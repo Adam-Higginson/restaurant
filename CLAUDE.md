@@ -25,6 +25,7 @@ The full design lives in `docs/GDD.md`. Read it before starting a gameplay task,
 ## Task tracking
 - The backlog is GitHub Project #1 owned by `Adam-Higginson` (kanban columns: Todo, In Progress, In Review, Done). Each task is an issue in `Adam-Higginson/restaurant` added to the board.
 - The user chooses which task to work on. If none was given, list the Todo items and ask.
+- **Plan and discuss before writing code.** For every task or other non-trivial change, first present a plan in chat and wait for the user's explicit approval before executing. The plan covers: the goal, the approach (with alternatives and a recommendation), the pieces/files involved, edge cases, the tests, what's out of scope, and any decisions the user needs to make (including project settings or plugins). Explain unfamiliar Godot concepts along the way. If the approach needs to change significantly during the task, stop and discuss before continuing. Small implementation details that don't change the approach can be decided as you go, but call them out in the summary.
 - Each task goes through a branch and a PR that the user reviews:
   1. Start from an up-to-date `main` and create a branch named `<issue-number>-<short-slug>`, e.g. `2-player-movement`. Move the card to In Progress.
   2. Commit on the branch as you go. Reference the issue number in commit messages, e.g. `Add customer spawning (#12)`.
@@ -59,6 +60,7 @@ The full design lives in `docs/GDD.md`. Read it before starting a gameplay task,
 - Unit tests use the gdUnit4 plugin (`addons/gdUnit4`, v6.2.1). Don't edit files in `addons/`.
 - Tests live in `tests/`, mirroring the script path: `scripts/player.gd` → `tests/scripts/player_test.gd`. Each suite `extends GdUnitTestSuite` and has typed `func test_<behaviour>() -> void` cases.
 - Test gameplay logic directly (pantry, money, recipes, day phases). Use `scene_runner(...)` with `simulate_action_press` and `simulate_frames` for behaviour that needs a running scene. Don't test visuals.
+- When a test waits for movement or physics (areas, collisions), wait on physics ticks (`await get_tree().physics_frame`), not `simulate_frames`. Rendered frames vary with machine speed, so frame-based waits can pass locally and fail in CI.
 - Run all tests from the command line (Git Bash):
   `GODOT_BIN=/c/Godot/godot_console.exe bash addons/gdUnit4/runtest.sh -a res://tests --headless --ignoreHeadlessMode`
   Input simulation works headless in this project. Reports go to `reports/`, which is gitignored.
