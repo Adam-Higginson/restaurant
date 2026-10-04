@@ -28,9 +28,14 @@ The full design lives in `docs/GDD.md`. Read it before starting a gameplay task,
   1. Start from an up-to-date `main` and create a branch named `<issue-number>-<short-slug>`, e.g. `2-player-movement`. Move the card to In Progress.
   2. Commit on the branch as you go. Reference the issue number in commit messages, e.g. `Add customer spawning (#12)`.
   3. When the task is working and the headless check passes, push the branch and open a PR into `main`. The PR body summarises the change, says how to test it in-game, and includes `Closes #<n>`.
-  4. Move the card to In Review, then stop and tell the user the PR is ready for review. **Never merge PRs yourself.** Address review comments as new commits on the same branch.
-  5. The user merges. Merging closes the issue, and the board moves it to Done automatically. Don't move cards to Done or close issues by hand.
-- Never commit task work directly to `main`.
+  4. Move the card to In Review, then stop and tell the user the PR is ready for review. Address review comments as new commits on the same branch.
+  5. **Only merge when the user explicitly tells you to.** Then:
+     - Check CI is green, then merge with a merge commit: `gh pr merge <n> --merge`. Don't pass `--delete-branch` while another open PR is based on that branch, because deleting a PR's base branch closes the PR.
+     - Confirm the issue closed and the card is in Done. The board normally does this; if it hasn't, close the issue or move the card yourself.
+     - Delete the merged branch (remote and local), switch to `main` and pull, and check CI passes on `main`.
+     - Report back with what was merged and the board state.
+- Never commit directly to `main`: it is protected and only accepts PRs. This includes changes to CLAUDE.md and docs, which go on a `docs/<slug>` branch.
+- Godot rewrites `project.godot` in its own format when the editor saves it. If it shows as modified with no real setting changes, commit it separately as a normalise commit.
 - Don't add new issues to the board yourself. Suggest follow-ups and bugs to the user instead.
 - Useful commands:
   - List items: `gh project item-list 1 --owner Adam-Higginson`
