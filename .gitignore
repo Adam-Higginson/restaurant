@@ -3,3 +3,6 @@
 /android/
 
 assets/third_party/
+
+# gdUnit4 test reports
+reports/

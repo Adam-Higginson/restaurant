@@ -43,7 +43,17 @@ The full design lives in `docs/GDD.md`. Read it before starting a gameplay task,
   `C:\Godot\godot_console.exe --headless --path . --quit-after 300`
 - Commit after each working step with a clear message.
 - Ask before adding plugins or changing project settings.
+- Add or update gdUnit4 tests for gameplay logic in every task (see Testing).
 - After every change, tell the user:
   - **What changed:** the files and behaviour, in plain terms.
   - **How to test it manually:** numbered steps in the game or editor (e.g. "Press F5, walk into a wall, you should stop"), what they should see, and anything not testable yet.
   Put the same testing steps in the PR body.
+
+## Testing
+- Unit tests use the gdUnit4 plugin (`addons/gdUnit4`, v6.2.1). Don't edit files in `addons/`.
+- Tests live in `tests/`, mirroring the script path: `scripts/player.gd` → `tests/scripts/player_test.gd`. Each suite `extends GdUnitTestSuite` and has typed `func test_<behaviour>() -> void` cases.
+- Test gameplay logic directly (pantry, money, recipes, day phases). Use `scene_runner(...)` with `simulate_action_press` and `simulate_frames` for behaviour that needs a running scene. Don't test visuals.
+- Run all tests from the command line (Git Bash):
+  `GODOT_BIN=/c/Godot/godot_console.exe bash addons/gdUnit4/runtest.sh -a res://tests --headless --ignoreHeadlessMode`
+  Input simulation works headless in this project. Reports go to `reports/`, which is gitignored.
+- CI (`.github/workflows/tests.yml`) runs the tests on every PR and on pushes to `main`. A PR is only ready for review when the tests pass both locally and in CI.
