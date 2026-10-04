@@ -5,7 +5,9 @@ const PLAYER_SCENE: String = "res://scenes/player.tscn"
 
 
 func _new_player() -> Player:
-	return auto_free((load(PLAYER_SCENE) as PackedScene).instantiate()) as Player
+	var player: Player = (load(PLAYER_SCENE) as PackedScene).instantiate() as Player
+	auto_free(player)
+	return player
 
 
 # --- Facing direction ---------------------------------------------------------
