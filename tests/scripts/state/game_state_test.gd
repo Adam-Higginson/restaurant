@@ -76,9 +76,18 @@ func test_full_day_cycle() -> void:
 	assert_array(_events).is_equal([
 		[&"phase", GameState.Phase.SERVICE],
 		[&"phase", GameState.Phase.SUMMARY],
-		[&"phase", GameState.Phase.PREP],
 		[&"day", 2],
+		[&"phase", GameState.Phase.PREP],
 	])
+
+
+func test_new_day_is_set_before_listeners_hear_the_phase_change() -> void:
+	var day_seen: Array[int] = []
+	_state.start_service()
+	_state.end_service()
+	_state.phase_changed.connect(func(_phase: GameState.Phase) -> void: day_seen.append(_state.day))
+	_state.start_next_day()
+	assert_array(day_seen).is_equal([2])
 
 
 func test_transitions_from_the_wrong_phase_fail() -> void:
@@ -114,6 +123,35 @@ func test_new_game_resets_everything() -> void:
 	assert_int(_state.phase).is_equal(GameState.Phase.PREP)
 	assert_dict(_state.pantry.get_counts()).is_empty()
 	# Same instance, so anything connected to the pantry's signals still hears it.
+	assert_object(_state.pantry).is_same(pantry)
+
+
+# --- Read-only values -----------------------------------------------------------
+
+func test_assigning_money_directly_is_an_error_and_changes_nothing() -> void:
+	await assert_error(func() -> void: _state.money = 999).is_push_error(
+		"GameState: money is read-only, use earn() or spend()"
+	)
+	assert_int(_state.money).is_equal(50)
+	assert_array(_events).is_empty()
+
+
+func test_assigning_day_or_phase_directly_is_an_error() -> void:
+	await assert_error(func() -> void: _state.day = 5).is_push_error(
+		"GameState: day is read-only, use start_next_day()"
+	)
+	await assert_error(func() -> void: _state.phase = GameState.Phase.SUMMARY).is_push_error(
+		"GameState: phase is read-only, use the phase methods"
+	)
+	assert_int(_state.day).is_equal(1)
+	assert_int(_state.phase).is_equal(GameState.Phase.PREP)
+
+
+func test_pantry_cannot_be_replaced() -> void:
+	var pantry: Pantry = _state.pantry
+	await assert_error(func() -> void: _state.pantry = Pantry.new()).is_push_error(
+		"GameState: pantry can't be replaced, use pantry.clear()"
+	)
 	assert_object(_state.pantry).is_same(pantry)
 
 

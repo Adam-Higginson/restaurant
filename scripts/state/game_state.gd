@@ -16,29 +16,43 @@ enum Phase { PREP, SERVICE, SUMMARY }
 
 const STARTING_MONEY: int = 50
 
+# These are read-only. Without a setter, Godot would quietly accept an
+# assignment into hidden storage that the getter never reads.
+
 ## Coins the player has. Never negative.
 var money: int:
 	get:
 		return _money
+	set(_value):
+		push_error("GameState: money is read-only, use earn() or spend()")
 var day: int:
 	get:
 		return _day
+	set(_value):
+		push_error("GameState: day is read-only, use start_next_day()")
 var phase: Phase:
 	get:
 		return _phase
+	set(_value):
+		push_error("GameState: phase is read-only, use the phase methods")
 ## Created once and cleared by [method new_game], never replaced, so signal
 ## connections to it keep working.
-var pantry: Pantry = Pantry.new()
+var pantry: Pantry:
+	get:
+		return _pantry
+	set(_value):
+		push_error("GameState: pantry can't be replaced, use pantry.clear()")
 
 var _money: int = STARTING_MONEY
 var _day: int = 1
 var _phase: Phase = Phase.PREP
+var _pantry: Pantry = Pantry.new()
 
 
 ## Puts everything back to the start: starting money, an empty pantry, day 1
 ## and the prep phase.
 func new_game() -> void:
-	pantry.clear()
+	_pantry.clear()
 	_set_money(STARTING_MONEY)
 	_set_day(1)
 	_set_phase(Phase.PREP)
@@ -77,9 +91,11 @@ func end_service() -> bool:
 ## Moves from the summary to the next day's prep. Returns false if not in the
 ## summary.
 func start_next_day() -> bool:
-	if not _advance(Phase.SUMMARY, Phase.PREP):
+	if _phase != Phase.SUMMARY:
 		return false
+	# Day first, so phase_changed listeners already see the new day.
 	_set_day(_day + 1)
+	_set_phase(Phase.PREP)
 	return true
 
 
