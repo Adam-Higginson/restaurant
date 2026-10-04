@@ -25,6 +25,7 @@ The full design lives in `docs/GDD.md`. Read it before starting a gameplay task,
 ## Task tracking
 - The backlog is GitHub Project #1 owned by `Adam-Higginson` (kanban columns: Todo, In Progress, In Review, Done). Each task is an issue in `Adam-Higginson/restaurant` added to the board.
 - The user chooses which task to work on. If none was given, list the Todo items and ask.
+- **Plan and discuss before writing code.** For every task or other non-trivial change, first present a plan in chat and wait for the user's explicit approval before executing. The plan covers: the goal, the approach (with alternatives and a recommendation), the pieces/files involved, edge cases, the tests, what's out of scope, and any decisions the user needs to make (including project settings or plugins). Explain unfamiliar Godot concepts along the way. If the approach needs to change significantly during the task, stop and discuss before continuing. Small implementation details that don't change the approach can be decided as you go, but call them out in the summary.
 - Each task goes through a branch and a PR that the user reviews:
   1. Start from an up-to-date `main` and create a branch named `<issue-number>-<short-slug>`, e.g. `2-player-movement`. Move the card to In Progress.
   2. Commit on the branch as you go. Reference the issue number in commit messages, e.g. `Add customer spawning (#12)`.
