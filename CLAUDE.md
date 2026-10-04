@@ -29,7 +29,7 @@ The full design lives in `docs/GDD.md`. Read it before starting a gameplay task,
 - Don't add new issues to the board yourself. Suggest follow-ups and bugs to the user instead.
 - Useful commands:
   - List items: `gh project item-list 1 --owner Adam-Higginson`
-  - Add an issue: `gh project item-add 1 --owner Adam-Higginson --url <issue-url>`
+  - New issues in the repo are added to the board as Todo automatically (the board's auto-add workflow). MVP issues use the `MVP` milestone.
   - Set status: `gh project item-edit --project-id PVT_kwHOABMmCs4Blqh2 --id <item-id> --field-id PVTSSF_lAHOABMmCs4Blqh2zhkWd0E --single-select-option-id <option>`
     - Options: Todo `f75ad846`, In Progress `47fc9ee4`, Done `98236657`
 
