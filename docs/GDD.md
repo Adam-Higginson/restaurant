@@ -71,7 +71,7 @@ Tomato is shared by two dishes, which makes stocking up a small decision. The nu
 ## Architecture notes
 - Ingredients and dishes are `Resource` definitions under `res://data/`.
 - The pantry is a plain store of ingredient counts with no notion of where ingredients came from. Today the shop fills it; later farms will too.
-- The game state (money, pantry, day, phase) lives in gameplay code, not in UI scripts. UI reads it and listens to signals.
+- The game state (money, pantry, day, phase) lives in gameplay code, not in UI scripts. UI reads it and listens to signals. It's the `Game` autoload (`scripts/state/game_state.gd`), so any script can use `Game.money`, `Game.pantry` and so on. Phase changes go through `start_service()`, `end_service()` and `start_next_day()`, which refuse transitions from the wrong phase.
 
 ## Out of scope for the MVP
 Saving and loading, menus and settings, real art and audio, decor and upgrades, multiple customers per table, spoilage.
@@ -86,3 +86,4 @@ Rough order, all post-MVP:
 6. Regulars with names, favourite dishes and relationship levels.
 7. Hiring staff (waiter, cook) to automate parts of the loop.
 8. Seasons that affect crops and the menu.
+9. Pantry as physical storage: start with one fridge, then buy more fridges or a walk-in pantry (design epic #28).
