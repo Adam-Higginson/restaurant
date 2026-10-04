@@ -22,3 +22,4 @@ jobs:
           version: 'installed'   # use the plugin committed in addons/gdUnit4
           paths: 'res://tests'
           timeout: 5
+          arguments: '-c'        # run every test instead of stopping a suite at its first failure

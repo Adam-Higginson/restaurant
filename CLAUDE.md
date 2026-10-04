@@ -63,8 +63,8 @@ The full design lives in `docs/GDD.md`. Read it before starting a gameplay task,
 - Suites extend `GameTestSuite` (`tests/game_test_suite.gd`), not `GdUnitTestSuite` directly. Use its helpers: `physics_ticks(runner, n)` to wait, `walk(runner, action, ticks)` to move the player, `place_player(runner, pos)` to position it. Add new shared helpers there rather than copying them between suites.
 - When a test waits for movement or physics (areas, collisions), wait on physics ticks (`physics_ticks`), never `simulate_frames`. Rendered frames vary with machine speed, so frame-based waits can pass locally and fail in CI.
 - Run all tests from the command line (Git Bash):
-  `GODOT_BIN=/c/Godot/godot_console.exe bash addons/gdUnit4/runtest.sh -a res://tests --headless --ignoreHeadlessMode`
-  Input simulation works headless in this project. Reports go to `reports/`, which is gitignored.
+  `GODOT_BIN=/c/Godot/godot_console.exe bash addons/gdUnit4/runtest.sh -a res://tests -c --headless --ignoreHeadlessMode`
+  `-c` turns off gdUnit's default fail-fast, which otherwise stops each suite at its first failing test. Input simulation works headless in this project. Reports go to `reports/`, which is gitignored.
 - CI (`.github/workflows/tests.yml`) runs the tests on every PR and on pushes to `main`. A PR is only ready for review when the tests pass both locally and in CI.
 
 ## Code style
