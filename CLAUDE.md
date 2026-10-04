@@ -22,13 +22,13 @@ The full design lives in `docs/GDD.md`. Read it before starting a gameplay task,
 - This repo is public. Third-party art and audio go in `assets/third_party/`, which is gitignored: never commit anything from it, and never commit keys or tokens.
 
 ## Task tracking
-- The backlog is GitHub Project #1 owned by `Adam-Higginson` (kanban columns: Todo, In Progress, Done). Each task is an issue in `Adam-Higginson/restaurant` added to the board.
+- The backlog is GitHub Project #1 owned by `Adam-Higginson` (kanban columns: Todo, In Progress, In Review, Done). Each task is an issue in `Adam-Higginson/restaurant` added to the board.
 - The user chooses which task to work on. If none was given, list the Todo items and ask.
 - Each task goes through a branch and a PR that the user reviews:
   1. Start from an up-to-date `main` and create a branch named `<issue-number>-<short-slug>`, e.g. `2-player-movement`. Move the card to In Progress.
   2. Commit on the branch as you go. Reference the issue number in commit messages, e.g. `Add customer spawning (#12)`.
   3. When the task is working and the headless check passes, push the branch and open a PR into `main`. The PR body summarises the change, says how to test it in-game, and includes `Closes #<n>`.
-  4. Stop and tell the user the PR is ready for review. **Never merge PRs yourself.** Address review comments as new commits on the same branch.
+  4. Move the card to In Review, then stop and tell the user the PR is ready for review. **Never merge PRs yourself.** Address review comments as new commits on the same branch.
   5. The user merges. Merging closes the issue, and the board moves it to Done automatically. Don't move cards to Done or close issues by hand.
 - Never commit task work directly to `main`.
 - Don't add new issues to the board yourself. Suggest follow-ups and bugs to the user instead.
@@ -36,7 +36,7 @@ The full design lives in `docs/GDD.md`. Read it before starting a gameplay task,
   - List items: `gh project item-list 1 --owner Adam-Higginson`
   - New issues in the repo are added to the board as Todo automatically (the board's auto-add workflow). MVP issues use the `MVP` milestone.
   - Set status: `gh project item-edit --project-id PVT_kwHOABMmCs4Blqh2 --id <item-id> --field-id PVTSSF_lAHOABMmCs4Blqh2zhkWd0E --single-select-option-id <option>`
-    - Options: Todo `f75ad846`, In Progress `47fc9ee4`, Done `98236657`
+    - Options: Todo `f75ad846`, In Progress `47fc9ee4`, In Review `cb535e89`, Done `98236657`
 
 ## Workflow
 - After each change, run the project headless to catch script errors:
