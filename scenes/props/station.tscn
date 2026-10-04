@@ -1,13 +1,22 @@
-[gd_scene load_steps=2 format=3]
+[gd_scene load_steps=4 format=3]
+
+[ext_resource type="Script" path="res://scripts/props/placeholder_prop.gd" id="1_prop"]
+[ext_resource type="Script" path="res://scripts/interaction/interactable.gd" id="2_interactable"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_station"]
 size = Vector2(16, 16)
 
 [node name="Station" type="StaticBody2D" groups=["stations"]]
+script = ExtResource("1_prop")
 
 [node name="Body" type="Polygon2D" parent="."]
-color = Color(1, 1, 1, 1)
 polygon = PackedVector2Array(-8, -8, 8, -8, 8, 8, -8, 8)
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("RectangleShape2D_station")
+
+[node name="Interactable" type="Area2D" parent="."]
+script = ExtResource("2_interactable")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Interactable"]
 shape = SubResource("RectangleShape2D_station")
