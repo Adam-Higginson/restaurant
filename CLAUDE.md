@@ -43,3 +43,7 @@ The full design lives in `docs/GDD.md`. Read it before starting a gameplay task,
   `C:\Godot\godot_console.exe --headless --path . --quit-after 300`
 - Commit after each working step with a clear message.
 - Ask before adding plugins or changing project settings.
+- After every change, tell the user:
+  - **What changed:** the files and behaviour, in plain terms.
+  - **How to test it manually:** numbered steps in the game or editor (e.g. "Press F5, walk into a wall, you should stop"), what they should see, and anything not testable yet.
+  Put the same testing steps in the PR body.
