@@ -1,0 +1,13 @@
+[gd_scene load_steps=2 format=3]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_pantry"]
+size = Vector2(16, 32)
+
+[node name="Pantry" type="StaticBody2D" groups=["pantry"]]
+
+[node name="Body" type="Polygon2D" parent="."]
+color = Color(0.45, 0.62, 0.35, 1)
+polygon = PackedVector2Array(-8, -16, 8, -16, 8, 16, -8, 16)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("RectangleShape2D_pantry")

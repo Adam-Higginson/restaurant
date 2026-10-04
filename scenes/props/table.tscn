@@ -1,0 +1,16 @@
+[gd_scene load_steps=2 format=3]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_table"]
+size = Vector2(28, 12)
+
+[node name="Table" type="StaticBody2D" groups=["tables"]]
+
+[node name="Body" type="Polygon2D" parent="."]
+color = Color(0.95, 0.93, 0.86, 1)
+polygon = PackedVector2Array(-15, -8, 15, -8, 15, 8, -15, 8)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("RectangleShape2D_table")
+
+[node name="Seat" type="Marker2D" parent="."]
+position = Vector2(0, 16)
