@@ -12,6 +12,8 @@ A cosy top-down restaurant game in the spirit of Stardew Valley. The player cont
 
 Use placeholder coloured shapes until real art is added.
 
+The full design lives in `docs/GDD.md`. Read it before starting a gameplay task, and keep it up to date when the design changes.
+
 ## Architecture
 - Dish and ingredient definitions are Resource files under `res://data/`.
 - Keep gameplay logic out of UI scripts.
