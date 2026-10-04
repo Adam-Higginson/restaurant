@@ -1,0 +1,10 @@
+[gd_resource type="Resource" script_class="Ingredient" format=3]
+
+[ext_resource type="Script" path="res://scripts/data/ingredient.gd" id="1_26b5r"]
+
+[resource]
+script = ExtResource("1_26b5r")
+id = &"onion"
+display_name = "Onion"
+price = 2
+color = Color(0.75, 0.6, 0.8, 1)

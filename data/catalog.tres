@@ -1,0 +1,18 @@
+[gd_resource type="Resource" script_class="Catalog" format=3]
+
+[ext_resource type="Script" path="res://scripts/data/dish.gd" id="1_yp22b"]
+[ext_resource type="Resource" path="res://data/dishes/garden_salad.tres" id="2_g3anq"]
+[ext_resource type="Resource" path="res://data/dishes/tomato_soup.tres" id="3_885by"]
+[ext_resource type="Resource" path="res://data/dishes/grilled_cheese.tres" id="4_2hwre"]
+[ext_resource type="Script" path="res://scripts/data/ingredient.gd" id="5_ibwnq"]
+[ext_resource type="Resource" path="res://data/ingredients/lettuce.tres" id="6_i5nfa"]
+[ext_resource type="Resource" path="res://data/ingredients/tomato.tres" id="7_jwc8w"]
+[ext_resource type="Resource" path="res://data/ingredients/onion.tres" id="8_0477j"]
+[ext_resource type="Resource" path="res://data/ingredients/bread.tres" id="9_dfthg"]
+[ext_resource type="Resource" path="res://data/ingredients/cheese.tres" id="10_nkssj"]
+[ext_resource type="Script" path="res://scripts/data/catalog.gd" id="11_7qgp0"]
+
+[resource]
+script = ExtResource("11_7qgp0")
+ingredients = Array[ExtResource("5_ibwnq")]([ExtResource("6_i5nfa"), ExtResource("7_jwc8w"), ExtResource("8_0477j"), ExtResource("9_dfthg"), ExtResource("10_nkssj")])
+dishes = Array[ExtResource("1_yp22b")]([ExtResource("2_g3anq"), ExtResource("3_885by"), ExtResource("4_2hwre")])

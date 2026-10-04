@@ -1,0 +1,18 @@
+[gd_resource type="Resource" script_class="Dish" format=3]
+
+[ext_resource type="Script" path="res://scripts/data/ingredient.gd" id="1_wnyuy"]
+[ext_resource type="Resource" path="res://data/ingredients/lettuce.tres" id="2_x1hxk"]
+[ext_resource type="Resource" path="res://data/ingredients/tomato.tres" id="3_equji"]
+[ext_resource type="Script" path="res://scripts/data/dish.gd" id="4_177np"]
+
+[resource]
+script = ExtResource("4_177np")
+id = &"garden_salad"
+display_name = "Garden Salad"
+price = 12
+cook_time = 4.0
+ingredients = Dictionary[ExtResource("1_wnyuy"), int]({
+ExtResource("2_x1hxk"): 1,
+ExtResource("3_equji"): 1
+})
+color = Color(0.5, 0.8, 0.4, 1)
