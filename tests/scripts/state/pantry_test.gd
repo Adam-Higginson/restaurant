@@ -79,7 +79,8 @@ func test_clear_empties_the_pantry() -> void:
 	_changes.clear()
 	_pantry.clear()
 	assert_dict(_pantry.get_counts()).is_empty()
-	assert_array(_changes).contains_exactly_in_any_order([[_tomato, 0], [_onion, 0]])
+	# Exact comparison, because contains_exactly_in_any_order ignores duplicates.
+	assert_array(_changes).is_equal([[_tomato, 0], [_onion, 0]])
 
 
 # --- Recipes ------------------------------------------------------------------
@@ -107,11 +108,54 @@ func test_remove_all_takes_nothing_if_anything_is_short() -> void:
 	assert_array(_changes).is_empty()
 
 
+func test_has_all_rejects_bad_amounts_like_remove_all() -> void:
+	# Otherwise a station could offer a dish that remove_all then refuses.
+	_pantry.add(_tomato, 1)
+	var zero: Dictionary[Ingredient, int] = {_tomato: 0}
+	var negative: Dictionary[Ingredient, int] = {_tomato: -1}
+	var missing: Dictionary[Ingredient, int] = {null: 1}
+	_assert_recipe_rejected(zero)
+	_assert_recipe_rejected(negative)
+	_assert_recipe_rejected(missing)
+
+
+func test_remove_all_is_safe_from_listeners_that_change_the_pantry() -> void:
+	# A listener that takes an onion when the tomato count changes must not be
+	# able to push the onion count below zero mid-recipe.
+	_pantry.add(_tomato, 1)
+	_pantry.add(_onion, 1)
+	var listener_removed: Array[bool] = []
+	_pantry.count_changed.connect(
+		func(ingredient: Ingredient, _count: int) -> void:
+			if ingredient == _tomato and listener_removed.is_empty():
+				listener_removed.append(_pantry.remove(_onion, 1))
+	)
+	assert_bool(_pantry.remove_all({_tomato: 1, _onion: 1})).is_true()
+	assert_int(_pantry.count(_onion)).is_equal(0)
+	assert_array(listener_removed).is_equal([false])
+
+
+func test_remove_all_emits_after_every_count_is_updated() -> void:
+	_pantry.add(_tomato, 1)
+	_pantry.add(_onion, 1)
+	var seen: Array[Array] = []
+	_pantry.count_changed.connect(
+		func(_ingredient: Ingredient, _count: int) -> void:
+			seen.append([_pantry.count(_tomato), _pantry.count(_onion)])
+	)
+	_pantry.remove_all({_tomato: 1, _onion: 1})
+	assert_array(seen).is_equal([[0, 0], [0, 0]])
+
+
 func test_remove_all_works_with_a_catalog_dish() -> void:
 	var catalog: Catalog = Catalog.load_default()
-	var soup: Dish = catalog.dishes.filter(
-		func(dish: Dish) -> bool: return dish.id == &"tomato_soup"
-	)[0]
+	var soup: Dish = null
+	for dish: Dish in catalog.dishes:
+		if dish.id == &"tomato_soup":
+			soup = dish
+	assert_object(soup).override_failure_message("No tomato_soup in the catalog").is_not_null()
+	if soup == null:
+		return
 	for ingredient: Ingredient in catalog.ingredients:
 		_pantry.add(ingredient, 1)
 	assert_bool(_pantry.remove_all(soup.ingredients)).is_true()
@@ -133,3 +177,12 @@ func _make_ingredient(id: StringName) -> Ingredient:
 	var ingredient: Ingredient = Ingredient.new()
 	ingredient.id = id
 	return ingredient
+
+
+func _assert_recipe_rejected(recipe: Dictionary[Ingredient, int]) -> void:
+	assert_bool(_pantry.has_all(recipe)).override_failure_message(
+		"has_all accepted %s" % [recipe]
+	).is_false()
+	assert_bool(_pantry.remove_all(recipe)).override_failure_message(
+		"remove_all accepted %s" % [recipe]
+	).is_false()
