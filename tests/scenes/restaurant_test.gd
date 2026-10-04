@@ -1,14 +1,7 @@
-extends GdUnitTestSuite
+extends GameTestSuite
 ## Tests for the restaurant layout (scenes/restaurant.tscn) inside the main scene.
 
 const MAIN_SCENE: String = "res://scenes/main.tscn"
-
-
-func _start(player_pos: Vector2) -> Array:
-	var runner: GdUnitSceneRunner = scene_runner(MAIN_SCENE)
-	var player: Player = runner.find_child("Player") as Player
-	player.position = player_pos
-	return [runner, player]
 
 
 # --- Contents -------------------------------------------------------------
@@ -32,47 +25,39 @@ func test_has_two_stations_a_pantry_and_a_door() -> void:
 # --- Collision --------------------------------------------------------------
 
 func test_outer_wall_blocks_player() -> void:
-	var started: Array = _start(Vector2(40, 136))
-	var runner: GdUnitSceneRunner = started[0]
-	var player: Player = started[1]
+	var runner: GdUnitSceneRunner = scene_runner(MAIN_SCENE)
+	var player: Player = place_player(runner, Vector2(40, 136))
 
-	runner.simulate_action_press("move_left")
-	await runner.simulate_frames(90)
+	await walk(runner, "move_left", 90)
 
 	# The left wall's inner edge is at x = 16; the player's collision box is 10px wide.
 	assert_float(player.position.x).is_greater_equal(20.0)
 
 
 func test_table_blocks_player() -> void:
-	var started: Array = _start(Vector2(256, 104))
-	var runner: GdUnitSceneRunner = started[0]
-	var player: Player = started[1]
+	var runner: GdUnitSceneRunner = scene_runner(MAIN_SCENE)
+	var player: Player = place_player(runner, Vector2(256, 104))
 
-	runner.simulate_action_press("move_up")
-	await runner.simulate_frames(90)
+	await walk(runner, "move_up", 90)
 
 	# Table1 is centred at y = 72; without collision the player would walk past it.
 	assert_float(player.position.y).is_greater(72.0)
 
 
 func test_counter_blocks_player_outside_the_gap() -> void:
-	var started: Array = _start(Vector2(140, 56))
-	var runner: GdUnitSceneRunner = started[0]
-	var player: Player = started[1]
+	var runner: GdUnitSceneRunner = scene_runner(MAIN_SCENE)
+	var player: Player = place_player(runner, Vector2(140, 56))
 
-	runner.simulate_action_press("move_right")
-	await runner.simulate_frames(90)
+	await walk(runner, "move_right", 90)
 
 	# The counter column starts at x = 160.
 	assert_float(player.position.x).is_less_equal(160.0)
 
 
 func test_gap_in_counter_lets_player_into_dining_area() -> void:
-	var started: Array = _start(Vector2(140, 128))
-	var runner: GdUnitSceneRunner = started[0]
-	var player: Player = started[1]
+	var runner: GdUnitSceneRunner = scene_runner(MAIN_SCENE)
+	var player: Player = place_player(runner, Vector2(140, 128))
 
-	runner.simulate_action_press("move_right")
-	await runner.simulate_frames(90)
+	await walk(runner, "move_right", 90)
 
 	assert_float(player.position.x).is_greater(176.0)

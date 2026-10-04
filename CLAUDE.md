@@ -58,9 +58,10 @@ The full design lives in `docs/GDD.md`. Read it before starting a gameplay task,
 
 ## Testing
 - Unit tests use the gdUnit4 plugin (`addons/gdUnit4`, v6.2.1). Don't edit files in `addons/`.
-- Tests live in `tests/`, mirroring the script path: `scripts/player.gd` → `tests/scripts/player_test.gd`. Each suite `extends GdUnitTestSuite` and has typed `func test_<behaviour>() -> void` cases.
-- Test gameplay logic directly (pantry, money, recipes, day phases). Use `scene_runner(...)` with `simulate_action_press` and `simulate_frames` for behaviour that needs a running scene. Don't test visuals.
-- When a test waits for movement or physics (areas, collisions), wait on physics ticks (`await get_tree().physics_frame`), not `simulate_frames`. Rendered frames vary with machine speed, so frame-based waits can pass locally and fail in CI.
+- Tests live in `tests/`, mirroring the script path: `scripts/player.gd` → `tests/scripts/player_test.gd`. Each suite `extends GameTestSuite` and has typed `func test_<behaviour>() -> void` cases.
+- Test gameplay logic directly (pantry, money, recipes, day phases). Use `scene_runner(...)` with the `GameTestSuite` helpers for behaviour that needs a running scene. Don't test visuals.
+- Suites extend `GameTestSuite` (`tests/game_test_suite.gd`), not `GdUnitTestSuite` directly. Use its helpers: `physics_ticks(runner, n)` to wait, `walk(runner, action, ticks)` to move the player, `place_player(runner, pos)` to position it. Add new shared helpers there rather than copying them between suites.
+- When a test waits for movement or physics (areas, collisions), wait on physics ticks (`physics_ticks`), never `simulate_frames`. Rendered frames vary with machine speed, so frame-based waits can pass locally and fail in CI.
 - Run all tests from the command line (Git Bash):
   `GODOT_BIN=/c/Godot/godot_console.exe bash addons/gdUnit4/runtest.sh -a res://tests --headless --ignoreHeadlessMode`
   Input simulation works headless in this project. Reports go to `reports/`, which is gitignored.
