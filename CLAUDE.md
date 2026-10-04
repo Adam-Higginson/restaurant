@@ -5,7 +5,7 @@
 - Use Godot 4 APIs only: CharacterBody2D, `await`, TileMapLayer. Never Godot 3 APIs (KinematicBody2D, `yield`, TileMap).
 - Typed GDScript everywhere: type every variable, parameter and return value.
 - Compatibility renderer. 2D top-down pixel art, 16px tiles (change if the art pack differs), nearest-neighbour filtering.
-- Godot binary: `C:\Godot\Godot_v4.7.2-stable_win64_console.exe`
+- Godot binary: `C:\Godot\godot_console.exe`
 
 ## The game
 A cosy top-down restaurant game in the spirit of Stardew Valley. The player controls a single character who runs a small restaurant: buys ingredients, cooks, serves customers and earns money. Later: hiring staff, and regulars the player builds relationships with. Not combat-focused.
@@ -35,6 +35,6 @@ The full design lives in `docs/GDD.md`. Read it before starting a gameplay task,
 
 ## Workflow
 - After each change, run the project headless to catch script errors:
-  `C:\Godot\Godot_v4.7.2-stable_win64_console.exe --headless --path . --quit-after 300`
+  `C:\Godot\godot_console.exe --headless --path . --quit-after 300`
 - Commit after each working step with a clear message.
 - Ask before adding plugins or changing project settings.
