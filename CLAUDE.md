@@ -3,7 +3,7 @@
 ## Stack
 - Godot 4.7, GDScript only (no C#).
 - Use Godot 4 APIs only: CharacterBody2D, `await`, TileMapLayer. Never Godot 3 APIs (KinematicBody2D, `yield`, TileMap).
-- Typed GDScript everywhere: type every variable, parameter and return value.
+- Typed GDScript everywhere: type every variable, parameter and return value (enforced as errors; see Code style).
 - Compatibility renderer. 2D top-down pixel art, 16px tiles (change if the art pack differs), nearest-neighbour filtering.
 - Godot binary: `C:\Godot\godot_console.exe`
 
@@ -57,3 +57,13 @@ The full design lives in `docs/GDD.md`. Read it before starting a gameplay task,
   `GODOT_BIN=/c/Godot/godot_console.exe bash addons/gdUnit4/runtest.sh -a res://tests --headless --ignoreHeadlessMode`
   Input simulation works headless in this project. Reports go to `reports/`, which is gitignored.
 - CI (`.github/workflows/tests.yml`) runs the tests on every PR and on pushes to `main`. A PR is only ready for review when the tests pass both locally and in CI.
+
+## Code style
+Follow the official GDScript style guide. Godot enforces some of it: in project settings, missing types and unsafe calls/casts are **errors**, and unused or shadowed variables are warnings. `tests/code_standards_test.gd` loads every script under `scripts/`, `ui/` and `tests/`, so CI fails if any script breaks these rules.
+- **Naming:** `snake_case` files, variables and functions. `PascalCase` for `class_name` and node names. `CONSTANT_CASE` for constants and enum values. Prefix private members with `_`.
+- **Signals** are named in the past tense: `order_placed`, `dish_served`, `money_changed`.
+- **Script order:** `class_name`, `extends`, a `##` doc comment, signals, enums, constants, `@export` vars, public vars, private vars, `@onready` vars, built-in callbacks (`_ready`, `_physics_process`, ...), public functions, private functions.
+- **Formatting:** tabs for indentation. Two blank lines between functions. Lines under about 100 characters.
+- **Types:** type everything explicitly (`var speed: float = 80.0`), including loop variables (`for item: Ingredient in items`) and typed arrays (`Array[Dish]`). Avoid `Variant` unless something truly can be any type. Cast with `as` from a concrete type, not from a `Variant`.
+- **Comments:** `##` doc comments on classes and on public members that aren't obvious. Otherwise comment why, not what.
+- **Nodes:** reference child nodes with `@onready var _x: Type = $X`, not `get_node` scattered through the code. Connect signals in code, not the editor, so wiring is visible in scripts.
