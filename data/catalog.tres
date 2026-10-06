@@ -1,18 +1,31 @@
 [gd_resource type="Resource" script_class="Catalog" format=3]
 
-[ext_resource type="Script" path="res://scripts/data/dish.gd" id="1_yp22b"]
-[ext_resource type="Resource" path="res://data/dishes/garden_salad.tres" id="2_g3anq"]
-[ext_resource type="Resource" path="res://data/dishes/tomato_soup.tres" id="3_885by"]
-[ext_resource type="Resource" path="res://data/dishes/grilled_cheese.tres" id="4_2hwre"]
-[ext_resource type="Script" path="res://scripts/data/ingredient.gd" id="5_ibwnq"]
-[ext_resource type="Resource" path="res://data/ingredients/lettuce.tres" id="6_i5nfa"]
-[ext_resource type="Resource" path="res://data/ingredients/tomato.tres" id="7_jwc8w"]
-[ext_resource type="Resource" path="res://data/ingredients/onion.tres" id="8_0477j"]
-[ext_resource type="Resource" path="res://data/ingredients/bread.tres" id="9_dfthg"]
-[ext_resource type="Resource" path="res://data/ingredients/cheese.tres" id="10_nkssj"]
-[ext_resource type="Script" path="res://scripts/data/catalog.gd" id="11_7qgp0"]
+[ext_resource type="Script" path="res://scripts/data/element.gd" id="1_sq7co"]
+[ext_resource type="Resource" path="res://data/elements/cut.tres" id="2_gpcun"]
+[ext_resource type="Script" path="res://scripts/data/item.gd" id="3_ri6n3"]
+[ext_resource type="Resource" path="res://data/items/lettuce.tres" id="4_n75ka"]
+[ext_resource type="Resource" path="res://data/items/tomato.tres" id="5_wvss8"]
+[ext_resource type="Resource" path="res://data/items/onion.tres" id="6_0uqn3"]
+[ext_resource type="Resource" path="res://data/items/bread.tres" id="7_5q4dk"]
+[ext_resource type="Resource" path="res://data/items/cheese.tres" id="8_l2ssu"]
+[ext_resource type="Resource" path="res://data/items/chopped_lettuce.tres" id="9_kruv5"]
+[ext_resource type="Resource" path="res://data/items/sliced_tomato.tres" id="10_7671r"]
+[ext_resource type="Resource" path="res://data/items/diced_tomato.tres" id="11_5u5l8"]
+[ext_resource type="Resource" path="res://data/items/garden_salad.tres" id="12_lcsjk"]
+[ext_resource type="Resource" path="res://data/items/tomato_soup.tres" id="13_vx4vr"]
+[ext_resource type="Resource" path="res://data/items/grilled_cheese.tres" id="14_cta3b"]
+[ext_resource type="Resource" path="res://data/items/chopping_board.tres" id="15_wwfey"]
+[ext_resource type="Resource" path="res://data/items/plate.tres" id="16_rhhc8"]
+[ext_resource type="Script" path="res://scripts/data/reaction.gd" id="17_gx03v"]
+[ext_resource type="Resource" path="res://data/reactions/chop_lettuce.tres" id="18_dxvgn"]
+[ext_resource type="Resource" path="res://data/reactions/slice_tomato.tres" id="19_qdmq8"]
+[ext_resource type="Resource" path="res://data/reactions/dice_tomato.tres" id="20_oyiyi"]
+[ext_resource type="Resource" path="res://data/reactions/garden_salad.tres" id="21_m07uu"]
+[ext_resource type="Resource" path="res://data/reactions/garden_salad_shortcut.tres" id="22_3onb0"]
+[ext_resource type="Script" path="res://scripts/data/catalog.gd" id="23_itf3g"]
 
 [resource]
-script = ExtResource("11_7qgp0")
-ingredients = Array[ExtResource("5_ibwnq")]([ExtResource("6_i5nfa"), ExtResource("7_jwc8w"), ExtResource("8_0477j"), ExtResource("9_dfthg"), ExtResource("10_nkssj")])
-dishes = Array[ExtResource("1_yp22b")]([ExtResource("2_g3anq"), ExtResource("3_885by"), ExtResource("4_2hwre")])
+script = ExtResource("23_itf3g")
+items = Array[ExtResource("3_ri6n3")]([ExtResource("4_n75ka"), ExtResource("5_wvss8"), ExtResource("6_0uqn3"), ExtResource("7_5q4dk"), ExtResource("8_l2ssu"), ExtResource("9_kruv5"), ExtResource("10_7671r"), ExtResource("11_5u5l8"), ExtResource("12_lcsjk"), ExtResource("13_vx4vr"), ExtResource("14_cta3b"), ExtResource("15_wwfey"), ExtResource("16_rhhc8")])
+elements = Array[ExtResource("1_sq7co")]([ExtResource("2_gpcun")])
+reactions = Array[ExtResource("17_gx03v")]([ExtResource("18_dxvgn"), ExtResource("19_qdmq8"), ExtResource("20_oyiyi"), ExtResource("21_m07uu"), ExtResource("22_3onb0")])

@@ -3,8 +3,8 @@ extends GameTestSuite
 ## catalog's data.
 
 var _pantry: Pantry
-var _tomato: Ingredient
-var _onion: Ingredient
+var _tomato: Item
+var _onion: Item
 # Each count_changed emission as [ingredient, count].
 var _changes: Array[Array] = []
 
@@ -15,7 +15,7 @@ func before_test() -> void:
 	_onion = _make_ingredient(&"onion")
 	_changes = []
 	_pantry.count_changed.connect(
-		func(ingredient: Ingredient, count: int) -> void: _changes.append([ingredient, count])
+		func(ingredient: Item, count: int) -> void: _changes.append([ingredient, count])
 	)
 
 
@@ -57,7 +57,7 @@ func test_emptied_ingredient_is_no_longer_listed() -> void:
 
 func test_get_counts_is_a_copy() -> void:
 	_pantry.add(_tomato, 1)
-	var counts: Dictionary[Ingredient, int] = _pantry.get_counts()
+	var counts: Dictionary[Item, int] = _pantry.get_counts()
 	counts[_tomato] = 99
 	assert_int(_pantry.count(_tomato)).is_equal(1)
 
@@ -86,7 +86,7 @@ func test_clear_empties_the_pantry() -> void:
 # --- Recipes ------------------------------------------------------------------
 
 func test_has_all_checks_every_ingredient() -> void:
-	var recipe: Dictionary[Ingredient, int] = {_tomato: 2, _onion: 1}
+	var recipe: Dictionary[Item, int] = {_tomato: 2, _onion: 1}
 	_pantry.add(_tomato, 2)
 	assert_bool(_pantry.has_all(recipe)).is_false()
 	_pantry.add(_onion, 1)
@@ -111,9 +111,9 @@ func test_remove_all_takes_nothing_if_anything_is_short() -> void:
 func test_has_all_rejects_bad_amounts_like_remove_all() -> void:
 	# Otherwise a station could offer a dish that remove_all then refuses.
 	_pantry.add(_tomato, 1)
-	var zero: Dictionary[Ingredient, int] = {_tomato: 0}
-	var negative: Dictionary[Ingredient, int] = {_tomato: -1}
-	var missing: Dictionary[Ingredient, int] = {null: 1}
+	var zero: Dictionary[Item, int] = {_tomato: 0}
+	var negative: Dictionary[Item, int] = {_tomato: -1}
+	var missing: Dictionary[Item, int] = {null: 1}
 	_assert_recipe_rejected(zero)
 	_assert_recipe_rejected(negative)
 	_assert_recipe_rejected(missing)
@@ -126,7 +126,7 @@ func test_remove_all_is_safe_from_listeners_that_change_the_pantry() -> void:
 	_pantry.add(_onion, 1)
 	var listener_removed: Array[bool] = []
 	_pantry.count_changed.connect(
-		func(ingredient: Ingredient, _count: int) -> void:
+		func(ingredient: Item, _count: int) -> void:
 			if ingredient == _tomato and listener_removed.is_empty():
 				listener_removed.append(_pantry.remove(_onion, 1))
 	)
@@ -140,26 +140,11 @@ func test_remove_all_emits_after_every_count_is_updated() -> void:
 	_pantry.add(_onion, 1)
 	var seen: Array[Array] = []
 	_pantry.count_changed.connect(
-		func(_ingredient: Ingredient, _count: int) -> void:
+		func(_ingredient: Item, _count: int) -> void:
 			seen.append([_pantry.count(_tomato), _pantry.count(_onion)])
 	)
 	_pantry.remove_all({_tomato: 1, _onion: 1})
 	assert_array(seen).is_equal([[0, 0], [0, 0]])
-
-
-func test_remove_all_works_with_a_catalog_dish() -> void:
-	var catalog: Catalog = Catalog.load_default()
-	var soup: Dish = null
-	for dish: Dish in catalog.dishes:
-		if dish.id == &"tomato_soup":
-			soup = dish
-	assert_object(soup).override_failure_message("No tomato_soup in the catalog").is_not_null()
-	if soup == null:
-		return
-	for ingredient: Ingredient in catalog.ingredients:
-		_pantry.add(ingredient, 1)
-	assert_bool(_pantry.remove_all(soup.ingredients)).is_true()
-	assert_bool(_pantry.has_all(soup.ingredients)).is_false()
 
 
 # --- Signals ------------------------------------------------------------------
@@ -173,13 +158,13 @@ func test_count_changed_reports_new_counts() -> void:
 
 # --- Helpers -------------------------------------------------------------------
 
-func _make_ingredient(id: StringName) -> Ingredient:
-	var ingredient: Ingredient = Ingredient.new()
+func _make_ingredient(id: StringName) -> Item:
+	var ingredient: Item = Item.new()
 	ingredient.id = id
 	return ingredient
 
 
-func _assert_recipe_rejected(recipe: Dictionary[Ingredient, int]) -> void:
+func _assert_recipe_rejected(recipe: Dictionary[Item, int]) -> void:
 	assert_bool(_pantry.has_all(recipe)).override_failure_message(
 		"has_all accepted %s" % [recipe]
 	).is_false()

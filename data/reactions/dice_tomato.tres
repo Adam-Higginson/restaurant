@@ -1,0 +1,18 @@
+[gd_resource type="Resource" script_class="Reaction" format=3]
+
+[ext_resource type="Script" path="res://scripts/data/item.gd" id="1_drtp1"]
+[ext_resource type="Resource" path="res://data/items/sliced_tomato.tres" id="2_auicx"]
+[ext_resource type="Script" path="res://scripts/data/element.gd" id="3_366ti"]
+[ext_resource type="Resource" path="res://data/elements/cut.tres" id="4_reuox"]
+[ext_resource type="Resource" path="res://data/items/chopping_board.tres" id="5_cskqx"]
+[ext_resource type="Resource" path="res://data/items/diced_tomato.tres" id="6_vw254"]
+[ext_resource type="Script" path="res://scripts/data/reaction.gd" id="7_i4ld7"]
+
+[resource]
+script = ExtResource("7_i4ld7")
+id = &"dice_tomato"
+consumes = Array[ExtResource("1_drtp1")]([ExtResource("2_auicx")])
+requires = Array[ExtResource("1_drtp1")]([ExtResource("5_cskqx")])
+elements = Array[ExtResource("3_366ti")]([ExtResource("4_reuox")])
+amount = 3.0
+result = ExtResource("6_vw254")

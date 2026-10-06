@@ -107,7 +107,7 @@ func test_transitions_from_the_wrong_phase_fail() -> void:
 # --- New game -----------------------------------------------------------------
 
 func test_new_game_resets_everything() -> void:
-	var tomato: Ingredient = Ingredient.new()
+	var tomato: Item = Item.new()
 	var pantry: Pantry = _state.pantry
 	_state.pantry.add(tomato, 3)
 	_state.spend(10)
