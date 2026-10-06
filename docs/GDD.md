@@ -26,34 +26,41 @@ Everything stays where you left it between days: ingredients in storage or the c
 
 ## Player
 - One character, top-down 4-direction movement.
-- Interacts with the object in front of them (containers, counters, the stove, tables, the shop board, the door sign, the bed).
-- **Arms:** carries up to **3 items** stacked above their head: ingredients, prepared food, finished dishes and utensils (chopping board, pan). Each item takes one slot. The stack bobs as they walk.
-- **Tool belt:** a small row of slots (4) for hand tools. One slot is selected at a time. Selecting an empty slot means bare hands.
+- Acts on the object in front of them (containers, counters, the stove, pans, tables, the shop board, the door sign, the bed).
+- **Arms:** carries up to **3 items** stacked above their head: ingredients, prepared food, finished dishes and utensils (chopping board, frying pan, saucepan). Each item takes one slot. The stack bobs as they walk. Utensils are carried from place to place like food; they never go on the belt.
+- **Tool belt:** a small row of slots (4) for hand tools, always with you. The MVP has one tool, the knife. One slot is selected at a time. Tools can only be used with empty arms: put everything down first.
 
 ### Controls
-| Key | Action |
-|---|---|
-| E | **Interact:** take an item, put down the top item, open a container, flip the door sign, go to bed |
-| Space | **Use** the selected belt tool on what you're facing: the knife chops, bare hands combine |
-| Q | Rotate the stack, so a different item is on top |
-| 1–4 / scroll | Select a belt slot |
+Three separate buttons, so each one always means the same thing: **pick up / put down** moves things, **interact** works things, **use tool** uses the selected belt tool.
 
-Only the top item of the stack is active: E puts that one down, and anything you pick up goes on top.
+| Action | Keyboard | Controller (Xbox naming) | Does |
+|---|---|---|---|
+| Move | WASD / arrows | Left stick / D-pad | Walk in 4 directions |
+| Pick up / put down | Space | A | Take the top item from a counter, board or pan (or an empty utensil itself). Put your top item on a counter, or into a board or pan. |
+| Interact | E | X | Switch a pan on, combine what's on a board or counter by hand, open a container, flip the door sign, go to bed |
+| Use tool | F | B | Use the selected belt tool on what you're facing (the knife chops). Empty arms only. |
+| Rotate stack | Q | Right bumper | Rotate the stack, so a different item is on top |
+| Select belt slot | 1–4 / scroll | Left bumper (cycle) | Choose the active tool |
+
+Only the top item of the stack is active: put down uses that one, and anything you pick up goes on top.
+
+Each action is a named action in Godot's Input Map with both the keyboard and the controller bound, so gameplay code never checks a specific key or button. Core play must never need the mouse, and panels (shop, containers, summary) must be usable with the D-pad.
 
 ## Starting kit (day one)
 | Thing | Kind | Starts |
 |---|---|---|
 | Cheap chef's knife | Belt tool | On the belt |
 | Basic chopping board | Utensil (carried in arms) | On a counter |
-| Basic frying pan | Utensil (carried in arms) | On the stove |
+| Basic frying pan | Utensil (carried in arms) | On a stove burner |
+| Basic saucepan | Utensil (carried in arms) | On the other stove burner |
 | Basic fridge (12 slots) | Storage furniture | Placed in the kitchen |
 | Basic cupboard (12 slots) | Storage furniture | Placed in the kitchen |
-| Counters, stove | Fixed kitchen fittings | Placed in the kitchen |
+| Counters, stove (2 burners) | Fixed kitchen fittings | Placed in the kitchen |
 
 ## Storage
 - The **fridge** holds chilled ingredients, and the **cupboard** holds dry ones. Each ingredient says which kind of storage it needs.
 - Containers have a fixed number of slots, and each item uses one. Bigger containers are a later upgrade.
-- E on a container opens a small panel showing its contents. Picking an ingredient puts it in your arms if you have space. E on a container while holding an ingredient it accepts puts that ingredient away.
+- Interact on a container opens a small panel showing its contents. Picking an ingredient puts it in your arms if you have space. Put down on a container while your top item is an ingredient it accepts puts that ingredient away.
 - Containers hold raw ingredients only, not prepared food or dishes.
 - Bought ingredients arrive in the **delivery crate** by the door at 6:00 the next morning. The crate has no limit and works like a container you can only take from.
 - Furniture is fixed in place in the MVP. Later it can be moved (see the roadmap).
@@ -61,19 +68,20 @@ Only the top item of the stack is active: E puts that one down, and anything you
 ## Cooking
 Cooking is hands-on: you move ingredients between places and apply tools to them. Recipes are fixed: only combinations that match a known recipe work, and anything else is refused with a small "that doesn't go together" bubble.
 
-- **Surfaces:** a counter holds one item, either food or a utensil. The chopping board and pan each hold up to 3 food items.
-- **Chopping:** with the knife selected, press Use at a chopping board to chop the raw item on it (for example tomato → chopped tomato). Chopping takes a few presses.
-- **Combining:** with bare hands, press Use at a board or counter holding items that match a combine recipe to turn them into one item (for example chopped lettuce + chopped tomato → Garden Salad).
-- **Stove cooking:** a pan on the stove holding items that match a cook recipe starts cooking. A progress bar shows the time left. When it's done, the result waits in the pan until you take it. It never burns.
-- The intended fun is juggling: the stove cooks on its own while you chop or serve.
+- **Surfaces:** a counter holds one item, either food or a utensil. The chopping board and each pan hold up to 3 food items.
+- **Chopping:** with empty arms and the knife selected, press Use tool at a chopping board to chop the raw item on it (for example tomato → chopped tomato). Chopping takes a few presses.
+- **Combining:** press Interact at a board or counter holding items that match a combine recipe to turn them into one item (for example chopped lettuce + chopped tomato → Garden Salad).
+- **Stove cooking:** the stove has two burners, one per pan. Put food into a pan on a burner, then press Interact on it to switch it on. If the food matches a recipe for that pan, it starts cooking, like a Stardew machine: a progress bar shows the time left, and when it's done the result waits in the pan until you take it. It never burns. If the food doesn't match, the pan stays off and shows the "that doesn't go together" bubble. A pan can't be filled, emptied or picked up while it's cooking.
+- **Which pan:** the **frying pan** fries (Grilled Cheese) and the **saucepan** boils (Tomato Soup). Each cook recipe names its pan.
+- The intended fun is juggling: both burners cook on their own while you chop or serve.
 - **Future ideas:** optional extra steps that improve a dish (toast the bread for a nicer grilled cheese that pays more), and the fresh-dish tip bonus. See the roadmap.
 
 ## MVP menu
 | Dish | Steps | Cook time | Price |
 |---|---|---|---|
 | Garden Salad | Chop lettuce, chop tomato → combine by hand | — | 12 |
-| Tomato Soup | Chop tomato, chop onion → cook in the pan | 8s | 18 |
-| Grilled Cheese | Combine bread + cheese by hand → cook in the pan | 6s | 15 |
+| Tomato Soup | Chop tomato, chop onion → boil in the saucepan | 8s | 18 |
+| Grilled Cheese | Combine bread + cheese by hand → fry in the frying pan | 6s | 15 |
 
 | Ingredient | Storage | Shop price |
 |---|---|---|
@@ -105,8 +113,8 @@ Tomato is shared by two dishes, which makes stocking up a small decision. The nu
 - **End-of-day summary** screen.
 
 ## Architecture notes
-- Ingredients and dishes are `Resource` definitions under `res://data/`. Prepared food (chopped tomato, a raw sandwich) is defined the same way, so everything food-related is an item definition.
-- Recipes are `Resource` definitions too: a method (chop, combine or cook), the input items, the output item and a time. Customers order from the dishes on the menu.
+- Ingredients and dishes are `Resource` definitions under `res://data/`. Prepared food (chopped tomato, a raw sandwich) is defined the same way, so everything food-related is an item definition. Anything that can be carried in your arms shares a holdable-item base; food is one kind, and utensils will be another.
+- Recipes are `Resource` definitions too: a method (chop, combine, fry or boil), the input items, the output item and a time (fry and boil only). The method says what does the work: the knife chops, hands combine, the frying pan fries and the saucepan boils. Customers order from the dishes on the menu.
 - Arms, the tool belt and each container's contents are gameplay state in scripts, not in UI scripts. UI reads them and listens to signals.
 - A container's contents are a store of ingredient counts with a capacity, with no notion of where ingredients came from. Today the shop fills it; later farms will too. The existing `Pantry` class (counts per ingredient) can become this store.
 - Money and the day number live in the `Game` autoload (`scripts/state/game_state.gd`), so any script can use `Game.money` and so on. The global `Game.pantry` goes away when storage containers are built.
