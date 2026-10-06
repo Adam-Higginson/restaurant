@@ -59,10 +59,10 @@ Each action is a named action in Godot's Input Map with both the keyboard and th
 | Counters, stove (2 burners), sink | Fixed kitchen fittings | Placed in the kitchen |
 
 ## Storage
-- The **fridge** holds chilled ingredients, and the **cupboard** holds dry ones. Each ingredient says which kind of storage it needs.
+- The **fridge** holds chilled food, and the **cupboard** holds dry food. Every food item says which kind of storage it needs.
 - Containers have a fixed number of slots, and each item uses one. Bigger containers are a later upgrade.
-- Interact on a container opens a small panel showing its contents. Picking an ingredient puts it in your arms if you have space. Put down on a container while your top item is an ingredient it accepts puts that ingredient away.
-- Containers hold raw ingredients only, not prepared food or dishes. Shop ingredients all arrive at the same quality (★), so a container only needs to count them.
+- Interact on a container opens a small panel showing its contents. Picking an item puts it in your arms if you have space. Put down on a container while your top item is food it accepts puts it away.
+- Containers hold any **solid** food, raw or prepared, so you can prep ahead: chop tomatoes and onions in the morning, or make sandwiches ready to fry. Each slot holds one piece of food, keeping its quality. Liquids can't be stored in the MVP (jars are on the roadmap).
 - Bought ingredients arrive in the **delivery crate** by the door at 6:00 the next morning. The crate has no limit and works like a container you can only take from.
 - Furniture is fixed in place in the MVP. Later it can be moved (see the roadmap).
 
@@ -134,21 +134,21 @@ Water is free from the sink. Tomato is shared by two dishes, which makes stockin
 - **HUD:** money, day number, clock, and whether the restaurant is open.
 - **Belt bar** showing the belt slots and the selected tool.
 - **Shop panel** at the shop board by the door. Orders arrive the next morning.
-- **Container panel** for taking ingredients out of the fridge, cupboard and crate.
+- **Container panel** for taking food out of the fridge, cupboard and crate.
 - **End-of-day summary** screen, including tips.
 
 ## Architecture notes
-- Every food state is a `Resource` definition under `res://data/`: ingredients, prepared food (chopped tomato, boiling water, a sandwich) and dishes. Each says whether it's a liquid or a solid. Anything that can be carried in your arms shares a holdable-item base; food is one kind, and utensils will be another. Customers order from the dishes on the menu.
+- Every food state is a `Resource` definition under `res://data/`: ingredients, prepared food (chopped tomato, boiling water, a sandwich) and dishes. Each says whether it's a liquid or a solid, and whether it's stored in the fridge or the cupboard. Anything that can be carried in your arms shares a holdable-item base; food is one kind, and utensils will be another. Customers order from the dishes on the menu.
 - Reactions are `Resource` definitions too: vessel, conditions, consumed food, kept food, time, result and quality. The matching rules (per-reaction matching, claiming, more-food-wins, quality averaging) are plain gameplay logic with no scenes, so they can be unit tested on their own.
 - Definitions are shared and never change. A piece of food in the world is a small runtime object pointing at its definition and holding its own quality (and later freshness). Arms, vessels and counters hold these objects. Vessels also hold the running reactions and their timers.
 - Arms, the tool belt and each container's contents are gameplay state in scripts, not in UI scripts. UI reads them and listens to signals.
-- A container's contents are a store of ingredient counts with a capacity, with no notion of where ingredients came from. Today the shop fills it; later farms will too. The existing `Pantry` class (counts per ingredient) can become this store.
+- A container's contents are a list of food objects with a capacity, with no notion of where the food came from. Today the shop fills it; later farms will too. It replaces the existing `Pantry` counts store.
 - Money and the day number live in the `Game` autoload (`scripts/state/game_state.gd`), so any script can use `Game.money` and so on. The global `Game.pantry` goes away when storage containers are built.
 - The clock and the restaurant's open/closed state are gameplay state too, replacing the old prep/service/summary phases (`start_service()`, `end_service()`, `start_next_day()`). Other code listens to signals such as the time changing, the restaurant opening or closing, and the day ending.
 - Orders placed at the shop are held as pending until the next morning, then moved into the crate.
 
 ## Out of scope for the MVP
-Saving and loading, menus and settings, real art and audio, decor and upgrades, multiple customers per table, ingredient decay, moving furniture, energy, washing up, the sieve and the ladle.
+Saving and loading, menus and settings, real art and audio, decor and upgrades, multiple customers per table, ingredient decay, moving furniture, energy, washing up, the sieve, the ladle, and storing liquids.
 
 ## Future roadmap
 Rough order, all post-MVP:
@@ -156,14 +156,15 @@ Rough order, all post-MVP:
 2. More dishes that show off building up (marinara: oil, then garlic, then tomato; boiled potatoes), staples like oil and salt, tools (whisk, peeler) and stations (oven, grill).
 3. **Sieve:** bring a sieve and a bowl to a pan, and the solids go into the bowl while the liquid stays in the pan, ready for the next batch.
 4. **Ladle and servings:** one pot of soup serves several bowls, ladled out one at a time.
-5. Washing up: served plates and bowls come back dirty and need washing at the sink.
-6. Movable furniture: lift a fridge or cupboard above your head with empty arms (it must be empty inside) and place it elsewhere.
-7. Ingredient decay: food loses freshness over time, slower in the fridge. Fresher food earns more.
-8. Energy: how much you slept sets the next day's energy. Low energy makes you walk and chop a bit slower, but never stops you playing.
-9. Restaurant upgrades: more tables, decor, better utensils (a faster knife, a bigger pan).
-10. **Farming:** plant, water and harvest crops that fill your storage. Later, animals for eggs, milk and cheese.
-11. Farm-to-table bonus: dishes made with home-grown ingredients sell for more.
-12. Regulars with names, favourite dishes and relationship levels.
-13. Hiring staff (waiter, cook) to automate parts of the loop.
-14. Seasons that affect crops and the menu.
-15. More storage: bigger fridges and cupboards, a walk-in pantry, more arm and belt space (design epic #28).
+5. **Jars and bottles:** bring a jar to a pan and the liquid pours in, solids stay behind. Jars go in the fridge or cupboard and pour back into a pan later, so you can make garlic oil in the morning for the evening's sauces.
+6. Washing up: served plates and bowls come back dirty and need washing at the sink.
+7. Movable furniture: lift a fridge or cupboard above your head with empty arms (it must be empty inside) and place it elsewhere.
+8. Ingredient decay: food loses freshness over time, slower in the fridge. Fresher food earns more.
+9. Energy: how much you slept sets the next day's energy. Low energy makes you walk and chop a bit slower, but never stops you playing.
+10. Restaurant upgrades: more tables, decor, better utensils (a faster knife, a bigger pan).
+11. **Farming:** plant, water and harvest crops that fill your storage. Later, animals for eggs, milk and cheese.
+12. Farm-to-table bonus: dishes made with home-grown ingredients sell for more.
+13. Regulars with names, favourite dishes and relationship levels.
+14. Hiring staff (waiter, cook) to automate parts of the loop.
+15. Seasons that affect crops and the menu.
+16. More storage: bigger fridges and cupboards, a walk-in pantry, more arm and belt space (design epic #28).
