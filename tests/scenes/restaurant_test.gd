@@ -14,10 +14,10 @@ func test_has_four_tables_each_with_a_seat() -> void:
 		assert_object(table.get_node_or_null("Seat")).is_not_null()
 
 
-func test_has_two_stations_a_pantry_and_a_door() -> void:
+func test_has_a_stove_a_board_a_pantry_and_a_door() -> void:
 	var runner: GdUnitSceneRunner = scene_runner(MAIN_SCENE)
 	assert_object(runner.find_child("Stove")).is_not_null()
-	assert_object(runner.find_child("ChoppingBoard")).is_not_null()
+	assert_object(runner.find_child("BoardCounter")).is_instanceof(Counter)
 	assert_object(runner.find_child("Pantry")).is_not_null()
 	assert_object(runner.find_child("Door")).is_instanceof(Marker2D)
 

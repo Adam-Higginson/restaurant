@@ -1,0 +1,19 @@
+[gd_scene load_steps=4 format=3]
+
+[ext_resource type="Script" path="res://scripts/props/dispenser.gd" id="1_dispenser"]
+[ext_resource type="Script" path="res://scripts/interaction/interactable.gd" id="2_interactable"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_dispenser"]
+size = Vector2(16, 16)
+
+[node name="Dispenser" type="StaticBody2D" groups=["dispensers"]]
+script = ExtResource("1_dispenser")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("RectangleShape2D_dispenser")
+
+[node name="Interactable" type="Area2D" parent="."]
+script = ExtResource("2_interactable")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Interactable"]
+shape = SubResource("RectangleShape2D_dispenser")
