@@ -1,12 +1,15 @@
 class_name Interactable
 extends Area2D
-## Makes its parent usable: the player presses "interact" while facing it.
+## Makes its parent usable: the player presses "interact" or "pick_up" while
+## facing it.
 ##
 ## Add as a child of a prop with a CollisionShape2D child of its own. The prop's
-## script listens to [signal interacted] and decides what happens.
+## script listens to the signals below and decides what happens.
 
 ## Emitted when the player uses this while it is enabled.
 signal interacted(player: Player)
+## Emitted when the player presses pick up / put down at this while it is enabled.
+signal pick_up_pressed(player: Player)
 
 ## Physics layer 2, named "interaction" in project settings.
 const LAYER: int = 1 << 1
@@ -34,13 +37,19 @@ func _draw() -> void:
 			continue
 		var size: Vector2 = (shape_node.shape as RectangleShape2D).size
 		var rect: Rect2 = Rect2(shape_node.position - size / 2.0, size).grow(1.0)
-		_draw_outline(rect)
+		PixelDraw.outline(self, rect, HIGHLIGHT_COLOR)
 
 
 ## Uses this interactable on behalf of the player. Does nothing while disabled.
 func interact(player: Player) -> void:
 	if enabled:
 		interacted.emit(player)
+
+
+## Pick up / put down at this on behalf of the player. Does nothing while disabled.
+func pick_up(player: Player) -> void:
+	if enabled:
+		pick_up_pressed.emit(player)
 
 
 func set_highlighted(value: bool) -> void:
@@ -52,14 +61,3 @@ func set_highlighted(value: bool) -> void:
 
 func is_highlighted() -> bool:
 	return _highlighted
-
-
-## Draws a crisp 1px outline just inside the rect, using filled rects so it
-## stays pixel-aligned.
-func _draw_outline(rect: Rect2) -> void:
-	var p: Vector2 = rect.position
-	var s: Vector2 = rect.size
-	draw_rect(Rect2(p, Vector2(s.x, 1)), HIGHLIGHT_COLOR)
-	draw_rect(Rect2(p + Vector2(0, s.y - 1), Vector2(s.x, 1)), HIGHLIGHT_COLOR)
-	draw_rect(Rect2(p, Vector2(1, s.y)), HIGHLIGHT_COLOR)
-	draw_rect(Rect2(p + Vector2(s.x - 1, 0), Vector2(1, s.y)), HIGHLIGHT_COLOR)

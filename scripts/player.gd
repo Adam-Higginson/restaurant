@@ -1,12 +1,16 @@
 class_name Player
 extends CharacterBody2D
-## The player character: top-down movement with a 4-way facing direction.
+## The player character: top-down movement with a 4-way facing direction, and
+## arms that carry a stack of items.
 
 ## Walk speed in pixels per second (16px tiles, so 5 tiles per second).
 @export var speed: float = 80.0
 
 ## The cardinal direction the player is facing. Used later to pick what to interact with.
 var facing: Vector2 = Vector2.DOWN
+## What the player is carrying. Created once and never replaced, so signal
+## connections to it keep working.
+var arms: Arms = Arms.new()
 
 @onready var _facing_marker: Node2D = $FacingMarker
 
@@ -18,6 +22,12 @@ func _physics_process(_delta: float) -> void:
 		facing = _to_cardinal(input)
 	move_and_slide()
 	_facing_marker.position = facing * 6.0
+
+
+func _unhandled_input(event: InputEvent) -> void:
+	if event.is_action_pressed("rotate_stack"):
+		get_viewport().set_input_as_handled()
+		arms.rotate()
 
 
 ## Turns a movement vector into one of the four cardinal directions.
