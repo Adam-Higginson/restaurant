@@ -1,8 +1,10 @@
-[gd_scene load_steps=6 format=3]
+[gd_scene load_steps=8 format=3]
 
 [ext_resource type="Script" path="res://scripts/player.gd" id="1_player"]
 [ext_resource type="Script" path="res://scripts/interaction/interaction_detector.gd" id="2_detector"]
 [ext_resource type="Script" path="res://scripts/player/carried_stack.gd" id="3_stack"]
+[ext_resource type="Resource" path="res://data/tools/chefs_knife.tres" id="4_knife"]
+[ext_resource type="Script" path="res://scripts/data/hand_tool.gd" id="5_tool"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_feet"]
 size = Vector2(10, 6)
@@ -13,6 +15,7 @@ size = Vector2(10, 10)
 [node name="Player" type="CharacterBody2D"]
 motion_mode = 1
 script = ExtResource("1_player")
+start_tools = Array[ExtResource("5_tool")]([ExtResource("4_knife")])
 
 [node name="Body" type="Polygon2D" parent="."]
 color = Color(0.25, 0.45, 0.85, 1)

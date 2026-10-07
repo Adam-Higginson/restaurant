@@ -92,6 +92,69 @@ func test_removing_focused_interactable_clears_focus() -> void:
 	assert_bool(_detector(rig).try_interact()).is_false()
 
 
+# --- Use tool -------------------------------------------------------------------
+
+func test_use_tool_sends_the_selected_tool_to_the_stove() -> void:
+	var runner: GdUnitSceneRunner = scene_runner(MAIN_SCENE)
+	var player: Player = place_player(runner, BELOW_STOVE)
+	var stove: Interactable = runner.find_child("Stove").get_node("Interactable") as Interactable
+	var calls: Array[Array] = _record_tool_uses(stove)
+
+	await walk(runner, "move_up", 20)
+	await press(runner, "use_tool")
+
+	assert_int(calls.size()).is_equal(1)
+	assert_object(calls[0][0]).is_same(player)
+	assert_object(calls[0][1]).is_same(player.belt.get_tool(0))
+
+
+func test_use_tool_does_nothing_while_carrying() -> void:
+	var runner: GdUnitSceneRunner = scene_runner(MAIN_SCENE)
+	var player: Player = place_player(runner, BELOW_STOVE)
+	var stove: Interactable = runner.find_child("Stove").get_node("Interactable") as Interactable
+	var calls: Array[Array] = _record_tool_uses(stove)
+	player.arms.add(ItemInstance.new(Item.new()))
+
+	await walk(runner, "move_up", 20)
+	await press(runner, "use_tool")
+
+	assert_int(calls.size()).is_equal(0)
+
+
+func test_use_tool_with_an_empty_slot_selected_does_nothing() -> void:
+	var runner: GdUnitSceneRunner = scene_runner(MAIN_SCENE)
+	var player: Player = place_player(runner, BELOW_STOVE)
+	var stove: Interactable = runner.find_child("Stove").get_node("Interactable") as Interactable
+	var calls: Array[Array] = _record_tool_uses(stove)
+	player.belt.select(1)
+
+	await walk(runner, "move_up", 20)
+	await press(runner, "use_tool")
+
+	assert_int(calls.size()).is_equal(0)
+
+
+func test_use_tool_facing_nothing_does_nothing() -> void:
+	var rig: Node2D = _make_rig()
+	var runner: GdUnitSceneRunner = scene_runner(rig)
+	await physics_ticks(runner, 5)
+
+	assert_bool(_detector(rig).try_use_tool()).is_false()
+
+
+func test_use_tool_on_a_disabled_interactable_does_nothing() -> void:
+	var rig: Node2D = _make_rig()
+	var target: Interactable = _add_interactable(rig, Vector2(100, 116))
+	var calls: Array[Array] = _record_tool_uses(target)
+	var runner: GdUnitSceneRunner = scene_runner(rig)
+	await physics_ticks(runner, 5)
+
+	target.enabled = false
+	target.use_tool(rig.get_node("Player") as Player, HandTool.new())
+
+	assert_int(calls.size()).is_equal(0)
+
+
 # --- Helpers -------------------------------------------------------------------
 
 func _make_rig() -> Node2D:
@@ -118,3 +181,12 @@ func _add_interactable(rig: Node2D, pos: Vector2) -> Interactable:
 
 func _detector(rig: Node2D) -> InteractionDetector:
 	return rig.get_node("Player/InteractionDetector") as InteractionDetector
+
+
+## Records each tool_used emission as [player, tool].
+func _record_tool_uses(interactable: Interactable) -> Array[Array]:
+	var calls: Array[Array] = []
+	interactable.tool_used.connect(
+		func(p: Player, tool: HandTool) -> void: calls.append([p, tool])
+	)
+	return calls

@@ -1,0 +1,11 @@
+[gd_resource type="Resource" script_class="HandTool" format=3]
+
+[ext_resource type="Script" path="res://scripts/data/hand_tool.gd" id="1_tool"]
+[ext_resource type="Resource" path="res://data/elements/cut.tres" id="2_cut"]
+
+[resource]
+script = ExtResource("1_tool")
+id = &"chefs_knife"
+display_name = "Cheap chef's knife"
+color = Color(0.78, 0.8, 0.84, 1)
+element = ExtResource("2_cut")

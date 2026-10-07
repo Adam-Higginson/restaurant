@@ -35,6 +35,16 @@ func test_cut_is_an_instant_element() -> void:
 	assert_int(cut.kind).is_equal(Element.Kind.INSTANT)
 
 
+func test_knife_is_a_tool_that_cuts() -> void:
+	var knife: HandTool = _catalog.find_tool(&"chefs_knife")
+	assert_object(knife).is_not_null()
+	assert_object(knife.element).is_same(_catalog.find_element(&"cut"))
+
+
+func test_find_tool_returns_null_for_unknown_id() -> void:
+	assert_object(_catalog.find_tool(&"spatula")).is_null()
+
+
 func test_chopping_reactions_match_design_doc() -> void:
 	_assert_reaction(&"chop_lettuce", [&"lettuce"], [&"chopping_board"], &"cut", 3,
 		&"chopped_lettuce", 3)
