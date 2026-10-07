@@ -92,3 +92,48 @@ func test_rotate_stack_changes_the_top_item() -> void:
 
 	assert_object(player.arms.top()).is_same(tomato)
 	assert_array(player.arms.get_items()).contains_exactly([plate, tomato])
+
+
+# --- Tool belt -------------------------------------------------------------------
+
+func test_starts_with_the_knife_in_the_first_slot_selected() -> void:
+	var player: Player = _new_player()
+	add_child(player)
+	var knife: HandTool = Catalog.load_default().find_tool(&"chefs_knife")
+	assert_object(player.belt.get_tool(0)).is_same(knife)
+	assert_int(player.belt.selected_index).is_equal(0)
+	assert_object(player.belt.selected_tool()).is_same(knife)
+
+
+func test_number_keys_select_belt_slots() -> void:
+	# In the main scene, so input isn't delivered twice (see rotate_stack above).
+	var runner: GdUnitSceneRunner = scene_runner(MAIN_SCENE)
+	var player: Player = runner.find_child("Player") as Player
+
+	await press(runner, "select_slot_3")
+	assert_int(player.belt.selected_index).is_equal(2)
+
+	await press(runner, "select_slot_1")
+	assert_int(player.belt.selected_index).is_equal(0)
+
+
+func test_next_and_previous_cycle_through_belt_slots() -> void:
+	var runner: GdUnitSceneRunner = scene_runner(MAIN_SCENE)
+	var player: Player = runner.find_child("Player") as Player
+
+	await press(runner, "select_slot_next")
+	assert_int(player.belt.selected_index).is_equal(1)
+
+	await press(runner, "select_slot_previous")
+	await press(runner, "select_slot_previous")
+	assert_int(player.belt.selected_index).is_equal(ToolBelt.SLOT_COUNT - 1)
+
+
+func test_selecting_a_slot_works_while_carrying() -> void:
+	var runner: GdUnitSceneRunner = scene_runner(MAIN_SCENE)
+	var player: Player = runner.find_child("Player") as Player
+	player.arms.add(ItemInstance.new(Item.new()))
+
+	await press(runner, "select_slot_2")
+
+	assert_int(player.belt.selected_index).is_equal(1)

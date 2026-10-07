@@ -40,7 +40,7 @@ Three separate buttons, so each one always means the same thing: **pick up / put
 | Interact | E | X | Turn a burner on or off, fill a pan at the sink, take a clean plate or bowl from the rack, open a container, flip the door sign, go to bed |
 | Use tool | F | B | Use the selected belt tool on what you're facing (the knife chops). Empty arms only. |
 | Rotate stack | Q | Right bumper | Rotate the stack, so a different item is on top |
-| Select belt slot | 1–4 / scroll | Left bumper (cycle) | Choose the active tool |
+| Select belt slot | 1–4 / scroll | Left bumper (cycle) | Choose the active tool. Cycling goes through every slot, empty ones too. |
 
 Only the top item of the stack is active: put down uses that one, and anything you pick up goes on top.
 
@@ -135,7 +135,7 @@ Water is free from the sink. Tomato is shared by two dishes, which makes stockin
 
 ## UI
 - **HUD:** money, day number, clock, and whether the restaurant is open.
-- **Belt bar** showing the belt slots and the selected tool.
+- **Belt bar** showing the belt slots and the selected tool, dimmed while the arms aren't empty.
 - **Shop panel** at the shop board by the door. Orders arrive the next morning.
 - **Container panel** for taking food out of the fridge, cupboard and crate.
 - **End-of-day summary** screen, including tips.
@@ -144,11 +144,13 @@ Water is free from the sink. Tomato is shared by two dishes, which makes stockin
 - Definitions are `Resource` files under `res://data/`, listed in `res://data/catalog.tres` (`Catalog`):
   - `Item` (`data/items/`): anything physical. Every food state (tomato, sliced tomato, Garden Salad) and every utensil (chopping board, plate). Fields like liquid/solid (#37) and storage kind (#32) are added when a feature needs them.
   - `Element` (`data/elements/`): cut, fire, later cold. Instant or timed.
+  - `HandTool` (`data/tools/`): a belt tool, and the `Element` it applies (the knife applies cut). Kept apart from `Item` because tools never go in the arms.
   - `Reaction` (`data/reactions/`): consumed items, required items (including the vessel), elements, amount, result and quality.
   - Prices aren't on items: the shop (#12) and the menu (#9) hold what's sold and for how much, so anything can be bought or put on the menu.
 - Definitions are shared and never change. A physical thing in the world is an `ItemInstance` (`scripts/cooking/`) pointing at its `Item` and holding its own quality (and later freshness). Arms, vessels and counters hold these.
 - `VesselContents` is the cooking logic of one vessel, with no nodes, so it's unit tested on its own. Its changes (`add_item`, `remove_item`, `add_element`, `remove_element`, `tick`) run the reaction engine inside them; its `get_` methods only read. Board and pan nodes feed it input and time, and redraw from its signals (`contents_changed`, `reaction_started`, `reaction_progressed`, `reaction_cancelled`, `reaction_finished`).
 - Arms, the tool belt and each container's contents are gameplay state in scripts, not in UI scripts. UI reads them and listens to signals.
+- Interact, pick up and use tool are routed the same way: the player's `InteractionDetector` sends each press to the focused `Interactable`, which emits `interacted`, `pick_up_pressed` or `tool_used(player, tool)` for its prop to handle. The empty-arms rule for tools is checked there.
 - A container's contents are a list of food objects with a capacity, with no notion of where the food came from. Today the shop fills it; later farms will too. It replaces the existing `Pantry` counts store.
 - Money and the day number live in the `Game` autoload (`scripts/state/game_state.gd`), so any script can use `Game.money` and so on. The global `Game.pantry` goes away when storage containers are built.
 - The clock and the restaurant's open/closed state are gameplay state too, replacing the old prep/service/summary phases (`start_service()`, `end_service()`, `start_next_day()`). Other code listens to signals such as the time changing, the restaurant opening or closing, and the day ending.

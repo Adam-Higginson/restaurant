@@ -1,7 +1,7 @@
 class_name Interactable
 extends Area2D
-## Makes its parent usable: the player presses "interact" or "pick_up" while
-## facing it.
+## Makes its parent usable: the player presses "interact", "pick_up" or
+## "use_tool" while facing it.
 ##
 ## Add as a child of a prop with a CollisionShape2D child of its own. The prop's
 ## script listens to the signals below and decides what happens.
@@ -10,6 +10,8 @@ extends Area2D
 signal interacted(player: Player)
 ## Emitted when the player presses pick up / put down at this while it is enabled.
 signal pick_up_pressed(player: Player)
+## Emitted when the player uses a belt tool on this while it is enabled.
+signal tool_used(player: Player, tool: HandTool)
 
 ## Physics layer 2, named "interaction" in project settings.
 const LAYER: int = 1 << 1
@@ -55,6 +57,12 @@ func interact(player: Player) -> void:
 func pick_up(player: Player) -> void:
 	if enabled:
 		pick_up_pressed.emit(player)
+
+
+## Uses [param tool] on this on behalf of the player. Does nothing while disabled.
+func use_tool(player: Player, tool: HandTool) -> void:
+	if enabled:
+		tool_used.emit(player, tool)
 
 
 func set_highlighted(value: bool) -> void:

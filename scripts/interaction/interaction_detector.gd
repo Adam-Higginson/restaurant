@@ -1,7 +1,7 @@
 class_name InteractionDetector
 extends Area2D
 ## Sits in front of the player, focuses the nearest enabled Interactable it
-## overlaps, and sends it "interact" and "pick_up" presses.
+## overlaps, and sends it "interact", "pick_up" and "use_tool" presses.
 
 ## Emitted when the focused interactable changes (null when nothing is in reach).
 signal focus_changed(interactable: Interactable)
@@ -34,6 +34,9 @@ func _unhandled_input(event: InputEvent) -> void:
 	elif event.is_action_pressed("pick_up"):
 		get_viewport().set_input_as_handled()
 		try_pick_up()
+	elif event.is_action_pressed("use_tool"):
+		get_viewport().set_input_as_handled()
+		try_use_tool()
 
 
 ## Uses the focused interactable, if any. Returns whether something was used.
@@ -50,6 +53,17 @@ func try_pick_up() -> bool:
 	if not is_instance_valid(focused):
 		return false
 	focused.pick_up(_player)
+	return true
+
+
+## Uses the selected belt tool on the focused interactable. Tools only work
+## with empty arms, so this does nothing while carrying, with an empty slot
+## selected, or with nothing in reach. Returns whether the tool was used.
+func try_use_tool() -> bool:
+	var tool: HandTool = _player.belt.selected_tool()
+	if tool == null or not _player.arms.is_empty() or not is_instance_valid(focused):
+		return false
+	focused.use_tool(_player, tool)
 	return true
 
 

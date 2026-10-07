@@ -23,9 +23,12 @@
 [ext_resource type="Resource" path="res://data/reactions/garden_salad.tres" id="21_m07uu"]
 [ext_resource type="Resource" path="res://data/reactions/garden_salad_shortcut.tres" id="22_3onb0"]
 [ext_resource type="Script" path="res://scripts/data/catalog.gd" id="23_itf3g"]
+[ext_resource type="Script" path="res://scripts/data/hand_tool.gd" id="24_tool"]
+[ext_resource type="Resource" path="res://data/tools/chefs_knife.tres" id="25_knife"]
 
 [resource]
 script = ExtResource("23_itf3g")
 items = Array[ExtResource("3_ri6n3")]([ExtResource("4_n75ka"), ExtResource("5_wvss8"), ExtResource("6_0uqn3"), ExtResource("7_5q4dk"), ExtResource("8_l2ssu"), ExtResource("9_kruv5"), ExtResource("10_7671r"), ExtResource("11_5u5l8"), ExtResource("12_lcsjk"), ExtResource("13_vx4vr"), ExtResource("14_cta3b"), ExtResource("15_wwfey"), ExtResource("16_rhhc8")])
 elements = Array[ExtResource("1_sq7co")]([ExtResource("2_gpcun")])
 reactions = Array[ExtResource("17_gx03v")]([ExtResource("18_dxvgn"), ExtResource("19_qdmq8"), ExtResource("20_oyiyi"), ExtResource("21_m07uu"), ExtResource("22_3onb0")])
+tools = Array[ExtResource("24_tool")]([ExtResource("25_knife")])
