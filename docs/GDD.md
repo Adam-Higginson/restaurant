@@ -55,7 +55,7 @@ Each action is a named action in Godot's Input Map with both the keyboard and th
 | Basic saucepan | Utensil (carried in arms) | On the other stove burner |
 | Basic fridge (12 slots) | Storage furniture | Placed in the kitchen |
 | Basic cupboard (12 slots) | Storage furniture | Placed in the kitchen |
-| Plate rack, bowl rack | Fixed kitchen fittings | Always give a clean plate or bowl |
+| Plate rack, bowl rack | Fixed kitchen fittings | Always give a clean plate or bowl (Interact) |
 | Counters, stove (2 burners), sink | Fixed kitchen fittings | Placed in the kitchen |
 
 ## Storage
@@ -94,8 +94,9 @@ A vessel keeps checking its contents. **Every reaction whose items are all prese
 
 ### Vessels and fittings
 - **Counter:** holds one item, food or a utensil.
-- **Chopping board:** holds one food item. With empty arms and the knife selected, each Use tool is one cut.
-- **Plate and bowl:** hold food, and assemble what's on them instantly when it matches a reaction (chopped lettuce + sliced tomato on a plate → Garden Salad). Customers are served the plate or bowl, which you carry whole. Racks give clean ones without limit; washing up is on the roadmap.
+- **Chopping board:** holds one food item (a bigger board can be an upgrade later). With empty arms and the knife selected, each Use tool on the board's counter is one cut. A progress bar shows how far the current cut level is. Pick up takes the food off (losing progress towards the next cut level), and only an empty board is picked up itself. Its food would travel with it, like a plate's.
+- **Plate and bowl:** hold up to 3 food items, and assemble what's on them instantly when it matches a reaction (chopped lettuce + sliced tomato on a plate → Garden Salad). Food goes on while the plate sits on a counter. Pick up always takes the plate whole, with its food, and customers are served it that way. Food that matches nothing just sits there; there's no way to take it back off yet (a bin is a possible follow-up). Racks give clean ones without limit (Interact); washing up is on the roadmap.
+- **Vessels don't nest:** only food goes into a board, plate, bowl or pan, never another utensil.
 - **Saucepan and frying pan:** hold up to 3 food items, and cook on the two-burner stove. Interact turns a burner on or off. A progress bar shows each running reaction. Finished food waits in the pan.
 - **Sink:** Interact with a saucepan at the sink fills it with water.
 - **Getting food out of a pan:** pick up takes the top solid item. Bring a plate or bowl and the pan's whole contents, liquids and solids, are tipped into it. Each food item is either a liquid (water, boiling water, soup) or a solid.
@@ -136,18 +137,22 @@ Water is free from the sink. Tomato is shared by two dishes, which makes stockin
 ## UI
 - **HUD:** money, day number, clock, and whether the restaurant is open.
 - **Belt bar** showing the belt slots and the selected tool, dimmed while the arms aren't empty.
+- **Held item label** above the belt bar naming the top carried item and its quality ("Sliced Tomato ★★", "Plate: Garden Salad ★★★").
+- **Quality pips:** food in the world shows 1–3 small dots for its stars, as a placeholder until there's real art.
 - **Shop panel** at the shop board by the door. Orders arrive the next morning.
 - **Container panel** for taking food out of the fridge, cupboard and crate.
 - **End-of-day summary** screen, including tips.
 
 ## Architecture notes
 - Definitions are `Resource` files under `res://data/`, listed in `res://data/catalog.tres` (`Catalog`):
-  - `Item` (`data/items/`): anything physical. Every food state (tomato, sliced tomato, Garden Salad) and every utensil (chopping board, plate). Fields like liquid/solid (#37) and storage kind (#32) are added when a feature needs them.
+  - `Item` (`data/items/`): anything physical. Every food state (tomato, sliced tomato, Garden Salad) and every utensil (chopping board, plate). A vessel has a `capacity` (how much food fits; 0 for everything else) and `carried_whole` (plates and bowls yes, boards and pans no). Fields like liquid/solid (#37) and storage kind (#32) are added when a feature needs them.
   - `Element` (`data/elements/`): cut, fire, later cold. Instant or timed.
   - `HandTool` (`data/tools/`): a belt tool, and the `Element` it applies (the knife applies cut). Kept apart from `Item` because tools never go in the arms.
   - `Reaction` (`data/reactions/`): consumed items, required items (including the vessel), elements, amount, result and quality.
   - Prices aren't on items: the shop (#12) and the menu (#9) hold what's sold and for how much, so anything can be bought or put on the menu.
-- Definitions are shared and never change. A physical thing in the world is an `ItemInstance` (`scripts/cooking/`) pointing at its `Item` and holding its own quality (and later freshness). Arms, vessels and counters hold these.
+- Definitions are shared and never change. A physical thing in the world is an `ItemInstance` (`scripts/cooking/`) pointing at its `Item` and holding its own quality (and later freshness). Arms, vessels and counters hold these. A vessel's instance also owns its `VesselContents`, so its food goes wherever it goes.
+- A `Counter` passes pick up, put down and Use tool through to a vessel on it. A stove burner can be a counter that also adds fire. `ItemDraw` (`scripts/visuals/`) draws any instance, its food and its progress the same way on counters, in the arms and later on the stove.
+- A `Dispenser` prop gives a fresh item on Interact without limit: the plate rack, and (temporarily, until storage #32) a lettuce bin and a tomato bin.
 - `VesselContents` is the cooking logic of one vessel, with no nodes, so it's unit tested on its own. Its changes (`add_item`, `remove_item`, `add_element`, `remove_element`, `tick`) run the reaction engine inside them; its `get_` methods only read. Board and pan nodes feed it input and time, and redraw from its signals (`contents_changed`, `reaction_started`, `reaction_progressed`, `reaction_cancelled`, `reaction_finished`).
 - Arms, the tool belt and each container's contents are gameplay state in scripts, not in UI scripts. UI reads them and listens to signals.
 - Interact, pick up and use tool are routed the same way: the player's `InteractionDetector` sends each press to the focused `Interactable`, which emits `interacted`, `pick_up_pressed` or `tool_used(player, tool)` for its prop to handle. The empty-arms rule for tools is checked there.
