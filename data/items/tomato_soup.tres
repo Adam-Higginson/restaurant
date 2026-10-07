@@ -1,0 +1,9 @@
+[gd_resource type="Resource" script_class="Item" format=3]
+
+[ext_resource type="Script" path="res://scripts/data/item.gd" id="1_qi3ko"]
+
+[resource]
+script = ExtResource("1_qi3ko")
+id = &"tomato_soup"
+display_name = "Tomato Soup"
+color = Color(0.85, 0.35, 0.25, 1)

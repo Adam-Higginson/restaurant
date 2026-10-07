@@ -1,0 +1,18 @@
+[gd_resource type="Resource" script_class="Reaction" format=3]
+
+[ext_resource type="Script" path="res://scripts/data/item.gd" id="1_0sm82"]
+[ext_resource type="Resource" path="res://data/items/lettuce.tres" id="2_s0eh0"]
+[ext_resource type="Script" path="res://scripts/data/element.gd" id="3_cnntc"]
+[ext_resource type="Resource" path="res://data/elements/cut.tres" id="4_hhgdp"]
+[ext_resource type="Resource" path="res://data/items/chopping_board.tres" id="5_dbi37"]
+[ext_resource type="Resource" path="res://data/items/chopped_lettuce.tres" id="6_ai7p2"]
+[ext_resource type="Script" path="res://scripts/data/reaction.gd" id="7_i051l"]
+
+[resource]
+script = ExtResource("7_i051l")
+id = &"chop_lettuce"
+consumes = Array[ExtResource("1_0sm82")]([ExtResource("2_s0eh0")])
+requires = Array[ExtResource("1_0sm82")]([ExtResource("5_dbi37")])
+elements = Array[ExtResource("3_cnntc")]([ExtResource("4_hhgdp")])
+amount = 3.0
+result = ExtResource("6_ai7p2")

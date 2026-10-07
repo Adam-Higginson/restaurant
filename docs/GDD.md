@@ -67,19 +67,22 @@ Each action is a named action in Godot's Input Map with both the keyboard and th
 - Furniture is fixed in place in the MVP. Later it can be moved (see the roadmap).
 
 ## Cooking
-Cooking is hands-on and works like a small chemistry system, in the spirit of Breath of the Wild: food reacts to where you put it. Every state food can be in is a named, designed item (tomato, chopped tomato, boiling water, tomato soup), so only combinations someone designed exist. Anything else simply doesn't react.
+Cooking is hands-on and works like a small chemistry system, in the spirit of Breath of the Wild: food reacts to where you put it. Every state food can be in is a named, designed item (tomato, sliced tomato, diced tomato, boiling water, tomato soup), so only combinations someone designed exist. Anything else simply doesn't react.
 
 ### Reactions
-A **reaction** is a rule: in a given **vessel**, under given **conditions**, a set of food turns into a result after some time.
+A **reaction** is a rule: when everything it needs is present together, for long enough, it becomes something else. Its inputs are:
 
-- **Vessel:** where it happens: chopping board, frying pan, saucepan, plate or bowl.
-- **Conditions:** what the vessel needs: the burner under it switched on (heat), or a tool being used on it (the knife).
-- **Consumed:** the food that gets used up.
-- **Kept:** food that must be present but isn't used up, like the boiling water a potato boils in.
-- **Time:** seconds of heat, chops with the knife, or instant.
-- **Result:** the food that comes out, and the reaction's **quality** (see below).
+- **Consumed items:** the food that gets used up.
+- **Required items:** things that must be present but aren't used up. This includes the **vessel** it happens in (chopping board, frying pan, saucepan, plate or bowl), and kept food like the boiling water a potato boils in.
+- **Elements:** things the surroundings provide rather than physical items (see below).
+- **Amount:** how much of the driving element it takes. With no elements, the reaction is **immediate**.
+- **Result:** the item that comes out, and the reaction's **quality** (see below).
 
-A vessel keeps checking its contents. **Every reaction whose food is all present and whose conditions hold runs**, each with its own timer, so a potato and a carrot can boil side by side in the same water. Food taking part in a reaction is claimed by it. If two reactions want the same food, the one that uses more food wins. When a reaction finishes, its consumed food is swapped for the result, which may let the next reaction start.
+**Elements** come in two kinds:
+- **Instant** elements arrive in one-off steps and don't stay. Each press of Use tool with the knife adds one **cut**. Cuts chain through cut levels: lettuce → chopped lettuce (3 cuts); tomato → sliced tomato (2 cuts) → diced tomato (3 more). You choose where to stop.
+- **Timed** elements stay while their source does and count seconds. A lit burner provides **fire** to the pan on it, so any heat source (a stove now, an oven or campfire later) works for any fire recipe. Turning the burner off pauses reactions without losing progress.
+
+A vessel keeps checking its contents. **Every reaction whose items are all present runs**, each with its own progress, moving forward while its elements are present, so a potato and a carrot can boil side by side in the same water. Consumed food is claimed by its reaction; required items can be shared. If two reactions want the same food, the one that uses more items wins, even taking over from a smaller reaction that already started. Taking food out of a vessel cancels its reactions, losing their progress. When a reaction finishes, its consumed food is swapped for the result, which may let the next reaction start.
 
 **Building up beats dumping in.** Because each step makes a new intermediate item, the order you add things matters without the game tracking it. A sauce built up step by step (oil, then garlic, then tomato) goes through the proper reactions. Dumping everything in at once triggers a separate, designed **shortcut reaction** that gives the same dish at a lower quality. Cooking never fails outright and never burns.
 
@@ -91,8 +94,8 @@ A vessel keeps checking its contents. **Every reaction whose food is all present
 
 ### Vessels and fittings
 - **Counter:** holds one item, food or a utensil.
-- **Chopping board:** holds up to 3 food items. With empty arms and the knife selected, Use tool chops (a few presses).
-- **Plate and bowl:** hold food, and assemble what's on them instantly when it matches a reaction (chopped lettuce + chopped tomato on a plate → Garden Salad). Customers are served the plate or bowl, which you carry whole. Racks give clean ones without limit; washing up is on the roadmap.
+- **Chopping board:** holds one food item. With empty arms and the knife selected, each Use tool is one cut.
+- **Plate and bowl:** hold food, and assemble what's on them instantly when it matches a reaction (chopped lettuce + sliced tomato on a plate → Garden Salad). Customers are served the plate or bowl, which you carry whole. Racks give clean ones without limit; washing up is on the roadmap.
 - **Saucepan and frying pan:** hold up to 3 food items, and cook on the two-burner stove. Interact turns a burner on or off. A progress bar shows each running reaction. Finished food waits in the pan.
 - **Sink:** Interact with a saucepan at the sink fills it with water.
 - **Getting food out of a pan:** pick up takes the top solid item. Bring a plate or bowl and the pan's whole contents, liquids and solids, are tipped into it. Each food item is either a liquid (water, boiling water, soup) or a solid.
@@ -101,8 +104,8 @@ A vessel keeps checking its contents. **Every reaction whose food is all present
 ## MVP menu
 | Dish | Proper (★★★) | Shortcut (★ or ★★) | Price |
 |---|---|---|---|
-| Garden Salad | Chop lettuce, chop tomato, put both on a plate | Whole lettuce and tomato on a plate | 12 |
-| Tomato Soup | Fill the saucepan at the sink, boil it (4s) → boiling water. Add chopped tomato and chopped onion, boil (8s). Tip it into a bowl. | Chopped tomato and onion into cold water, then turn the burner on (12s) | 18 |
+| Garden Salad | Chop lettuce, slice tomato, put both on a plate | Whole lettuce and tomato on a plate | 12 |
+| Tomato Soup | Fill the saucepan at the sink, boil it (4s) → boiling water. Add diced tomato and chopped onion, boil (8s). Tip it into a bowl. | Diced tomato and chopped onion into cold water, then turn the burner on (12s) | 18 |
 | Grilled Cheese | Bread + cheese on a plate → sandwich. Melt butter in the hot frying pan (2s), add the sandwich, fry (6s). | Sandwich straight into the frying pan without butter (6s) | 15 |
 
 | Ingredient | Storage | Shop price |
@@ -114,7 +117,7 @@ A vessel keeps checking its contents. **Every reaction whose food is all present
 | Onion | Cupboard | 2 |
 | Bread | Cupboard | 3 |
 
-Worked example: a tomato (★) chopped properly gives (1 + 3) / 2 = ★★ chopped tomato. Chopped lettuce and chopped tomato (both ★★) on a plate give (2 + 3) / 2 = 2.5, rounded up to a ★★★ Garden Salad. Whole lettuce and tomato on a plate give (1 + 1) / 2 = a ★ salad.
+Worked example: a tomato (★) sliced properly gives (1 + 3) / 2 = ★★ sliced tomato. Chopped lettuce and sliced tomato (both ★★) on a plate give (2 + 3) / 2 = 2.5, rounded up to a ★★★ Garden Salad. Whole lettuce and tomato on a plate give (1 + 1) / 2 = a ★ salad.
 
 Water is free from the sink. Tomato is shared by two dishes, which makes stocking up a small decision. The numbers are starting points for balancing.
 
@@ -138,9 +141,13 @@ Water is free from the sink. Tomato is shared by two dishes, which makes stockin
 - **End-of-day summary** screen, including tips.
 
 ## Architecture notes
-- Every food state is a `Resource` definition under `res://data/`: ingredients, prepared food (chopped tomato, boiling water, a sandwich) and dishes. Each says whether it's a liquid or a solid, and whether it's stored in the fridge or the cupboard. Anything that can be carried in your arms shares a holdable-item base; food is one kind, and utensils will be another. Customers order from the dishes on the menu.
-- Reactions are `Resource` definitions too: vessel, conditions, consumed food, kept food, time, result and quality. The matching rules (per-reaction matching, claiming, more-food-wins, quality averaging) are plain gameplay logic with no scenes, so they can be unit tested on their own.
-- Definitions are shared and never change. A piece of food in the world is a small runtime object pointing at its definition and holding its own quality (and later freshness). Arms, vessels and counters hold these objects. Vessels also hold the running reactions and their timers.
+- Definitions are `Resource` files under `res://data/`, listed in `res://data/catalog.tres` (`Catalog`):
+  - `Item` (`data/items/`): anything physical. Every food state (tomato, sliced tomato, Garden Salad) and every utensil (chopping board, plate). Fields like liquid/solid (#37) and storage kind (#32) are added when a feature needs them.
+  - `Element` (`data/elements/`): cut, fire, later cold. Instant or timed.
+  - `Reaction` (`data/reactions/`): consumed items, required items (including the vessel), elements, amount, result and quality.
+  - Prices aren't on items: the shop (#12) and the menu (#9) hold what's sold and for how much, so anything can be bought or put on the menu.
+- Definitions are shared and never change. A physical thing in the world is an `ItemInstance` (`scripts/cooking/`) pointing at its `Item` and holding its own quality (and later freshness). Arms, vessels and counters hold these.
+- `VesselContents` is the cooking logic of one vessel, with no nodes, so it's unit tested on its own. Its changes (`add_item`, `remove_item`, `add_element`, `remove_element`, `tick`) run the reaction engine inside them; its `get_` methods only read. Board and pan nodes feed it input and time, and redraw from its signals (`contents_changed`, `reaction_started`, `reaction_progressed`, `reaction_cancelled`, `reaction_finished`).
 - Arms, the tool belt and each container's contents are gameplay state in scripts, not in UI scripts. UI reads them and listens to signals.
 - A container's contents are a list of food objects with a capacity, with no notion of where the food came from. Today the shop fills it; later farms will too. It replaces the existing `Pantry` counts store.
 - Money and the day number live in the `Game` autoload (`scripts/state/game_state.gd`), so any script can use `Game.money` and so on. The global `Game.pantry` goes away when storage containers are built.
@@ -154,17 +161,19 @@ Saving and loading, menus and settings, real art and audio, decor and upgrades, 
 Rough order, all post-MVP:
 1. Save and load.
 2. More dishes that show off building up (marinara: oil, then garlic, then tomato; boiled potatoes), staples like oil and salt, tools (whisk, peeler) and stations (oven, grill).
-3. **Sieve:** bring a sieve and a bowl to a pan, and the solids go into the bowl while the liquid stays in the pan, ready for the next batch.
-4. **Ladle and servings:** one pot of soup serves several bowls, ladled out one at a time.
-5. **Jars and bottles:** bring a jar to a pan and the liquid pours in, solids stay behind. Jars go in the fridge or cupboard and pour back into a pan later, so you can make garlic oil in the morning for the evening's sauces.
-6. Washing up: served plates and bowls come back dirty and need washing at the sink.
-7. Movable furniture: lift a fridge or cupboard above your head with empty arms (it must be empty inside) and place it elsewhere.
-8. Ingredient decay: food loses freshness over time, slower in the fridge. Fresher food earns more.
-9. Energy: how much you slept sets the next day's energy. Low energy makes you walk and chop a bit slower, but never stops you playing.
-10. Restaurant upgrades: more tables, decor, better utensils (a faster knife, a bigger pan).
-11. **Farming:** plant, water and harvest crops that fill your storage. Later, animals for eggs, milk and cheese.
-12. Farm-to-table bonus: dishes made with home-grown ingredients sell for more.
-13. Regulars with names, favourite dishes and relationship levels.
-14. Hiring staff (waiter, cook) to automate parts of the loop.
-15. Seasons that affect crops and the menu.
-16. More storage: bigger fridges and cupboards, a walk-in pantry, more arm and belt space (design epic #28).
+3. **Cold** as a timed element provided by the fridge (or a freezer), for chilled recipes like jelly, ice cream or a set cheesecake.
+4. Reactions with several results: splitting (a loaf into slices) and byproducts (an egg and its shell). Needs a rule for results that don't fit in the vessel.
+5. **Sieve:** bring a sieve and a bowl to a pan, and the solids go into the bowl while the liquid stays in the pan, ready for the next batch.
+6. **Ladle and servings:** one pot of soup serves several bowls, ladled out one at a time.
+7. **Jars and bottles:** bring a jar to a pan and the liquid pours in, solids stay behind. Jars go in the fridge or cupboard and pour back into a pan later, so you can make garlic oil in the morning for the evening's sauces.
+8. Washing up: served plates and bowls come back dirty and need washing at the sink.
+9. Movable furniture: lift a fridge or cupboard above your head with empty arms (it must be empty inside) and place it elsewhere.
+10. Ingredient decay: food loses freshness over time, slower in the fridge. Fresher food earns more.
+11. Energy: how much you slept sets the next day's energy. Low energy makes you walk and chop a bit slower, but never stops you playing.
+12. Restaurant upgrades: more tables, decor, better utensils (a faster knife, a bigger pan).
+13. **Farming:** plant, water and harvest crops that fill your storage. Later, animals for eggs, milk and cheese.
+14. Farm-to-table bonus: dishes made with home-grown ingredients sell for more.
+15. Regulars with names, favourite dishes and relationship levels.
+16. Hiring staff (waiter, cook) to automate parts of the loop.
+17. Seasons that affect crops and the menu.
+18. More storage: bigger fridges and cupboards, a walk-in pantry, more arm and belt space (design epic #28).

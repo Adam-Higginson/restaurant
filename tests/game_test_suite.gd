@@ -23,6 +23,13 @@ func walk(runner: GdUnitSceneRunner, action: String, ticks: int) -> void:
 	await physics_ticks(runner, 2)
 
 
+## Presses and releases [param action] once, then waits two physics ticks so
+## the scene has handled it.
+func press(runner: GdUnitSceneRunner, action: String) -> void:
+	runner.simulate_action_pressed(action)
+	await physics_ticks(runner, 2)
+
+
 ## Finds the node named "Player" in the running scene and moves it to [param pos].
 func place_player(runner: GdUnitSceneRunner, pos: Vector2) -> Player:
 	var player: Player = runner.find_child("Player") as Player

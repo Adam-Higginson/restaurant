@@ -1,0 +1,16 @@
+[gd_resource type="Resource" script_class="Reaction" format=3]
+
+[ext_resource type="Script" path="res://scripts/data/item.gd" id="1_r0ynr"]
+[ext_resource type="Resource" path="res://data/items/chopped_lettuce.tres" id="2_5m08b"]
+[ext_resource type="Resource" path="res://data/items/sliced_tomato.tres" id="3_8c2sp"]
+[ext_resource type="Script" path="res://scripts/data/element.gd" id="4_qd455"]
+[ext_resource type="Resource" path="res://data/items/plate.tres" id="5_va7tr"]
+[ext_resource type="Resource" path="res://data/items/garden_salad.tres" id="6_n86s3"]
+[ext_resource type="Script" path="res://scripts/data/reaction.gd" id="7_0ttpa"]
+
+[resource]
+script = ExtResource("7_0ttpa")
+id = &"garden_salad"
+consumes = Array[ExtResource("1_r0ynr")]([ExtResource("2_5m08b"), ExtResource("3_8c2sp")])
+requires = Array[ExtResource("1_r0ynr")]([ExtResource("5_va7tr")])
+result = ExtResource("6_n86s3")
