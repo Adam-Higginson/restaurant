@@ -14,6 +14,10 @@ signal pick_up_pressed(player: Player)
 ## Physics layer 2, named "interaction" in project settings.
 const LAYER: int = 1 << 1
 const HIGHLIGHT_COLOR: Color = Color(1, 1, 1, 1)
+## The highlight sits 1px outside the prop, so it's drawn above neighbouring
+## props and the player's body, or they'd cover parts of it. The player's
+## carried stack is drawn above it, as it's held in front.
+const HIGHLIGHT_Z_INDEX: int = 1
 
 ## Disabled interactables can't be focused or used (e.g. a busy stove).
 @export var enabled: bool = true
@@ -26,6 +30,7 @@ func _ready() -> void:
 	collision_mask = 0
 	monitoring = false
 	monitorable = true
+	z_index = HIGHLIGHT_Z_INDEX
 
 
 func _draw() -> void:
