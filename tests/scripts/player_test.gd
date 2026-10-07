@@ -2,6 +2,7 @@ extends GameTestSuite
 ## Tests for scripts/player.gd.
 
 const PLAYER_SCENE: String = "res://scenes/player.tscn"
+const MAIN_SCENE: String = "res://scenes/main.tscn"
 
 
 func _new_player() -> Player:
@@ -69,3 +70,25 @@ func test_stops_when_input_released() -> void:
 
 	assert_vector(player.velocity).is_equal(Vector2.ZERO)
 	assert_vector(player.facing).is_equal(Vector2.DOWN)
+
+
+# --- Carrying --------------------------------------------------------------------
+
+func test_starts_with_empty_arms() -> void:
+	assert_bool(_new_player().arms.is_empty()).is_true()
+
+
+func test_rotate_stack_changes_the_top_item() -> void:
+	# In the main scene, because gdUnit delivers input twice to a scene's root
+	# node, which would rotate twice per press.
+	var runner: GdUnitSceneRunner = scene_runner(MAIN_SCENE)
+	var player: Player = runner.find_child("Player") as Player
+	var tomato: ItemInstance = ItemInstance.new(Item.new())
+	var plate: ItemInstance = ItemInstance.new(Item.new())
+	player.arms.add(tomato)
+	player.arms.add(plate)
+
+	await press(runner, "rotate_stack")
+
+	assert_object(player.arms.top()).is_same(tomato)
+	assert_array(player.arms.get_items()).contains_exactly([plate, tomato])

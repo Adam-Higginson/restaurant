@@ -1,7 +1,7 @@
 class_name InteractionDetector
 extends Area2D
 ## Sits in front of the player, focuses the nearest enabled Interactable it
-## overlaps, and uses it when "interact" is pressed.
+## overlaps, and sends it "interact" and "pick_up" presses.
 
 ## Emitted when the focused interactable changes (null when nothing is in reach).
 signal focus_changed(interactable: Interactable)
@@ -31,6 +31,9 @@ func _unhandled_input(event: InputEvent) -> void:
 	if event.is_action_pressed("interact"):
 		get_viewport().set_input_as_handled()
 		try_interact()
+	elif event.is_action_pressed("pick_up"):
+		get_viewport().set_input_as_handled()
+		try_pick_up()
 
 
 ## Uses the focused interactable, if any. Returns whether something was used.
@@ -38,6 +41,15 @@ func try_interact() -> bool:
 	if not is_instance_valid(focused):
 		return false
 	focused.interact(_player)
+	return true
+
+
+## Picks up from or puts down at the focused interactable, if any. Returns
+## whether there was something to send it to.
+func try_pick_up() -> bool:
+	if not is_instance_valid(focused):
+		return false
+	focused.pick_up(_player)
 	return true
 
 
