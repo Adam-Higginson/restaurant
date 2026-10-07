@@ -7,3 +7,5 @@ script = ExtResource("1_exsv6")
 id = &"plate"
 display_name = "Plate"
 color = Color(0.95, 0.95, 0.92, 1)
+capacity = 3
+carried_whole = true

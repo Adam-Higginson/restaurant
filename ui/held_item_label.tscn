@@ -1,0 +1,11 @@
+[gd_scene load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://ui/held_item_label.gd" id="1_label"]
+
+[node name="HeldItemLabel" type="Label"]
+mouse_filter = 2
+theme_override_colors/font_outline_color = Color(0.1, 0.09, 0.09, 1)
+theme_override_constants/outline_size = 3
+theme_override_font_sizes/font_size = 8
+horizontal_alignment = 1
+script = ExtResource("1_label")

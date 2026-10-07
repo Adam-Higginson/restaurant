@@ -1,7 +1,7 @@
 extends Node2D
 ## Draws what the player carries as coloured squares stacked above their head,
-## each overlapping the one below, with the active top item outlined. Bobs
-## while walking.
+## each overlapping the one below, with the active top item outlined. A plate
+## shows its food on it. Bobs while walking.
 ##
 ## Display only: it reads the player's [Arms] and redraws when they change.
 
@@ -44,7 +44,7 @@ func _draw() -> void:
 		# Snap to whole pixels: an odd size centred on 0 would land on halves.
 		rect.position = rect.position.floor()
 		var color: Color = items[i].item.color
-		draw_rect(rect, color)
+		ItemDraw.draw_item(self, items[i], rect)
 		PixelDraw.outline(self, rect, color.darkened(BORDER_DARKEN))
 		if i == items.size() - 1:
 			PixelDraw.outline(self, rect.grow(1.0), TOP_OUTLINE_COLOR)

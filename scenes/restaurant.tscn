@@ -8,6 +8,8 @@
 [ext_resource type="Resource" path="res://data/items/tomato.tres" id="6_tomato"]
 [ext_resource type="Resource" path="res://data/items/lettuce.tres" id="7_lettuce"]
 [ext_resource type="Resource" path="res://data/items/plate.tres" id="8_plate"]
+[ext_resource type="Resource" path="res://data/items/chopping_board.tres" id="9_board"]
+[ext_resource type="PackedScene" path="res://scenes/props/dispenser.tscn" id="10_dispenser"]
 
 [node name="Restaurant" type="Node2D" unique_id=79848715]
 
@@ -21,24 +23,33 @@ tile_set = ExtResource("1_f3ktr")
 color = Color(0.85, 0.35, 0.3, 1)
 position = Vector2(56, 24)
 
-[node name="ChoppingBoard" type="StaticBody2D" parent="Props" unique_id=1839155887 groups=["stations"] instance=ExtResource("2_50xnb")]
-color = Color(0.95, 0.85, 0.6, 1)
-position = Vector2(104, 24)
-
 [node name="Counter1" type="StaticBody2D" parent="Props" groups=["counters"] instance=ExtResource("5_counter")]
 position = Vector2(72, 24)
-start_item = ExtResource("6_tomato")
 
 [node name="Counter2" type="StaticBody2D" parent="Props" groups=["counters"] instance=ExtResource("5_counter")]
 position = Vector2(88, 24)
-start_item = ExtResource("7_lettuce")
 
 [node name="Counter3" type="StaticBody2D" parent="Props" groups=["counters"] instance=ExtResource("5_counter")]
 position = Vector2(120, 24)
-start_item = ExtResource("8_plate")
 
 [node name="Counter4" type="StaticBody2D" parent="Props" groups=["counters"] instance=ExtResource("5_counter")]
 position = Vector2(136, 24)
+
+[node name="BoardCounter" type="StaticBody2D" parent="Props" groups=["counters"] instance=ExtResource("5_counter")]
+position = Vector2(104, 24)
+start_item = ExtResource("9_board")
+
+[node name="LettuceBin" type="StaticBody2D" parent="Props" groups=["dispensers"] instance=ExtResource("10_dispenser")]
+position = Vector2(24, 24)
+item = ExtResource("7_lettuce")
+
+[node name="TomatoBin" type="StaticBody2D" parent="Props" groups=["dispensers"] instance=ExtResource("10_dispenser")]
+position = Vector2(40, 24)
+item = ExtResource("6_tomato")
+
+[node name="PlateRack" type="StaticBody2D" parent="Props" groups=["dispensers"] instance=ExtResource("10_dispenser")]
+position = Vector2(152, 24)
+item = ExtResource("8_plate")
 
 [node name="Pantry" type="StaticBody2D" parent="Props" unique_id=1040802693 groups=["pantry"] instance=ExtResource("3_uk3xj")]
 position = Vector2(24, 192)
