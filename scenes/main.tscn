@@ -1,7 +1,8 @@
-[gd_scene load_steps=3 format=3]
+[gd_scene load_steps=4 format=3]
 
 [ext_resource type="PackedScene" path="res://scenes/restaurant.tscn" id="1_restaurant"]
 [ext_resource type="PackedScene" path="res://scenes/player.tscn" id="2_player"]
+[ext_resource type="PackedScene" path="res://ui/belt_bar.tscn" id="3_belt_bar"]
 
 [node name="Main" type="Node2D"]
 
@@ -9,3 +10,19 @@
 
 [node name="Player" parent="." instance=ExtResource("2_player")]
 position = Vector2(80, 136)
+
+[node name="HUD" type="CanvasLayer" parent="."]
+
+[node name="BeltBar" parent="HUD" node_paths=PackedStringArray("player") instance=ExtResource("3_belt_bar")]
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -35.0
+offset_top = -21.0
+offset_right = 35.0
+offset_bottom = -5.0
+grow_horizontal = 2
+grow_vertical = 0
+player = NodePath("../../Player")
