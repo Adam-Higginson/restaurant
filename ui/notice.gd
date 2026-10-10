@@ -23,22 +23,23 @@ func _ready() -> void:
 
 ## Shows [param message], replacing any note already showing.
 func show_message(message: String) -> void:
-	# TODO 1: _stop_tween(), so an older note's tween can't hide this one.
-	# TODO 2: set text to message, set modulate.a to 0.0, and show().
-	# TODO 3: _tween = create_tween(), then queue four steps. They run one after
-	#         another:
-	#         - tween_property(self, "modulate:a", 1.0, fade_seconds)
-	#         - tween_interval(show_seconds)        (just waits)
-	#         - tween_property(self, "modulate:a", 0.0, fade_seconds)
-	#         - tween_callback(hide)                (calls hide() at the end)
-	#         No await here: the note looks after itself while the game runs.
-	pass
+	_stop_tween()
+
+	text = message
+	modulate.a = 0.0
+	show()
+
+	_tween = create_tween()
+	_tween.tween_property(self, "modulate:a", 1.0, fade_seconds)
+	_tween.tween_interval(show_seconds)
+	_tween.tween_property(self, "modulate:a", 0.0, fade_seconds)
+	_tween.tween_callback(hide)
 
 
 ## Hides the note straight away.
 func dismiss() -> void:
-	# TODO 4: stop the tween and hide().
-	pass
+	_stop_tween()
+	hide()
 
 
 func is_showing() -> bool:

@@ -91,7 +91,9 @@ func test_going_to_bed_in_the_game() -> void:
 
 	runner.simulate_action_pressed("ui_accept")
 	await runner.await_input_processed()
-	assert_bool(get_tree().paused).is_false()
+	var panel: ConfirmPanel = runner.find_child("ConfirmPanel") as ConfirmPanel
+	assert_bool(panel.is_open()).is_false()
+	# The game stays paused, but now for the night: DayCycle's tests cover that.
 	assert_bool(Game.is_day_over).is_true()
 
 
