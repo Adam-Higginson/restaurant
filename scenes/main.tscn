@@ -1,9 +1,10 @@
 [gd_scene format=3 uid="uid://d171p3v8fsehp"]
 
-[ext_resource type="PackedScene" path="res://scenes/restaurant.tscn" id="1_restaurant"]
+[ext_resource type="PackedScene" uid="uid://dpcrh125bdj5n" path="res://scenes/restaurant.tscn" id="1_restaurant"]
 [ext_resource type="PackedScene" path="res://scenes/player.tscn" id="2_player"]
 [ext_resource type="PackedScene" path="res://ui/belt_bar.tscn" id="3_belt_bar"]
 [ext_resource type="PackedScene" path="res://ui/held_item_label.tscn" id="4_held_label"]
+[ext_resource type="PackedScene" uid="uid://db6jl14tmtqt3" path="res://ui/time_label.tscn" id="5_tbgi4"]
 
 [node name="Main" type="Node2D" unique_id=324224924]
 
@@ -41,3 +42,9 @@ offset_bottom = -24.0
 grow_horizontal = 2
 grow_vertical = 0
 player = NodePath("../../Player")
+
+[node name="TimeLabel" parent="HUD" unique_id=668659520 instance=ExtResource("5_tbgi4")]
+offset_left = 4.0
+offset_top = 4.0
+offset_right = 44.0
+offset_bottom = 27.0
