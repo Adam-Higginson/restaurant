@@ -3,20 +3,21 @@
 Working title: **Restaurant** (TBD)
 
 ## Pitch
-A cosy top-down restaurant game in the spirit of Stardew Valley. You run a small restaurant on your own: buy ingredients, cook, serve customers and earn money. Over time the restaurant grows into a full farm-to-table operation, where you grow and raise the ingredients you cook with.
+A cosy top-down restaurant game in the spirit of Stardew Valley. You run a small restaurant on your own in a town full of people: buy ingredients, cook, serve the townsfolk and earn money. Your restaurant becomes the town's living room, where you get to know everyone through the food you cook for them. Over time the restaurant grows into a full farm-to-table operation, where you grow and raise the ingredients you cook with.
 
 ## Pillars
-1. **Cosy, not stressful.** Busy moments, but nothing burns and nobody shouts. Failing costs you a sale, never progress.
-2. **Hands-on.** You walk your character between stations and tables. The restaurant is a place, not a menu.
-3. **Farm to table (long-term).** Every dish should feel traceable to where its ingredients came from.
-4. **Growth you can see.** More money leads to more dishes, a nicer restaurant, staff and regulars.
+1. **Cosy, not stressful.** Busy moments, but nothing burns and nobody shouts. Failing costs you a sale, never progress or friendship.
+2. **People are the heart.** Every customer is someone from town with tastes, habits and a story. The rush is the seasoning, not the meal.
+3. **Hands-on.** You walk your character between stations and tables. The restaurant is a place, not a menu.
+4. **Farm to table (long-term).** Every dish should feel traceable to where its ingredients came from.
+5. **Growth you can see.** More money leads to more dishes, a nicer restaurant, staff, a growing town and a better star rating.
 
 ## Core loop (MVP)
 Time always moves, like Stardew Valley. There are no fixed phases: you choose when to open, when to close and when to go to bed.
 
 - **The clock** runs from 6:00 to 2:00 in 10-minute steps, about 20 real minutes per day (one step every ~10 real seconds). It stops while any panel is open (shop, container, summary).
 - **Morning:** you wake in bed in the back room at 6:00. Yesterday's orders are waiting in the delivery crate by the door. Carry them to the fridge and cupboard, set up the kitchen, and order tomorrow's ingredients at the shop board.
-- **Open and close whenever you like** by flipping the sign on the door (E). While it says Open, customers arrive, sit and order one dish. Fetch the ingredients, prepare and cook them, carry the dish to the customer and get paid. Customers left waiting too long leave without paying.
+- **Open and close whenever you like** by flipping the sign on the door (E). While it says Open, townsfolk arrive, sit and order one dish. Fetch the ingredients, prepare and cook them, carry the dish to the customer and get paid. Customers left waiting too long leave without paying.
 - **Mealtime rushes:** customers trickle in at most times, with peaks around lunch (12:00–14:00) and dinner (18:00–21:00). Choosing when to be open is part of the game.
 - **Closing:** flipping the sign to Closed stops new customers. Anyone already seated stays until they're served or run out of patience.
 - **Bed:** go to bed (E on the bed) at any time to end the day. If the restaurant is still open, it closes and anyone still seated leaves without paying, counting as lost. If you're still up at 2:00, you fall asleep where you stand and wake in bed. No penalty in the MVP.
@@ -123,11 +124,28 @@ Worked example: a tomato (★) sliced properly gives (1 + 3) / 2 = ★★ sliced
 Water is free from the sink. Tomato is shared by two dishes, which makes stocking up a small decision. The numbers are starting points for balancing.
 
 ## Customers
-- Spawn at the door while the restaurant is open, more often at mealtimes. They walk to a free table and sit.
-- Order a random dish from the menu, shown in a speech bubble.
-- Have a patience meter that drains while they wait for their food. If it empties they leave and you lose the sale.
-- Serving the correct dish (on its plate or in its bowl) pays the dish price, plus a tip for ★★ or ★★★ quality. The customer eats briefly, then leaves and frees the table. The plate or bowl goes with them.
-- MVP: 4 tables, one customer per table.
+Customers are **townsfolk**: a fixed cast of hand-written people, like Stardew Valley's villagers. Every face in the dining room is someone with a name, tastes, habits and a story. Getting to know them is the heart of the game, and the cooking rush is the seasoning.
+
+### Vision (long-term)
+- **The cast:** about 25–30 townsfolk in the full game. For now you only meet them in the restaurant: their lives happen offstage and you hear about them over meals. A walkable town comes later.
+- **Why they visit:** each person has a routine (the blacksmith comes for lunch on weekdays, the night-owl writer drops in late), so your opening hours decide who you meet. Weather, town events and how much they like you vary it. Your menu and reputation draw new people in: putting soup on the menu might be what finally brings the soup lover through the door.
+- **Ordering:** each person has hidden **loves, likes and dislikes**. They order from your menu by taste, and you discover their preferences by watching and chatting. Sometimes they ask for a **craving** ("something warm", "something with cheese") or an off-menu dish instead, which becomes a small goal.
+- **Waiting:** each person has their own patience. The retired teacher will wait all evening; the busy builder won't. When patience runs out they leave politely ("I'll pop back another time"): you lose the sale, never friendship. Next visit they might tease you about it, with no mechanical cost.
+- **Getting to know them:** friendship grows by serving dishes they like (loved dishes and high quality count most), chatting to them at their table, and giving gifts. Each person has a written **storyline** that advances as friendship grows, with moments you help through cooking: a birthday cake, a comfort meal after bad news.
+- **What friendship gives you:** family recipes and techniques, ingredients and new suppliers (the farmer drops off eggs), friends you can hire as staff, and friends who wait longer, tip more and bring others along.
+- **A social room:** friends, families and couples arrive together and share a table. You overhear chatter as you walk past: gossip, story hints, reactions to your food. The town's own stories happen in your restaurant: first dates, reconciliations, birthday parties.
+- **Pacing:** busy but player-paced. The room fills to match your capacity (tables and menu), new arrivals wait for seats to free up, and patience is generous. Lively, rarely frantic.
+- **Reputation:** a visible **star rating** that rises with good service and quality and unlocks things such as newcomers moving to town. **Critics** visit to award Michelin-style stars. Their visits are announced ahead (a letter, town gossip) so you can prepare. A bad review just means trying again next season. You never lose stars.
+- **New arrivals:** the town starts with a smaller cast and new people move in as your reputation grows, so each newcomer is an event.
+
+### MVP
+- **The cast:** 6 townsfolk, each a `Person` resource with a name, a placeholder colour, loved and liked dishes, and their patience.
+- **Arriving:** while the restaurant is open, a random townsperson who isn't already inside walks in from the door, more often at mealtimes, and sits at a free table. If every table is full, nobody new arrives. Personal routines come later.
+- **Ordering:** they pick a dish from the menu weighted by taste (loved dishes most, then liked, then anything else on the menu), never one they dislike. The order shows in a speech bubble.
+- **Patience:** a meter drains at that person's rate while they wait. If it empties they leave politely and the sale is lost.
+- **Serving:** put down the plate or bowl holding the dish they ordered while facing them. They pay the menu price plus the quality tip (★★ +25%, ★★★ +50%). A **loved dish** also shows a heart and adds a bonus tip of 25% of the price (a starting number for balancing). A wrong dish isn't accepted. They eat briefly, then leave with the plate or bowl and free the table.
+- **Tables:** 4 tables, one diner each. Groups come later.
+- Not in the MVP: routines, friendship, chatting, gifts, storylines, cravings, groups, the star rating and critics.
 
 ## Economy
 - Start with 50 coins and empty storage. On day one a starter delivery is waiting in the crate (2 of each ingredient), so there's something to cook before your first order arrives.
@@ -157,12 +175,13 @@ Water is free from the sink. Tomato is shared by two dishes, which makes stockin
 - Arms, the tool belt and each container's contents are gameplay state in scripts, not in UI scripts. UI reads them and listens to signals.
 - Interact, pick up and use tool are routed the same way: the player's `InteractionDetector` sends each press to the focused `Interactable`, which emits `interacted`, `pick_up_pressed` or `tool_used(player, tool)` for its prop to handle. The empty-arms rule for tools is checked there.
 - A container's contents are a list of food objects with a capacity, with no notion of where the food came from. Today the shop fills it; later farms will too. It replaces the existing `Pantry` counts store.
+- Each townsperson is a `Person` resource (`data/people/`): name, placeholder colour, loved, liked and disliked dishes, and patience. Later it grows routines, friendship and a storyline. A customer in the dining room is a node pointing at its `Person`, and at most one is inside at a time.
 - Money and the day number live in the `Game` autoload (`scripts/state/game_state.gd`), so any script can use `Game.money` and so on. The global `Game.pantry` goes away when storage containers are built.
 - The clock and the restaurant's open/closed state are gameplay state too, replacing the old prep/service/summary phases (`start_service()`, `end_service()`, `start_next_day()`). Other code listens to signals such as the time changing, the restaurant opening or closing, and the day ending.
 - Orders placed at the shop are held as pending until the next morning, then moved into the crate.
 
 ## Out of scope for the MVP
-Saving and loading, menus and settings, real art and audio, decor and upgrades, multiple customers per table, ingredient decay, moving furniture, energy, washing up, the sieve, the ladle, and storing liquids.
+Saving and loading, menus and settings, friendship and the other long-term customer features (see Customers), real art and audio, decor and upgrades, multiple customers per table, ingredient decay, moving furniture, energy, washing up, the sieve, the ladle, and storing liquids.
 
 ## Future roadmap
 Rough order, all post-MVP:
@@ -180,7 +199,10 @@ Rough order, all post-MVP:
 12. Restaurant upgrades: more tables, decor, better utensils (a faster knife, a bigger pan).
 13. **Farming:** plant, water and harvest crops that fill your storage. Later, animals for eggs, milk and cheese.
 14. Farm-to-table bonus: dishes made with home-grown ingredients sell for more.
-15. Regulars with names, favourite dishes and relationship levels.
-16. Hiring staff (waiter, cook) to automate parts of the loop.
-17. Seasons that affect crops and the menu.
-18. More storage: bigger fridges and cupboards, a walk-in pantry, more arm and belt space (design epic #28).
+15. **Townsfolk and friendship:** routines, friendship from serving, chatting and gifts, storylines, cravings, and the cast growing towards 25–30 (design epic #46).
+16. **Reputation and critics:** a star rating, announced critic visits and Michelin-style stars (design epic #47).
+17. **Groups and social dining:** groups and couples sharing tables, overheard chatter, town events in the restaurant (design epic #48).
+18. Hiring staff (waiter, cook) from among your friends, to automate parts of the loop.
+19. A walkable town where townsfolk live out their routines.
+20. Seasons that affect crops and the menu.
+21. More storage: bigger fridges and cupboards, a walk-in pantry, more arm and belt space (design epic #28).
