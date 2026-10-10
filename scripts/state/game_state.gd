@@ -1,18 +1,16 @@
 class_name GameState
 extends Node
-## The game's central state: money, pantry, day number and phase.
+## The game's central state: money, pantry, day number and whether the
+## restaurant is open.
 ##
 ## The game's instance is the [code]Game[/code] autoload, so any script can use
-## [code]Game.money[/code] or [code]Game.pantry[/code]. Values only change through
-## the methods below, which emit signals that UI listens to. Tests create their
+## [code]Game.money[/code]. Values only change through the methods below,
+## which emit signals that UI listens to. Tests create their
 ## own instances instead of touching the autoload.
 
 signal money_changed(money: int)
-signal phase_changed(phase: Phase)
 signal day_changed(day: int)
-
-## The parts of each day. See the core loop in docs/GDD.md.
-enum Phase { PREP, SERVICE, SUMMARY }
+signal open_changed(is_open: bool)
 
 const STARTING_MONEY: int = 50
 
@@ -30,11 +28,6 @@ var day: int:
 		return _day
 	set(_value):
 		push_error("GameState: day is read-only, use start_next_day()")
-var phase: Phase:
-	get:
-		return _phase
-	set(_value):
-		push_error("GameState: phase is read-only, use the phase methods")
 ## Created once and cleared by [method new_game], never replaced, so signal
 ## connections to it keep working.
 var pantry: Pantry:
@@ -42,20 +35,25 @@ var pantry: Pantry:
 		return _pantry
 	set(_value):
 		push_error("GameState: pantry can't be replaced, use pantry.clear()")
+var is_open: bool:
+	get:
+		return _is_open
+	set(_value):
+		push_error("GameState: is_open is read-only, use set_open()")
 
 var _money: int = STARTING_MONEY
 var _day: int = 1
-var _phase: Phase = Phase.PREP
 var _pantry: Pantry = Pantry.new()
+var _is_open: bool = false
 
 
 ## Puts everything back to the start: starting money, an empty pantry, day 1
-## and the prep phase.
+## and the restaurant closed.
 func new_game() -> void:
 	_pantry.clear()
 	_set_money(STARTING_MONEY)
 	_set_day(1)
-	_set_phase(Phase.PREP)
+	set_open(false)
 
 
 func can_afford(amount: int) -> bool:
@@ -78,32 +76,19 @@ func spend(amount: int) -> bool:
 	return true
 
 
-## Opens the restaurant: prep to service. Returns false if not in prep.
-func start_service() -> bool:
-	return _advance(Phase.PREP, Phase.SERVICE)
+## Opens or closes the restaurant. Emits [signal open_changed] only when it
+## actually changes.
+func set_open(value: bool) -> void:
+	if _is_open == value:
+		return
+	_is_open = value
+	open_changed.emit(_is_open)
 
 
-## Closes the restaurant: service to summary. Returns false if not in service.
-func end_service() -> bool:
-	return _advance(Phase.SERVICE, Phase.SUMMARY)
-
-
-## Moves from the summary to the next day's prep. Returns false if not in the
-## summary.
-func start_next_day() -> bool:
-	if _phase != Phase.SUMMARY:
-		return false
-	# Day first, so phase_changed listeners already see the new day.
+## Closes the restaurant and moves to the next day.
+func start_next_day() -> void:
+	set_open(false)
 	_set_day(_day + 1)
-	_set_phase(Phase.PREP)
-	return true
-
-
-func _advance(from: Phase, to: Phase) -> bool:
-	if _phase != from:
-		return false
-	_set_phase(to)
-	return true
 
 
 func _set_money(value: int) -> void:
@@ -118,13 +103,6 @@ func _set_day(value: int) -> void:
 		return
 	_day = value
 	day_changed.emit(_day)
-
-
-func _set_phase(value: Phase) -> void:
-	if _phase == value:
-		return
-	_phase = value
-	phase_changed.emit(_phase)
 
 
 func _is_valid_amount(amount: int) -> bool:
