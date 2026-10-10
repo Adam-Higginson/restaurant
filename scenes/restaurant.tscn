@@ -1,6 +1,6 @@
 [gd_scene format=4 uid="uid://dpcrh125bdj5n"]
 
-[ext_resource type="TileSet" uid="uid://bevqlvy6h6px8" path="res://assets/placeholder/placeholder_tileset.tres" id="1_f3ktr"]
+[ext_resource type="TileSet" path="res://assets/placeholder/placeholder_tileset.tres" id="1_f3ktr"]
 [ext_resource type="PackedScene" path="res://scenes/props/station.tscn" id="2_50xnb"]
 [ext_resource type="PackedScene" path="res://scenes/props/pantry.tscn" id="3_uk3xj"]
 [ext_resource type="PackedScene" path="res://scenes/props/table.tscn" id="4_bp8vj"]
@@ -10,8 +10,9 @@
 [ext_resource type="Resource" path="res://data/items/plate.tres" id="8_plate"]
 [ext_resource type="Resource" path="res://data/items/chopping_board.tres" id="9_board"]
 [ext_resource type="PackedScene" path="res://scenes/props/dispenser.tscn" id="10_dispenser"]
-[ext_resource type="PackedScene" uid="uid://tmap162mg1e0" path="res://scenes/props/door_sign.tscn" id="11_qujyy"]
-[ext_resource type="PackedScene" uid="uid://sbf822dq28vm" path="res://scenes/props/bed.tscn" id="12_bed"]
+[ext_resource type="PackedScene" path="res://scenes/props/door_sign.tscn" id="11_qujyy"]
+[ext_resource type="PackedScene" path="res://scenes/props/bed.tscn" id="12_bed"]
+[ext_resource type="PackedScene" path="res://scenes/props/lamp.tscn" id="13_5scnu"]
 
 [node name="Restaurant" type="Node2D" unique_id=79848715]
 
@@ -71,11 +72,40 @@ position = Vector2(400, 168)
 [node name="DoorSign" parent="Props" unique_id=1840225875 instance=ExtResource("11_qujyy")]
 position = Vector2(352, 232)
 
+[node name="Bed" parent="Props" unique_id=1318632659 instance=ExtResource("12_bed")]
+position = Vector2(24, 200)
+
 [node name="Door" type="Marker2D" parent="." unique_id=1053605584]
 position = Vector2(320, 248)
 
 [node name="WakeSpot" type="Marker2D" parent="." unique_id=1566975550]
 position = Vector2(56, 216)
 
-[node name="Bed" parent="Props" instance=ExtResource("12_bed")]
-position = Vector2(24, 200)
+[node name="Lamps" type="Node2D" parent="." unique_id=1633162919]
+
+[node name="TableLamp1" parent="Lamps" unique_id=680674144 instance=ExtResource("13_5scnu")]
+position = Vector2(256, 72)
+
+[node name="TableLamp2" parent="Lamps" unique_id=164602098 instance=ExtResource("13_5scnu")]
+position = Vector2(400, 72)
+
+[node name="TableLamp3" parent="Lamps" unique_id=1479629838 instance=ExtResource("13_5scnu")]
+position = Vector2(256, 168)
+
+[node name="TableLamp4" parent="Lamps" unique_id=1991370715 instance=ExtResource("13_5scnu")]
+position = Vector2(400, 168)
+
+[node name="KitchenLamp1" parent="Lamps" unique_id=834872535 instance=ExtResource("13_5scnu")]
+position = Vector2(64, 48)
+max_energy = 0.6
+
+[node name="KitchenLamp2" parent="Lamps" unique_id=334075568 instance=ExtResource("13_5scnu")]
+position = Vector2(128, 48)
+max_energy = 0.6
+
+[node name="DoorLamp" parent="Lamps" unique_id=234267607 instance=ExtResource("13_5scnu")]
+position = Vector2(320, 224)
+
+[node name="BackRoomLamp" parent="Lamps" unique_id=1074126916 instance=ExtResource("13_5scnu")]
+position = Vector2(48, 208)
+max_energy = 0.8

@@ -110,3 +110,42 @@ func test_pantry_moved_out_of_the_back_room() -> void:
 	var pantry: Node2D = runner.find_child("Pantry") as Node2D
 	# It's 32px tall, so its centre must be at least 16px above the wall.
 	assert_float(pantry.global_position.y).is_less_equal(144.0)
+
+
+# --- Lighting -----------------------------------------------------------------
+
+func test_every_table_has_a_lamp_over_it() -> void:
+	var runner: GdUnitSceneRunner = scene_runner(MAIN_SCENE)
+	var tree: SceneTree = runner.scene().get_tree()
+	for table: Node in tree.get_nodes_in_group("tables"):
+		var table_position: Vector2 = (table as Node2D).global_position
+		assert_bool(_has_lamp_within(tree, Rect2(table_position - Vector2(16, 16), Vector2(32, 32)))) \
+				.override_failure_message("No lamp over %s" % table.name).is_true()
+
+
+func test_the_kitchen_and_back_room_have_lamps() -> void:
+	var runner: GdUnitSceneRunner = scene_runner(MAIN_SCENE)
+	var tree: SceneTree = runner.scene().get_tree()
+	assert_bool(_has_lamp_within(tree, Rect2(16, 16, 144, 144))).is_true()
+	assert_bool(_has_lamp_within(tree, Rect2(16, 176, 64, 64))).is_true()
+
+
+func test_walls_block_light() -> void:
+	var tile_set: TileSet = load("res://assets/placeholder/placeholder_tileset.tres") as TileSet
+	assert_int(tile_set.get_occlusion_layers_count()).is_greater(0)
+	var source: TileSetAtlasSource = tile_set.get_source(0) as TileSetAtlasSource
+	# Every solid tile (one with collision) should cast a shadow too.
+	for i: int in source.get_tiles_count():
+		var coords: Vector2i = source.get_tile_id(i)
+		var data: TileData = source.get_tile_data(coords, 0)
+		if data.get_collision_polygons_count(0) > 0:
+			assert_int(data.get_occluder_polygons_count(0)) \
+					.override_failure_message("Tile %s is solid but lets light through" % coords) \
+					.is_greater(0)
+
+
+func _has_lamp_within(tree: SceneTree, area: Rect2) -> bool:
+	for lamp: Node in tree.get_nodes_in_group(Lamp.GROUP):
+		if area.has_point((lamp as Node2D).global_position):
+			return true
+	return false
