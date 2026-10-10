@@ -14,6 +14,38 @@ func physics_ticks(runner: GdUnitSceneRunner, ticks: int) -> void:
 		await tree.physics_frame
 
 
+## Waits until [param emitted] fires or [param seconds] of real time pass,
+## and returns whether it fired. Keeps counting while the game is paused,
+## unlike gdUnit's own waits, which stall then.
+func wait_for_signal(emitted: Signal, seconds: float = 2.0) -> bool:
+	# A Dictionary, because a lambda gets a copy of a plain bool.
+	var state: Dictionary[String, bool] = {"fired": false}
+	var on_emitted: Callable = func(..._args: Array) -> void:
+		state["fired"] = true
+	emitted.connect(on_emitted)
+	var deadline: int = Time.get_ticks_msec() + int(seconds * 1000.0)
+	while not state["fired"] and Time.get_ticks_msec() < deadline:
+		await get_tree().process_frame
+	if emitted.is_connected(on_emitted):
+		emitted.disconnect(on_emitted)
+	return state["fired"]
+
+
+## Runs [param work] (which may [code]await[/code]) and returns whether it
+## finished within [param seconds] of real time, so a test fails rather than
+## hangs if it never does. Keeps counting while the game is paused.
+func finishes_within(work: Callable, seconds: float = 2.0) -> bool:
+	var state: Dictionary[String, bool] = {"done": false}
+	var run: Callable = func() -> void:
+		await work.call()
+		state["done"] = true
+	run.call()
+	var deadline: int = Time.get_ticks_msec() + int(seconds * 1000.0)
+	while not state["done"] and Time.get_ticks_msec() < deadline:
+		await get_tree().process_frame
+	return state["done"]
+
+
 ## Holds [param action] for [param ticks] physics ticks, then releases it and
 ## waits two more ticks so the player has stopped.
 func walk(runner: GdUnitSceneRunner, action: String, ticks: int) -> void:
