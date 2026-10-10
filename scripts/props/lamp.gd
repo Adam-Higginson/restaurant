@@ -19,12 +19,9 @@ const FITTING_RADIUS: float = 3.0
 ## How far on the lamp is, from 0 (off) to 1 (fully on).
 var level: float = 0.0:
 	set(value):
-		# TODO 1: store value in level, kept between 0 and 1 (clampf).
-		#         Inside its own setter, assigning to level stores it directly
-		#         rather than calling the setter again.
-		# TODO 2: if is_node_ready(), call _apply_level(). Before the lamp is in
-		#         the tree, _light doesn't exist yet, so _ready applies it then.
-		pass
+		level = clampf(value, 0.0, 1.0)
+		if is_node_ready():
+			_apply_level()
 
 @onready var _light: PointLight2D = $Light
 
@@ -39,8 +36,7 @@ func _draw() -> void:
 
 
 func _apply_level() -> void:
-	# TODO 3: set _light.energy to level * max_energy.
-	# TODO 4: switch the light off (_light.enabled = false) at level 0. A light
-	#         at zero energy still costs a shadow pass, so it's worth it.
-	# TODO 5: queue_redraw(), so _draw repaints the fitting brighter or dimmer.
-	pass
+	_light.energy = level * max_energy
+	# A light at zero energy still costs a shadow pass, so switch it off.
+	_light.enabled = level > 0.0
+	queue_redraw()

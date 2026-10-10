@@ -37,27 +37,23 @@ func _ready() -> void:
 ## How far through the day [param minutes] is: 0 at 6:00 am, 1 at 2:00 am,
 ## clamped outside that.
 static func day_fraction(minutes: int) -> float:
-	# TODO 1: inverse_lerp(from, to, value) is the opposite of lerp: it tells
-	#         you how far value is between from and to (0 at from, 1 at to).
-	#         Use it with GameClock.START_MINUTES and GameClock.END_MINUTES,
-	#         then clampf the result between 0.0 and 1.0.
-	return 0.0
+	return clampf(
+			inverse_lerp(GameClock.START_MINUTES, GameClock.END_MINUTES, minutes), 0.0, 1.0)
 
 
 ## The room's colour at [param minutes], or white without a gradient.
 static func colour_at(day_gradient: Gradient, minutes: int) -> Color:
-	# TODO 2: if day_gradient is null, return Color.WHITE. Otherwise return
-	#         day_gradient.sample(...) at this time's day_fraction.
-	return Color.WHITE
+	if day_gradient == null:
+		return Color.WHITE
+	return day_gradient.sample(day_fraction(minutes))
 
 
 ## How far on the lamps are at [param minutes], from 0 to 1, or 0 without a
 ## curve.
 static func lamp_level_at(curve: Curve, minutes: int) -> float:
-	# TODO 3: like colour_at, with curve.sample(...), returning 0.0 without a
-	#         curve. Clamp the result between 0 and 1 in case the curve is
-	#         drawn outside that.
-	return 0.0
+	if curve == null:
+		return 0.0
+	return clampf(curve.sample(day_fraction(minutes)), 0.0, 1.0)
 
 
 func _on_time_changed(minutes: int) -> void:
@@ -70,24 +66,22 @@ func _on_day_changed(_day: int) -> void:
 
 # Drifts the room's colour and every lamp to [param minutes] together.
 func _fade_to(minutes: int) -> void:
-	# TODO 4: _stop_tween(), then _tween = create_tween() and set_parallel(),
-	#         so all the steps below run at the same time.
-	# TODO 5: tween self's "color" to colour_at(gradient, minutes) over
-	#         tween_seconds.
-	# TODO 6: work out the lamp level once with lamp_level_at, then for each
-	#         lamp in get_tree().get_nodes_in_group(Lamp.GROUP), tween its
-	#         "level" to it. Tweening a property with a setter calls the setter
-	#         every frame, so the lamp's light follows along.
-	#         Loop variables need a type too: for lamp: Node in ...
-	pass
+	_stop_tween()
+	_tween = create_tween()
+	_tween.set_parallel()
+	_tween.tween_property(self, "color", colour_at(gradient, minutes), tween_seconds)
+	var lamp_level: float = lamp_level_at(lamp_curve, minutes)
+	for lamp: Node in get_tree().get_nodes_in_group(Lamp.GROUP):
+		_tween.tween_property(lamp, "level", lamp_level, tween_seconds)
 
 
 # Jumps straight to [param minutes], for a new day behind the black screen.
 func _snap_to(minutes: int) -> void:
-	# TODO 7: _stop_tween(), so no drift left over pulls it back to the night.
-	# TODO 8: set color, and each lamp's level, directly. A Node from the group
-	#         needs a cast to set level: (lamp as Lamp).level = ...
-	pass
+	_stop_tween()
+	color = colour_at(gradient, minutes)
+	var lamp_level: float = lamp_level_at(lamp_curve, minutes)
+	for lamp: Node in get_tree().get_nodes_in_group(Lamp.GROUP):
+		(lamp as Lamp).level = lamp_level
 
 
 func _stop_tween() -> void:
