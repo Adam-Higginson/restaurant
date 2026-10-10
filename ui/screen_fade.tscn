@@ -1,6 +1,6 @@
-[gd_scene format=3]
+[gd_scene format=3 uid="uid://n4orl0qw4jy5"]
 
-[ext_resource type="Script" path="res://ui/screen_fade.gd" id="1_7ln6p"]
+[ext_resource type="Script" uid="uid://c40xurm6fauef" path="res://ui/screen_fade.gd" id="1_7ln6p"]
 
 [node name="ScreenFade" type="CanvasLayer" unique_id=1036649606]
 process_mode = 3

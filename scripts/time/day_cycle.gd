@@ -50,28 +50,33 @@ func is_night() -> bool:
 
 
 func _on_day_ended(_day: int) -> void:
-	# TODO 1: if it's already night, return. Otherwise set _is_night.
-	# TODO 2: dismiss the notice (it's optional, so check it isn't null), then
-	#         pause the game: get_tree().paused = true
-	# TODO 3: the night, one awaited step at a time:
-	#         - await the screen fading out
-	#         - start the next day on game_state, then _wake_player()
-	#         - await the title showing Calendar.format_date(game_state.day)
-	#         - hold it: await get_tree().create_timer(title_seconds).timeout
-	#           (scene-tree timers keep counting while the game is paused)
-	#         - await the screen fading back in
-	# TODO 4: unpause, clear _is_night, and emit morning_started.
-	pass
+	if _is_night:
+		return
+	_is_night = true
+	if notice != null:
+		notice.dismiss()
+	# Paused so nobody moves in the dark. The fade runs anyway (process mode
+	# Always), and scene-tree timers keep counting while paused.
+	get_tree().paused = true
+
+	await screen_fade.fade_out()
+	# Behind the black screen, so the player never sees the jump.
+	game_state.start_next_day()
+	_wake_player()
+	await screen_fade.show_title(Calendar.format_date(game_state.day))
+	await get_tree().create_timer(title_seconds).timeout
+	await screen_fade.fade_in()
+
+	get_tree().paused = false
+	_is_night = false
+	morning_started.emit()
 
 
 func _wake_player() -> void:
-	# TODO 5: if there's a player and a wake spot, move the player's
-	#         global_position to the wake spot's global_position.
-	pass
+	if player != null and wake_spot != null:
+		player.global_position = wake_spot.global_position
 
 
 func _on_time_changed(minutes: int) -> void:
-	# TODO 6: at exactly MIDNIGHT_MINUTES, show LATE_MESSAGE on the notice (if
-	#         there is one). The clock only moves forward and resets each
-	#         morning, so == fires once a night.
-	pass
+	if minutes == MIDNIGHT_MINUTES and notice != null:
+		notice.show_message(LATE_MESSAGE)

@@ -27,30 +27,28 @@ func _ready() -> void:
 
 ## Shows the overlay and fades the screen to black.
 func fade_out() -> void:
-	# TODO 1: show() the overlay, so the black rectangle can be seen at all.
-	# TODO 2: _tween = _new_tween(), then queue one step on it:
-	#         _tween.tween_property(_black, "modulate:a", 1.0, fade_seconds)
-	#         That animates the rectangle's alpha from where it is now to 1.0.
-	# TODO 3: await _tween.finished, so whoever awaits fade_out() waits too.
-	pass
+	show()
+	_tween = _new_tween()
+	_tween.tween_property(_black, "modulate:a", 1.0, fade_seconds)
+	await _tween.finished
 
 
 ## Fades [param text] in over the black screen, in half the fade time.
 func show_title(text: String) -> void:
-	# TODO 4: set _title.text to text.
-	# TODO 5: like fade_out, but tween _title's "modulate:a" to 1.0 over
-	#         fade_seconds * 0.5, and await it.
-	pass
+	_title.text = text
+	_tween = _new_tween()
+	_tween.tween_property(_title, "modulate:a", 1.0, fade_seconds * 0.5)
+	await _tween.finished
 
 
 ## Fades the black screen and the title away together, then hides the overlay.
 func fade_in() -> void:
-	# TODO 6: _tween = _new_tween(), then call _tween.set_parallel() so the next
-	#         steps run at the same time instead of one after another.
-	# TODO 7: tween both _black and _title's "modulate:a" to 0.0 over
-	#         fade_seconds.
-	# TODO 8: await _tween.finished, then hide() the overlay.
-	pass
+	_tween = _new_tween()
+	_tween.set_parallel()
+	_tween.tween_property(_black, "modulate:a", 0.0, fade_seconds)
+	_tween.tween_property(_title, "modulate:a", 0.0, fade_seconds)
+	await _tween.finished
+	hide()
 
 
 ## Whether the screen is fully black.

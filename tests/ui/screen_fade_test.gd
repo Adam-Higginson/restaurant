@@ -25,6 +25,8 @@ func test_fade_out_covers_the_screen() -> void:
 func test_show_title_shows_the_text() -> void:
 	var fade: ScreenFade = _new_fade()
 	await finishes_within(fade.fade_out)
+	# Several frames long, so returning before the title is in can't pass by luck.
+	fade.fade_seconds = 0.2
 	assert_bool(await finishes_within(fade.show_title.bind(DATE))).is_true()
 	assert_str(_title(fade).text).is_equal(DATE)
 	assert_float(_title(fade).modulate.a).is_equal_approx(1.0, 0.01)
