@@ -15,13 +15,17 @@ A cosy top-down restaurant game in the spirit of Stardew Valley. You run a small
 ## Core loop (MVP)
 Time always moves, like Stardew Valley. There are no fixed phases: you choose when to open, when to close and when to go to bed.
 
-- **The clock** runs from 6:00 to 2:00 in 10-minute steps, about 20 real minutes per day (one step every ~10 real seconds). It stops while any panel is open (shop, container, summary).
+- **The calendar:** four seasons (Spring, Summer, Autumn, Winter) of 28 days each, and 7-day weeks. Day 1 is Spring 1, a Monday, in year 1, and after Winter 28 comes Spring 1 of the next year. Dates read like "Spring 2, Tuesday".
+- **The clock** runs from 6:00 to 2:00 in 10-minute steps, about 20 real minutes per day (one step every ~10 real seconds). It shows 12-hour time ("6:40 pm") by default, with a 24-hour option. It stops while any panel is open (shop, container, summary, the bed's question).
+- **Light:** the room's light follows the clock: a warm dawn at 6:00, plain daylight from about 9:00, golden in the early evening, a lavender dusk around 20:30, then a dark blue night from 22:00. Lamps over the tables, in the kitchen, by the door and in the back room fade up as it gets dark (from about 18:00, fully on by 21:00) and cast warm pools of light, and walls cast shadows. The HUD and panels are never tinted.
+- **Getting late:** at midnight a small "Getting late…" note appears at the top of the screen and fades away after a few seconds. It's a nudge, not a warning.
 - **Morning:** you wake in bed in the back room at 6:00. Yesterday's orders are waiting in the delivery crate by the door. Carry them to the fridge and cupboard, set up the kitchen, and order tomorrow's ingredients at the shop board.
 - **Open and close whenever you like** by flipping the sign on the door (E). While it says Open, townsfolk arrive, sit and order one dish. Fetch the ingredients, prepare and cook them, carry the dish to the customer and get paid. Customers left waiting too long leave without paying.
 - **Mealtime rushes:** customers trickle in at most times, with peaks around lunch (12:00–14:00) and dinner (18:00–21:00). Choosing when to be open is part of the game.
 - **Closing:** flipping the sign to Closed stops new customers. Anyone already seated stays until they're served or run out of patience.
-- **Bed:** go to bed (E on the bed) at any time to end the day. If the restaurant is still open, it closes and anyone still seated leaves without paying, counting as lost. If you're still up at 2:00, you fall asleep where you stand and wake in bed. No penalty in the MVP.
-- **Summary:** when the day ends, a summary shows earnings, ingredients spent, customers served and customers lost. Continue to the next morning.
+- **Bed:** go to bed (E on the bed) at any time to end the day. The bed asks "Go to bed?" first, adding "The restaurant will close." while it's open. If the restaurant is still open, it closes and anyone still seated leaves without paying, counting as lost. If you're still up at 2:00, you fall asleep where you stand and wake in bed. No penalty in the MVP.
+- **The night:** when the day ends, the game pauses and the screen fades to black. Behind it the next day starts and you're moved to the bed. The new date fades in as a title card ("Spring 2, Tuesday"), holds for a moment, then the screen fades back in on the morning at 6:00. About 4 seconds in all.
+- **Summary:** when the day ends, a summary shows earnings, ingredients spent, customers served and customers lost, between the fade to black and the morning. Continue to the next morning. (Not built yet: today the night goes straight to the morning.)
 
 Everything stays where you left it between days: ingredients in storage or the crate, and food on counters. Nothing decays in the MVP.
 
@@ -153,7 +157,10 @@ Customers are **townsfolk**: a fixed cast of hand-written people, like Stardew V
 - No lose condition. A bad day is just a bad day.
 
 ## UI
-- **HUD:** money, day number, clock, and whether the restaurant is open.
+- **HUD:** money, day number, clock, and whether the restaurant is open. Until the HUD is built (#13), a temporary label in the top left shows the date, time and open state ("Spring 3, Wednesday · 6:40 pm · Open").
+- **Question panel:** a small yes/no question ("Go to bed?") with an optional detail line. It pauses the game while open, Yes has focus so a controller can answer, and Esc or cancel means No.
+- **Night fade:** a full-screen fade to black with the new date as a title card, drawn above everything else.
+- **Notices:** short notes at the top centre ("Getting late…") that fade in, stay for 3 seconds and fade away by themselves. A new note replaces the old one.
 - **Belt bar** showing the belt slots and the selected tool, dimmed while the arms aren't empty.
 - **Held item label** above the belt bar naming the top carried item and its quality ("Sliced Tomato ★★", "Plate: Garden Salad ★★★").
 - **Quality pips:** food in the world shows 1–3 small dots for its stars, as a placeholder until there's real art.
@@ -177,7 +184,10 @@ Customers are **townsfolk**: a fixed cast of hand-written people, like Stardew V
 - A container's contents are a list of food objects with a capacity, with no notion of where the food came from. Today the shop fills it; later farms will too. It replaces the existing `Pantry` counts store.
 - Each townsperson is a `Person` resource (`data/people/`): name, placeholder colour, loved, liked and disliked dishes, and patience. Later it grows routines, friendship and a storyline. A customer in the dining room is a node pointing at its `Person`, and at most one is inside at a time.
 - Money and the day number live in the `Game` autoload (`scripts/state/game_state.gd`), so any script can use `Game.money` and so on. The global `Game.pantry` goes away when storage containers are built.
-- The clock and the restaurant's open/closed state are gameplay state too, replacing the old prep/service/summary phases (`start_service()`, `end_service()`, `start_next_day()`). Other code listens to signals such as the time changing, the restaurant opening or closing, and the day ending.
+- The clock and the restaurant's open/closed state are gameplay state too, replacing the old prep/service/summary phases. `Game` holds a `GameClock` (`scripts/time/`, no nodes) and the open state, with `set_open()`, `end_day()` and `start_next_day()`. Other code listens to its signals: `time_changed`, `open_changed`, `day_ended` and `day_changed`. The clock emits `reached_end` at 2:00 and `Game` ends the day; it never ends the day itself. Each open panel pauses it as its own source, so closing one can't restart it while another is open. `Calendar` (`scripts/time/`) is static functions turning a day number into a season, weekday and year.
+- `DayCycle` (`scripts/time/day_cycle.gd`, a node in the main scene) runs the day: it ticks the clock with real time, shows the midnight note, and plays the night when `day_ended` fires. The night is one function that awaits each step in turn (fade out, start the next day, move the player to the `WakeSpot` marker, show the date, fade in) and emits `morning_started` at the end. The game is paused throughout, and the fade keeps running because its process mode is Always.
+- `ScreenFade` and `Notice` (`ui/`) are display only: the day cycle decides when they show and what they say. Each animates with its own Tween, and `ScreenFade`'s methods can be awaited.
+- `DayLight` (`scripts/visuals/day_light.gd`) is a `CanvasModulate` in the main scene. A `Gradient` sets the room's colour and a `Curve` the lamps' level, both keyed from 6:00 (0) to 2:00 (1) and editable in the Inspector. Each clock step drifts to the new values with a one-second tween; a new day snaps straight to the morning. Each `Lamp` prop (`scenes/props/lamp.tscn`) is a `PointLight2D` with a radial texture and a per-lamp `max_energy`, and joins the `lamps` group so the day light finds every lamp without knowing where they are. Solid tiles in the placeholder tileset have occluders on its occlusion layer, so walls cast shadows.
 - Orders placed at the shop are held as pending until the next morning, then moved into the crate.
 
 ## Out of scope for the MVP
@@ -197,12 +207,13 @@ Rough order, all post-MVP:
 10. Ingredient decay: food loses freshness over time, slower in the fridge. Fresher food earns more.
 11. Energy: how much you slept sets the next day's energy. Low energy makes you walk and chop a bit slower, but never stops you playing.
 12. Restaurant upgrades: more tables, decor, better utensils (a faster knife, a bigger pan).
-13. **Farming:** plant, water and harvest crops that fill your storage. Later, animals for eggs, milk and cheese.
-14. Farm-to-table bonus: dishes made with home-grown ingredients sell for more.
-15. **Townsfolk and friendship:** routines, friendship from serving, chatting and gifts, storylines, cravings, and the cast growing towards 25–30 (design epic #46).
-16. **Reputation and critics:** a star rating, announced critic visits and Michelin-style stars (design epic #47).
-17. **Groups and social dining:** groups and couples sharing tables, overheard chatter, town events in the restaurant (design epic #48).
-18. Hiring staff (waiter, cook) from among your friends, to automate parts of the loop.
-19. A walkable town where townsfolk live out their routines.
-20. Seasons that affect crops and the menu.
-21. More storage: bigger fridges and cupboards, a walk-in pantry, more arm and belt space (design epic #28).
+13. Atmosphere: windows that show the sky changing with the time of day (#50), and a light switch so the player can turn the lamps on and off (#51).
+14. **Farming:** plant, water and harvest crops that fill your storage. Later, animals for eggs, milk and cheese.
+15. Farm-to-table bonus: dishes made with home-grown ingredients sell for more.
+16. **Townsfolk and friendship:** routines, friendship from serving, chatting and gifts, storylines, cravings, and the cast growing towards 25–30 (design epic #46).
+17. **Reputation and critics:** a star rating, announced critic visits and Michelin-style stars (design epic #47).
+18. **Groups and social dining:** groups and couples sharing tables, overheard chatter, town events in the restaurant (design epic #48).
+19. Hiring staff (waiter, cook) from among your friends, to automate parts of the loop.
+20. A walkable town where townsfolk live out their routines.
+21. Seasons that affect crops and the menu.
+22. More storage: bigger fridges and cupboards, a walk-in pantry, more arm and belt space (design epic #28).
