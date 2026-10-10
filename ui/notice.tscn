@@ -1,0 +1,10 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://ui/notice.gd" id="1_qm5pf"]
+
+[node name="Notice" type="Label" unique_id=799610639]
+theme_override_colors/font_outline_color = Color(0.1, 0.08, 0.06, 1)
+theme_override_constants/outline_size = 3
+theme_override_font_sizes/font_size = 8
+horizontal_alignment = 1
+script = ExtResource("1_qm5pf")

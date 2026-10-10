@@ -1,20 +1,38 @@
-[gd_scene load_steps=5 format=3]
+[gd_scene format=3 uid="uid://d171p3v8fsehp"]
 
 [ext_resource type="PackedScene" path="res://scenes/restaurant.tscn" id="1_restaurant"]
+[ext_resource type="Script" path="res://scripts/visuals/day_light.gd" id="2_85g3d"]
 [ext_resource type="PackedScene" path="res://scenes/player.tscn" id="2_player"]
 [ext_resource type="PackedScene" path="res://ui/belt_bar.tscn" id="3_belt_bar"]
 [ext_resource type="PackedScene" path="res://ui/held_item_label.tscn" id="4_held_label"]
+[ext_resource type="PackedScene" path="res://ui/time_label.tscn" id="5_tbgi4"]
+[ext_resource type="Script" path="res://scripts/time/day_cycle.gd" id="6_tefeu"]
+[ext_resource type="PackedScene" path="res://ui/notice.tscn" id="6_tipki"]
+[ext_resource type="PackedScene" path="res://ui/screen_fade.tscn" id="8_85g3d"]
 
-[node name="Main" type="Node2D"]
+[sub_resource type="Gradient" id="Gradient_choun"]
+offsets = PackedFloat32Array(0, 0.15, 0.5, 0.625, 0.725, 0.8, 1)
+colors = PackedColorArray(1, 0.86, 0.74, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0.85, 0.65, 1, 0.62, 0.5, 0.68, 1, 0.2, 0.22, 0.4, 1, 0.2, 0.22, 0.4, 1)
 
-[node name="Restaurant" parent="." instance=ExtResource("1_restaurant")]
+[sub_resource type="Curve" id="Curve_ya4ey"]
+_data = [Vector2(0, 0), 0.0, 0.0, 1, 1, Vector2(0.6, 0), 0.0, 6.6666675, 1, 1, Vector2(0.75, 1), 6.6666675, 0.0, 1, 1, Vector2(1, 1), 0.0, 0.0, 1, 1]
+point_count = 4
 
-[node name="Player" parent="." instance=ExtResource("2_player")]
+[node name="Main" type="Node2D" unique_id=324224924]
+
+[node name="Restaurant" parent="." unique_id=1159023787 instance=ExtResource("1_restaurant")]
+
+[node name="DayLight" type="CanvasModulate" parent="." unique_id=1128620840]
+script = ExtResource("2_85g3d")
+gradient = SubResource("Gradient_choun")
+lamp_curve = SubResource("Curve_ya4ey")
+
+[node name="Player" parent="." unique_id=1143421194 instance=ExtResource("2_player")]
 position = Vector2(80, 136)
 
-[node name="HUD" type="CanvasLayer" parent="."]
+[node name="HUD" type="CanvasLayer" parent="." unique_id=464251152]
 
-[node name="BeltBar" parent="HUD" node_paths=PackedStringArray("player") instance=ExtResource("3_belt_bar")]
+[node name="BeltBar" parent="HUD" unique_id=1695134885 node_paths=PackedStringArray("player") instance=ExtResource("3_belt_bar")]
 anchors_preset = 7
 anchor_left = 0.5
 anchor_top = 1.0
@@ -28,7 +46,7 @@ grow_horizontal = 2
 grow_vertical = 0
 player = NodePath("../../Player")
 
-[node name="HeldItemLabel" parent="HUD" node_paths=PackedStringArray("player") instance=ExtResource("4_held_label")]
+[node name="HeldItemLabel" parent="HUD" unique_id=523695902 node_paths=PackedStringArray("player") instance=ExtResource("4_held_label")]
 anchors_preset = 7
 anchor_left = 0.5
 anchor_top = 1.0
@@ -41,3 +59,27 @@ offset_bottom = -24.0
 grow_horizontal = 2
 grow_vertical = 0
 player = NodePath("../../Player")
+
+[node name="TimeLabel" parent="HUD" unique_id=668659520 instance=ExtResource("5_tbgi4")]
+offset_left = 4.0
+offset_top = 4.0
+offset_right = 44.0
+offset_bottom = 27.0
+
+[node name="Notice" parent="HUD" unique_id=799610639 instance=ExtResource("6_tipki")]
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -100.0
+offset_top = 16.0
+offset_right = 100.0
+offset_bottom = 28.0
+
+[node name="DayCycle" type="Node" parent="." unique_id=1324712917 node_paths=PackedStringArray("player", "wake_spot", "screen_fade", "notice")]
+script = ExtResource("6_tefeu")
+player = NodePath("../Player")
+wake_spot = NodePath("../Restaurant/WakeSpot")
+screen_fade = NodePath("../ScreenFade")
+notice = NodePath("../HUD/Notice")
+
+[node name="ScreenFade" parent="." unique_id=1036649606 instance=ExtResource("8_85g3d")]
