@@ -13,9 +13,7 @@ func before_test() -> void:
 	_events = []
 	_state.money_changed.connect(func(value: int) -> void: _events.append([&"money", value]))
 	_state.day_changed.connect(func(value: int) -> void: _events.append([&"day", value]))
-	_state.phase_changed.connect(
-		func(value: GameState.Phase) -> void: _events.append([&"phase", value])
-	)
+	_state.open_changed.connect(func(value: bool) -> void: _events.append([&"open", value]))
 
 
 # --- Starting state -------------------------------------------------------------
@@ -23,7 +21,7 @@ func before_test() -> void:
 func test_starts_with_design_doc_values() -> void:
 	assert_int(_state.money).is_equal(50)
 	assert_int(_state.day).is_equal(1)
-	assert_int(_state.phase).is_equal(GameState.Phase.PREP)
+	assert_bool(_state.is_open).is_false()
 	assert_dict(_state.pantry.get_counts()).is_empty()
 
 
@@ -63,45 +61,40 @@ func test_rejects_non_positive_amounts() -> void:
 	assert_array(_events).is_empty()
 
 
-# --- Day and phase --------------------------------------------------------------
+# --- Open and closed ------------------------------------------------------------
 
-func test_full_day_cycle() -> void:
-	assert_bool(_state.start_service()).is_true()
-	assert_int(_state.phase).is_equal(GameState.Phase.SERVICE)
-	assert_bool(_state.end_service()).is_true()
-	assert_int(_state.phase).is_equal(GameState.Phase.SUMMARY)
-	assert_bool(_state.start_next_day()).is_true()
-	assert_int(_state.phase).is_equal(GameState.Phase.PREP)
-	assert_int(_state.day).is_equal(2)
-	assert_array(_events).is_equal([
-		[&"phase", GameState.Phase.SERVICE],
-		[&"phase", GameState.Phase.SUMMARY],
-		[&"day", 2],
-		[&"phase", GameState.Phase.PREP],
-	])
+func test_set_open_opens_the_restaurant() -> void:
+	_state.set_open(true)
+	assert_bool(_state.is_open).is_true()
+	assert_array(_events).is_equal([[&"open", true]])
 
 
-func test_new_day_is_set_before_listeners_hear_the_phase_change() -> void:
-	var day_seen: Array[int] = []
-	_state.start_service()
-	_state.end_service()
-	_state.phase_changed.connect(func(_phase: GameState.Phase) -> void: day_seen.append(_state.day))
+func test_set_open_closes_the_restaurant() -> void:
+	_state.set_open(true)
+	_state.set_open(false)
+	assert_bool(_state.is_open).is_false()
+	assert_array(_events).is_equal([[&"open", true], [&"open", false]])
+
+
+func test_setting_the_same_open_state_emits_nothing() -> void:
+	_state.set_open(false)
+	_state.set_open(true)
+	_state.set_open(true)
+	assert_array(_events).is_equal([[&"open", true]])
+
+
+# --- Days ---------------------------------------------------------------------
+
+func test_start_next_day_advances_the_day() -> void:
 	_state.start_next_day()
-	assert_array(day_seen).is_equal([2])
+	assert_int(_state.day).is_equal(2)
+	assert_array(_events).is_equal([[&"day", 2]])
 
 
-func test_transitions_from_the_wrong_phase_fail() -> void:
-	# In prep.
-	assert_bool(_state.end_service()).is_false()
-	assert_bool(_state.start_next_day()).is_false()
-	_state.start_service()
-	assert_bool(_state.start_service()).is_false()
-	assert_bool(_state.start_next_day()).is_false()
-	_state.end_service()
-	assert_bool(_state.start_service()).is_false()
-	assert_bool(_state.end_service()).is_false()
-	assert_int(_state.phase).is_equal(GameState.Phase.SUMMARY)
-	assert_int(_state.day).is_equal(1)
+func test_each_day_starts_closed() -> void:
+	_state.set_open(true)
+	_state.start_next_day()
+	assert_bool(_state.is_open).is_false()
 
 
 # --- New game -----------------------------------------------------------------
@@ -111,16 +104,14 @@ func test_new_game_resets_everything() -> void:
 	var pantry: Pantry = _state.pantry
 	_state.pantry.add(tomato, 3)
 	_state.spend(10)
-	_state.start_service()
-	_state.end_service()
 	_state.start_next_day()
-	_state.start_service()
+	_state.set_open(true)
 
 	_state.new_game()
 
 	assert_int(_state.money).is_equal(50)
 	assert_int(_state.day).is_equal(1)
-	assert_int(_state.phase).is_equal(GameState.Phase.PREP)
+	assert_bool(_state.is_open).is_false()
 	assert_dict(_state.pantry.get_counts()).is_empty()
 	# Same instance, so anything connected to the pantry's signals still hears it.
 	assert_object(_state.pantry).is_same(pantry)
@@ -136,15 +127,15 @@ func test_assigning_money_directly_is_an_error_and_changes_nothing() -> void:
 	assert_array(_events).is_empty()
 
 
-func test_assigning_day_or_phase_directly_is_an_error() -> void:
+func test_assigning_day_or_open_directly_is_an_error() -> void:
 	await assert_error(func() -> void: _state.day = 5).is_push_error(
 		"GameState: day is read-only, use start_next_day()"
 	)
-	await assert_error(func() -> void: _state.phase = GameState.Phase.SUMMARY).is_push_error(
-		"GameState: phase is read-only, use the phase methods"
+	await assert_error(func() -> void: _state.is_open = true).is_push_error(
+		"GameState: is_open is read-only, use set_open()"
 	)
 	assert_int(_state.day).is_equal(1)
-	assert_int(_state.phase).is_equal(GameState.Phase.PREP)
+	assert_bool(_state.is_open).is_false()
 
 
 func test_pantry_cannot_be_replaced() -> void:
