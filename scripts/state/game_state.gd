@@ -38,6 +38,14 @@ var pantry: Pantry:
 		return _pantry
 	set(_value):
 		push_error("GameState: pantry can't be replaced, use pantry.clear()")
+## The time of day. Like the pantry, created once and never replaced, so signal
+## connections to it keep working. The day cycle ticks it; reaching 2:00 am
+## ends the day.
+var clock: GameClock:
+	get:
+		return _clock
+	set(_value):
+		push_error("GameState: clock can't be replaced, use start_next_day()")
 var is_open: bool:
 	get:
 		return _is_open
@@ -52,17 +60,25 @@ var is_day_over: bool:
 var _money: int = STARTING_MONEY
 var _day: int = 1
 var _pantry: Pantry = Pantry.new()
+var _clock: GameClock = GameClock.new()
 var _is_open: bool = false
 var _is_day_over: bool = false
 
 
+func _init() -> void:
+	_clock.reached_end.connect(end_day)
+
+
 ## Puts everything back to the start: starting money, an empty pantry, day 1
-## and the restaurant closed.
+## at 6:00 am with the clock running, and the restaurant closed.
 func new_game() -> void:
 	_pantry.clear()
 	_set_money(STARTING_MONEY)
-	_set_day(1)
 	_is_day_over = false
+	# Clock first, so day_changed listeners already see 6:00 am.
+	_clock.reset()
+	_clock.resume(self)
+	_set_day(1)
 	set_open(false)
 
 
@@ -100,6 +116,7 @@ func set_open(value: bool) -> void:
 func end_day() -> void:
 	if _is_day_over:
 		return
+	_clock.pause(self)
 	set_open(false)
 	_is_day_over = true
 	day_ended.emit(_day)
@@ -111,6 +128,8 @@ func start_next_day() -> bool:
 	if not _is_day_over:
 		return false
 	_is_day_over = false
+	_clock.reset()
+	_clock.resume(self)
 	_set_day(_day + 1)
 	return true
 
