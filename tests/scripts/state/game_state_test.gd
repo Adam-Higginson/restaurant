@@ -141,16 +141,67 @@ func test_each_day_starts_closed_and_can_open() -> void:
 	assert_bool(_state.is_open).is_true()
 
 
+# --- The clock ----------------------------------------------------------------
+
+func test_clock_starts_at_six_am_and_running() -> void:
+	assert_int(_state.clock.minutes).is_equal(GameClock.START_MINUTES)
+	assert_bool(_state.clock.is_paused()).is_false()
+
+
+func test_reaching_two_am_ends_the_day() -> void:
+	_state.set_open(true)
+	_state.clock.seconds_per_step = 1.0
+	_state.clock.tick(1000.0)
+	assert_bool(_state.is_day_over).is_true()
+	assert_bool(_state.is_open).is_false()
+	assert_array(_events.slice(-1)).is_equal([[&"day_ended", 1]])
+
+
+func test_clock_stops_once_the_day_is_over() -> void:
+	# E.g. after going to bed at 22:00, time stands still until morning.
+	_state.clock.seconds_per_step = 1.0
+	_state.end_day()
+	_state.clock.tick(5.0)
+	assert_int(_state.clock.minutes).is_equal(GameClock.START_MINUTES)
+
+
+func test_next_day_starts_at_six_am_with_the_clock_running() -> void:
+	_state.clock.seconds_per_step = 1.0
+	_state.clock.tick(30.5)
+	_state.end_day()
+	_state.start_next_day()
+	assert_int(_state.clock.minutes).is_equal(GameClock.START_MINUTES)
+	assert_bool(_state.clock.is_paused()).is_false()
+	_state.clock.tick(1.0)
+	assert_int(_state.clock.minutes).is_equal(GameClock.START_MINUTES + 10)
+
+
+func test_next_day_starts_the_clock_before_announcing_the_day() -> void:
+	# So anything that hears day_changed already reads 6:00 am.
+	var minutes_seen: Array[int] = []
+	_state.clock.seconds_per_step = 1.0
+	_state.clock.tick(30.0)
+	_state.end_day()
+	_state.day_changed.connect(
+		func(_day: int) -> void: minutes_seen.append(_state.clock.minutes)
+	)
+	_state.start_next_day()
+	assert_array(minutes_seen).is_equal([GameClock.START_MINUTES])
+
+
 # --- New game -----------------------------------------------------------------
 
 func test_new_game_resets_everything() -> void:
 	var tomato: Item = Item.new()
 	var pantry: Pantry = _state.pantry
+	var clock: GameClock = _state.clock
 	_state.pantry.add(tomato, 3)
 	_state.spend(10)
 	_state.end_day()
 	_state.start_next_day()
 	_state.set_open(true)
+	_state.clock.seconds_per_step = 1.0
+	_state.clock.tick(30.0)
 	_state.end_day()
 
 	_state.new_game()
@@ -160,8 +211,11 @@ func test_new_game_resets_everything() -> void:
 	assert_bool(_state.is_open).is_false()
 	assert_bool(_state.is_day_over).is_false()
 	assert_dict(_state.pantry.get_counts()).is_empty()
-	# Same instance, so anything connected to the pantry's signals still hears it.
+	assert_int(_state.clock.minutes).is_equal(GameClock.START_MINUTES)
+	assert_bool(_state.clock.is_paused()).is_false()
+	# Same instances, so anything connected to their signals still hears them.
 	assert_object(_state.pantry).is_same(pantry)
+	assert_object(_state.clock).is_same(clock)
 
 
 # --- Read-only values -----------------------------------------------------------
@@ -194,6 +248,14 @@ func test_pantry_cannot_be_replaced() -> void:
 		"GameState: pantry can't be replaced, use pantry.clear()"
 	)
 	assert_object(_state.pantry).is_same(pantry)
+
+
+func test_clock_cannot_be_replaced() -> void:
+	var clock: GameClock = _state.clock
+	await assert_error(func() -> void: _state.clock = GameClock.new()).is_push_error(
+		"GameState: clock can't be replaced, use start_next_day()"
+	)
+	assert_object(_state.clock).is_same(clock)
 
 
 # --- Autoload -----------------------------------------------------------------
