@@ -1,20 +1,20 @@
-[gd_scene load_steps=5 format=3]
+[gd_scene format=3 uid="uid://d171p3v8fsehp"]
 
 [ext_resource type="PackedScene" path="res://scenes/restaurant.tscn" id="1_restaurant"]
 [ext_resource type="PackedScene" path="res://scenes/player.tscn" id="2_player"]
 [ext_resource type="PackedScene" path="res://ui/belt_bar.tscn" id="3_belt_bar"]
 [ext_resource type="PackedScene" path="res://ui/held_item_label.tscn" id="4_held_label"]
 
-[node name="Main" type="Node2D"]
+[node name="Main" type="Node2D" unique_id=324224924]
 
-[node name="Restaurant" parent="." instance=ExtResource("1_restaurant")]
+[node name="Restaurant" parent="." unique_id=1159023787 instance=ExtResource("1_restaurant")]
 
-[node name="Player" parent="." instance=ExtResource("2_player")]
+[node name="Player" parent="." unique_id=1143421194 instance=ExtResource("2_player")]
 position = Vector2(80, 136)
 
-[node name="HUD" type="CanvasLayer" parent="."]
+[node name="HUD" type="CanvasLayer" parent="." unique_id=464251152]
 
-[node name="BeltBar" parent="HUD" node_paths=PackedStringArray("player") instance=ExtResource("3_belt_bar")]
+[node name="BeltBar" parent="HUD" unique_id=1695134885 node_paths=PackedStringArray("player") instance=ExtResource("3_belt_bar")]
 anchors_preset = 7
 anchor_left = 0.5
 anchor_top = 1.0
@@ -28,7 +28,7 @@ grow_horizontal = 2
 grow_vertical = 0
 player = NodePath("../../Player")
 
-[node name="HeldItemLabel" parent="HUD" node_paths=PackedStringArray("player") instance=ExtResource("4_held_label")]
+[node name="HeldItemLabel" parent="HUD" unique_id=523695902 node_paths=PackedStringArray("player") instance=ExtResource("4_held_label")]
 anchors_preset = 7
 anchor_left = 0.5
 anchor_top = 1.0
