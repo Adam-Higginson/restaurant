@@ -1,0 +1,22 @@
+[gd_scene format=3 uid="uid://tmap162mg1e0"]
+
+[ext_resource type="Script" uid="uid://p6x8yc4renre" path="res://scripts/interaction/interactable.gd" id="1_1dbm4"]
+[ext_resource type="Script" uid="uid://iqarpvoabcgw" path="res://scripts/props/door_sign.gd" id="1_v7gqr"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_tdc86"]
+size = Vector2(16, 16)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_i1on3"]
+size = Vector2(16, 16)
+
+[node name="DoorSign" type="StaticBody2D" unique_id=1840225875]
+script = ExtResource("1_v7gqr")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1176987941]
+shape = SubResource("RectangleShape2D_tdc86")
+
+[node name="Interactable" type="Area2D" parent="." unique_id=916392540]
+script = ExtResource("1_1dbm4")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Interactable" unique_id=524848157]
+shape = SubResource("RectangleShape2D_i1on3")

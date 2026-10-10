@@ -1,6 +1,6 @@
-[gd_scene format=4]
+[gd_scene format=4 uid="uid://dpcrh125bdj5n"]
 
-[ext_resource type="TileSet" path="res://assets/placeholder/placeholder_tileset.tres" id="1_f3ktr"]
+[ext_resource type="TileSet" uid="uid://bevqlvy6h6px8" path="res://assets/placeholder/placeholder_tileset.tres" id="1_f3ktr"]
 [ext_resource type="PackedScene" path="res://scenes/props/station.tscn" id="2_50xnb"]
 [ext_resource type="PackedScene" path="res://scenes/props/pantry.tscn" id="3_uk3xj"]
 [ext_resource type="PackedScene" path="res://scenes/props/table.tscn" id="4_bp8vj"]
@@ -10,6 +10,7 @@
 [ext_resource type="Resource" path="res://data/items/plate.tres" id="8_plate"]
 [ext_resource type="Resource" path="res://data/items/chopping_board.tres" id="9_board"]
 [ext_resource type="PackedScene" path="res://scenes/props/dispenser.tscn" id="10_dispenser"]
+[ext_resource type="PackedScene" uid="uid://tmap162mg1e0" path="res://scenes/props/door_sign.tscn" id="11_qujyy"]
 
 [node name="Restaurant" type="Node2D" unique_id=79848715]
 
@@ -19,52 +20,55 @@ tile_set = ExtResource("1_f3ktr")
 
 [node name="Props" type="Node2D" parent="." unique_id=577540405]
 
-[node name="Stove" type="StaticBody2D" parent="Props" unique_id=1953241169 groups=["stations"] instance=ExtResource("2_50xnb")]
-color = Color(0.85, 0.35, 0.3, 1)
+[node name="Stove" parent="Props" unique_id=1953241169 instance=ExtResource("2_50xnb")]
 position = Vector2(56, 24)
+color = Color(0.85, 0.35, 0.3, 1)
 
-[node name="Counter1" type="StaticBody2D" parent="Props" groups=["counters"] instance=ExtResource("5_counter")]
+[node name="Counter1" parent="Props" unique_id=1829790269 instance=ExtResource("5_counter")]
 position = Vector2(72, 24)
 
-[node name="Counter2" type="StaticBody2D" parent="Props" groups=["counters"] instance=ExtResource("5_counter")]
+[node name="Counter2" parent="Props" unique_id=2064864994 instance=ExtResource("5_counter")]
 position = Vector2(88, 24)
 
-[node name="Counter3" type="StaticBody2D" parent="Props" groups=["counters"] instance=ExtResource("5_counter")]
+[node name="Counter3" parent="Props" unique_id=1079053219 instance=ExtResource("5_counter")]
 position = Vector2(120, 24)
 
-[node name="Counter4" type="StaticBody2D" parent="Props" groups=["counters"] instance=ExtResource("5_counter")]
+[node name="Counter4" parent="Props" unique_id=478792126 instance=ExtResource("5_counter")]
 position = Vector2(136, 24)
 
-[node name="BoardCounter" type="StaticBody2D" parent="Props" groups=["counters"] instance=ExtResource("5_counter")]
+[node name="BoardCounter" parent="Props" unique_id=536996229 instance=ExtResource("5_counter")]
 position = Vector2(104, 24)
 start_item = ExtResource("9_board")
 
-[node name="LettuceBin" type="StaticBody2D" parent="Props" groups=["dispensers"] instance=ExtResource("10_dispenser")]
+[node name="LettuceBin" parent="Props" unique_id=24171080 instance=ExtResource("10_dispenser")]
 position = Vector2(24, 24)
 item = ExtResource("7_lettuce")
 
-[node name="TomatoBin" type="StaticBody2D" parent="Props" groups=["dispensers"] instance=ExtResource("10_dispenser")]
+[node name="TomatoBin" parent="Props" unique_id=911074801 instance=ExtResource("10_dispenser")]
 position = Vector2(40, 24)
 item = ExtResource("6_tomato")
 
-[node name="PlateRack" type="StaticBody2D" parent="Props" groups=["dispensers"] instance=ExtResource("10_dispenser")]
+[node name="PlateRack" parent="Props" unique_id=1361283919 instance=ExtResource("10_dispenser")]
 position = Vector2(152, 24)
 item = ExtResource("8_plate")
 
-[node name="Pantry" type="StaticBody2D" parent="Props" unique_id=1040802693 groups=["pantry"] instance=ExtResource("3_uk3xj")]
+[node name="Pantry" parent="Props" unique_id=1040802693 instance=ExtResource("3_uk3xj")]
 position = Vector2(24, 192)
 
-[node name="Table1" type="StaticBody2D" parent="Props" unique_id=187416035 groups=["tables"] instance=ExtResource("4_bp8vj")]
+[node name="Table1" parent="Props" unique_id=187416035 instance=ExtResource("4_bp8vj")]
 position = Vector2(256, 72)
 
-[node name="Table2" type="StaticBody2D" parent="Props" unique_id=523467727 groups=["tables"] instance=ExtResource("4_bp8vj")]
+[node name="Table2" parent="Props" unique_id=523467727 instance=ExtResource("4_bp8vj")]
 position = Vector2(400, 72)
 
-[node name="Table3" type="StaticBody2D" parent="Props" unique_id=890630109 groups=["tables"] instance=ExtResource("4_bp8vj")]
+[node name="Table3" parent="Props" unique_id=890630109 instance=ExtResource("4_bp8vj")]
 position = Vector2(256, 168)
 
-[node name="Table4" type="StaticBody2D" parent="Props" unique_id=936455283 groups=["tables"] instance=ExtResource("4_bp8vj")]
+[node name="Table4" parent="Props" unique_id=936455283 instance=ExtResource("4_bp8vj")]
 position = Vector2(400, 168)
+
+[node name="DoorSign" parent="Props" unique_id=1840225875 instance=ExtResource("11_qujyy")]
+position = Vector2(352, 232)
 
 [node name="Door" type="Marker2D" parent="." unique_id=1053605584]
 position = Vector2(320, 248)
