@@ -5,6 +5,7 @@
 [ext_resource type="PackedScene" path="res://ui/belt_bar.tscn" id="3_belt_bar"]
 [ext_resource type="PackedScene" path="res://ui/held_item_label.tscn" id="4_held_label"]
 [ext_resource type="PackedScene" uid="uid://db6jl14tmtqt3" path="res://ui/time_label.tscn" id="5_tbgi4"]
+[ext_resource type="Script" uid="uid://bru8im5criytk" path="res://scripts/time/day_cycle.gd" id="6_tefeu"]
 
 [node name="Main" type="Node2D" unique_id=324224924]
 
@@ -48,3 +49,6 @@ offset_left = 4.0
 offset_top = 4.0
 offset_right = 44.0
 offset_bottom = 27.0
+
+[node name="DayCycle" type="Node" parent="." unique_id=1324712917]
+script = ExtResource("6_tefeu")
