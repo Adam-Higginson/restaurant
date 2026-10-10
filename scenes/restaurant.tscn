@@ -11,6 +11,7 @@
 [ext_resource type="Resource" path="res://data/items/chopping_board.tres" id="9_board"]
 [ext_resource type="PackedScene" path="res://scenes/props/dispenser.tscn" id="10_dispenser"]
 [ext_resource type="PackedScene" uid="uid://tmap162mg1e0" path="res://scenes/props/door_sign.tscn" id="11_qujyy"]
+[ext_resource type="PackedScene" uid="uid://sbf822dq28vm" path="res://scenes/props/bed.tscn" id="12_bed"]
 
 [node name="Restaurant" type="Node2D" unique_id=79848715]
 
@@ -75,3 +76,6 @@ position = Vector2(320, 248)
 
 [node name="WakeSpot" type="Marker2D" parent="." unique_id=1566975550]
 position = Vector2(56, 216)
+
+[node name="Bed" parent="Props" instance=ExtResource("12_bed")]
+position = Vector2(24, 200)

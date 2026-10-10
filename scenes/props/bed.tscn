@@ -1,0 +1,25 @@
+[gd_scene format=3 uid="uid://sbf822dq28vm"]
+
+[ext_resource type="Script" uid="uid://cfuik3hvf7bbo" path="res://scripts/props/bed.gd" id="1_16w1d"]
+[ext_resource type="Script" uid="uid://p6x8yc4renre" path="res://scripts/interaction/interactable.gd" id="2_esql8"]
+[ext_resource type="PackedScene" uid="uid://bm78t7nmsm5gb" path="res://ui/confirm_panel.tscn" id="3_esql8"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_tdc86"]
+size = Vector2(16, 32)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_i1on3"]
+size = Vector2(16, 32)
+
+[node name="Bed" type="StaticBody2D" unique_id=1840225875]
+script = ExtResource("1_16w1d")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1176987941]
+shape = SubResource("RectangleShape2D_tdc86")
+
+[node name="Interactable" type="Area2D" parent="." unique_id=916392540]
+script = ExtResource("2_esql8")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Interactable" unique_id=524848157]
+shape = SubResource("RectangleShape2D_i1on3")
+
+[node name="ConfirmPanel" parent="." unique_id=2141306868 instance=ExtResource("3_esql8")]
