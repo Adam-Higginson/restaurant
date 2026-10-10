@@ -44,6 +44,17 @@ func test_format_after_midnight() -> void:
 	assert_str(GameClock.format_time(26 * 60)).is_equal("2:00 am")
 
 
+func test_format_24_hour() -> void:
+	assert_str(GameClock.format_time(6 * 60, true)).is_equal("06:00")
+	assert_str(GameClock.format_time(12 * 60 + 40, true)).is_equal("12:40")
+	assert_str(GameClock.format_time(18 * 60 + 30, true)).is_equal("18:30")
+
+
+func test_format_24_hour_after_midnight() -> void:
+	assert_str(GameClock.format_time(24 * 60, true)).is_equal("00:00")
+	assert_str(GameClock.format_time(25 * 60 + 50, true)).is_equal("01:50")
+
+
 # --- Ticking ------------------------------------------------------------------
 
 func test_starts_at_six_am() -> void:
