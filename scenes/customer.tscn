@@ -23,6 +23,7 @@ target_desired_distance = 2.0
 radius = 6.0
 
 [node name="NameLabel" type="Label" parent="." unique_id=1769671928]
+z_index = 10
 offset_left = -32.0
 offset_top = 5.0
 offset_right = 32.0
@@ -33,6 +34,7 @@ theme_override_font_sizes/font_size = 8
 horizontal_alignment = 1
 
 [node name="Bubble" type="Label" parent="." unique_id=974141272]
+z_index = 10
 visible = false
 theme_override_colors/font_color = Color(0.15, 0.12, 0.12, 1)
 theme_override_font_sizes/font_size = 8
