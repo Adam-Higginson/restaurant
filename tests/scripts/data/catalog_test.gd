@@ -61,6 +61,23 @@ func test_garden_salad_reactions_match_design_doc() -> void:
 		&"garden_salad", 1)
 
 
+func test_storage_kinds_match_design_doc() -> void:
+	var fridge: Array[StringName] = [
+		&"lettuce", &"tomato", &"cheese", &"chopped_lettuce", &"sliced_tomato",
+		&"diced_tomato", &"garden_salad", &"grilled_cheese",
+	]
+	var cupboard: Array[StringName] = [&"onion", &"bread"]
+	for item: Item in _catalog.items:
+		var expected: Item.StorageKind = Item.StorageKind.NONE
+		if item.id in fridge:
+			expected = Item.StorageKind.FRIDGE
+		elif item.id in cupboard:
+			expected = Item.StorageKind.CUPBOARD
+		assert_int(item.storage).override_failure_message(
+			"%s should be stored in %s" % [item.id, Item.StorageKind.keys()[expected]]
+		).is_equal(expected)
+
+
 # --- Townsfolk -------------------------------------------------------------------
 # The cast mirrors the Customers section of docs/GDD.md.
 

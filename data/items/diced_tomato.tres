@@ -7,3 +7,4 @@ script = ExtResource("1_g2sbe")
 id = &"diced_tomato"
 display_name = "Diced Tomato"
 color = Color(0.75, 0.15, 0.15, 1)
+storage = 1

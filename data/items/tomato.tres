@@ -7,3 +7,4 @@ script = ExtResource("1_bprmv")
 id = &"tomato"
 display_name = "Tomato"
 color = Color(0.9, 0.25, 0.2, 1)
+storage = 1
