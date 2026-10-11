@@ -15,6 +15,8 @@ signal seated(customer: Customer)
 signal served(customer: Customer, bill: Bill)
 ## Emitted when their patience runs out, just before they get up to leave.
 signal gave_up(customer: Customer)
+## Emitted when they get up to leave, fed or not, taking any plate with them.
+signal stood_up(customer: Customer)
 ## Emitted when they've walked out of the door, just before they're freed.
 signal left(customer: Customer)
 
@@ -172,6 +174,7 @@ func leave() -> void:
 		_say(LEAVE_MESSAGE)
 	_agent.target_position = _exit_position
 	queue_redraw()
+	stood_up.emit(self)
 
 
 ## Called when the agent has reached its target: the seat or the door.

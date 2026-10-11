@@ -136,6 +136,16 @@ func test_leaving_twice_changes_nothing() -> void:
 	assert_int(customer.state).is_equal(Customer.State.LEAVING)
 
 
+func test_announces_standing_up_once() -> void:
+	var runner: GdUnitSceneRunner = await _main()
+	var customer: Customer = await _seated_customer(runner, _person(120.0))
+	var counter: Dictionary[String, int] = {"stood_up": 0}
+	customer.stood_up.connect(func(_who: Customer) -> void: counter["stood_up"] += 1)
+	customer.leave()
+	customer.leave()
+	assert_int(counter["stood_up"]).is_equal(1)
+
+
 func test_running_out_of_patience_means_giving_up() -> void:
 	var runner: GdUnitSceneRunner = await _main()
 	var customer: Customer = await _seated_customer(runner, _person(0.3))
