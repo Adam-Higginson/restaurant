@@ -84,6 +84,13 @@ func test_patience_drains_while_they_wait() -> void:
 	assert_float(customer.patience_fraction()).is_less(1.0)
 
 
+func test_keeps_waiting_until_served_or_out_of_patience() -> void:
+	var runner: GdUnitSceneRunner = await _main()
+	var customer: Customer = await _seated_customer(runner, _person(120.0))
+	await get_tree().create_timer(0.5).timeout
+	assert_int(customer.state).is_equal(Customer.State.WAITING)
+
+
 func test_patience_stops_while_the_clock_is_paused() -> void:
 	var runner: GdUnitSceneRunner = await _main()
 	var customer: Customer = await _seated_customer(runner, _person(120.0))
