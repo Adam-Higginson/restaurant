@@ -4,6 +4,10 @@ extends Node
 ## dinner, if it's open (see [ArrivalPlanner]). Each is someone who isn't
 ## already inside and can order something, sat at a free table.
 ##
+## It also settles up: a customer who is served pays their bill, and the day's
+## tally ([member GameState.stats]) counts who was served and who was lost,
+## including anyone still waiting when the day ends.
+##
 ## Customers are added as siblings of the spawner, so they share the
 ## restaurant's navigation map. Anyone still inside when a new day starts is
 ## sent home behind the night's black screen.
@@ -30,7 +34,7 @@ var rng: RandomNumberGenerator = null
 
 var _planner: ArrivalPlanner = null
 ## Each taken table and who's sitting there.
-var _seated_at: Dictionary[Node2D, Customer] = {}
+var _seated_at: Dictionary[Table, Customer] = {}
 
 
 func _ready() -> void:
@@ -47,6 +51,7 @@ func _ready() -> void:
 	game_state.clock.time_changed.connect(_on_time_changed)
 	game_state.open_changed.connect(_on_open_changed)
 	game_state.day_changed.connect(_on_day_changed)
+	game_state.day_ended.connect(_on_day_ended)
 
 
 ## Everyone inside, walking in, waiting or leaving.
@@ -57,10 +62,10 @@ func customers() -> Array[Customer]:
 
 
 ## Tables nobody is sitting at (or walking to, or leaving from).
-func free_tables() -> Array[Node2D]:
-	var tables: Array[Node2D] = []
+func free_tables() -> Array[Table]:
+	var tables: Array[Table] = []
 	for node: Node in get_tree().get_nodes_in_group(&"tables"):
-		var table: Node2D = node as Node2D
+		var table: Table = node as Table
 		if table != null and not _seated_at.has(table):
 			tables.append(table)
 	return tables
@@ -70,24 +75,28 @@ func free_tables() -> Array[Node2D]:
 ## from the menu, at a random free table. Returns null, bringing nobody, if
 ## there's no free table or nobody to bring.
 func spawn_customer() -> Customer:
-	var tables: Array[Node2D] = free_tables()
+	var tables: Array[Table] = free_tables()
 	var candidates: Array[Person] = _people_who_could_come()
 	if tables.is_empty() or candidates.is_empty():
 		return null
 
-	var table: Node2D = tables[rng.randi_range(0, tables.size() - 1)]
+	var table: Table = tables[rng.randi_range(0, tables.size() - 1)]
 	var person: Person = candidates[rng.randi_range(0, candidates.size() - 1)]
 	var seat: Marker2D = table.get_node("Seat") as Marker2D
 
 	var customer: Customer = CUSTOMER_SCENE.instantiate() as Customer
 	customer.game_state = game_state
+	customer.menu = menu
 	# Global positions: the seat's own position is relative to its table.
 	customer.setup(person, person.choose_order(menu, rng), seat.global_position,
 		door.global_position)
 	customer.position = door.global_position
+	customer.served.connect(_on_customer_served)
+	customer.gave_up.connect(_on_customer_gave_up)
 	customer.left.connect(_on_customer_left)
 
 	_seated_at[table] = customer
+	table.seat(customer)
 	get_parent().add_child(customer)
 	customer_arrived.emit(customer)
 
@@ -127,7 +136,26 @@ func _on_day_changed(_day: int) -> void:
 	_seated_at.clear()
 
 
+# Anyone not served by the end of the day leaves without paying. Those who gave
+# up are already counted, and those eating have paid.
+func _on_day_ended(_day: int) -> void:
+	for customer: Customer in customers():
+		if customer.state == Customer.State.WALKING_IN or customer.state == Customer.State.WAITING:
+			game_state.stats.record_lost()
+
+
+func _on_customer_served(_customer: Customer, bill: Bill) -> void:
+	# A dish that isn't on the menu (taken off since they ordered) costs nothing.
+	if bill.total() > 0:
+		game_state.earn(bill.total())
+	game_state.stats.record_served(bill)
+
+
+func _on_customer_gave_up(_customer: Customer) -> void:
+	game_state.stats.record_lost()
+
+
 func _on_customer_left(customer: Customer) -> void:
-	var customer_table: Node2D = _seated_at.find_key(customer)
+	var customer_table: Table = _seated_at.find_key(customer)
 	if customer_table != null:
 		_seated_at.erase(customer_table)

@@ -1,5 +1,6 @@
 extends GameTestSuite
-## Tests for CustomerSpawner: who comes in, when, and where they sit.
+## Tests for CustomerSpawner: who comes in, when, where they sit, and what the
+## day's customers pay or leave without paying.
 ##
 ## Most tests use a small rig (a door, some tables and the spawner) with their
 ## own GameState, and move its clock on by hand at one second per step.
@@ -8,6 +9,8 @@ const MAIN_SCENE: String = "res://scenes/main.tscn"
 const LUNCH_DUE: int = 12 * 60 + 30
 const LUNCH_UNTIL: int = 14 * 60
 const DOOR_POSITION: Vector2 = Vector2(0, 100)
+const TABLE_SCENE: String = "res://scenes/props/table.tscn"
+const PLATE: Item = preload("res://data/items/plate.tres")
 
 var _state: GameState
 var _salad: Item
@@ -35,7 +38,10 @@ func before_test() -> void:
 
 
 func after_test() -> void:
-	# The scene test uses the real Game autoload, so put it back afterwards.
+	# Ending the day in the main scene plays the night, which pauses the game;
+	# left paused, later suites would stall.
+	get_tree().paused = false
+	# The scene tests use the real Game autoload, so put it back afterwards.
 	Game.clock.seconds_per_step = GameClock.DEFAULT_SECONDS_PER_STEP
 	Game.new_game()
 
@@ -167,12 +173,71 @@ func test_a_customer_leaving_frees_their_table() -> void:
 	assert_array(spawner.customers()).is_empty()
 
 
+func test_seats_the_customer_at_their_table() -> void:
+	var spawner: CustomerSpawner = _new_spawner([], [_fan], 1)
+	var customer: Customer = _spawn(spawner)
+	if customer == null:
+		return
+	assert_object((_tables()[0]).diner).is_same(customer)
+
+
 func test_announces_each_arrival() -> void:
 	var spawner: CustomerSpawner = _new_spawner([], [_fan], 1)
 	var seen: Array[Customer] = []
 	spawner.customer_arrived.connect(func(customer: Customer) -> void: seen.append(customer))
 	var customer: Customer = spawner.spawn_customer()
 	assert_array(seen).contains_exactly([customer])
+
+
+# --- Paying and the day's tally ----------------------------------------------------
+
+func test_a_served_customer_pays_their_bill() -> void:
+	var spawner: CustomerSpawner = _new_spawner([], [_fan], 1)
+	var customer: Customer = _spawn(spawner)
+	if customer == null:
+		return
+	# 12 + 6 (★★★) + 3 (loved).
+	customer.served.emit(customer, Bill.new(12, 3, true))
+	assert_int(_state.money).is_equal(GameState.STARTING_MONEY + 21)
+
+
+func test_a_served_customer_is_on_the_tally() -> void:
+	var spawner: CustomerSpawner = _new_spawner([], [_fan], 1)
+	var customer: Customer = _spawn(spawner)
+	if customer == null:
+		return
+	customer.served.emit(customer, Bill.new(12, 3, true))
+	assert_int(_state.stats.served).is_equal(1)
+	assert_int(_state.stats.earnings).is_equal(21)
+	assert_int(_state.stats.tips).is_equal(9)
+
+
+func test_a_dish_off_the_menu_pays_nothing() -> void:
+	var spawner: CustomerSpawner = _new_spawner([], [_fan], 1)
+	var customer: Customer = _spawn(spawner)
+	if customer == null:
+		return
+	customer.served.emit(customer, Bill.new(0, 1, false))
+	assert_int(_state.money).is_equal(GameState.STARTING_MONEY)
+	assert_int(_state.stats.served).is_equal(1)
+
+
+func test_a_customer_who_gives_up_is_lost() -> void:
+	var spawner: CustomerSpawner = _new_spawner([], [_fan], 1)
+	var customer: Customer = _spawn(spawner)
+	if customer == null:
+		return
+	customer.gave_up.emit(customer)
+	assert_int(_state.stats.lost).is_equal(1)
+	assert_int(_state.money).is_equal(GameState.STARTING_MONEY)
+
+
+func test_anyone_still_waiting_when_the_day_ends_is_lost() -> void:
+	var spawner: CustomerSpawner = _new_spawner([], [_fan, _friend], 2)
+	_spawn(spawner)
+	_spawn(spawner)
+	_state.end_day()
+	assert_int(_state.stats.lost).is_equal(2)
 
 
 # --- Closing and the night --------------------------------------------------------
@@ -253,6 +318,57 @@ func test_a_lunch_customer_sits_at_a_table_in_the_restaurant() -> void:
 	assert_array(seats).contains([customer.global_position])
 
 
+func test_a_customer_eating_when_the_day_ends_isnt_lost() -> void:
+	var runner: GdUnitSceneRunner = scene_runner(MAIN_SCENE)
+	assert_bool(await wait_for_navigation(runner)).is_true()
+	var spawner: CustomerSpawner = runner.find_child("CustomerSpawner") as CustomerSpawner
+	var customer: Customer = await _seated_in_restaurant(spawner)
+	if customer == null:
+		return
+	var plate: ItemInstance = ItemInstance.new(PLATE)
+	plate.contents.add_item(ItemInstance.new(_salad))
+	assert_bool(customer.serve(plate)).is_true()
+	Game.end_day()
+	assert_int(Game.stats.served).is_equal(1)
+	assert_int(Game.stats.lost).is_equal(0)
+
+
+func test_a_customer_who_gave_up_is_lost_only_once() -> void:
+	var runner: GdUnitSceneRunner = scene_runner(MAIN_SCENE)
+	assert_bool(await wait_for_navigation(runner)).is_true()
+	var spawner: CustomerSpawner = runner.find_child("CustomerSpawner") as CustomerSpawner
+	var impatient: Person = _person(&"impatient", [_salad], [])
+	impatient.patience_seconds = 0.3
+	spawner.people = [impatient]
+	var customer: Customer = await _seated_in_restaurant(spawner)
+	if customer == null:
+		return
+	assert_bool(await wait_for_signal(customer.gave_up, 2.0)).is_true()
+	Game.end_day()
+	assert_int(Game.stats.lost).is_equal(1)
+
+
+func test_serving_at_a_table_in_the_restaurant_pays() -> void:
+	var runner: GdUnitSceneRunner = scene_runner(MAIN_SCENE)
+	assert_bool(await wait_for_navigation(runner)).is_true()
+	var spawner: CustomerSpawner = runner.find_child("CustomerSpawner") as CustomerSpawner
+	var customer: Customer = await _seated_in_restaurant(spawner)
+	if customer == null:
+		return
+	var table: Table = null
+	for candidate: Table in _tables():
+		if candidate.diner == customer:
+			table = candidate
+	var arms: Arms = Arms.new()
+	var plate: ItemInstance = ItemInstance.new(PLATE)
+	plate.contents.add_item(ItemInstance.new(_salad))
+	arms.add(plate)
+	assert_bool(table.serve_from(arms)).is_true()
+	# At least the menu price; tips depend on who it was.
+	assert_int(Game.money).is_greater_equal(GameState.STARTING_MONEY + 12)
+	assert_int(Game.stats.served).is_equal(1)
+
+
 # --- Helpers ----------------------------------------------------------------------
 
 func _new_spawner(arrivals: Array[Arrival], people: Array[Person], tables: int) -> CustomerSpawner:
@@ -263,13 +379,8 @@ func _new_spawner(arrivals: Array[Arrival], people: Array[Person], tables: int) 
 	_door.position = DOOR_POSITION
 	rig.add_child(_door)
 	for i: int in tables:
-		var table: Node2D = Node2D.new()
+		var table: Table = (load(TABLE_SCENE) as PackedScene).instantiate() as Table
 		table.position = Vector2(40 * i, 0)
-		table.add_to_group(&"tables")
-		var seat: Marker2D = Marker2D.new()
-		seat.name = "Seat"
-		seat.position = Vector2(0, 16)
-		table.add_child(seat)
 		rig.add_child(table)
 
 	var spawner: CustomerSpawner = CustomerSpawner.new()
@@ -285,12 +396,31 @@ func _new_spawner(arrivals: Array[Arrival], people: Array[Person], tables: int) 
 	return spawner
 
 
+## Brings a customer into the restaurant now and waits until they sit down.
+## Returns null, failing the test, if they never do.
+func _seated_in_restaurant(spawner: CustomerSpawner) -> Customer:
+	var customer: Customer = _spawn(spawner)
+	if customer == null:
+		return null
+	if not await wait_for_signal(customer.seated, 10.0):
+		fail("The customer never sat down")
+		return null
+	return customer
+
+
 ## Spawns a customer, failing the test (and returning null) if nobody came.
 func _spawn(spawner: CustomerSpawner) -> Customer:
 	var customer: Customer = spawner.spawn_customer()
 	assert_object(customer).override_failure_message(
 		"spawn_customer() brought nobody").is_not_null()
 	return customer
+
+
+func _tables() -> Array[Table]:
+	var tables: Array[Table] = []
+	for node: Node in get_tree().get_nodes_in_group(&"tables"):
+		tables.append(node as Table)
+	return tables
 
 
 ## Moves the test clock on, one step at a time, until it's [param minutes].
