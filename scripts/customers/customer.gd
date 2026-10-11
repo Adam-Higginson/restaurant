@@ -26,6 +26,9 @@ enum State { WALKING_IN, WAITING, EATING, LEAVING }
 const SPEED: float = 40.0
 ## How long they eat, in real seconds, unless [member eat_seconds] is changed.
 const EAT_SECONDS: float = 8.0
+## How long the bubble shows what they paid, before it clears so you can see
+## their plate on the table.
+const PAYMENT_SHOW_SECONDS: float = 2.5
 const LEAVE_MESSAGE: String = "I'll pop back another time"
 const THANKS_MESSAGE: String = "Thank you!"
 const BODY_RADIUS: float = 5.0
@@ -115,6 +118,8 @@ func _process(delta: float) -> void:
 			queue_redraw()
 		State.EATING:
 			_eating_left -= delta
+			if eat_seconds - _eating_left >= PAYMENT_SHOW_SECONDS:
+				_bubble.visible = false
 			if _eating_left <= 0.0:
 				leave()
 
