@@ -55,6 +55,22 @@ func test_the_diner_is_gone_if_theyre_sent_home() -> void:
 	assert_object(_table(runner).diner).is_null()
 
 
+func test_listens_to_the_diner_with_matching_handlers() -> void:
+	# A handler taking the wrong number of arguments only logs an error when the
+	# signal fires, so the table would silently never redraw.
+	var runner: GdUnitSceneRunner = await _main()
+	var customer: Customer = await _seat(runner)
+	var table: Table = _table(runner)
+	var signals: Dictionary[Signal, int] = {customer.served: 2, customer.stood_up: 1}
+	for diner_signal: Signal in signals:
+		for connection: Dictionary in diner_signal.get_connections():
+			var handler: Callable = connection["callable"]
+			if handler.get_object() == table:
+				assert_int(handler.get_argument_count()).override_failure_message(
+					"%s handler takes the wrong arguments" % diner_signal.get_name()
+				).is_equal(signals[diner_signal])
+
+
 # --- Serving ------------------------------------------------------------------------
 
 func test_serve_from_hands_the_plate_to_the_diner() -> void:

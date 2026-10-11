@@ -6,6 +6,8 @@ extends StaticBody2D
 
 ## Where the plate sits, on the half of the table nearest the seat.
 const PLATE_RECT: Rect2 = Rect2(-5, -3, 10, 10)
+## Plates are nearly the table's colour, so they get a dark rim.
+const PLATE_OUTLINE_COLOR: Color = Color(0.15, 0.12, 0.12, 1)
 
 ## Who is sitting here, or on their way here; null when the table is free.
 var diner: Customer:
@@ -26,13 +28,14 @@ func _ready() -> void:
 func _draw() -> void:
 	if _diner != null and _diner.state == Customer.State.EATING:
 		ItemDraw.draw_item(self, _diner.plate, PLATE_RECT)
+		PixelDraw.outline(self, PLATE_RECT.grow(1.0), PLATE_OUTLINE_COLOR)
 
 
 ## Makes [param customer] this table's diner, until they leave the scene.
 func seat(customer: Customer) -> void:
 	_diner = customer
-	_diner.served.connect(_on_diner_changed)
-	_diner.stood_up.connect(_on_diner_changed)
+	_diner.served.connect(_on_diner_served)
+	_diner.stood_up.connect(_on_diner_stood_up)
 	_diner.tree_exiting.connect(_on_diner_gone)
 	queue_redraw()
 
@@ -50,8 +53,13 @@ func _on_pick_up_pressed(player: Player) -> void:
 	serve_from(player.arms)
 
 
-# Takes the signals' customer argument and ignores it.
-func _on_diner_changed(_customer: Customer) -> void:
+# Their plate arrives on the table.
+func _on_diner_served(_customer: Customer, _bill: Bill) -> void:
+	queue_redraw()
+
+
+# They take the plate with them.
+func _on_diner_stood_up(_customer: Customer) -> void:
 	queue_redraw()
 
 
