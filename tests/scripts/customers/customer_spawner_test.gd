@@ -246,6 +246,11 @@ func test_a_lunch_customer_sits_at_a_table_in_the_restaurant() -> void:
 	assert_bool(await wait_for_signal(customer.seated, 10.0)).override_failure_message(
 		"The lunch customer never sat down").is_true()
 	assert_int(spawner.free_tables().size()).is_equal(3)
+	# At a real seat in the dining room, not a seat's position relative to its table.
+	var seats: Array[Vector2] = []
+	for table: Node in runner.scene().get_tree().get_nodes_in_group(&"tables"):
+		seats.append((table.get_node("Seat") as Node2D).global_position)
+	assert_array(seats).contains([customer.global_position])
 
 
 # --- Helpers ----------------------------------------------------------------------
