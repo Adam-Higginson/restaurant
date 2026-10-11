@@ -1,11 +1,19 @@
-[gd_scene load_steps=2 format=3]
+[gd_scene load_steps=5 format=3]
+
+[ext_resource type="Script" path="res://scripts/props/table.gd" id="1_table"]
+[ext_resource type="Script" path="res://scripts/interaction/interactable.gd" id="2_interactable"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_table"]
 size = Vector2(28, 12)
 
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_serve"]
+size = Vector2(30, 16)
+
 [node name="Table" type="StaticBody2D" groups=["tables"]]
+script = ExtResource("1_table")
 
 [node name="Body" type="Polygon2D" parent="."]
+show_behind_parent = true
 color = Color(0.95, 0.93, 0.86, 1)
 polygon = PackedVector2Array(-15, -8, 15, -8, 15, 8, -15, 8)
 
@@ -14,3 +22,9 @@ shape = SubResource("RectangleShape2D_table")
 
 [node name="Seat" type="Marker2D" parent="."]
 position = Vector2(0, 16)
+
+[node name="Interactable" type="Area2D" parent="."]
+script = ExtResource("2_interactable")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Interactable"]
+shape = SubResource("RectangleShape2D_serve")
