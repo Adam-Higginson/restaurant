@@ -25,6 +25,7 @@ func test_starts_with_design_doc_values() -> void:
 	assert_bool(_state.is_open).is_false()
 	assert_bool(_state.is_day_over).is_false()
 	assert_dict(_state.pantry.get_counts()).is_empty()
+	assert_int(_state.stats.served).is_equal(0)
 
 
 # --- Money --------------------------------------------------------------------
@@ -189,14 +190,45 @@ func test_next_day_starts_the_clock_before_announcing_the_day() -> void:
 	assert_array(minutes_seen).is_equal([GameClock.START_MINUTES])
 
 
+# --- The day's tally ----------------------------------------------------------
+
+func test_next_day_starts_a_fresh_tally() -> void:
+	_state.stats.record_served(Bill.new(12, 3, false))
+	_state.stats.record_lost()
+	_state.end_day()
+	_state.start_next_day()
+	assert_int(_state.stats.served).is_equal(0)
+	assert_int(_state.stats.lost).is_equal(0)
+	assert_int(_state.stats.earnings).is_equal(0)
+
+
+func test_ending_the_day_keeps_the_tally_for_the_summary() -> void:
+	_state.stats.record_served(Bill.new(12, 3, false))
+	_state.end_day()
+	assert_int(_state.stats.served).is_equal(1)
+
+
+func test_next_day_clears_the_tally_before_announcing_the_day() -> void:
+	var served_seen: Array[int] = []
+	_state.stats.record_served(Bill.new(12, 1, false))
+	_state.end_day()
+	_state.day_changed.connect(
+		func(_day: int) -> void: served_seen.append(_state.stats.served)
+	)
+	_state.start_next_day()
+	assert_array(served_seen).is_equal([0])
+
+
 # --- New game -----------------------------------------------------------------
 
 func test_new_game_resets_everything() -> void:
 	var tomato: Item = Item.new()
 	var pantry: Pantry = _state.pantry
 	var clock: GameClock = _state.clock
+	var stats: DayStats = _state.stats
 	_state.pantry.add(tomato, 3)
 	_state.spend(10)
+	_state.stats.record_lost()
 	_state.end_day()
 	_state.start_next_day()
 	_state.set_open(true)
@@ -213,9 +245,11 @@ func test_new_game_resets_everything() -> void:
 	assert_dict(_state.pantry.get_counts()).is_empty()
 	assert_int(_state.clock.minutes).is_equal(GameClock.START_MINUTES)
 	assert_bool(_state.clock.is_paused()).is_false()
+	assert_int(_state.stats.lost).is_equal(0)
 	# Same instances, so anything connected to their signals still hears them.
 	assert_object(_state.pantry).is_same(pantry)
 	assert_object(_state.clock).is_same(clock)
+	assert_object(_state.stats).is_same(stats)
 
 
 # --- Read-only values -----------------------------------------------------------
@@ -256,6 +290,14 @@ func test_clock_cannot_be_replaced() -> void:
 		"GameState: clock can't be replaced, use start_next_day()"
 	)
 	assert_object(_state.clock).is_same(clock)
+
+
+func test_stats_cannot_be_replaced() -> void:
+	var stats: DayStats = _state.stats
+	await assert_error(func() -> void: _state.stats = DayStats.new()).is_push_error(
+		"GameState: stats can't be replaced, use stats.reset()"
+	)
+	assert_object(_state.stats).is_same(stats)
 
 
 # --- Autoload -----------------------------------------------------------------
