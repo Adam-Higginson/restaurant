@@ -1,0 +1,39 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://scripts/customers/customer.gd" id="1_ktfjk"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_xss0h"]
+content_margin_left = 3.0
+content_margin_top = 0.0
+content_margin_right = 3.0
+content_margin_bottom = 0.0
+bg_color = Color(0.98, 0.96, 0.9, 1)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.15, 0.12, 0.12, 1)
+
+[node name="Customer" type="Node2D" unique_id=1622107190]
+script = ExtResource("1_ktfjk")
+
+[node name="Agent" type="NavigationAgent2D" parent="." unique_id=956570058]
+path_desired_distance = 2.0
+target_desired_distance = 2.0
+radius = 6.0
+
+[node name="NameLabel" type="Label" parent="." unique_id=1769671928]
+offset_left = -32.0
+offset_top = 5.0
+offset_right = 32.0
+offset_bottom = 28.0
+theme_override_colors/font_outline_color = Color(0.1, 0.08, 0.06, 1)
+theme_override_constants/outline_size = 3
+theme_override_font_sizes/font_size = 8
+horizontal_alignment = 1
+
+[node name="Bubble" type="Label" parent="." unique_id=974141272]
+visible = false
+theme_override_colors/font_color = Color(0.15, 0.12, 0.12, 1)
+theme_override_font_sizes/font_size = 8
+theme_override_styles/normal = SubResource("StyleBoxFlat_xss0h")

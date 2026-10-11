@@ -9,6 +9,10 @@
 [ext_resource type="Script" path="res://scripts/time/day_cycle.gd" id="6_tefeu"]
 [ext_resource type="PackedScene" path="res://ui/notice.tscn" id="6_tipki"]
 [ext_resource type="PackedScene" path="res://ui/screen_fade.tscn" id="8_85g3d"]
+[ext_resource type="Script" path="res://scripts/customers/customer_spawner.gd" id="20_spawner"]
+[ext_resource type="Script" path="res://scripts/customers/arrival.gd" id="21_arrival"]
+[ext_resource type="Resource" path="res://data/arrivals/lunch.tres" id="22_lunch"]
+[ext_resource type="Resource" path="res://data/arrivals/dinner.tres" id="23_dinner"]
 
 [sub_resource type="Gradient" id="Gradient_choun"]
 offsets = PackedFloat32Array(0, 0.15, 0.5, 0.625, 0.725, 0.8, 1)
@@ -26,6 +30,11 @@ point_count = 4
 script = ExtResource("2_85g3d")
 gradient = SubResource("Gradient_choun")
 lamp_curve = SubResource("Curve_ya4ey")
+
+[node name="CustomerSpawner" type="Node" parent="." unique_id=154758118 node_paths=PackedStringArray("door")]
+script = ExtResource("20_spawner")
+arrivals = Array[ExtResource("21_arrival")]([ExtResource("22_lunch"), ExtResource("23_dinner")])
+door = NodePath("../Restaurant/Door")
 
 [node name="Player" parent="." unique_id=1143421194 instance=ExtResource("2_player")]
 position = Vector2(80, 136)
