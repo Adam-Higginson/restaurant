@@ -1,6 +1,6 @@
 class_name Table
 extends StaticBody2D
-## A dining table with one seat. Pick up / put down at the table offers the top
+## A dining table with one seat. Interact at the table offers the top
 ## of the player's stack to whoever is sitting there, and their plate sits on
 ## the table while they eat. See Serving in docs/GDD.md.
 
@@ -22,7 +22,7 @@ var _diner: Customer = null
 
 
 func _ready() -> void:
-	_interactable.pick_up_pressed.connect(_on_pick_up_pressed)
+	_interactable.interacted.connect(_on_interacted)
 
 
 func _draw() -> void:
@@ -49,7 +49,7 @@ func serve_from(arms: Arms) -> bool:
 	return true
 
 
-func _on_pick_up_pressed(player: Player) -> void:
+func _on_interacted(player: Player) -> void:
 	serve_from(player.arms)
 
 

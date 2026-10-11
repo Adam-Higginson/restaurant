@@ -1,15 +1,15 @@
 class_name Interactable
 extends Area2D
-## Makes its parent usable: the player presses "interact", "pick_up" or
+## Makes its parent usable: the player presses "interact" (E or Space) or
 ## "use_tool" while facing it.
 ##
 ## Add as a child of a prop with a CollisionShape2D child of its own. The prop's
 ## script listens to the signals below and decides what happens.
 
-## Emitted when the player uses this while it is enabled.
+## Emitted when the player acts on this while it is enabled. The one button
+## does everything: if what they're holding goes here, it goes in; otherwise
+## they use the object. See Controls in docs/GDD.md.
 signal interacted(player: Player)
-## Emitted when the player presses pick up / put down at this while it is enabled.
-signal pick_up_pressed(player: Player)
 ## Emitted when the player uses a belt tool on this while it is enabled.
 signal tool_used(player: Player, tool: HandTool)
 
@@ -51,12 +51,6 @@ func _draw() -> void:
 func interact(player: Player) -> void:
 	if enabled:
 		interacted.emit(player)
-
-
-## Pick up / put down at this on behalf of the player. Does nothing while disabled.
-func pick_up(player: Player) -> void:
-	if enabled:
-		pick_up_pressed.emit(player)
 
 
 ## Uses [param tool] on this on behalf of the player. Does nothing while disabled.
