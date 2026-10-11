@@ -1,6 +1,6 @@
 [gd_scene format=4 uid="uid://dpcrh125bdj5n"]
 
-[ext_resource type="TileSet" path="res://assets/placeholder/placeholder_tileset.tres" id="1_f3ktr"]
+[ext_resource type="TileSet" uid="uid://bevqlvy6h6px8" path="res://assets/placeholder/placeholder_tileset.tres" id="1_f3ktr"]
 [ext_resource type="PackedScene" path="res://scenes/props/station.tscn" id="2_50xnb"]
 [ext_resource type="PackedScene" path="res://scenes/props/pantry.tscn" id="3_uk3xj"]
 [ext_resource type="PackedScene" path="res://scenes/props/table.tscn" id="4_bp8vj"]
@@ -10,10 +10,10 @@
 [ext_resource type="Resource" path="res://data/items/plate.tres" id="8_plate"]
 [ext_resource type="Resource" path="res://data/items/chopping_board.tres" id="9_board"]
 [ext_resource type="PackedScene" path="res://scenes/props/dispenser.tscn" id="10_dispenser"]
-[ext_resource type="PackedScene" path="res://scenes/props/door_sign.tscn" id="11_qujyy"]
-[ext_resource type="PackedScene" path="res://scenes/props/bed.tscn" id="12_bed"]
+[ext_resource type="PackedScene" uid="uid://tmap162mg1e0" path="res://scenes/props/door_sign.tscn" id="11_qujyy"]
+[ext_resource type="PackedScene" uid="uid://sbf822dq28vm" path="res://scenes/props/bed.tscn" id="12_bed"]
 [ext_resource type="PackedScene" path="res://scenes/props/lamp.tscn" id="13_5scnu"]
-[ext_resource type="Script" path="res://scripts/navigation/floor_navigation.gd" id="14_floor"]
+[ext_resource type="Script" uid="uid://dvb0dwpv6ylk" path="res://scripts/navigation/floor_navigation.gd" id="14_floor"]
 
 [sub_resource type="NavigationPolygon" id="NavigationPolygon_floor"]
 outlines = Array[PackedVector2Array]([PackedVector2Array(16, 16, 464, 16, 464, 256, 16, 256)])

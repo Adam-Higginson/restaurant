@@ -79,6 +79,25 @@ func press(runner: GdUnitSceneRunner, action: String) -> void:
 	await physics_ticks(runner, 2)
 
 
+## Brings [param person] in through the restaurant's door to [param table]'s
+## seat, ordering [param order] priced from [param menu], and waits until they
+## sit down. Needs the main scene with its navigation ready.
+func seat_customer(runner: GdUnitSceneRunner, table: Table, person: Person, order: Item,
+		menu: Menu, eat_seconds: float = Customer.EAT_SECONDS) -> Customer:
+	var door: Marker2D = runner.find_child("Door") as Marker2D
+	var seat: Marker2D = table.get_node("Seat") as Marker2D
+	var scene: PackedScene = load("res://scenes/customer.tscn") as PackedScene
+	var customer: Customer = scene.instantiate() as Customer
+	customer.menu = menu
+	customer.eat_seconds = eat_seconds
+	customer.setup(person, order, seat.global_position, door.global_position)
+	customer.position = door.global_position
+	table.seat(customer)
+	runner.scene().add_child(customer)
+	await wait_for_signal(customer.seated, 6.0)
+	return customer
+
+
 ## Finds the node named "Player" in the running scene and moves it to [param pos].
 func place_player(runner: GdUnitSceneRunner, pos: Vector2) -> Player:
 	var player: Player = runner.find_child("Player") as Player
