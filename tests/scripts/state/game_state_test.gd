@@ -24,7 +24,6 @@ func test_starts_with_design_doc_values() -> void:
 	assert_int(_state.day).is_equal(1)
 	assert_bool(_state.is_open).is_false()
 	assert_bool(_state.is_day_over).is_false()
-	assert_dict(_state.pantry.get_counts()).is_empty()
 	assert_int(_state.stats.served).is_equal(0)
 
 
@@ -222,11 +221,8 @@ func test_next_day_clears_the_tally_before_announcing_the_day() -> void:
 # --- New game -----------------------------------------------------------------
 
 func test_new_game_resets_everything() -> void:
-	var tomato: Item = Item.new()
-	var pantry: Pantry = _state.pantry
 	var clock: GameClock = _state.clock
 	var stats: DayStats = _state.stats
-	_state.pantry.add(tomato, 3)
 	_state.spend(10)
 	_state.stats.record_lost()
 	_state.end_day()
@@ -242,12 +238,10 @@ func test_new_game_resets_everything() -> void:
 	assert_int(_state.day).is_equal(1)
 	assert_bool(_state.is_open).is_false()
 	assert_bool(_state.is_day_over).is_false()
-	assert_dict(_state.pantry.get_counts()).is_empty()
 	assert_int(_state.clock.minutes).is_equal(GameClock.START_MINUTES)
 	assert_bool(_state.clock.is_paused()).is_false()
 	assert_int(_state.stats.lost).is_equal(0)
 	# Same instances, so anything connected to their signals still hears them.
-	assert_object(_state.pantry).is_same(pantry)
 	assert_object(_state.clock).is_same(clock)
 	assert_object(_state.stats).is_same(stats)
 
@@ -274,14 +268,6 @@ func test_assigning_day_or_open_state_directly_is_an_error() -> void:
 	)
 	assert_int(_state.day).is_equal(1)
 	assert_bool(_state.is_open).is_false()
-
-
-func test_pantry_cannot_be_replaced() -> void:
-	var pantry: Pantry = _state.pantry
-	await assert_error(func() -> void: _state.pantry = Pantry.new()).is_push_error(
-		"GameState: pantry can't be replaced, use pantry.clear()"
-	)
-	assert_object(_state.pantry).is_same(pantry)
 
 
 func test_clock_cannot_be_replaced() -> void:

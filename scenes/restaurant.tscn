@@ -2,7 +2,9 @@
 
 [ext_resource type="TileSet" uid="uid://bevqlvy6h6px8" path="res://assets/placeholder/placeholder_tileset.tres" id="1_f3ktr"]
 [ext_resource type="PackedScene" path="res://scenes/props/station.tscn" id="2_50xnb"]
-[ext_resource type="PackedScene" path="res://scenes/props/pantry.tscn" id="3_uk3xj"]
+[ext_resource type="PackedScene" path="res://scenes/props/fridge.tscn" id="3_fridge"]
+[ext_resource type="PackedScene" path="res://scenes/props/cupboard.tscn" id="15_cupboard"]
+[ext_resource type="PackedScene" path="res://scenes/props/crate.tscn" id="16_crate"]
 [ext_resource type="PackedScene" path="res://scenes/props/table.tscn" id="4_bp8vj"]
 [ext_resource type="PackedScene" path="res://scenes/props/counter.tscn" id="5_counter"]
 [ext_resource type="Resource" path="res://data/items/tomato.tres" id="6_tomato"]
@@ -62,8 +64,14 @@ item = ExtResource("6_tomato")
 position = Vector2(152, 24)
 item = ExtResource("8_plate")
 
-[node name="Pantry" parent="Props" unique_id=1040802693 instance=ExtResource("3_uk3xj")]
-position = Vector2(24, 136)
+[node name="Fridge" parent="Props" instance=ExtResource("3_fridge")]
+position = Vector2(24, 72)
+
+[node name="Cupboard" parent="Props" instance=ExtResource("15_cupboard")]
+position = Vector2(24, 120)
+
+[node name="Crate" parent="Props" instance=ExtResource("16_crate")]
+position = Vector2(288, 232)
 
 [node name="Table1" parent="Props" unique_id=187416035 instance=ExtResource("4_bp8vj")]
 position = Vector2(256, 72)

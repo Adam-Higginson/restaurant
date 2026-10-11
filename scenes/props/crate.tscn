@@ -1,0 +1,38 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://scripts/props/storage_prop.gd" id="1_storage"]
+[ext_resource type="Script" path="res://scripts/interaction/interactable.gd" id="2_interactable"]
+[ext_resource type="PackedScene" path="res://ui/container_panel.tscn" id="3_panel"]
+[ext_resource type="Script" path="res://scripts/data/item.gd" id="4_item"]
+[ext_resource type="Resource" path="res://data/items/lettuce.tres" id="5_lettuce"]
+[ext_resource type="Resource" path="res://data/items/tomato.tres" id="6_tomato"]
+[ext_resource type="Resource" path="res://data/items/onion.tres" id="7_onion"]
+[ext_resource type="Resource" path="res://data/items/bread.tres" id="8_bread"]
+[ext_resource type="Resource" path="res://data/items/cheese.tres" id="9_cheese"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_body"]
+size = Vector2(16, 16)
+
+[node name="Crate" type="StaticBody2D" groups=["storage", "delivery_crate"]]
+script = ExtResource("1_storage")
+display_name = "Delivery crate"
+take_only = true
+color = Color(0.72, 0.56, 0.34, 1)
+start_items = Dictionary[ExtResource("4_item"), int]({
+ExtResource("5_lettuce"): 2,
+ExtResource("6_tomato"): 2,
+ExtResource("7_onion"): 2,
+ExtResource("8_bread"): 2,
+ExtResource("9_cheese"): 2
+})
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("RectangleShape2D_body")
+
+[node name="Interactable" type="Area2D" parent="."]
+script = ExtResource("2_interactable")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Interactable"]
+shape = SubResource("RectangleShape2D_body")
+
+[node name="ContainerPanel" parent="." instance=ExtResource("3_panel")]
