@@ -1,8 +1,8 @@
-[gd_resource type="Resource" script_class="Menu" format=3]
+[gd_resource type="Resource" script_class="Menu" format=3 uid="uid://cto40b7a81igx"]
 
-[ext_resource type="Script" path="res://scripts/data/item.gd" id="1_douef"]
+[ext_resource type="Script" uid="uid://dj1hww6uo0ttx" path="res://scripts/data/item.gd" id="1_douef"]
 [ext_resource type="Resource" path="res://data/items/garden_salad.tres" id="2_rtq37"]
-[ext_resource type="Script" path="res://scripts/data/menu.gd" id="3_cloq5"]
+[ext_resource type="Script" uid="uid://caayq3858h6ca" path="res://scripts/data/menu.gd" id="3_cloq5"]
 
 [resource]
 script = ExtResource("3_cloq5")

@@ -18,20 +18,15 @@ static func load_default() -> Menu:
 
 ## The dishes on the menu, in the order they were added.
 func dishes() -> Array[Item]:
-	# TODO 1: Return the dishes (the keys of `prices`) as an Array[Item].
-	# `prices.keys()` gives a plain, untyped Array, which can't be returned as
-	# an Array[Item] directly. Make a typed array and fill it with
-	# `result.assign(prices.keys())`.
-	return []
+	var result: Array[Item] = []
+	result.assign(prices.keys())
+	return result
 
 
 func has_dish(dish: Item) -> bool:
-	# TODO 2: Whether `dish` is on the menu. Dictionary has a method for this.
-	return false
+	return prices.has(dish)
 
 
 ## What [param dish] costs, or 0 if it isn't on the menu.
 func price_of(dish: Item) -> int:
-	# TODO 3: The dish's price, or 0 if it isn't on the menu.
-	# `Dictionary.get(key, default)` does both in one call.
-	return 0
+	return prices.get(dish, 0)

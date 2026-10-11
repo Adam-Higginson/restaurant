@@ -76,37 +76,25 @@ func _ready() -> void:
 	_patience = PatienceMeter.new(_person.patience_seconds)
 	_name_label.text = _person.display_name
 	_bubble.visible = false
-	# TODO 1:
-	#   a. When their patience runs out, they leave: connect
-	#      `_patience.ran_out` to `leave`.
-	#   b. Start walking to the seat: set the agent's `target_position` to
-	#      `_seat_position`. The agent works out the path, and
-	#      `_physics_process` follows it.
+	_patience.ran_out.connect(leave)
+	_agent.target_position = _seat_position
 
 
-func _process(_delta: float) -> void:
-	# TODO 2: Patience only drains while they're waiting at the table and the
-	# clock is running (panels such as the bed's question pause it; ask
-	# `game_state.clock.is_paused()`).
-	#   a. Otherwise, return straight away.
-	#   b. Drain `_patience` by delta.
-	#   c. `queue_redraw()`, so the patience bar shrinks on screen.
-	# Rename the parameter to `delta` once you use it.
-	pass
+func _process(delta: float) -> void:
+	if game_state.clock.is_paused() or _state != State.WAITING:
+		return
+	_patience.drain(delta)
+	queue_redraw()
 
 
-func _physics_process(_delta: float) -> void:
-	# TODO 3: Walk along the agent's path while walking in or leaving.
-	#   a. While waiting at the table, don't move: return.
-	#   b. If `_agent.is_navigation_finished()`, they've got where they were
-	#      going: call `_arrive()` and return.
-	#   c. Otherwise ask the agent for the next point on the path with
-	#      `_agent.get_next_path_position()`, and step `global_position`
-	#      towards it by `SPEED * delta` pixels (`Vector2.move_toward()`).
-	#      Customers have no collision, so setting the position directly is
-	#      fine; there's nothing to bump into.
-	# Rename the parameter to `delta` once you use it.
-	pass
+func _physics_process(delta: float) -> void:
+	if _state == State.WAITING:
+		return
+	if _agent.is_navigation_finished():
+		_arrive()
+		return
+	var next_position: Vector2 = _agent.get_next_path_position()
+	global_position = global_position.move_toward(next_position, SPEED * delta)
 
 
 func _draw() -> void:
@@ -128,29 +116,26 @@ func patience_fraction() -> float:
 ## Stands up and walks out of the door, saying goodbye. Does nothing if
 ## they're already leaving.
 func leave() -> void:
-	# TODO 4:
-	#   a. If they're already leaving, do nothing.
-	#   b. Set `_state` to LEAVING.
-	#   c. `_say(LEAVE_MESSAGE)`, to show the goodbye in their bubble.
-	#   d. Point the agent's `target_position` at `_exit_position`, so
-	#      `_physics_process` walks them out.
-	#   e. `queue_redraw()`, as the patience bar goes away.
-	pass
+	if _state == State.LEAVING:
+		return
+	_state = State.LEAVING
+	_say(LEAVE_MESSAGE)
+	_agent.target_position = _exit_position
+	queue_redraw()
 
 
 ## Called when the agent has reached its target: the seat or the door.
 func _arrive() -> void:
-	# TODO 5: Use `match _state:` to do the right thing in each state.
-	#   WALKING_IN: they've reached their seat.
-	#     - Snap `global_position` to `_seat_position` (the agent stops within
-	#       a couple of pixels of it).
-	#     - Set `_state` to WAITING.
-	#     - `_say()` the order's display_name.
-	#     - `queue_redraw()`, so the patience bar appears.
-	#     - Emit `seated` with `self`.
-	#   LEAVING: they've reached the door.
-	#     - Emit `left` with `self`, then `queue_free()`.
-	pass
+	match _state:
+		State.WALKING_IN:
+			global_position = _seat_position
+			_state = State.WAITING
+			_say(_order.display_name)
+			queue_redraw()
+			seated.emit(self)
+		State.LEAVING:
+			left.emit(self)
+			queue_free()
 
 
 func _say(text: String) -> void:

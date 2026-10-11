@@ -29,17 +29,22 @@ const OTHER_WEIGHT: int = 1
 ## [constant LIKED_WEIGHT] or [constant OTHER_WEIGHT], or 0 if they dislike it.
 ## A dislike wins over everything else.
 func taste_weight(dish: Item) -> int:
-	# TODO 1: Check the lists in this order and return the matching weight:
-	#   disliked -> 0, loved -> LOVED_WEIGHT, liked -> LIKED_WEIGHT,
-	#   anything else -> OTHER_WEIGHT.
-	# Checking `disliked` first is what makes a dislike win.
-	return 0
+	if disliked.has(dish):
+		return 0
+	if loved.has(dish):
+		return LOVED_WEIGHT
+	if liked.has(dish):
+		return LIKED_WEIGHT
+
+	return OTHER_WEIGHT
 
 
 ## Whether [param menu] has at least one dish they'd order.
 func can_order_from(menu: Menu) -> bool:
-	# TODO 2: Loop over `menu.dishes()` and return true as soon as a dish has a
-	# taste weight above 0. If none does (or the menu is empty), return false.
+	for dish: Item in menu.dishes():
+		if taste_weight(dish) > 0:
+			return true
+
 	return false
 
 
@@ -47,11 +52,13 @@ func can_order_from(menu: Menu) -> bool:
 ## [param rng] so tests can control the roll. Returns null if there's nothing
 ## they'd order.
 func choose_order(menu: Menu, rng: RandomNumberGenerator) -> Item:
-	# TODO 3:
-	#   a. If they can't order from the menu, return null.
-	#   b. Build a PackedFloat32Array of weights, one per dish in
-	#      `menu.dishes()`, in the same order.
-	#   c. `rng.rand_weighted(weights)` returns a random index, where each
-	#      index's chance is its weight divided by the total. A weight of 0 is
-	#      never picked. Return the dish at that index.
-	return null
+	if not can_order_from(menu):
+		return null
+
+	var dishes: Array[Item] = menu.dishes()
+	var weights: PackedFloat32Array = PackedFloat32Array()
+	for dish: Item in dishes:
+		weights.append(taste_weight(dish))
+
+	var selected_dish: int = rng.rand_weighted(weights)
+	return dishes[selected_dish]

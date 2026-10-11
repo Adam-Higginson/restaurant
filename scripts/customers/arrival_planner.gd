@@ -20,16 +20,20 @@ func _init(arrivals: Array[Arrival]) -> void:
 ## How many customers should walk in now, at [param minutes]. Counts each one
 ## as having come, so asking again at the same time returns 0.
 func check(minutes: int, is_open: bool) -> int:
-	# TODO 1:
-	#   a. While closed, nobody is due: return 0.
-	#   b. For each arrival in `_arrivals` that isn't in `_done` yet: if
-	#      `minutes` is at or after its due time and before its until time,
-	#      add it to `_done` and count it.
-	#   c. Return the count.
-	return 0
+	if not is_open:
+		return 0
+
+	var arrival_count: int = 0
+	for arrival: Arrival in _arrivals:
+		if _done.has(arrival):
+			continue
+		if minutes >= arrival.due_minutes and minutes < arrival.until_minutes:
+			arrival_count += 1
+			_done.append(arrival)
+
+	return arrival_count
 
 
 ## Forgets who has come, for a new day.
 func reset() -> void:
-	# TODO 2: Empty `_done`.
-	pass
+	_done.clear()

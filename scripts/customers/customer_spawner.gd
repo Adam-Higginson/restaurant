@@ -43,90 +43,91 @@ func _ready() -> void:
 	if rng == null:
 		rng = RandomNumberGenerator.new()
 		rng.randomize()
-	# TODO 1:
-	#   a. Make `_planner`, an ArrivalPlanner for `arrivals`.
-	#   b. Connect the game state's signals to the handlers at the bottom:
-	#      `game_state.clock.time_changed` -> `_on_time_changed`,
-	#      `game_state.open_changed` -> `_on_open_changed`,
-	#      `game_state.day_changed` -> `_on_day_changed`.
+	_planner = ArrivalPlanner.new(arrivals)
+	game_state.clock.time_changed.connect(_on_time_changed)
+	game_state.open_changed.connect(_on_open_changed)
+	game_state.day_changed.connect(_on_day_changed)
 
 
 ## Everyone inside, walking in, waiting or leaving.
 func customers() -> Array[Customer]:
-	# TODO 2: The customers in `_seated_at` (its values) as an Array[Customer].
-	# Like Menu.dishes(), use `assign()` to turn the untyped values() into a
-	# typed array.
-	return []
+	var result: Array[Customer] = []
+	result.assign(_seated_at.values())
+	return result
 
 
 ## Tables nobody is sitting at (or walking to, or leaving from).
 func free_tables() -> Array[Node2D]:
-	# TODO 3: Every table is in the "tables" group (see table.tscn), so
-	# `get_tree().get_nodes_in_group(&"tables")` finds them all without knowing
-	# where they are. Return the ones that aren't keys in `_seated_at`.
-	# The group gives you Nodes: cast each one with `as Node2D`.
-	return []
+	var tables: Array[Node2D] = []
+	for node: Node in get_tree().get_nodes_in_group(&"tables"):
+		var table: Node2D = node as Node2D
+		if table != null and not _seated_at.has(table):
+			tables.append(table)
+	return tables
 
 
 ## Brings someone in now: a random townsperson who isn't inside and can order
 ## from the menu, at a random free table. Returns null, bringing nobody, if
 ## there's no free table or nobody to bring.
 func spawn_customer() -> Customer:
-	# TODO 5:
-	#   a. Get the free tables and `_people_who_could_come()`. If either is
-	#      empty, return null.
-	#   b. Pick a random person and a random table with
-	#      `rng.randi_range(0, size - 1)`. Always use `rng`, never the global
-	#      randi(), so tests can seed it.
-	#   c. The table's seat is its "Seat" child: `table.get_node("Seat")`, cast
-	#      to Marker2D.
-	#   d. Make the customer with `CUSTOMER_SCENE.instantiate() as Customer`.
-	#      Before adding it to the scene:
-	#      - set its `game_state` to ours,
-	#      - call `setup()` with the person, their order
-	#        (`person.choose_order(menu, rng)`), the seat's global_position
-	#        and the door's global_position,
-	#      - put it at the door (its `position`),
-	#      - connect its `left` signal to `_on_customer_left`.
-	#   e. Record it in `_seated_at` under its table, add it as a child of our
-	#      parent (`get_parent().add_child(...)`, so it's in the restaurant with
-	#      the navigation floor), emit `customer_arrived`, and return it.
-	return null
+	var tables: Array[Node2D] = free_tables()
+	var candidates: Array[Person] = _people_who_could_come()
+	if tables.is_empty() or candidates.is_empty():
+		return null
+
+	var table: Node2D = tables[rng.randi_range(0, tables.size() - 1)]
+	var person: Person = candidates[rng.randi_range(0, candidates.size() - 1)]
+	var seat: Marker2D = table.get_node("Seat") as Marker2D
+
+	var customer: Customer = CUSTOMER_SCENE.instantiate() as Customer
+	customer.game_state = game_state
+	# Global positions: the seat's own position is relative to its table.
+	customer.setup(person, person.choose_order(menu, rng), seat.global_position,
+		door.global_position)
+	customer.position = door.global_position
+	customer.left.connect(_on_customer_left)
+
+	_seated_at[table] = customer
+	get_parent().add_child(customer)
+	customer_arrived.emit(customer)
+
+	return customer
 
 
 func _people_who_could_come() -> Array[Person]:
-	# TODO 4: Everyone in `people` who isn't already inside (no customer in
-	# `customers()` has them as its `person`) and can order from `menu`.
-	return []
+	var inside: Array[Person] = []
+	for customer: Customer in customers():
+		inside.append(customer.person)
+	var candidates: Array[Person] = []
+	for person: Person in people:
+		if not inside.has(person) and person.can_order_from(menu):
+			candidates.append(person)
+	return candidates
 
 
 func _check_arrivals() -> void:
-	# TODO 6: Ask `_planner.check()` how many are due now (pass the clock's
-	# `minutes` and the game state's `is_open`), and spawn that many.
-	pass
+	var due: int = _planner.check(game_state.clock.minutes, game_state.is_open)
+	for i: int in due:
+		spawn_customer()
 
 
 func _on_time_changed(_minutes: int) -> void:
-	# TODO 7: Every clock step might bring someone: check the arrivals.
-	pass
+	_check_arrivals()
 
 
-func _on_open_changed(_is_open: bool) -> void:
-	# TODO 8: Opening late brings a due customer straight away, without waiting
-	# for the next step: check the arrivals when it opens (not when it closes).
-	# Rename the parameter to `is_open` once you use it.
-	pass
+func _on_open_changed(is_open: bool) -> void:
+	if is_open:
+		_check_arrivals()
 
 
 func _on_day_changed(_day: int) -> void:
-	# TODO 9: A new day, behind the night's black screen:
-	#   a. Reset the planner, so lunch and dinner come again.
-	#   b. Send everyone home: `queue_free()` each customer and clear
-	#      `_seated_at`.
-	pass
+	_planner.reset()
+	for customer: Customer in customers():
+		customer.queue_free()
+	_seated_at.clear()
 
 
-func _on_customer_left(_customer: Customer) -> void:
-	# TODO 10: Free their table: find the key in `_seated_at` whose value is
-	# the customer, and `erase()` it. Rename the parameter to `customer`.
-	pass
+func _on_customer_left(customer: Customer) -> void:
+	var customer_table: Node2D = _seated_at.find_key(customer)
+	if customer_table != null:
+		_seated_at.erase(customer_table)
