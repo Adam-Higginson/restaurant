@@ -1,0 +1,15 @@
+[gd_resource type="Resource" script_class="Person" format=3]
+
+[ext_resource type="Script" path="res://scripts/data/item.gd" id="1_nj3o6"]
+[ext_resource type="Resource" path="res://data/items/tomato_soup.tres" id="2_n87qc"]
+[ext_resource type="Resource" path="res://data/items/garden_salad.tres" id="3_m7e8p"]
+[ext_resource type="Script" path="res://scripts/data/person.gd" id="4_yhbla"]
+
+[resource]
+script = ExtResource("4_yhbla")
+id = &"isla"
+display_name = "Isla"
+role = "night-owl writer"
+color = Color(0.3, 0.45, 0.7, 1)
+loved = Array[ExtResource("1_nj3o6")]([ExtResource("3_m7e8p")])
+liked = Array[ExtResource("1_nj3o6")]([ExtResource("2_n87qc")])

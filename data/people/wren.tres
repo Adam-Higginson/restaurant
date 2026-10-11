@@ -1,0 +1,16 @@
+[gd_resource type="Resource" script_class="Person" format=3]
+
+[ext_resource type="Script" path="res://scripts/data/item.gd" id="1_nllmq"]
+[ext_resource type="Resource" path="res://data/items/garden_salad.tres" id="2_7xju1"]
+[ext_resource type="Resource" path="res://data/items/tomato_soup.tres" id="3_v5s6m"]
+[ext_resource type="Script" path="res://scripts/data/person.gd" id="4_rf6rj"]
+
+[resource]
+script = ExtResource("4_rf6rj")
+id = &"wren"
+display_name = "Wren"
+role = "retired teacher"
+color = Color(0.6, 0.5, 0.75, 1)
+loved = Array[ExtResource("1_nllmq")]([ExtResource("3_v5s6m")])
+liked = Array[ExtResource("1_nllmq")]([ExtResource("2_7xju1")])
+patience_seconds = 180.0

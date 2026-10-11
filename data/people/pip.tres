@@ -1,0 +1,17 @@
+[gd_resource type="Resource" script_class="Person" format=3]
+
+[ext_resource type="Script" path="res://scripts/data/item.gd" id="1_k1ngm"]
+[ext_resource type="Resource" path="res://data/items/tomato_soup.tres" id="2_xnpa3"]
+[ext_resource type="Resource" path="res://data/items/grilled_cheese.tres" id="3_mesdq"]
+[ext_resource type="Resource" path="res://data/items/garden_salad.tres" id="4_7j0vc"]
+[ext_resource type="Script" path="res://scripts/data/person.gd" id="5_trfln"]
+
+[resource]
+script = ExtResource("5_trfln")
+id = &"pip"
+display_name = "Pip"
+role = "schoolkid"
+color = Color(0.95, 0.75, 0.3, 1)
+loved = Array[ExtResource("1_k1ngm")]([ExtResource("4_7j0vc")])
+liked = Array[ExtResource("1_k1ngm")]([ExtResource("3_mesdq")])
+disliked = Array[ExtResource("1_k1ngm")]([ExtResource("2_xnpa3")])

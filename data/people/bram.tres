@@ -1,0 +1,18 @@
+[gd_resource type="Resource" script_class="Person" format=3]
+
+[ext_resource type="Script" path="res://scripts/data/item.gd" id="1_lkl3j"]
+[ext_resource type="Resource" path="res://data/items/garden_salad.tres" id="2_ux3lx"]
+[ext_resource type="Resource" path="res://data/items/tomato_soup.tres" id="3_501ky"]
+[ext_resource type="Resource" path="res://data/items/grilled_cheese.tres" id="4_cxn1p"]
+[ext_resource type="Script" path="res://scripts/data/person.gd" id="5_lwhxx"]
+
+[resource]
+script = ExtResource("5_lwhxx")
+id = &"bram"
+display_name = "Bram"
+role = "blacksmith"
+color = Color(0.55, 0.35, 0.25, 1)
+loved = Array[ExtResource("1_lkl3j")]([ExtResource("4_cxn1p")])
+liked = Array[ExtResource("1_lkl3j")]([ExtResource("3_501ky")])
+disliked = Array[ExtResource("1_lkl3j")]([ExtResource("2_ux3lx")])
+patience_seconds = 90.0

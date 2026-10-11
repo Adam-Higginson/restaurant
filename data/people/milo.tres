@@ -1,0 +1,16 @@
+[gd_resource type="Resource" script_class="Person" format=3]
+
+[ext_resource type="Script" path="res://scripts/data/item.gd" id="1_y3l7j"]
+[ext_resource type="Resource" path="res://data/items/garden_salad.tres" id="2_80rgr"]
+[ext_resource type="Resource" path="res://data/items/grilled_cheese.tres" id="3_xq4r4"]
+[ext_resource type="Script" path="res://scripts/data/person.gd" id="4_yl6s8"]
+
+[resource]
+script = ExtResource("4_yl6s8")
+id = &"milo"
+display_name = "Milo"
+role = "builder"
+color = Color(0.9, 0.6, 0.2, 1)
+loved = Array[ExtResource("1_y3l7j")]([ExtResource("3_xq4r4")])
+liked = Array[ExtResource("1_y3l7j")]([ExtResource("2_80rgr")])
+patience_seconds = 90.0
