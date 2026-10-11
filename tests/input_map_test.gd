@@ -4,7 +4,7 @@ extends GameTestSuite
 
 const ACTIONS: Array[StringName] = [
 	&"move_up", &"move_down", &"move_left", &"move_right",
-	&"interact", &"pick_up", &"use_tool", &"rotate_stack",
+	&"interact", &"use_tool", &"rotate_stack",
 ]
 
 
@@ -25,6 +25,21 @@ func test_every_action_has_keyboard_and_controller_bindings() -> void:
 		assert_bool(has_joypad).override_failure_message(
 			"%s has no controller binding" % action
 		).is_true()
+
+
+func test_one_button_does_everything() -> void:
+	# E and Space, and X and A on a controller, are the same action. See
+	# Controls in docs/GDD.md.
+	assert_bool(InputMap.has_action(&"pick_up")).is_false()
+	var keys: Array[Key] = []
+	var buttons: Array[JoyButton] = []
+	for event: InputEvent in InputMap.action_get_events(&"interact"):
+		if event is InputEventKey:
+			keys.append((event as InputEventKey).physical_keycode)
+		elif event is InputEventJoypadButton:
+			buttons.append((event as InputEventJoypadButton).button_index)
+	assert_array(keys).contains_exactly_in_any_order([KEY_E, KEY_SPACE])
+	assert_array(buttons).contains_exactly_in_any_order([JOY_BUTTON_X, JOY_BUTTON_A])
 
 
 func test_belt_slots_are_selectable_from_keyboard_and_controller() -> void:

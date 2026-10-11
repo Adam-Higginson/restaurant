@@ -124,7 +124,7 @@ func test_serve_from_with_no_diner_does_nothing() -> void:
 
 # --- With the player --------------------------------------------------------------
 
-func test_pressing_pick_up_at_the_table_serves_the_diner() -> void:
+func test_pressing_interact_at_the_table_serves_the_diner() -> void:
 	var runner: GdUnitSceneRunner = await _main()
 	var customer: Customer = await _seat(runner)
 	var player: Player = place_player(runner, ABOVE_TABLE_3)
@@ -132,7 +132,7 @@ func test_pressing_pick_up_at_the_table_serves_the_diner() -> void:
 	player.arms.add(plate)
 
 	await walk(runner, "move_down", 20)
-	await press(runner, "pick_up")
+	await press(runner, "interact")
 
 	assert_bool(player.arms.is_empty()).is_true()
 	assert_object(customer.plate).is_same(plate)

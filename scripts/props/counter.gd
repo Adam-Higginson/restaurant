@@ -1,9 +1,9 @@
 class_name Counter
 extends StaticBody2D
 ## A kitchen counter. Holds one item, food or a utensil, and swaps it with the
-## player's arms on pick up / put down. A vessel on it (a chopping board, a
-## plate) takes food from the arms, and Use tool works on what's in it. See
-## "Vessels and fittings" in docs/GDD.md.
+## player's arms on Interact. A vessel on it (a chopping board, a plate) takes
+## food from the arms, and Use tool works on what's in it. See "Vessels and
+## fittings" in docs/GDD.md.
 
 ## Emitted when an item is put on or taken off, with the new item (or null).
 ## Not emitted when food goes in or out of a vessel on the counter.
@@ -27,7 +27,7 @@ var _item: ItemInstance = null
 func _ready() -> void:
 	if start_item != null:
 		_set_item(ItemInstance.new(start_item))
-	_interactable.pick_up_pressed.connect(_on_pick_up_pressed)
+	_interactable.interacted.connect(_on_interacted)
 	_interactable.tool_used.connect(_on_tool_used)
 
 
@@ -139,7 +139,7 @@ func _on_vessel_changed(_active: ActiveReaction = null) -> void:
 	queue_redraw()
 
 
-func _on_pick_up_pressed(player: Player) -> void:
+func _on_interacted(player: Player) -> void:
 	exchange_with(player.arms)
 
 

@@ -109,11 +109,54 @@ func test_contents_cant_be_replaced() -> void:
 	assert_object(fridge.contents).is_same(contents)
 
 
+# --- One button ---------------------------------------------------------------
+
+func test_act_puts_away_food_that_fits_without_opening() -> void:
+	var fridge: StorageProp = _new_prop(FRIDGE_SCENE)
+	var tomato: ItemInstance = _hold(&"tomato")
+	fridge.act(_arms)
+	assert_array(fridge.contents.get_items()).contains_exactly([tomato])
+	assert_bool(_panel(fridge).is_open()).is_false()
+
+
+func test_act_with_empty_arms_opens_the_panel() -> void:
+	var fridge: StorageProp = _new_prop(FRIDGE_SCENE)
+	fridge.act(_arms)
+	assert_bool(_panel(fridge).is_open()).is_true()
+
+
+func test_act_with_food_that_doesnt_fit_opens_the_panel_and_keeps_it() -> void:
+	var fridge: StorageProp = _new_prop(FRIDGE_SCENE)
+	var onion: ItemInstance = _hold(&"onion")
+	fridge.act(_arms)
+	assert_bool(_panel(fridge).is_open()).is_true()
+	assert_object(_arms.top()).is_same(onion)
+	assert_bool(fridge.contents.is_empty()).is_true()
+
+
+func test_act_at_a_full_fridge_opens_the_panel() -> void:
+	var fridge: StorageProp = _new_prop(FRIDGE_SCENE)
+	for i: int in 12:
+		fridge.contents.add(ItemInstance.new(_catalog.find_item(&"tomato")))
+	_hold(&"tomato")
+	fridge.act(_arms)
+	assert_bool(_panel(fridge).is_open()).is_true()
+	assert_int(_arms.size()).is_equal(1)
+
+
+func test_act_at_the_crate_always_opens_the_panel() -> void:
+	var crate: StorageProp = _new_prop(CRATE_SCENE)
+	_hold(&"tomato")
+	crate.act(_arms)
+	assert_bool(_panel(crate).is_open()).is_true()
+	assert_int(_arms.size()).is_equal(1)
+
+
 # --- Opening ------------------------------------------------------------------
 
 func test_interact_opens_the_panel() -> void:
 	var crate: StorageProp = _new_prop(CRATE_SCENE)
-	var panel: ContainerPanel = crate.get_node("ContainerPanel") as ContainerPanel
+	var panel: ContainerPanel = _panel(crate)
 	crate.open_for(_arms)
 	assert_bool(panel.is_open()).is_true()
 	assert_str((panel.find_child("Title") as Label).text).is_equal("Delivery crate")
@@ -129,9 +172,12 @@ func test_putting_away_and_taking_out_in_the_game() -> void:
 	var tomato: ItemInstance = ItemInstance.new(_catalog.find_item(&"tomato"), 2)
 	player.arms.add(tomato)
 
-	await press(runner, "pick_up")
+	# The first press puts the tomato away; with nothing left that fits, the
+	# second opens the fridge.
+	await press(runner, "interact")
 	assert_bool(player.arms.is_empty()).is_true()
 	assert_array(fridge.contents.get_items()).contains_exactly([tomato])
+	assert_bool(_panel(fridge).is_open()).is_false()
 
 	await press(runner, "interact")
 	assert_bool(get_tree().paused).is_true()
@@ -160,6 +206,22 @@ func test_taking_from_the_crate_in_the_game() -> void:
 	assert_int(crate.contents.size()).is_equal(9)
 
 
+func test_opening_with_space_doesnt_also_take_the_first_row() -> void:
+	# Space is also ui_accept, which presses the focused button.
+	var runner: GdUnitSceneRunner = scene_runner(MAIN_SCENE)
+	var player: Player = place_player(runner, ABOVE_CRATE)
+	var crate: StorageProp = runner.find_child("Crate") as StorageProp
+	await walk(runner, "move_down", 10)
+
+	runner.simulate_key_pressed(KEY_SPACE)
+	await runner.await_input_processed()
+	await get_tree().create_timer(0.1, true).timeout
+
+	assert_bool(_panel(crate).is_open()).is_true()
+	assert_bool(player.arms.is_empty()).is_true()
+	assert_int(crate.contents.size()).is_equal(10)
+
+
 func test_the_clock_stops_while_the_panel_is_open() -> void:
 	Game.clock.seconds_per_step = 0.05
 	var runner: GdUnitSceneRunner = scene_runner(MAIN_SCENE)
@@ -180,6 +242,10 @@ func _new_prop(path: String) -> StorageProp:
 	add_child(prop)
 	auto_free(prop)
 	return prop
+
+
+func _panel(prop: StorageProp) -> ContainerPanel:
+	return prop.get_node("ContainerPanel") as ContainerPanel
 
 
 func _hold(id: StringName, quality: int = 1) -> ItemInstance:

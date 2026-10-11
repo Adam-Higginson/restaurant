@@ -1,8 +1,8 @@
 class_name StorageProp
 extends StaticBody2D
 ## A container in the restaurant: the fridge, the cupboard or the delivery
-## crate. Put down puts the top of the stack away if it fits, and Interact
-## opens a panel to take food out. See Storage in docs/GDD.md.
+## crate. Interact puts the top of the stack away if it fits here, and
+## otherwise opens a panel to take food out. See Storage in docs/GDD.md.
 
 const LID_COLOR: Color = Color(1, 1, 1, 0.25)
 ## A strip along the top edge marks it as a container rather than a counter.
@@ -43,7 +43,6 @@ func _ready() -> void:
 		for i: int in start_items[item]:
 			_contents.add(ItemInstance.new(item))
 	_interactable.interacted.connect(_on_interacted)
-	_interactable.pick_up_pressed.connect(_on_pick_up_pressed)
 
 
 func _draw() -> void:
@@ -65,9 +64,12 @@ func open_for(arms: Arms) -> void:
 	_panel.open(display_name, _contents, arms)
 
 
+## What Interact does: puts the top of [param arms] away if it fits here,
+## and otherwise opens the panel.
+func act(arms: Arms) -> void:
+	if not put_away_from(arms):
+		open_for(arms)
+
+
 func _on_interacted(player: Player) -> void:
-	open_for(player.arms)
-
-
-func _on_pick_up_pressed(player: Player) -> void:
-	put_away_from(player.arms)
+	act(player.arms)

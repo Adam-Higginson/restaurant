@@ -333,7 +333,7 @@ func test_restaurant_has_five_counters_with_only_the_board_on_one() -> void:
 	assert_array(items).contains_exactly([BOARD])
 
 
-func test_pressing_pick_up_at_a_counter_takes_and_puts_back() -> void:
+func test_pressing_interact_at_a_counter_takes_and_puts_back() -> void:
 	var runner: GdUnitSceneRunner = scene_runner(MAIN_SCENE)
 	var player: Player = place_player(runner, BELOW_COUNTER_1)
 	var counter: Counter = runner.find_child("Counter1") as Counter
@@ -341,12 +341,29 @@ func test_pressing_pick_up_at_a_counter_takes_and_puts_back() -> void:
 	counter.place(tomato)
 
 	await walk(runner, "move_up", 20)
-	await press(runner, "pick_up")
+	await press(runner, "interact")
 	assert_object(player.arms.top()).is_same(tomato)
 	assert_bool(counter.is_empty()).is_true()
 
-	await press(runner, "pick_up")
+	await press(runner, "interact")
 	assert_bool(player.arms.is_empty()).is_true()
+	assert_object(counter.get_item()).is_same(tomato)
+
+
+func test_space_and_e_both_take_and_put_back() -> void:
+	var runner: GdUnitSceneRunner = scene_runner(MAIN_SCENE)
+	var player: Player = place_player(runner, BELOW_COUNTER_1)
+	var counter: Counter = runner.find_child("Counter1") as Counter
+	var tomato: ItemInstance = ItemInstance.new(TOMATO)
+	counter.place(tomato)
+	await walk(runner, "move_up", 20)
+
+	runner.simulate_key_pressed(KEY_SPACE)
+	await physics_ticks(runner, 2)
+	assert_object(player.arms.top()).is_same(tomato)
+
+	runner.simulate_key_pressed(KEY_E)
+	await physics_ticks(runner, 2)
 	assert_object(counter.get_item()).is_same(tomato)
 
 
@@ -358,13 +375,13 @@ func test_carried_item_can_be_put_on_another_counter() -> void:
 	player.arms.add(tomato)
 
 	await walk(runner, "move_up", 20)
-	await press(runner, "pick_up")
+	await press(runner, "interact")
 
 	assert_object(counter.get_item()).is_same(tomato)
 	assert_bool(player.arms.is_empty()).is_true()
 
 
-func test_pick_up_facing_nothing_keeps_the_stack() -> void:
+func test_interact_facing_nothing_keeps_the_stack() -> void:
 	var runner: GdUnitSceneRunner = scene_runner(MAIN_SCENE)
 	# Facing down at the start, towards open floor.
 	var player: Player = place_player(runner, BELOW_COUNTER_1)
@@ -372,7 +389,7 @@ func test_pick_up_facing_nothing_keeps_the_stack() -> void:
 	player.arms.add(tomato)
 
 	await physics_ticks(runner, 5)
-	await press(runner, "pick_up")
+	await press(runner, "interact")
 
 	assert_object(player.arms.top()).is_same(tomato)
 
@@ -384,7 +401,7 @@ func test_use_tool_at_the_board_chops_the_lettuce() -> void:
 	player.arms.add(ItemInstance.new(LETTUCE))
 
 	await walk(runner, "move_up", 20)
-	await press(runner, "pick_up")
+	await press(runner, "interact")
 	for i: int in 3:
 		await press(runner, "use_tool")
 
