@@ -7,3 +7,4 @@ script = ExtResource("1_wqma0")
 id = &"grilled_cheese"
 display_name = "Grilled Cheese"
 color = Color(0.95, 0.75, 0.35, 1)
+storage = 1

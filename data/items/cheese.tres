@@ -7,3 +7,4 @@ script = ExtResource("1_db6y0")
 id = &"cheese"
 display_name = "Cheese"
 color = Color(0.98, 0.85, 0.3, 1)
+storage = 1

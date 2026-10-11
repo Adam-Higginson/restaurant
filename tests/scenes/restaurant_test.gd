@@ -14,12 +14,31 @@ func test_has_four_tables_each_with_a_seat() -> void:
 		assert_object(table.get_node_or_null("Seat")).is_not_null()
 
 
-func test_has_a_stove_a_board_a_pantry_and_a_door() -> void:
+func test_has_a_stove_a_board_and_a_door() -> void:
 	var runner: GdUnitSceneRunner = scene_runner(MAIN_SCENE)
 	assert_object(runner.find_child("Stove")).is_not_null()
 	assert_object(runner.find_child("BoardCounter")).is_instanceof(Counter)
-	assert_object(runner.find_child("Pantry")).is_not_null()
 	assert_object(runner.find_child("Door")).is_instanceof(Marker2D)
+
+
+func test_has_a_fridge_a_cupboard_and_a_delivery_crate() -> void:
+	var runner: GdUnitSceneRunner = scene_runner(MAIN_SCENE)
+	var fridge: StorageProp = runner.find_child("Fridge") as StorageProp
+	var cupboard: StorageProp = runner.find_child("Cupboard") as StorageProp
+	var crate: StorageProp = runner.find_child("Crate") as StorageProp
+	assert_object(fridge).is_not_null()
+	assert_object(cupboard).is_not_null()
+	assert_object(crate).is_not_null()
+	assert_object(runner.find_child("Pantry")).is_null()
+	if fridge == null or cupboard == null or crate == null:
+		return
+	assert_int(fridge.kind).is_equal(Item.StorageKind.FRIDGE)
+	assert_int(fridge.slots).is_equal(12)
+	assert_int(cupboard.kind).is_equal(Item.StorageKind.CUPBOARD)
+	assert_int(cupboard.slots).is_equal(12)
+	assert_bool(crate.take_only).is_true()
+	assert_int(crate.slots).is_equal(0)
+	assert_bool(crate.is_in_group("delivery_crate")).is_true()
 
 
 # --- Collision --------------------------------------------------------------
@@ -105,11 +124,23 @@ func test_wake_spot_is_inside_the_back_room() -> void:
 	assert_bool(Rect2(16, 176, 64, 64).has_point(wake_spot.global_position)).is_true()
 
 
-func test_pantry_moved_out_of_the_back_room() -> void:
+func test_fridge_and_cupboard_are_in_the_kitchen() -> void:
 	var runner: GdUnitSceneRunner = scene_runner(MAIN_SCENE)
-	var pantry: Node2D = runner.find_child("Pantry") as Node2D
-	# It's 32px tall, so its centre must be at least 16px above the wall.
-	assert_float(pantry.global_position.y).is_less_equal(144.0)
+	# Inside the walls, above the back room and left of the dining room.
+	var kitchen: Rect2 = Rect2(16, 16, 144, 144)
+	for prop_name: String in ["Fridge", "Cupboard"]:
+		var prop: StorageProp = runner.find_child(prop_name) as StorageProp
+		var body: Rect2 = Rect2(prop.global_position - prop.size / 2.0, prop.size)
+		assert_bool(kitchen.encloses(body)).override_failure_message(
+			"%s should be inside the kitchen" % prop_name
+		).is_true()
+
+
+func test_crate_is_by_the_door() -> void:
+	var runner: GdUnitSceneRunner = scene_runner(MAIN_SCENE)
+	var crate: Node2D = runner.find_child("Crate") as Node2D
+	var door: Marker2D = runner.find_child("Door") as Marker2D
+	assert_float(crate.global_position.distance_to(door.global_position)).is_less(48.0)
 
 
 # --- Lighting -----------------------------------------------------------------

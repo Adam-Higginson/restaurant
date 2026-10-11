@@ -1,7 +1,7 @@
 class_name GameState
 extends Node
-## The game's central state: money, pantry, day number and whether the
-## restaurant is open.
+## The game's central state: money, day number and whether the restaurant
+## is open.
 ##
 ## The game's instance is the [code]Game[/code] autoload, so any script can use
 ## [code]Game.money[/code]. Values only change through the methods below,
@@ -31,15 +31,8 @@ var day: int:
 		return _day
 	set(_value):
 		push_error("GameState: day is read-only, use start_next_day()")
-## Created once and cleared by [method new_game], never replaced, so signal
-## connections to it keep working.
-var pantry: Pantry:
-	get:
-		return _pantry
-	set(_value):
-		push_error("GameState: pantry can't be replaced, use pantry.clear()")
-## The time of day. Like the pantry, created once and never replaced, so signal
-## connections to it keep working. The day cycle ticks it; reaching 2:00 am
+## The time of day. Created once and never replaced, so signal connections to
+## it keep working. The day cycle ticks it; reaching 2:00 am
 ## ends the day.
 var clock: GameClock:
 	get:
@@ -66,7 +59,6 @@ var is_day_over: bool:
 
 var _money: int = STARTING_MONEY
 var _day: int = 1
-var _pantry: Pantry = Pantry.new()
 var _clock: GameClock = GameClock.new()
 var _stats: DayStats = DayStats.new()
 var _is_open: bool = false
@@ -77,10 +69,9 @@ func _init() -> void:
 	_clock.reached_end.connect(end_day)
 
 
-## Puts everything back to the start: starting money, an empty pantry, day 1
-## at 6:00 am with the clock running, and the restaurant closed.
+## Puts everything back to the start: starting money, day 1 at 6:00 am with
+## the clock running, and the restaurant closed.
 func new_game() -> void:
-	_pantry.clear()
 	_stats.reset()
 	_set_money(STARTING_MONEY)
 	_is_day_over = false

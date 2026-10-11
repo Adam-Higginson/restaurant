@@ -6,6 +6,10 @@ extends Resource
 ## Every state food can be in is its own item (tomato, sliced tomato, diced
 ## tomato), so only designed states exist. [Reaction]s turn items into others.
 
+## Where food is kept. NONE for things that can't be stored: utensils, plates
+## and liquids.
+enum StorageKind { NONE, FRIDGE, CUPBOARD }
+
 ## Stable internal name (e.g. &"sliced_tomato"). Saves will refer to this, so don't change it.
 @export var id: StringName = &""
 @export var display_name: String = ""
@@ -18,6 +22,8 @@ extends Resource
 ## pick up takes its top food item, and the vessel itself only once it's empty
 ## (a chopping board or pan).
 @export var carried_whole: bool = false
+## Which container it can be put away in. See Storage in docs/GDD.md.
+@export var storage: StorageKind = StorageKind.NONE
 
 
 ## Whether food can go in it. Vessels never go inside other vessels.
