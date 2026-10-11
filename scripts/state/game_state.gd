@@ -46,6 +46,13 @@ var clock: GameClock:
 		return _clock
 	set(_value):
 		push_error("GameState: clock can't be replaced, use start_next_day()")
+## Today's customers and takings. Like the clock, created once and never
+## replaced; [method start_next_day] clears it.
+var stats: DayStats:
+	get:
+		return _stats
+	set(_value):
+		push_error("GameState: stats can't be replaced, use stats.reset()")
 var is_open: bool:
 	get:
 		return _is_open
@@ -61,6 +68,7 @@ var _money: int = STARTING_MONEY
 var _day: int = 1
 var _pantry: Pantry = Pantry.new()
 var _clock: GameClock = GameClock.new()
+var _stats: DayStats = DayStats.new()
 var _is_open: bool = false
 var _is_day_over: bool = false
 
@@ -73,6 +81,7 @@ func _init() -> void:
 ## at 6:00 am with the clock running, and the restaurant closed.
 func new_game() -> void:
 	_pantry.clear()
+	_stats.reset()
 	_set_money(STARTING_MONEY)
 	_is_day_over = false
 	# Clock first, so day_changed listeners already see 6:00 am.
@@ -128,6 +137,7 @@ func start_next_day() -> bool:
 	if not _is_day_over:
 		return false
 	_is_day_over = false
+	_stats.reset()
 	_clock.reset()
 	_clock.resume(self)
 	_set_day(_day + 1)
