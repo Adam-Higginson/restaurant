@@ -1,0 +1,18 @@
+[gd_resource type="Resource" script_class="Person" format=3]
+
+[ext_resource type="Script" path="res://scripts/data/item.gd" id="1_beee6"]
+[ext_resource type="Resource" path="res://data/items/grilled_cheese.tres" id="2_gvxi2"]
+[ext_resource type="Resource" path="res://data/items/garden_salad.tres" id="3_tul2r"]
+[ext_resource type="Resource" path="res://data/items/tomato_soup.tres" id="4_xg4k3"]
+[ext_resource type="Script" path="res://scripts/data/person.gd" id="5_dtnxt"]
+
+[resource]
+script = ExtResource("5_dtnxt")
+id = &"hazel"
+display_name = "Hazel"
+role = "farmer"
+color = Color(0.45, 0.65, 0.35, 1)
+loved = Array[ExtResource("1_beee6")]([ExtResource("4_xg4k3")])
+liked = Array[ExtResource("1_beee6")]([ExtResource("3_tul2r")])
+disliked = Array[ExtResource("1_beee6")]([ExtResource("2_gvxi2")])
+patience_seconds = 150.0

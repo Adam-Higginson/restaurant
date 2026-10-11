@@ -1,7 +1,7 @@
 class_name Catalog
 extends Resource
-## Every item, element, reaction and tool in the game, so other code doesn't need to
-## know file paths. The game's catalog is res://data/catalog.tres.
+## Every item, element, reaction, tool and townsperson in the game, so other
+## code doesn't need to know file paths. The game's catalog is res://data/catalog.tres.
 
 const PATH: String = "res://data/catalog.tres"
 
@@ -10,6 +10,7 @@ const PATH: String = "res://data/catalog.tres"
 ## Tried in this order when two reactions with the same number of inputs compete.
 @export var reactions: Array[Reaction] = []
 @export var tools: Array[HandTool] = []
+@export var people: Array[Person] = []
 
 
 ## Loads the game's catalog.
@@ -38,4 +39,12 @@ func find_tool(id: StringName) -> HandTool:
 	for tool: HandTool in tools:
 		if tool.id == id:
 			return tool
+	return null
+
+
+## The townsperson with [param id], or null if there isn't one.
+func find_person(id: StringName) -> Person:
+	for person: Person in people:
+		if person.id == id:
+			return person
 	return null

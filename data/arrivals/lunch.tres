@@ -1,0 +1,6 @@
+[gd_resource type="Resource" script_class="Arrival" format=3]
+
+[ext_resource type="Script" path="res://scripts/customers/arrival.gd" id="1_by8m3"]
+
+[resource]
+script = ExtResource("1_by8m3")

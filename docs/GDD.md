@@ -21,7 +21,7 @@ Time always moves, like Stardew Valley. There are no fixed phases: you choose wh
 - **Getting late:** at midnight a small "Getting late…" note appears at the top of the screen and fades away after a few seconds. It's a nudge, not a warning.
 - **Morning:** you wake in bed in the back room at 6:00. Yesterday's orders are waiting in the delivery crate by the door. Carry them to the fridge and cupboard, set up the kitchen, and order tomorrow's ingredients at the shop board.
 - **Open and close whenever you like** by flipping the sign on the door (E). While it says Open, townsfolk arrive, sit and order one dish. Fetch the ingredients, prepare and cook them, carry the dish to the customer and get paid. Customers left waiting too long leave without paying.
-- **Mealtime rushes:** customers trickle in at most times, with peaks around lunch (12:00–14:00) and dinner (18:00–21:00). Choosing when to be open is part of the game.
+- **Mealtimes:** for now one customer comes at lunch and one at dinner (see Customers → MVP), so choosing when to be open decides who you serve. Later they trickle in at most times, with peaks around lunch (12:00–14:00) and dinner (18:00–21:00) (#54).
 - **Closing:** flipping the sign to Closed stops new customers. Anyone already seated stays until they're served or run out of patience.
 - **Bed:** go to bed (E on the bed) at any time to end the day. The bed asks "Go to bed?" first, adding "The restaurant will close." while it's open. If the restaurant is still open, it closes and anyone still seated leaves without paying, counting as lost. If you're still up at 2:00, you fall asleep where you stand and wake in bed. No penalty in the MVP.
 - **The night:** when the day ends, the game pauses and the screen fades to black. Behind it the next day starts and you're moved to the bed. The new date fades in as a title card ("Spring 2, Tuesday"), holds for a moment, then the screen fades back in on the morning at 6:00. About 4 seconds in all.
@@ -143,10 +143,23 @@ Customers are **townsfolk**: a fixed cast of hand-written people, like Stardew V
 - **New arrivals:** the town starts with a smaller cast and new people move in as your reputation grows, so each newcomer is an event.
 
 ### MVP
-- **The cast:** 6 townsfolk, each a `Person` resource with a name, a placeholder colour, loved and liked dishes, and their patience.
-- **Arriving:** while the restaurant is open, a random townsperson who isn't already inside walks in from the door, more often at mealtimes, and sits at a free table. If every table is full, nobody new arrives. Personal routines come later.
-- **Ordering:** they pick a dish from the menu weighted by taste (loved dishes most, then liked, then anything else on the menu), never one they dislike. The order shows in a speech bubble.
-- **Patience:** a meter drains at that person's rate while they wait. If it empties they leave politely and the sale is lost.
+- **The cast:** 6 townsfolk, each a `Person` resource with a name, a placeholder colour, loved, liked and disliked dishes, and their patience in real seconds:
+
+  | Name | Who | Patience | Loves | Likes | Dislikes |
+  |---|---|---|---|---|---|
+  | Bram | blacksmith | 90 s | Grilled Cheese | Tomato Soup | Garden Salad |
+  | Wren | retired teacher | 180 s | Tomato Soup | Garden Salad | – |
+  | Milo | builder | 90 s | Grilled Cheese | Garden Salad | – |
+  | Pip | schoolkid | 120 s | Garden Salad | Grilled Cheese | Tomato Soup |
+  | Isla | night-owl writer | 120 s | Garden Salad | Tomato Soup | – |
+  | Hazel | farmer | 150 s | Tomato Soup | Garden Salad | Grilled Cheese |
+
+- **Arriving:** on a fixed schedule for now: one customer at lunch (due 12:30) and one at dinner (due 19:00), each at most once a day. If the restaurant isn't open when they're due, they come as soon as it opens, until 14:00 for lunch and 21:00 for dinner; after that, nobody comes for that meal. Random arrivals with mealtime peaks may replace this (#54), and personal routines come later.
+- **Who comes:** a random townsperson who isn't already inside and has something on the menu they'd order. Someone who dislikes every dish on the menu never comes. They walk in from the door and find their way around the tables to a random free table's seat. If every table is full or nobody can come, the arrival is skipped.
+- **Walking:** customers walk through the player and each other rather than bumping (#53 decides whether to keep this).
+- **Ordering:** they pick a dish from the menu weighted by taste: a loved dish counts 3, a liked one 2, anything else 1, and a disliked dish is never ordered. The order shows in a speech bubble above their head, with their name below them. The menu is Garden Salad (12) for now; Tomato Soup and Grilled Cheese join it when they can be cooked (#37, #38).
+- **Patience:** a bar above their head drains in real time while they wait at the table, and pauses whenever the clock does (any panel open). If it empties they say "I'll pop back another time" and walk out of the door, and the sale is lost.
+- **Closing and the night:** flipping the sign to Closed doesn't send seated customers away. Anyone still inside when the day ends is gone by the morning (counting them as lost comes with #10).
 - **Serving:** put down the plate or bowl holding the dish they ordered while facing them. They pay the menu price plus the quality tip (★★ +25%, ★★★ +50%). A **loved dish** also shows a heart and adds a bonus tip of 25% of the price (a starting number for balancing). A wrong dish isn't accepted. They eat briefly, then leave with the plate or bowl and free the table.
 - **Tables:** 4 tables, one diner each. Groups come later.
 - Not in the MVP: routines, friendship, chatting, gifts, storylines, cravings, groups, the star rating and critics.
@@ -182,12 +195,16 @@ Customers are **townsfolk**: a fixed cast of hand-written people, like Stardew V
 - Arms, the tool belt and each container's contents are gameplay state in scripts, not in UI scripts. UI reads them and listens to signals.
 - Interact, pick up and use tool are routed the same way: the player's `InteractionDetector` sends each press to the focused `Interactable`, which emits `interacted`, `pick_up_pressed` or `tool_used(player, tool)` for its prop to handle. The empty-arms rule for tools is checked there.
 - A container's contents are a list of food objects with a capacity, with no notion of where the food came from. Today the shop fills it; later farms will too. It replaces the existing `Pantry` counts store.
-- Each townsperson is a `Person` resource (`data/people/`): name, placeholder colour, loved, liked and disliked dishes, and patience. Later it grows routines, friendship and a storyline. A customer in the dining room is a node pointing at its `Person`, and at most one is inside at a time.
+- Each townsperson is a `Person` resource (`data/people/`): name, placeholder colour, loved, liked and disliked dishes, and patience. Later it grows routines, friendship and a storyline. A customer in the dining room is a `Customer` node (`scenes/customer.tscn`) pointing at its `Person` and its order, and each townsperson is inside at most once.
 - Money and the day number live in the `Game` autoload (`scripts/state/game_state.gd`), so any script can use `Game.money` and so on. The global `Game.pantry` goes away when storage containers are built.
 - The clock and the restaurant's open/closed state are gameplay state too, replacing the old prep/service/summary phases. `Game` holds a `GameClock` (`scripts/time/`, no nodes) and the open state, with `set_open()`, `end_day()` and `start_next_day()`. Other code listens to its signals: `time_changed`, `open_changed`, `day_ended` and `day_changed`. The clock emits `reached_end` at 2:00 and `Game` ends the day; it never ends the day itself. Each open panel pauses it as its own source, so closing one can't restart it while another is open. `Calendar` (`scripts/time/`) is static functions turning a day number into a season, weekday and year.
 - `DayCycle` (`scripts/time/day_cycle.gd`, a node in the main scene) runs the day: it ticks the clock with real time, shows the midnight note, and plays the night when `day_ended` fires. The night is one function that awaits each step in turn (fade out, start the next day, move the player to the `WakeSpot` marker, show the date, fade in) and emits `morning_started` at the end. The game is paused throughout, and the fade keeps running because its process mode is Always.
 - `ScreenFade` and `Notice` (`ui/`) are display only: the day cycle decides when they show and what they say. Each animates with its own Tween, and `ScreenFade`'s methods can be awaited.
 - `DayLight` (`scripts/visuals/day_light.gd`) is a `CanvasModulate` in the main scene. A `Gradient` sets the room's colour and a `Curve` the lamps' level, both keyed from 6:00 (0) to 2:00 (1) and editable in the Inspector. Each clock step drifts to the new values with a one-second tween; a new day snaps straight to the morning. Each `Lamp` prop (`scenes/props/lamp.tscn`) is a `PointLight2D` with a radial texture and a per-lamp `max_energy`, and joins the `lamps` group so the day light finds every lamp without knowing where they are. Solid tiles in the placeholder tileset have occluders on its occlusion layer, so walls cast shadows.
+- The menu is a `Menu` resource (`data/menu.tres`): a `Dictionary[Item, int]` of dishes and prices.
+- `CustomerSpawner` (`scripts/customers/`, a node in the main scene) brings customers in. An `ArrivalPlanner` (no nodes) decides when, from `Arrival` resources (`data/arrivals/`, a due time and an until time each), checked on every clock step and when the sign opens. The spawner picks who and which table with a `RandomNumberGenerator` that tests seed, tracks which tables are taken, and clears everyone on `day_changed`, behind the night's black screen. A `Customer` walks with a `NavigationAgent2D`, waits with a `PatienceMeter` (no nodes), and emits `seated` and `left`.
+- `FloorNavigation` (`scripts/navigation/`, a `NavigationRegion2D` in the restaurant) bakes the walkable floor when the scene starts, cutting out the collision shapes of everything in the `navigation_source` group (the tiles and the props), so it always matches the layout. Debug → Visible Navigation shows it while the game runs.
+- `DebugKeys` (`scripts/debug/`) gives testing shortcuts in debug builds only: F9 skips an hour, F10 toggles ×20 fast forward, F11 brings a customer in now.
 - Orders placed at the shop are held as pending until the next morning, then moved into the crate.
 
 ## Out of scope for the MVP

@@ -40,6 +40,14 @@ func test_belt_slots_are_selectable_from_keyboard_and_controller() -> void:
 	assert_bool(_has_event(&"select_slot_previous", "InputEventMouseButton")).is_true()
 
 
+func test_debug_keys_are_on_the_keyboard() -> void:
+	# Testing shortcuts (DebugKeys), not part of play, so keyboard only.
+	for action: StringName in [&"debug_skip_hour", &"debug_fast_forward", &"debug_spawn_customer"]:
+		assert_bool(_has_event(action, "InputEventKey")).override_failure_message(
+			"%s has no keyboard binding" % action
+		).is_true()
+
+
 func _has_event(action: StringName, event_class: String) -> bool:
 	if not InputMap.has_action(action):
 		return false

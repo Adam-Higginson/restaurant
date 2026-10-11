@@ -61,6 +61,58 @@ func test_garden_salad_reactions_match_design_doc() -> void:
 		&"garden_salad", 1)
 
 
+# --- Townsfolk -------------------------------------------------------------------
+# The cast mirrors the Customers section of docs/GDD.md.
+
+func test_catalog_has_the_six_townsfolk() -> void:
+	var ids: Array[StringName] = []
+	for person: Person in _catalog.people:
+		ids.append(person.id)
+	assert_array(ids).contains_exactly_in_any_order([
+		&"bram", &"wren", &"milo", &"pip", &"isla", &"hazel",
+	])
+
+
+func test_find_person_returns_null_for_unknown_id() -> void:
+	assert_object(_catalog.find_person(&"nobody")).is_null()
+
+
+func test_townsfolk_tastes_and_patience_match_design_doc() -> void:
+	_assert_person(&"bram", 90.0, [&"grilled_cheese"], [&"tomato_soup"], [&"garden_salad"])
+	_assert_person(&"wren", 180.0, [&"tomato_soup"], [&"garden_salad"], [])
+	_assert_person(&"milo", 90.0, [&"grilled_cheese"], [&"garden_salad"], [])
+	_assert_person(&"pip", 120.0, [&"garden_salad"], [&"grilled_cheese"], [&"tomato_soup"])
+	_assert_person(&"isla", 120.0, [&"garden_salad"], [&"tomato_soup"], [])
+	_assert_person(&"hazel", 150.0, [&"tomato_soup"], [&"garden_salad"], [&"grilled_cheese"])
+
+
+func test_townsfolk_are_complete() -> void:
+	var colors: Array[Color] = []
+	for person: Person in _catalog.people:
+		assert_str(person.display_name).override_failure_message(
+			"%s has no name" % person.id).is_not_empty()
+		assert_float(person.patience_seconds).is_greater(0.0)
+		assert_bool(colors.has(person.color)).override_failure_message(
+			"%s shares a colour with someone else" % person.id).is_false()
+		colors.append(person.color)
+
+
+func test_townsfolk_tastes_use_catalog_items() -> void:
+	for person: Person in _catalog.people:
+		for dish: Item in person.loved + person.liked + person.disliked:
+			assert_bool(_catalog.items.has(dish)).override_failure_message(
+				"%s's tastes use an item that isn't in the catalog" % person.id).is_true()
+
+
+func test_someone_can_order_from_the_game_menu() -> void:
+	var menu: Menu = Menu.load_default()
+	var can_order: int = 0
+	for person: Person in _catalog.people:
+		if person.can_order_from(menu):
+			can_order += 1
+	assert_int(can_order).is_greater(0)
+
+
 # --- Tracing dishes back to raw items ------------------------------------------
 
 func test_garden_salad_traces_back_to_raw_ingredients() -> void:
@@ -176,6 +228,20 @@ func _assert_reaction(
 	assert_float(reaction.amount).is_equal(amount)
 	assert_str(String(reaction.result.id)).is_equal(String(result))
 	assert_int(reaction.quality).is_equal(quality)
+
+
+func _assert_person(
+	id: StringName, patience: float, loved: Array[StringName], liked: Array[StringName],
+	disliked: Array[StringName]
+) -> void:
+	var person: Person = _catalog.find_person(id)
+	assert_object(person).override_failure_message("No person with id %s" % id).is_not_null()
+	if person == null:
+		return
+	assert_float(person.patience_seconds).is_equal(patience)
+	assert_array(_ids(person.loved)).contains_exactly_in_any_order(loved)
+	assert_array(_ids(person.liked)).contains_exactly_in_any_order(liked)
+	assert_array(_ids(person.disliked)).contains_exactly_in_any_order(disliked)
 
 
 # Every set of raw items that can make [param id], each sorted. A path is the

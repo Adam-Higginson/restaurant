@@ -26,7 +26,8 @@ func wait_for_signal(emitted: Signal, seconds: float = 2.0) -> bool:
 	var deadline: int = Time.get_ticks_msec() + int(seconds * 1000.0)
 	while not state["fired"] and Time.get_ticks_msec() < deadline:
 		await get_tree().process_frame
-	if emitted.is_connected(on_emitted):
+	# The emitter may have freed itself after emitting (a customer leaving).
+	if is_instance_valid(emitted.get_object()) and emitted.is_connected(on_emitted):
 		emitted.disconnect(on_emitted)
 	return state["fired"]
 
@@ -44,6 +45,22 @@ func finishes_within(work: Callable, seconds: float = 2.0) -> bool:
 	while not state["done"] and Time.get_ticks_msec() < deadline:
 		await get_tree().process_frame
 	return state["done"]
+
+
+## Waits until every navigation region in the running scene is on its map,
+## so paths can be found, and returns whether that happened within
+## [param max_ticks] physics ticks. Maps update in the background: a new
+## region first joins the map empty, and its floor arrives a tick or two later.
+func wait_for_navigation(runner: GdUnitSceneRunner, max_ticks: int = 60) -> bool:
+	var regions: Array[NavigationRegion2D] = []
+	for node: Node in runner.scene().find_children("*", "NavigationRegion2D", true, false):
+		regions.append(node as NavigationRegion2D)
+	var tree: SceneTree = runner.scene().get_tree()
+	for i: int in max_ticks:
+		if _regions_are_on_their_maps(regions):
+			return true
+		await tree.physics_frame
+	return _regions_are_on_their_maps(regions)
 
 
 ## Holds [param action] for [param ticks] physics ticks, then releases it and
@@ -67,3 +84,20 @@ func place_player(runner: GdUnitSceneRunner, pos: Vector2) -> Player:
 	var player: Player = runner.find_child("Player") as Player
 	player.position = pos
 	return player
+
+
+# Whether each region's floor is on its map: the map's nearest polygon to one
+# of the region's own vertices belongs to the region.
+func _regions_are_on_their_maps(regions: Array[NavigationRegion2D]) -> bool:
+	for region: NavigationRegion2D in regions:
+		var vertices: PackedVector2Array = region.navigation_polygon.get_vertices()
+		if vertices.is_empty():
+			return false
+		var point: Vector2 = region.to_global(vertices[0])
+		var map: RID = region.get_navigation_map()
+		# Querying a map that has never updated is an error.
+		if NavigationServer2D.map_get_iteration_id(map) == 0:
+			return false
+		if NavigationServer2D.map_get_closest_point_owner(map, point) != region.get_rid():
+			return false
+	return true
