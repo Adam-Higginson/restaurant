@@ -1,6 +1,5 @@
 [gd_scene format=3]
 
-[ext_resource type="Material" path="res://assets/placeholder/materials/greybox_water.tres" id="1_xvubq"]
 [ext_resource type="Material" path="res://assets/placeholder/materials/greybox_sand.tres" id="2_dlk4p"]
 [ext_resource type="Material" path="res://assets/placeholder/materials/greybox_grass.tres" id="3_nk5mb"]
 [ext_resource type="Material" path="res://assets/placeholder/materials/greybox_dark_wood.tres" id="4_8v0wy"]
@@ -8,12 +7,15 @@
 [ext_resource type="Script" path="res://scripts/ship/ship.gd" id="6_ivyv4"]
 [ext_resource type="PackedScene" path="res://scenes/prototype/player.tscn" id="7_p3dpl"]
 [ext_resource type="PackedScene" path="res://ui/hud_3d.tscn" id="8_hud"]
+[ext_resource type="PackedScene" path="res://scenes/prototype/weather/sea_surface.tscn" id="9_sea"]
+[ext_resource type="PackedScene" path="res://scenes/prototype/weather/weather.tscn" id="10_weather"]
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_mqylf"]
-sky_top_color = Color(0.42, 0.6, 0.78, 1)
-sky_horizon_color = Color(0.75, 0.8, 0.84, 1)
-ground_bottom_color = Color(0.2, 0.3, 0.38, 1)
-ground_horizon_color = Color(0.75, 0.8, 0.84, 1)
+sky_top_color = Color(0.03, 0.04, 0.06, 1)
+sky_horizon_color = Color(0.1, 0.12, 0.14, 1)
+ground_bottom_color = Color(0.01, 0.014, 0.02, 1)
+ground_horizon_color = Color(0.1, 0.12, 0.14, 1)
+sky_energy_multiplier = 0.5
 
 [sub_resource type="Sky" id="Sky_fgrll"]
 sky_material = SubResource("ProceduralSkyMaterial_mqylf")
@@ -22,15 +24,26 @@ sky_material = SubResource("ProceduralSkyMaterial_mqylf")
 background_mode = 2
 sky = SubResource("Sky_fgrll")
 ambient_light_source = 3
+ambient_light_energy = 0.5
 reflected_light_source = 2
 tonemap_mode = 2
+tonemap_exposure = 1.1
+ssr_enabled = true
+ssr_max_steps = 48
+glow_enabled = true
+glow_intensity = 0.6
+glow_bloom = 0.05
 fog_enabled = true
-fog_light_color = Color(0.74, 0.79, 0.83, 1)
-fog_density = 0.008
-fog_sky_affect = 0.5
-
-[sub_resource type="PlaneMesh" id="PlaneMesh_ofujv"]
-size = Vector2(2000, 2000)
+fog_mode = 1
+fog_light_color = Color(0.13, 0.155, 0.18, 1)
+fog_sky_affect = 1.0
+fog_depth_curve = 0.8
+fog_depth_begin = 10.0
+fog_depth_end = 45.0
+volumetric_fog_enabled = true
+volumetric_fog_density = 0.012
+volumetric_fog_albedo = Color(0.55, 0.6, 0.65, 1)
+volumetric_fog_length = 40.0
 
 [sub_resource type="CylinderMesh" id="CylinderMesh_oromj"]
 top_radius = 20.0
@@ -98,15 +111,12 @@ point_count = 2
 [node name="WorldEnvironment" type="WorldEnvironment" parent="." unique_id=1655094490]
 environment = SubResource("Environment_r0v5v")
 
-[node name="Sun" type="DirectionalLight3D" parent="." unique_id=1064959821]
+[node name="Moon" type="DirectionalLight3D" parent="." unique_id=1064959821]
 transform = Transform3D(0.81915206, 0.4055798, -0.4055798, 0, 0.70710677, 0.70710677, 0.57357645, -0.579228, 0.579228, 0, 0, 0)
-light_color = Color(1, 0.96, 0.88, 1)
+light_color = Color(0.55, 0.65, 0.85, 1)
+light_energy = 0.6
 shadow_enabled = true
-directional_shadow_max_distance = 120.0
-
-[node name="Water" type="MeshInstance3D" parent="." unique_id=889213786]
-material_override = ExtResource("1_xvubq")
-mesh = SubResource("PlaneMesh_ofujv")
+directional_shadow_max_distance = 60.0
 
 [node name="Island" type="Node3D" parent="." unique_id=2006085588]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 30, 0, -40)
@@ -176,4 +186,12 @@ route = NodePath("../Route")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -23.5, 5.35, 51)
 
 [node name="Hud3D" parent="." node_paths=PackedStringArray("player") instance=ExtResource("8_hud")]
+player = NodePath("../Player")
+
+[node name="SeaSurface" parent="." node_paths=PackedStringArray("ship") instance=ExtResource("9_sea")]
+ship = NodePath("../Ship")
+
+[node name="Weather" parent="." node_paths=PackedStringArray("sea", "camera", "player") instance=ExtResource("10_weather")]
+sea = NodePath("../SeaSurface")
+camera = NodePath("../Player/CameraRig/Camera3D")
 player = NodePath("../Player")
