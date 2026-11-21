@@ -128,6 +128,24 @@ func new_player_3d_on_floor() -> Player3D:
 	return player
 
 
+## A [CameraZone] filling a box of [param size] centred at [param pos], with
+## its fixed shot at [param shot] (in the zone's own space). Add it to the
+## test world before the scene runs.
+func new_camera_zone(size: Vector3, pos: Vector3, shot: Transform3D) -> CameraZone:
+	var zone: CameraZone = CameraZone.new()
+	zone.position = pos
+	var shape: CollisionShape3D = CollisionShape3D.new()
+	var box: BoxShape3D = BoxShape3D.new()
+	box.size = size
+	shape.shape = box
+	zone.add_child(shape)
+	var marker: Marker3D = Marker3D.new()
+	marker.name = "Shot"
+	marker.transform = shot
+	zone.add_child(marker)
+	return zone
+
+
 ## A solid, unmoving box of [param size] centred at [param pos], for test worlds.
 func static_box(size: Vector3, pos: Vector3) -> StaticBody3D:
 	var body: StaticBody3D = StaticBody3D.new()

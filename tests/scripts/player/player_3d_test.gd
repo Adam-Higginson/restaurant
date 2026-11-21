@@ -62,6 +62,79 @@ func test_forward_walks_the_way_the_camera_faces() -> void:
 	assert_vector(moved.normalized()).is_equal_approx(Vector3.LEFT, NEAR)
 
 
+func test_up_walks_away_from_a_fixed_camera() -> void:
+	var player: Player3D = new_player_3d_on_floor()
+	var runner: GdUnitSceneRunner = scene_runner(player.get_parent())
+	var zone: CameraZone = _add_far_zone(player)
+	player.camera_rig.enter_zone(zone)
+	await physics_ticks(runner, 5)
+	var start: Vector3 = player.global_position
+
+	await walk(runner, "move_up", 30)
+
+	var moved: Vector3 = player.global_position - start
+	assert_float(moved.length()).is_greater(1.0)
+	assert_vector(moved.normalized()).is_equal_approx(Vector3.LEFT, NEAR)
+
+
+func test_keeps_its_heading_when_the_camera_switches_mid_walk() -> void:
+	var player: Player3D = new_player_3d_on_floor()
+	var runner: GdUnitSceneRunner = scene_runner(player.get_parent())
+	var zone: CameraZone = _add_far_zone(player)
+	await physics_ticks(runner, 5)
+	runner.simulate_action_press("move_up")
+	await physics_ticks(runner, 10)
+
+	# The camera switches to the shot looking along -X while up is held.
+	player.camera_rig.enter_zone(zone)
+	var switched_at: Vector3 = player.global_position
+	await physics_ticks(runner, 20)
+	runner.simulate_action_release("move_up")
+	await physics_ticks(runner, 2)
+
+	# Still walking along -Z, the way the free camera looked.
+	var moved: Vector3 = player.global_position - switched_at
+	assert_float(moved.length()).is_greater(1.0)
+	assert_vector(moved.normalized()).is_equal_approx(Vector3.FORWARD, NEAR)
+
+
+func test_follows_the_new_camera_after_letting_go() -> void:
+	var player: Player3D = new_player_3d_on_floor()
+	var runner: GdUnitSceneRunner = scene_runner(player.get_parent())
+	var zone: CameraZone = _add_far_zone(player)
+	await physics_ticks(runner, 5)
+	runner.simulate_action_press("move_up")
+	await physics_ticks(runner, 5)
+	player.camera_rig.enter_zone(zone)
+	# walk() presses again, then lets go.
+	await walk(runner, "move_up", 5)
+	var start: Vector3 = player.global_position
+
+	await walk(runner, "move_up", 30)
+
+	var moved: Vector3 = player.global_position - start
+	assert_vector(moved.normalized()).is_equal_approx(Vector3.LEFT, NEAR)
+
+
+func test_turning_the_free_camera_mid_walk_still_steers() -> void:
+	var player: Player3D = new_player_3d_on_floor()
+	var runner: GdUnitSceneRunner = scene_runner(player.get_parent())
+	await physics_ticks(runner, 5)
+	runner.simulate_action_press("move_up")
+	await physics_ticks(runner, 5)
+
+	# Turn the free camera a quarter turn left without letting go.
+	player.camera_rig.yaw = PI / 2.0
+	await physics_ticks(runner, 1)
+	var turned_at: Vector3 = player.global_position
+	await physics_ticks(runner, 20)
+	runner.simulate_action_release("move_up")
+	await physics_ticks(runner, 2)
+
+	var moved: Vector3 = player.global_position - turned_at
+	assert_vector(moved.normalized()).is_equal_approx(Vector3.LEFT, NEAR)
+
+
 func test_faces_the_way_it_walks() -> void:
 	var player: Player3D = new_player_3d_on_floor()
 	var runner: GdUnitSceneRunner = scene_runner(player.get_parent())
@@ -164,6 +237,16 @@ func test_stays_on_the_deck_while_the_ship_turns() -> void:
 	assert_bool(player.is_on_floor()).is_true()
 	assert_vector(ship.to_local(player.global_position)).is_equal_approx(
 			on_deck, Vector3(0.2, 0.1, 0.2))
+
+
+# A camera zone far from the player, so only direct enter_zone calls use it,
+# with an instant glide. Its shot looks along -X (a quarter turn left).
+func _add_far_zone(player: Player3D) -> CameraZone:
+	var shot: Transform3D = Transform3D(Basis(Vector3.UP, PI / 2.0), Vector3(0, 3, 0))
+	var zone: CameraZone = new_camera_zone(Vector3(2, 2, 2), Vector3(15, 1, 15), shot)
+	player.get_parent().add_child(zone)
+	player.camera_rig.blend_seconds = 0.0
+	return zone
 
 
 # A ship moored at the start of [param curve], and a player on its aft deck.
