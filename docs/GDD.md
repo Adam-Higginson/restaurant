@@ -75,7 +75,7 @@ When you lose a fight, **the lantern pulls you out**, echoing how you met. You r
 - **Tool belt:** 4 slots for hand tools, always with you. One slot is selected at a time. Tools are used with empty arms only. The knife is on the belt from the start, and the belt doubles as the item bar ashore.
 
 ### Camera
-- **Free third-person camera** on deck and on islands, orbited with the right stick or mouse. A spring arm pulls it in when a wall or the mast is in the way.
+- **Free third-person camera** on deck and on islands, orbited with the right stick or mouse. A spring arm pulls it in when a wall or the mast is in the way. It keeps its direction in the world when the ship turns, rather than turning with the deck. With a mouse, the cursor is captured while playing: Esc frees it and a click captures it again.
 - **Fixed, framed shots** in tight interiors like the galley, as in OoT's houses and shops. Walking into the galley blends to its shot, and leaving blends back. Movement always follows the active camera.
 - **Lock-on** frames the player and the target together.
 
@@ -87,7 +87,7 @@ One button, **interact**, does everything with the thing in front of you.
 | Action | Keyboard / mouse | Controller (Xbox naming) | Does |
 |---|---|---|---|
 | Move | WASD / arrows | Left stick | Walk, relative to the camera |
-| Camera | Mouse | Right stick | Orbit the free camera |
+| Camera | Mouse (Esc frees the cursor) | Right stick | Orbit the free camera |
 | Interact | E or Space | X or A | Put down, pick up, put away, open, ring, talk, gather |
 | Use tool | F | B | Use the selected belt tool on what you're facing (the knife chops). Empty arms only. |
 | Rotate stack | Q | Right bumper | Rotate the stack, so a different item is on top |
