@@ -1,0 +1,243 @@
+[gd_scene format=3]
+
+[ext_resource type="Material" path="res://assets/placeholder/materials/dark_prop_wood.tres" id="1_d"]
+[ext_resource type="Material" path="res://assets/placeholder/materials/prop_wood.tres" id="2_d"]
+[ext_resource type="Script" path="res://scripts/props/rocking.gd" id="3_d"]
+[ext_resource type="Script" path="res://scripts/art/third_party_model.gd" id="4_d"]
+[ext_resource type="Material" path="res://assets/placeholder/materials/green_glass.tres" id="5_d"]
+
+[sub_resource type="BoxMesh" id="S1"]
+size = Vector3(0.05, 1.9, 0.32)
+
+[sub_resource type="BoxMesh" id="S2"]
+size = Vector3(0.05, 1.9, 0.32)
+
+[sub_resource type="BoxMesh" id="S3"]
+size = Vector3(1.1, 0.05, 0.32)
+
+[sub_resource type="BoxMesh" id="S4"]
+size = Vector3(1.1, 1.9, 0.03)
+
+[sub_resource type="BoxMesh" id="S5"]
+size = Vector3(1.0, 0.04, 0.28)
+
+[sub_resource type="BoxMesh" id="S6"]
+size = Vector3(1.0, 0.04, 0.28)
+
+[sub_resource type="CylinderMesh" id="S7"]
+top_radius = 0.05
+bottom_radius = 0.05
+height = 0.2
+radial_segments = 8
+rings = 1
+
+[sub_resource type="CylinderMesh" id="S8"]
+top_radius = 0.018
+bottom_radius = 0.04
+height = 0.09
+radial_segments = 8
+rings = 1
+
+[sub_resource type="CylinderMesh" id="S9"]
+top_radius = 0.02
+bottom_radius = 0.02
+height = 0.03
+radial_segments = 8
+rings = 1
+
+[sub_resource type="CylinderMesh" id="S10"]
+top_radius = 0.05
+bottom_radius = 0.05
+height = 0.2
+radial_segments = 8
+rings = 1
+
+[sub_resource type="CylinderMesh" id="S11"]
+top_radius = 0.018
+bottom_radius = 0.04
+height = 0.09
+radial_segments = 8
+rings = 1
+
+[sub_resource type="CylinderMesh" id="S12"]
+top_radius = 0.02
+bottom_radius = 0.02
+height = 0.03
+radial_segments = 8
+rings = 1
+
+[sub_resource type="BoxMesh" id="S13"]
+size = Vector3(1.0, 0.04, 0.28)
+
+[sub_resource type="BoxMesh" id="S14"]
+size = Vector3(1.0, 0.04, 0.28)
+
+[sub_resource type="BoxShape3D" id="S15"]
+size = Vector3(1.1, 1.9, 0.32)
+
+[node name="Bookshelf" type="StaticBody3D"]
+
+[node name="SideLeft" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.525, 0.95, 0)
+material_override = ExtResource("1_d")
+mesh = SubResource("S1")
+
+[node name="SideRight" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.525, 0.95, 0)
+material_override = ExtResource("1_d")
+mesh = SubResource("S2")
+
+[node name="Top" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.875, 0)
+material_override = ExtResource("1_d")
+mesh = SubResource("S3")
+
+[node name="Back" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.95, -0.145)
+material_override = ExtResource("1_d")
+mesh = SubResource("S4")
+
+[node name="Shelf1" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.05, 0.01)
+material_override = ExtResource("2_d")
+mesh = SubResource("S5")
+
+[node name="Row1" type="Node3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.07, 0.02)
+script = ExtResource("3_d")
+phase = 0.0
+
+[node name="BooksA" type="Node3D" parent="Row1"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.25, 0, 0)
+script = ExtResource("4_d")
+path = "res://assets/third_party/kaykit_furniture/Assets/gltf/book_set.gltf"
+fit_size = Vector3(0.36, 0.3, 0.2)
+grain_metres = 0.1
+
+[node name="BooksB" type="Node3D" parent="Row1"]
+transform = Transform3D(-1, 0, 0, 0, 1, 0, 0, 0, -1, 0.12, 0, 0)
+script = ExtResource("4_d")
+path = "res://assets/third_party/kaykit_furniture/Assets/gltf/book_set.gltf"
+fit_size = Vector3(0.32, 0.27, 0.2)
+grain_metres = 0.1
+
+[node name="Lying" type="Node3D" parent="Row1"]
+transform = Transform3D(0.9553, 0, 0.2955, 0, 1, 0, -0.2955, 0, 0.9553, 0.38, 0, 0)
+script = ExtResource("4_d")
+path = "res://assets/third_party/kaykit_furniture/Assets/gltf/book_single.gltf"
+fit_size = Vector3(0.2, 0.06, 0.15)
+grain_metres = 0.1
+
+[node name="Shelf2" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5, 0.01)
+material_override = ExtResource("2_d")
+mesh = SubResource("S6")
+
+[node name="Row2" type="Node3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.52, 0.02)
+script = ExtResource("3_d")
+phase = 0.01
+
+[node name="BottleA" type="MeshInstance3D" parent="Row2"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.35, 0.1, 0)
+material_override = ExtResource("5_d")
+mesh = SubResource("S7")
+
+[node name="BottleANeck" type="MeshInstance3D" parent="Row2"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.35, 0.245, 0)
+material_override = ExtResource("5_d")
+mesh = SubResource("S8")
+
+[node name="BottleACork" type="MeshInstance3D" parent="Row2"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.35, 0.3, 0)
+material_override = ExtResource("1_d")
+mesh = SubResource("S9")
+
+[node name="BottleB" type="MeshInstance3D" parent="Row2"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.22, 0.1, 0.03)
+material_override = ExtResource("5_d")
+mesh = SubResource("S10")
+
+[node name="BottleBNeck" type="MeshInstance3D" parent="Row2"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.22, 0.245, 0.03)
+material_override = ExtResource("5_d")
+mesh = SubResource("S11")
+
+[node name="BottleBCork" type="MeshInstance3D" parent="Row2"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.22, 0.3, 0.03)
+material_override = ExtResource("1_d")
+mesh = SubResource("S12")
+
+[node name="Jar" type="Node3D" parent="Row2"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.05, 0, 0)
+script = ExtResource("4_d")
+path = "res://assets/third_party/kaykit_restaurant/Assets/gltf/jar_A_large.gltf"
+fit_size = Vector3(0.16, 0.26, 0.16)
+grain_metres = 0.1
+
+[node name="Books" type="Node3D" parent="Row2"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.3, 0, 0)
+script = ExtResource("4_d")
+path = "res://assets/third_party/kaykit_furniture/Assets/gltf/book_set.gltf"
+fit_size = Vector3(0.3, 0.27, 0.2)
+grain_metres = 0.1
+
+[node name="Shelf3" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.95, 0.01)
+material_override = ExtResource("2_d")
+mesh = SubResource("S13")
+
+[node name="Row3" type="Node3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.97, 0.02)
+script = ExtResource("3_d")
+phase = 0.02
+
+[node name="BooksA" type="Node3D" parent="Row3"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.25, 0, 0)
+script = ExtResource("4_d")
+path = "res://assets/third_party/kaykit_furniture/Assets/gltf/book_set.gltf"
+fit_size = Vector3(0.36, 0.3, 0.2)
+grain_metres = 0.1
+
+[node name="BooksB" type="Node3D" parent="Row3"]
+transform = Transform3D(-1, 0, 0, 0, 1, 0, 0, 0, -1, 0.12, 0, 0)
+script = ExtResource("4_d")
+path = "res://assets/third_party/kaykit_furniture/Assets/gltf/book_set.gltf"
+fit_size = Vector3(0.32, 0.27, 0.2)
+grain_metres = 0.1
+
+[node name="Lying" type="Node3D" parent="Row3"]
+transform = Transform3D(0.9553, 0, 0.2955, 0, 1, 0, -0.2955, 0, 0.9553, 0.38, 0, 0)
+script = ExtResource("4_d")
+path = "res://assets/third_party/kaykit_furniture/Assets/gltf/book_single.gltf"
+fit_size = Vector3(0.2, 0.06, 0.15)
+grain_metres = 0.1
+
+[node name="Shelf4" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.4, 0.01)
+material_override = ExtResource("2_d")
+mesh = SubResource("S14")
+
+[node name="Row4" type="Node3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.42, 0.02)
+script = ExtResource("3_d")
+phase = 0.03
+
+[node name="Books" type="Node3D" parent="Row4"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.2, 0, 0)
+script = ExtResource("4_d")
+path = "res://assets/third_party/kaykit_furniture/Assets/gltf/book_set.gltf"
+fit_size = Vector3(0.34, 0.3, 0.2)
+grain_metres = 0.1
+
+[node name="Lettuce" type="Node3D" parent="Row4"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.25, 0, 0)
+script = ExtResource("4_d")
+path = "res://assets/third_party/kaykit_restaurant/Assets/gltf/food_ingredient_lettuce.gltf"
+tint = Color(0.55, 1.5, 0.5, 1)
+fit_size = Vector3(0.18, 0.15, 0.18)
+grain_metres = 0.06
+
+[node name="Shape" type="CollisionShape3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.95, 0)
+shape = SubResource("S15")

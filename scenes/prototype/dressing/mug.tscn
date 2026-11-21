@@ -6,8 +6,6 @@
 
 [node name="Mug" type="Node3D"]
 script = ExtResource("1_d")
-tip_degrees = 1.5
-period = 2.4
 
 [node name="Model" type="Node3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)

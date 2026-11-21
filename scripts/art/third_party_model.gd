@@ -48,6 +48,9 @@ const GRAIN: Texture2D = preload("res://assets/placeholder/materials/n64_grain.t
 @export var grain: bool = true
 ## How many metres one copy of the grain covers on this model.
 @export var grain_metres: float = 0.2
+## Multiplies the model's colours: above 1 in a channel makes it stronger,
+## e.g. to keep greens green under warm lamplight.
+@export var tint: Color = Color.WHITE
 ## How fine a version of the model to draw: Godot keeps simplified copies of
 ## every imported mesh (levels of detail), and low values pick the cruder,
 ## lower-poly ones, for the chunky N64 look. 1 is Godot's usual choice.
@@ -135,7 +138,7 @@ func _use_n64(node: Node, made: Dictionary) -> void:
 		# One material over the whole mesh: convert that instead.
 		var whole: ShaderMaterial = made.get(override, null)
 		if whole == null:
-			whole = n64_material(override, grain_metres)
+			whole = n64_material(override, grain_metres, tint)
 			made[override] = whole
 		mesh_node.material_override = whole
 	elif mesh_node != null and mesh_node.mesh != null:
@@ -145,7 +148,7 @@ func _use_n64(node: Node, made: Dictionary) -> void:
 				continue
 			var converted: ShaderMaterial = made.get(source, null)
 			if converted == null:
-				converted = n64_material(source, grain_metres)
+				converted = n64_material(source, grain_metres, tint)
 				made[source] = converted
 			mesh_node.set_surface_override_material(surface, converted)
 	for child: Node in node.get_children():
@@ -153,11 +156,13 @@ func _use_n64(node: Node, made: Dictionary) -> void:
 
 
 ## The N64 prop material for a model surface painted with [param source]:
-## the same colour and texture, with chunky grain every [param metres].
-static func n64_material(source: BaseMaterial3D, metres: float) -> ShaderMaterial:
+## the same colour and texture (times [param tint]), with chunky grain every
+## [param metres].
+static func n64_material(source: BaseMaterial3D, metres: float,
+		tint: Color = Color.WHITE) -> ShaderMaterial:
 	var material: ShaderMaterial = ShaderMaterial.new()
 	material.shader = N64_SHADER
-	material.set_shader_parameter(&"albedo_color", source.albedo_color)
+	material.set_shader_parameter(&"albedo_color", source.albedo_color * tint)
 	if source.albedo_texture != null:
 		material.set_shader_parameter(&"albedo_texture", source.albedo_texture)
 	material.set_shader_parameter(&"grain", GRAIN)

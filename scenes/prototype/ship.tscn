@@ -40,6 +40,12 @@
 [ext_resource type="PackedScene" path="res://scenes/prototype/dressing/picture_frame.tscn" id="48_picture"]
 [ext_resource type="PackedScene" path="res://scenes/prototype/dressing/kettle.tscn" id="49_kettle"]
 [ext_resource type="PackedScene" path="res://scenes/prototype/dressing/mug.tscn" id="50_mug"]
+[ext_resource type="PackedScene" path="res://scenes/prototype/dressing/meat_rack.tscn" id="51_meat"]
+[ext_resource type="PackedScene" path="res://scenes/prototype/dressing/bookshelf.tscn" id="52_books"]
+[ext_resource type="PackedScene" path="res://scenes/prototype/dressing/herb_pot.tscn" id="53_herbs"]
+[ext_resource type="PackedScene" path="res://scenes/prototype/dressing/lettuce_crate.tscn" id="54_lettuce"]
+[ext_resource type="PackedScene" path="res://scenes/prototype/dressing/green_bottle.tscn" id="55_bottle"]
+[ext_resource type="Script" path="res://scripts/props/rocking.gd" id="56_rock"]
 
 [sub_resource type="BoxMesh" id="Mesh_Hull"]
 size = Vector3(12, 2.5, 30)
@@ -393,6 +399,12 @@ size = Vector3(1.6, 0.05, 1.3)
 
 [sub_resource type="BoxShape3D" id="Detail_49"]
 size = Vector3(0.26, 2.24, 0.26)
+
+[sub_resource type="BoxShape3D" id="RibShape"]
+size = Vector3(0.2, 2.6, 0.22)
+
+[sub_resource type="BoxShape3D" id="BilgeShapeBox"]
+size = Vector3(0.7, 0.45, 6.65)
 
 [node name="Ship" type="AnimatableBody3D" unique_id=200548129]
 script = ExtResource("1_7ykrf")
@@ -800,31 +812,37 @@ material_override = ExtResource("28_darkwood")
 mesh = SubResource("Cosy_13")
 
 [node name="Crock1" type="MeshInstance3D" parent="Visuals"]
+script = ExtResource("56_rock")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5.55, 2.705, 2.72)
 material_override = ExtResource("29_clay")
 mesh = SubResource("Cosy_14")
 
 [node name="Crock1Lid" type="MeshInstance3D" parent="Visuals"]
+script = ExtResource("56_rock")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5.55, 2.855, 2.72)
 material_override = ExtResource("29_clay")
 mesh = SubResource("Cosy_15")
 
 [node name="Crock2" type="MeshInstance3D" parent="Visuals"]
+script = ExtResource("56_rock")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5.55, 2.735, 3.02)
 material_override = ExtResource("29_clay")
 mesh = SubResource("Cosy_16")
 
 [node name="Crock2Lid" type="MeshInstance3D" parent="Visuals"]
+script = ExtResource("56_rock")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5.55, 2.915, 3.02)
 material_override = ExtResource("29_clay")
 mesh = SubResource("Cosy_17")
 
 [node name="Crock3" type="MeshInstance3D" parent="Visuals"]
+script = ExtResource("56_rock")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5.55, 2.685, 3.35)
 material_override = ExtResource("29_clay")
 mesh = SubResource("Cosy_18")
 
 [node name="Crock3Lid" type="MeshInstance3D" parent="Visuals"]
+script = ExtResource("56_rock")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5.55, 2.815, 3.35)
 material_override = ExtResource("29_clay")
 mesh = SubResource("Cosy_19")
@@ -835,11 +853,13 @@ material_override = ExtResource("27_propwood")
 mesh = SubResource("Cosy_20")
 
 [node name="LowCrock1" type="MeshInstance3D" parent="Visuals"]
+script = ExtResource("56_rock")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5.55, 2.095, 2.8)
 material_override = ExtResource("29_clay")
 mesh = SubResource("Cosy_21")
 
 [node name="LowCrock2" type="MeshInstance3D" parent="Visuals"]
+script = ExtResource("56_rock")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5.55, 2.075, 3.25)
 material_override = ExtResource("29_clay")
 mesh = SubResource("Cosy_22")
@@ -1114,12 +1134,6 @@ shape = SubResource("Detail_49")
 [node name="VegCrate1" parent="Galley" instance=ExtResource("41_vegcrate")]
 transform = Transform3D(0.9801, 0, 0.1987, 0, 1, 0, -0.1987, 0, 0.9801, 4.7, 1, 2.8)
 
-[node name="VegCrate2" parent="Galley" instance=ExtResource("41_vegcrate")]
-transform = Transform3D(0.8776, 0, -0.4794, 0, 1, 0, 0.4794, 0, 0.8776, 4.65, 1, 3.5)
-
-[node name="HangingHam" parent="Galley" instance=ExtResource("42_ham")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.6, 3.3, 2.5)
-
 [node name="PotRail" parent="Galley" instance=ExtResource("43_potrail")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.5, 3.05, 1.32)
 
@@ -1136,7 +1150,7 @@ transform = Transform3D(0.9211, 0, 0.3894, 0, 1, 0, -0.3894, 0, 0.9211, 2.3, 1, 
 transform = Transform3D(0, 0, -1, 0, 1, 0, 1, 0, 0, 5.55, 2.575, 3.55)
 
 [node name="Picture" parent="Galley" instance=ExtResource("48_picture")]
-transform = Transform3D(0, 0, 1, 0, 1, 0, -1, 0, 0, -3.31, 2.3, 4.4)
+transform = Transform3D(0, 0, 1, 0, 1, 0, -1, 0, 0, -3.31, 2.3, 6.3)
 
 [node name="Kettle" parent="Galley" instance=ExtResource("49_kettle")]
 transform = Transform3D(0.8253, 0, -0.5646, 0, 1, 0, 0.5646, 0, 0.8253, 3.7, 1.87, 1.95)
@@ -1146,7 +1160,7 @@ transform = Transform3D(0.6967, 0, 0.7174, 0, 1, 0, -0.7174, 0, 0.6967, 3.55, 1.
 
 [node name="Mug2" parent="Galley" instance=ExtResource("50_mug")]
 transform = Transform3D(0.3624, 0, -0.932, 0, 1, 0, 0.932, 0, 0.3624, 4, 1.82, 5.55)
-phase = 0.5
+phase = 0.05
 
 [node name="GalleyLanternCounters" parent="Visuals" instance=ExtResource("23_lantern")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.6, 3.24, 1.6)
@@ -1155,6 +1169,44 @@ swing_degrees = 3.0
 period = 4.2
 light_energy = 1.1
 light_range = 5.5
+
+[node name="MeatRack" parent="Galley" instance=ExtResource("51_meat")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.7, 3.3, 2.5)
+
+[node name="Bookshelf" parent="Galley" instance=ExtResource("52_books")]
+transform = Transform3D(0, 0, 1, 0, 1, 0, -1, 0, 0, -3.15, 1, 4.4)
+
+[node name="LettuceCrate" parent="Galley" instance=ExtResource("54_lettuce")]
+transform = Transform3D(0.8776, 0, -0.4794, 0, 1, 0, 0.4794, 0, 0.8776, 4.65, 1, 3.5)
+
+[node name="HerbPot1" parent="Galley" instance=ExtResource("53_herbs")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4.85, 1.865, 7.3)
+
+[node name="HerbPot2" parent="Galley" instance=ExtResource("53_herbs")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3.12, 2.9, 4.15)
+
+[node name="GreenBottle" parent="Galley" instance=ExtResource("55_bottle")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.5, 1.82, 5.35)
+
+[node name="Rib1Shape" type="CollisionShape3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5.6, 2.3, 1.6)
+shape = SubResource("RibShape")
+
+[node name="Rib2Shape" type="CollisionShape3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5.6, 2.3, 3.85)
+shape = SubResource("RibShape")
+
+[node name="Rib3Shape" type="CollisionShape3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5.6, 2.3, 6.1)
+shape = SubResource("RibShape")
+
+[node name="Rib4Shape" type="CollisionShape3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5.6, 2.3, 7.55)
+shape = SubResource("RibShape")
+
+[node name="BilgeShape" type="CollisionShape3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5.35, 1.22, 4.475)
+shape = SubResource("BilgeShapeBox")
 
 [node name="Shelter" type="Area3D" parent="."]
 script = ExtResource("11_shelter")

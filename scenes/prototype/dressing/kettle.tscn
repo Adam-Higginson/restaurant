@@ -1,13 +1,15 @@
 [gd_scene format=3]
 
-[ext_resource type="Script" path="res://scripts/art/third_party_model.gd" id="1_d"]
+[ext_resource type="Script" path="res://scripts/props/rocking.gd" id="1_d"]
+[ext_resource type="Script" path="res://scripts/art/third_party_model.gd" id="2_d"]
 
 
 [node name="Kettle" type="Node3D"]
+script = ExtResource("1_d")
 
 [node name="Model" type="Node3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)
-script = ExtResource("1_d")
+script = ExtResource("2_d")
 path = "res://assets/third_party/tiny_treats_charming_kitchen/Assets/gltf/kettle.gltf"
 fit_size = Vector3(0.3, 0.24, 0.24)
 grain_metres = 0.12
