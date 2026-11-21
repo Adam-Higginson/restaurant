@@ -284,6 +284,153 @@ func test_counter_stops_listening_to_a_board_that_leaves() -> void:
 	assert_int(board.contents.reaction_progressed.get_connections().size()).is_equal(0)
 
 
+# --- With the 3D toolbar --------------------------------------------------------
+
+func test_holding_food_at_a_counter_with_other_food_picks_that_up_too() -> void:
+	var hand: Toolbar = Toolbar.new()
+	var counter: CounterSlot = CounterSlot.new(TOMATO)
+	var lettuce: ItemInstance = ItemInstance.new(LETTUCE)
+	hand.add(lettuce)
+
+	assert_int(counter.interact_action(hand)).is_equal(CounterSlot.Action.PICK_UP)
+	assert_bool(counter.exchange_with(hand)).is_true()
+
+	assert_object(hand.top().item).is_same(TOMATO)
+	assert_array(hand.get_items()).contains([lettuce])
+	assert_bool(counter.is_empty()).is_true()
+
+
+func test_a_full_toolbar_at_an_occupied_counter_does_nothing() -> void:
+	var hand: Toolbar = Toolbar.new()
+	while not hand.is_full():
+		hand.add(ItemInstance.new(LETTUCE))
+	var counter: CounterSlot = CounterSlot.new(TOMATO)
+
+	assert_int(counter.interact_action(hand)).is_equal(CounterSlot.Action.NONE)
+	assert_bool(counter.exchange_with(hand)).is_false()
+	assert_object(counter.get_item().item).is_same(TOMATO)
+
+
+func test_a_held_plate_takes_the_food_off_the_board() -> void:
+	var hand: Toolbar = Toolbar.new()
+	var counter: CounterSlot = CounterSlot.new(BOARD)
+	var lettuce: ItemInstance = ItemInstance.new(CHOPPED_LETTUCE)
+	counter.get_item().contents.add_item(lettuce)
+	var plate: ItemInstance = ItemInstance.new(PLATE)
+	hand.add(plate)
+
+	assert_int(counter.interact_action(hand)).is_equal(CounterSlot.Action.MOVE_ONTO_PLATE)
+	assert_bool(counter.exchange_with(hand)).is_true()
+
+	assert_object(hand.top()).is_same(plate)
+	assert_array(plate.contents.get_contents()).contains_exactly([lettuce])
+	assert_array(counter.get_item().contents.get_contents()).is_empty()
+	assert_object(counter.get_item().item).is_same(BOARD)
+
+
+func test_moving_food_onto_a_plate_makes_a_salad() -> void:
+	var hand: Toolbar = Toolbar.new()
+	var counter: CounterSlot = CounterSlot.new(BOARD)
+	counter.get_item().contents.add_item(ItemInstance.new(SLICED_TOMATO, 2))
+	var plate: ItemInstance = ItemInstance.new(PLATE)
+	plate.contents.add_item(ItemInstance.new(CHOPPED_LETTUCE, 2))
+	hand.add(plate)
+
+	counter.exchange_with(hand)
+
+	var food: Array[ItemInstance] = plate.contents.get_contents()
+	assert_int(food.size()).is_equal(1)
+	assert_object(food[0].item).is_same(GARDEN_SALAD)
+	assert_int(food[0].quality).is_equal(3)
+
+
+func test_moving_food_half_chopped_loses_its_progress() -> void:
+	var hand: Toolbar = Toolbar.new()
+	var counter: CounterSlot = CounterSlot.new(BOARD)
+	counter.get_item().contents.add_item(ItemInstance.new(LETTUCE))
+	counter.use_tool(KNIFE)
+	var plate: ItemInstance = ItemInstance.new(PLATE)
+	hand.add(plate)
+
+	counter.exchange_with(hand)
+
+	assert_object(plate.contents.get_contents()[0].item).is_same(LETTUCE)
+	assert_array(counter.get_item().contents.get_active_reactions()).is_empty()
+
+
+func test_a_full_plate_leaves_the_food_so_it_is_taken_instead() -> void:
+	var hand: Toolbar = Toolbar.new()
+	var counter: CounterSlot = CounterSlot.new(BOARD)
+	var lettuce: ItemInstance = ItemInstance.new(CHOPPED_LETTUCE)
+	counter.get_item().contents.add_item(lettuce)
+	var plate: ItemInstance = ItemInstance.new(PLATE)
+	for i: int in PLATE.capacity:
+		plate.contents.add_item(ItemInstance.new(ONION))
+	hand.add(plate)
+
+	assert_int(counter.interact_action(hand)).is_equal(CounterSlot.Action.TAKE_FOOD)
+	counter.exchange_with(hand)
+
+	assert_object(hand.top()).is_same(lettuce)
+	assert_int(plate.contents.get_contents().size()).is_equal(PLATE.capacity)
+
+
+func test_a_held_plate_at_an_empty_board_picks_up_the_board() -> void:
+	var hand: Toolbar = Toolbar.new()
+	var counter: CounterSlot = CounterSlot.new(BOARD)
+	hand.add(ItemInstance.new(PLATE))
+	assert_int(counter.interact_action(hand)).is_equal(CounterSlot.Action.PICK_UP)
+
+
+# --- What Interact would do ----------------------------------------------------
+
+func test_interact_action_matches_each_case() -> void:
+	var hand: Toolbar = Toolbar.new()
+	assert_int(CounterSlot.new(null).interact_action(hand)).is_equal(CounterSlot.Action.NONE)
+	assert_int(CounterSlot.new(TOMATO).interact_action(hand)) 			.is_equal(CounterSlot.Action.PICK_UP)
+	var board: CounterSlot = CounterSlot.new(BOARD)
+	assert_int(board.interact_action(hand)).is_equal(CounterSlot.Action.PICK_UP)
+	board.get_item().contents.add_item(ItemInstance.new(LETTUCE))
+	assert_int(board.interact_action(hand)).is_equal(CounterSlot.Action.TAKE_FOOD)
+
+	hand.add(ItemInstance.new(TOMATO))
+	assert_int(CounterSlot.new(null).interact_action(hand)) 			.is_equal(CounterSlot.Action.PUT_DOWN)
+	assert_int(CounterSlot.new(PLATE).interact_action(hand)) 			.is_equal(CounterSlot.Action.ADD_TO_VESSEL)
+	# The board already holds its one piece of food.
+	assert_int(board.interact_action(hand)).is_equal(CounterSlot.Action.NONE)
+
+
+func test_interact_prompts() -> void:
+	var hand: Toolbar = Toolbar.new()
+	var board: CounterSlot = CounterSlot.new(BOARD)
+	assert_str(board.interact_prompt(hand)).is_equal("Pick up Chopping Board")
+	assert_str(CounterSlot.new(null).interact_prompt(hand)).is_empty()
+
+	hand.add(ItemInstance.new(LETTUCE))
+	assert_str(CounterSlot.new(null).interact_prompt(hand)).is_equal("Put down Lettuce")
+	assert_str(board.interact_prompt(hand)).is_equal("Put Lettuce on Chopping Board")
+
+	board.exchange_with(hand)
+	assert_str(board.interact_prompt(hand)).is_equal("Take Lettuce")
+
+	hand.add(ItemInstance.new(PLATE))
+	assert_str(board.interact_prompt(hand)).is_equal("Put Lettuce on Plate")
+	assert_str(CounterSlot.new(TOMATO).interact_prompt(hand)).is_equal("Pick up Tomato")
+
+
+func test_can_use_tool_only_while_there_is_something_to_cut() -> void:
+	var board: CounterSlot = CounterSlot.new(BOARD)
+	assert_bool(board.can_use_tool(KNIFE)).is_false()
+	board.get_item().contents.add_item(ItemInstance.new(LETTUCE))
+	assert_bool(board.can_use_tool(KNIFE)).is_true()
+	for i: int in 3:
+		board.use_tool(KNIFE)
+	# Chopped lettuce can't be cut any further.
+	assert_bool(board.can_use_tool(KNIFE)).is_false()
+	assert_bool(CounterSlot.new(TOMATO).can_use_tool(KNIFE)).is_false()
+	assert_bool(CounterSlot.new(null).can_use_tool(KNIFE)).is_false()
+
+
 # --- Garden Salad, end to end -----------------------------------------------------
 
 func test_proper_garden_salad_is_three_stars() -> void:

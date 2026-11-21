@@ -24,6 +24,14 @@ const LAYER: int = 1 << 1
 ## enough to show over the player's head and stack when seen from behind.
 @export var focus_height: float = 2.2
 
+## Says what [method interact] would do for a player, for the HUD prompt: a
+## function taking a [Player3D] and returning text like "Put down Tomato", or
+## "" for nothing. Set by the prop; unset means no prompt.
+var describe_interact: Callable = Callable()
+## Says what [method use_tool] would do: a function taking a [Player3D] and a
+## [HandTool] and returning text like "Chop", or "" for nothing.
+var describe_tool: Callable = Callable()
+
 
 func _ready() -> void:
 	collision_layer = LAYER
@@ -37,6 +45,24 @@ func _ready() -> void:
 func interact(player: Player3D) -> void:
 	if enabled:
 		interacted.emit(player)
+
+
+## What [method interact] would do for [param player], e.g. "Open Pantry",
+## or "" for nothing (or while disabled).
+func interact_prompt(player: Player3D) -> String:
+	if not enabled or not describe_interact.is_valid():
+		return ""
+	var text: String = describe_interact.call(player)
+	return text
+
+
+## What [method use_tool] would do with [param tool], e.g. "Chop", or "" for
+## nothing (or while disabled).
+func tool_prompt(player: Player3D, tool: HandTool) -> String:
+	if not enabled or not describe_tool.is_valid():
+		return ""
+	var text: String = describe_tool.call(player, tool)
+	return text
 
 
 ## Uses [param tool] on this on behalf of [param player]. Does nothing while

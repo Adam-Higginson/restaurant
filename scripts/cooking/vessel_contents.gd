@@ -55,6 +55,23 @@ func _init(vessel: Item, reactions: Array[Reaction], capacity: int) -> void:
 	_reactions = _by_priority(possible)
 
 
+## How many more items fit.
+func room() -> int:
+	return maxi(_capacity - _contents.size(), 0)
+
+
+## Whether adding [param element] would do anything, without adding it: the
+## same answer [method add_element] would give. Lets the HUD say whether the
+## knife would cut.
+func would_react_to(element: Element) -> bool:
+	if element.kind == Element.Kind.TIMED:
+		return not _elements.has(element)
+	for active: ActiveReaction in _active:
+		if active.reaction.driving_element() == element and _has_other_elements(active):
+			return true
+	return false
+
+
 ## Puts [param instance] in the vessel. Returns false, changing nothing, if the
 ## vessel is full or already holds it.
 func add_item(instance: ItemInstance) -> bool:

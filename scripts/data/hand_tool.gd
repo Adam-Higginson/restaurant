@@ -11,5 +11,7 @@ extends Resource
 @export var display_name: String = ""
 ## Placeholder colour until there's real art.
 @export var color: Color = Color.WHITE
+## What using it is called in the HUD prompt (the knife chops).
+@export var verb: String = "Use"
 ## What using the tool applies to the thing it's used on (the knife cuts).
 @export var element: Element = null

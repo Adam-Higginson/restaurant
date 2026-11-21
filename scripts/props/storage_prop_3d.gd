@@ -33,6 +33,8 @@ func _ready() -> void:
 		for i: int in start_items[item]:
 			_contents.add(ItemInstance.new(item))
 	_interactable.interacted.connect(_on_interacted)
+	_interactable.describe_interact = func(player: Player3D) -> String:
+		return interact_prompt(player.arms)
 
 
 ## What Interact does: puts the top of [param arms] away if it fits here, and
@@ -42,6 +44,14 @@ func act(arms: Arms) -> void:
 		_panel.open(display_name, _contents, arms)
 		return
 	arms.take_top()
+
+
+## What [method act] would do, for the HUD prompt: "Put away Tomato" or
+## "Open Pantry".
+func interact_prompt(arms: Arms) -> String:
+	if _contents.accepts(arms.top()):
+		return "Put away %s" % arms.top().item.display_name
+	return "Open %s" % display_name
 
 
 func _on_interacted(player: Player3D) -> void:

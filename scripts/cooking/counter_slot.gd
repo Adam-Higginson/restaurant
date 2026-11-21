@@ -15,6 +15,22 @@ signal item_changed(item: ItemInstance)
 ## vessel here, or a reaction's progress. Views redraw on it.
 signal changed
 
+## What Interact would do here. See [method interact_action].
+enum Action {
+	## Nothing: E is hidden in the prompt.
+	NONE,
+	## Put the held item down on the empty counter.
+	PUT_DOWN,
+	## Put the held food into the vessel here (a board or plate).
+	ADD_TO_VESSEL,
+	## Slide the food from the board here onto the held plate or bowl.
+	MOVE_ONTO_PLATE,
+	## Take the top food off the board here.
+	TAKE_FOOD,
+	## Pick up the whole item here.
+	PICK_UP,
+}
+
 var _item: ItemInstance = null
 
 
@@ -52,34 +68,81 @@ func take() -> ItemInstance:
 	return item
 
 
-## Pick up / put down between here and [param arms]. Returns whether
-## anything moved.
-## - Empty: the top item goes down here.
-## - A vessel here and food on top of the stack: the food goes into the vessel,
-##   if it fits.
-## - Otherwise, if the arms have room, something comes up onto the stack: the
-##   top food from a chopping board, or the whole item (a plate with its food,
-##   an empty board, a tomato).
-func exchange_with(arms: Arms) -> bool:
-	if _item == null:
-		if arms.is_empty():
-			return false
-		return place(arms.take_top())
+## What Interact would do between here and [param arms], without doing it.
+## [method exchange_with] does exactly this, so the HUD prompt and the game
+## never disagree.
+## - Empty: the held item goes down here.
+## - A vessel here and food held: the food goes into the vessel, if it fits.
+## - A plate or bowl held, at a board with food: the food slides onto the
+##   plate, if it all fits.
+## - Otherwise, with free hands, something comes up: the top food from a
+##   board, or the whole item (a plate with its food, an empty board, a tomato).
+func interact_action(arms: Arms) -> Action:
 	var held: ItemInstance = arms.top()
+	if _item == null:
+		return Action.NONE if held == null else Action.PUT_DOWN
 	if _item.is_vessel() and held != null and not held.is_vessel():
-		if not _item.contents.add_item(held):
-			return false
-		arms.take_top()
-		return true
+		return Action.ADD_TO_VESSEL if _item.contents.room() > 0 else Action.NONE
+	if _can_move_onto(held):
+		return Action.MOVE_ONTO_PLATE
 	if arms.is_full():
+		return Action.NONE
+	if _board_food() != null:
+		return Action.TAKE_FOOD
+	return Action.PICK_UP
+
+
+## Does what [method interact_action] says. Returns whether anything moved.
+func exchange_with(arms: Arms) -> bool:
+	match interact_action(arms):
+		Action.PUT_DOWN:
+			return place(arms.take_top())
+		Action.ADD_TO_VESSEL:
+			if not _item.contents.add_item(arms.top()):
+				return false
+			arms.take_top()
+			return true
+		Action.MOVE_ONTO_PLATE:
+			var plate: VesselContents = arms.top().contents
+			for food: ItemInstance in _item.contents.get_contents():
+				_item.contents.remove_item(food)
+				plate.add_item(food)
+			return true
+		Action.TAKE_FOOD:
+			var food: ItemInstance = _board_food()
+			_item.contents.remove_item(food)
+			return arms.add(food)
+		Action.PICK_UP:
+			return arms.add(take())
+	return false
+
+
+## What the prompt says Interact would do, e.g. "Put down Tomato", or "" for
+## nothing.
+func interact_prompt(arms: Arms) -> String:
+	var held: ItemInstance = arms.top()
+	match interact_action(arms):
+		Action.PUT_DOWN:
+			return "Put down %s" % held.item.display_name
+		Action.ADD_TO_VESSEL:
+			return "Put %s on %s" % [held.item.display_name, _item.item.display_name]
+		Action.MOVE_ONTO_PLATE:
+			var food: Array[ItemInstance] = _item.contents.get_contents()
+			var what: String = food[0].item.display_name if food.size() == 1 else "food"
+			return "Put %s on %s" % [what, held.item.display_name]
+		Action.TAKE_FOOD:
+			return "Take %s" % _board_food().item.display_name
+		Action.PICK_UP:
+			return "Pick up %s" % _item.item.display_name
+	return ""
+
+
+## Whether [param tool] would do anything here: the knife cuts food on a board
+## until it can't be cut any further.
+func can_use_tool(tool: HandTool) -> bool:
+	if _item == null or not _item.is_vessel() or tool.element == null:
 		return false
-	if _item.is_vessel() and not _item.item.carried_whole:
-		var food: Array[ItemInstance] = _item.contents.get_contents()
-		if not food.is_empty():
-			var top_food: ItemInstance = food[food.size() - 1]
-			_item.contents.remove_item(top_food)
-			return arms.add(top_food)
-	return arms.add(take())
+	return _item.contents.would_react_to(tool.element)
 
 
 ## Uses [param tool] on what's here: the knife cuts food on a board. Returns
@@ -89,6 +152,25 @@ func use_tool(tool: HandTool) -> bool:
 	if _item == null or not _item.is_vessel() or tool.element == null:
 		return false
 	return _item.contents.add_element(tool.element)
+
+
+# The top food on a board here (a vessel not carried whole), or null.
+func _board_food() -> ItemInstance:
+	if _item == null or not _item.is_vessel() or _item.item.carried_whole:
+		return null
+	var food: Array[ItemInstance] = _item.contents.get_contents()
+	return null if food.is_empty() else food[food.size() - 1]
+
+
+# Whether the food on a board here could all slide onto [param held], a plate
+# or bowl.
+func _can_move_onto(held: ItemInstance) -> bool:
+	if held == null or not held.is_vessel() or not held.item.carried_whole:
+		return false
+	if _item == null or not _item.is_vessel() or _item.item.carried_whole:
+		return false
+	var count: int = _item.contents.get_contents().size()
+	return count > 0 and held.contents.room() >= count
 
 
 func _set_item(item: ItemInstance) -> void:

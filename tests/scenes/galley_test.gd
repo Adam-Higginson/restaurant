@@ -7,7 +7,6 @@ const TOMATO: Item = preload("res://data/items/tomato.tres")
 const BOARD: Item = preload("res://data/items/chopping_board.tres")
 const PLATE: Item = preload("res://data/items/plate.tres")
 const CHOPPED_LETTUCE: Item = preload("res://data/items/chopped_lettuce.tres")
-const SLICED_TOMATO: Item = preload("res://data/items/sliced_tomato.tres")
 const GARDEN_SALAD: Item = preload("res://data/items/garden_salad.tres")
 ## The stations along the bulkhead, port to starboard.
 const STATIONS: Array[String] = ["Pantry", "Counter", "BoardCounter", "PlateRack"]
@@ -68,32 +67,45 @@ func test_a_garden_salad_from_start_to_finish_while_sailing() -> void:
 	ship.set_sail()
 	await physics_ticks(runner, 30)
 	var start: Vector3 = ship.global_position
+	var detector: InteractionDetector3D = player.get_node("InteractionDetector") 			as InteractionDetector3D
 
-	# Lettuce from the pantry, chopped on the board, then picked up again.
-	await _take_from_pantry(runner, ship, "Lettuce")
-	await _go_to(runner, ship, "BoardCounter")
-	await press(runner, "interact")
-	for i: int in 3:
-		await press(runner, "use_tool")
-	await press(runner, "interact")
-	assert_object(player.arms.top().item).is_same(CHOPPED_LETTUCE)
-
-	# A plate from the rack goes on the counter, and the lettuce onto it.
+	# A plate from the rack goes down on the counter.
 	await _go_to(runner, ship, "PlateRack")
+	assert_str(detector.interact_prompt()).is_equal("Take Plate")
 	await press(runner, "interact")
 	await _go_to(runner, ship, "Counter")
+	assert_str(detector.interact_prompt()).is_equal("Put down Plate")
 	await press(runner, "interact")
+
+	# Lettuce from the pantry, chopped on the board, carried to the plate.
+	await _take_from_pantry(runner, ship, "Lettuce")
+	await _go_to(runner, ship, "BoardCounter")
+	assert_str(detector.interact_prompt()).is_equal("Put Lettuce on Chopping Board")
+	await press(runner, "interact")
+	assert_str(detector.tool_prompt()).is_equal("Chop")
+	for i: int in 3:
+		await press(runner, "use_tool")
+	assert_str(detector.tool_prompt()).is_empty()
+	await press(runner, "interact")
+	assert_object(player.arms.top().item).is_same(CHOPPED_LETTUCE)
+	await _go_to(runner, ship, "Counter")
+	assert_str(detector.interact_prompt()).is_equal("Put Chopped Lettuce on Plate")
 	await press(runner, "interact")
 	assert_bool(player.arms.is_empty()).is_true()
 
-	# A tomato, sliced (two cuts, stopping before diced), onto the plate too.
+	# A tomato sliced on the board (two cuts, stopping before diced), then the
+	# plate carried over to it: the tomato slides onto the plate.
 	await _take_from_pantry(runner, ship, "Tomato")
 	await _go_to(runner, ship, "BoardCounter")
 	await press(runner, "interact")
 	for i: int in 2:
 		await press(runner, "use_tool")
+	await _go_to(runner, ship, "Counter")
+	assert_str(detector.interact_prompt()).is_equal("Pick up Plate")
 	await press(runner, "interact")
-	assert_object(player.arms.top().item).is_same(SLICED_TOMATO)
+	await _go_to(runner, ship, "BoardCounter")
+	assert_str(detector.interact_prompt()).is_equal("Put Sliced Tomato on Plate")
+	await press(runner, "interact")
 	await _go_to(runner, ship, "Counter")
 	await press(runner, "interact")
 
@@ -108,6 +120,28 @@ func test_a_garden_salad_from_start_to_finish_while_sailing() -> void:
 	assert_bool(player.arms.is_empty()).is_true()
 	assert_bool(ship.is_sailing).is_true()
 	assert_float(ship.global_position.distance_to(start)).is_greater(1.0)
+
+
+func test_one_pantry_visit_takes_lettuce_and_a_tomato() -> void:
+	var rig: Array[Node3D] = new_moored_ship_with_player(_spot_at(0.0))
+	var ship: Ship = rig[0] as Ship
+	var player: Player3D = rig[1] as Player3D
+	var runner: GdUnitSceneRunner = scene_runner(ship.get_parent())
+	await physics_ticks(runner, 5)
+
+	await _go_to(runner, ship, "Pantry")
+	await press(runner, "interact")
+	var panel: ContainerPanel = _station(ship, "Pantry").get_node("ContainerPanel") 			as ContainerPanel
+	for food_name: String in ["Lettuce", "Tomato"]:
+		for button: Button in panel.get_rows():
+			if button.text.begins_with(food_name):
+				button.pressed.emit()
+				break
+	await press(runner, "ui_cancel")
+
+	assert_int(player.toolbar.size()).is_equal(2)
+	assert_object(player.toolbar.top().item).is_same(TOMATO)
+	assert_object(player.toolbar.get_item(1).item).is_same(LETTUCE)
 
 
 # Opens the pantry, takes one of the food named [param food_name], and closes it.

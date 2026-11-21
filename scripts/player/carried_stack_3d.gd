@@ -1,8 +1,7 @@
 class_name CarriedStack3D
 extends Node3D
-## Shows what the player carries as small models stacked above their head,
-## bottom item first, so the top of the stack (the one Interact uses) is on
-## top. Bobs gently while the player walks.
+## Shows the item selected on the player's toolbar (what they hold) as a small
+## model above their head. Bobs gently while the player walks.
 ##
 ## Display only: it reads the player's [Arms] and rebuilds when they change.
 
@@ -10,8 +9,6 @@ extends Node3D
 @export var bob_height: float = 0.04
 ## Bobs per second while walking.
 @export var bob_rate: float = 3.0
-## The gap between stacked items, in metres.
-@export var gap: float = 0.03
 
 ## Seconds spent walking since the player last stood still.
 var _bob_time: float = 0.0
@@ -44,14 +41,11 @@ static func bob_offset(walked: float, height: float, rate: float) -> float:
 	return sin(walked * rate * TAU) * height
 
 
-# Throws the old models away and stacks one per carried item, bottom first.
+# Throws the old model away and builds one of what's held now.
 func _rebuild() -> void:
 	for child: Node in get_children():
 		remove_child(child)
 		child.queue_free()
-	var y: float = 0.0
-	for item: ItemInstance in _player.arms.get_items():
-		var model: Node3D = ItemModel.build(item)
-		model.position.y = y
-		add_child(model)
-		y += ItemModel.height_of(item) + gap
+	var item: ItemInstance = _player.arms.top()
+	if item != null:
+		add_child(ItemModel.build(item))

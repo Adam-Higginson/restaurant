@@ -4,7 +4,7 @@ extends GameTestSuite
 
 const ACTIONS: Array[StringName] = [
 	&"move_up", &"move_down", &"move_left", &"move_right",
-	&"interact", &"use_tool", &"rotate_stack",
+	&"interact", &"use_tool",
 ]
 
 
@@ -42,17 +42,24 @@ func test_one_button_does_everything() -> void:
 	assert_array(buttons).contains_exactly_in_any_order([JOY_BUTTON_X, JOY_BUTTON_A])
 
 
-func test_belt_slots_are_selectable_from_keyboard_and_controller() -> void:
-	# No single action has both: the keyboard picks slots 1 to 4 directly, and
-	# the controller cycles with the left bumper. The scroll wheel goes both ways.
-	for i: int in ToolBelt.SLOT_COUNT:
+func test_toolbar_slots_are_selectable_from_keyboard_and_controller() -> void:
+	# No single action has both: the keyboard picks slots 1 to 12 directly
+	# (1-9, 0, - and =), and the controller cycles with the bumpers. The scroll
+	# wheel goes both ways.
+	for i: int in Toolbar.SLOT_COUNT:
 		var action: StringName = StringName("select_slot_%d" % (i + 1))
 		assert_bool(_has_event(action, "InputEventKey")).override_failure_message(
 			"%s has no keyboard binding" % action
 		).is_true()
-	assert_bool(_has_event(&"select_slot_next", "InputEventJoypadButton")).is_true()
-	assert_bool(_has_event(&"select_slot_next", "InputEventMouseButton")).is_true()
-	assert_bool(_has_event(&"select_slot_previous", "InputEventMouseButton")).is_true()
+	for action: StringName in [&"select_slot_next", &"select_slot_previous"]:
+		assert_bool(_has_event(action, "InputEventJoypadButton")).is_true()
+		assert_bool(_has_event(action, "InputEventMouseButton")).is_true()
+
+
+func test_the_mouse_buttons_interact_and_use_tools() -> void:
+	# Like Stardew Valley: right click does things, left click uses the tool.
+	assert_array(_mouse_buttons(&"interact")).contains_exactly([MOUSE_BUTTON_RIGHT])
+	assert_array(_mouse_buttons(&"use_tool")).contains_exactly([MOUSE_BUTTON_LEFT])
 
 
 func test_debug_keys_are_on_the_keyboard() -> void:
@@ -82,6 +89,14 @@ func test_the_camera_turns_with_the_right_stick() -> void:
 		assert_array(bound).override_failure_message(
 			"%s isn't bound to the right stick" % action
 		).contains([axes[action]])
+
+
+func _mouse_buttons(action: StringName) -> Array[MouseButton]:
+	var buttons: Array[MouseButton] = []
+	for event: InputEvent in InputMap.action_get_events(action):
+		if event is InputEventMouseButton:
+			buttons.append((event as InputEventMouseButton).button_index)
+	return buttons
 
 
 func _has_event(action: StringName, event_class: String) -> bool:

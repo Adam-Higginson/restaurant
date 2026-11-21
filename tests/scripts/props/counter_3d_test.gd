@@ -92,6 +92,23 @@ func test_chopping_in_the_galley_while_the_ship_sails() -> void:
 	assert_object(food[0].item).is_same(CHOPPED_LETTUCE)
 
 
+func test_the_detector_prompts_for_the_board() -> void:
+	var player: Player3D = new_player_3d_on_floor()
+	_add_counter(player, BOARD)
+	var runner: GdUnitSceneRunner = scene_runner(player.get_parent())
+	var detector: InteractionDetector3D = player.get_node("InteractionDetector") 			as InteractionDetector3D
+	player.arms.add(ItemInstance.new(LETTUCE))
+	await physics_ticks(runner, 5)
+
+	assert_str(detector.interact_prompt()).is_equal("Put Lettuce on Chopping Board")
+	assert_str(detector.tool_prompt()).is_empty()
+
+	await press(runner, "interact")
+
+	assert_str(detector.interact_prompt()).is_equal("Take Lettuce")
+	assert_str(detector.tool_prompt()).is_equal("Chop")
+
+
 func _item_spot(counter: Counter3D) -> Node3D:
 	return counter.get_node("ItemSpot") as Node3D
 

@@ -55,17 +55,6 @@ static func build(instance: ItemInstance) -> Node3D:
 	return root
 
 
-## How tall a model of [param instance] is, food on a vessel included, for
-## stacking models on top of each other. The progress bar doesn't count.
-static func height_of(instance: ItemInstance) -> float:
-	if not instance.is_vessel():
-		return FOOD_SIZE
-	var height: float = vessel_height(instance.item)
-	if not instance.contents.get_contents().is_empty():
-		height += FOOD_ON_VESSEL_SIZE
-	return height
-
-
 ## How tall the vessel [param item] is without its food.
 static func vessel_height(item: Item) -> float:
 	return PLATE_HEIGHT if item.carried_whole else BOARD_SIZE.y

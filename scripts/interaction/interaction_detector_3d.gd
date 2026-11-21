@@ -47,6 +47,8 @@ func _process(delta: float) -> void:
 
 
 func _unhandled_input(event: InputEvent) -> void:
+	if not accepts_event(event, Input.mouse_mode):
+		return
 	if event.is_action_pressed("interact"):
 		get_viewport().set_input_as_handled()
 		try_interact()
@@ -63,15 +65,56 @@ func try_interact() -> bool:
 	return true
 
 
-## Uses the selected belt tool on the focused interactable. Tools only work
-## with empty arms, so this does nothing while carrying, with an empty slot
-## selected, or with nothing in reach. Returns whether the tool was used.
+## Uses a tool on the focused interactable: the selected one, or if the
+## selected slot isn't a tool, the toolbar's tool that works here (the knife
+## on a board). Does nothing with nothing in reach or no tool that fits.
+## Returns whether a tool was used.
 func try_use_tool() -> bool:
-	var tool: HandTool = _player.belt.selected_tool()
-	if tool == null or not _player.arms.is_empty() or not is_instance_valid(focused):
+	var tool: HandTool = tool_to_use()
+	if tool == null:
 		return false
 	focused.use_tool(_player, tool)
 	return true
+
+
+## The tool Use tool would use right now (see [method try_use_tool]), or null.
+func tool_to_use() -> HandTool:
+	if not is_instance_valid(focused):
+		return null
+	var selected: HandTool = _player.toolbar.selected_tool()
+	if selected != null:
+		return selected
+	for tool: HandTool in _player.toolbar.get_tools():
+		if not focused.tool_prompt(_player, tool).is_empty():
+			return tool
+	return null
+
+
+## Whether this should act on [param event], given the current
+## [param mouse_mode]. Mouse clicks only count while the mouse is captured:
+## with the cursor free, a click just captures it again (the camera rig does
+## that), so it mustn't also chop or put down.
+static func accepts_event(event: InputEvent, mouse_mode: Input.MouseMode) -> bool:
+	if event is InputEventMouseButton:
+		return mouse_mode == Input.MOUSE_MODE_CAPTURED
+	return true
+
+
+## What Interact would do right now, e.g. "Put down Tomato", or "" with
+## nothing in reach or nothing to do. The HUD prompt shows it.
+func interact_prompt() -> String:
+	if not is_instance_valid(focused):
+		return ""
+	return focused.interact_prompt(_player)
+
+
+## What Use tool would do right now, e.g. "Chop", or "" with nothing in reach
+## or no tool that does anything here.
+func tool_prompt() -> String:
+	var tool: HandTool = tool_to_use()
+	if tool == null:
+		return ""
+	return focused.tool_prompt(_player, tool)
 
 
 func _update_focus() -> void:
