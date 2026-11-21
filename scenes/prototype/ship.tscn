@@ -4,353 +4,339 @@
 [ext_resource type="Material" path="res://assets/placeholder/materials/greybox_wood.tres" id="2_nifss"]
 [ext_resource type="Material" path="res://assets/placeholder/materials/greybox_dark_wood.tres" id="3_t630l"]
 [ext_resource type="Material" path="res://assets/placeholder/materials/greybox_cloth.tres" id="4_dp3rt"]
-[ext_resource type="Script" path="res://scripts/camera/camera_zone.gd" id="5_gzone"]
 [ext_resource type="PackedScene" path="res://scenes/prototype/props/counter.tscn" id="6_counter"]
 [ext_resource type="Resource" path="res://data/items/tomato.tres" id="7_tomato"]
 [ext_resource type="Resource" path="res://data/items/chopping_board.tres" id="8_board"]
 
-[sub_resource type="BoxMesh" id="BoxMesh_ot2i1"]
-size = Vector3(8, 2.5, 24)
+[sub_resource type="BoxMesh" id="Mesh_Hull"]
+size = Vector3(12, 2.5, 30)
 
-[sub_resource type="BoxMesh" id="BoxMesh_m4c7k"]
-size = Vector3(0.3, 2.7, 24)
+[sub_resource type="BoxMesh" id="Mesh_WallPort"]
+size = Vector3(0.3, 4, 30)
 
-[sub_resource type="BoxMesh" id="BoxMesh_x06qv"]
-size = Vector3(0.3, 2.7, 24)
+[sub_resource type="BoxMesh" id="Mesh_WallStarboard"]
+size = Vector3(0.3, 4, 30)
 
-[sub_resource type="BoxMesh" id="BoxMesh_ieblm"]
-size = Vector3(7.4, 2.7, 0.3)
+[sub_resource type="BoxMesh" id="Mesh_WallBow"]
+size = Vector3(11.4, 4, 0.3)
 
-[sub_resource type="BoxMesh" id="BoxMesh_b58sy"]
-size = Vector3(7.4, 2.7, 0.3)
+[sub_resource type="BoxMesh" id="Mesh_WallStern"]
+size = Vector3(11.4, 4, 0.3)
 
-[sub_resource type="BoxMesh" id="BoxMesh_h5bjm"]
-size = Vector3(7.4, 2.7, 0.3)
+[sub_resource type="BoxMesh" id="Mesh_Bulkhead"]
+size = Vector3(11.4, 4, 0.3)
 
-[sub_resource type="BoxMesh" id="BoxMesh_0tjho"]
-size = Vector3(8, 0.3, 14.15)
+[sub_resource type="BoxMesh" id="Mesh_DeckFore"]
+size = Vector3(12, 0.3, 16.15)
 
-[sub_resource type="BoxMesh" id="BoxMesh_l1xej"]
-size = Vector3(8, 0.3, 5)
+[sub_resource type="BoxMesh" id="Mesh_DeckAft"]
+size = Vector3(12, 0.3, 6)
 
-[sub_resource type="BoxMesh" id="BoxMesh_r8ug0"]
-size = Vector3(6.1, 0.3, 4.85)
+[sub_resource type="BoxMesh" id="Mesh_DeckBesideHatch"]
+size = Vector3(9.5, 0.3, 7.85)
 
-[sub_resource type="BoxMesh" id="BoxMesh_rqp4h"]
-size = Vector3(0.3, 0.3, 4.85)
+[sub_resource type="BoxMesh" id="Mesh_DeckPortStrip"]
+size = Vector3(0.3, 0.3, 7.85)
 
-[sub_resource type="BoxMesh" id="BoxMesh_5fhot"]
-size = Vector3(0.2, 1, 24)
+[sub_resource type="BoxMesh" id="Mesh_RailPort"]
+size = Vector3(0.2, 1, 30)
 
-[sub_resource type="BoxMesh" id="BoxMesh_m2ob2"]
-size = Vector3(0.2, 1, 24)
+[sub_resource type="BoxMesh" id="Mesh_RailStarboard"]
+size = Vector3(0.2, 1, 30)
 
-[sub_resource type="BoxMesh" id="BoxMesh_4rko8"]
-size = Vector3(7.6, 1, 0.2)
+[sub_resource type="BoxMesh" id="Mesh_RailBow"]
+size = Vector3(11.6, 1, 0.2)
 
-[sub_resource type="BoxMesh" id="BoxMesh_76fso"]
-size = Vector3(7.6, 1, 0.2)
+[sub_resource type="BoxMesh" id="Mesh_RailStern"]
+size = Vector3(11.6, 1, 0.2)
 
-[sub_resource type="BoxMesh" id="BoxMesh_bcfqq"]
-size = Vector3(1.6, 0.2, 6)
+[sub_resource type="BoxMesh" id="Mesh_Ramp"]
+size = Vector3(1.8, 0.2, 8.6)
 
-[sub_resource type="CylinderMesh" id="CylinderMesh_ntk51"]
-top_radius = 0.25
-bottom_radius = 0.25
-height = 12.0
+[sub_resource type="CylinderMesh" id="Mesh_Mast"]
+top_radius = 0.3
+bottom_radius = 0.3
+height = 14
 radial_segments = 8
 rings = 1
 
-[sub_resource type="BoxMesh" id="BoxMesh_0smt7"]
-size = Vector3(6, 0.25, 0.25)
+[sub_resource type="BoxMesh" id="Mesh_Yard"]
+size = Vector3(8, 0.25, 0.25)
 
-[sub_resource type="BoxMesh" id="BoxMesh_f71y3"]
-size = Vector3(5.5, 5, 0.1)
+[sub_resource type="BoxMesh" id="Mesh_Sail"]
+size = Vector3(7.5, 6, 0.1)
 
-[sub_resource type="BoxMesh" id="BoxMesh_c8dnn"]
+[sub_resource type="BoxMesh" id="Mesh_WheelPost"]
 size = Vector3(0.3, 1.1, 0.3)
 
-[sub_resource type="CylinderMesh" id="CylinderMesh_22gjm"]
+[sub_resource type="CylinderMesh" id="Mesh_Wheel"]
 top_radius = 0.6
 bottom_radius = 0.6
 height = 0.12
 radial_segments = 8
 rings = 1
 
-[sub_resource type="BoxMesh" id="BoxMesh_4fjpf"]
+[sub_resource type="BoxMesh" id="Mesh_BunkFrame"]
 size = Vector3(0.9, 0.5, 2)
 
-[sub_resource type="BoxMesh" id="BoxMesh_5muff"]
+[sub_resource type="BoxMesh" id="Mesh_BunkMattress"]
 size = Vector3(0.8, 0.15, 1.9)
 
-[sub_resource type="BoxShape3D" id="BoxShape3D_sfhht"]
-size = Vector3(8, 2.5, 24)
+[sub_resource type="BoxShape3D" id="Shape_Hull"]
+size = Vector3(12, 2.5, 30)
 
-[sub_resource type="BoxShape3D" id="BoxShape3D_i7tnm"]
-size = Vector3(0.3, 2.7, 24)
+[sub_resource type="BoxShape3D" id="Shape_WallPort"]
+size = Vector3(0.3, 4, 30)
 
-[sub_resource type="BoxShape3D" id="BoxShape3D_0v4j1"]
-size = Vector3(0.3, 2.7, 24)
+[sub_resource type="BoxShape3D" id="Shape_WallStarboard"]
+size = Vector3(0.3, 4, 30)
 
-[sub_resource type="BoxShape3D" id="BoxShape3D_7wlhi"]
-size = Vector3(7.4, 2.7, 0.3)
+[sub_resource type="BoxShape3D" id="Shape_WallBow"]
+size = Vector3(11.4, 4, 0.3)
 
-[sub_resource type="BoxShape3D" id="BoxShape3D_a47bb"]
-size = Vector3(7.4, 2.7, 0.3)
+[sub_resource type="BoxShape3D" id="Shape_WallStern"]
+size = Vector3(11.4, 4, 0.3)
 
-[sub_resource type="BoxShape3D" id="BoxShape3D_d742f"]
-size = Vector3(7.4, 2.7, 0.3)
+[sub_resource type="BoxShape3D" id="Shape_Bulkhead"]
+size = Vector3(11.4, 4, 0.3)
 
-[sub_resource type="BoxShape3D" id="BoxShape3D_r34tl"]
-size = Vector3(8, 0.3, 14.15)
+[sub_resource type="BoxShape3D" id="Shape_DeckFore"]
+size = Vector3(12, 0.3, 16.15)
 
-[sub_resource type="BoxShape3D" id="BoxShape3D_oxge8"]
-size = Vector3(8, 0.3, 5)
+[sub_resource type="BoxShape3D" id="Shape_DeckAft"]
+size = Vector3(12, 0.3, 6)
 
-[sub_resource type="BoxShape3D" id="BoxShape3D_bp06w"]
-size = Vector3(6.1, 0.3, 4.85)
+[sub_resource type="BoxShape3D" id="Shape_DeckBesideHatch"]
+size = Vector3(9.5, 0.3, 7.85)
 
-[sub_resource type="BoxShape3D" id="BoxShape3D_udtgg"]
-size = Vector3(0.3, 0.3, 4.85)
+[sub_resource type="BoxShape3D" id="Shape_DeckPortStrip"]
+size = Vector3(0.3, 0.3, 7.85)
 
-[sub_resource type="BoxShape3D" id="BoxShape3D_g72ue"]
-size = Vector3(0.2, 1, 24)
+[sub_resource type="BoxShape3D" id="Shape_RailPort"]
+size = Vector3(0.2, 1, 30)
 
-[sub_resource type="BoxShape3D" id="BoxShape3D_6lq54"]
-size = Vector3(0.2, 1, 24)
+[sub_resource type="BoxShape3D" id="Shape_RailStarboard"]
+size = Vector3(0.2, 1, 30)
 
-[sub_resource type="BoxShape3D" id="BoxShape3D_sjpai"]
-size = Vector3(7.6, 1, 0.2)
+[sub_resource type="BoxShape3D" id="Shape_RailBow"]
+size = Vector3(11.6, 1, 0.2)
 
-[sub_resource type="BoxShape3D" id="BoxShape3D_y3epb"]
-size = Vector3(7.6, 1, 0.2)
+[sub_resource type="BoxShape3D" id="Shape_RailStern"]
+size = Vector3(11.6, 1, 0.2)
 
-[sub_resource type="BoxShape3D" id="BoxShape3D_mifx8"]
-size = Vector3(1.6, 0.2, 6)
+[sub_resource type="BoxShape3D" id="Shape_Ramp"]
+size = Vector3(1.8, 0.2, 8.6)
 
-[sub_resource type="CylinderShape3D" id="CylinderShape3D_jug0d"]
-height = 12.0
-radius = 0.25
+[sub_resource type="CylinderShape3D" id="Shape_Mast"]
+height = 14
+radius = 0.3
 
-[sub_resource type="BoxShape3D" id="BoxShape3D_rdduo"]
+[sub_resource type="BoxShape3D" id="Shape_WheelPost"]
 size = Vector3(0.3, 1.1, 0.3)
 
-[sub_resource type="BoxShape3D" id="BoxShape3D_ctpom"]
+[sub_resource type="BoxShape3D" id="Shape_BunkShape"]
 size = Vector3(0.9, 0.65, 2)
-
-[sub_resource type="BoxShape3D" id="BoxShape3D_galley"]
-size = Vector3(7.4, 2.4, 9.55)
 
 [node name="Ship" type="AnimatableBody3D" unique_id=200548129]
 script = ExtResource("1_7ykrf")
 
-[node name="Visuals" type="Node3D" parent="." unique_id=1456176985]
+[node name="Visuals" type="Node3D" parent="."]
 
-[node name="Hull" type="MeshInstance3D" parent="Visuals" unique_id=1083706938]
+[node name="Hull" type="MeshInstance3D" parent="Visuals"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.25, 0)
 material_override = ExtResource("2_nifss")
-mesh = SubResource("BoxMesh_ot2i1")
+mesh = SubResource("Mesh_Hull")
 
-[node name="WallPort" type="MeshInstance3D" parent="Visuals" unique_id=915196175]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3.85, 2.35, 0)
+[node name="WallPort" type="MeshInstance3D" parent="Visuals"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -5.85, 3, 0)
 material_override = ExtResource("2_nifss")
-mesh = SubResource("BoxMesh_m4c7k")
+mesh = SubResource("Mesh_WallPort")
 
-[node name="WallStarboard" type="MeshInstance3D" parent="Visuals" unique_id=817178926]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.85, 2.35, 0)
+[node name="WallStarboard" type="MeshInstance3D" parent="Visuals"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5.85, 3, 0)
 material_override = ExtResource("2_nifss")
-mesh = SubResource("BoxMesh_x06qv")
+mesh = SubResource("Mesh_WallStarboard")
 
-[node name="WallBow" type="MeshInstance3D" parent="Visuals" unique_id=1693135194]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.35, -11.85)
+[node name="WallBow" type="MeshInstance3D" parent="Visuals"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3, -14.85)
 material_override = ExtResource("2_nifss")
-mesh = SubResource("BoxMesh_ieblm")
+mesh = SubResource("Mesh_WallBow")
 
-[node name="WallStern" type="MeshInstance3D" parent="Visuals" unique_id=1409134680]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.35, 11.85)
+[node name="WallStern" type="MeshInstance3D" parent="Visuals"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3, 14.85)
 material_override = ExtResource("2_nifss")
-mesh = SubResource("BoxMesh_b58sy")
+mesh = SubResource("Mesh_WallStern")
 
-[node name="Bulkhead" type="MeshInstance3D" parent="Visuals" unique_id=1171643553]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.35, 2)
+[node name="Bulkhead" type="MeshInstance3D" parent="Visuals"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3, 1)
 material_override = ExtResource("2_nifss")
-mesh = SubResource("BoxMesh_h5bjm")
+mesh = SubResource("Mesh_Bulkhead")
 
-[node name="DeckFore" type="MeshInstance3D" parent="Visuals" unique_id=297361712]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3.85, -4.925)
+[node name="DeckFore" type="MeshInstance3D" parent="Visuals"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 5.15, -6.925)
 material_override = ExtResource("2_nifss")
-mesh = SubResource("BoxMesh_0tjho")
+mesh = SubResource("Mesh_DeckFore")
 
-[node name="DeckAft" type="MeshInstance3D" parent="Visuals" unique_id=2073285770]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3.85, 9.5)
+[node name="DeckAft" type="MeshInstance3D" parent="Visuals"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 5.15, 12)
 material_override = ExtResource("2_nifss")
-mesh = SubResource("BoxMesh_l1xej")
+mesh = SubResource("Mesh_DeckAft")
 
-[node name="DeckBesideHatch" type="MeshInstance3D" parent="Visuals" unique_id=515394844]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.95, 3.85, 4.575)
+[node name="DeckBesideHatch" type="MeshInstance3D" parent="Visuals"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.25, 5.15, 5.075)
 material_override = ExtResource("2_nifss")
-mesh = SubResource("BoxMesh_r8ug0")
+mesh = SubResource("Mesh_DeckBesideHatch")
 
-[node name="DeckPortStrip" type="MeshInstance3D" parent="Visuals" unique_id=1243539745]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3.85, 3.85, 4.575)
+[node name="DeckPortStrip" type="MeshInstance3D" parent="Visuals"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -5.85, 5.15, 5.075)
 material_override = ExtResource("2_nifss")
-mesh = SubResource("BoxMesh_rqp4h")
+mesh = SubResource("Mesh_DeckPortStrip")
 
-[node name="RailPort" type="MeshInstance3D" parent="Visuals" unique_id=1735488836]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3.9, 4.5, 0)
+[node name="RailPort" type="MeshInstance3D" parent="Visuals"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -5.9, 5.8, 0)
 material_override = ExtResource("3_t630l")
-mesh = SubResource("BoxMesh_5fhot")
+mesh = SubResource("Mesh_RailPort")
 
-[node name="RailStarboard" type="MeshInstance3D" parent="Visuals" unique_id=1378428237]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.9, 4.5, 0)
+[node name="RailStarboard" type="MeshInstance3D" parent="Visuals"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5.9, 5.8, 0)
 material_override = ExtResource("3_t630l")
-mesh = SubResource("BoxMesh_m2ob2")
+mesh = SubResource("Mesh_RailStarboard")
 
-[node name="RailBow" type="MeshInstance3D" parent="Visuals" unique_id=767805626]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 4.5, -11.9)
+[node name="RailBow" type="MeshInstance3D" parent="Visuals"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 5.8, -14.9)
 material_override = ExtResource("3_t630l")
-mesh = SubResource("BoxMesh_4rko8")
+mesh = SubResource("Mesh_RailBow")
 
-[node name="RailStern" type="MeshInstance3D" parent="Visuals" unique_id=1358110908]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 4.5, 11.9)
+[node name="RailStern" type="MeshInstance3D" parent="Visuals"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 5.8, 14.9)
 material_override = ExtResource("3_t630l")
-mesh = SubResource("BoxMesh_76fso")
+mesh = SubResource("Mesh_RailStern")
 
-[node name="Ramp" type="MeshInstance3D" parent="Visuals" unique_id=1649277288]
-transform = Transform3D(1, 0, 0, 0, 0.8660254, -0.5, 0, 0.5, 0.8660254, -2.9, 2.413, 4.85)
+[node name="Ramp" type="MeshInstance3D" parent="Visuals"]
+transform = Transform3D(1, 0, 0, 0, 0.866, -0.5, 0, 0.5, 0.866, -4.6, 3.0634, 4.8239)
 material_override = ExtResource("3_t630l")
-mesh = SubResource("BoxMesh_bcfqq")
+mesh = SubResource("Mesh_Ramp")
 
-[node name="Mast" type="MeshInstance3D" parent="Visuals" unique_id=279062094]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 10, -3)
+[node name="Mast" type="MeshInstance3D" parent="Visuals"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 12.3, -4)
 material_override = ExtResource("3_t630l")
-mesh = SubResource("CylinderMesh_ntk51")
+mesh = SubResource("Mesh_Mast")
 
-[node name="Yard" type="MeshInstance3D" parent="Visuals" unique_id=1821961312]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 12, -2.7)
+[node name="Yard" type="MeshInstance3D" parent="Visuals"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 16.3, -3.7)
 material_override = ExtResource("3_t630l")
-mesh = SubResource("BoxMesh_0smt7")
+mesh = SubResource("Mesh_Yard")
 
-[node name="Sail" type="MeshInstance3D" parent="Visuals" unique_id=2139745410]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 9.3, -2.7)
+[node name="Sail" type="MeshInstance3D" parent="Visuals"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 13, -3.7)
 material_override = ExtResource("4_dp3rt")
-mesh = SubResource("BoxMesh_f71y3")
+mesh = SubResource("Mesh_Sail")
 
-[node name="WheelPost" type="MeshInstance3D" parent="Visuals" unique_id=853152416]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 4.55, 9.5)
+[node name="WheelPost" type="MeshInstance3D" parent="Visuals"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 5.85, 12)
 material_override = ExtResource("3_t630l")
-mesh = SubResource("BoxMesh_c8dnn")
+mesh = SubResource("Mesh_WheelPost")
 
-[node name="Wheel" type="MeshInstance3D" parent="Visuals" unique_id=1156283967]
-transform = Transform3D(1, 0, 0, 0, -4.371139e-08, -1, 0, 1, -4.371139e-08, 0, 5.2, 9.72)
+[node name="Wheel" type="MeshInstance3D" parent="Visuals"]
+transform = Transform3D(1, 0, 0, 0, 0, -1, 0, 1, 0, 0, 6.5, 12.22)
 material_override = ExtResource("3_t630l")
-mesh = SubResource("CylinderMesh_22gjm")
+mesh = SubResource("Mesh_Wheel")
 
-[node name="BunkFrame" type="MeshInstance3D" parent="Visuals" unique_id=1587961807]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.2, 1.25, 10.5)
+[node name="BunkFrame" type="MeshInstance3D" parent="Visuals"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5.2, 1.25, 13)
 material_override = ExtResource("3_t630l")
-mesh = SubResource("BoxMesh_4fjpf")
+mesh = SubResource("Mesh_BunkFrame")
 
-[node name="BunkMattress" type="MeshInstance3D" parent="Visuals" unique_id=1318556974]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.2, 1.575, 10.5)
+[node name="BunkMattress" type="MeshInstance3D" parent="Visuals"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5.2, 1.575, 13)
 material_override = ExtResource("4_dp3rt")
-mesh = SubResource("BoxMesh_5muff")
+mesh = SubResource("Mesh_BunkMattress")
 
-[node name="GalleyLight" type="OmniLight3D" parent="Visuals" unique_id=869768320]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3.2, 7)
+[node name="GalleyLight" type="OmniLight3D" parent="Visuals"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 4.4, 8.075)
 light_color = Color(1, 0.8, 0.55, 1)
-light_energy = 1.5
+light_energy = 2.0
 shadow_enabled = true
-omni_range = 9.0
+omni_range = 13.0
 
-[node name="HullShape" type="CollisionShape3D" parent="." unique_id=1872154505]
+[node name="HullShape" type="CollisionShape3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.25, 0)
-shape = SubResource("BoxShape3D_sfhht")
+shape = SubResource("Shape_Hull")
 
-[node name="WallPortShape" type="CollisionShape3D" parent="." unique_id=207174591]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3.85, 2.35, 0)
-shape = SubResource("BoxShape3D_i7tnm")
+[node name="WallPortShape" type="CollisionShape3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -5.85, 3, 0)
+shape = SubResource("Shape_WallPort")
 
-[node name="WallStarboardShape" type="CollisionShape3D" parent="." unique_id=1508998454]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.85, 2.35, 0)
-shape = SubResource("BoxShape3D_0v4j1")
+[node name="WallStarboardShape" type="CollisionShape3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5.85, 3, 0)
+shape = SubResource("Shape_WallStarboard")
 
-[node name="WallBowShape" type="CollisionShape3D" parent="." unique_id=192180490]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.35, -11.85)
-shape = SubResource("BoxShape3D_7wlhi")
+[node name="WallBowShape" type="CollisionShape3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3, -14.85)
+shape = SubResource("Shape_WallBow")
 
-[node name="WallSternShape" type="CollisionShape3D" parent="." unique_id=759123038]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.35, 11.85)
-shape = SubResource("BoxShape3D_a47bb")
+[node name="WallSternShape" type="CollisionShape3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3, 14.85)
+shape = SubResource("Shape_WallStern")
 
-[node name="BulkheadShape" type="CollisionShape3D" parent="." unique_id=1787268897]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.35, 2)
-shape = SubResource("BoxShape3D_d742f")
+[node name="BulkheadShape" type="CollisionShape3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3, 1)
+shape = SubResource("Shape_Bulkhead")
 
-[node name="DeckForeShape" type="CollisionShape3D" parent="." unique_id=978018224]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3.85, -4.925)
-shape = SubResource("BoxShape3D_r34tl")
+[node name="DeckForeShape" type="CollisionShape3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 5.15, -6.925)
+shape = SubResource("Shape_DeckFore")
 
-[node name="DeckAftShape" type="CollisionShape3D" parent="." unique_id=1722832014]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3.85, 9.5)
-shape = SubResource("BoxShape3D_oxge8")
+[node name="DeckAftShape" type="CollisionShape3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 5.15, 12)
+shape = SubResource("Shape_DeckAft")
 
-[node name="DeckBesideHatchShape" type="CollisionShape3D" parent="." unique_id=958036891]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.95, 3.85, 4.575)
-shape = SubResource("BoxShape3D_bp06w")
+[node name="DeckBesideHatchShape" type="CollisionShape3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.25, 5.15, 5.075)
+shape = SubResource("Shape_DeckBesideHatch")
 
-[node name="DeckPortStripShape" type="CollisionShape3D" parent="." unique_id=1584440186]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3.85, 3.85, 4.575)
-shape = SubResource("BoxShape3D_udtgg")
+[node name="DeckPortStripShape" type="CollisionShape3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -5.85, 5.15, 5.075)
+shape = SubResource("Shape_DeckPortStrip")
 
-[node name="RailPortShape" type="CollisionShape3D" parent="." unique_id=1875683732]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3.9, 4.5, 0)
-shape = SubResource("BoxShape3D_g72ue")
+[node name="RailPortShape" type="CollisionShape3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -5.9, 5.8, 0)
+shape = SubResource("Shape_RailPort")
 
-[node name="RailStarboardShape" type="CollisionShape3D" parent="." unique_id=1958978623]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.9, 4.5, 0)
-shape = SubResource("BoxShape3D_6lq54")
+[node name="RailStarboardShape" type="CollisionShape3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5.9, 5.8, 0)
+shape = SubResource("Shape_RailStarboard")
 
-[node name="RailBowShape" type="CollisionShape3D" parent="." unique_id=1031649094]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 4.5, -11.9)
-shape = SubResource("BoxShape3D_sjpai")
+[node name="RailBowShape" type="CollisionShape3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 5.8, -14.9)
+shape = SubResource("Shape_RailBow")
 
-[node name="RailSternShape" type="CollisionShape3D" parent="." unique_id=38536986]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 4.5, 11.9)
-shape = SubResource("BoxShape3D_y3epb")
+[node name="RailSternShape" type="CollisionShape3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 5.8, 14.9)
+shape = SubResource("Shape_RailStern")
 
-[node name="RampShape" type="CollisionShape3D" parent="." unique_id=1192875758]
-transform = Transform3D(1, 0, 0, 0, 0.8660254, -0.5, 0, 0.5, 0.8660254, -2.9, 2.413, 4.85)
-shape = SubResource("BoxShape3D_mifx8")
+[node name="RampShape" type="CollisionShape3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 0.866, -0.5, 0, 0.5, 0.866, -4.6, 3.0634, 4.8239)
+shape = SubResource("Shape_Ramp")
 
-[node name="MastShape" type="CollisionShape3D" parent="." unique_id=425996989]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 10, -3)
-shape = SubResource("CylinderShape3D_jug0d")
+[node name="MastShape" type="CollisionShape3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 12.3, -4)
+shape = SubResource("Shape_Mast")
 
-[node name="WheelPostShape" type="CollisionShape3D" parent="." unique_id=422248001]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 4.55, 9.5)
-shape = SubResource("BoxShape3D_rdduo")
+[node name="WheelPostShape" type="CollisionShape3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 5.85, 12)
+shape = SubResource("Shape_WheelPost")
 
-[node name="BunkShape" type="CollisionShape3D" parent="." unique_id=1391400313]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.2, 1.325, 10.5)
-shape = SubResource("BoxShape3D_ctpom")
-
-[node name="GalleyCameraZone" type="Area3D" parent="."]
-script = ExtResource("5_gzone")
-
-[node name="Shape" type="CollisionShape3D" parent="GalleyCameraZone"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.2, 6.925)
-shape = SubResource("BoxShape3D_galley")
-
-[node name="Shot" type="Marker3D" parent="GalleyCameraZone"]
-transform = Transform3D(0.8502651, -0.1435271, 0.5064081, 0, 0.9621044, 0.2726813, -0.5263546, -0.2318514, 0.8180439, 2.9, 3.3, 11.3)
+[node name="BunkShape" type="CollisionShape3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5.2, 1.325, 13)
+shape = SubResource("Shape_BunkShape")
 
 [node name="Galley" type="Node3D" parent="."]
 
 [node name="Counter" parent="Galley" instance=ExtResource("6_counter")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.3, 1, 2.5)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.6, 1, 1.45)
 start_item = ExtResource("7_tomato")
 
 [node name="BoardCounter" parent="Galley" instance=ExtResource("6_counter")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.9, 1, 2.5)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.6, 1, 1.45)
 start_item = ExtResource("8_board")
