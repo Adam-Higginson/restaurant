@@ -1,0 +1,175 @@
+[gd_scene format=3]
+
+[ext_resource type="Material" path="res://assets/placeholder/materials/greybox_water.tres" id="1_xvubq"]
+[ext_resource type="Material" path="res://assets/placeholder/materials/greybox_sand.tres" id="2_dlk4p"]
+[ext_resource type="Material" path="res://assets/placeholder/materials/greybox_grass.tres" id="3_nk5mb"]
+[ext_resource type="Material" path="res://assets/placeholder/materials/greybox_dark_wood.tres" id="4_8v0wy"]
+[ext_resource type="PackedScene" path="res://scenes/prototype/ship.tscn" id="5_ahqms"]
+[ext_resource type="Script" path="res://scripts/ship/ship.gd" id="6_ivyv4"]
+
+[sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_mqylf"]
+sky_top_color = Color(0.42, 0.6, 0.78, 1)
+sky_horizon_color = Color(0.75, 0.8, 0.84, 1)
+ground_bottom_color = Color(0.2, 0.3, 0.38, 1)
+ground_horizon_color = Color(0.75, 0.8, 0.84, 1)
+
+[sub_resource type="Sky" id="Sky_fgrll"]
+sky_material = SubResource("ProceduralSkyMaterial_mqylf")
+
+[sub_resource type="Environment" id="Environment_r0v5v"]
+background_mode = 2
+sky = SubResource("Sky_fgrll")
+ambient_light_source = 3
+reflected_light_source = 2
+tonemap_mode = 2
+fog_enabled = true
+fog_light_color = Color(0.74, 0.79, 0.83, 1)
+fog_density = 0.008
+fog_sky_affect = 0.5
+
+[sub_resource type="PlaneMesh" id="PlaneMesh_ofujv"]
+size = Vector2(2000, 2000)
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_oromj"]
+top_radius = 20.0
+bottom_radius = 23.0
+height = 3.0
+radial_segments = 12
+rings = 1
+
+[sub_resource type="ConvexPolygonShape3D" id="ConvexPolygonShape3D_bu1sd"]
+points = PackedVector3Array(0, -1.5, -23, -11.5, -1.5, -19.920126, -10.752545, 0, -18.623337, 0, 1.5, -20.001175, 10.748043, 0, -18.623337, 11.5, -1.5, -19.920126, -19.920126, -1.5, -11.5, -10.000587, 1.5, -17.322044, -18.623337, 0, -10.752545, 9.996082, 1.5, -17.322044, 18.618832, 0, -10.752545, 19.915623, -1.5, -11.504503, -23, -1.5, 0, -17.322044, 1.5, -10.000587, -20.001175, 1.5, 0, 17.31754, 1.5, -10.000587, 19.99667, 1.5, 0, 23, -1.5, 0, -19.920126, -1.5, 11.495495, -18.623337, 0, 10.748043, -17.322044, 1.5, 9.996082, 17.31754, 1.5, 9.996082, 18.618832, 0, 10.748043, 19.915623, -1.5, 11.5, -11.5, -1.5, 19.915623, -10.752545, 0, 18.618832, -10.000587, 1.5, 17.31754, 9.996082, 1.5, 17.31754, 10.748043, 0, 18.618832, 11.5, -1.5, 19.915623, 0, -1.5, 23, 0, 1.5, 19.99667)
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_gj5sk"]
+top_radius = 5.0
+bottom_radius = 14.0
+height = 8.0
+radial_segments = 8
+rings = 1
+
+[sub_resource type="ConvexPolygonShape3D" id="ConvexPolygonShape3D_pusdg"]
+points = PackedVector3Array(0, -4, -14, -9.899765, -4, -9.899765, 0, 0, -9.50235, 9.897024, -4, -9.899765, -14, -4, 0, -9.50235, 0, 0, -5.001958, 4, 0, -3.5356302, 4, -3.5356302, 0, 4, -5.001958, 3.5328903, 4, -3.5356302, 4.999216, 4, 0, 14, -4, 0, -9.899765, -4, 9.897024, -3.5356302, 4, 3.5328903, 9.897024, -4, 9.897024, 3.5328903, 4, 3.5328903, 0, 4, 4.999216, 0, -4, 14)
+
+[sub_resource type="BoxMesh" id="BoxMesh_4e7xa"]
+size = Vector3(8, 0.3, 4)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_ir474"]
+size = Vector3(8, 0.3, 4)
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_6q0t0"]
+top_radius = 0.15
+bottom_radius = 0.15
+height = 3.0
+radial_segments = 6
+rings = 1
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_w0ntv"]
+top_radius = 0.15
+bottom_radius = 0.15
+height = 3.0
+radial_segments = 6
+rings = 1
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_jtgdx"]
+top_radius = 0.15
+bottom_radius = 0.15
+height = 3.0
+radial_segments = 6
+rings = 1
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_apsxi"]
+top_radius = 0.15
+bottom_radius = 0.15
+height = 3.0
+radial_segments = 6
+rings = 1
+
+[sub_resource type="Curve3D" id="Curve3D_ycoyo"]
+_data = {
+"points": PackedVector3Array(0, 0, 0, 0, 0, -25, -25, 0, 40, 0, 0, 25, 0, 0, 0, 0, 0, -40),
+"tilts": PackedFloat32Array(0, 0)
+}
+point_count = 2
+
+[node name="Sea" type="Node3D" unique_id=756368308]
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="." unique_id=1655094490]
+environment = SubResource("Environment_r0v5v")
+
+[node name="Sun" type="DirectionalLight3D" parent="." unique_id=1064959821]
+transform = Transform3D(0.81915206, 0.4055798, -0.4055798, 0, 0.70710677, 0.70710677, 0.57357645, -0.579228, 0.579228, 0, 0, 0)
+light_color = Color(1, 0.96, 0.88, 1)
+shadow_enabled = true
+directional_shadow_max_distance = 120.0
+
+[node name="Water" type="MeshInstance3D" parent="." unique_id=889213786]
+material_override = ExtResource("1_xvubq")
+mesh = SubResource("PlaneMesh_ofujv")
+
+[node name="Island" type="Node3D" parent="." unique_id=2006085588]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 30, 0, -40)
+
+[node name="Beach" type="StaticBody3D" parent="Island" unique_id=995245174]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.3, 0)
+
+[node name="Mesh" type="MeshInstance3D" parent="Island/Beach" unique_id=169728136]
+material_override = ExtResource("2_dlk4p")
+mesh = SubResource("CylinderMesh_oromj")
+
+[node name="Shape" type="CollisionShape3D" parent="Island/Beach" unique_id=1840809958]
+shape = SubResource("ConvexPolygonShape3D_bu1sd")
+
+[node name="Mound" type="StaticBody3D" parent="Island" unique_id=1181221478]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5, 5.2, -2)
+
+[node name="Mesh" type="MeshInstance3D" parent="Island/Mound" unique_id=2140367505]
+material_override = ExtResource("3_nk5mb")
+mesh = SubResource("CylinderMesh_gj5sk")
+
+[node name="Shape" type="CollisionShape3D" parent="Island/Mound" unique_id=39087648]
+shape = SubResource("ConvexPolygonShape3D_pusdg")
+
+[node name="Jetty" type="StaticBody3D" parent="Island" unique_id=178536866]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -21.75, 1.05, 0)
+
+[node name="Mesh" type="MeshInstance3D" parent="Island/Jetty" unique_id=1410648533]
+material_override = ExtResource("4_8v0wy")
+mesh = SubResource("BoxMesh_4e7xa")
+
+[node name="Shape" type="CollisionShape3D" parent="Island/Jetty" unique_id=2065856966]
+shape = SubResource("BoxShape3D_ir474")
+
+[node name="JettyPost1" type="MeshInstance3D" parent="Island" unique_id=1489364037]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -25.5, -0.3, -1.8)
+material_override = ExtResource("4_8v0wy")
+mesh = SubResource("CylinderMesh_6q0t0")
+
+[node name="JettyPost2" type="MeshInstance3D" parent="Island" unique_id=710643655]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -25.5, -0.3, 1.8)
+material_override = ExtResource("4_8v0wy")
+mesh = SubResource("CylinderMesh_w0ntv")
+
+[node name="JettyPost3" type="MeshInstance3D" parent="Island" unique_id=1333749263]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -18.5, -0.3, -1.8)
+material_override = ExtResource("4_8v0wy")
+mesh = SubResource("CylinderMesh_jtgdx")
+
+[node name="JettyPost4" type="MeshInstance3D" parent="Island" unique_id=1906831281]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -18.5, -0.3, 1.8)
+material_override = ExtResource("4_8v0wy")
+mesh = SubResource("CylinderMesh_apsxi")
+
+[node name="MooringPoint" type="Marker3D" parent="." unique_id=174792813]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -40)
+
+[node name="Route" type="Path3D" parent="." unique_id=931347176]
+curve = SubResource("Curve3D_ycoyo")
+
+[node name="Ship" type="AnimatableBody3D" parent="." unique_id=200548129 node_paths=PackedStringArray("route") instance=ExtResource("5_ahqms")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -25, 0, 40)
+script = ExtResource("6_ivyv4")
+route = NodePath("../Route")
+
+[node name="DeckCamera" type="Camera3D" parent="Ship" unique_id=158847941]
+transform = Transform3D(1, 0, 0, 0, 0.95105654, 0.309017, 0, -0.309017, 0.95105654, 0, 9, 20)
+current = true
