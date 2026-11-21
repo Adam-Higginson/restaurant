@@ -1,16 +1,17 @@
-# Restaurant game
+# Ship adventure game (repo name: restaurant)
 
 ## Stack
 - Godot 4.7, GDScript only (no C#).
-- Use Godot 4 APIs only: CharacterBody2D, `await`, TileMapLayer. Never Godot 3 APIs (KinematicBody2D, `yield`, TileMap).
+- Use Godot 4 APIs only: CharacterBody3D, `await`, AnimatableBody3D. Never Godot 3 APIs (KinematicBody, `yield`).
 - Typed GDScript everywhere: type every variable, parameter and return value (enforced as errors; see Code style).
-- Compatibility renderer. 2D top-down pixel art, 16px tiles (change if the art pack differs), nearest-neighbour filtering.
+- 3D, Forward+ renderer (switched from Compatibility in #61). Low-poly models with small blocky textures and nearest-neighbour filtering, lit with modern lighting (N64/OoT style, high resolution).
+- The 2D world layer (2D player, props, customers, tilemap) is legacy, being replaced by the 3D prototype in `scenes/prototype/`. Don't extend it.
 - Godot binary: `C:\Godot\godot_console.exe`
 
 ## The game
-A cosy top-down restaurant game in the spirit of Stardew Valley. The player controls a single character who runs a small restaurant: buys ingredients, cooks, serves customers and earns money. Later: hiring staff, and regulars the player builds relationships with. Not combat-focused.
+A cosy 3D adventure in the spirit of Ocarina of Time. A lantern spirit rescues the player at sea and they join a ship's crew sailing between fog-wrapped islands, searching for a home they remember only as tastes and sounds. Ashore: exploring, gathering, puzzles and OoT-style duels against fog-touched creatures. Aboard: the ship is a safe hearth, and the galley, where you cook for the crew, is its heart. The hands-on cooking system carries over from the earlier restaurant design.
 
-Use placeholder coloured shapes until real art is added.
+Use greybox placeholder shapes until real art is added.
 
 The full design lives in `docs/GDD.md`. Read it before starting a gameplay task, and keep it up to date when the design changes.
 
@@ -41,7 +42,7 @@ The full design lives in `docs/GDD.md`. Read it before starting a gameplay task,
 - Don't add new issues to the board yourself. Suggest follow-ups and bugs to the user instead.
 - Useful commands:
   - List items: `gh project item-list 1 --owner Adam-Higginson`
-  - New issues in the repo are added to the board as Todo automatically (the board's auto-add workflow). MVP issues use the `MVP` milestone.
+  - New issues in the repo are added to the board as Todo automatically (the board's auto-add workflow). Use the `Prototype` milestone (greybox 3D prototype) or `MVP: Prologue`.
   - Set status: `gh project item-edit --project-id PVT_kwHOABMmCs4Blqh2 --id <item-id> --field-id PVTSSF_lAHOABMmCs4Blqh2zhkWd0E --single-select-option-id <option>`
     - Options: Todo `f75ad846`, In Progress `47fc9ee4`, In Review `cb535e89`, Done `98236657`
 
@@ -55,6 +56,13 @@ The full design lives in `docs/GDD.md`. Read it before starting a gameplay task,
   - **What changed:** the files and behaviour, in plain terms.
   - **How to test it manually:** numbered steps in the game or editor (e.g. "Press F5, walk into a wall, you should stop"), what they should see, and anything not testable yet.
   Put the same testing steps in the PR body.
+
+## Keeping the user in the loop
+Claude writes most of the code. The user is learning Godot and wants to understand everything that goes in, so every code PR includes:
+- **How it works** (in the PR body): the scene tree, which script does what, how signals and data flow, and any new Godot concept in plain terms.
+- **An editor tour** (in the test steps): click-by-click where to look. Open this scene, select this node, see this Inspector setting, watch the Remote tree while it runs.
+- **One "your turn" piece:** a small, well-scoped part (a tuning value, a short function or a test) left as a `# TODO(your turn):` with hints. When the user says "check", read their change, run the relevant tests, and list issues (bugs first, then style).
+- **Glossary updates:** add each new Godot concept to `docs/godot-notes.md` (what it is in two lines, and where it's used in our code).
 
 ## Testing
 - Unit tests use the gdUnit4 plugin (`addons/gdUnit4`, v6.2.1). Don't edit files in `addons/`.
