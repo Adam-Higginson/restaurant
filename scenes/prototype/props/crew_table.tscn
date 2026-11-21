@@ -1,0 +1,109 @@
+[gd_scene format=3]
+
+[ext_resource type="Material" path="res://assets/placeholder/materials/greybox_dark_wood.tres" id="1_wood"]
+[ext_resource type="Script" path="res://scripts/art/third_party_model.gd" id="2_model"]
+
+[sub_resource type="BoxMesh" id="Mesh_Top"]
+size = Vector3(2, 0.06, 1.1)
+
+[sub_resource type="BoxMesh" id="Mesh_Base"]
+size = Vector3(1.7, 0.7, 0.8)
+
+[sub_resource type="BoxMesh" id="Mesh_Seat"]
+size = Vector3(0.45, 0.48, 0.45)
+
+[sub_resource type="BoxShape3D" id="Shape_Table"]
+size = Vector3(2, 0.76, 1.1)
+
+[node name="CrewTable" type="StaticBody3D"]
+
+[node name="TopStandIn" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.73, 0)
+material_override = ExtResource("1_wood")
+mesh = SubResource("Mesh_Top")
+
+[node name="BaseStandIn" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.35, 0)
+material_override = ExtResource("1_wood")
+mesh = SubResource("Mesh_Base")
+
+[node name="Table" type="Node3D" parent="." node_paths=PackedStringArray("stand_ins")]
+script = ExtResource("2_model")
+path = "res://assets/third_party/kaykit_restaurant/Assets/gltf/kitchentable_A_large.gltf"
+fit_size = Vector3(2, 0.76, 1.1)
+stretch = true
+stand_ins = [NodePath("../TopStandIn"), NodePath("../BaseStandIn")]
+
+[node name="SeatStandIn1" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.5, 0.24, 0.85)
+material_override = ExtResource("1_wood")
+mesh = SubResource("Mesh_Seat")
+
+[node name="SeatStandIn2" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.5, 0.24, 0.85)
+material_override = ExtResource("1_wood")
+mesh = SubResource("Mesh_Seat")
+
+[node name="SeatStandIn3" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.5, 0.24, -0.85)
+material_override = ExtResource("1_wood")
+mesh = SubResource("Mesh_Seat")
+
+[node name="SeatStandIn4" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.5, 0.24, -0.85)
+material_override = ExtResource("1_wood")
+mesh = SubResource("Mesh_Seat")
+
+[node name="Chair1" type="Node3D" parent="." node_paths=PackedStringArray("stand_ins")]
+transform = Transform3D(-1, 0, 0, 0, 1, 0, 0, 0, -1, -0.5, 0, 0.85)
+script = ExtResource("2_model")
+path = "res://assets/third_party/kaykit_furniture/Assets/gltf/chair_A_wood.gltf"
+fit_size = Vector3(0.45, 0.95, 0.5)
+stretch = true
+stand_ins = [NodePath("../SeatStandIn1")]
+
+[node name="Chair2" type="Node3D" parent="." node_paths=PackedStringArray("stand_ins")]
+transform = Transform3D(-1, 0, 0, 0, 1, 0, 0, 0, -1, 0.5, 0, 0.85)
+script = ExtResource("2_model")
+path = "res://assets/third_party/kaykit_furniture/Assets/gltf/chair_A_wood.gltf"
+fit_size = Vector3(0.45, 0.95, 0.5)
+stretch = true
+stand_ins = [NodePath("../SeatStandIn2")]
+
+[node name="Chair3" type="Node3D" parent="." node_paths=PackedStringArray("stand_ins")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.5, 0, -0.85)
+script = ExtResource("2_model")
+path = "res://assets/third_party/kaykit_furniture/Assets/gltf/chair_A_wood.gltf"
+fit_size = Vector3(0.45, 0.95, 0.5)
+stretch = true
+stand_ins = [NodePath("../SeatStandIn3")]
+
+[node name="Chair4" type="Node3D" parent="." node_paths=PackedStringArray("stand_ins")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.5, 0, -0.85)
+script = ExtResource("2_model")
+path = "res://assets/third_party/kaykit_furniture/Assets/gltf/chair_A_wood.gltf"
+fit_size = Vector3(0.45, 0.95, 0.5)
+stretch = true
+stand_ins = [NodePath("../SeatStandIn4")]
+
+[node name="MugRed" type="Node3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.55, 0.76, 0.25)
+script = ExtResource("2_model")
+path = "res://assets/third_party/tiny_treats_charming_kitchen/Assets/gltf/mug_red.gltf"
+fit_size = Vector3(0.13, 0.11, 0.13)
+
+[node name="MugBlue" type="Node3D" parent="."]
+transform = Transform3D(0.7, 0, 0.7, 0, 1, 0, -0.7, 0, 0.7, 0.45, 0.76, -0.3)
+script = ExtResource("2_model")
+path = "res://assets/third_party/tiny_treats_charming_kitchen/Assets/gltf/mug_blue.gltf"
+fit_size = Vector3(0.13, 0.11, 0.13)
+
+[node name="Bowl" type="Node3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.05, 0.76, 0.05)
+script = ExtResource("2_model")
+path = "res://assets/third_party/kaykit_restaurant/Assets/gltf/stew_bowl.gltf"
+fit_size = Vector3(0.3, 0.15, 0.3)
+
+[node name="Shape" type="CollisionShape3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.38, 0)
+shape = SubResource("Shape_Table")

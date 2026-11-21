@@ -15,11 +15,14 @@ var _noise: FastNoiseLite = FastNoiseLite.new()
 var _time: float = 0.0
 
 
-func _ready() -> void:
+func _init() -> void:
 	# Each fire wavers its own way.
 	_noise.seed = randi()
 	_noise.frequency = 1.0
 	_noise.fractal_octaves = 3
+
+
+func _ready() -> void:
 	light_energy = energy_at(0.0)
 
 

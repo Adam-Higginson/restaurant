@@ -4,6 +4,10 @@
 [ext_resource type="Material" path="res://assets/placeholder/materials/galley_wood.tres" id="2_nifss"]
 [ext_resource type="Material" path="res://assets/placeholder/materials/galley_floor.tres" id="17_floor"]
 [ext_resource type="PackedScene" path="res://scenes/prototype/props/galley_stove.tscn" id="18_stove"]
+[ext_resource type="PackedScene" path="res://scenes/prototype/props/crew_table.tscn" id="19_table"]
+[ext_resource type="Script" path="res://scripts/art/third_party_model.gd" id="20_model"]
+[ext_resource type="Material" path="res://assets/placeholder/materials/brass.tres" id="21_brass"]
+[ext_resource type="Shader" path="res://shaders/rain_glass.gdshader" id="22_glass"]
 [ext_resource type="Material" path="res://assets/placeholder/materials/greybox_dark_wood.tres" id="3_t630l"]
 [ext_resource type="Material" path="res://assets/placeholder/materials/greybox_cloth.tres" id="4_dp3rt"]
 [ext_resource type="PackedScene" path="res://scenes/prototype/props/counter.tscn" id="6_counter"]
@@ -168,6 +172,25 @@ size = Vector3(1.25, 0.06, 0.06)
 [sub_resource type="BoxMesh" id="Mesh_GalleyFloor"]
 size = Vector3(11.4, 0.02, 13.7)
 
+[sub_resource type="BoxMesh" id="Mesh_BeamShort"]
+size = Vector3(9.2, 0.18, 0.22)
+
+[sub_resource type="BoxMesh" id="Mesh_BeamLong"]
+size = Vector3(11.4, 0.18, 0.22)
+
+[sub_resource type="TorusMesh" id="Mesh_PortholeRim"]
+inner_radius = 0.27
+outer_radius = 0.36
+rings = 16
+ring_segments = 8
+
+[sub_resource type="QuadMesh" id="Mesh_PortholeGlass"]
+size = Vector2(0.56, 0.56)
+
+[sub_resource type="ShaderMaterial" id="Material_PortholeGlass"]
+render_priority = 0
+shader = ExtResource("22_glass")
+
 [sub_resource type="BoxMesh" id="Mesh_Cord"]
 size = Vector3(0.025, 0.45, 0.025)
 
@@ -200,10 +223,25 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -5.85, 3, 0)
 material_override = ExtResource("2_nifss")
 mesh = SubResource("Mesh_WallPort")
 
-[node name="WallStarboard" type="MeshInstance3D" parent="Visuals"]
+[node name="WallStarboard" type="CSGBox3D" parent="Visuals"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5.85, 3, 0)
-material_override = ExtResource("2_nifss")
-mesh = SubResource("Mesh_WallStarboard")
+size = Vector3(0.3, 4, 30)
+material = ExtResource("2_nifss")
+
+[node name="PortholeByStove" type="CSGCylinder3D" parent="Visuals/WallStarboard"]
+transform = Transform3D(0, -1, 0, 1, 0, 0, 0, 0, 1, 0, -0.2, 4.3)
+operation = 2
+radius = 0.28
+height = 0.6
+sides = 16
+
+[node name="PortholeByTable" type="CSGCylinder3D" parent="Visuals/WallStarboard"]
+transform = Transform3D(0, -1, 0, 1, 0, 0, 0, 0, 1, 0, -0.2, 10.2)
+operation = 2
+radius = 0.28
+height = 0.6
+sides = 16
+
 
 [node name="WallBow" type="MeshInstance3D" parent="Visuals"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3, -14.85)
@@ -300,12 +338,97 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5.2, 1.575, 13)
 material_override = ExtResource("4_dp3rt")
 mesh = SubResource("Mesh_BunkMattress")
 
-[node name="GalleyLight" type="OmniLight3D" parent="Visuals"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 4.4, 8.075)
-light_color = Color(1, 0.8, 0.55, 1)
-light_energy = 2.0
+[node name="BeamFore" type="MeshInstance3D" parent="Visuals"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.1, 4.9, 3.0)
+material_override = ExtResource("3_t630l")
+mesh = SubResource("Mesh_BeamShort")
+
+[node name="BeamMid" type="MeshInstance3D" parent="Visuals"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.1, 4.9, 6.5)
+material_override = ExtResource("3_t630l")
+mesh = SubResource("Mesh_BeamShort")
+
+[node name="BeamAft" type="MeshInstance3D" parent="Visuals"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 4.9, 9.8)
+material_override = ExtResource("3_t630l")
+mesh = SubResource("Mesh_BeamLong")
+
+[node name="BeamStern" type="MeshInstance3D" parent="Visuals"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 4.9, 13.3)
+material_override = ExtResource("3_t630l")
+mesh = SubResource("Mesh_BeamLong")
+
+[node name="GalleyLanternFore" type="Node3D" parent="Visuals"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 4.8, 3.0)
+script = ExtResource("12_swing")
+swing_degrees = 3.0
+period = 4.2
+phase = 0.2
+
+[node name="Cord" type="MeshInstance3D" parent="Visuals/GalleyLanternFore"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.225, 0)
+material_override = ExtResource("3_t630l")
+mesh = SubResource("Mesh_Cord")
+
+[node name="Glow" type="MeshInstance3D" parent="Visuals/GalleyLanternFore"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.6, 0)
+mesh = SubResource("Mesh_Lantern")
+surface_material_override/0 = SubResource("Material_LanternGlow")
+cast_shadow = 0
+
+[node name="Light" type="OmniLight3D" parent="Visuals/GalleyLanternFore"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.6, 0)
+light_color = Color(1, 0.7, 0.42, 1)
+light_energy = 1.2
 shadow_enabled = true
-omni_range = 13.0
+omni_range = 7.0
+
+[node name="GalleyLanternAft" type="Node3D" parent="Visuals"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.3, 4.8, 9.8)
+script = ExtResource("12_swing")
+swing_degrees = 3.0
+period = 4.2
+phase = 0.6
+
+[node name="Cord" type="MeshInstance3D" parent="Visuals/GalleyLanternAft"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.225, 0)
+material_override = ExtResource("3_t630l")
+mesh = SubResource("Mesh_Cord")
+
+[node name="Glow" type="MeshInstance3D" parent="Visuals/GalleyLanternAft"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.6, 0)
+mesh = SubResource("Mesh_Lantern")
+surface_material_override/0 = SubResource("Material_LanternGlow")
+cast_shadow = 0
+
+[node name="Light" type="OmniLight3D" parent="Visuals/GalleyLanternAft"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.6, 0)
+light_color = Color(1, 0.7, 0.42, 1)
+light_energy = 1.2
+shadow_enabled = true
+omni_range = 7.0
+
+[node name="PortholeByStoveRim" type="MeshInstance3D" parent="Visuals"]
+transform = Transform3D(0, -1, 0, 1, 0, 0, 0, 0, 1, 5.69, 2.8, 4.3)
+material_override = ExtResource("21_brass")
+mesh = SubResource("Mesh_PortholeRim")
+
+[node name="PortholeByStoveGlass" type="MeshInstance3D" parent="Visuals"]
+transform = Transform3D(0, 0, -1, 0, 1, 0, 1, 0, 0, 5.78, 2.8, 4.3)
+mesh = SubResource("Mesh_PortholeGlass")
+surface_material_override/0 = SubResource("Material_PortholeGlass")
+cast_shadow = 0
+
+[node name="PortholeByTableRim" type="MeshInstance3D" parent="Visuals"]
+transform = Transform3D(0, -1, 0, 1, 0, 0, 0, 0, 1, 5.69, 2.8, 10.2)
+material_override = ExtResource("21_brass")
+mesh = SubResource("Mesh_PortholeRim")
+
+[node name="PortholeByTableGlass" type="MeshInstance3D" parent="Visuals"]
+transform = Transform3D(0, 0, -1, 0, 1, 0, 1, 0, 0, 5.78, 2.8, 10.2)
+mesh = SubResource("Mesh_PortholeGlass")
+surface_material_override/0 = SubResource("Material_PortholeGlass")
+cast_shadow = 0
 
 [node name="MastLanternArm" type="MeshInstance3D" parent="Visuals"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.45, 8.23, -4)
@@ -543,6 +666,77 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.65, 1, 1.45)
 
 [node name="Stove" parent="Galley" instance=ExtResource("18_stove")]
 transform = Transform3D(0, 0, -1, 0, 1, 0, 1, 0, 0, 5.2, 1, 6)
+
+[node name="CrewTable" parent="Galley" instance=ExtResource("19_table")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.3, 1, 9.8)
+
+[node name="Model" type="Node3D" parent="Galley/Counter" node_paths=PackedStringArray("stand_ins")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)
+script = ExtResource("20_model")
+path = "res://assets/third_party/tiny_treats_charming_kitchen/Assets/gltf/countertop_single.gltf"
+fit_size = Vector3(1.1, 0.9, 0.6)
+stretch = true
+stand_ins = [NodePath("../Mesh")]
+
+[node name="Model" type="Node3D" parent="Galley/BoardCounter" node_paths=PackedStringArray("stand_ins")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)
+script = ExtResource("20_model")
+path = "res://assets/third_party/tiny_treats_charming_kitchen/Assets/gltf/countertop_single.gltf"
+fit_size = Vector3(1.1, 0.9, 0.6)
+stretch = true
+stand_ins = [NodePath("../Mesh")]
+
+[node name="Model" type="Node3D" parent="Galley/PlateRack" node_paths=PackedStringArray("stand_ins")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)
+script = ExtResource("20_model")
+path = "res://assets/third_party/tiny_treats_charming_kitchen/Assets/gltf/countertop_single.gltf"
+fit_size = Vector3(1.1, 0.9, 0.6)
+stretch = true
+stand_ins = [NodePath("../Mesh"), NodePath("../Back")]
+
+[node name="Plates" type="Node3D" parent="Galley/PlateRack"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.9, -0.05)
+script = ExtResource("20_model")
+path = "res://assets/third_party/kaykit_restaurant/Assets/gltf/dishrack_plates.gltf"
+fit_size = Vector3(0.7, 0.6, 0.5)
+
+[node name="Model" type="Node3D" parent="Galley/Pantry" node_paths=PackedStringArray("stand_ins")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)
+script = ExtResource("20_model")
+path = "res://assets/third_party/kaykit_furniture/Assets/gltf/cabinet_medium.gltf"
+fit_size = Vector3(1.1, 1.8, 0.6)
+stretch = true
+stand_ins = [NodePath("../Mesh"), NodePath("../Doors")]
+
+[node name="JarShelf" type="Node3D" parent="Galley"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3.0, 1.33)
+script = ExtResource("20_model")
+path = "res://assets/third_party/kaykit_furniture/Assets/gltf/shelf_B_large_decorated.gltf"
+fit_size = Vector3(2.2, 0.9, 0.35)
+
+[node name="KnifeRack" type="Node3D" parent="Galley"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.55, 2.3, 1.2)
+script = ExtResource("20_model")
+path = "res://assets/third_party/tiny_treats_charming_kitchen/Assets/gltf/wall_knife_rack.gltf"
+fit_size = Vector3(0.6, 0.4, 0.08)
+
+[node name="CrateCarrots" type="Node3D" parent="Galley"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4.7, 1, 1.75)
+script = ExtResource("20_model")
+path = "res://assets/third_party/kaykit_restaurant/Assets/gltf/crate_carrots.gltf"
+fit_size = Vector3(0.6, 0.3, 0.6)
+
+[node name="CrateTomatoes" type="Node3D" parent="Galley"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4.7, 1.29, 1.75)
+script = ExtResource("20_model")
+path = "res://assets/third_party/kaykit_restaurant/Assets/gltf/crate_tomatoes.gltf"
+fit_size = Vector3(0.6, 0.3, 0.6)
+
+[node name="CratePotatoes" type="Node3D" parent="Galley"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4.0, 1, 1.75)
+script = ExtResource("20_model")
+path = "res://assets/third_party/kaykit_restaurant/Assets/gltf/crate_potatoes.gltf"
+fit_size = Vector3(0.6, 0.3, 0.6)
 
 [node name="Shelter" type="Area3D" parent="."]
 script = ExtResource("11_shelter")
