@@ -6,6 +6,7 @@
 [ext_resource type="Material" path="res://assets/placeholder/materials/greybox_dark_wood.tres" id="4_8v0wy"]
 [ext_resource type="PackedScene" path="res://scenes/prototype/ship.tscn" id="5_ahqms"]
 [ext_resource type="Script" path="res://scripts/ship/ship.gd" id="6_ivyv4"]
+[ext_resource type="PackedScene" path="res://scenes/prototype/player.tscn" id="7_p3dpl"]
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_mqylf"]
 sky_top_color = Color(0.42, 0.6, 0.78, 1)
@@ -170,6 +171,5 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -25, 0, 40)
 script = ExtResource("6_ivyv4")
 route = NodePath("../Route")
 
-[node name="DeckCamera" type="Camera3D" parent="Ship" unique_id=158847941]
-transform = Transform3D(1, 0, 0, 0, 0.95105654, 0.309017, 0, -0.309017, 0.95105654, 0, 9, 20)
-current = true
+[node name="Player" parent="." instance=ExtResource("7_p3dpl")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -23.5, 4.05, 48)

@@ -1,0 +1,85 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://scripts/player/player_3d.gd" id="1_ydnt8"]
+[ext_resource type="Material" path="res://assets/placeholder/materials/greybox_player.tres" id="2_y5ox6"]
+[ext_resource type="Material" path="res://assets/placeholder/materials/greybox_dark_wood.tres" id="3_g4u1m"]
+[ext_resource type="Material" path="res://assets/placeholder/materials/greybox_wood.tres" id="4_ttec1"]
+[ext_resource type="Script" path="res://scripts/player/camera_rig.gd" id="5_qlp8k"]
+
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_raosb"]
+radius = 0.4
+height = 1.8
+
+[sub_resource type="CapsuleMesh" id="CapsuleMesh_ptnd0"]
+radius = 0.38
+height = 1.3
+radial_segments = 8
+rings = 2
+
+[sub_resource type="SphereMesh" id="SphereMesh_uxjgj"]
+radius = 0.3
+height = 0.6
+radial_segments = 8
+rings = 4
+
+[sub_resource type="BoxMesh" id="BoxMesh_fauql"]
+size = Vector3(0.08, 0.12, 0.06)
+
+[sub_resource type="BoxMesh" id="BoxMesh_7uydm"]
+size = Vector3(0.14, 0.3, 0.36)
+
+[sub_resource type="SphereShape3D" id="SphereShape3D_jaqp2"]
+radius = 0.25
+
+[node name="Player" type="CharacterBody3D" unique_id=1530964768]
+floor_constant_speed = true
+floor_snap_length = 0.2
+script = ExtResource("1_ydnt8")
+
+[node name="Shape" type="CollisionShape3D" parent="." unique_id=1347474155]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.9, 0)
+shape = SubResource("CapsuleShape3D_raosb")
+
+[node name="Model" type="Node3D" parent="." unique_id=1444130212]
+
+[node name="Body" type="MeshInstance3D" parent="Model" unique_id=944846714]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.65, 0)
+material_override = ExtResource("2_y5ox6")
+mesh = SubResource("CapsuleMesh_ptnd0")
+
+[node name="Head" type="MeshInstance3D" parent="Model" unique_id=1979511548]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.45, 0)
+material_override = ExtResource("2_y5ox6")
+mesh = SubResource("SphereMesh_uxjgj")
+
+[node name="EyeLeft" type="MeshInstance3D" parent="Model" unique_id=560353704]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.11, 1.5, -0.27)
+material_override = ExtResource("3_g4u1m")
+mesh = SubResource("BoxMesh_fauql")
+
+[node name="EyeRight" type="MeshInstance3D" parent="Model" unique_id=77804662]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.11, 1.5, -0.27)
+material_override = ExtResource("3_g4u1m")
+mesh = SubResource("BoxMesh_fauql")
+
+[node name="Satchel" type="MeshInstance3D" parent="Model" unique_id=1158780102]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.42, 0.7, 0)
+material_override = ExtResource("4_ttec1")
+mesh = SubResource("BoxMesh_7uydm")
+
+[node name="CameraRig" type="Node3D" parent="." unique_id=21507693]
+physics_interpolation_mode = 2
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.5, 0)
+top_level = true
+script = ExtResource("5_qlp8k")
+
+[node name="Pitch" type="Node3D" parent="CameraRig" unique_id=1220587874]
+transform = Transform3D(1, 0, 0, 0, 0.9396926, 0.34202012, 0, -0.34202012, 0.9396926, 0, 0, 0)
+
+[node name="SpringArm3D" type="SpringArm3D" parent="CameraRig/Pitch" unique_id=242309488]
+shape = SubResource("SphereShape3D_jaqp2")
+spring_length = 5.0
+margin = 0.1
+
+[node name="Camera3D" type="Camera3D" parent="CameraRig/Pitch/SpringArm3D" unique_id=86618845]
+current = true
