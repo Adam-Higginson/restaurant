@@ -48,6 +48,8 @@ uniform float plank_tint : hint_range(0.0, 0.5) = 0.14;
 uniform float plank_warp : hint_range(0.0, 0.2) = 0.05;
 // How far in from a plank's edge it starts rounding down to the seam, in metres.
 uniform float bevel : hint_range(0.0, 0.1) = 0.03;
+// How much lighter the worn edges of boards are, rubbed by boots and hands.
+uniform float wear : hint_range(0.0, 1.0) = 0.25;
 
 group_uniforms wet;
 // How much the weather reaches it: 1 out in the rain, 0 indoors (the galley
@@ -216,6 +218,11 @@ void fragment() {
 		float across = fract(board.x / width);
 		float to_edge = min(across, 1.0 - across) * width;
 		float round_off = 1.0 - smoothstep(0.0, bevel, to_edge);
+		// Lived in: each board darkens or lightens along its length, and its
+		// long edges are worn lighter.
+		float along_board = fract(board.y / plank_length + hash3(vec2(floor(board.x / width), 0.0)).x);
+		shade *= 1.0 + plank_tint * 0.8 * (along_board - 0.5) * (h.y > 0.5 ? 1.0 : -1.0);
+		shade *= 1.0 + wear * (1.0 - smoothstep(0.0, bevel * 2.5, to_edge));
 		lean.x += (across < 0.5 ? -1.0 : 1.0) * round_off * 0.7;
 	}
 

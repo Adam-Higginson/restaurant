@@ -41,34 +41,34 @@ size = Vector3(0.1, 0.4, 0.3)
 size = Vector3(0.1, 0.4, 0.3)
 
 [sub_resource type="CylinderMesh" id="R13"]
-top_radius = 0.055
-bottom_radius = 0.06
-height = 0.14
+top_radius = 0.08
+bottom_radius = 0.085
+height = 0.2
 radial_segments = 8
 rings = 1
 
 [sub_resource type="BoxMesh" id="R14"]
-size = Vector3(0.02, 0.09, 0.05)
+size = Vector3(0.03, 0.13, 0.07)
 
 [sub_resource type="CylinderMesh" id="R15"]
-top_radius = 0.055
-bottom_radius = 0.06
-height = 0.14
+top_radius = 0.08
+bottom_radius = 0.085
+height = 0.2
 radial_segments = 8
 rings = 1
 
 [sub_resource type="BoxMesh" id="R16"]
-size = Vector3(0.02, 0.09, 0.05)
+size = Vector3(0.03, 0.13, 0.07)
 
 [sub_resource type="CylinderMesh" id="R17"]
-top_radius = 0.055
-bottom_radius = 0.06
-height = 0.14
+top_radius = 0.08
+bottom_radius = 0.085
+height = 0.2
 radial_segments = 8
 rings = 1
 
 [sub_resource type="BoxMesh" id="R18"]
-size = Vector3(0.02, 0.09, 0.05)
+size = Vector3(0.03, 0.13, 0.07)
 
 [sub_resource type="BoxShape3D" id="R19"]
 size = Vector3(2.0, 0.82, 1.0)
@@ -78,6 +78,9 @@ size = Vector3(1.8, 0.48, 0.34)
 
 [sub_resource type="BoxShape3D" id="R21"]
 size = Vector3(1.8, 0.48, 0.34)
+
+[sub_resource type="BoxMesh" id="Spoon"]
+size = Vector3(0.03, 0.03, 0.3)
 
 [node name="CrewTable" type="StaticBody3D"]
 
@@ -145,7 +148,7 @@ mesh = SubResource("R12")
 transform = Transform3D(0.9553, 0, 0.2955, 0, 1, 0, -0.2955, 0, 0.9553, 0.05, 0.82, 0.05)
 script = ExtResource("3_x")
 path = "res://assets/third_party/kaykit_restaurant/Assets/gltf/food_ingredient_bun.gltf"
-fit_size = Vector3(0.34, 0.16, 0.24)
+fit_size = Vector3(0.5, 0.24, 0.34)
 grain_metres = 0.12
 stretch = true
 
@@ -153,45 +156,50 @@ stretch = true
 transform = Transform3D(0.6967, 0, 0.7174, 0, 1, 0, -0.7174, 0, 0.6967, 0.35, 0.82, 0.2)
 script = ExtResource("3_x")
 path = "res://assets/third_party/kaykit_restaurant/Assets/gltf/food_ingredient_cheese.gltf"
-fit_size = Vector3(0.16, 0.1, 0.16)
+fit_size = Vector3(0.26, 0.16, 0.26)
 grain_metres = 0.1
 
 [node name="Bowl" type="Node3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.4, 0.82, -0.1)
 script = ExtResource("3_x")
 path = "res://assets/third_party/kaykit_restaurant/Assets/gltf/stew_bowl.gltf"
-fit_size = Vector3(0.26, 0.12, 0.26)
+fit_size = Vector3(0.38, 0.16, 0.38)
 grain_metres = 0.12
 
 [node name="Tankard1" type="MeshInstance3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.75, 0.89, 0.25)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.75, 0.92, 0.25)
 material_override = ExtResource("1_x")
 mesh = SubResource("R13")
 
 [node name="Tankard1Handle" type="MeshInstance3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.68, 0.89, 0.25)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.65, 0.92, 0.25)
 material_override = ExtResource("2_x")
 mesh = SubResource("R14")
 
 [node name="Tankard2" type="MeshInstance3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.7, 0.89, -0.25)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.7, 0.92, -0.25)
 material_override = ExtResource("1_x")
 mesh = SubResource("R15")
 
 [node name="Tankard2Handle" type="MeshInstance3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.77, 0.89, -0.25)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.8, 0.92, -0.25)
 material_override = ExtResource("2_x")
 mesh = SubResource("R16")
 
 [node name="Tankard3" type="MeshInstance3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.15, 0.89, -0.3)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.15, 0.92, -0.3)
 material_override = ExtResource("1_x")
 mesh = SubResource("R17")
 
 [node name="Tankard3Handle" type="MeshInstance3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.22, 0.89, -0.3)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.25, 0.92, -0.3)
 material_override = ExtResource("2_x")
 mesh = SubResource("R18")
+
+[node name="Spoon" type="MeshInstance3D" parent="."]
+transform = Transform3D(0.8776, 0.2707, 0.3957, 0, 0.8253, -0.5646, -0.4794, 0.4955, 0.7243, -0.4, 0.98, -0.02)
+material_override = ExtResource("2_x")
+mesh = SubResource("Spoon")
 
 [node name="Shape" type="CollisionShape3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.41, 0)

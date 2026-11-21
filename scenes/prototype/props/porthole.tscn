@@ -95,13 +95,16 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.3724, -0.215, 0.005)
 material_override = ExtResource("1_x")
 mesh = SubResource("R2")
 
-[node name="Plate" type="MeshInstance3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 0, -1, 0, 1, 0, 0, 0, -0.012)
-material_override = ExtResource("1_x")
-mesh = SubResource("R3")
-
 [node name="Glass" type="MeshInstance3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -0.06)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -0.03)
 mesh = SubResource("R5")
 surface_material_override/0 = SubResource("R4")
 cast_shadow = 0
+
+[node name="Moonlight" type="SpotLight3D" parent="."]
+transform = Transform3D(-1, 0, 0, 0, 0.9394, 0.3429, 0, 0.3429, -0.9394, 0, 0.25, 0.1)
+light_color = Color(0.45, 0.6, 1, 1)
+light_energy = 3.0
+spot_range = 6.0
+spot_angle = 38.0
+spot_attenuation = 0.8

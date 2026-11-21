@@ -5,6 +5,7 @@
 [ext_resource type="Material" path="res://assets/placeholder/materials/iron.tres" id="3_x"]
 [ext_resource type="Script" path="res://scripts/props/flicker.gd" id="4_x"]
 [ext_resource type="Script" path="res://scripts/art/third_party_model.gd" id="5_x"]
+[ext_resource type="Shader" path="res://shaders/pixel_fire.gdshader" id="6_fire"]
 
 [sub_resource type="StandardMaterial3D" id="R1"]
 albedo_color = Color(1, 0.5, 0.15, 1)
@@ -73,6 +74,15 @@ size = Vector3(1.2, 0.87, 0.88)
 radius = 0.11
 height = 4.8
 
+[sub_resource type="QuadMesh" id="FireQuad"]
+size = Vector2(0.44, 0.3)
+
+[sub_resource type="ShaderMaterial" id="FireFlames"]
+shader = ExtResource("6_fire")
+shader_parameter/texels = 10.0
+shader_parameter/glow = 5.0
+shader_parameter/seed = 3.0
+
 [node name="GalleyStove" type="StaticBody3D"]
 script = ExtResource("1_x")
 
@@ -87,9 +97,9 @@ material_override = ExtResource("3_x")
 mesh = SubResource("R3")
 
 [node name="Fire" type="MeshInstance3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.36, 0.401)
-material_override = SubResource("R1")
-mesh = SubResource("R4")
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.36, 0.402)
+mesh = SubResource("FireQuad")
+surface_material_override/0 = SubResource("FireFlames")
 cast_shadow = 0
 
 [node name="DoorFrameTop" type="MeshInstance3D" parent="."]
@@ -158,12 +168,13 @@ stand_ins = [NodePath("../PotStandIn")]
 [node name="FireLight" type="OmniLight3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.4, 0.7)
 light_color = Color(1, 0.55, 0.25, 1)
-light_energy = 2.4
+light_energy = 3.2
 light_volumetric_fog_energy = 1.5
 shadow_enabled = true
-omni_range = 6.0
+omni_range = 7.5
+light_size = 0.15
 script = ExtResource("4_x")
-base_energy = 2.4
+base_energy = 3.2
 
 [node name="SteamSpot" type="Marker3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.2, 1.16, 0.08)

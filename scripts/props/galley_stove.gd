@@ -10,7 +10,7 @@ extends StaticBody3D
 ## coordinates), so they rise straight up on a sailing ship.
 
 ## Puffs of steam a second from the pot.
-@export var steam_rate: float = 6.0
+@export var steam_rate: float = 9.0
 ## Embers a second from the fire door.
 @export var ember_rate: float = 3.0
 
@@ -53,11 +53,11 @@ func _make_steam() -> GPUParticles3D:
 	process.scale_min = 0.6
 	process.scale_max = 1.0
 	process.scale_curve = _curve_texture([Vector2(0.0, 0.3), Vector2(1.0, 1.6)])
-	process.color_ramp = _fade([0.0, 0.2, 1.0], [0.0, 0.22, 0.0])
+	process.color_ramp = _fade([0.0, 0.2, 1.0], [0.0, 0.12, 0.0])
 
 	var material: StandardMaterial3D = _soft_material(Color(0.95, 0.93, 0.9, 1.0))
 	var mesh: QuadMesh = QuadMesh.new()
-	mesh.size = Vector2(0.5, 0.5)
+	mesh.size = Vector2(0.35, 0.35)
 	mesh.material = material
 
 	var particles: GPUParticles3D = GPUParticles3D.new()
