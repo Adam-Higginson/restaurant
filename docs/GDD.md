@@ -85,7 +85,7 @@ One button, **interact**, does everything with the thing in front of you.
 
 **The interact rule:** if what you're holding goes here, it goes in or on; otherwise you use the object. Every object follows it, so new ones need no new buttons.
 
-**The action prompt:** the top-right corner of the HUD always says what Interact and Use tool would do right now, like OoT's A-button text: `[E] Put down Tomato` above `[F] Chop`. A line hides when its button would do nothing. Button names follow the last device used: keys after a key press (`[E]`), mouse buttons after a click (`[RMB]`, `[LMB]`), Xbox buttons after a controller press (`[X]`). Along the bottom of the HUD are the toolbar and the name and quality of the selected item.
+**The action prompt:** the top-right corner of the HUD always says what Interact and Use tool would do right now, like OoT's A-button text: `[RMB] Put down Tomato` above `[LMB] Chop`. A line hides when its button would do nothing. On keyboard and mouse it names the mouse buttons, as in Stardew (E and F still work); after a controller press it names Xbox buttons (`[X]`, `[B]`) until the keyboard or mouse is used again. Along the bottom of the HUD are the toolbar and the name and quality of the selected item.
 
 | Action | Keyboard / mouse | Controller (Xbox naming) | Does |
 |---|---|---|---|

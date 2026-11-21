@@ -4,15 +4,16 @@ extends VBoxContainer
 ## like OoT's A-button text: "[E] Put down Tomato" above "[F] Chop". Each line
 ## hides when its button would do nothing.
 ##
-## Button names follow the last device used: keys after a key press, mouse
-## buttons after a click ("[RMB] Put down Tomato", "[LMB] Chop"), and Xbox
-## buttons after a controller press.
+## On keyboard and mouse it names the mouse buttons, as in Stardew Valley
+## ("[RMB] Put down Tomato", "[LMB] Chop"); E and F still work. After a
+## controller press it names Xbox buttons instead, until the keyboard or mouse
+## is used again.
 ##
 ## Display only: the words come from the player's [InteractionDetector3D],
 ## which asks the focused prop. [Hud3D] hands it the player.
 
 ## Whose button names to show.
-enum Device { KEYBOARD, MOUSE, PAD }
+enum Device { KEYBOARD_MOUSE, PAD }
 
 ## How far a stick must move to count as using the controller, so a resting
 ## stick's drift doesn't switch the names.
@@ -23,7 +24,7 @@ var device: Device:
 	get:
 		return _device
 
-var _device: Device = Device.KEYBOARD
+var _device: Device = Device.KEYBOARD_MOUSE
 var _detector: InteractionDetector3D = null
 
 @onready var _interact_line: Label = $InteractLine
@@ -43,10 +44,8 @@ func _process(_delta: float) -> void:
 # _input rather than _unhandled_input: it sees every press first, even ones
 # the game then handles, and never marks them handled.
 func _input(event: InputEvent) -> void:
-	if event is InputEventKey:
-		_device = Device.KEYBOARD
-	elif event is InputEventMouseButton:
-		_device = Device.MOUSE
+	if event is InputEventKey or event is InputEventMouseButton 			or event is InputEventMouseMotion:
+		_device = Device.KEYBOARD_MOUSE
 	elif event is InputEventJoypadButton:
 		_device = Device.PAD
 	elif event is InputEventJoypadMotion \
@@ -72,16 +71,16 @@ func line_text(action: StringName, text: String) -> String:
 	return "[%s] %s" % [button_name(action, _device), text]
 
 
-## The name of the first button of device [param on] bound to [param action]:
-## a key like "E", a mouse button like "RMB", or an Xbox button like "X". With
-## the mouse it falls back to the key if the action has no mouse button. "?"
-## if nothing fits.
+## The name of the button of device [param on] bound to [param action]: on
+## keyboard and mouse, the mouse button like "RMB" if there is one, otherwise
+## the first key like "W"; on a controller, an Xbox button like "X". "?" if
+## nothing fits.
 static func button_name(action: StringName, on: Device) -> String:
 	var key_name: String = "?"
 	for event: InputEvent in InputMap.action_get_events(action):
 		if on == Device.PAD and event is InputEventJoypadButton:
 			return pad_button_name((event as InputEventJoypadButton).button_index)
-		if on == Device.MOUSE and event is InputEventMouseButton:
+		if on == Device.KEYBOARD_MOUSE and event is InputEventMouseButton:
 			return mouse_button_name((event as InputEventMouseButton).button_index)
 		if event is InputEventKey and key_name == "?":
 			key_name = OS.get_keycode_string((event as InputEventKey).physical_keycode)
