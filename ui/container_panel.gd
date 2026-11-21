@@ -2,7 +2,8 @@ class_name ContainerPanel
 extends CanvasLayer
 ## Lists what's in a container (the fridge, the cupboard, the delivery crate),
 ## one row per item and quality ("Tomato ★ ×2"). Picking a row moves one onto
-## the player's arms. It pauses the whole game while it's open.
+## the player's arms. It pauses the whole game while it's open, and shows the
+## mouse cursor (the 3D camera captures it) until it closes.
 ##
 ## Display only: [StorageContents] does the moving, and the panel redraws from
 ## its signals and the arms'.
@@ -14,6 +15,8 @@ const FONT_SIZE: int = 8
 
 var _contents: StorageContents = null
 var _arms: Arms = null
+## The mouse mode before opening, put back on closing.
+var _mouse_mode_before: Input.MouseMode = Input.MOUSE_MODE_VISIBLE
 
 @onready var _title: Label = %Title
 @onready var _rows: VBoxContainer = %Rows
@@ -34,7 +37,7 @@ func _unhandled_input(event: InputEvent) -> void:
 
 
 ## Shows [param contents] under [param title], taking into [param arms], and
-## pauses the game until it's closed.
+## pauses the game and frees the mouse until it's closed.
 func open(title: String, contents: StorageContents, arms: Arms) -> void:
 	if visible:
 		return
@@ -45,6 +48,8 @@ func open(title: String, contents: StorageContents, arms: Arms) -> void:
 	_arms.changed.connect(_refresh)
 	show()
 	get_tree().paused = true
+	_mouse_mode_before = Input.mouse_mode
+	Input.mouse_mode = Input.MOUSE_MODE_VISIBLE
 	_refresh()
 
 
@@ -57,6 +62,7 @@ func close() -> void:
 	_arms = null
 	hide()
 	get_tree().paused = false
+	Input.mouse_mode = _mouse_mode_before
 	closed.emit()
 
 
