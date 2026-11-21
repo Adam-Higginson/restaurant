@@ -112,6 +112,20 @@ A growing glossary of the Godot concepts this project uses: what each one is, in
 
 **Mouse buttons in the Input Map.** An action can be bound to mouse buttons as well as keys and controller buttons (`InputEventMouseButton`, `MOUSE_BUTTON_LEFT`/`RIGHT`; the wheel is buttons 4 and 5). *Ours:* right click is `interact`, left click is `use_tool`, and the wheel cycles the toolbar. A click only counts while the mouse is captured (`InteractionDetector3D.accepts_event`), so the click that recaptures it does nothing else.
 
+**Spatial shaders.** A `.gdshader` file is a small program the graphics card runs for every vertex (`vertex()`, to move the surface) and every pixel (`fragment()`, to colour it). `uniform`s are its settings, set from GDScript with `material.set_shader_parameter()`; `varying`s pass values from the vertex step to the pixel step. *Ours:* `shaders/water.gdshader`, driven by `Sea`.
+
+**Gerstner waves.** Instead of moving the sea only up and down (a sine wave), each point moves in a circle, so crests come out sharp and troughs wide, like real water. Several layers with different directions and lengths add up to a sea. *Ours:* `WaveLayer`/`WaveSettings` in `data/sea/`, used by both the shader and `Waves`, so scripts know exactly how high the drawn sea is.
+
+**Fresnel.** Water (and glass) reflects more the flatter you look across it: almost a mirror at a glancing angle, see-through looking straight down. *Ours:* the water shader adds a misty sky reflection by Fresnel, which is what lets the swell's shape show at night.
+
+**GPUParticles3D.** Thousands of small meshes moved on the graphics card, set up with a `ParticleProcessMaterial` (where they start, which way and how fast they go, how they grow and fade). `local_coords = false` leaves them where they were born when the emitter moves. *Ours:* `RainEffect` builds the rain streaks and splashes in code and keeps them around the camera.
+
+**Fog: depth and volumetric.** The `Environment`'s *depth* fog fades things between two distances from the camera (we start at 10 m, so rooms stay clear). *Volumetric* fog fills the air itself, so lights glow as haloes and cones in it (Forward+ only). *Ours:* `sea.tscn`'s `WorldEnvironment`, with each lantern's `light_volumetric_fog_energy`.
+
+**Audio buses and effects.** Sounds play on a *bus*, like a channel on a mixing desk; a bus can have effects (a low-pass filter muffles high sounds) and sends into `Master`. The layout lives in `default_bus_layout.tres`. *Ours:* the `Ambience` bus, whose low-pass filter `Ambience` closes as you go below deck.
+
+**`call_deferred()`.** Runs a function at the end of the current frame instead of now, once everything else has caught up (for instance, once every node in a new scene is ready). *Ours:* `Weather` listens to the shelter zones that way, so zones later in the tree have joined their group.
+
 *Still to come with the prototype tickets: ...*
 
 ## Testing

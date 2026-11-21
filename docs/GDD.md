@@ -178,6 +178,15 @@ N64 / OoT style with modern rendering. The reference is a ship's galley at night
 - **Lighting:** modern, where the cosiness comes from. Warm lantern point lights with soft shadows, glowing emissive flames, a stove fire that lights the room.
 - **Particles:** steam from pots, drifting embers, fireflies.
 - **Sea and sky:** fog, good-looking water, weather.
+
+### The rainy night (the opening's atmosphere)
+The game opens at night in steady rain, and Studio Ghibli's rain is the reference: patient, heavy rain that settles in, where the sound is half the picture.
+- **The fog wall:** visibility ends about 30–45 m out. There's no horizon, so the ship feels like a lit room floating in grey. The fog starts about 10 m from the camera, so rooms stay clear.
+- **The only warmth** is the ship's: lanterns on the mast, the stern and the hatch, and the galley's hearth below. Wet decks smear their light.
+- **The sea:** a long, heavy swell with a fine chop on top, modern water (Gerstner waves, Fresnel sky reflection, light through the crests, foam on crests, along the hull and in the wake, rain rings). The ship's deck stays level for walking and cooking; the sea rises and falls around the hull instead, and the hull tilts a few degrees.
+- **Sound:** rain loud on deck, muffled and quieter below deck, with waves underneath, gliding as you go through the hatch.
+- **The moment to aim for:** sitting by the stove while the crew drift in from the rain, with stories and music. In the score, the music *is* the crew playing.
+- Rain and weather are one intensity, so a heavier or lighter night changes the rain, the rings on the sea and the sound together.
 - High resolution: no pixelated low-resolution viewport. This needs the Forward+ renderer.
 - Placeholder art is simple coloured shapes (greybox) until real models are made.
 
