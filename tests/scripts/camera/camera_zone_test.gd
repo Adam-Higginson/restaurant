@@ -3,8 +3,6 @@ extends GameTestSuite
 ## between the zone's fixed shot and the free camera, and the galley on the
 ## ship has a zone that covers the room below deck but not the deck.
 
-const SHIP_SCENE: String = "res://scenes/prototype/ship.tscn"
-const PLAYER_SCENE: String = "res://scenes/prototype/player.tscn"
 ## Standing on the galley floor, in the ship's own space.
 const IN_GALLEY: Vector3 = Vector3(0.0, 1.05, 8.0)
 ## Standing on the aft deck, above the galley, in the ship's own space.
@@ -57,7 +55,7 @@ func test_other_bodies_are_ignored() -> void:
 
 
 func test_the_galley_has_a_fixed_shot() -> void:
-	var rig: Array[Node3D] = _new_ship_with_player(IN_GALLEY)
+	var rig: Array[Node3D] = new_moored_ship_with_player(IN_GALLEY)
 	var ship: Ship = rig[0] as Ship
 	var player: Player3D = rig[1] as Player3D
 	var runner: GdUnitSceneRunner = scene_runner(ship.get_parent())
@@ -68,7 +66,7 @@ func test_the_galley_has_a_fixed_shot() -> void:
 
 
 func test_the_deck_keeps_the_free_camera() -> void:
-	var rig: Array[Node3D] = _new_ship_with_player(ON_DECK)
+	var rig: Array[Node3D] = new_moored_ship_with_player(ON_DECK)
 	var player: Player3D = rig[1] as Player3D
 	var runner: GdUnitSceneRunner = scene_runner(rig[0].get_parent())
 
@@ -80,7 +78,7 @@ func test_the_deck_keeps_the_free_camera() -> void:
 
 
 func test_the_galley_shot_sails_with_the_ship() -> void:
-	var rig: Array[Node3D] = _new_ship_with_player(IN_GALLEY)
+	var rig: Array[Node3D] = new_moored_ship_with_player(IN_GALLEY)
 	var ship: Ship = rig[0] as Ship
 	var player: Player3D = rig[1] as Player3D
 	var runner: GdUnitSceneRunner = scene_runner(ship.get_parent())
@@ -108,24 +106,3 @@ func _add_zone_ahead(player: Player3D) -> CameraZone:
 	var zone: CameraZone = new_camera_zone(Vector3(4, 2, 4), Vector3(0, 1, -5), shot)
 	player.get_parent().add_child(zone)
 	return zone
-
-
-# A moored ship at the origin facing -Z (so ship space is world space), with
-# the player at [param pos]. Returns [ship, player]. Hand the ship's parent to
-# scene_runner to start it.
-func _new_ship_with_player(pos: Vector3) -> Array[Node3D]:
-	var world: Node3D = Node3D.new()
-	auto_free(world)
-	var route: Path3D = Path3D.new()
-	route.curve = Curve3D.new()
-	route.curve.add_point(Vector3.ZERO)
-	route.curve.add_point(Vector3(0, 0, -200))
-	world.add_child(route)
-	var ship: Ship = (load(SHIP_SCENE) as PackedScene).instantiate() as Ship
-	ship.route = route
-	ship.sail_on_ready = false
-	world.add_child(ship)
-	var player: Player3D = (load(PLAYER_SCENE) as PackedScene).instantiate() as Player3D
-	player.position = pos
-	world.add_child(player)
-	return [ship, player]

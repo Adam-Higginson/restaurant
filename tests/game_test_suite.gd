@@ -128,6 +128,30 @@ func new_player_3d_on_floor() -> Player3D:
 	return player
 
 
+## A moored ship at the origin facing -Z (so ship space is world space here),
+## with the 3D player at [param pos], in a world that's freed after the test.
+## Returns [ship, player]. Hand the ship's parent to scene_runner to start it;
+## call [method Ship.set_sail] to sail 200 m straight ahead.
+func new_moored_ship_with_player(pos: Vector3) -> Array[Node3D]:
+	var world: Node3D = Node3D.new()
+	auto_free(world)
+	var route: Path3D = Path3D.new()
+	route.curve = Curve3D.new()
+	route.curve.add_point(Vector3.ZERO)
+	route.curve.add_point(Vector3(0, 0, -200))
+	world.add_child(route)
+	var ship_scene: PackedScene = load("res://scenes/prototype/ship.tscn") as PackedScene
+	var ship: Ship = ship_scene.instantiate() as Ship
+	ship.route = route
+	ship.sail_on_ready = false
+	world.add_child(ship)
+	var player_scene: PackedScene = load("res://scenes/prototype/player.tscn") as PackedScene
+	var player: Player3D = player_scene.instantiate() as Player3D
+	player.position = pos
+	world.add_child(player)
+	return [ship, player]
+
+
 ## A [CameraZone] filling a box of [param size] centred at [param pos], with
 ## its fixed shot at [param shot] (in the zone's own space). Add it to the
 ## test world before the scene runs.
