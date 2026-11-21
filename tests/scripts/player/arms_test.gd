@@ -39,26 +39,6 @@ func test_holds_up_to_three_items() -> void:
 	assert_int(_changes).is_equal(Arms.CAPACITY)
 
 
-func test_capacity_can_be_set_when_made() -> void:
-	var hand: Arms = Arms.new(1)
-	assert_int(hand.capacity).is_equal(1)
-	assert_bool(hand.add(_make(&"tomato"))).is_true()
-	assert_bool(hand.is_full()).is_true()
-	assert_bool(hand.add(_make(&"lettuce"))).is_false()
-	assert_int(hand.size()).is_equal(1)
-
-
-func test_capacity_is_at_least_one() -> void:
-	assert_int(Arms.new(0).capacity).is_equal(1)
-
-
-func test_capacity_is_read_only() -> void:
-	await assert_error(func() -> void: _arms.capacity = 9).is_push_error(
-		"Arms: capacity is read-only"
-	)
-	assert_int(_arms.capacity).is_equal(Arms.CAPACITY)
-
-
 func test_rejects_null() -> void:
 	assert_bool(_arms.add(null)).is_false()
 	assert_bool(_arms.is_empty()).is_true()

@@ -1,7 +1,6 @@
 class_name Arms
 extends RefCounted
-## The items the player carries above their head. The 3D player carries one
-## item at a time; the legacy 2D player carries a stack of three.
+## The items the player carries stacked above their head.
 ##
 ## The last item in the stack is the top one, and only the top one is active:
 ## putting down uses it and anything picked up goes on top. See the Player
@@ -10,22 +9,9 @@ extends RefCounted
 ## Emitted whenever the stack's contents or order change.
 signal changed
 
-## How many items the legacy 2D player's stack holds, the default.
 const CAPACITY: int = 3
 
-## How many items fit.
-var capacity: int:
-	get:
-		return _capacity
-	set(_value):
-		push_error("Arms: capacity is read-only")
-
-var _capacity: int = CAPACITY
 var _items: Array[ItemInstance] = []
-
-
-func _init(max_items: int = CAPACITY) -> void:
-	_capacity = maxi(max_items, 1)
 
 
 ## The carried items, bottom first. Changing the copy doesn't change the arms.
@@ -42,7 +28,7 @@ func is_empty() -> bool:
 
 
 func is_full() -> bool:
-	return _items.size() >= _capacity
+	return _items.size() >= CAPACITY
 
 
 ## The active item, or null with empty arms.
