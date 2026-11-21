@@ -29,7 +29,7 @@ material_override = ExtResource("2_wood")
 mesh = SubResource("BoxMesh_top")
 
 [node name="Top" type="MeshInstance3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.87, 0.02)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.88, 0.02)
 material_override = ExtResource("4_dark")
 mesh = SubResource("Counter_1")
 

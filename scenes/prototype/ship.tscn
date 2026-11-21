@@ -18,7 +18,6 @@
 [ext_resource type="Material" path="res://assets/placeholder/materials/rope.tres" id="32_rope"]
 [ext_resource type="Material" path="res://assets/placeholder/materials/iron.tres" id="34_iron"]
 [ext_resource type="Material" path="res://assets/placeholder/materials/stone.tres" id="35_stone"]
-[ext_resource type="Script" path="res://scripts/camera/camera_zone.gd" id="36_zone"]
 [ext_resource type="Material" path="res://assets/placeholder/materials/greybox_dark_wood.tres" id="3_t630l"]
 [ext_resource type="Material" path="res://assets/placeholder/materials/greybox_cloth.tres" id="4_dp3rt"]
 [ext_resource type="PackedScene" path="res://scenes/prototype/props/counter.tscn" id="6_counter"]
@@ -936,16 +935,6 @@ mesh = SubResource("Cosy_26")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.6, 2.3, 4.8)
 script = ExtResource("26_motes")
 extents = Vector3(1.6, 0.8, 2.2)
-
-[node name="TableView" type="Area3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.4, 2.2, 5.6)
-script = ExtResource("36_zone")
-
-[node name="Shape" type="CollisionShape3D" parent="TableView"]
-shape = SubResource("Cosy_37")
-
-[node name="Shot" type="Marker3D" parent="TableView"]
-transform = Transform3D(0.06, 0.0599, -0.9964, 0, 0.9982, 0.06, 0.9982, -0.0036, 0.0599, -1.8, -0.15, -1.2)
 
 [node name="CorridorWallShape" type="CollisionShape3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3.4, 2.3, 4.475)

@@ -81,12 +81,6 @@ func test_you_walk_in_through_the_doorway_from_the_bunks() -> void:
 	assert_float(ship.to_local(player.global_position).z).is_less(7.0)
 
 
-func test_the_table_has_a_framed_shot() -> void:
-	var ship: Ship = new_moored_ship_with_player(Vector3(0, 1.05, 6))[0] as Ship
-	var view: CameraZone = ship.get_node("TableView") as CameraZone
-	assert_object(view.get_node("Shot") as Marker3D).is_not_null()
-
-
 func test_the_portholes_are_cut_through_the_wall() -> void:
 	var ship: Ship = new_moored_ship_with_player(Vector3(0, 1.05, 6))[0] as Ship
 	var wall: CSGBox3D = ship.get_node("Visuals/WallStarboard") as CSGBox3D

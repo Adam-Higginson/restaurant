@@ -99,12 +99,10 @@ size = Vector3(0.03, 0.01, 0.2)
 [sub_resource type="BoxMesh" id="Supper_4"]
 size = Vector3(0.03, 0.01, 0.2)
 
-[sub_resource type="CylinderMesh" id="Supper_5"]
-top_radius = 0.15
-bottom_radius = 0.15
-height = 0.12
-radial_segments = 3
-rings = 1
+[sub_resource type="PrismMesh" id="Supper_5"]
+left_to_right = 0.0
+size = Vector3(0.3, 0.16, 0.16)
+
 
 [sub_resource type="CylinderMesh" id="Supper_6"]
 top_radius = 0.17
@@ -238,17 +236,17 @@ material_override = ExtResource("6_stew")
 mesh = SubResource("Supper_4")
 
 [node name="Cheese" type="MeshInstance3D" parent="."]
-transform = Transform3D(0.6967, 0, 0.7174, 0, 1, 0, -0.7174, 0, 0.6967, 0.42, 0.88, 0.2)
+transform = Transform3D(0.6967, 0, 0.7174, 0, 1, 0, -0.7174, 0, 0.6967, 0.42, 0.902, 0.2)
 material_override = ExtResource("5_cheese")
 mesh = SubResource("Supper_5")
 
 [node name="Bowl" type="MeshInstance3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.4, 0.875, -0.1)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.4, 0.877, -0.1)
 material_override = ExtResource("1_x")
 mesh = SubResource("Supper_6")
 
 [node name="Stew" type="MeshInstance3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.4, 0.925, -0.1)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.4, 0.912, -0.1)
 material_override = ExtResource("6_stew")
 mesh = SubResource("Supper_7")
 

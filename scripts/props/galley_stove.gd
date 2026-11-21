@@ -110,7 +110,8 @@ func _make_embers() -> GPUParticles3D:
 	return particles
 
 
-# A camera-facing soft round puff that fades by the particles' colour.
+# A camera-facing puff drawn as a chunky pixel blob (a small texture shown
+# with sharp, nearest filtering), fading by the particles' colour.
 func _soft_material(color: Color) -> StandardMaterial3D:
 	var material: StandardMaterial3D = StandardMaterial3D.new()
 	material.transparency = BaseMaterial3D.TRANSPARENCY_ALPHA
@@ -126,8 +127,9 @@ func _soft_material(color: Color) -> StandardMaterial3D:
 	disc.fill = GradientTexture2D.FILL_RADIAL
 	disc.fill_from = Vector2(0.5, 0.5)
 	disc.fill_to = Vector2(1.0, 0.5)
-	disc.width = 32
-	disc.height = 32
+	disc.width = 8
+	disc.height = 8
+	material.texture_filter = BaseMaterial3D.TEXTURE_FILTER_NEAREST
 	material.albedo_texture = disc
 	return material
 

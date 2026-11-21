@@ -2,10 +2,10 @@ extends GameTestSuite
 ## Tests for ThirdPartyModel: dressing a scene with a model when its file is
 ## there, fitting it to a box, and leaving the greybox when it isn't.
 ##
-## Third-party files aren't in the repo, so these use one of our own scenes as
-## the "model": the counter, a 1.1 x 0.9 x 0.6 m box sitting on its origin.
+## Third-party files aren't in the repo, so these use a small test scene as
+## the "model": a painted 1.1 x 0.9 x 0.6 m box sitting on its origin.
 
-const STAND_IN_MODEL: String = "res://scenes/prototype/props/counter.tscn"
+const STAND_IN_MODEL: String = "res://tests/fixtures/box_model.tscn"
 
 
 func test_keeps_the_greybox_when_the_file_is_missing() -> void:
@@ -29,7 +29,7 @@ func test_shows_the_model_and_hides_the_greybox() -> void:
 func test_gives_the_model_the_chunky_n64_grain() -> void:
 	var dresser: ThirdPartyModel = _new_dresser(STAND_IN_MODEL)[0] as ThirdPartyModel
 	var mesh: MeshInstance3D = dresser.model.get_node("Mesh") as MeshInstance3D
-	# Our counter colours itself with one material over the whole mesh.
+	# The test box colours itself with one material over the whole mesh.
 	var material: ShaderMaterial = mesh.material_override as ShaderMaterial
 	assert_object(material).is_not_null()
 	assert_object(material.shader).is_same(ThirdPartyModel.N64_SHADER)
@@ -52,7 +52,7 @@ func test_stretches_to_fill_its_box() -> void:
 func test_sits_on_its_origin_centred() -> void:
 	var dresser: ThirdPartyModel = _new_dresser(STAND_IN_MODEL, Vector3(2.2, 1.8, 1.2))[0] \
 			as ThirdPartyModel
-	# The counter already sits centred on its origin, so it stays put.
+	# The box already sits centred on its origin, so it stays put.
 	assert_vector(dresser.model.position).is_equal_approx(Vector3.ZERO, Vector3.ONE * 0.001)
 
 
