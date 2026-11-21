@@ -34,6 +34,7 @@ The ship's bell marks the day, as on real ships: eight bells calls everyone down
 - **Deck:** open to the sky, with the mast, the wheel, the ship's bell and the hatch down below.
 - **Below deck:**
   - **The galley:** the kitchen and the mess in one room, so the crew eats at a table beside the stove. Its stations stand in a row along the bulkhead: the pantry, a counter, the chopping board on its counter, and the plate rack.
+  - **The hearth:** a cast-iron ship's stove on the starboard side, opposite the ramp, so its glow is the first thing you see coming down. Its fire flickers behind the door's grate, embers drift up, a pot steams on top, and its flue rises through the deck. The crew's table stands between the stove and the ramp. Two lanterns swing from the ceiling beams, and two brass portholes look out on the rain.
   - **The pantry:** a tall cupboard at the end of the galley's row (see Storage).
   - **Your bunk.**
 - The ship **really moves** between islands, but it never tilts or rocks: the deck stays level and still, so nothing slides off the counters and nobody feels seasick. The sea's motion shows in the water moving around the hull and in hanging things that swing, like the lanterns.
@@ -177,6 +178,7 @@ N64 / OoT style with modern rendering. The reference is a ship's galley at night
 - **Textures:** small, blocky and low-resolution, with nearest-neighbour filtering.
 - **Lighting:** modern, where the cosiness comes from. Warm lantern point lights with soft shadows, glowing emissive flames, a stove fire that lights the room.
 - **Particles:** steam from pots, drifting embers, fireflies.
+- **Third-party models** (KayKit, Tiny Treats) dress our greybox when they're downloaded. Gameplay always lives on our own shapes, so the game works without them.
 - **Sea and sky:** fog, good-looking water, weather.
 
 ### The rainy night (the opening's atmosphere)

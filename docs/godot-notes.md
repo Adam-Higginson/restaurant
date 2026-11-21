@@ -122,6 +122,10 @@ A growing glossary of the Godot concepts this project uses: what each one is, in
 
 **Fog: depth and volumetric.** The `Environment`'s *depth* fog fades things between two distances from the camera (we start at 10 m, so rooms stay clear). *Volumetric* fog fills the air itself, so lights glow as haloes and cones in it (Forward+ only). *Ours:* `sea.tscn`'s `WorldEnvironment`, with each lantern's `light_volumetric_fog_energy`.
 
+**CSG shapes.** *Constructive solid geometry*: simple shapes (`CSGBox3D`, `CSGCylinder3D`) that combine, with a child set to *Subtraction* cutting itself out of its parent. Quick for blocking out levels; slower than plain meshes, so best for a few pieces. *Ours:* the galley's starboard wall is a `CSGBox3D` with two cylinders cut out for the portholes.
+
+**`@tool` scripts.** A script marked `@tool` also runs inside the editor, so it can show things while you edit (here, models loaded at runtime). Anything it adds without an *owner* isn't saved into the scene. *Ours:* `ThirdPartyModel` shows pack models in the editor without saving them.
+
 **Particle collision and heightfields.** Particles don't use the physics engine. They collide with special collider nodes instead. A `GPUParticlesCollisionHeightField3D` photographs everything inside its box from above into a height map, and particles that go below it have hit something. It's cheap and ideal for rain, but it can't see under overhangs. *Ours:* the ship's `RainCatcher` covers the whole ship, so drops land on the deck, rails and sail, and the deck keeps the galley dry.
 
 **Particle shaders and sub-emitters.** A `shader_type particles` shader replaces the `ParticleProcessMaterial`: `start()` places each particle and `process()` moves it every step. `COLLIDED` says it hit a collider, and `emit_subparticle()` starts a particle in another system, the *sub-emitter* (set by `GPUParticles3D.sub_emitter`). *Ours:* `shaders/rain_drops.gdshader` turns each drop that lands into one splash ring, then removes the drop.
