@@ -52,6 +52,28 @@ func test_refuses_vessels_even_of_its_kind() -> void:
 	assert_bool(_fridge.put_away(ItemInstance.new(tray))).is_false()
 
 
+func test_a_pantry_takes_food_of_any_kind() -> void:
+	var pantry: StorageContents = _watch(StorageContents.new(Item.StorageKind.PANTRY, 3))
+	assert_bool(pantry.put_away(ItemInstance.new(_tomato))).is_true()
+	assert_bool(pantry.put_away(ItemInstance.new(_onion))).is_true()
+	assert_int(pantry.size()).is_equal(2)
+	assert_int(_changes).is_equal(2)
+
+
+func test_a_pantry_refuses_things_that_cant_be_stored() -> void:
+	var pantry: StorageContents = StorageContents.new(Item.StorageKind.PANTRY, 3)
+	var board: Item = _item(&"board", Item.StorageKind.FRIDGE)
+	board.capacity = 1
+	assert_bool(pantry.accepts(ItemInstance.new(_soup))).is_false()
+	assert_bool(pantry.accepts(ItemInstance.new(_plate))).is_false()
+	assert_bool(pantry.accepts(ItemInstance.new(board))).is_false()
+
+
+func test_a_container_of_no_kind_takes_nothing() -> void:
+	var shelf: StorageContents = StorageContents.new(Item.StorageKind.NONE, 3)
+	assert_bool(shelf.accepts(ItemInstance.new(_tomato))).is_false()
+
+
 func test_holds_up_to_its_capacity() -> void:
 	for i: int in 3:
 		assert_bool(_fridge.put_away(ItemInstance.new(_tomato))).is_true()

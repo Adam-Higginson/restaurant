@@ -67,13 +67,17 @@ func count(item: Item, quality: int) -> int:
 
 
 ## Whether the player could put [param instance] away here: food of this
-## container's kind, with room left, and never into a take-only container.
+## container's kind (any storable food for a pantry), with room left, and
+## never into a take-only container.
 func accepts(instance: ItemInstance) -> bool:
 	if instance == null or _take_only or is_full():
 		return false
 	if instance.is_vessel():
 		return false
-	return _kind != Item.StorageKind.NONE and instance.item.storage == _kind
+	if _kind == Item.StorageKind.NONE or instance.item.storage == Item.StorageKind.NONE:
+		return false
+	# A pantry (the galley's) takes any food that can be stored.
+	return _kind == Item.StorageKind.PANTRY or instance.item.storage == _kind
 
 
 ## Puts [param instance] away if [method accepts] allows it. Returns whether it did.
