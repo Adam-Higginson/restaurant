@@ -2,7 +2,9 @@
 
 [ext_resource type="Material" path="res://assets/placeholder/materials/prop_wood.tres" id="1_x"]
 [ext_resource type="Material" path="res://assets/placeholder/materials/dark_prop_wood.tres" id="2_x"]
-[ext_resource type="Script" path="res://scripts/art/third_party_model.gd" id="3_x"]
+[ext_resource type="Material" path="res://assets/placeholder/materials/bread.tres" id="4_bread"]
+[ext_resource type="Material" path="res://assets/placeholder/materials/cheese.tres" id="5_cheese"]
+[ext_resource type="Material" path="res://assets/placeholder/materials/stew.tres" id="6_stew"]
 
 [sub_resource type="BoxMesh" id="R1"]
 size = Vector3(2.0, 0.1, 1.0)
@@ -82,6 +84,42 @@ size = Vector3(1.8, 0.48, 0.34)
 [sub_resource type="BoxMesh" id="Spoon"]
 size = Vector3(0.03, 0.03, 0.3)
 
+[sub_resource type="SphereMesh" id="Supper_1"]
+radius = 0.16
+height = 0.2
+radial_segments = 10
+rings = 5
+
+[sub_resource type="BoxMesh" id="Supper_2"]
+size = Vector3(0.03, 0.01, 0.2)
+
+[sub_resource type="BoxMesh" id="Supper_3"]
+size = Vector3(0.03, 0.01, 0.2)
+
+[sub_resource type="BoxMesh" id="Supper_4"]
+size = Vector3(0.03, 0.01, 0.2)
+
+[sub_resource type="CylinderMesh" id="Supper_5"]
+top_radius = 0.15
+bottom_radius = 0.15
+height = 0.12
+radial_segments = 3
+rings = 1
+
+[sub_resource type="CylinderMesh" id="Supper_6"]
+top_radius = 0.17
+bottom_radius = 0.1
+height = 0.11
+radial_segments = 10
+rings = 1
+
+[sub_resource type="CylinderMesh" id="Supper_7"]
+top_radius = 0.15
+bottom_radius = 0.15
+height = 0.01
+radial_segments = 10
+rings = 1
+
 [node name="CrewTable" type="StaticBody3D"]
 
 [node name="Top" type="MeshInstance3D" parent="."]
@@ -144,28 +182,6 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.7, 0.2, -0.78)
 material_override = ExtResource("2_x")
 mesh = SubResource("R12")
 
-[node name="Bread" type="Node3D" parent="."]
-transform = Transform3D(0.9553, 0, 0.2955, 0, 1, 0, -0.2955, 0, 0.9553, 0.05, 0.82, 0.05)
-script = ExtResource("3_x")
-path = "res://assets/third_party/kaykit_restaurant/Assets/gltf/food_ingredient_bun.gltf"
-fit_size = Vector3(0.5, 0.24, 0.34)
-grain_metres = 0.12
-stretch = true
-
-[node name="Cheese" type="Node3D" parent="."]
-transform = Transform3D(0.6967, 0, 0.7174, 0, 1, 0, -0.7174, 0, 0.6967, 0.35, 0.82, 0.2)
-script = ExtResource("3_x")
-path = "res://assets/third_party/kaykit_restaurant/Assets/gltf/food_ingredient_cheese.gltf"
-fit_size = Vector3(0.26, 0.16, 0.26)
-grain_metres = 0.1
-
-[node name="Bowl" type="Node3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.4, 0.82, -0.1)
-script = ExtResource("3_x")
-path = "res://assets/third_party/kaykit_restaurant/Assets/gltf/stew_bowl.gltf"
-fit_size = Vector3(0.38, 0.16, 0.38)
-grain_metres = 0.12
-
 [node name="Tankard1" type="MeshInstance3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.75, 0.92, 0.25)
 material_override = ExtResource("1_x")
@@ -200,6 +216,41 @@ mesh = SubResource("R18")
 transform = Transform3D(0.8776, 0.2707, 0.3957, 0, 0.8253, -0.5646, -0.4794, 0.4955, 0.7243, -0.4, 0.98, -0.02)
 material_override = ExtResource("2_x")
 mesh = SubResource("Spoon")
+
+[node name="Bread" type="MeshInstance3D" parent="."]
+transform = Transform3D(1.5285, 0, 0.2955, 0, 1, 0, -0.4728, 0, 0.9553, 0.05, 0.89, 0.05)
+material_override = ExtResource("4_bread")
+mesh = SubResource("Supper_1")
+
+[node name="BreadScore1" type="MeshInstance3D" parent="."]
+transform = Transform3D(0.6967, 0, 0.7174, 0, 1, 0, -0.7174, 0, 0.6967, -0.07, 0.99, 0.05)
+material_override = ExtResource("6_stew")
+mesh = SubResource("Supper_2")
+
+[node name="BreadScore2" type="MeshInstance3D" parent="."]
+transform = Transform3D(0.6967, 0, 0.7174, 0, 1, 0, -0.7174, 0, 0.6967, 0.05, 0.99, 0.05)
+material_override = ExtResource("6_stew")
+mesh = SubResource("Supper_3")
+
+[node name="BreadScore3" type="MeshInstance3D" parent="."]
+transform = Transform3D(0.6967, 0, 0.7174, 0, 1, 0, -0.7174, 0, 0.6967, 0.17, 0.99, 0.05)
+material_override = ExtResource("6_stew")
+mesh = SubResource("Supper_4")
+
+[node name="Cheese" type="MeshInstance3D" parent="."]
+transform = Transform3D(0.6967, 0, 0.7174, 0, 1, 0, -0.7174, 0, 0.6967, 0.42, 0.88, 0.2)
+material_override = ExtResource("5_cheese")
+mesh = SubResource("Supper_5")
+
+[node name="Bowl" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.4, 0.875, -0.1)
+material_override = ExtResource("1_x")
+mesh = SubResource("Supper_6")
+
+[node name="Stew" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.4, 0.925, -0.1)
+material_override = ExtResource("6_stew")
+mesh = SubResource("Supper_7")
 
 [node name="Shape" type="CollisionShape3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.41, 0)

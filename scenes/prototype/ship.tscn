@@ -5,8 +5,6 @@
 [ext_resource type="Material" path="res://assets/placeholder/materials/galley_floor.tres" id="17_floor"]
 [ext_resource type="PackedScene" path="res://scenes/prototype/props/galley_stove.tscn" id="18_stove"]
 [ext_resource type="PackedScene" path="res://scenes/prototype/props/crew_table.tscn" id="19_table"]
-[ext_resource type="Script" path="res://scripts/art/third_party_model.gd" id="20_model"]
-[ext_resource type="Material" path="res://assets/placeholder/materials/brass.tres" id="21_brass"]
 [ext_resource type="Shader" path="res://shaders/rain_glass.gdshader" id="22_glass"]
 [ext_resource type="PackedScene" path="res://scenes/prototype/props/lantern.tscn" id="23_lantern"]
 [ext_resource type="PackedScene" path="res://scenes/prototype/props/porthole.tscn" id="24_porthole"]
@@ -18,7 +16,6 @@
 [ext_resource type="Material" path="res://assets/placeholder/materials/sackcloth.tres" id="30_sack"]
 [ext_resource type="Material" path="res://assets/placeholder/materials/rug.tres" id="31_rug"]
 [ext_resource type="Material" path="res://assets/placeholder/materials/rope.tres" id="32_rope"]
-[ext_resource type="Material" path="res://assets/placeholder/materials/herbs.tres" id="33_herbs"]
 [ext_resource type="Material" path="res://assets/placeholder/materials/iron.tres" id="34_iron"]
 [ext_resource type="Material" path="res://assets/placeholder/materials/stone.tres" id="35_stone"]
 [ext_resource type="Script" path="res://scripts/camera/camera_zone.gd" id="36_zone"]
@@ -34,7 +31,6 @@
 [ext_resource type="Script" path="res://scripts/weather/drips.gd" id="15_drips"]
 [ext_resource type="Script" path="res://scripts/art/surface_space.gd" id="16_space"]
 [ext_resource type="Script" path="res://scripts/weather/shelter_zone.gd" id="11_shelter"]
-[ext_resource type="Script" path="res://scripts/props/swinging.gd" id="12_swing"]
 
 [sub_resource type="BoxMesh" id="Mesh_Hull"]
 size = Vector3(12, 2.5, 30)
@@ -398,6 +394,62 @@ size = Vector3(7.82, 2.6, 0.16)
 [sub_resource type="BoxShape3D" id="Cosy_40"]
 size = Vector3(1.1999999999999997, 0.3999999999999999, 0.16)
 
+[sub_resource type="BoxMesh" id="Blocks_1"]
+size = Vector3(0.42, 0.36, 6.65)
+
+[sub_resource type="BoxMesh" id="Blocks_2"]
+size = Vector3(0.42, 0.36, 6.65)
+
+[sub_resource type="BoxMesh" id="Blocks_3"]
+size = Vector3(9.1, 0.3, 0.34)
+
+[sub_resource type="BoxMesh" id="Blocks_4"]
+size = Vector3(9.1, 0.3, 0.34)
+
+[sub_resource type="BoxMesh" id="Blocks_5"]
+size = Vector3(9.1, 0.3, 0.34)
+
+[sub_resource type="BoxMesh" id="Blocks_6"]
+size = Vector3(0.6, 0.08, 0.05)
+
+[sub_resource type="BoxMesh" id="Blocks_7"]
+size = Vector3(0.05, 0.26, 0.015)
+
+[sub_resource type="BoxMesh" id="Blocks_8"]
+size = Vector3(0.04, 0.1, 0.03)
+
+[sub_resource type="BoxMesh" id="Blocks_9"]
+size = Vector3(0.05, 0.26, 0.015)
+
+[sub_resource type="BoxMesh" id="Blocks_10"]
+size = Vector3(0.04, 0.1, 0.03)
+
+[sub_resource type="BoxMesh" id="Blocks_11"]
+size = Vector3(0.05, 0.26, 0.015)
+
+[sub_resource type="BoxMesh" id="Blocks_12"]
+size = Vector3(0.04, 0.1, 0.03)
+
+[sub_resource type="CylinderMesh" id="Blocks_13"]
+top_radius = 0.2
+bottom_radius = 0.18
+height = 0.04
+radial_segments = 12
+rings = 1
+
+[sub_resource type="BoxMesh" id="Blocks_14"]
+size = Vector3(0.04, 0.32, 0.05)
+
+[sub_resource type="BoxMesh" id="Blocks_15"]
+size = Vector3(0.03, 0.4, 0.04)
+
+[sub_resource type="CylinderMesh" id="Blocks_16"]
+top_radius = 0.05
+bottom_radius = 0.05
+height = 0.03
+radial_segments = 8
+rings = 1
+
 [node name="Ship" type="AnimatableBody3D" unique_id=200548129]
 script = ExtResource("1_7ykrf")
 
@@ -699,69 +751,10 @@ start_item = ExtResource("8_board")
 [node name="PlateRack" parent="Galley" instance=ExtResource("9_rack")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.65, 1, 1.45)
 
-[node name="Model" type="Node3D" parent="Galley/Counter" node_paths=PackedStringArray("stand_ins")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)
-script = ExtResource("20_model")
-path = "res://assets/third_party/tiny_treats_charming_kitchen/Assets/gltf/countertop_single.gltf"
-fit_size = Vector3(1.1, 0.9, 0.6)
-stretch = true
-stand_ins = [NodePath("../Mesh")]
-
-[node name="Model" type="Node3D" parent="Galley/BoardCounter" node_paths=PackedStringArray("stand_ins")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)
-script = ExtResource("20_model")
-path = "res://assets/third_party/tiny_treats_charming_kitchen/Assets/gltf/countertop_single.gltf"
-fit_size = Vector3(1.1, 0.9, 0.6)
-stretch = true
-stand_ins = [NodePath("../Mesh")]
-
-[node name="Model" type="Node3D" parent="Galley/PlateRack" node_paths=PackedStringArray("stand_ins")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)
-script = ExtResource("20_model")
-path = "res://assets/third_party/tiny_treats_charming_kitchen/Assets/gltf/countertop_single.gltf"
-fit_size = Vector3(1.1, 0.9, 0.6)
-stretch = true
-stand_ins = [NodePath("../Mesh"), NodePath("../Back")]
-
-[node name="Plates" type="Node3D" parent="Galley/PlateRack"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.9, -0.05)
-script = ExtResource("20_model")
-path = "res://assets/third_party/kaykit_restaurant/Assets/gltf/dishrack_plates.gltf"
-fit_size = Vector3(0.7, 0.6, 0.5)
-
-[node name="Model" type="Node3D" parent="Galley/Pantry" node_paths=PackedStringArray("stand_ins")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)
-script = ExtResource("20_model")
-path = "res://assets/third_party/kaykit_furniture/Assets/gltf/cabinet_medium.gltf"
-fit_size = Vector3(1.1, 1.8, 0.6)
-stretch = true
-stand_ins = [NodePath("../Mesh"), NodePath("../Doors")]
-
-[node name="KnifeRack" type="Node3D" parent="Galley"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.55, 2.3, 1.2)
-script = ExtResource("20_model")
-path = "res://assets/third_party/tiny_treats_charming_kitchen/Assets/gltf/wall_knife_rack.gltf"
-fit_size = Vector3(0.6, 0.4, 0.08)
-
 [node name="GalleyCeiling" type="MeshInstance3D" parent="Visuals"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.15, 3.65, 4.475)
 material_override = ExtResource("17_floor")
 mesh = SubResource("Cosy_1")
-
-[node name="GalleyBeamPort" type="MeshInstance3D" parent="Visuals"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.6, 3.5, 4.475)
-material_override = ExtResource("28_darkwood")
-mesh = SubResource("Cosy_2")
-
-[node name="GalleyBeamStarboard" type="MeshInstance3D" parent="Visuals"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.6, 3.5, 4.475)
-material_override = ExtResource("28_darkwood")
-mesh = SubResource("Cosy_3")
-
-[node name="GalleyCrossBeam" type="MeshInstance3D" parent="Visuals"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.15, 3.51, 4.9)
-material_override = ExtResource("28_darkwood")
-mesh = SubResource("Cosy_4")
 
 [node name="CorridorWall" type="MeshInstance3D" parent="Visuals"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3.4, 2.3, 4.475)
@@ -807,7 +800,7 @@ light_energy = 1.6
 light_range = 8.0
 
 [node name="GalleyLanternFore" parent="Visuals" instance=ExtResource("23_lantern")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.6, 3.4, 2.7)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.6, 3.24, 4.2)
 phase = 0.2
 light_energy = 1.0
 light_range = 6.0
@@ -815,7 +808,7 @@ swing_degrees = 3.0
 period = 4.2
 
 [node name="GalleyLanternAft" parent="Visuals" instance=ExtResource("23_lantern")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.6, 3.4, 6.9)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.6, 3.24, 5.8)
 phase = 0.6
 light_energy = 1.0
 light_range = 6.0
@@ -892,13 +885,6 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5.55, 2.815, 3.35)
 material_override = ExtResource("29_clay")
 mesh = SubResource("Cosy_19")
 
-[node name="ShelfJar" type="Node3D" parent="Visuals"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5.55, 2.575, 3.6)
-script = ExtResource("20_model")
-path = "res://assets/third_party/kaykit_restaurant/Assets/gltf/jar_B_medium.gltf"
-fit_size = Vector3(0.16, 0.22, 0.16)
-grain_metres = 0.15
-
 [node name="LowerShelf" type="MeshInstance3D" parent="Visuals"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5.55, 1.95, 3.1)
 material_override = ExtResource("27_propwood")
@@ -918,20 +904,6 @@ mesh = SubResource("Cosy_22")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5.64, 2.75, 4)
 material_override = ExtResource("28_darkwood")
 mesh = SubResource("Cosy_23")
-
-[node name="HangingPan" type="Node3D" parent="Visuals"]
-transform = Transform3D(0, 1, 0, 0, 0, -1, -1, 0, 0, 5.66, 2.72, 4)
-script = ExtResource("20_model")
-path = "res://assets/third_party/kaykit_restaurant/Assets/gltf/pan_A.gltf"
-fit_size = Vector3(0.7, 0.08, 0.45)
-grain_metres = 0.15
-
-[node name="HangingLadle" type="Node3D" parent="Visuals"]
-transform = Transform3D(0, 1, 0, 0, 0, -1, -1, 0, 0, 5.66, 2.7, 4.25)
-script = ExtResource("20_model")
-path = "res://assets/third_party/tiny_treats_charming_kitchen/Assets/gltf/spatula.gltf"
-fit_size = Vector3(0.3, 0.05, 0.08)
-grain_metres = 0.15
 
 [node name="Barrel1" parent="Galley" instance=ExtResource("25_barrel")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5.15, 1, 7.3)
@@ -1036,6 +1008,86 @@ light_energy = 0.35
 light_specular = 0.0
 omni_range = 9.0
 omni_attenuation = 0.6
+
+[node name="GalleyBeamPort" type="MeshInstance3D" parent="Visuals"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.6, 3.42, 4.475)
+material_override = ExtResource("28_darkwood")
+mesh = SubResource("Blocks_1")
+
+[node name="GalleyBeamStarboard" type="MeshInstance3D" parent="Visuals"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.6, 3.42, 4.475)
+material_override = ExtResource("28_darkwood")
+mesh = SubResource("Blocks_2")
+
+[node name="GalleyCrossBeam1" type="MeshInstance3D" parent="Visuals"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.15, 3.45, 2.5)
+material_override = ExtResource("28_darkwood")
+mesh = SubResource("Blocks_3")
+
+[node name="GalleyCrossBeam2" type="MeshInstance3D" parent="Visuals"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.15, 3.45, 4.95)
+material_override = ExtResource("28_darkwood")
+mesh = SubResource("Blocks_4")
+
+[node name="GalleyCrossBeam3" type="MeshInstance3D" parent="Visuals"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.15, 3.45, 7.4)
+material_override = ExtResource("28_darkwood")
+mesh = SubResource("Blocks_5")
+
+[node name="KnifeRack" type="MeshInstance3D" parent="Visuals"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.55, 2.4, 1.2)
+material_override = ExtResource("28_darkwood")
+mesh = SubResource("Blocks_6")
+
+[node name="Knife1" type="MeshInstance3D" parent="Visuals"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.37, 2.27, 1.24)
+material_override = ExtResource("34_iron")
+mesh = SubResource("Blocks_7")
+
+[node name="KnifeHandle1" type="MeshInstance3D" parent="Visuals"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.37, 2.47, 1.24)
+material_override = ExtResource("28_darkwood")
+mesh = SubResource("Blocks_8")
+
+[node name="Knife2" type="MeshInstance3D" parent="Visuals"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.55, 2.27, 1.24)
+material_override = ExtResource("34_iron")
+mesh = SubResource("Blocks_9")
+
+[node name="KnifeHandle2" type="MeshInstance3D" parent="Visuals"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.55, 2.47, 1.24)
+material_override = ExtResource("28_darkwood")
+mesh = SubResource("Blocks_10")
+
+[node name="Knife3" type="MeshInstance3D" parent="Visuals"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.73, 2.27, 1.24)
+material_override = ExtResource("34_iron")
+mesh = SubResource("Blocks_11")
+
+[node name="KnifeHandle3" type="MeshInstance3D" parent="Visuals"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.73, 2.47, 1.24)
+material_override = ExtResource("28_darkwood")
+mesh = SubResource("Blocks_12")
+
+[node name="HangingPan" type="MeshInstance3D" parent="Visuals"]
+transform = Transform3D(0, -1, 0, 1, 0, 0, 0, 0, 1, 5.64, 2.45, 4)
+material_override = ExtResource("34_iron")
+mesh = SubResource("Blocks_13")
+
+[node name="HangingPanHandle" type="MeshInstance3D" parent="Visuals"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5.64, 2.8, 4)
+material_override = ExtResource("34_iron")
+mesh = SubResource("Blocks_14")
+
+[node name="HangingSpoon" type="MeshInstance3D" parent="Visuals"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5.65, 2.6, 4.45)
+material_override = ExtResource("28_darkwood")
+mesh = SubResource("Blocks_15")
+
+[node name="HangingSpoonBowl" type="MeshInstance3D" parent="Visuals"]
+transform = Transform3D(0, -1, 0, 1, 0, 0, 0, 0, 1, 5.65, 2.38, 4.45)
+material_override = ExtResource("28_darkwood")
+mesh = SubResource("Blocks_16")
 
 [node name="Shelter" type="Area3D" parent="."]
 script = ExtResource("11_shelter")

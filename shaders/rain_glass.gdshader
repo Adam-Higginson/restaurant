@@ -13,6 +13,8 @@ uniform vec4 tint : source_color = vec4(0.5, 0.62, 0.85, 0.12);
 uniform vec4 drop_light : source_color = vec4(1.0, 0.78, 0.5, 1.0);
 // How many drop columns cross the pane.
 uniform float columns = 9.0;
+// How many texels across the drops are drawn with, for the chunky look.
+uniform float texels = 40.0;
 
 
 vec3 hash3(vec2 cell) {
@@ -36,8 +38,9 @@ void fragment() {
 	}
 	float wet = clamp(wetness, 0.0, 1.0);
 
-	// Still beads in some cells, and one drop running down each column.
-	vec2 p = UV * columns;
+	// Still beads in some cells, and one drop running down each column, drawn
+	// on a coarse grid of square texels.
+	vec2 p = (floor(UV * texels) + 0.5) / texels * columns;
 	vec2 cell = floor(p);
 	vec3 h = hash3(cell);
 	float water = h.x < 0.45 * wet ? drop(p, cell + 0.3 + 0.4 * h.yz, 0.12 + 0.1 * h.z) : 0.0;
@@ -48,6 +51,10 @@ void fragment() {
 	// The thin wet trail a running drop leaves above it.
 	float trail = smoothstep(0.08, 0.0, abs(p.x - runner.x)) * step(p.y, runner.y)
 			* smoothstep(runner.y - 2.5, runner.y, p.y) * step(column.x, wet);
+
+	// A few hard bands of shading, like a small palette, not smooth domes.
+	water = floor(water * 3.0 + 0.5) / 3.0;
+	trail = step(0.5, trail);
 
 	// Mostly clear glass; drops glint with the room's warm light on their rims.
 	float glint = smoothstep(0.2, 0.6, water) * (1.0 - smoothstep(0.6, 1.0, water));

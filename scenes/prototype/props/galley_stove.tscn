@@ -4,7 +4,6 @@
 [ext_resource type="Material" path="res://assets/placeholder/materials/stone.tres" id="2_x"]
 [ext_resource type="Material" path="res://assets/placeholder/materials/iron.tres" id="3_x"]
 [ext_resource type="Script" path="res://scripts/props/flicker.gd" id="4_x"]
-[ext_resource type="Script" path="res://scripts/art/third_party_model.gd" id="5_x"]
 [ext_resource type="Shader" path="res://shaders/pixel_fire.gdshader" id="6_fire"]
 
 [sub_resource type="StandardMaterial3D" id="R1"]
@@ -83,6 +82,19 @@ shader_parameter/texels = 10.0
 shader_parameter/glow = 5.0
 shader_parameter/seed = 3.0
 
+[sub_resource type="BoxMesh" id="Pot_1"]
+size = Vector3(0.06, 0.03, 0.05)
+
+[sub_resource type="BoxMesh" id="Pot_2"]
+size = Vector3(0.06, 0.03, 0.05)
+
+[sub_resource type="CylinderMesh" id="Pot_3"]
+top_radius = 0.12
+bottom_radius = 0.17
+height = 0.03
+radial_segments = 10
+rings = 1
+
 [node name="GalleyStove" type="StaticBody3D"]
 script = ExtResource("1_x")
 
@@ -152,18 +164,25 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.3, 5.69, -0.2)
 material_override = ExtResource("3_x")
 mesh = SubResource("R14")
 
-[node name="PotStandIn" type="MeshInstance3D" parent="."]
+[node name="Pot" type="MeshInstance3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.2, 0.99, 0.08)
 material_override = ExtResource("3_x")
 mesh = SubResource("R15")
 
-[node name="Pot" type="Node3D" parent="." node_paths=PackedStringArray("stand_ins")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.2, 0.87, 0.08)
-script = ExtResource("5_x")
-path = "res://assets/third_party/kaykit_restaurant/Assets/gltf/pot_A_stew.gltf"
-fit_size = Vector3(0.5, 0.3, 0.4)
-grain_metres = 0.15
-stand_ins = [NodePath("../PotStandIn")]
+[node name="PotHandle1" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.41, 1.07, 0.08)
+material_override = ExtResource("3_x")
+mesh = SubResource("Pot_1")
+
+[node name="PotHandle2" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.01, 1.07, 0.08)
+material_override = ExtResource("3_x")
+mesh = SubResource("Pot_2")
+
+[node name="PotLid" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.2, 1.125, 0.08)
+material_override = ExtResource("3_x")
+mesh = SubResource("Pot_3")
 
 [node name="FireLight" type="OmniLight3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.4, 0.7)
