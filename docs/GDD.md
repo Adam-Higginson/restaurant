@@ -54,14 +54,14 @@ OoT-style duels: lock on, read the enemy, strike at the opening.
   - The **frying pan** parries. Time it right for a big *clang* that staggers the enemy.
   - Later, the **ladle** sweeps, the **pepper grinder** makes creatures sneeze, and the lantern lights dark places and burns webs.
 
-  The tool belt is the item bar, and new utensils open new parts of old islands.
+  The toolbar is the item bar, and new utensils open new parts of old islands.
 - **Hearts:** the player's health.
 - **Enemies have rhythms:** a readable windup, an attack, then an opening. Learning a fight is like learning a recipe.
 
 ### Preparation
 - **Dinner is the briefing:** crew gossip at the table tells you what's on tomorrow's island ("the crabs hate pepper", "the tide goes out at four bells").
 - **Tonight's meal is tomorrow's blessing:** what the crew eats at dinner shapes the next day ashore (a hearty stew for an extra heart, ginger soup against the cold).
-- **The satchel:** packing for an island is a real choice: healing buns, a jar of honey to lure something, pepper. Your hands only ever hold one thing, so what you take ashore goes in a small satchel with a few slots (still to design: its size, and how it relates to the belt).
+- **Packing:** going ashore is a real choice: healing buns, a jar of honey to lure something, pepper. What you take is what fits on your toolbar next to your tools, so space is the limit.
 - **Taste weaknesses:** creatures react to food (pepper makes them sneeze, honey distracts, smoke makes them sleepy), so cooking knowledge is combat knowledge.
 
 ### Defeat
@@ -71,8 +71,8 @@ When you lose a fight, **the lantern pulls you out**, echoing how you met. You r
 - A young adult, rescued at sea. Their name and look are to be decided.
 - 3D movement relative to the camera, turning to face the way they walk.
 - Acts on the thing in front of them: counters, the pantry, the stove, pans, the bell, the gangplank, plants, people.
-- **Hands:** carry **one item** at a time, held above the head as in OoT: an ingredient, prepared food or a utensil (chopping board, frying pan, saucepan, plate, bowl). A plate or bowl carries whatever is on it, so assembling a dish on a plate is how you move several things at once. (The 2D prototype had a stack of 3 with a rotate button; playtesting in 3D found it confusing, #76.)
-- **Tool belt:** 4 slots for hand tools, always with you. One slot is selected at a time. Tools are used with empty arms only. The knife is on the belt from the start, and the belt doubles as the item bar ashore.
+- **Toolbar (like Stardew Valley):** 12 slots that hold hand tools and items together: ingredients, prepared food and utensils (chopping board, frying pan, saucepan, plate, bowl). A plate or bowl carries whatever is on it. One slot is selected at a time, and **the selected slot is what you hold**: an item there shows above your head, and Interact uses it. Picking anything up puts it in the first free slot and selects it. The knife starts in slot 1. (Before this, the 2D prototype had a stack of 3 with a rotate button, then the 3D prototype briefly had one item in hand; both were confusing in playtests, #76.)
+- **Tools** work whatever you're holding. Use tool uses the selected tool, or if an item or an empty slot is selected, the tool that does something to what you're facing (the knife on a board).
 
 ### Camera
 - **Free third-person camera** everywhere you walk: on deck, below deck in the galley, and on islands, orbited with the right stick or mouse. A spring arm pulls it in when a wall or the mast is in the way. It keeps its direction in the world when the ship turns, rather than turning with the deck. With a mouse, the cursor is captured while playing: Esc frees it and a click captures it again.
@@ -85,15 +85,15 @@ One button, **interact**, does everything with the thing in front of you.
 
 **The interact rule:** if what you're holding goes here, it goes in or on; otherwise you use the object. Every object follows it, so new ones need no new buttons.
 
-**The action prompt:** the top-right corner of the HUD always says what Interact and Use tool would do right now, like OoT's A-button text: `[E] Put down Tomato` above `[F] Chop`. A line hides when its button would do nothing. Button names follow the last device used: keys after a key press or click, Xbox buttons after a controller press. Along the bottom of the HUD are the belt bar (dimmed while your hands are full) and the name and quality of what you're holding.
+**The action prompt:** the top-right corner of the HUD always says what Interact and Use tool would do right now, like OoT's A-button text: `[E] Put down Tomato` above `[F] Chop`. A line hides when its button would do nothing. Button names follow the last device used: keys after a key press (`[E]`), mouse buttons after a click (`[RMB]`, `[LMB]`), Xbox buttons after a controller press (`[X]`). Along the bottom of the HUD are the toolbar and the name and quality of the selected item.
 
 | Action | Keyboard / mouse | Controller (Xbox naming) | Does |
 |---|---|---|---|
 | Move | WASD / arrows | Left stick | Walk, relative to the camera |
 | Camera | Mouse (Esc frees the cursor) | Right stick | Orbit the free camera |
-| Interact | E or Space | X or A | Put down, pick up, put away, open, ring, talk, gather |
-| Use tool | F | B | Use the selected belt tool on what you're facing (the knife chops). Empty hands only. |
-| Select belt slot | 1–4 / scroll | Left bumper (cycle) | Choose the active tool |
+| Interact | E or Space / right click | X or A | Put down, pick up, put away, open, ring, talk, gather |
+| Use tool | F / left click | B | Use the selected tool, or the tool that fits what you're facing (the knife chops) |
+| Select toolbar slot | 1–9, 0, -, = / scroll | Bumpers (cycle) | Choose what you hold |
 | Lock-on, attack, parry | To be set in #66 | To be set in #66 | Duels |
 
 Each action is a named action in Godot's Input Map with keyboard and controller bound, so gameplay code never checks a specific key. Panels must be usable with the D-pad. While a panel is open the mouse cursor is freed so it can be clicked, and it's captured again when the panel closes.
@@ -140,7 +140,7 @@ Worked example: a tomato (★) sliced properly gives (1 + 3) / 2 = ★★ sliced
 
 ### Vessels and fittings
 - **Counter:** holds one item, food or a utensil.
-- **Chopping board:** holds one food item. With empty arms and the knife selected, each Use tool on the board's counter is one cut. A progress bar shows how far the current cut level is. Interact takes the food off (losing progress towards the next cut level), and only an empty board is picked up itself. Holding a plate or bowl, Interact slides the board's food onto it instead, if it fits.
+- **Chopping board:** holds one food item. Each Use tool on the board's counter is one cut (the knife, which works whatever you're holding). A progress bar shows how far the current cut level is. Interact takes the food off (losing progress towards the next cut level), and only an empty board is picked up itself. Holding a plate or bowl, Interact slides the board's food onto it instead, if it fits.
 - **Plate and bowl:** hold up to 3 food items, and assemble what's on them instantly when it matches a reaction (chopped lettuce + sliced tomato on a plate → Garden Salad). Food goes on while the plate sits on a counter. Interact always takes the plate whole, with its food, and the crew are served it that way. A rack gives clean ones without limit.
 - **Vessels don't nest:** only food goes into a board, plate, bowl or pan, never another utensil.
 - **Saucepan and frying pan:** hold up to 3 food items, and cook on the galley stove. Interact puts what you're holding into the pan if it fits; otherwise it turns the heat on or off. Finished food waits in the pan.
@@ -159,7 +159,7 @@ Garden Salad works today. Tomato Soup and Grilled Cheese need the stove, pans an
 
 ## Storage
 - The galley **pantry** (and later the hold) stores ingredients. Containers have a fixed number of slots, and each item uses one.
-- Interact on a container while holding food it accepts (and there's room) puts it away. Otherwise it opens a small panel showing its contents, and picking an item puts it in your hands if they're free.
+- Interact on a container while holding food it accepts (and there's room) puts it away. Otherwise it opens a small panel showing its contents, and picking an item puts it on your toolbar if there's a free slot. While you hold food the container accepts, Interact puts it away instead, so select an empty slot or a tool to open it.
 - Browsing a container's panel pauses the game (the ship stops and cooking waits), like OoT's item screen. Esc or Close shuts it.
 - The galley pantry holds 12 pieces and starts stocked with 3 lettuce and 3 tomatoes for now.
 - Containers hold any **solid** food, raw or prepared, so you can prep ahead. Liquids can't be stored yet.
@@ -237,12 +237,12 @@ These cover the pure-logic code that carries over to 3D. The 2D world layer (pla
 - Definitions are `Resource` files under `res://data/`, listed in `res://data/catalog.tres` (`Catalog`):
   - `Item` (`data/items/`): anything physical. Every food state and every utensil. A vessel has a `capacity` (how much food fits; 0 for everything else) and `carried_whole` (plates and bowls yes, boards and pans no). A `storage` kind says where food is put away.
   - `Element` (`data/elements/`): cut, fire, later cold. Instant or timed.
-  - `HandTool` (`data/tools/`): a belt tool, and the `Element` it applies (the knife applies cut). Kept apart from `Item` because tools never go in the arms.
+  - `HandTool` (`data/tools/`): a toolbar tool, and the `Element` it applies (the knife applies cut). Kept apart from `Item` because tools are never put down or into anything.
   - `Reaction` (`data/reactions/`): consumed items, required items (including the vessel), elements, amount, result and quality.
   - `Person` (`data/people/`): a character with tastes. Will describe crew members.
 - Definitions are shared and never change. A physical thing in the world is an `ItemInstance` (`scripts/cooking/`) pointing at its `Item` and holding its own quality. Arms, vessels and counters hold these. A vessel's instance also owns its `VesselContents`, so its food goes wherever it goes.
 - `VesselContents` is the cooking logic of one vessel, with no nodes, so it's unit tested on its own. Its changes (`add_item`, `remove_item`, `add_element`, `remove_element`, `tick`) run the reaction engine inside them; its `get_` methods only read. It emits `contents_changed`, `reaction_started`, `reaction_progressed`, `reaction_cancelled` and `reaction_finished` for the world to redraw from.
-- Arms (`scripts/player/arms.gd`), the tool belt (`tool_belt.gd`) and each container's contents are gameplay state in scripts, not in UI scripts. UI reads them and listens to signals.
+- The 3D toolbar (`scripts/player/toolbar.gd`, an `Arms` whose selected item is its "top", so every arms rule works with it), the legacy 2D arms and tool belt (`arms.gd`, `tool_belt.gd`), and each container's contents are gameplay state in scripts, not in UI scripts. UI reads them and listens to signals.
 - A container's contents are a `StorageContents` (`scripts/state/`, no nodes): a list of `ItemInstance`s with a capacity, the storage kind it accepts and a take-only flag. `put_away()` follows the player's rules; `add()` ignores them (deliveries); `take_into(arms, item, quality)` moves the oldest matching piece onto the arms. It emits `changed`.
 - Interact and use tool are routed the same way: the player's interaction detector sends each press to the focused interactable, which hands it to its prop. Each prop applies the interact rule itself. The 3D versions (`Area3D`) keep this design (#64).
 - Shared state lives in the `Game` autoload (`scripts/state/game_state.gd`). `GameClock` and `Calendar` (`scripts/time/`) are pure logic. Whether the clock-driven day stays is an open question.

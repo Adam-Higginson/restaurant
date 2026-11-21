@@ -108,6 +108,10 @@ A growing glossary of the Godot concepts this project uses: what each one is, in
 
 **`%UniqueName`.** Tick *Access as Unique Name* on a node in a scene, and scripts in that scene can find it with `%Name` wherever it sits in the tree, so moving it into a container doesn't break the script. *Ours:* `Hud3D` finds `%BeltBar`, `%HeldItem` and `%ActionPrompt`.
 
+**Inheritance and overriding.** `extends SomeClass` makes a script a kind of that class: it gets all its functions, and can replace (*override*) any of them by defining one with the same name and signature. Code that expects the parent type works with the child unchanged. *Ours:* `Toolbar extends Arms`, overriding `top()`, `add()` and `take_top()`, so the counter, pantry and plate-rack rules (written for `Arms`) work with the toolbar.
+
+**Mouse buttons in the Input Map.** An action can be bound to mouse buttons as well as keys and controller buttons (`InputEventMouseButton`, `MOUSE_BUTTON_LEFT`/`RIGHT`; the wheel is buttons 4 and 5). *Ours:* right click is `interact`, left click is `use_tool`, and the wheel cycles the toolbar. A click only counts while the mouse is captured (`InteractionDetector3D.accepts_event`), so the click that recaptures it does nothing else.
+
 *Still to come with the prototype tickets: ...*
 
 ## Testing
