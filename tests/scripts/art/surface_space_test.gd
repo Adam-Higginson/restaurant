@@ -28,7 +28,12 @@ func test_the_deck_pattern_sails_with_the_ship() -> void:
 	var runner: GdUnitSceneRunner = scene_runner(ship.get_parent())
 	ship.set_sail()
 	await physics_ticks(runner, 20)
-	await get_tree().process_frame
+	# Stop it before checking, so how many frames the machine draws between
+	# ticks can't put the ship somewhere other than where it was last drawn.
+	ship.speed = 0.0
+	await physics_ticks(runner, 3)
+	(ship.get_node("SurfaceSpace") as SurfaceSpace).apply()
+	assert_vector(ship.global_position).is_not_equal(Vector3.ZERO)
 
 	var deck: ShaderMaterial = (ship.get_node("Visuals/DeckAft") as MeshInstance3D) \
 			.material_override as ShaderMaterial
@@ -37,7 +42,7 @@ func test_the_deck_pattern_sails_with_the_ship() -> void:
 	# ship has got to.
 	var spot_on_deck: Vector3 = Vector3(1, 5.3, 12)
 	var in_pattern: Vector3 = Transform3D(handed) * ship.to_global(spot_on_deck)
-	assert_vector(in_pattern).is_equal_approx(spot_on_deck, Vector3.ONE * 0.1)
+	assert_vector(in_pattern).is_equal_approx(spot_on_deck, Vector3.ONE * 0.01)
 
 
 func _wet_material() -> ShaderMaterial:
