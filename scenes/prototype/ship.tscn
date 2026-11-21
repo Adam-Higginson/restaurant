@@ -1,7 +1,9 @@
 [gd_scene format=3]
 
 [ext_resource type="Script" path="res://scripts/ship/ship.gd" id="1_7ykrf"]
-[ext_resource type="Material" path="res://assets/placeholder/materials/greybox_wood.tres" id="2_nifss"]
+[ext_resource type="Material" path="res://assets/placeholder/materials/galley_wood.tres" id="2_nifss"]
+[ext_resource type="Material" path="res://assets/placeholder/materials/galley_floor.tres" id="17_floor"]
+[ext_resource type="PackedScene" path="res://scenes/prototype/props/galley_stove.tscn" id="18_stove"]
 [ext_resource type="Material" path="res://assets/placeholder/materials/greybox_dark_wood.tres" id="3_t630l"]
 [ext_resource type="Material" path="res://assets/placeholder/materials/greybox_cloth.tres" id="4_dp3rt"]
 [ext_resource type="PackedScene" path="res://scenes/prototype/props/counter.tscn" id="6_counter"]
@@ -163,6 +165,9 @@ size = Vector3(0.06, 0.06, 0.7)
 [sub_resource type="BoxMesh" id="Mesh_HatchArm"]
 size = Vector3(1.25, 0.06, 0.06)
 
+[sub_resource type="BoxMesh" id="Mesh_GalleyFloor"]
+size = Vector3(11.4, 0.02, 13.7)
+
 [sub_resource type="BoxMesh" id="Mesh_Cord"]
 size = Vector3(0.025, 0.45, 0.025)
 
@@ -184,6 +189,11 @@ script = ExtResource("1_7ykrf")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.25, 0)
 material_override = ExtResource("2_nifss")
 mesh = SubResource("Mesh_Hull")
+
+[node name="GalleyFloor" type="MeshInstance3D" parent="Visuals"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.01, 8)
+material_override = ExtResource("17_floor")
+mesh = SubResource("Mesh_GalleyFloor")
 
 [node name="WallPort" type="MeshInstance3D" parent="Visuals"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -5.85, 3, 0)
@@ -405,6 +415,16 @@ script = ExtResource("14_tex")
 material = ExtResource("10_wet")
 path = "res://assets/third_party/sbs_textures_128/128x128/Wood/Synth-Wood_13-128x128.png"
 
+[node name="GalleyWoodTexture" type="Node" parent="."]
+script = ExtResource("14_tex")
+material = ExtResource("2_nifss")
+path = "res://assets/third_party/sbs_textures_128/128x128/Wood/Synth-Wood_15-128x128.png"
+
+[node name="GalleyFloorTexture" type="Node" parent="."]
+script = ExtResource("14_tex")
+material = ExtResource("17_floor")
+path = "res://assets/third_party/sbs_textures_128/128x128/Wood/Synth-Wood_14-128x128.png"
+
 [node name="TrimTexture" type="Node" parent="."]
 script = ExtResource("14_tex")
 material = ExtResource("13_wetdark")
@@ -412,7 +432,7 @@ path = "res://assets/third_party/sbs_textures_128/128x128/Wood/Synth-Wood_01-128
 
 [node name="SurfaceSpace" type="Node" parent="."]
 script = ExtResource("16_space")
-materials = Array[ShaderMaterial]([ExtResource("10_wet"), ExtResource("13_wetdark")])
+materials = Array[ShaderMaterial]([ExtResource("10_wet"), ExtResource("13_wetdark"), ExtResource("2_nifss"), ExtResource("17_floor")])
 
 [node name="HatchDrips" type="GPUParticles3D" parent="."]
 transform = Transform3D(0, 0, -1, 0, 1, 0, 1, 0, 0, -3.52, 4.98, 5.075)
@@ -520,6 +540,9 @@ start_item = ExtResource("8_board")
 
 [node name="PlateRack" parent="Galley" instance=ExtResource("9_rack")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.65, 1, 1.45)
+
+[node name="Stove" parent="Galley" instance=ExtResource("18_stove")]
+transform = Transform3D(0, 0, -1, 0, 1, 0, 1, 0, 0, 5.2, 1, 6)
 
 [node name="Shelter" type="Area3D" parent="."]
 script = ExtResource("11_shelter")

@@ -1,0 +1,161 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://scripts/props/galley_stove.gd" id="1_stove"]
+[ext_resource type="Material" path="res://assets/placeholder/materials/iron.tres" id="2_iron"]
+[ext_resource type="Script" path="res://scripts/props/flicker.gd" id="3_flicker"]
+[ext_resource type="Script" path="res://scripts/art/third_party_model.gd" id="4_model"]
+
+[sub_resource type="BoxMesh" id="Mesh_Body"]
+size = Vector3(0.9, 0.62, 0.62)
+
+[sub_resource type="BoxMesh" id="Mesh_Top"]
+size = Vector3(1.0, 0.06, 0.72)
+
+[sub_resource type="BoxMesh" id="Mesh_Leg"]
+size = Vector3(0.08, 0.16, 0.08)
+
+[sub_resource type="BoxMesh" id="Mesh_Door"]
+size = Vector3(0.38, 0.26, 0.02)
+
+[sub_resource type="StandardMaterial3D" id="Material_Fire"]
+albedo_color = Color(1, 0.5, 0.15, 1)
+emission_enabled = true
+emission = Color(1, 0.42, 0.1, 1)
+emission_energy_multiplier = 5.0
+
+[sub_resource type="BoxMesh" id="Mesh_Bar"]
+size = Vector3(0.02, 0.26, 0.03)
+
+[sub_resource type="CylinderMesh" id="Mesh_Flue"]
+top_radius = 0.08
+bottom_radius = 0.08
+height = 4.8
+radial_segments = 10
+rings = 1
+
+[sub_resource type="CylinderMesh" id="Mesh_FlueCap"]
+top_radius = 0.16
+bottom_radius = 0.12
+height = 0.12
+radial_segments = 10
+rings = 1
+
+[sub_resource type="CylinderMesh" id="Mesh_Pot"]
+top_radius = 0.17
+bottom_radius = 0.15
+height = 0.22
+radial_segments = 10
+rings = 1
+
+[sub_resource type="BoxShape3D" id="Shape_Stove"]
+size = Vector3(1.0, 0.86, 0.72)
+
+[sub_resource type="CylinderShape3D" id="Shape_Flue"]
+height = 4.8
+radius = 0.09
+
+[node name="GalleyStove" type="StaticBody3D"]
+script = ExtResource("1_stove")
+
+[node name="Body" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.47, 0)
+material_override = ExtResource("2_iron")
+mesh = SubResource("Mesh_Body")
+
+[node name="Top" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.81, 0)
+material_override = ExtResource("2_iron")
+mesh = SubResource("Mesh_Top")
+
+[node name="LegFrontLeft" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.38, 0.08, 0.24)
+material_override = ExtResource("2_iron")
+mesh = SubResource("Mesh_Leg")
+
+[node name="LegFrontRight" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.38, 0.08, 0.24)
+material_override = ExtResource("2_iron")
+mesh = SubResource("Mesh_Leg")
+
+[node name="LegBackLeft" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.38, 0.08, -0.24)
+material_override = ExtResource("2_iron")
+mesh = SubResource("Mesh_Leg")
+
+[node name="LegBackRight" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.38, 0.08, -0.24)
+material_override = ExtResource("2_iron")
+mesh = SubResource("Mesh_Leg")
+
+[node name="Fire" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.42, 0.31)
+mesh = SubResource("Mesh_Door")
+surface_material_override/0 = SubResource("Material_Fire")
+cast_shadow = 0
+
+[node name="Bar1" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.1, 0.42, 0.325)
+material_override = ExtResource("2_iron")
+mesh = SubResource("Mesh_Bar")
+
+[node name="Bar2" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.42, 0.325)
+material_override = ExtResource("2_iron")
+mesh = SubResource("Mesh_Bar")
+
+[node name="Bar3" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.1, 0.42, 0.325)
+material_override = ExtResource("2_iron")
+mesh = SubResource("Mesh_Bar")
+
+[node name="Flue" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.3, 3.24, -0.15)
+material_override = ExtResource("2_iron")
+mesh = SubResource("Mesh_Flue")
+
+[node name="FlueCap" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.3, 5.66, -0.15)
+material_override = ExtResource("2_iron")
+mesh = SubResource("Mesh_FlueCap")
+
+[node name="PotStandIn" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.18, 0.95, 0.05)
+material_override = ExtResource("2_iron")
+mesh = SubResource("Mesh_Pot")
+
+[node name="Pot" type="Node3D" parent="." node_paths=PackedStringArray("stand_ins")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.18, 0.84, 0.05)
+script = ExtResource("4_model")
+path = "res://assets/third_party/kaykit_restaurant/Assets/gltf/pot_A_stew.gltf"
+fit_size = Vector3(0.5, 0.3, 0.4)
+stand_ins = [NodePath("../PotStandIn")]
+
+[node name="Kettle" type="Node3D" parent="."]
+transform = Transform3D(0.94, 0, 0.34, 0, 1, 0, -0.34, 0, 0.94, 0.28, 0.84, 0.1)
+script = ExtResource("4_model")
+path = "res://assets/third_party/tiny_treats_charming_kitchen/Assets/gltf/kettle.gltf"
+fit_size = Vector3(0.3, 0.25, 0.3)
+
+[node name="FireLight" type="OmniLight3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.45, 0.6)
+light_color = Color(1, 0.55, 0.25, 1)
+light_energy = 2.6
+light_volumetric_fog_energy = 1.5
+shadow_enabled = true
+omni_range = 7.0
+script = ExtResource("3_flicker")
+base_energy = 2.6
+
+[node name="SteamSpot" type="Marker3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.18, 1.12, 0.05)
+
+[node name="EmberSpot" type="Marker3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.56, 0.34)
+
+[node name="Shape" type="CollisionShape3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.43, 0)
+shape = SubResource("Shape_Stove")
+
+[node name="FlueShape" type="CollisionShape3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.3, 3.24, -0.15)
+shape = SubResource("Shape_Flue")

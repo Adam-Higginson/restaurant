@@ -47,6 +47,9 @@ uniform float plank_warp : hint_range(0.0, 0.2) = 0.05;
 uniform float bevel : hint_range(0.0, 0.1) = 0.03;
 
 group_uniforms wet;
+// How much the weather reaches it: 1 out in the rain, 0 indoors (the galley
+// floor and walls), where it stays dry whatever the weather.
+uniform float exposure : hint_range(0.0, 1.0) = 1.0;
 // How much soaking darkens it: high for porous wood, low for paint or metal.
 uniform float soak : hint_range(0.0, 1.0) = 0.6;
 // How shiny the soaked (not pooled) surface gets. Wood drinks water in, so it
@@ -172,7 +175,7 @@ float brightness(vec3 c) {
 
 void fragment() {
 	vec3 n = normalize(surface_normal);
-	float wet = clamp(wetness, 0.0, 1.0);
+	float wet = clamp(wetness, 0.0, 1.0) * exposure;
 	// Rain lands on faces that look up; undersides (the galley ceiling) stay dry.
 	float up = clamp(n.y, 0.0, 1.0);
 	float exposed = smoothstep(-0.4, 0.1, n.y);
