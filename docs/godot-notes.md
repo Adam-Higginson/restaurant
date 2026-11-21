@@ -100,6 +100,14 @@ A growing glossary of the Godot concepts this project uses: what each one is, in
 
 **Typed dictionary exports.** `@export var start_items: Dictionary[Item, int]` shows in the Inspector as a list of key/value pairs, with the key limited to an `Item` resource and the value to a whole number. *Ours:* the pantry's starting stock, `StorageProp3D.start_items`.
 
+**`Callable` stored in a variable.** A `Callable` is a function you can keep in a variable and call later with `.call(...)`. A lambda (`func(x: int) -> String: ...`) makes one on the spot. `is_valid()` says whether one has been set. *Ours:* each prop puts a lambda in its `Interactable3D.describe_interact`, so the detector can ask any prop what Interact would do without knowing what kind of prop it is.
+
+**`_input` vs `_unhandled_input`.** Both receive input events. `_input` runs first, for every event, before the UI gets it; `_unhandled_input` only gets events nothing else used. Gameplay listens in `_unhandled_input`, so open panels win. *Ours:* `ActionPrompt._input` notices every key or controller press (to name the right buttons) without using them up; the player and detector use `_unhandled_input`.
+
+**`InputMap.action_get_events()`.** Lists the keys and buttons bound to an Input Map action, so the game can show them instead of hard-coding "E". `OS.get_keycode_string()` turns a key into its name. *Ours:* `ActionPrompt.button_name()`.
+
+**`%UniqueName`.** Tick *Access as Unique Name* on a node in a scene, and scripts in that scene can find it with `%Name` wherever it sits in the tree, so moving it into a container doesn't break the script. *Ours:* `Hud3D` finds `%BeltBar`, `%HeldItem` and `%ActionPrompt`.
+
 *Still to come with the prototype tickets: ...*
 
 ## Testing

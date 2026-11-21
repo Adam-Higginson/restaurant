@@ -61,7 +61,7 @@ OoT-style duels: lock on, read the enemy, strike at the opening.
 ### Preparation
 - **Dinner is the briefing:** crew gossip at the table tells you what's on tomorrow's island ("the crabs hate pepper", "the tide goes out at four bells").
 - **Tonight's meal is tomorrow's blessing:** what the crew eats at dinner shapes the next day ashore (a hearty stew for an extra heart, ginger soup against the cold).
-- **The basket:** you carry at most 3 things (the arms), so packing for an island is a real choice: healing buns, a jar of honey to lure something, pepper.
+- **The satchel:** packing for an island is a real choice: healing buns, a jar of honey to lure something, pepper. Your hands only ever hold one thing, so what you take ashore goes in a small satchel with a few slots (still to design: its size, and how it relates to the belt).
 - **Taste weaknesses:** creatures react to food (pepper makes them sneeze, honey distracts, smoke makes them sleepy), so cooking knowledge is combat knowledge.
 
 ### Defeat
@@ -71,7 +71,7 @@ When you lose a fight, **the lantern pulls you out**, echoing how you met. You r
 - A young adult, rescued at sea. Their name and look are to be decided.
 - 3D movement relative to the camera, turning to face the way they walk.
 - Acts on the thing in front of them: counters, the pantry, the stove, pans, the bell, the gangplank, plants, people.
-- **Arms:** carry up to **3 items** stacked above the head: ingredients, prepared food and utensils (chopping board, frying pan, saucepan, plates, bowls). A plate or bowl carries whatever is on it. Each item takes one slot. Only the top item is active: putting down uses it, and anything you pick up goes on top.
+- **Hands:** carry **one item** at a time, held above the head as in OoT: an ingredient, prepared food or a utensil (chopping board, frying pan, saucepan, plate, bowl). A plate or bowl carries whatever is on it, so assembling a dish on a plate is how you move several things at once. (The 2D prototype had a stack of 3 with a rotate button; playtesting in 3D found it confusing, #76.)
 - **Tool belt:** 4 slots for hand tools, always with you. One slot is selected at a time. Tools are used with empty arms only. The knife is on the belt from the start, and the belt doubles as the item bar ashore.
 
 ### Camera
@@ -83,15 +83,16 @@ When you lose a fight, **the lantern pulls you out**, echoing how you met. You r
 ### Controls
 One button, **interact**, does everything with the thing in front of you.
 
-**The interact rule:** if what you're holding (the top of your stack) goes here, it goes in or on; otherwise you use the object. Every object follows it, so new ones need no new buttons. When something would do the wrong thing, rotate your stack (Q) so something else is on top.
+**The interact rule:** if what you're holding goes here, it goes in or on; otherwise you use the object. Every object follows it, so new ones need no new buttons.
+
+**The action prompt:** the top-right corner of the HUD always says what Interact and Use tool would do right now, like OoT's A-button text: `[E] Put down Tomato` above `[F] Chop`. A line hides when its button would do nothing. Button names follow the last device used: keys after a key press or click, Xbox buttons after a controller press. Along the bottom of the HUD are the belt bar (dimmed while your hands are full) and the name and quality of what you're holding.
 
 | Action | Keyboard / mouse | Controller (Xbox naming) | Does |
 |---|---|---|---|
 | Move | WASD / arrows | Left stick | Walk, relative to the camera |
 | Camera | Mouse (Esc frees the cursor) | Right stick | Orbit the free camera |
 | Interact | E or Space | X or A | Put down, pick up, put away, open, ring, talk, gather |
-| Use tool | F | B | Use the selected belt tool on what you're facing (the knife chops). Empty arms only. |
-| Rotate stack | Q | Right bumper | Rotate the stack, so a different item is on top |
+| Use tool | F | B | Use the selected belt tool on what you're facing (the knife chops). Empty hands only. |
 | Select belt slot | 1–4 / scroll | Left bumper (cycle) | Choose the active tool |
 | Lock-on, attack, parry | To be set in #66 | To be set in #66 | Duels |
 
@@ -139,7 +140,7 @@ Worked example: a tomato (★) sliced properly gives (1 + 3) / 2 = ★★ sliced
 
 ### Vessels and fittings
 - **Counter:** holds one item, food or a utensil.
-- **Chopping board:** holds one food item. With empty arms and the knife selected, each Use tool on the board's counter is one cut. A progress bar shows how far the current cut level is. Interact takes the food off (losing progress towards the next cut level), and only an empty board is picked up itself.
+- **Chopping board:** holds one food item. With empty arms and the knife selected, each Use tool on the board's counter is one cut. A progress bar shows how far the current cut level is. Interact takes the food off (losing progress towards the next cut level), and only an empty board is picked up itself. Holding a plate or bowl, Interact slides the board's food onto it instead, if it fits.
 - **Plate and bowl:** hold up to 3 food items, and assemble what's on them instantly when it matches a reaction (chopped lettuce + sliced tomato on a plate → Garden Salad). Food goes on while the plate sits on a counter. Interact always takes the plate whole, with its food, and the crew are served it that way. A rack gives clean ones without limit.
 - **Vessels don't nest:** only food goes into a board, plate, bowl or pan, never another utensil.
 - **Saucepan and frying pan:** hold up to 3 food items, and cook on the galley stove. Interact puts what you're holding into the pan if it fits; otherwise it turns the heat on or off. Finished food waits in the pan.
@@ -158,7 +159,7 @@ Garden Salad works today. Tomato Soup and Grilled Cheese need the stove, pans an
 
 ## Storage
 - The galley **pantry** (and later the hold) stores ingredients. Containers have a fixed number of slots, and each item uses one.
-- Interact on a container while your top item is food it accepts (and there's room) puts it away. Otherwise it opens a small panel showing its contents, and picking an item puts it in your arms if you have space.
+- Interact on a container while holding food it accepts (and there's room) puts it away. Otherwise it opens a small panel showing its contents, and picking an item puts it in your hands if they're free.
 - Browsing a container's panel pauses the game (the ship stops and cooking waits), like OoT's item screen. Esc or Close shuts it.
 - The galley pantry holds 12 pieces and starts stocked with 3 lettuce and 3 tomatoes for now.
 - Containers hold any **solid** food, raw or prepared, so you can prep ahead. Liquids can't be stored yet.

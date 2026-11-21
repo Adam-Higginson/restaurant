@@ -14,7 +14,6 @@ func test_food_is_one_cube() -> void:
 	auto_free(model)
 
 	assert_int(model.get_child_count()).is_equal(1)
-	assert_float(ItemModel.height_of(ItemInstance.new(TOMATO))).is_equal(ItemModel.FOOD_SIZE)
 
 
 func test_a_plate_shows_each_piece_of_food_on_it() -> void:
@@ -51,13 +50,3 @@ func test_an_empty_board_has_no_progress_bar() -> void:
 	auto_free(model)
 
 	assert_object(model.find_child("ProgressBar", false, false)).is_null()
-
-
-func test_food_on_a_vessel_adds_to_its_height() -> void:
-	var plate: ItemInstance = ItemInstance.new(PLATE)
-	assert_float(ItemModel.height_of(plate)).is_equal(ItemModel.PLATE_HEIGHT)
-
-	plate.contents.add_item(ItemInstance.new(TOMATO))
-
-	assert_float(ItemModel.height_of(plate)).is_equal_approx(
-			ItemModel.PLATE_HEIGHT + ItemModel.FOOD_ON_VESSEL_SIZE, 0.0001)
