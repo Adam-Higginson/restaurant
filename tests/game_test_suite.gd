@@ -152,6 +152,15 @@ func new_moored_ship_with_player(pos: Vector3) -> Array[Node3D]:
 	return [ship, player]
 
 
+## A [Hud3D] for [param player], added to the player's world, so it's freed
+## with it. Add it before the scene runs.
+func new_hud_3d(player: Player3D) -> Hud3D:
+	var hud: Hud3D = (load("res://ui/hud_3d.tscn") as PackedScene).instantiate() as Hud3D
+	hud.player = player
+	player.get_parent().add_child(hud)
+	return hud
+
+
 ## A [CameraZone] filling a box of [param size] centred at [param pos], with
 ## its fixed shot at [param shot] (in the zone's own space). Add it to the
 ## test world before the scene runs.

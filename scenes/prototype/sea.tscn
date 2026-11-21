@@ -7,6 +7,7 @@
 [ext_resource type="PackedScene" path="res://scenes/prototype/ship.tscn" id="5_ahqms"]
 [ext_resource type="Script" path="res://scripts/ship/ship.gd" id="6_ivyv4"]
 [ext_resource type="PackedScene" path="res://scenes/prototype/player.tscn" id="7_p3dpl"]
+[ext_resource type="PackedScene" path="res://ui/hud_3d.tscn" id="8_hud"]
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_mqylf"]
 sky_top_color = Color(0.42, 0.6, 0.78, 1)
@@ -173,3 +174,6 @@ route = NodePath("../Route")
 
 [node name="Player" parent="." instance=ExtResource("7_p3dpl")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -23.5, 5.35, 51)
+
+[node name="Hud3D" parent="." node_paths=PackedStringArray("player") instance=ExtResource("8_hud")]
+player = NodePath("../Player")
