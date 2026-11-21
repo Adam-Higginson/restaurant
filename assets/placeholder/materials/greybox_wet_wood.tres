@@ -5,6 +5,6 @@
 [resource]
 albedo_color = Color(0.429, 0.31199998, 0.20799999, 1)
 albedo_texture = ExtResource("1_230b8")
-roughness = 0.12
+roughness = 0.32
 uv1_triplanar = true
 texture_filter = 2
