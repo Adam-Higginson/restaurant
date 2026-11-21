@@ -10,6 +10,10 @@
 //
 // Textures are small and nearest-filtered (N64 style). The wet effects are
 // smooth lighting on top of them.
+//
+// Everything is placed in the surface's own space (the ship's, handed in as
+// `to_surface_space` by SurfaceSpace), so planks and puddles sail with the
+// ship instead of sliding across it.
 shader_type spatial;
 render_mode blend_mix, depth_draw_opaque, cull_back, diffuse_burley, specular_schlick_ggx;
 
@@ -18,7 +22,7 @@ global uniform float wetness;
 
 group_uniforms look;
 uniform vec4 albedo : source_color = vec4(0.66, 0.48, 0.32, 1.0);
-// The grain. Mapped in world space from whichever side a face looks out of,
+// The grain. Mapped in the surface space from whichever side a face looks out of,
 // so boxes never stretch it.
 uniform sampler2D albedo_texture : source_color, filter_nearest_mipmap, repeat_enable, hint_default_white;
 // One copy of the texture covers this many metres.
@@ -53,18 +57,22 @@ uniform float ripple_strength = 0.6;
 uniform sampler2D streak_noise : hint_default_black, repeat_enable, filter_linear;
 uniform float streaks : hint_range(0.0, 1.0) = 1.0;
 
-varying vec3 world_pos;
-varying vec3 world_normal;
+// World space to the space the pattern is fixed in (the ship's). Set every
+// frame by SurfaceSpace; left alone, the pattern is fixed to the world.
+uniform mat4 to_surface_space = mat4(1.0);
+
+varying vec3 surface_pos;
+varying vec3 surface_normal;
 
 
 void vertex() {
-	world_pos = (MODEL_MATRIX * vec4(VERTEX, 1.0)).xyz;
-	world_normal = normalize((MODEL_MATRIX * vec4(NORMAL, 0.0)).xyz);
+	surface_pos = (to_surface_space * MODEL_MATRIX * vec4(VERTEX, 1.0)).xyz;
+	surface_normal = normalize((to_surface_space * MODEL_MATRIX * vec4(NORMAL, 0.0)).xyz);
 }
 
 
-// Texture coordinates from the world, from the side the face looks out of.
-vec2 world_uv(vec3 p, vec3 n) {
+// Texture coordinates in the surface space, from the side the face looks out of.
+vec2 surface_uv(vec3 p, vec3 n) {
 	vec3 a = abs(n);
 	if (a.y >= a.x && a.y >= a.z) {
 		return p.xz;
@@ -123,16 +131,16 @@ vec2 ripples(vec2 p, float t) {
 
 
 void fragment() {
-	vec3 n = normalize(world_normal);
+	vec3 n = normalize(surface_normal);
 	float wet = clamp(wetness, 0.0, 1.0);
 	// Rain lands on faces that look up; undersides (the galley ceiling) stay dry.
 	float up = clamp(n.y, 0.0, 1.0);
 	float exposed = smoothstep(-0.4, 0.1, n.y);
 	float side = 1.0 - abs(n.y);
 
-	vec2 uv = world_uv(world_pos, n);
+	vec2 uv = surface_uv(surface_pos, n);
 	vec3 base = albedo.rgb * texture(albedo_texture, uv / texture_metres).rgb;
-	float in_seam = up > 0.9 ? seam(world_pos.xz) : 0.0;
+	float in_seam = up > 0.9 ? seam(surface_pos.xz) : 0.0;
 	base *= 1.0 - seam_darkness * in_seam;
 
 	// Soaked: darker and richer (a power darkens the darks most), a bit glossier.
@@ -141,7 +149,7 @@ void fragment() {
 	float rough = mix(dry_roughness, soaked_roughness, soaked);
 
 	// Standing water: on flat tops, in the noise's low spots, and in the seams.
-	float low = texture(puddle_noise, world_pos.xz * puddle_scale).r;
+	float low = texture(puddle_noise, surface_pos.xz * puddle_scale).r;
 	float pooled = smoothstep(1.0 - puddle_cover, 1.0 - puddle_cover + 0.12, low);
 	pooled = max(pooled, in_seam * 0.8);
 	float puddle = puddles * pooled * step(0.9, up) * smoothstep(0.35, 0.8, wet);
@@ -151,19 +159,22 @@ void fragment() {
 	rough = mix(rough, 0.03, puddle);
 
 	// Water running down the sides in thin, slowly sliding streaks.
-	vec2 run = vec2((world_pos.x + world_pos.z) * 2.5, world_pos.y * 0.3 + TIME * 0.18);
+	vec2 run = vec2((surface_pos.x + surface_pos.z) * 2.5, surface_pos.y * 0.3 + TIME * 0.18);
 	float stream = smoothstep(0.58, 0.72, texture(streak_noise, run).r);
 	float streak = streaks * stream * side * wet;
 	rough = mix(rough, 0.12, streak);
 	colour *= 1.0 - 0.12 * streak;
 
 	// Rain rings tilt the surface: faint on soaked wood, strong in puddles.
-	vec2 slope = ripples(world_pos.xz / ripple_cell, TIME);
+	vec2 slope = ripples(surface_pos.xz / ripple_cell, TIME);
 	slope *= ripple_strength * up * wet * mix(0.25, 1.0, puddle);
 	vec3 bent = normalize(n + vec3(slope.x, 0.0, slope.y));
 
 	ALBEDO = colour;
 	ROUGHNESS = rough;
 	SPECULAR = 0.5;
-	NORMAL = normalize((VIEW_MATRIX * vec4(bent, 0.0)).xyz);
+	// Back from the surface's space to the world (the inverse of a turn is its
+	// transpose), then to the camera's view.
+	vec3 bent_world = transpose(mat3(to_surface_space)) * bent;
+	NORMAL = normalize((VIEW_MATRIX * vec4(bent_world, 0.0)).xyz);
 }

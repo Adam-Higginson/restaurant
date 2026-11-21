@@ -12,6 +12,7 @@
 [ext_resource type="Material" path="res://assets/placeholder/materials/wet_dark_wood.tres" id="13_wetdark"]
 [ext_resource type="Script" path="res://scripts/art/third_party_texture.gd" id="14_tex"]
 [ext_resource type="Script" path="res://scripts/weather/drips.gd" id="15_drips"]
+[ext_resource type="Script" path="res://scripts/art/surface_space.gd" id="16_space"]
 [ext_resource type="Script" path="res://scripts/weather/shelter_zone.gd" id="11_shelter"]
 [ext_resource type="Script" path="res://scripts/props/swinging.gd" id="12_swing"]
 
@@ -368,6 +369,10 @@ path = "res://assets/third_party/sbs_textures_128/128x128/Wood/Synth-Wood_13-128
 script = ExtResource("14_tex")
 material = ExtResource("13_wetdark")
 path = "res://assets/third_party/sbs_textures_128/128x128/Wood/Synth-Wood_01-128x128.png"
+
+[node name="SurfaceSpace" type="Node" parent="."]
+script = ExtResource("16_space")
+materials = Array[ShaderMaterial]([ExtResource("10_wet"), ExtResource("13_wetdark")])
 
 [node name="HatchDrips" type="GPUParticles3D" parent="."]
 transform = Transform3D(0, 0, -1, 0, 1, 0, 1, 0, 0, -3.52, 4.98, 5.075)
