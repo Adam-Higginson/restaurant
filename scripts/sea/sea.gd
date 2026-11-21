@@ -7,7 +7,7 @@ extends MeshInstance3D
 ## its uniforms. The ship's body never moves up and down (the deck must stay
 ## level for walking and cooking), so instead the sea moves around it: the
 ## plane is lowered by the wave height under the ship, so the swell rises and
-## falls past the hull, and the ship's visuals tilt a little with the slope.
+## falls past the hull. The ship itself never tilts.
 
 ## The waves. Shared with [Waves], so heights asked about match what's drawn.
 @export var settings: WaveSettings
@@ -19,10 +19,6 @@ extends MeshInstance3D
 ## The plane moves in steps this long, so its vertices never slide across the
 ## waves (which would make them shimmer).
 @export var grid_step: float = 4.0
-## The most the ship's visuals tilt with the swell, in degrees. Kept small:
-## the deck you walk on stays level, so big tilts would show your feet
-## floating.
-@export var max_tilt_degrees: float = 3.0
 
 ## Rain intensity, 0 to 1, for the rain rings. Set by the weather.
 var rain: float = 0.0:
@@ -52,37 +48,12 @@ func _process(delta: float) -> void:
 	_apply()
 
 
-# The tilt goes to the ship on physics ticks, when it moves its visuals, so
-# physics interpolation smooths it like the rest of the ship.
-func _physics_process(_delta: float) -> void:
-	if is_instance_valid(ship):
-		ship.swell_tilt = tilt_under(ship.global_transform)
-
-
 ## How high the sea's surface is at world spot [param spot] (x and z) right
 ## now, above its still level, before the plane is lowered for the ship.
 func height_at(spot: Vector2) -> float:
 	if settings == null:
 		return 0.0
 	return Waves.height_at(settings, spot, _time)
-
-
-## The pitch (x) and roll (z) the ship's visuals should have on the swell
-## under [param ship_transform], in radians, each within
-## [member max_tilt_degrees]. Pitch lifts the bow; roll lifts the starboard
-## side.
-func tilt_under(ship_transform: Transform3D) -> Vector2:
-	var bow: Vector3 = ship_transform * Vector3(0.0, 0.0, -hull_half.y)
-	var stern: Vector3 = ship_transform * Vector3(0.0, 0.0, hull_half.y)
-	var port: Vector3 = ship_transform * Vector3(-hull_half.x, 0.0, 0.0)
-	var starboard: Vector3 = ship_transform * Vector3(hull_half.x, 0.0, 0.0)
-	var rise_bow: float = height_at(Vector2(bow.x, bow.z)) - height_at(Vector2(stern.x, stern.z))
-	var rise_starboard: float = height_at(Vector2(starboard.x, starboard.z)) \
-			- height_at(Vector2(port.x, port.z))
-	var limit: float = deg_to_rad(max_tilt_degrees)
-	var pitch: float = clampf(atan2(rise_bow, hull_half.y * 2.0), -limit, limit)
-	var roll: float = clampf(atan2(rise_starboard, hull_half.x * 2.0), -limit, limit)
-	return Vector2(pitch, roll)
 
 
 # Centres the plane under the ship (in grid steps) and lowers it by the wave

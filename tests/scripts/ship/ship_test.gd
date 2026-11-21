@@ -139,25 +139,29 @@ func test_stays_put_without_a_route() -> void:
 	assert_vector(ship.global_position).is_equal(Vector3.ZERO)
 
 
-# --- Rocking ------------------------------------------------------------------
+# --- Staying level -----------------------------------------------------------
 
-func test_rocking_tilts_the_visuals_but_never_the_body() -> void:
+func test_the_ship_and_its_visuals_stay_level_while_sailing() -> void:
 	var ship: Ship = _new_ship([Vector3.ZERO, Vector3(0, 0, -100)])
-	ship.rock_degrees = 2.0
-	ship.rock_period = 1.0
 	var runner: GdUnitSceneRunner = scene_runner(ship.get_parent())
 	var visuals: Node3D = ship.get_node("Visuals") as Node3D
 	ship.set_sail()
 
-	# A quarter of a roll, when the tilt is near its largest.
-	await physics_ticks(runner, 15)
+	await physics_ticks(runner, 30)
 
-	var tilt: float = absf(rad_to_deg(visuals.rotation.z))
-	assert_float(tilt).is_greater(0.5)
-	assert_float(tilt).is_less_equal(2.0)
-	# The body stays level: its up is straight up, and its side is flat.
+	assert_vector(visuals.rotation).is_equal(Vector3.ZERO)
 	assert_vector(ship.global_basis.y).is_equal_approx(Vector3.UP, Vector3(0.001, 0.001, 0.001))
-	assert_float(ship.global_basis.x.y).is_equal_approx(0.0, 0.001)
+
+
+func test_the_lanterns_swing() -> void:
+	var ship: Ship = _new_ship([Vector3.ZERO, Vector3(0, 0, -100)])
+	var runner: GdUnitSceneRunner = scene_runner(ship.get_parent())
+	var lantern: Swinging = ship.get_node("Visuals/SternLantern") as Swinging
+	var before: Vector3 = lantern.rotation
+
+	await physics_ticks(runner, 20)
+
+	assert_vector(lantern.rotation).is_not_equal(before)
 
 
 # A ship in a small world with a straight route through [param points],

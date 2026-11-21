@@ -3,9 +3,10 @@ extends AnimatableBody3D
 ## The crew's ship. It sails along [member route] at [member speed], facing
 ## the way it's going, and stops at the route's end (the mooring point).
 ##
-## The hull rocks gently on the waves, but only the [code]Visuals[/code] child
-## rocks. The body and its collision shapes stay level, so anything standing
-## on deck never slides about.
+## The ship never tilts or rocks: the deck stays level and still, so walking
+## and cooking feel steady and the floor you see is the floor you stand on.
+## The sea moves around the hull instead (see [Sea]), and hanging things like
+## the lanterns swing ([Swinging]).
 
 ## Emitted once, when the ship reaches the end of its route and stops.
 signal moored
@@ -20,15 +21,6 @@ const LOOK_STEP: float = 0.5
 @export var speed: float = 3.0
 ## Whether to set sail as soon as the scene starts.
 @export var sail_on_ready: bool = true
-## How far the hull rolls to each side, in degrees.
-@export var rock_degrees: float = 1.5
-## Seconds for one full roll, side to side and back.
-@export var rock_period: float = 4.0
-
-## How the swell tilts the hull's visuals, in radians: pitch (x, bow up) and
-## roll (y, starboard up). Set by the [Sea] each physics tick; the gentle
-## rocking is added on top.
-var swell_tilt: Vector2 = Vector2.ZERO
 
 ## Whether the ship is under way. False before it sets sail and once moored.
 var is_sailing: bool:
@@ -38,10 +30,6 @@ var is_sailing: bool:
 var _sailing: bool = false
 ## How far along the route the ship has come, in metres.
 var _distance: float = 0.0
-## Seconds the ship has been rocking, for the rocking wave.
-var _time: float = 0.0
-
-@onready var _visuals: Node3D = $Visuals
 
 
 func _ready() -> void:
@@ -54,9 +42,6 @@ func _ready() -> void:
 
 
 func _physics_process(delta: float) -> void:
-	# Rock on physics ticks, in step with the ship's movement.
-	_time += delta
-	_visuals.rotation = Vector3(swell_tilt.x, 0.0, swell_tilt.y + deg_to_rad(_rock_angle(_time)))
 	if not _sailing or speed <= 0.0:
 		return
 	var length: float = route.curve.get_baked_length()
@@ -74,14 +59,6 @@ func set_sail() -> void:
 	if not _has_route() or _distance >= route.curve.get_baked_length():
 		return
 	_sailing = true
-
-
-# The hull's roll in degrees at [param time]: a sine wave that swings
-# between -rock_degrees and +rock_degrees once every rock_period seconds.
-func _rock_angle(time: float) -> float:
-	if rock_period <= 0.0:
-		return 0.0
-	return rock_degrees * sin(TAU * time / rock_period)
 
 
 func _has_route() -> bool:
