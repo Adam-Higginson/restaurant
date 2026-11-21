@@ -1,4 +1,4 @@
-[gd_resource type="Resource" script_class="WaveSettings" format=3]
+[gd_resource type="Resource" script_class="WaveSettings" format=3 uid="uid://dd7glvhgr76dr"]
 
 [ext_resource type="Script" path="res://scripts/sea/wave_layer.gd" id="1_adjfo"]
 [ext_resource type="Script" path="res://scripts/sea/wave_settings.gd" id="2_2h7sp"]

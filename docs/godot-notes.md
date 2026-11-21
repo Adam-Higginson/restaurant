@@ -10,6 +10,8 @@ A growing glossary of the Godot concepts this project uses: what each one is, in
 
 **Resource.** A data object saved as a file (`.tres`), edited in the Inspector, shared and never copied by accident. Good for definitions. *Ours:* every item, reaction and tool under `data/`.
 
+**Resource UID.** A permanent id in a resource's header (`uid="uid://..."`), so references survive a file being moved or renamed. If a hand-written `.tres` has none, the editor may re-save it to add one, and a shader material re-saved before its shader compiles loses all its parameters. *Ours:* every shader material in `assets/placeholder/materials/` has one, checked by `tests/resource_standards_test.gd`.
+
 **Signal.** A node or object announces "this happened" and anyone connected reacts, so the sender doesn't need to know who's listening. *Ours:* `VesselContents.reaction_finished`, `Arms.changed`. Signals are named in the past tense.
 
 **Autoload.** A script Godot creates once at startup and makes available everywhere by name. *Ours:* `Game` (`scripts/state/game_state.gd`).
