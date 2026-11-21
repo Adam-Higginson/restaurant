@@ -1,0 +1,18 @@
+[gd_scene format=3]
+
+[ext_resource type="Material" path="res://assets/placeholder/materials/water.tres" id="1_1su1g"]
+[ext_resource type="Script" path="res://scripts/sea/sea.gd" id="2_jx64c"]
+[ext_resource type="Resource" path="res://data/sea/night_swell.tres" id="3_mmwaf"]
+
+[sub_resource type="PlaneMesh" id="PlaneMesh_nuuw8"]
+size = Vector2(480, 480)
+subdivide_width = 200
+subdivide_depth = 200
+
+[node name="SeaSurface" type="MeshInstance3D" unique_id=1356742197]
+material_override = ExtResource("1_1su1g")
+cast_shadow = 0
+extra_cull_margin = 4.0
+mesh = SubResource("PlaneMesh_nuuw8")
+script = ExtResource("2_jx64c")
+settings = ExtResource("3_mmwaf")

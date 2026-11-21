@@ -36,7 +36,7 @@ The ship's bell marks the day, as on real ships: eight bells calls everyone down
   - **The galley:** the kitchen and the mess in one room, so the crew eats at a table beside the stove. Its stations stand in a row along the bulkhead: the pantry, a counter, the chopping board on its counter, and the plate rack.
   - **The pantry:** a tall cupboard at the end of the galley's row (see Storage).
   - **Your bunk.**
-- The ship **really moves** between islands. Its rocking is visual only: the floor stays level, so nothing slides off the counters.
+- The ship **really moves** between islands, but it never tilts or rocks: the deck stays level and still, so nothing slides off the counters and nobody feels seasick. The sea's motion shows in the water moving around the hull and in hanging things that swing, like the lanterns.
 - **Mooring:** at an island, a **gangplank** connects the ship to the shore. **Ring the ship's bell** while aboard to set sail.
 
 ## Islands
@@ -178,6 +178,18 @@ N64 / OoT style with modern rendering. The reference is a ship's galley at night
 - **Lighting:** modern, where the cosiness comes from. Warm lantern point lights with soft shadows, glowing emissive flames, a stove fire that lights the room.
 - **Particles:** steam from pots, drifting embers, fireflies.
 - **Sea and sky:** fog, good-looking water, weather.
+
+### The rainy night (the opening's atmosphere)
+The game opens at night in steady rain, and Studio Ghibli's rain is the reference: patient, heavy rain that settles in, where the sound is half the picture.
+- **The fog wall:** visibility ends about 30–45 m out. There's no horizon, so the ship feels like a lit room floating in grey. The fog starts about 10 m from the camera, so rooms stay clear.
+- **The only warmth** is the ship's: swinging lanterns on the mast, the stern and the hatch, and the galley's hearth below. Their light streaks across the wet deck.
+- **Wet, not shiny:** soaked wood goes darker and richer rather than glossy. Water pools in low spots and plank seams, and those puddles are what mirror the lanterns and the moon. Rain rings ripple across them, water runs down the rails and mast, and drips fall from the hatch rim and the sail. Undersides stay dry.
+- **Rain lands everywhere:** every drop that hits the ship splashes where it lands, on the deck, the rails or your head, and the deck above keeps the galley dry.
+- **The moon** shows faintly through drifting cloud, lighting the cloud edges silver, so the moonlight has a source.
+- **The sea:** a long, heavy swell with a fine chop on top, modern water (Gerstner waves, Fresnel sky reflection, light through the crests, foam on crests, along the hull and in the wake, rain rings). The ship stays level and still; the sea rises and falls around the hull instead.
+- **Sound:** rain loud on deck, muffled and quieter below deck, with waves underneath, gliding as you go through the hatch.
+- **The moment to aim for:** sitting by the stove while the crew drift in from the rain, with stories and music. In the score, the music *is* the crew playing.
+- Rain and weather are one intensity, so a heavier or lighter night changes the rain, the rings on the sea, how wet everything looks and the sound together.
 - High resolution: no pixelated low-resolution viewport. This needs the Forward+ renderer.
 - Placeholder art is simple coloured shapes (greybox) until real models are made.
 

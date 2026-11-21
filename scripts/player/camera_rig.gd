@@ -5,7 +5,8 @@ extends Node3D
 ## when something (a wall, the mast) is between the camera and the player.
 ##
 ## The rig turns left and right ([member yaw]) and its [code]Pitch[/code]
-## child tilts up and down ([member pitch]), so the two never mix.
+## child tilts up and down ([member pitch]), so the two never mix. The mouse
+## wheel zooms in and out ([member zoom]), easing the arm to the new length.
 ##
 ## Inside a [CameraZone] (the galley), the camera glides to the zone's fixed
 ## shot instead, and glides back when the player leaves. The spring arm only
@@ -30,6 +31,14 @@ const PITCH_MAX_DEGREES: float = 15.0
 @export var height: float = 1.5
 ## Seconds to glide between the free camera and a zone's fixed shot.
 @export var blend_seconds: float = 0.6
+## The closest the free camera zooms in, in metres from the player.
+@export var zoom_min: float = 2.5
+## The furthest the free camera zooms out, in metres from the player.
+@export var zoom_max: float = 9.0
+## How far one notch of the mouse wheel zooms, in metres.
+@export var zoom_step: float = 0.75
+## How quickly the arm eases to a new zoom: higher is snappier.
+@export var zoom_ease: float = 10.0
 
 ## Left/right turn in radians. 0 looks along -Z (Godot's forward).
 var yaw: float:
@@ -70,6 +79,12 @@ var view_yaw: float:
 			return yaw
 		return lerp_angle(yaw, yaw_of(shot.global_basis), blend_curve(_blend))
 
+## How far the free camera wants to be from the player, in metres, within
+## [member zoom_min] and [member zoom_max]. The arm eases towards it.
+var zoom: float = 5.0:
+	set(value):
+		zoom = clampf(value, zoom_min, zoom_max)
+
 ## Zones the player is inside, in the order they entered. The last one wins.
 var _zones: Array[CameraZone] = []
 ## The shot being glided to, or back from after leaving its zone.
@@ -78,6 +93,7 @@ var _blend: float = 0.0
 
 @onready var _target: Node3D = get_parent() as Node3D
 @onready var _pitch: Node3D = $Pitch
+@onready var _arm: SpringArm3D = $Pitch/SpringArm3D
 @onready var _free_spot: Marker3D = $Pitch/SpringArm3D/FreeSpot
 @onready var _camera: Camera3D = $Camera3D
 
@@ -86,6 +102,7 @@ func _ready() -> void:
 	# The spring arm needs no exclusion for the player: its cast starts inside
 	# the player's capsule and points away from it, and a cast ignores
 	# anything it starts inside.
+	zoom = _arm.spring_length
 	_follow_target()
 	_place_camera()
 	Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
@@ -98,13 +115,20 @@ func _process(delta: float) -> void:
 				"camera_down")
 		# Right turns clockwise seen from above, which is a negative yaw.
 		orbit(-stick.x * stick_speed * delta, -stick.y * stick_speed * delta)
+	# Ease towards the chosen zoom; the same each frame however fast the game
+	# runs, because the step is 1 - e^(-ease * delta).
+	_arm.spring_length = lerpf(_arm.spring_length, zoom, 1.0 - exp(-zoom_ease * delta))
 	_follow_target()
 	_update_blend(delta)
 	_place_camera()
 
 
 func _unhandled_input(event: InputEvent) -> void:
-	if event.is_action_pressed("ui_cancel"):
+	if event.is_action_pressed("zoom_in"):
+		zoom -= zoom_step
+	elif event.is_action_pressed("zoom_out"):
+		zoom += zoom_step
+	elif event.is_action_pressed("ui_cancel"):
 		Input.mouse_mode = Input.MOUSE_MODE_VISIBLE
 	elif event is InputEventMouseButton and (event as InputEventMouseButton).pressed:
 		Input.mouse_mode = Input.MOUSE_MODE_CAPTURED

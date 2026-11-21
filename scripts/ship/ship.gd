@@ -3,9 +3,10 @@ extends AnimatableBody3D
 ## The crew's ship. It sails along [member route] at [member speed], facing
 ## the way it's going, and stops at the route's end (the mooring point).
 ##
-## The hull rocks gently on the waves, but only the [code]Visuals[/code] child
-## rocks. The body and its collision shapes stay level, so anything standing
-## on deck never slides about.
+## The ship never tilts or rocks: the deck stays level and still, so walking
+## and cooking feel steady and the floor you see is the floor you stand on.
+## The sea moves around the hull instead (see [Sea]), and hanging things like
+## the lanterns swing ([Swinging]).
 
 ## Emitted once, when the ship reaches the end of its route and stops.
 signal moored
@@ -20,23 +21,25 @@ const LOOK_STEP: float = 0.5
 @export var speed: float = 3.0
 ## Whether to set sail as soon as the scene starts.
 @export var sail_on_ready: bool = true
-## How far the hull rolls to each side, in degrees.
-@export var rock_degrees: float = 1.5
-## Seconds for one full roll, side to side and back.
-@export var rock_period: float = 4.0
+## Whether to sail round and round the route forever instead of mooring at
+## its end. The route should be a closed loop (its last point on its first).
+@export var loop_route: bool = false
 
 ## Whether the ship is under way. False before it sets sail and once moored.
 var is_sailing: bool:
 	get:
 		return _sailing
 
+## How fast and which way the ship is moving, in metres per second.
+var velocity: Vector3:
+	get:
+		if not _sailing:
+			return Vector3.ZERO
+		return -global_basis.z * speed
+
 var _sailing: bool = false
 ## How far along the route the ship has come, in metres.
 var _distance: float = 0.0
-## Seconds the ship has been rocking, for the rocking wave.
-var _time: float = 0.0
-
-@onready var _visuals: Node3D = $Visuals
 
 
 func _ready() -> void:
@@ -49,12 +52,14 @@ func _ready() -> void:
 
 
 func _physics_process(delta: float) -> void:
-	# Rock on physics ticks, in step with the ship's movement.
-	_time += delta
-	_visuals.rotation.z = deg_to_rad(_rock_angle(_time))
 	if not _sailing or speed <= 0.0:
 		return
 	var length: float = route.curve.get_baked_length()
+	if loop_route:
+		# Round again: past the end is the start of the next lap.
+		_distance = fposmod(_distance + speed * delta, length)
+		global_transform = _transform_at(_distance)
+		return
 	# Clamp, so a long frame stops the ship at the end rather than past it.
 	_distance = minf(_distance + speed * delta, length)
 	global_transform = _transform_at(_distance)
@@ -71,14 +76,6 @@ func set_sail() -> void:
 	_sailing = true
 
 
-# The hull's roll in degrees at [param time]: a sine wave that swings
-# between -rock_degrees and +rock_degrees once every rock_period seconds.
-func _rock_angle(time: float) -> float:
-	if rock_period <= 0.0:
-		return 0.0
-	return rock_degrees * sin(TAU * time / rock_period)
-
-
 func _has_route() -> bool:
 	return route != null and route.curve != null and route.curve.point_count >= 2 \
 			and route.curve.get_baked_length() > 0.0
@@ -89,8 +86,8 @@ func _has_route() -> bool:
 func _transform_at(distance: float) -> Transform3D:
 	var curve: Curve3D = route.curve
 	var length: float = curve.get_baked_length()
-	var behind: Vector3 = route.to_global(curve.sample_baked(maxf(distance - LOOK_STEP, 0.0)))
-	var ahead: Vector3 = route.to_global(curve.sample_baked(minf(distance + LOOK_STEP, length)))
+	var behind: Vector3 = route.to_global(curve.sample_baked(_along(distance - LOOK_STEP, length)))
+	var ahead: Vector3 = route.to_global(curve.sample_baked(_along(distance + LOOK_STEP, length)))
 	var heading: Vector3 = ahead - behind
 	# Ignore any climb or dip in the route, so the deck never tilts.
 	heading.y = 0.0
@@ -98,3 +95,11 @@ func _transform_at(distance: float) -> Transform3D:
 	if not heading.is_zero_approx():
 		basis_now = Basis.looking_at(heading, Vector3.UP)
 	return Transform3D(basis_now, route.to_global(curve.sample_baked(distance)))
+
+
+# A distance along the route, kept on it: wrapped round a loop, or held at
+# the ends of a one-way route.
+func _along(distance: float, length: float) -> float:
+	if loop_route:
+		return fposmod(distance, length)
+	return clampf(distance, 0.0, length)

@@ -8,6 +8,13 @@
 [ext_resource type="PackedScene" path="res://scenes/prototype/props/pantry.tscn" id="7_pantry"]
 [ext_resource type="Resource" path="res://data/items/chopping_board.tres" id="8_board"]
 [ext_resource type="PackedScene" path="res://scenes/prototype/props/plate_rack.tscn" id="9_rack"]
+[ext_resource type="Material" path="res://assets/placeholder/materials/wet_deck.tres" id="10_wet"]
+[ext_resource type="Material" path="res://assets/placeholder/materials/wet_dark_wood.tres" id="13_wetdark"]
+[ext_resource type="Script" path="res://scripts/art/third_party_texture.gd" id="14_tex"]
+[ext_resource type="Script" path="res://scripts/weather/drips.gd" id="15_drips"]
+[ext_resource type="Script" path="res://scripts/art/surface_space.gd" id="16_space"]
+[ext_resource type="Script" path="res://scripts/weather/shelter_zone.gd" id="11_shelter"]
+[ext_resource type="Script" path="res://scripts/props/swinging.gd" id="12_swing"]
 
 [sub_resource type="BoxMesh" id="Mesh_Hull"]
 size = Vector3(12, 2.5, 30)
@@ -138,6 +145,36 @@ size = Vector3(0.3, 1.1, 0.3)
 [sub_resource type="BoxShape3D" id="Shape_BunkShape"]
 size = Vector3(0.9, 0.65, 2)
 
+[sub_resource type="BoxMesh" id="Mesh_Lantern"]
+size = Vector3(0.22, 0.3, 0.22)
+
+[sub_resource type="BoxMesh" id="Mesh_BracketPost"]
+size = Vector3(0.14, 2.7, 0.14)
+
+[sub_resource type="BoxShape3D" id="Shape_BracketPost"]
+size = Vector3(0.14, 2.7, 0.14)
+
+[sub_resource type="BoxMesh" id="Mesh_MastArm"]
+size = Vector3(0.4, 0.06, 0.06)
+
+[sub_resource type="BoxMesh" id="Mesh_SternArm"]
+size = Vector3(0.06, 0.06, 0.7)
+
+[sub_resource type="BoxMesh" id="Mesh_HatchArm"]
+size = Vector3(1.25, 0.06, 0.06)
+
+[sub_resource type="BoxMesh" id="Mesh_Cord"]
+size = Vector3(0.025, 0.45, 0.025)
+
+[sub_resource type="StandardMaterial3D" id="Material_LanternGlow"]
+albedo_color = Color(1, 0.72, 0.38, 1)
+emission_enabled = true
+emission = Color(1, 0.62, 0.3, 1)
+emission_energy_multiplier = 4.0
+
+[sub_resource type="BoxShape3D" id="Shape_Shelter"]
+size = Vector3(11.4, 3.8, 13.5)
+
 [node name="Ship" type="AnimatableBody3D" unique_id=200548129]
 script = ExtResource("1_7ykrf")
 
@@ -175,42 +212,42 @@ mesh = SubResource("Mesh_Bulkhead")
 
 [node name="DeckFore" type="MeshInstance3D" parent="Visuals"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 5.15, -6.925)
-material_override = ExtResource("2_nifss")
+material_override = ExtResource("10_wet")
 mesh = SubResource("Mesh_DeckFore")
 
 [node name="DeckAft" type="MeshInstance3D" parent="Visuals"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 5.15, 12)
-material_override = ExtResource("2_nifss")
+material_override = ExtResource("10_wet")
 mesh = SubResource("Mesh_DeckAft")
 
 [node name="DeckBesideHatch" type="MeshInstance3D" parent="Visuals"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.25, 5.15, 5.075)
-material_override = ExtResource("2_nifss")
+material_override = ExtResource("10_wet")
 mesh = SubResource("Mesh_DeckBesideHatch")
 
 [node name="DeckPortStrip" type="MeshInstance3D" parent="Visuals"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -5.85, 5.15, 5.075)
-material_override = ExtResource("2_nifss")
+material_override = ExtResource("10_wet")
 mesh = SubResource("Mesh_DeckPortStrip")
 
 [node name="RailPort" type="MeshInstance3D" parent="Visuals"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -5.9, 5.8, 0)
-material_override = ExtResource("3_t630l")
+material_override = ExtResource("13_wetdark")
 mesh = SubResource("Mesh_RailPort")
 
 [node name="RailStarboard" type="MeshInstance3D" parent="Visuals"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5.9, 5.8, 0)
-material_override = ExtResource("3_t630l")
+material_override = ExtResource("13_wetdark")
 mesh = SubResource("Mesh_RailStarboard")
 
 [node name="RailBow" type="MeshInstance3D" parent="Visuals"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 5.8, -14.9)
-material_override = ExtResource("3_t630l")
+material_override = ExtResource("13_wetdark")
 mesh = SubResource("Mesh_RailBow")
 
 [node name="RailStern" type="MeshInstance3D" parent="Visuals"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 5.8, 14.9)
-material_override = ExtResource("3_t630l")
+material_override = ExtResource("13_wetdark")
 mesh = SubResource("Mesh_RailStern")
 
 [node name="Ramp" type="MeshInstance3D" parent="Visuals"]
@@ -220,12 +257,12 @@ mesh = SubResource("Mesh_Ramp")
 
 [node name="Mast" type="MeshInstance3D" parent="Visuals"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 12.3, -4)
-material_override = ExtResource("3_t630l")
+material_override = ExtResource("13_wetdark")
 mesh = SubResource("Mesh_Mast")
 
 [node name="Yard" type="MeshInstance3D" parent="Visuals"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 16.3, -3.7)
-material_override = ExtResource("3_t630l")
+material_override = ExtResource("13_wetdark")
 mesh = SubResource("Mesh_Yard")
 
 [node name="Sail" type="MeshInstance3D" parent="Visuals"]
@@ -235,12 +272,12 @@ mesh = SubResource("Mesh_Sail")
 
 [node name="WheelPost" type="MeshInstance3D" parent="Visuals"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 5.85, 12)
-material_override = ExtResource("3_t630l")
+material_override = ExtResource("13_wetdark")
 mesh = SubResource("Mesh_WheelPost")
 
 [node name="Wheel" type="MeshInstance3D" parent="Visuals"]
 transform = Transform3D(1, 0, 0, 0, 0, -1, 0, 1, 0, 0, 6.5, 12.22)
-material_override = ExtResource("3_t630l")
+material_override = ExtResource("13_wetdark")
 mesh = SubResource("Mesh_Wheel")
 
 [node name="BunkFrame" type="MeshInstance3D" parent="Visuals"]
@@ -259,6 +296,143 @@ light_color = Color(1, 0.8, 0.55, 1)
 light_energy = 2.0
 shadow_enabled = true
 omni_range = 13.0
+
+[node name="MastLanternArm" type="MeshInstance3D" parent="Visuals"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.45, 8.23, -4)
+material_override = ExtResource("3_t630l")
+mesh = SubResource("Mesh_MastArm")
+
+[node name="SternLanternPost" type="MeshInstance3D" parent="Visuals"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 6.65, 14.7)
+material_override = ExtResource("3_t630l")
+mesh = SubResource("Mesh_BracketPost")
+
+[node name="SternLanternArm" type="MeshInstance3D" parent="Visuals"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 7.95, 14.4)
+material_override = ExtResource("3_t630l")
+mesh = SubResource("Mesh_SternArm")
+
+[node name="HatchLanternPost" type="MeshInstance3D" parent="Visuals"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3.25, 6.65, 3)
+material_override = ExtResource("3_t630l")
+mesh = SubResource("Mesh_BracketPost")
+
+[node name="HatchLanternArm" type="MeshInstance3D" parent="Visuals"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3.85, 7.95, 3)
+material_override = ExtResource("3_t630l")
+mesh = SubResource("Mesh_HatchArm")
+
+[node name="MastLantern" type="Node3D" parent="Visuals"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.55, 8.2, -4)
+script = ExtResource("12_swing")
+phase = 0.0
+
+[node name="Cord" type="MeshInstance3D" parent="Visuals/MastLantern"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.225, 0)
+material_override = ExtResource("3_t630l")
+mesh = SubResource("Mesh_Cord")
+
+[node name="Glow" type="MeshInstance3D" parent="Visuals/MastLantern"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.6, 0)
+mesh = SubResource("Mesh_Lantern")
+surface_material_override/0 = SubResource("Material_LanternGlow")
+cast_shadow = 0
+
+[node name="Light" type="OmniLight3D" parent="Visuals/MastLantern"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.6, 0)
+light_color = Color(1, 0.68, 0.38, 1)
+light_energy = 1.6
+light_volumetric_fog_energy = 2.0
+shadow_enabled = true
+omni_range = 8.0
+
+[node name="SternLantern" type="Node3D" parent="Visuals"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 7.9, 14.15)
+script = ExtResource("12_swing")
+phase = 0.37
+
+[node name="Cord" type="MeshInstance3D" parent="Visuals/SternLantern"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.225, 0)
+material_override = ExtResource("3_t630l")
+mesh = SubResource("Mesh_Cord")
+
+[node name="Glow" type="MeshInstance3D" parent="Visuals/SternLantern"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.6, 0)
+mesh = SubResource("Mesh_Lantern")
+surface_material_override/0 = SubResource("Material_LanternGlow")
+cast_shadow = 0
+
+[node name="Light" type="OmniLight3D" parent="Visuals/SternLantern"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.6, 0)
+light_color = Color(1, 0.68, 0.38, 1)
+light_energy = 1.6
+light_volumetric_fog_energy = 2.0
+shadow_enabled = true
+omni_range = 8.0
+
+[node name="HatchLantern" type="Node3D" parent="Visuals"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4.4, 7.9, 3)
+script = ExtResource("12_swing")
+phase = 0.71
+
+[node name="Cord" type="MeshInstance3D" parent="Visuals/HatchLantern"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.225, 0)
+material_override = ExtResource("3_t630l")
+mesh = SubResource("Mesh_Cord")
+
+[node name="Glow" type="MeshInstance3D" parent="Visuals/HatchLantern"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.6, 0)
+mesh = SubResource("Mesh_Lantern")
+surface_material_override/0 = SubResource("Material_LanternGlow")
+cast_shadow = 0
+
+[node name="Light" type="OmniLight3D" parent="Visuals/HatchLantern"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.6, 0)
+light_color = Color(1, 0.68, 0.38, 1)
+light_energy = 1.6
+light_volumetric_fog_energy = 2.0
+shadow_enabled = true
+omni_range = 8.0
+
+[node name="RainCatcher" type="GPUParticlesCollisionHeightField3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8, 0)
+size = Vector3(14, 20, 32)
+resolution = 1
+update_mode = 1
+
+[node name="DeckTexture" type="Node" parent="."]
+script = ExtResource("14_tex")
+material = ExtResource("10_wet")
+path = "res://assets/third_party/sbs_textures_128/128x128/Wood/Synth-Wood_13-128x128.png"
+
+[node name="TrimTexture" type="Node" parent="."]
+script = ExtResource("14_tex")
+material = ExtResource("13_wetdark")
+path = "res://assets/third_party/sbs_textures_128/128x128/Wood/Synth-Wood_01-128x128.png"
+
+[node name="SurfaceSpace" type="Node" parent="."]
+script = ExtResource("16_space")
+materials = Array[ShaderMaterial]([ExtResource("10_wet"), ExtResource("13_wetdark")])
+
+[node name="HatchDrips" type="GPUParticles3D" parent="."]
+transform = Transform3D(0, 0, -1, 0, 1, 0, 1, 0, 0, -3.52, 4.98, 5.075)
+script = ExtResource("15_drips")
+length = 7.8
+rate = 10.0
+
+[node name="SailDrips" type="GPUParticles3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 9.95, -3.65)
+script = ExtResource("15_drips")
+length = 7.4
+rate = 14.0
+
+[node name="SternLanternPostShape" type="CollisionShape3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 6.65, 14.7)
+shape = SubResource("Shape_BracketPost")
+
+[node name="HatchLanternPostShape" type="CollisionShape3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3.25, 6.65, 3)
+shape = SubResource("Shape_BracketPost")
 
 [node name="HullShape" type="CollisionShape3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.25, 0)
@@ -346,3 +520,10 @@ start_item = ExtResource("8_board")
 
 [node name="PlateRack" parent="Galley" instance=ExtResource("9_rack")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.65, 1, 1.45)
+
+[node name="Shelter" type="Area3D" parent="."]
+script = ExtResource("11_shelter")
+
+[node name="Shape" type="CollisionShape3D" parent="Shelter"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3, 8)
+shape = SubResource("Shape_Shelter")
