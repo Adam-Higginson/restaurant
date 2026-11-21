@@ -76,7 +76,7 @@ A growing glossary of the Godot concepts this project uses: what each one is, in
 
 **Area3D and `body_entered` / `body_exited`.** An invisible volume (shaped by a `CollisionShape3D` child) that notices physics bodies overlapping it, but doesn't block them. It emits `body_entered(body)` when one starts overlapping and `body_exited(body)` when it stops, checked on physics ticks. It notices every body its collision mask covers, so check what came in. *Ours:* `CameraZone` (`scripts/camera/camera_zone.gd`), which reacts only to a `Player3D`.
 
-**Marker3D.** An empty node that only marks a position and rotation, drawn as a small cross in the editor. Like a camera, it "looks" along its -Z axis. *Ours:* the galley's `GalleyCameraZone/Shot` (where the fixed camera sits) and the rig's `FreeSpot` (where the free camera would be).
+**Marker3D.** An empty node that only marks a position and rotation, drawn as a small cross in the editor. Like a camera, it "looks" along its -Z axis. *Ours:* a `CameraZone`'s `Shot` (where its fixed camera sits) and the rig's `FreeSpot` (where the free camera would be).
 
 **`Transform3D.interpolate_with()`.** Returns a transform part-way between two others: `a.interpolate_with(b, 0.25)` is a quarter of the way from `a` to `b`. Positions move in a straight line, and rotations turn smoothly the short way round. *Ours:* `CameraRig._place_camera()` glides the camera between the free spot and a fixed shot.
 

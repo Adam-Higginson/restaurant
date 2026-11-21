@@ -75,8 +75,9 @@ When you lose a fight, **the lantern pulls you out**, echoing how you met. You r
 - **Tool belt:** 4 slots for hand tools, always with you. One slot is selected at a time. Tools are used with empty arms only. The knife is on the belt from the start, and the belt doubles as the item bar ashore.
 
 ### Camera
-- **Free third-person camera** on deck and on islands, orbited with the right stick or mouse. A spring arm pulls it in when a wall or the mast is in the way. It keeps its direction in the world when the ship turns, rather than turning with the deck. With a mouse, the cursor is captured while playing: Esc frees it and a click captures it again.
-- **Fixed, framed shots** in tight interiors like the galley, as in OoT's houses and shops. Walking into the galley blends to its shot, and leaving blends back, to the free camera's angle from before. The camera can't be turned in a fixed shot. Movement always follows the active camera, except that if the camera switches while you hold a direction, you keep walking the same way until you let go or swing the stick, so a switch never turns you round.
+- **Free third-person camera** everywhere you walk: on deck, below deck in the galley, and on islands, orbited with the right stick or mouse. A spring arm pulls it in when a wall or the mast is in the way. It keeps its direction in the world when the ship turns, rather than turning with the deck. With a mouse, the cursor is captured while playing: Esc frees it and a click captures it again.
+- **The galley is roomy enough for the free camera** (a 4 m ceiling and the full width of the hull), so cooking uses the same camera and controls as everywhere else. We tried a fixed shot there first (#63), but it looked at the player's back while they cooked at the counters.
+- **Fixed, framed shots** are kept for spaces too tight for the free camera, like your bunk or an island shop, as in OoT's houses. A *camera zone* blends to its shot as you walk in, and back to the free camera's angle from before as you leave. The camera can't be turned in a fixed shot. Movement always follows the active camera, except that if the camera switches while you hold a direction, you keep walking the same way until you let go or swing the stick, so a switch never turns you round.
 - **Lock-on** frames the player and the target together.
 
 ### Controls
@@ -191,7 +192,7 @@ A tiny complete story arc that proves the "day is a song" loop and ends on the g
 6. **Evening two:** dinner for three. The lantern, sheepish: "...Next island. *Definitely* the next one." End card.
 
 **In:**
-- The deck (free camera), the galley (fixed camera) and the bunk.
+- The deck, the galley and the bunk.
 - The ship sailing a fixed route, with the crew at the wheel.
 - The lantern companion.
 - One island, one enemy type, one puzzle.
