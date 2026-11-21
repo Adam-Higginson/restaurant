@@ -13,6 +13,9 @@ uniform float speed_min = 15.0;
 uniform float speed_max = 19.0;
 // Wind pushing the drops sideways, in metres per second squared.
 uniform vec3 wind = vec3(1.5, 0.0, 0.8);
+// How fast the ship the rain lands on is moving. Splashes start with this
+// velocity, so they ride along with the deck instead of sliding off behind.
+uniform vec3 carrier_velocity = vec3(0.0);
 
 float rand_from_seed(inout uint seed) {
 	// A small, fast hash: good enough to scatter raindrops.
@@ -52,8 +55,8 @@ void process() {
 		// A splash lying flat on whatever was hit, where it was hit.
 		mat4 splash = mat4(1.0);
 		splash[3].xyz = TRANSFORM[3].xyz;
-		emit_subparticle(splash, vec3(0.0), vec4(1.0), vec4(0.0),
-				FLAG_EMIT_POSITION | FLAG_EMIT_ROT_SCALE);
+		emit_subparticle(splash, carrier_velocity, vec4(1.0), vec4(0.0),
+				FLAG_EMIT_POSITION | FLAG_EMIT_ROT_SCALE | FLAG_EMIT_VELOCITY);
 		ACTIVE = false;
 	} else {
 		VELOCITY += wind * DELTA;

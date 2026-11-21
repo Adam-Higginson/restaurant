@@ -88,6 +88,22 @@ func test_drops_vanish_where_they_land_and_splash_there() -> void:
 	assert_object(streaks.get_node(streaks.sub_emitter)).is_same(weather.rain.splashes())
 
 
+func test_splashes_sail_with_the_ship() -> void:
+	var ship: Ship = new_moored_ship_with_player(ON_DECK)[0] as Ship
+	var weather: Weather = (load(WEATHER_SCENE) as PackedScene).instantiate() as Weather
+	weather.ship = ship
+	ship.get_parent().add_child(weather)
+	var runner: GdUnitSceneRunner = scene_runner(ship.get_parent())
+	ship.set_sail()
+	await physics_ticks(runner, 5)
+	await get_tree().process_frame
+
+	var drops: ShaderMaterial = weather.rain.streaks().process_material as ShaderMaterial
+	var handed: Vector3 = drops.get_shader_parameter(&"carrier_velocity")
+	assert_float(ship.velocity.length()).is_greater(0.0)
+	assert_vector(handed).is_equal_approx(ship.velocity, Vector3.ONE * 0.001)
+
+
 func test_the_ship_catches_rain_over_its_whole_deck() -> void:
 	var ship: Ship = new_moored_ship_with_player(ON_DECK)[0] as Ship
 	var catcher: GPUParticlesCollisionHeightField3D = 			ship.get_node("RainCatcher") as GPUParticlesCollisionHeightField3D

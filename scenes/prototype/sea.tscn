@@ -201,6 +201,7 @@ player = NodePath("../Player")
 [node name="SeaSurface" parent="." node_paths=PackedStringArray("ship") instance=ExtResource("9_sea")]
 ship = NodePath("../Ship")
 
-[node name="Weather" parent="." node_paths=PackedStringArray("sea", "camera") instance=ExtResource("10_weather")]
+[node name="Weather" parent="." node_paths=PackedStringArray("sea", "camera", "ship") instance=ExtResource("10_weather")]
 sea = NodePath("../SeaSurface")
 camera = NodePath("../Player/CameraRig/Camera3D")
+ship = NodePath("../Ship")

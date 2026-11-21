@@ -27,6 +27,13 @@ var is_sailing: bool:
 	get:
 		return _sailing
 
+## How fast and which way the ship is moving, in metres per second.
+var velocity: Vector3:
+	get:
+		if not _sailing:
+			return Vector3.ZERO
+		return -global_basis.z * speed
+
 var _sailing: bool = false
 ## How far along the route the ship has come, in metres.
 var _distance: float = 0.0

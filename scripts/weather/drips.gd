@@ -45,7 +45,9 @@ func _ready() -> void:
 	draw_pass_1 = mesh
 	lifetime = 1.6
 	amount = maxi(ceili(rate * lifetime), 1)
-	local_coords = false
+	# Drops belong to whatever they drip from, so they fall straight down onto
+	# the deck of a sailing ship instead of trailing behind it.
+	local_coords = true
 	collision_base_size = 0.02
 	cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
 	visibility_aabb = AABB(Vector3(-length, -12.0, -1.0), Vector3(length * 2.0, 13.0, 2.0))

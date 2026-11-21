@@ -17,6 +17,10 @@ func test_stops_when_dry_and_clamps() -> void:
 	assert_float(drips.wetness).is_equal(1.0)
 
 
+func test_drops_move_with_what_they_drip_from() -> void:
+	assert_bool(_new_drips().local_coords).is_true()
+
+
 func test_more_drops_for_a_faster_rate() -> void:
 	var slow: Drips = _new_drips(4.0)
 	var fast: Drips = _new_drips(20.0)

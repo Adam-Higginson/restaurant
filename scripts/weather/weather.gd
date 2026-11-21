@@ -33,6 +33,9 @@ const WETNESS: StringName = &"wetness"
 @export var rain: RainEffect
 ## The camera the rain falls around, handed to [member rain].
 @export var camera: Node3D
+## The ship the rain lands on, handed to [member rain] so its splashes sail
+## with it. Optional.
+@export var ship: Ship
 
 ## Whether the player is under a roof right now.
 var sheltered: bool:
@@ -46,6 +49,7 @@ var _shelters_inside: int = 0
 func _ready() -> void:
 	if is_instance_valid(rain):
 		rain.camera = camera
+		rain.carrier = ship
 	# Once the whole scene is ready, so zones later in the tree have joined
 	# the group too.
 	_listen_to_shelters.call_deferred()

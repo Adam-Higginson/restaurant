@@ -27,6 +27,8 @@ const DROPS_SHADER: Shader = preload("res://shaders/rain_drops.gdshader")
 
 ## The camera the rain surrounds.
 @export var camera: Node3D
+## The ship the rain lands on. Its splashes move along with it. Optional.
+@export var carrier: Ship
 ## Wind pushing the rain sideways, in metres per second.
 @export var wind: Vector3 = Vector3(1.5, 0.0, 0.8)
 
@@ -54,6 +56,9 @@ func _ready() -> void:
 # particles live in world space, so moving the emitters doesn't drag drops
 # already falling.
 func _process(_delta: float) -> void:
+	var carried: Vector3 = carrier.velocity if is_instance_valid(carrier) else Vector3.ZERO
+	(_streaks.process_material as ShaderMaterial).set_shader_parameter(
+			&"carrier_velocity", carried)
 	if is_instance_valid(camera):
 		_streaks.global_position = camera.global_position + Vector3.UP * STREAK_HEIGHT
 		_splashes.global_position = camera.global_position
@@ -114,6 +119,7 @@ func _make_streaks() -> GPUParticles3D:
 
 func _make_splashes() -> GPUParticles3D:
 	var process: ParticleProcessMaterial = ParticleProcessMaterial.new()
+	# No gravity or drag: a splash keeps the ship's velocity it was born with.
 	process.gravity = Vector3.ZERO
 	# Each splash starts as a small bright ring and spreads, fading.
 	var grow: Curve = Curve.new()

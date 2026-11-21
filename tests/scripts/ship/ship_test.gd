@@ -139,6 +139,19 @@ func test_stays_put_without_a_route() -> void:
 	assert_vector(ship.global_position).is_equal(Vector3.ZERO)
 
 
+# --- Velocity ----------------------------------------------------------------
+
+func test_velocity_is_forward_at_speed_while_sailing() -> void:
+	var ship: Ship = _new_ship([Vector3.ZERO, Vector3(0, 0, -100)], 4.0)
+	var runner: GdUnitSceneRunner = scene_runner(ship.get_parent())
+	assert_vector(ship.velocity).is_equal(Vector3.ZERO)
+
+	ship.set_sail()
+	await physics_ticks(runner, 3)
+
+	assert_vector(ship.velocity).is_equal_approx(Vector3(0, 0, -4), Vector3.ONE * 0.01)
+
+
 # --- Staying level -----------------------------------------------------------
 
 func test_the_ship_and_its_visuals_stay_level_while_sailing() -> void:
