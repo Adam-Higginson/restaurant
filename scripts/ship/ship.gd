@@ -33,7 +33,7 @@ var is_sailing: bool:
 var _sailing: bool = false
 ## How far along the route the ship has come, in metres.
 var _distance: float = 0.0
-## Seconds since the scene started, for the rocking wave.
+## Seconds the ship has been rocking, for the rocking wave.
 var _time: float = 0.0
 
 @onready var _visuals: Node3D = $Visuals
@@ -46,12 +46,10 @@ func _ready() -> void:
 		set_sail()
 
 
-func _process(delta: float) -> void:
+func _physics_process(delta: float) -> void:
+	# Rock on physics ticks, in step with the ship's movement.
 	_time += delta
 	_visuals.rotation.z = deg_to_rad(_rock_angle(_time))
-
-
-func _physics_process(delta: float) -> void:
 	if not _sailing or speed <= 0.0:
 		return
 	var length: float = route.curve.get_baked_length()
