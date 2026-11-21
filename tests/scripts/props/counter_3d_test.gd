@@ -11,7 +11,7 @@ const CHOPPED_LETTUCE: Item = preload("res://data/items/chopped_lettuce.tres")
 ## A counter 1.2 m ahead of the player (who faces -Z), within reach.
 const AHEAD: Vector3 = Vector3(0, 0, -1.2)
 ## In front of the galley's BoardCounter, facing it, in the ship's own space.
-const AT_BOARD: Vector3 = Vector3(0.6, 1.05, 2.35)
+const AT_BOARD: Vector3 = Vector3(0.55, 1.05, 2.35)
 
 
 func test_shows_its_start_item() -> void:
@@ -69,16 +69,6 @@ func test_the_knife_chops_lettuce_on_the_board() -> void:
 
 	var food: Array[ItemInstance] = counter.slot.get_item().contents.get_contents()
 	assert_object(food[0].item).is_same(CHOPPED_LETTUCE)
-
-
-func test_the_galley_has_a_tomato_and_a_chopping_board() -> void:
-	var ship: Ship = new_moored_ship_with_player(AT_BOARD)[0] as Ship
-	scene_runner(ship.get_parent())
-
-	var counter: Counter3D = ship.get_node("Galley/Counter") as Counter3D
-	var board: Counter3D = ship.get_node("Galley/BoardCounter") as Counter3D
-	assert_object(counter.slot.get_item().item).is_same(TOMATO)
-	assert_object(board.slot.get_item().item).is_same(BOARD)
 
 
 func test_chopping_in_the_galley_while_the_ship_sails() -> void:

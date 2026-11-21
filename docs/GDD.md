@@ -33,8 +33,8 @@ The ship's bell marks the day, as on real ships: eight bells calls everyone down
 - A big wooden ship with a small crew. A **crew member steers** by default. Taking the wheel yourself comes later.
 - **Deck:** open to the sky, with the mast, the wheel, the ship's bell and the hatch down below.
 - **Below deck:**
-  - **The galley:** the kitchen and the mess in one room, so the crew eats at a table beside the stove.
-  - **The pantry.**
+  - **The galley:** the kitchen and the mess in one room, so the crew eats at a table beside the stove. Its stations stand in a row along the bulkhead: the pantry, a counter, the chopping board on its counter, and the plate rack.
+  - **The pantry:** a tall cupboard at the end of the galley's row (see Storage).
   - **Your bunk.**
 - The ship **really moves** between islands. Its rocking is visual only: the floor stays level, so nothing slides off the counters.
 - **Mooring:** at an island, a **gangplank** connects the ship to the shore. **Ring the ship's bell** while aboard to set sail.
@@ -95,7 +95,7 @@ One button, **interact**, does everything with the thing in front of you.
 | Select belt slot | 1–4 / scroll | Left bumper (cycle) | Choose the active tool |
 | Lock-on, attack, parry | To be set in #66 | To be set in #66 | Duels |
 
-Each action is a named action in Godot's Input Map with keyboard and controller bound, so gameplay code never checks a specific key. Panels must be usable with the D-pad.
+Each action is a named action in Godot's Input Map with keyboard and controller bound, so gameplay code never checks a specific key. Panels must be usable with the D-pad. While a panel is open the mouse cursor is freed so it can be clicked, and it's captured again when the panel closes.
 
 ## Crew and meals
 - For now you cook **for the crew only**. There are no paying customers and no money.
@@ -159,6 +159,8 @@ Garden Salad works today. Tomato Soup and Grilled Cheese need the stove, pans an
 ## Storage
 - The galley **pantry** (and later the hold) stores ingredients. Containers have a fixed number of slots, and each item uses one.
 - Interact on a container while your top item is food it accepts (and there's room) puts it away. Otherwise it opens a small panel showing its contents, and picking an item puts it in your arms if you have space.
+- Browsing a container's panel pauses the game (the ship stops and cooking waits), like OoT's item screen. Esc or Close shuts it.
+- The galley pantry holds 12 pieces and starts stocked with 3 lettuce and 3 tomatoes for now.
 - Containers hold any **solid** food, raw or prepared, so you can prep ahead. Liquids can't be stored yet.
 - Whether chilled and dry storage stay separate aboard a ship (an ice box?) is still open.
 

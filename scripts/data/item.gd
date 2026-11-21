@@ -7,8 +7,10 @@ extends Resource
 ## tomato), so only designed states exist. [Reaction]s turn items into others.
 
 ## Where food is kept. NONE for things that can't be stored: utensils, plates
-## and liquids.
-enum StorageKind { NONE, FRIDGE, CUPBOARD }
+## and liquids. PANTRY is only a container's kind, never an item's: a pantry
+## takes any food that can be stored. New kinds go at the end, because the
+## .tres files save them as numbers.
+enum StorageKind { NONE, FRIDGE, CUPBOARD, PANTRY }
 
 ## Stable internal name (e.g. &"sliced_tomato"). Saves will refer to this, so don't change it.
 @export var id: StringName = &""
