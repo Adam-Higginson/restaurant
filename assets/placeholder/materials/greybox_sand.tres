@@ -1,0 +1,10 @@
+[gd_resource type="StandardMaterial3D" format=3]
+
+[ext_resource type="Texture2D" path="res://assets/placeholder/greybox_grid.png" id="1_e1feg"]
+
+[resource]
+albedo_color = Color(0.92, 0.84, 0.62, 1)
+albedo_texture = ExtResource("1_e1feg")
+roughness = 0.9
+uv1_triplanar = true
+texture_filter = 2
