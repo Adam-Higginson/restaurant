@@ -4,6 +4,11 @@ extends CharacterBody3D
 ## walks, falls under gravity, and rides whatever floor it stands on, so the
 ## ship's deck carries it along as the ship sails.
 ##
+## When the camera switches (walking into or out of a [CameraZone]) while you
+## hold a direction, the player keeps walking the same way until you let go
+## or change direction. Otherwise "up" would flip with the camera and walk
+## you straight back where you came from.
+##
 ## The body itself never rotates: only [code]Model[/code] turns to face the
 ## way you walk. The camera rig is a child of the body, so a turning body
 ## would swing the camera round with every step.
@@ -13,11 +18,29 @@ extends CharacterBody3D
 ## How fast the model turns to face the way you walk, in degrees per second.
 ## Not used yet: see the TODO in [method _face].
 @export var turn_speed: float = 720.0
+## How far, in degrees, you must swing the stick while walking through a
+## camera switch before "up" follows the new camera.
+@export var reaim_degrees: float = 45.0
 
 ## The flat direction the model faces, in world space.
 var facing: Vector3:
 	get:
 		return -_model.global_basis.z
+
+## The player's camera. Camera zones tell it when to use their fixed shot.
+var camera_rig: CameraRig:
+	get:
+		return _camera_rig
+
+## The camera yaw movement used last tick.
+var _move_yaw: float = 0.0
+## Whether movement is held to [member _held_yaw] after a camera switch.
+var _holding: bool = false
+var _held_yaw: float = 0.0
+## The stick direction when the hold started.
+var _held_input: Vector2 = Vector2.ZERO
+## The camera zone in use when you last weren't walking through a switch.
+var _zone_seen: CameraZone
 
 @onready var _model: Node3D = $Model
 @onready var _camera_rig: CameraRig = $CameraRig
@@ -25,7 +48,7 @@ var facing: Vector3:
 
 func _physics_process(delta: float) -> void:
 	var input: Vector2 = Input.get_vector("move_left", "move_right", "move_up", "move_down")
-	var direction: Vector3 = camera_relative(input, _camera_rig.yaw)
+	var direction: Vector3 = camera_relative(input, _movement_yaw(input))
 	velocity.x = direction.x * speed
 	velocity.z = direction.z * speed
 	if not is_on_floor():
@@ -42,6 +65,25 @@ func _physics_process(delta: float) -> void:
 ## [param yaw] radians about the up axis. Pushing up walks away from the camera.
 static func camera_relative(input: Vector2, yaw: float) -> Vector3:
 	return Vector3(input.x, 0.0, input.y).rotated(Vector3.UP, yaw)
+
+
+# The camera yaw to walk by this tick. Usually the view's yaw, so in the
+# galley's fixed shot up still walks away from the camera you look through.
+# But if the camera switches while you hold a direction, keep walking by the
+# yaw from before the switch until you let go or swing the stick away.
+func _movement_yaw(input: Vector2) -> float:
+	var zone: CameraZone = _camera_rig.active_zone
+	if _holding and (input.is_zero_approx()
+			or absf(input.angle_to(_held_input)) > deg_to_rad(reaim_degrees)):
+		_holding = false
+	if not _holding:
+		if not input.is_zero_approx() and zone != _zone_seen:
+			_holding = true
+			_held_yaw = _move_yaw
+			_held_input = input
+		_zone_seen = zone
+	_move_yaw = _held_yaw if _holding else _camera_rig.view_yaw
+	return _move_yaw
 
 
 # Turns the model to face [param direction], a flat world direction.

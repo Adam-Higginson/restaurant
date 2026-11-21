@@ -76,7 +76,7 @@ When you lose a fight, **the lantern pulls you out**, echoing how you met. You r
 
 ### Camera
 - **Free third-person camera** on deck and on islands, orbited with the right stick or mouse. A spring arm pulls it in when a wall or the mast is in the way. It keeps its direction in the world when the ship turns, rather than turning with the deck. With a mouse, the cursor is captured while playing: Esc frees it and a click captures it again.
-- **Fixed, framed shots** in tight interiors like the galley, as in OoT's houses and shops. Walking into the galley blends to its shot, and leaving blends back. Movement always follows the active camera.
+- **Fixed, framed shots** in tight interiors like the galley, as in OoT's houses and shops. Walking into the galley blends to its shot, and leaving blends back, to the free camera's angle from before. The camera can't be turned in a fixed shot. Movement always follows the active camera, except that if the camera switches while you hold a direction, you keep walking the same way until you let go or swing the stick, so a switch never turns you round.
 - **Lock-on** frames the player and the target together.
 
 ### Controls

@@ -4,6 +4,7 @@
 [ext_resource type="Material" path="res://assets/placeholder/materials/greybox_wood.tres" id="2_nifss"]
 [ext_resource type="Material" path="res://assets/placeholder/materials/greybox_dark_wood.tres" id="3_t630l"]
 [ext_resource type="Material" path="res://assets/placeholder/materials/greybox_cloth.tres" id="4_dp3rt"]
+[ext_resource type="Script" path="res://scripts/camera/camera_zone.gd" id="5_gzone"]
 
 [sub_resource type="BoxMesh" id="BoxMesh_ot2i1"]
 size = Vector3(8, 2.5, 24)
@@ -133,6 +134,9 @@ size = Vector3(0.3, 1.1, 0.3)
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_ctpom"]
 size = Vector3(0.9, 0.65, 2)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_galley"]
+size = Vector3(7.4, 2.4, 9.55)
 
 [node name="Ship" type="AnimatableBody3D" unique_id=200548129]
 script = ExtResource("1_7ykrf")
@@ -327,3 +331,13 @@ shape = SubResource("BoxShape3D_rdduo")
 [node name="BunkShape" type="CollisionShape3D" parent="." unique_id=1391400313]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.2, 1.325, 10.5)
 shape = SubResource("BoxShape3D_ctpom")
+
+[node name="GalleyCameraZone" type="Area3D" parent="."]
+script = ExtResource("5_gzone")
+
+[node name="Shape" type="CollisionShape3D" parent="GalleyCameraZone"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.2, 6.925)
+shape = SubResource("BoxShape3D_galley")
+
+[node name="Shot" type="Marker3D" parent="GalleyCameraZone"]
+transform = Transform3D(0.8502651, -0.1435271, 0.5064081, 0, 0.9621044, 0.2726813, -0.5263546, -0.2318514, 0.8180439, 2.9, 3.3, 11.3)
