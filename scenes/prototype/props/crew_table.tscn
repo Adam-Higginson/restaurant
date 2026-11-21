@@ -1,0 +1,276 @@
+[gd_scene format=3]
+
+[ext_resource type="Material" path="res://assets/placeholder/materials/prop_wood.tres" id="1_x"]
+[ext_resource type="Material" path="res://assets/placeholder/materials/dark_prop_wood.tres" id="2_x"]
+[ext_resource type="Material" path="res://assets/placeholder/materials/bread.tres" id="4_bread"]
+[ext_resource type="Script" path="res://scripts/props/rocking.gd" id="7_rock"]
+[ext_resource type="Material" path="res://assets/placeholder/materials/cheese.tres" id="5_cheese"]
+[ext_resource type="Material" path="res://assets/placeholder/materials/stew.tres" id="6_stew"]
+
+[sub_resource type="BoxMesh" id="R1"]
+size = Vector3(2.0, 0.1, 1.0)
+
+[sub_resource type="BoxMesh" id="R2"]
+size = Vector3(0.12, 0.72, 0.12)
+
+[sub_resource type="BoxMesh" id="R3"]
+size = Vector3(0.12, 0.72, 0.12)
+
+[sub_resource type="BoxMesh" id="R4"]
+size = Vector3(0.12, 0.72, 0.12)
+
+[sub_resource type="BoxMesh" id="R5"]
+size = Vector3(0.12, 0.72, 0.12)
+
+[sub_resource type="BoxMesh" id="R6"]
+size = Vector3(1.7, 0.08, 0.06)
+
+[sub_resource type="BoxMesh" id="R7"]
+size = Vector3(1.8, 0.08, 0.34)
+
+[sub_resource type="BoxMesh" id="R8"]
+size = Vector3(0.1, 0.4, 0.3)
+
+[sub_resource type="BoxMesh" id="R9"]
+size = Vector3(0.1, 0.4, 0.3)
+
+[sub_resource type="BoxMesh" id="R10"]
+size = Vector3(1.8, 0.08, 0.34)
+
+[sub_resource type="BoxMesh" id="R11"]
+size = Vector3(0.1, 0.4, 0.3)
+
+[sub_resource type="BoxMesh" id="R12"]
+size = Vector3(0.1, 0.4, 0.3)
+
+[sub_resource type="CylinderMesh" id="R13"]
+top_radius = 0.08
+bottom_radius = 0.085
+height = 0.2
+radial_segments = 8
+rings = 1
+
+[sub_resource type="BoxMesh" id="R14"]
+size = Vector3(0.03, 0.13, 0.07)
+
+[sub_resource type="CylinderMesh" id="R15"]
+top_radius = 0.08
+bottom_radius = 0.085
+height = 0.2
+radial_segments = 8
+rings = 1
+
+[sub_resource type="BoxMesh" id="R16"]
+size = Vector3(0.03, 0.13, 0.07)
+
+[sub_resource type="CylinderMesh" id="R17"]
+top_radius = 0.08
+bottom_radius = 0.085
+height = 0.2
+radial_segments = 8
+rings = 1
+
+[sub_resource type="BoxMesh" id="R18"]
+size = Vector3(0.03, 0.13, 0.07)
+
+[sub_resource type="BoxShape3D" id="R19"]
+size = Vector3(2.0, 0.82, 1.0)
+
+[sub_resource type="BoxShape3D" id="R20"]
+size = Vector3(1.8, 0.48, 0.34)
+
+[sub_resource type="BoxShape3D" id="R21"]
+size = Vector3(1.8, 0.48, 0.34)
+
+[sub_resource type="BoxMesh" id="Spoon"]
+size = Vector3(0.03, 0.03, 0.3)
+
+[sub_resource type="SphereMesh" id="Supper_1"]
+radius = 0.16
+height = 0.2
+radial_segments = 10
+rings = 5
+
+[sub_resource type="BoxMesh" id="Supper_2"]
+size = Vector3(0.03, 0.01, 0.2)
+
+[sub_resource type="BoxMesh" id="Supper_3"]
+size = Vector3(0.03, 0.01, 0.2)
+
+[sub_resource type="BoxMesh" id="Supper_4"]
+size = Vector3(0.03, 0.01, 0.2)
+
+[sub_resource type="PrismMesh" id="Supper_5"]
+left_to_right = 0.0
+size = Vector3(0.3, 0.16, 0.16)
+
+
+[sub_resource type="CylinderMesh" id="Supper_6"]
+top_radius = 0.17
+bottom_radius = 0.1
+height = 0.11
+radial_segments = 10
+rings = 1
+
+[sub_resource type="CylinderMesh" id="Supper_7"]
+top_radius = 0.15
+bottom_radius = 0.15
+height = 0.01
+radial_segments = 10
+rings = 1
+
+[node name="CrewTable" type="StaticBody3D"]
+
+[node name="Top" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.77, 0)
+material_override = ExtResource("1_x")
+mesh = SubResource("R1")
+
+[node name="Leg1" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.85, 0.36, -0.38)
+material_override = ExtResource("2_x")
+mesh = SubResource("R2")
+
+[node name="Leg2" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.85, 0.36, -0.38)
+material_override = ExtResource("2_x")
+mesh = SubResource("R3")
+
+[node name="Leg3" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.85, 0.36, 0.38)
+material_override = ExtResource("2_x")
+mesh = SubResource("R4")
+
+[node name="Leg4" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.85, 0.36, 0.38)
+material_override = ExtResource("2_x")
+mesh = SubResource("R5")
+
+[node name="Rail" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.3, 0)
+material_override = ExtResource("2_x")
+mesh = SubResource("R6")
+
+[node name="BenchNear" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.44, 0.78)
+material_override = ExtResource("1_x")
+mesh = SubResource("R7")
+
+[node name="BenchNearLeg1" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.7, 0.2, 0.78)
+material_override = ExtResource("2_x")
+mesh = SubResource("R8")
+
+[node name="BenchNearLeg2" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.7, 0.2, 0.78)
+material_override = ExtResource("2_x")
+mesh = SubResource("R9")
+
+[node name="BenchFar" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.44, -0.78)
+material_override = ExtResource("1_x")
+mesh = SubResource("R10")
+
+[node name="BenchFarLeg1" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.7, 0.2, -0.78)
+material_override = ExtResource("2_x")
+mesh = SubResource("R11")
+
+[node name="BenchFarLeg2" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.7, 0.2, -0.78)
+material_override = ExtResource("2_x")
+mesh = SubResource("R12")
+
+[node name="Tankard1" type="MeshInstance3D" parent="."]
+script = ExtResource("7_rock")
+phase = 0.0
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.75, 0.92, 0.25)
+material_override = ExtResource("1_x")
+mesh = SubResource("R13")
+
+[node name="Tankard1Handle" type="MeshInstance3D" parent="Tankard1"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.1, 0, 0)
+material_override = ExtResource("2_x")
+mesh = SubResource("R14")
+
+[node name="Tankard2" type="MeshInstance3D" parent="."]
+script = ExtResource("7_rock")
+phase = 0.03
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.7, 0.92, -0.25)
+material_override = ExtResource("1_x")
+mesh = SubResource("R15")
+
+[node name="Tankard2Handle" type="MeshInstance3D" parent="Tankard2"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.1, 0, 0)
+material_override = ExtResource("2_x")
+mesh = SubResource("R16")
+
+[node name="Tankard3" type="MeshInstance3D" parent="."]
+script = ExtResource("7_rock")
+phase = 0.05
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.15, 0.92, -0.3)
+material_override = ExtResource("1_x")
+mesh = SubResource("R17")
+
+[node name="Tankard3Handle" type="MeshInstance3D" parent="Tankard3"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.1, 0, 0)
+material_override = ExtResource("2_x")
+mesh = SubResource("R18")
+
+[node name="Bread" type="MeshInstance3D" parent="."]
+script = ExtResource("7_rock")
+phase = 0.04
+transform = Transform3D(1.5285, 0, 0.2955, 0, 1, 0, -0.4728, 0, 0.9553, 0.05, 0.89, 0.05)
+material_override = ExtResource("4_bread")
+mesh = SubResource("Supper_1")
+
+[node name="BreadScore1" type="MeshInstance3D" parent="."]
+transform = Transform3D(0.6967, 0, 0.7174, 0, 1, 0, -0.7174, 0, 0.6967, -0.07, 0.99, 0.05)
+material_override = ExtResource("6_stew")
+mesh = SubResource("Supper_2")
+
+[node name="BreadScore2" type="MeshInstance3D" parent="."]
+transform = Transform3D(0.6967, 0, 0.7174, 0, 1, 0, -0.7174, 0, 0.6967, 0.05, 0.99, 0.05)
+material_override = ExtResource("6_stew")
+mesh = SubResource("Supper_3")
+
+[node name="BreadScore3" type="MeshInstance3D" parent="."]
+transform = Transform3D(0.6967, 0, 0.7174, 0, 1, 0, -0.7174, 0, 0.6967, 0.17, 0.99, 0.05)
+material_override = ExtResource("6_stew")
+mesh = SubResource("Supper_4")
+
+[node name="Cheese" type="MeshInstance3D" parent="."]
+script = ExtResource("7_rock")
+phase = 0.04
+transform = Transform3D(0.6967, 0, 0.7174, 0, 1, 0, -0.7174, 0, 0.6967, 0.42, 0.902, 0.2)
+material_override = ExtResource("5_cheese")
+mesh = SubResource("Supper_5")
+
+[node name="Bowl" type="MeshInstance3D" parent="."]
+script = ExtResource("7_rock")
+phase = 0.02
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.4, 0.877, -0.1)
+material_override = ExtResource("1_x")
+mesh = SubResource("Supper_6")
+
+[node name="Stew" type="MeshInstance3D" parent="Bowl"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.035, 0)
+material_override = ExtResource("6_stew")
+mesh = SubResource("Supper_7")
+
+[node name="Spoon" type="MeshInstance3D" parent="Bowl"]
+transform = Transform3D(0.8776, 0.2707, 0.3957, 0, 0.8253, -0.5646, -0.4794, 0.4955, 0.7243, 0, 0.103, 0.08)
+material_override = ExtResource("2_x")
+mesh = SubResource("Spoon")
+
+[node name="Shape" type="CollisionShape3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.41, 0)
+shape = SubResource("R19")
+
+[node name="BenchNearShape" type="CollisionShape3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.24, 0.78)
+shape = SubResource("R20")
+
+[node name="BenchFarShape" type="CollisionShape3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.24, -0.78)
+shape = SubResource("R21")

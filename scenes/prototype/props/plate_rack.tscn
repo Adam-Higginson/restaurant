@@ -2,9 +2,10 @@
 
 [ext_resource type="Script" path="res://scripts/props/dispenser_3d.gd" id="1_62wl1"]
 [ext_resource type="Resource" path="res://data/items/plate.tres" id="2_30d5p"]
-[ext_resource type="Material" path="res://assets/placeholder/materials/greybox_dark_wood.tres" id="3_8ouqk"]
-[ext_resource type="Material" path="res://assets/placeholder/materials/greybox_wood.tres" id="4_b55jk"]
+[ext_resource type="Material" path="res://assets/placeholder/materials/prop_wood.tres" id="3_8ouqk"]
+[ext_resource type="Material" path="res://assets/placeholder/materials/dark_prop_wood.tres" id="4_b55jk"]
 [ext_resource type="Script" path="res://scripts/interaction/interactable_3d.gd" id="5_lyve7"]
+[ext_resource type="Material" path="res://assets/placeholder/materials/crockery.tres" id="6_plates"]
 
 [sub_resource type="BoxMesh" id="BoxMesh_wxett"]
 size = Vector3(1.1, 0.9, 0.6)
@@ -21,6 +22,51 @@ size = Vector3(1.1, 0.5, 0.06)
 [sub_resource type="BoxShape3D" id="BoxShape3D_updgk"]
 size = Vector3(1.1, 1, 0.7)
 
+[sub_resource type="CylinderMesh" id="Rack_1"]
+top_radius = 0.13
+bottom_radius = 0.13
+height = 0.025
+radial_segments = 12
+rings = 1
+
+[sub_resource type="CylinderMesh" id="Rack_2"]
+top_radius = 0.13
+bottom_radius = 0.13
+height = 0.025
+radial_segments = 12
+rings = 1
+
+[sub_resource type="CylinderMesh" id="Rack_3"]
+top_radius = 0.13
+bottom_radius = 0.13
+height = 0.025
+radial_segments = 12
+rings = 1
+
+[sub_resource type="CylinderMesh" id="Rack_4"]
+top_radius = 0.13
+bottom_radius = 0.13
+height = 0.025
+radial_segments = 12
+rings = 1
+
+[sub_resource type="CylinderMesh" id="Rack_5"]
+top_radius = 0.13
+bottom_radius = 0.13
+height = 0.025
+radial_segments = 12
+rings = 1
+
+[sub_resource type="CylinderMesh" id="Rack_6"]
+top_radius = 0.13
+bottom_radius = 0.13
+height = 0.025
+radial_segments = 12
+rings = 1
+
+[sub_resource type="BoxMesh" id="Rack_7"]
+size = Vector3(1.0, 0.04, 0.04)
+
 [node name="PlateRack" type="StaticBody3D" unique_id=1824789546]
 script = ExtResource("1_62wl1")
 item = ExtResource("2_30d5p")
@@ -34,6 +80,41 @@ mesh = SubResource("BoxMesh_wxett")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.15, -0.27)
 material_override = ExtResource("4_b55jk")
 mesh = SubResource("BoxMesh_30iej")
+
+[node name="Plate1" type="MeshInstance3D" parent="."]
+transform = Transform3D(0, -1, 0, 0.2474, 0, -0.9689, 0.9689, 0, 0.2474, -0.32, 1.04, -0.17)
+material_override = ExtResource("6_plates")
+mesh = SubResource("Rack_1")
+
+[node name="Plate2" type="MeshInstance3D" parent="."]
+transform = Transform3D(0, -1, 0, 0.2474, 0, -0.9689, 0.9689, 0, 0.2474, -0.2, 1.04, -0.17)
+material_override = ExtResource("6_plates")
+mesh = SubResource("Rack_2")
+
+[node name="Plate3" type="MeshInstance3D" parent="."]
+transform = Transform3D(0, -1, 0, 0.2474, 0, -0.9689, 0.9689, 0, 0.2474, -0.08, 1.04, -0.17)
+material_override = ExtResource("6_plates")
+mesh = SubResource("Rack_3")
+
+[node name="Plate4" type="MeshInstance3D" parent="."]
+transform = Transform3D(0, -1, 0, 0.2474, 0, -0.9689, 0.9689, 0, 0.2474, 0.04, 1.04, -0.17)
+material_override = ExtResource("6_plates")
+mesh = SubResource("Rack_4")
+
+[node name="Plate5" type="MeshInstance3D" parent="."]
+transform = Transform3D(0, -1, 0, 0.2474, 0, -0.9689, 0.9689, 0, 0.2474, 0.16, 1.04, -0.17)
+material_override = ExtResource("6_plates")
+mesh = SubResource("Rack_5")
+
+[node name="Plate6" type="MeshInstance3D" parent="."]
+transform = Transform3D(0, -1, 0, 0.2474, 0, -0.9689, 0.9689, 0, 0.2474, 0.28, 1.04, -0.17)
+material_override = ExtResource("6_plates")
+mesh = SubResource("Rack_6")
+
+[node name="PlateRail" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.98, -0.07)
+material_override = ExtResource("4_b55jk")
+mesh = SubResource("Rack_7")
 
 [node name="Shape" type="CollisionShape3D" parent="." unique_id=1576358641]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.45, 0)

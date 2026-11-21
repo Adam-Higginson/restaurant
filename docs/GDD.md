@@ -34,6 +34,7 @@ The ship's bell marks the day, as on real ships: eight bells calls everyone down
 - **Deck:** open to the sky, with the mast, the wheel, the ship's bell and the hatch down below.
 - **Below deck:**
   - **The galley:** the kitchen and the mess in one room, so the crew eats at a table beside the stove. Its stations stand in a row along the bulkhead: the pantry, a counter, the chopping board on its counter, and the plate rack.
+  - **The hearth:** the galley is a snug, low room (about 9 x 6.5 m, a plank ceiling 2.6 m up), closed off from the ramp's corridor and from the bunks aft, and crammed with things like the reference image. A stone stove with an iron grate and chimney glows at the fore starboard corner, its pot steaming and embers drifting. The crew's table stands against the starboard wall under a riveted brass porthole, with benches, bread, cheese, tankards and a bowl. A crock shelf and a hanging pan, barrels, sacks, rope, drying herbs, a rug, two framed lanterns and golden motes in the air fill it. At the table the camera glides to a framed shot like the reference.
   - **The pantry:** a tall cupboard at the end of the galley's row (see Storage).
   - **Your bunk.**
 - The ship **really moves** between islands, but it never tilts or rocks: the deck stays level and still, so nothing slides off the counters and nobody feels seasick. The sea's motion shows in the water moving around the hull and in hanging things that swing, like the lanterns.
@@ -177,6 +178,8 @@ N64 / OoT style with modern rendering. The reference is a ship's galley at night
 - **Textures:** small, blocky and low-resolution, with nearest-neighbour filtering.
 - **Lighting:** modern, where the cosiness comes from. Warm lantern point lights with soft shadows, glowing emissive flames, a stove fire that lights the room.
 - **Particles:** steam from pots, drifting embers, fireflies.
+- **The N64 recipe:** every surface has a small texture (32 x 32) stretched so its pixels show, about 64 per metre. Big things are simple textured blocks (tables, benches, barrels, the stove). Planks run on floors, ceilings and walls.
+- **Third-party models** (KayKit, Tiny Treats) are only for small detailed props (pots, jars, bread, cheese). They keep their colours under a chunky grain so they don't read as smooth modern toys. They dress our greybox when downloaded; gameplay always lives on our own shapes, so the game works without them.
 - **Sea and sky:** fog, good-looking water, weather.
 
 ### The rainy night (the opening's atmosphere)

@@ -1,0 +1,25 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://scripts/props/swinging.gd" id="1_d"]
+[ext_resource type="Material" path="res://assets/placeholder/materials/dark_prop_wood.tres" id="2_d"]
+[ext_resource type="Script" path="res://scripts/art/third_party_model.gd" id="3_d"]
+
+[sub_resource type="BoxMesh" id="S1"]
+size = Vector3(0.02, 0.3, 0.02)
+
+[node name="HangingHam" type="Node3D"]
+script = ExtResource("1_d")
+swing_degrees = 2.0
+period = 3.1
+
+[node name="Cord" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.15, 0)
+material_override = ExtResource("2_d")
+mesh = SubResource("S1")
+
+[node name="Ham" type="Node3D" parent="."]
+transform = Transform3D(0, -1, 0, 1, 0, 0, 0, 0, 1, 0, -0.72, 0)
+script = ExtResource("3_d")
+path = "res://assets/third_party/kaykit_restaurant/Assets/gltf/food_ingredient_ham.gltf"
+fit_size = Vector3(0.3, 0.42, 0.3)
+grain_metres = 0.15

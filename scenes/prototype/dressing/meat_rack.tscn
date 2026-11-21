@@ -1,0 +1,130 @@
+[gd_scene format=3]
+
+[ext_resource type="Material" path="res://assets/placeholder/materials/dark_prop_wood.tres" id="1_d"]
+[ext_resource type="Script" path="res://scripts/props/swinging.gd" id="2_d"]
+[ext_resource type="Script" path="res://scripts/art/third_party_model.gd" id="3_d"]
+[ext_resource type="Material" path="res://assets/placeholder/materials/stew.tres" id="4_d"]
+
+[sub_resource type="BoxMesh" id="S1"]
+size = Vector3(0.95, 0.05, 0.05)
+
+[sub_resource type="BoxMesh" id="S2"]
+size = Vector3(0.015, 0.42, 0.015)
+
+[sub_resource type="BoxMesh" id="S3"]
+size = Vector3(0.015, 0.42, 0.015)
+
+[sub_resource type="CapsuleMesh" id="S4"]
+radius = 0.04
+height = 0.16
+radial_segments = 6
+rings = 2
+
+[sub_resource type="CapsuleMesh" id="S5"]
+radius = 0.04
+height = 0.16
+radial_segments = 6
+rings = 2
+
+[sub_resource type="CapsuleMesh" id="S6"]
+radius = 0.04
+height = 0.16
+radial_segments = 6
+rings = 2
+
+[sub_resource type="CapsuleMesh" id="S7"]
+radius = 0.04
+height = 0.16
+radial_segments = 6
+rings = 2
+
+[sub_resource type="CapsuleMesh" id="S8"]
+radius = 0.04
+height = 0.16
+radial_segments = 6
+rings = 2
+
+[sub_resource type="BoxMesh" id="S9"]
+size = Vector3(0.015, 0.42, 0.015)
+
+[node name="MeatRack" type="Node3D"]
+
+[node name="Bar" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)
+material_override = ExtResource("1_d")
+mesh = SubResource("S1")
+
+[node name="Hook1" type="Node3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.32, 0, 0)
+script = ExtResource("2_d")
+swing_degrees = 2.0
+period = 2.8
+phase = 0.0
+
+[node name="Cord" type="MeshInstance3D" parent="Hook1"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.21, 0)
+material_override = ExtResource("1_d")
+mesh = SubResource("S2")
+
+[node name="Ham" type="Node3D" parent="Hook1"]
+transform = Transform3D(0, -1, 0, 1, 0, 0, 0, 0, 1, 0.08, -0.55, 0)
+script = ExtResource("3_d")
+path = "res://assets/third_party/kaykit_restaurant/Assets/gltf/food_ingredient_ham.gltf"
+fit_size = Vector3(0.45, 0.45, 0.45)
+grain_metres = 0.12
+
+[node name="Hook2" type="Node3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)
+script = ExtResource("2_d")
+swing_degrees = 2.0
+period = 3.05
+phase = 0.3
+
+[node name="Cord" type="MeshInstance3D" parent="Hook2"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.21, 0)
+material_override = ExtResource("1_d")
+mesh = SubResource("S3")
+
+[node name="Link1" type="MeshInstance3D" parent="Hook2"]
+transform = Transform3D(0.9888, 0.1494, 0, -0.1494, 0.9888, 0, 0, 0, 1, 0, -0.49, 0)
+material_override = ExtResource("4_d")
+mesh = SubResource("S4")
+
+[node name="Link2" type="MeshInstance3D" parent="Hook2"]
+transform = Transform3D(0.9888, -0.1494, 0, 0.1494, 0.9888, 0, 0, 0, 1, 0.015, -0.63, 0)
+material_override = ExtResource("4_d")
+mesh = SubResource("S5")
+
+[node name="Link3" type="MeshInstance3D" parent="Hook2"]
+transform = Transform3D(0.9888, 0.1494, 0, -0.1494, 0.9888, 0, 0, 0, 1, 0, -0.77, 0)
+material_override = ExtResource("4_d")
+mesh = SubResource("S6")
+
+[node name="Link4" type="MeshInstance3D" parent="Hook2"]
+transform = Transform3D(0.9888, -0.1494, 0, 0.1494, 0.9888, 0, 0, 0, 1, 0.015, -0.91, 0)
+material_override = ExtResource("4_d")
+mesh = SubResource("S7")
+
+[node name="Link5" type="MeshInstance3D" parent="Hook2"]
+transform = Transform3D(0.9888, 0.1494, 0, -0.1494, 0.9888, 0, 0, 0, 1, 0, -1.05, 0)
+material_override = ExtResource("4_d")
+mesh = SubResource("S8")
+
+[node name="Hook3" type="Node3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.32, 0, 0)
+script = ExtResource("2_d")
+swing_degrees = 2.0
+period = 3.3
+phase = 0.6
+
+[node name="Cord" type="MeshInstance3D" parent="Hook3"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.21, 0)
+material_override = ExtResource("1_d")
+mesh = SubResource("S9")
+
+[node name="Ham" type="Node3D" parent="Hook3"]
+transform = Transform3D(0, -1, 0, 1, 0, 0, 0, 0, 1, 0.08, -0.55, 0)
+script = ExtResource("3_d")
+path = "res://assets/third_party/kaykit_restaurant/Assets/gltf/food_ingredient_ham.gltf"
+fit_size = Vector3(0.45, 0.45, 0.45)
+grain_metres = 0.12

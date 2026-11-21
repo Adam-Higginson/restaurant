@@ -1,0 +1,13 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://scripts/art/third_party_model.gd" id="1_d"]
+
+
+[node name="PictureFrame" type="Node3D"]
+
+[node name="Model" type="Node3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)
+script = ExtResource("1_d")
+path = "res://assets/third_party/kaykit_furniture/Assets/gltf/pictureframe_large_A.gltf"
+fit_size = Vector3(0.6, 0.8, 0.06)
+grain_metres = 0.15

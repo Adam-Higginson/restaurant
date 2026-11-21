@@ -1,0 +1,28 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://scripts/props/rocking.gd" id="1_d"]
+[ext_resource type="Material" path="res://assets/placeholder/materials/clay.tres" id="2_d"]
+[ext_resource type="Script" path="res://scripts/art/third_party_model.gd" id="3_d"]
+
+[sub_resource type="CylinderMesh" id="S1"]
+top_radius = 0.09
+bottom_radius = 0.07
+height = 0.13
+radial_segments = 8
+rings = 1
+
+[node name="HerbPot" type="Node3D"]
+script = ExtResource("1_d")
+
+[node name="Pot" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.065, 0)
+material_override = ExtResource("2_d")
+mesh = SubResource("S1")
+
+[node name="Herbs" type="Node3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.11, 0)
+script = ExtResource("3_d")
+path = "res://assets/third_party/kaykit_restaurant/Assets/gltf/food_ingredient_lettuce.gltf"
+tint = Color(0.55, 1.5, 0.5, 1)
+fit_size = Vector3(0.2, 0.17, 0.2)
+grain_metres = 0.06

@@ -1,0 +1,92 @@
+extends GameTestSuite
+## Tests for the galley's hearth and mood: the stove's fire, steam and embers,
+## the swinging lanterns, the crew's table and a galley that stays dry
+## whatever the weather.
+
+const STOVE_SCENE: String = "res://scenes/prototype/props/galley_stove.tscn"
+
+
+func test_the_stove_flickers_steams_and_sparks() -> void:
+	var stove: GalleyStove = (load(STOVE_SCENE) as PackedScene).instantiate() as GalleyStove
+	add_child(stove)
+	auto_free(stove)
+
+	assert_object(stove.get_node("FireLight") as Flicker).is_not_null()
+	assert_bool(stove.steam().emitting).is_true()
+	assert_bool(stove.embers().emitting).is_true()
+	# They belong to the stove, so they rise straight up on a sailing ship.
+	assert_bool(stove.steam().local_coords).is_true()
+	assert_bool(stove.embers().local_coords).is_true()
+
+
+func test_the_galley_has_its_hearth_table_and_lanterns() -> void:
+	var ship: Ship = new_moored_ship_with_player(Vector3(0, 1.05, 6))[0] as Ship
+	assert_object(ship.get_node("Galley/Stove") as GalleyStove).is_not_null()
+	assert_object(ship.get_node("Galley/CrewTable") as StaticBody3D).is_not_null()
+	for lantern: String in ["Visuals/GalleyLanternFore", "Visuals/GalleyLanternAft"]:
+		assert_object(ship.get_node(lantern) as Swinging).is_not_null()
+
+
+func test_you_cannot_walk_through_the_stove_or_the_table() -> void:
+	var ship: Ship = new_moored_ship_with_player(Vector3(0, 1.05, 6))[0] as Ship
+	for path: String in ["Galley/Stove", "Galley/CrewTable"]:
+		var body: StaticBody3D = ship.get_node(path) as StaticBody3D
+		assert_bool(body.get_children().any(
+				func(child: Node) -> bool: return child is CollisionShape3D)).is_true()
+
+
+func test_the_galley_stays_dry_in_the_rain() -> void:
+	var ship: Ship = new_moored_ship_with_player(Vector3(0, 1.05, 6))[0] as Ship
+	for path: String in ["Visuals/GalleyFloor", "Visuals/WallPort", "Visuals/Bulkhead"]:
+		var mesh: MeshInstance3D = ship.get_node(path) as MeshInstance3D
+		var material: ShaderMaterial = mesh.material_override as ShaderMaterial
+		var exposure: float = material.get_shader_parameter(&"exposure")
+		assert_float(exposure).override_failure_message("%s gets wet" % path).is_equal(0.0)
+	# The deck above is out in it.
+	var deck: ShaderMaterial = (ship.get_node("Visuals/DeckAft") as MeshInstance3D) \
+			.material_override as ShaderMaterial
+	var deck_exposure: Variant = deck.get_shader_parameter(&"exposure")
+	# Unset means the shader's default, which is fully out in the weather.
+	assert_bool(deck_exposure == null or deck_exposure == 1.0).is_true()
+
+
+func test_the_lanterns_glow_as_bright_as_set() -> void:
+	var lantern: Lantern = (load("res://scenes/prototype/props/lantern.tscn") as PackedScene) 			.instantiate() as Lantern
+	lantern.light_energy = 0.7
+	lantern.light_range = 3.0
+	add_child(lantern)
+	auto_free(lantern)
+	var light: OmniLight3D = lantern.get_node("Light") as OmniLight3D
+	assert_float(light.light_energy).is_equal_approx(0.7, 0.0001)
+	assert_float(light.omni_range).is_equal_approx(3.0, 0.0001)
+
+
+func test_golden_motes_drift_with_the_ship() -> void:
+	var ship: Ship = new_moored_ship_with_player(Vector3(0, 1.05, 6))[0] as Ship
+	scene_runner(ship.get_parent())
+	var motes: Motes = ship.get_node("Galley/Motes") as Motes
+	assert_bool(motes.local_coords).is_true()
+	assert_bool(motes.emitting).is_true()
+
+
+func test_you_walk_in_through_the_doorway_from_the_bunks() -> void:
+	var ship: Ship = new_moored_ship_with_player(Vector3(-2.72, 1.05, 8.6))[0] as Ship
+	var runner: GdUnitSceneRunner = scene_runner(ship.get_parent())
+	await physics_ticks(runner, 5)
+
+	# Up on the stick walks away from the camera, towards the bow.
+	await walk(runner, "move_up", 60)
+
+	var player: Player3D = runner.find_child("Player") as Player3D
+	assert_float(ship.to_local(player.global_position).z).is_less(7.0)
+
+
+func test_the_portholes_are_cut_through_the_wall() -> void:
+	var ship: Ship = new_moored_ship_with_player(Vector3(0, 1.05, 6))[0] as Ship
+	var wall: CSGBox3D = ship.get_node("Visuals/WallStarboard") as CSGBox3D
+	var holes: int = 0
+	for child: Node in wall.get_children():
+		var cut: CSGCylinder3D = child as CSGCylinder3D
+		if cut != null and cut.operation == CSGShape3D.OPERATION_SUBTRACTION:
+			holes += 1
+	assert_int(holes).is_equal(2)

@@ -1,0 +1,139 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://scripts/props/lantern.gd" id="1_x"]
+[ext_resource type="Material" path="res://assets/placeholder/materials/iron.tres" id="2_x"]
+[ext_resource type="Shader" path="res://shaders/pixel_fire.gdshader" id="3_fire"]
+
+[sub_resource type="StandardMaterial3D" id="R1"]
+albedo_color = Color(1, 0.75, 0.4, 1)
+emission_enabled = true
+emission = Color(1, 0.62, 0.28, 1)
+emission_energy_multiplier = 3.0
+
+[sub_resource type="BoxMesh" id="R2"]
+size = Vector3(0.02, 0.3, 0.02)
+
+[sub_resource type="CylinderMesh" id="R3"]
+top_radius = 0.03
+bottom_radius = 0.03
+height = 0.04
+radial_segments = 6
+rings = 1
+
+[sub_resource type="CylinderMesh" id="R4"]
+top_radius = 0.03
+bottom_radius = 0.15
+height = 0.12
+radial_segments = 4
+rings = 1
+
+[sub_resource type="BoxMesh" id="R5"]
+size = Vector3(0.15, 0.22, 0.15)
+
+[sub_resource type="BoxMesh" id="R6"]
+size = Vector3(0.025, 0.25, 0.025)
+
+[sub_resource type="BoxMesh" id="R7"]
+size = Vector3(0.025, 0.25, 0.025)
+
+[sub_resource type="BoxMesh" id="R8"]
+size = Vector3(0.025, 0.25, 0.025)
+
+[sub_resource type="BoxMesh" id="R9"]
+size = Vector3(0.025, 0.25, 0.025)
+
+[sub_resource type="BoxMesh" id="R10"]
+size = Vector3(0.2, 0.04, 0.2)
+
+[sub_resource type="QuadMesh" id="Pane"]
+size = Vector2(0.17, 0.24)
+
+[sub_resource type="ShaderMaterial" id="Flame"]
+shader = ExtResource("3_fire")
+shader_parameter/texels = 6.0
+shader_parameter/glow = 3.5
+
+[node name="Lantern" type="Node3D"]
+script = ExtResource("1_x")
+
+[node name="Cord" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.15, 0)
+material_override = ExtResource("2_x")
+mesh = SubResource("R2")
+cast_shadow = 0
+
+[node name="Ring" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.31, 0)
+material_override = ExtResource("2_x")
+mesh = SubResource("R3")
+cast_shadow = 0
+
+[node name="Cap" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.39, 0)
+material_override = ExtResource("2_x")
+mesh = SubResource("R4")
+cast_shadow = 0
+
+
+[node name="Post1" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.08, -0.56, -0.08)
+material_override = ExtResource("2_x")
+mesh = SubResource("R6")
+cast_shadow = 0
+
+[node name="Post2" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.08, -0.56, -0.08)
+material_override = ExtResource("2_x")
+mesh = SubResource("R7")
+cast_shadow = 0
+
+[node name="Post3" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.08, -0.56, 0.08)
+material_override = ExtResource("2_x")
+mesh = SubResource("R8")
+cast_shadow = 0
+
+[node name="Post4" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.08, -0.56, 0.08)
+material_override = ExtResource("2_x")
+mesh = SubResource("R9")
+cast_shadow = 0
+
+[node name="Base" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.69, 0)
+material_override = ExtResource("2_x")
+mesh = SubResource("R10")
+cast_shadow = 0
+
+[node name="Pane1" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.56, 0.085)
+mesh = SubResource("Pane")
+surface_material_override/0 = SubResource("Flame")
+cast_shadow = 0
+
+[node name="Pane2" type="MeshInstance3D" parent="."]
+transform = Transform3D(0, 0, 1, 0, 1, 0, -1, 0, 0, 0.085, -0.56, 0)
+mesh = SubResource("Pane")
+surface_material_override/0 = SubResource("Flame")
+cast_shadow = 0
+
+[node name="Pane3" type="MeshInstance3D" parent="."]
+transform = Transform3D(-1, 0, 0, 0, 1, 0, 0, 0, -1, 0, -0.56, -0.085)
+mesh = SubResource("Pane")
+surface_material_override/0 = SubResource("Flame")
+cast_shadow = 0
+
+[node name="Pane4" type="MeshInstance3D" parent="."]
+transform = Transform3D(0, 0, -1, 0, 1, 0, 1, 0, 0, -0.085, -0.56, 0)
+mesh = SubResource("Pane")
+surface_material_override/0 = SubResource("Flame")
+cast_shadow = 0
+
+[node name="Light" type="OmniLight3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.56, 0)
+light_color = Color(1, 0.76, 0.46, 1)
+light_energy = 1.4
+light_volumetric_fog_energy = 2.0
+shadow_enabled = true
+omni_range = 7.0
+light_size = 0.12
