@@ -5,7 +5,6 @@
 [ext_resource type="Material" path="res://assets/placeholder/materials/galley_floor.tres" id="17_floor"]
 [ext_resource type="PackedScene" path="res://scenes/prototype/props/galley_stove.tscn" id="18_stove"]
 [ext_resource type="PackedScene" path="res://scenes/prototype/props/crew_table.tscn" id="19_table"]
-[ext_resource type="Shader" path="res://shaders/rain_glass.gdshader" id="22_glass"]
 [ext_resource type="PackedScene" path="res://scenes/prototype/props/lantern.tscn" id="23_lantern"]
 [ext_resource type="PackedScene" path="res://scenes/prototype/props/porthole.tscn" id="24_porthole"]
 [ext_resource type="PackedScene" path="res://scenes/prototype/props/barrel.tscn" id="25_barrel"]
@@ -30,18 +29,22 @@
 [ext_resource type="Script" path="res://scripts/weather/drips.gd" id="15_drips"]
 [ext_resource type="Script" path="res://scripts/art/surface_space.gd" id="16_space"]
 [ext_resource type="Script" path="res://scripts/weather/shelter_zone.gd" id="11_shelter"]
-[ext_resource type="Shader" path="res://shaders/pixel_decal.gdshader" id="37_decal"]
-[ext_resource type="Material" path="res://assets/placeholder/materials/brass.tres" id="21_brass"]
 [ext_resource type="Script" path="res://scripts/props/swinging.gd" id="12_swing"]
-[ext_resource type="Shader" path="res://shaders/sea_chart.gdshader" id="38_chart"]
+[ext_resource type="PackedScene" path="res://scenes/prototype/dressing/veg_crate.tscn" id="41_vegcrate"]
+[ext_resource type="PackedScene" path="res://scenes/prototype/dressing/hanging_ham.tscn" id="42_ham"]
+[ext_resource type="PackedScene" path="res://scenes/prototype/dressing/pot_rail.tscn" id="43_potrail"]
+[ext_resource type="PackedScene" path="res://scenes/prototype/dressing/crockery_shelf.tscn" id="44_crockery"]
+[ext_resource type="PackedScene" path="res://scenes/prototype/dressing/jar_row.tscn" id="45_jars"]
+[ext_resource type="PackedScene" path="res://scenes/prototype/dressing/stool.tscn" id="46_stool"]
+[ext_resource type="PackedScene" path="res://scenes/prototype/dressing/books.tscn" id="47_books"]
+[ext_resource type="PackedScene" path="res://scenes/prototype/dressing/picture_frame.tscn" id="48_picture"]
+[ext_resource type="PackedScene" path="res://scenes/prototype/dressing/kettle.tscn" id="49_kettle"]
+[ext_resource type="PackedScene" path="res://scenes/prototype/dressing/mug.tscn" id="50_mug"]
 
 [sub_resource type="BoxMesh" id="Mesh_Hull"]
 size = Vector3(12, 2.5, 30)
 
 [sub_resource type="BoxMesh" id="Mesh_WallPort"]
-size = Vector3(0.3, 4, 30)
-
-[sub_resource type="BoxMesh" id="Mesh_WallStarboard"]
 size = Vector3(0.3, 4, 30)
 
 [sub_resource type="BoxMesh" id="Mesh_WallBow"]
@@ -164,9 +167,6 @@ size = Vector3(0.3, 1.1, 0.3)
 [sub_resource type="BoxShape3D" id="Shape_BunkShape"]
 size = Vector3(0.9, 0.65, 2)
 
-[sub_resource type="BoxMesh" id="Mesh_Lantern"]
-size = Vector3(0.22, 0.3, 0.22)
-
 [sub_resource type="BoxMesh" id="Mesh_BracketPost"]
 size = Vector3(0.14, 2.7, 0.14)
 
@@ -185,48 +185,11 @@ size = Vector3(1.25, 0.06, 0.06)
 [sub_resource type="BoxMesh" id="Mesh_GalleyFloor"]
 size = Vector3(11.4, 0.02, 13.7)
 
-[sub_resource type="BoxMesh" id="Mesh_BeamShort"]
-size = Vector3(9.2, 0.18, 0.22)
-
-[sub_resource type="BoxMesh" id="Mesh_BeamLong"]
-size = Vector3(11.4, 0.18, 0.22)
-
-[sub_resource type="TorusMesh" id="Mesh_PortholeRim"]
-inner_radius = 0.27
-outer_radius = 0.36
-rings = 16
-ring_segments = 8
-
-[sub_resource type="QuadMesh" id="Mesh_PortholeGlass"]
-size = Vector2(0.56, 0.56)
-
-[sub_resource type="ShaderMaterial" id="Material_PortholeGlass"]
-render_priority = 0
-shader = ExtResource("22_glass")
-
-[sub_resource type="BoxMesh" id="Mesh_Cord"]
-size = Vector3(0.025, 0.45, 0.025)
-
-[sub_resource type="StandardMaterial3D" id="Material_LanternGlow"]
-albedo_color = Color(1, 0.72, 0.38, 1)
-emission_enabled = true
-emission = Color(1, 0.62, 0.3, 1)
-emission_energy_multiplier = 4.0
-
 [sub_resource type="BoxShape3D" id="Shape_Shelter"]
 size = Vector3(11.4, 3.8, 13.5)
 
 [sub_resource type="BoxMesh" id="Cosy_1"]
 size = Vector3(9.1, 0.1, 6.65)
-
-[sub_resource type="BoxMesh" id="Cosy_2"]
-size = Vector3(0.24, 0.2, 6.65)
-
-[sub_resource type="BoxMesh" id="Cosy_3"]
-size = Vector3(0.24, 0.2, 6.65)
-
-[sub_resource type="BoxMesh" id="Cosy_4"]
-size = Vector3(9.1, 0.18, 0.2)
 
 [sub_resource type="BoxMesh" id="Cosy_5"]
 size = Vector3(0.16, 2.6, 6.65)
@@ -314,9 +277,6 @@ height = 0.2
 radial_segments = 10
 rings = 1
 
-[sub_resource type="BoxMesh" id="Cosy_23"]
-size = Vector3(0.12, 0.03, 0.03)
-
 [sub_resource type="SphereMesh" id="Cosy_24"]
 radius = 0.24
 height = 0.5
@@ -334,59 +294,6 @@ inner_radius = 0.12
 outer_radius = 0.24
 rings = 12
 ring_segments = 6
-
-[sub_resource type="BoxMesh" id="Cosy_27"]
-size = Vector3(0.01, 0.2, 0.01)
-
-[sub_resource type="CylinderMesh" id="Cosy_28"]
-top_radius = 0.03
-bottom_radius = 0.07
-height = 0.22
-radial_segments = 6
-rings = 1
-
-[sub_resource type="BoxMesh" id="Cosy_29"]
-size = Vector3(0.01, 0.2, 0.01)
-
-[sub_resource type="CylinderMesh" id="Cosy_30"]
-top_radius = 0.03
-bottom_radius = 0.07
-height = 0.22
-radial_segments = 6
-rings = 1
-
-[sub_resource type="BoxMesh" id="Cosy_31"]
-size = Vector3(0.01, 0.2, 0.01)
-
-[sub_resource type="CylinderMesh" id="Cosy_32"]
-top_radius = 0.03
-bottom_radius = 0.07
-height = 0.22
-radial_segments = 6
-rings = 1
-
-[sub_resource type="BoxMesh" id="Cosy_33"]
-size = Vector3(0.01, 0.2, 0.01)
-
-[sub_resource type="CylinderMesh" id="Cosy_34"]
-top_radius = 0.03
-bottom_radius = 0.07
-height = 0.22
-radial_segments = 6
-rings = 1
-
-[sub_resource type="BoxMesh" id="Cosy_35"]
-size = Vector3(0.01, 0.2, 0.01)
-
-[sub_resource type="CylinderMesh" id="Cosy_36"]
-top_radius = 0.03
-bottom_radius = 0.07
-height = 0.22
-radial_segments = 6
-rings = 1
-
-[sub_resource type="BoxShape3D" id="Cosy_37"]
-size = Vector3(4.6, 2.4, 3.6)
 
 [sub_resource type="BoxShape3D" id="Cosy_38"]
 size = Vector3(0.16, 2.6, 6.65)
@@ -433,26 +340,6 @@ size = Vector3(0.05, 0.26, 0.015)
 [sub_resource type="BoxMesh" id="Blocks_12"]
 size = Vector3(0.04, 0.1, 0.03)
 
-[sub_resource type="CylinderMesh" id="Blocks_13"]
-top_radius = 0.2
-bottom_radius = 0.18
-height = 0.04
-radial_segments = 12
-rings = 1
-
-[sub_resource type="BoxMesh" id="Blocks_14"]
-size = Vector3(0.04, 0.32, 0.05)
-
-[sub_resource type="BoxMesh" id="Blocks_15"]
-size = Vector3(0.03, 0.4, 0.04)
-
-[sub_resource type="CylinderMesh" id="Blocks_16"]
-top_radius = 0.05
-bottom_radius = 0.05
-height = 0.03
-radial_segments = 8
-rings = 1
-
 [sub_resource type="BoxMesh" id="Detail_1"]
 size = Vector3(0.84, 0.05, 6.65)
 
@@ -474,78 +361,6 @@ size = Vector3(0.38, 0.38, 0.16)
 
 [sub_resource type="BoxMesh" id="Detail_7"]
 size = Vector3(0.26, 2.24, 0.26)
-
-[sub_resource type="ShaderMaterial" id="Detail_8"]
-shader = ExtResource("37_decal")
-shader_parameter/kind = 0
-shader_parameter/colour = Color(0.85, 0.85, 0.8, 0.5)
-shader_parameter/seed = 1.0
-
-[sub_resource type="QuadMesh" id="Detail_9"]
-size = Vector2(0.7, 0.7)
-
-[sub_resource type="ShaderMaterial" id="Detail_10"]
-shader = ExtResource("37_decal")
-shader_parameter/kind = 0
-shader_parameter/colour = Color(0.85, 0.85, 0.8, 0.5)
-shader_parameter/seed = 2.0
-
-[sub_resource type="QuadMesh" id="Detail_11"]
-size = Vector2(0.7, 0.7)
-
-[sub_resource type="ShaderMaterial" id="Detail_12"]
-shader = ExtResource("37_decal")
-shader_parameter/kind = 0
-shader_parameter/colour = Color(0.85, 0.85, 0.8, 0.5)
-shader_parameter/seed = 3.0
-
-[sub_resource type="QuadMesh" id="Detail_13"]
-size = Vector2(0.6, 0.6)
-
-[sub_resource type="ShaderMaterial" id="Detail_14"]
-shader = ExtResource("37_decal")
-shader_parameter/kind = 1
-shader_parameter/colour = Color(0.12, 0.08, 0.05, 0.35)
-shader_parameter/seed = 4.0
-
-[sub_resource type="QuadMesh" id="Detail_15"]
-size = Vector2(1.4, 1.0)
-
-[sub_resource type="ShaderMaterial" id="Detail_16"]
-shader = ExtResource("37_decal")
-shader_parameter/kind = 1
-shader_parameter/colour = Color(0.12, 0.08, 0.05, 0.35)
-shader_parameter/seed = 5.0
-
-[sub_resource type="QuadMesh" id="Detail_17"]
-size = Vector2(3.6, 0.9)
-
-[sub_resource type="ShaderMaterial" id="Detail_18"]
-shader = ExtResource("37_decal")
-shader_parameter/kind = 1
-shader_parameter/colour = Color(0.12, 0.08, 0.05, 0.35)
-shader_parameter/seed = 6.0
-
-[sub_resource type="QuadMesh" id="Detail_19"]
-size = Vector2(1.2, 1.0)
-
-[sub_resource type="ShaderMaterial" id="Detail_20"]
-shader = ExtResource("37_decal")
-shader_parameter/kind = 1
-shader_parameter/colour = Color(0.05, 0.04, 0.03, 0.6)
-shader_parameter/seed = 7.0
-
-[sub_resource type="QuadMesh" id="Detail_21"]
-size = Vector2(1.3, 1.1)
-
-[sub_resource type="ShaderMaterial" id="Detail_22"]
-shader = ExtResource("37_decal")
-shader_parameter/kind = 1
-shader_parameter/colour = Color(0.05, 0.04, 0.03, 0.6)
-shader_parameter/seed = 8.0
-
-[sub_resource type="QuadMesh" id="Detail_23"]
-size = Vector2(1.3, 1.2)
 
 [sub_resource type="BoxMesh" id="Detail_24"]
 size = Vector3(0.12, 0.03, 0.03)
@@ -573,79 +388,8 @@ height = 0.03
 radial_segments = 8
 rings = 1
 
-[sub_resource type="BoxMesh" id="Detail_30"]
-size = Vector3(0.04, 0.04, 0.14)
-
-[sub_resource type="BoxMesh" id="Detail_31"]
-size = Vector3(0.04, 0.04, 0.14)
-
-[sub_resource type="BoxMesh" id="Detail_32"]
-size = Vector3(0.46, 0.86, 0.12)
-
-[sub_resource type="BoxMesh" id="Detail_33"]
-size = Vector3(0.12, 0.6, 0.11)
-
-[sub_resource type="BoxMesh" id="Detail_34"]
-size = Vector3(0.12, 0.6, 0.11)
-
-[sub_resource type="CylinderMesh" id="Detail_35"]
-top_radius = 0.2
-bottom_radius = 0.2
-height = 0.03
-radial_segments = 10
-rings = 1
-
-[sub_resource type="CylinderMesh" id="Detail_36"]
-top_radius = 0.1
-bottom_radius = 0.12
-height = 0.14
-radial_segments = 10
-rings = 1
-
-[sub_resource type="TorusMesh" id="Detail_37"]
-inner_radius = 0.18
-outer_radius = 0.36
-rings = 10
-ring_segments = 6
-
-[sub_resource type="SphereMesh" id="Detail_38"]
-radius = 0.2
-height = 0.24
-radial_segments = 8
-rings = 4
-
-[sub_resource type="ShaderMaterial" id="Detail_39"]
-shader = ExtResource("38_chart")
-
-[sub_resource type="QuadMesh" id="Detail_40"]
-size = Vector2(0.9, 0.6)
-
-[sub_resource type="BoxMesh" id="Detail_41"]
-size = Vector3(0.03, 0.03, 0.03)
-
-[sub_resource type="BoxMesh" id="Detail_42"]
-size = Vector3(0.03, 0.03, 0.03)
-
-[sub_resource type="BoxMesh" id="Detail_43"]
-size = Vector3(0.03, 0.03, 0.03)
-
-[sub_resource type="BoxMesh" id="Detail_44"]
-size = Vector3(0.03, 0.03, 0.03)
-
 [sub_resource type="BoxMesh" id="Detail_45"]
 size = Vector3(1.6, 0.05, 1.3)
-
-[sub_resource type="SphereMesh" id="Detail_46"]
-radius = 0.5
-height = 0.4
-radial_segments = 10
-rings = 5
-
-[sub_resource type="BoxMesh" id="Detail_47"]
-size = Vector3(0.02, 2.35, 0.02)
-
-[sub_resource type="BoxMesh" id="Detail_48"]
-size = Vector3(0.02, 2.35, 0.02)
 
 [sub_resource type="BoxShape3D" id="Detail_49"]
 size = Vector3(0.26, 2.24, 0.26)
@@ -1366,6 +1110,51 @@ mesh = SubResource("Detail_45")
 [node name="CentrePostShape" type="CollisionShape3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.6, 2.12, 4.95)
 shape = SubResource("Detail_49")
+
+[node name="VegCrate1" parent="Galley" instance=ExtResource("41_vegcrate")]
+transform = Transform3D(0.9801, 0, 0.1987, 0, 1, 0, -0.1987, 0, 0.9801, 4.7, 1, 2.8)
+
+[node name="VegCrate2" parent="Galley" instance=ExtResource("41_vegcrate")]
+transform = Transform3D(0.8776, 0, -0.4794, 0, 1, 0, 0.4794, 0, 0.8776, 4.65, 1, 3.5)
+
+[node name="HangingHam" parent="Galley" instance=ExtResource("42_ham")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.6, 3.3, 2.5)
+
+[node name="PotRail" parent="Galley" instance=ExtResource("43_potrail")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.5, 3.05, 1.32)
+
+[node name="CrockeryShelf" parent="Galley" instance=ExtResource("44_crockery")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.1, 2.75, 1.3)
+
+[node name="Jars" parent="Galley" instance=ExtResource("45_jars")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.65, 2.8, 1.45)
+
+[node name="Stool" parent="Galley" instance=ExtResource("46_stool")]
+transform = Transform3D(0.9211, 0, 0.3894, 0, 1, 0, -0.3894, 0, 0.9211, 2.3, 1, 2.95)
+
+[node name="Books" parent="Galley" instance=ExtResource("47_books")]
+transform = Transform3D(0, 0, -1, 0, 1, 0, 1, 0, 0, 5.55, 2.575, 3.55)
+
+[node name="Picture" parent="Galley" instance=ExtResource("48_picture")]
+transform = Transform3D(0, 0, 1, 0, 1, 0, -1, 0, 0, -3.31, 2.3, 4.4)
+
+[node name="Kettle" parent="Galley" instance=ExtResource("49_kettle")]
+transform = Transform3D(0.8253, 0, -0.5646, 0, 1, 0, 0.5646, 0, 0.8253, 3.7, 1.87, 1.95)
+
+[node name="Mug1" parent="Galley" instance=ExtResource("50_mug")]
+transform = Transform3D(0.6967, 0, 0.7174, 0, 1, 0, -0.7174, 0, 0.6967, 3.55, 1.82, 4.55)
+
+[node name="Mug2" parent="Galley" instance=ExtResource("50_mug")]
+transform = Transform3D(0.3624, 0, -0.932, 0, 1, 0, 0.932, 0, 0.3624, 4, 1.82, 5.55)
+phase = 0.5
+
+[node name="GalleyLanternCounters" parent="Visuals" instance=ExtResource("23_lantern")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.6, 3.24, 1.6)
+phase = 0.35
+swing_degrees = 3.0
+period = 4.2
+light_energy = 1.1
+light_range = 5.5
 
 [node name="Shelter" type="Area3D" parent="."]
 script = ExtResource("11_shelter")

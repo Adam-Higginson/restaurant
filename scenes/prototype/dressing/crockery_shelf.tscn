@@ -1,0 +1,80 @@
+[gd_scene format=3]
+
+[ext_resource type="Material" path="res://assets/placeholder/materials/prop_wood.tres" id="1_d"]
+[ext_resource type="Material" path="res://assets/placeholder/materials/dark_prop_wood.tres" id="2_d"]
+[ext_resource type="Script" path="res://scripts/art/third_party_model.gd" id="3_d"]
+
+[sub_resource type="BoxMesh" id="S1"]
+size = Vector3(1.0, 0.05, 0.28)
+
+[sub_resource type="BoxMesh" id="S2"]
+size = Vector3(0.05, 0.2, 0.22)
+
+[sub_resource type="BoxMesh" id="S3"]
+size = Vector3(0.05, 0.2, 0.22)
+
+[node name="CrockeryShelf" type="Node3D"]
+
+[node name="Board" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)
+material_override = ExtResource("1_d")
+mesh = SubResource("S1")
+
+[node name="Bracket1" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.4, -0.12, -0.02)
+material_override = ExtResource("2_d")
+mesh = SubResource("S2")
+
+[node name="Bracket2" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.4, -0.12, -0.02)
+material_override = ExtResource("2_d")
+mesh = SubResource("S3")
+
+[node name="Plate1" type="Node3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.3, 0.025, 0)
+script = ExtResource("3_d")
+path = "res://assets/third_party/kaykit_restaurant/Assets/gltf/plate.gltf"
+fit_size = Vector3(0.26, 0.04, 0.26)
+grain_metres = 0.1
+
+[node name="Plate2" type="Node3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.3, 0.055, 0)
+script = ExtResource("3_d")
+path = "res://assets/third_party/kaykit_restaurant/Assets/gltf/plate.gltf"
+fit_size = Vector3(0.26, 0.04, 0.26)
+grain_metres = 0.1
+
+[node name="Plate3" type="Node3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.3, 0.085, 0)
+script = ExtResource("3_d")
+path = "res://assets/third_party/kaykit_restaurant/Assets/gltf/plate.gltf"
+fit_size = Vector3(0.26, 0.04, 0.26)
+grain_metres = 0.1
+
+[node name="Plate4" type="Node3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.3, 0.115, 0)
+script = ExtResource("3_d")
+path = "res://assets/third_party/kaykit_restaurant/Assets/gltf/plate.gltf"
+fit_size = Vector3(0.26, 0.04, 0.26)
+grain_metres = 0.1
+
+[node name="Bowl1" type="Node3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.02, 0.025, 0)
+script = ExtResource("3_d")
+path = "res://assets/third_party/kaykit_restaurant/Assets/gltf/bowl.gltf"
+fit_size = Vector3(0.22, 0.1, 0.22)
+grain_metres = 0.1
+
+[node name="Bowl2" type="Node3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.02, 0.085, 0)
+script = ExtResource("3_d")
+path = "res://assets/third_party/kaykit_restaurant/Assets/gltf/bowl.gltf"
+fit_size = Vector3(0.22, 0.1, 0.22)
+grain_metres = 0.1
+
+[node name="Utensils" type="Node3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.34, 0.025, 0)
+script = ExtResource("3_d")
+path = "res://assets/third_party/tiny_treats_charming_kitchen/Assets/gltf/utensils_cup.gltf"
+fit_size = Vector3(0.2, 0.3, 0.2)
+grain_metres = 0.1
