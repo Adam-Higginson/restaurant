@@ -5,6 +5,9 @@
 [ext_resource type="Material" path="res://assets/placeholder/materials/greybox_dark_wood.tres" id="3_t630l"]
 [ext_resource type="Material" path="res://assets/placeholder/materials/greybox_cloth.tres" id="4_dp3rt"]
 [ext_resource type="Script" path="res://scripts/camera/camera_zone.gd" id="5_gzone"]
+[ext_resource type="PackedScene" path="res://scenes/prototype/props/counter.tscn" id="6_counter"]
+[ext_resource type="Resource" path="res://data/items/tomato.tres" id="7_tomato"]
+[ext_resource type="Resource" path="res://data/items/chopping_board.tres" id="8_board"]
 
 [sub_resource type="BoxMesh" id="BoxMesh_ot2i1"]
 size = Vector3(8, 2.5, 24)
@@ -341,3 +344,13 @@ shape = SubResource("BoxShape3D_galley")
 
 [node name="Shot" type="Marker3D" parent="GalleyCameraZone"]
 transform = Transform3D(0.8502651, -0.1435271, 0.5064081, 0, 0.9621044, 0.2726813, -0.5263546, -0.2318514, 0.8180439, 2.9, 3.3, 11.3)
+
+[node name="Galley" type="Node3D" parent="."]
+
+[node name="Counter" parent="Galley" instance=ExtResource("6_counter")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.3, 1, 2.5)
+start_item = ExtResource("7_tomato")
+
+[node name="BoardCounter" parent="Galley" instance=ExtResource("6_counter")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.9, 1, 2.5)
+start_item = ExtResource("8_board")
