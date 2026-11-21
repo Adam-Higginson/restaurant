@@ -84,6 +84,16 @@ A growing glossary of the Godot concepts this project uses: what each one is, in
 
 **Easing (`smoothstep`, `ease`).** Turns a value that grows steadily from 0 to 1 into one that starts or ends gently, so motion doesn't jolt. `smoothstep(0, 1, t)` is slow at both ends; `ease(t, curve)` gives a family of shapes picked by `curve`. *Ours:* `CameraRig.blend_curve()` (your turn in #63).
 
+**Collision layers and masks.** Every physics object is *on* some layers (`collision_layer`) and *looks at* some layers (`collision_mask`), as bit flags: layer 2 is `1 << 1`. An area only notices things on layers its mask covers. *Ours:* `Interactable3D` sits on layer 2 and the player's `InteractionDetector3D` looks only at layer 2, so the detector never notices walls or camera zones, and camera zones never notice interactables.
+
+**`monitoring` and `monitorable`.** An `Area3D` with `monitoring` on notices others (and gets `get_overlapping_areas()`); one with `monitorable` on can be noticed. Turning off the side you don't need saves work. *Ours:* interactables are monitorable only; the detector is monitoring only.
+
+**Building nodes in code.** `MeshInstance3D.new()`, a `BoxMesh` or `CylinderMesh` with a size, and `add_child()` make scenery from a script, which suits things that change shape often. Free the old ones with `remove_child()` then `queue_free()`, so the old and new never show at once. *Ours:* `ItemModel.build()`, used by `Counter3D` and `CarriedStack3D`.
+
+**Static variables.** `static var` belongs to the class, not to each instance, so every user shares one copy. *Ours:* `ItemModel._materials`, one material per colour for every item model.
+
+**`RefCounted` logic classes.** A script that `extends RefCounted` isn't a node: it lives as long as something refers to it, and can be tested without a scene. Keeping rules in one and having a node wrap it splits "what happens" from "how it looks". *Ours:* `CounterSlot` (wrapped by `Counter3D`), `Arms`, `ToolBelt`.
+
 *Still to come with the prototype tickets: ...*
 
 ## Testing
