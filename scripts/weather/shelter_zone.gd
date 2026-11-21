@@ -1,7 +1,8 @@
 class_name ShelterZone
 extends Area3D
 ## A space with a roof, like the galley below deck. While the player is inside
-## one, rain doesn't fall on them and the rain sounds muffled. [Weather] finds
+## one, the rain sounds muffled. (The roof itself keeps the rain off: drops
+## land on whatever is above, see [RainEffect].) [Weather] finds
 ## every zone in the "shelters" group and listens to it.
 ##
 ## Give it a [CollisionShape3D] child covering the sheltered space.

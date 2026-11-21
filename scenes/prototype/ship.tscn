@@ -350,6 +350,12 @@ light_volumetric_fog_energy = 2.0
 shadow_enabled = true
 omni_range = 8.0
 
+[node name="RainCatcher" type="GPUParticlesCollisionHeightField3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8, 0)
+size = Vector3(14, 20, 32)
+resolution = 1
+update_mode = 1
+
 [node name="HullShape" type="CollisionShape3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.25, 0)
 shape = SubResource("Shape_Hull")

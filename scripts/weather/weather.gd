@@ -28,8 +28,6 @@ signal sheltered_changed(sheltered: bool)
 @export var rain: RainEffect
 ## The camera the rain falls around, handed to [member rain].
 @export var camera: Node3D
-## The player whose feet the rain splashes around, handed to [member rain].
-@export var player: Node3D
 
 ## Whether the player is under a roof right now.
 var sheltered: bool:
@@ -43,7 +41,6 @@ var _shelters_inside: int = 0
 func _ready() -> void:
 	if is_instance_valid(rain):
 		rain.camera = camera
-		rain.player = player
 	# Once the whole scene is ready, so zones later in the tree have joined
 	# the group too.
 	_listen_to_shelters.call_deferred()
@@ -65,7 +62,6 @@ func _apply() -> void:
 		sea.rain = intensity
 	if is_instance_valid(rain):
 		rain.intensity = intensity
-		rain.sheltered = sheltered
 
 
 func _on_player_entered() -> void:
@@ -73,7 +69,6 @@ func _on_player_entered() -> void:
 	_shelters_inside += 1
 	if sheltered != was:
 		sheltered_changed.emit(sheltered)
-		_apply()
 
 
 func _on_player_exited() -> void:
@@ -81,4 +76,3 @@ func _on_player_exited() -> void:
 	_shelters_inside = maxi(_shelters_inside - 1, 0)
 	if sheltered != was:
 		sheltered_changed.emit(sheltered)
-		_apply()

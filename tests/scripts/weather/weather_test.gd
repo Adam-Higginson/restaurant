@@ -1,7 +1,7 @@
 extends GameTestSuite
 ## Tests for Weather, ShelterZone, RainEffect and Ambience: one rain intensity
-## shown everywhere, the galley's roof keeping the rain off, and silence when
-## the third-party sounds aren't there.
+## shown everywhere, drops landing on the ship and splashing, the galley
+## counting as sheltered, and silence when the third-party sounds aren't there.
 
 const WEATHER_SCENE: String = "res://scenes/prototype/weather/weather.tscn"
 const SEA_SCENE: String = "res://scenes/prototype/weather/sea_surface.tscn"
@@ -40,27 +40,45 @@ func test_the_rain_and_the_sea_follow_the_intensity() -> void:
 func test_the_galley_is_sheltered_and_the_deck_is_not() -> void:
 	var rig: Array[Node3D] = new_moored_ship_with_player(ON_DECK)
 	var ship: Ship = rig[0] as Ship
-	var player: Player3D = rig[1] as Player3D
 	var weather: Weather = (load(WEATHER_SCENE) as PackedScene).instantiate() as Weather
-	weather.player = player
 	ship.get_parent().add_child(weather)
 	var runner: GdUnitSceneRunner = scene_runner(ship.get_parent())
 	await physics_ticks(runner, 5)
 
 	assert_bool(weather.sheltered).is_false()
-	assert_bool(weather.rain.is_raining()).is_true()
 
 	place_player_3d(runner, ship.to_global(IN_GALLEY))
 	await physics_ticks(runner, 5)
 
 	assert_bool(weather.sheltered).is_true()
-	assert_bool(weather.rain.is_raining()).is_false()
+	# It still rains: the deck above catches the drops, not a switch.
+	assert_bool(weather.rain.is_raining()).is_true()
 
 	place_player_3d(runner, ship.to_global(ON_DECK))
 	await physics_ticks(runner, 5)
 
 	assert_bool(weather.sheltered).is_false()
-	assert_bool(weather.rain.is_raining()).is_true()
+
+
+func test_drops_vanish_where_they_land_and_splash_there() -> void:
+	var weather: Weather = _new_weather()
+	var streaks: GPUParticles3D = weather.rain.streaks()
+	var falling: ShaderMaterial = streaks.process_material as ShaderMaterial
+
+	assert_object(falling.shader).is_same(RainEffect.DROPS_SHADER)
+	assert_object(streaks.get_node(streaks.sub_emitter)).is_same(weather.rain.splashes())
+
+
+func test_the_ship_catches_rain_over_its_whole_deck() -> void:
+	var ship: Ship = new_moored_ship_with_player(ON_DECK)[0] as Ship
+	var catcher: GPUParticlesCollisionHeightField3D = 			ship.get_node("RainCatcher") as GPUParticlesCollisionHeightField3D
+	# Every corner of the deck and the top of the mast are inside it.
+	var box: AABB = AABB(catcher.position - catcher.size / 2.0, catcher.size)
+	for corner: Vector3 in [Vector3(-6, 5.3, -15), Vector3(6, 5.3, 15), Vector3(0, 16.5, -4)]:
+		assert_bool(box.has_point(corner)).is_true()
+	# It follows the sailing ship, so it has to redraw every frame.
+	assert_int(catcher.update_mode).is_equal(
+			GPUParticlesCollisionHeightField3D.UPDATE_MODE_ALWAYS)
 
 
 func test_ambience_stays_silent_without_its_sounds() -> void:
