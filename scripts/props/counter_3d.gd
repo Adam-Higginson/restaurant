@@ -27,6 +27,10 @@ func _ready() -> void:
 	_slot.changed.connect(_show_item)
 	_interactable.interacted.connect(_on_interacted)
 	_interactable.tool_used.connect(_on_tool_used)
+	_interactable.describe_interact = func(player: Player3D) -> String:
+		return _slot.interact_prompt(player.arms)
+	_interactable.describe_tool = func(_player: Player3D, tool: HandTool) -> String:
+		return tool.verb if _slot.can_use_tool(tool) else ""
 	_show_item()
 
 

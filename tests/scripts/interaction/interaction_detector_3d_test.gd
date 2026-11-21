@@ -178,6 +178,52 @@ func test_a_disabled_one_ignores_direct_use() -> void:
 
 
 # Waits for the areas to notice each other and the arrow to be placed.
+func test_prompts_are_empty_with_nothing_in_reach() -> void:
+	var player: Player3D = new_player_3d_on_floor()
+	scene_runner(player.get_parent())
+	await _settle(player)
+	assert_str(_detector(player).interact_prompt()).is_empty()
+	assert_str(_detector(player).tool_prompt()).is_empty()
+
+
+func test_prompts_come_from_the_focused_interactable() -> void:
+	var player: Player3D = new_player_3d_on_floor()
+	var target: Interactable3D = _add_interactable(player, AHEAD)
+	target.describe_interact = func(_by: Player3D) -> String: return "Ring Bell"
+	target.describe_tool = func(_by: Player3D, tool: HandTool) -> String: return tool.verb
+	scene_runner(player.get_parent())
+	await _settle(player)
+
+	assert_str(_detector(player).interact_prompt()).is_equal("Ring Bell")
+	assert_str(_detector(player).tool_prompt()).is_equal("Chop")
+
+
+func test_no_tool_prompt_while_carrying() -> void:
+	var player: Player3D = new_player_3d_on_floor()
+	var target: Interactable3D = _add_interactable(player, AHEAD)
+	target.describe_tool = func(_by: Player3D, tool: HandTool) -> String: return tool.verb
+	scene_runner(player.get_parent())
+	await _settle(player)
+
+	player.arms.add(ItemInstance.new(TOMATO))
+
+	assert_str(_detector(player).tool_prompt()).is_empty()
+
+
+func test_a_disabled_or_undescribed_interactable_has_no_prompt() -> void:
+	var player: Player3D = new_player_3d_on_floor()
+	var target: Interactable3D = _add_interactable(player, AHEAD)
+	scene_runner(player.get_parent())
+	await _settle(player)
+	assert_str(target.interact_prompt(player)).is_empty()
+
+	target.describe_interact = func(_by: Player3D) -> String: return "Ring Bell"
+	target.enabled = false
+
+	assert_str(target.interact_prompt(player)).is_empty()
+	assert_str(target.tool_prompt(player, KNIFE)).is_empty()
+
+
 func _settle(player: Player3D) -> void:
 	for i: int in 5:
 		await player.get_tree().physics_frame

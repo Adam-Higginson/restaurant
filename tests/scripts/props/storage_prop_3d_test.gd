@@ -96,6 +96,17 @@ func test_interact_takes_a_tomato_out_through_the_panel() -> void:
 	assert_int(pantry.contents.count(TOMATO, ItemInstance.MIN_QUALITY)).is_equal(2)
 
 
+func test_prompt_says_put_away_or_open() -> void:
+	var pantry: StorageProp3D = _new_pantry()
+	var hand: Arms = Arms.new(1)
+	assert_str(pantry.interact_prompt(hand)).is_equal("Open Pantry")
+	hand.add(ItemInstance.new(TOMATO))
+	assert_str(pantry.interact_prompt(hand)).is_equal("Put away Tomato")
+	hand.take_top()
+	hand.add(ItemInstance.new(PLATE))
+	assert_str(pantry.interact_prompt(hand)).is_equal("Open Pantry")
+
+
 func _instantiate() -> StorageProp3D:
 	return (load(PANTRY_SCENE) as PackedScene).instantiate() as StorageProp3D
 

@@ -74,6 +74,24 @@ func try_use_tool() -> bool:
 	return true
 
 
+## What Interact would do right now, e.g. "Put down Tomato", or "" with
+## nothing in reach or nothing to do. The HUD prompt shows it.
+func interact_prompt() -> String:
+	if not is_instance_valid(focused):
+		return ""
+	return focused.interact_prompt(_player)
+
+
+## What Use tool would do right now, e.g. "Chop", or "". Always "" while
+## carrying, with an empty slot selected, or with nothing in reach, the same
+## as [method try_use_tool].
+func tool_prompt() -> String:
+	var tool: HandTool = _player.belt.selected_tool()
+	if tool == null or not _player.arms.is_empty() or not is_instance_valid(focused):
+		return ""
+	return focused.tool_prompt(_player, tool)
+
+
 func _update_focus() -> void:
 	var best: Interactable3D = null
 	var best_distance: float = INF

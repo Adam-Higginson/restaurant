@@ -16,6 +16,8 @@ signal dispensed(item: ItemInstance)
 
 func _ready() -> void:
 	_interactable.interacted.connect(_on_interacted)
+	_interactable.describe_interact = func(player: Player3D) -> String:
+		return interact_prompt(player.arms)
 	if item != null:
 		_item_spot.add_child(ItemModel.build(ItemInstance.new(item)))
 
@@ -29,6 +31,14 @@ func dispense(arms: Arms) -> bool:
 	arms.add(instance)
 	dispensed.emit(instance)
 	return true
+
+
+## What [method dispense] would do, for the HUD prompt: "Take Plate", or ""
+## with full arms.
+func interact_prompt(arms: Arms) -> String:
+	if item == null or arms.is_full():
+		return ""
+	return "Take %s" % item.display_name
 
 
 func _on_interacted(player: Player3D) -> void:

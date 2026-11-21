@@ -88,6 +88,14 @@ func test_interact_hands_the_player_a_plate() -> void:
 	assert_object(player.arms.top().item).is_same(PLATE)
 
 
+func test_prompt_offers_a_plate_to_free_hands_only() -> void:
+	var rack: Dispenser3D = _new_rack()
+	var hand: Arms = Arms.new(1)
+	assert_str(rack.interact_prompt(hand)).is_equal("Take Plate")
+	hand.add(ItemInstance.new(TOMATO))
+	assert_str(rack.interact_prompt(hand)).is_empty()
+
+
 func _new_rack() -> Dispenser3D:
 	var rack: Dispenser3D = (load(RACK_SCENE) as PackedScene).instantiate() as Dispenser3D
 	add_child(rack)
