@@ -3,6 +3,7 @@
 [ext_resource type="Material" path="res://assets/placeholder/materials/prop_wood.tres" id="1_x"]
 [ext_resource type="Material" path="res://assets/placeholder/materials/dark_prop_wood.tres" id="2_x"]
 [ext_resource type="Material" path="res://assets/placeholder/materials/bread.tres" id="4_bread"]
+[ext_resource type="Script" path="res://scripts/props/rocking.gd" id="7_rock"]
 [ext_resource type="Material" path="res://assets/placeholder/materials/cheese.tres" id="5_cheese"]
 [ext_resource type="Material" path="res://assets/placeholder/materials/stew.tres" id="6_stew"]
 
@@ -181,39 +182,40 @@ material_override = ExtResource("2_x")
 mesh = SubResource("R12")
 
 [node name="Tankard1" type="MeshInstance3D" parent="."]
+script = ExtResource("7_rock")
+phase = 0.0
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.75, 0.92, 0.25)
 material_override = ExtResource("1_x")
 mesh = SubResource("R13")
 
-[node name="Tankard1Handle" type="MeshInstance3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.65, 0.92, 0.25)
+[node name="Tankard1Handle" type="MeshInstance3D" parent="Tankard1"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.1, 0, 0)
 material_override = ExtResource("2_x")
 mesh = SubResource("R14")
 
 [node name="Tankard2" type="MeshInstance3D" parent="."]
+script = ExtResource("7_rock")
+phase = 0.4
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.7, 0.92, -0.25)
 material_override = ExtResource("1_x")
 mesh = SubResource("R15")
 
-[node name="Tankard2Handle" type="MeshInstance3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.8, 0.92, -0.25)
+[node name="Tankard2Handle" type="MeshInstance3D" parent="Tankard2"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.1, 0, 0)
 material_override = ExtResource("2_x")
 mesh = SubResource("R16")
 
 [node name="Tankard3" type="MeshInstance3D" parent="."]
+script = ExtResource("7_rock")
+phase = 0.75
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.15, 0.92, -0.3)
 material_override = ExtResource("1_x")
 mesh = SubResource("R17")
 
-[node name="Tankard3Handle" type="MeshInstance3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.25, 0.92, -0.3)
+[node name="Tankard3Handle" type="MeshInstance3D" parent="Tankard3"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.1, 0, 0)
 material_override = ExtResource("2_x")
 mesh = SubResource("R18")
-
-[node name="Spoon" type="MeshInstance3D" parent="."]
-transform = Transform3D(0.8776, 0.2707, 0.3957, 0, 0.8253, -0.5646, -0.4794, 0.4955, 0.7243, -0.4, 0.98, -0.02)
-material_override = ExtResource("2_x")
-mesh = SubResource("Spoon")
 
 [node name="Bread" type="MeshInstance3D" parent="."]
 transform = Transform3D(1.5285, 0, 0.2955, 0, 1, 0, -0.4728, 0, 0.9553, 0.05, 0.89, 0.05)
@@ -241,14 +243,21 @@ material_override = ExtResource("5_cheese")
 mesh = SubResource("Supper_5")
 
 [node name="Bowl" type="MeshInstance3D" parent="."]
+script = ExtResource("7_rock")
+phase = 0.2
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.4, 0.877, -0.1)
 material_override = ExtResource("1_x")
 mesh = SubResource("Supper_6")
 
-[node name="Stew" type="MeshInstance3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.4, 0.912, -0.1)
+[node name="Stew" type="MeshInstance3D" parent="Bowl"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.035, 0)
 material_override = ExtResource("6_stew")
 mesh = SubResource("Supper_7")
+
+[node name="Spoon" type="MeshInstance3D" parent="Bowl"]
+transform = Transform3D(0.8776, 0.2707, 0.3957, 0, 0.8253, -0.5646, -0.4794, 0.4955, 0.7243, 0, 0.103, 0.08)
+material_override = ExtResource("2_x")
+mesh = SubResource("Spoon")
 
 [node name="Shape" type="CollisionShape3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.41, 0)

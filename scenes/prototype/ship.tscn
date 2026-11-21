@@ -30,6 +30,12 @@
 [ext_resource type="Script" path="res://scripts/weather/drips.gd" id="15_drips"]
 [ext_resource type="Script" path="res://scripts/art/surface_space.gd" id="16_space"]
 [ext_resource type="Script" path="res://scripts/weather/shelter_zone.gd" id="11_shelter"]
+[ext_resource type="Shader" path="res://shaders/pixel_decal.gdshader" id="37_decal"]
+[ext_resource type="Material" path="res://assets/placeholder/materials/brass.tres" id="21_brass"]
+[ext_resource type="Script" path="res://scripts/props/swinging.gd" id="12_swing"]
+[ext_resource type="Shader" path="res://shaders/sea_chart.gdshader" id="38_chart"]
+[ext_resource type="Material" path="res://assets/placeholder/materials/oilskin.tres" id="39_oilskin"]
+[ext_resource type="Material" path="res://assets/placeholder/materials/netting.tres" id="40_net"]
 
 [sub_resource type="BoxMesh" id="Mesh_Hull"]
 size = Vector3(12, 2.5, 30)
@@ -448,6 +454,203 @@ bottom_radius = 0.05
 height = 0.03
 radial_segments = 8
 rings = 1
+
+[sub_resource type="BoxMesh" id="Detail_1"]
+size = Vector3(0.84, 0.05, 6.65)
+
+[sub_resource type="BoxMesh" id="Detail_2"]
+size = Vector3(0.2, 2.25, 0.22)
+
+[sub_resource type="BoxMesh" id="Detail_3"]
+size = Vector3(0.2, 2.25, 0.22)
+
+[sub_resource type="BoxMesh" id="Detail_4"]
+size = Vector3(0.2, 2.25, 0.22)
+
+[sub_resource type="BoxMesh" id="Detail_5"]
+size = Vector3(0.2, 2.25, 0.22)
+
+[sub_resource type="PrismMesh" id="Detail_6"]
+left_to_right = 0.0
+size = Vector3(0.38, 0.38, 0.16)
+
+[sub_resource type="BoxMesh" id="Detail_7"]
+size = Vector3(0.26, 2.24, 0.26)
+
+[sub_resource type="ShaderMaterial" id="Detail_8"]
+shader = ExtResource("37_decal")
+shader_parameter/kind = 0
+shader_parameter/colour = Color(0.85, 0.85, 0.8, 0.5)
+shader_parameter/seed = 1.0
+
+[sub_resource type="QuadMesh" id="Detail_9"]
+size = Vector2(0.7, 0.7)
+
+[sub_resource type="ShaderMaterial" id="Detail_10"]
+shader = ExtResource("37_decal")
+shader_parameter/kind = 0
+shader_parameter/colour = Color(0.85, 0.85, 0.8, 0.5)
+shader_parameter/seed = 2.0
+
+[sub_resource type="QuadMesh" id="Detail_11"]
+size = Vector2(0.7, 0.7)
+
+[sub_resource type="ShaderMaterial" id="Detail_12"]
+shader = ExtResource("37_decal")
+shader_parameter/kind = 0
+shader_parameter/colour = Color(0.85, 0.85, 0.8, 0.5)
+shader_parameter/seed = 3.0
+
+[sub_resource type="QuadMesh" id="Detail_13"]
+size = Vector2(0.6, 0.6)
+
+[sub_resource type="ShaderMaterial" id="Detail_14"]
+shader = ExtResource("37_decal")
+shader_parameter/kind = 1
+shader_parameter/colour = Color(0.12, 0.08, 0.05, 0.35)
+shader_parameter/seed = 4.0
+
+[sub_resource type="QuadMesh" id="Detail_15"]
+size = Vector2(1.4, 1.0)
+
+[sub_resource type="ShaderMaterial" id="Detail_16"]
+shader = ExtResource("37_decal")
+shader_parameter/kind = 1
+shader_parameter/colour = Color(0.12, 0.08, 0.05, 0.35)
+shader_parameter/seed = 5.0
+
+[sub_resource type="QuadMesh" id="Detail_17"]
+size = Vector2(3.6, 0.9)
+
+[sub_resource type="ShaderMaterial" id="Detail_18"]
+shader = ExtResource("37_decal")
+shader_parameter/kind = 1
+shader_parameter/colour = Color(0.12, 0.08, 0.05, 0.35)
+shader_parameter/seed = 6.0
+
+[sub_resource type="QuadMesh" id="Detail_19"]
+size = Vector2(1.2, 1.0)
+
+[sub_resource type="ShaderMaterial" id="Detail_20"]
+shader = ExtResource("37_decal")
+shader_parameter/kind = 1
+shader_parameter/colour = Color(0.05, 0.04, 0.03, 0.6)
+shader_parameter/seed = 7.0
+
+[sub_resource type="QuadMesh" id="Detail_21"]
+size = Vector2(1.3, 1.1)
+
+[sub_resource type="ShaderMaterial" id="Detail_22"]
+shader = ExtResource("37_decal")
+shader_parameter/kind = 1
+shader_parameter/colour = Color(0.05, 0.04, 0.03, 0.6)
+shader_parameter/seed = 8.0
+
+[sub_resource type="QuadMesh" id="Detail_23"]
+size = Vector2(1.3, 1.2)
+
+[sub_resource type="BoxMesh" id="Detail_24"]
+size = Vector3(0.12, 0.03, 0.03)
+
+[sub_resource type="BoxMesh" id="Detail_25"]
+size = Vector3(0.04, 0.32, 0.05)
+
+[sub_resource type="CylinderMesh" id="Detail_26"]
+top_radius = 0.2
+bottom_radius = 0.18
+height = 0.04
+radial_segments = 12
+rings = 1
+
+[sub_resource type="BoxMesh" id="Detail_27"]
+size = Vector3(0.12, 0.03, 0.03)
+
+[sub_resource type="BoxMesh" id="Detail_28"]
+size = Vector3(0.03, 0.4, 0.04)
+
+[sub_resource type="CylinderMesh" id="Detail_29"]
+top_radius = 0.05
+bottom_radius = 0.05
+height = 0.03
+radial_segments = 8
+rings = 1
+
+[sub_resource type="BoxMesh" id="Detail_30"]
+size = Vector3(0.04, 0.04, 0.14)
+
+[sub_resource type="BoxMesh" id="Detail_31"]
+size = Vector3(0.04, 0.04, 0.14)
+
+[sub_resource type="BoxMesh" id="Detail_32"]
+size = Vector3(0.46, 0.86, 0.12)
+
+[sub_resource type="BoxMesh" id="Detail_33"]
+size = Vector3(0.12, 0.6, 0.11)
+
+[sub_resource type="BoxMesh" id="Detail_34"]
+size = Vector3(0.12, 0.6, 0.11)
+
+[sub_resource type="CylinderMesh" id="Detail_35"]
+top_radius = 0.2
+bottom_radius = 0.2
+height = 0.03
+radial_segments = 10
+rings = 1
+
+[sub_resource type="CylinderMesh" id="Detail_36"]
+top_radius = 0.1
+bottom_radius = 0.12
+height = 0.14
+radial_segments = 10
+rings = 1
+
+[sub_resource type="TorusMesh" id="Detail_37"]
+inner_radius = 0.18
+outer_radius = 0.36
+rings = 10
+ring_segments = 6
+
+[sub_resource type="SphereMesh" id="Detail_38"]
+radius = 0.2
+height = 0.24
+radial_segments = 8
+rings = 4
+
+[sub_resource type="ShaderMaterial" id="Detail_39"]
+shader = ExtResource("38_chart")
+
+[sub_resource type="QuadMesh" id="Detail_40"]
+size = Vector2(0.9, 0.6)
+
+[sub_resource type="BoxMesh" id="Detail_41"]
+size = Vector3(0.03, 0.03, 0.03)
+
+[sub_resource type="BoxMesh" id="Detail_42"]
+size = Vector3(0.03, 0.03, 0.03)
+
+[sub_resource type="BoxMesh" id="Detail_43"]
+size = Vector3(0.03, 0.03, 0.03)
+
+[sub_resource type="BoxMesh" id="Detail_44"]
+size = Vector3(0.03, 0.03, 0.03)
+
+[sub_resource type="BoxMesh" id="Detail_45"]
+size = Vector3(1.6, 0.05, 1.3)
+
+[sub_resource type="SphereMesh" id="Detail_46"]
+radius = 0.5
+height = 0.4
+radial_segments = 10
+rings = 5
+
+[sub_resource type="BoxMesh" id="Detail_47"]
+size = Vector3(0.02, 2.35, 0.02)
+
+[sub_resource type="BoxMesh" id="Detail_48"]
+size = Vector3(0.02, 2.35, 0.02)
+
+[sub_resource type="BoxShape3D" id="Detail_49"]
+size = Vector3(0.26, 2.24, 0.26)
 
 [node name="Ship" type="AnimatableBody3D" unique_id=200548129]
 script = ExtResource("1_7ykrf")
@@ -899,30 +1102,25 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5.55, 2.075, 3.25)
 material_override = ExtResource("29_clay")
 mesh = SubResource("Cosy_22")
 
-[node name="PanPeg" type="MeshInstance3D" parent="Visuals"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5.64, 2.75, 4)
-material_override = ExtResource("28_darkwood")
-mesh = SubResource("Cosy_23")
-
 [node name="Barrel1" parent="Galley" instance=ExtResource("25_barrel")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5.15, 1, 7.3)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4.85, 1, 7.3)
 
 [node name="Barrel2" parent="Galley" instance=ExtResource("25_barrel")]
 transform = Transform3D(0.2675, 0, 0.9636, 0, 1, 0, -0.9636, 0, 0.2675, 4.5, 1, 7.4)
 
 [node name="Barrel3" parent="Galley" instance=ExtResource("25_barrel")]
-transform = Transform3D(-0.8569, 0, 0.5155, 0, 1, 0, -0.5155, 0, -0.8569, 5.2, 1, 1.7)
+transform = Transform3D(-0.8569, 0, 0.5155, 0, 1, 0, -0.5155, 0, -0.8569, 4.85, 1, 1.75)
 
 [node name="Barrel4" parent="Galley" instance=ExtResource("25_barrel")]
 transform = Transform3D(-0.7259, 0, -0.6878, 0, 1, 0, 0.6878, 0, -0.7259, -2.85, 1, 1.75)
 
 [node name="Sack1" type="MeshInstance3D" parent="Visuals"]
-transform = Transform3D(0.9553, 0, 0.2955, 0, 1, 0, -0.2955, 0, 0.9553, 5.25, 1.2, 6.55)
+transform = Transform3D(0.9553, 0, 0.2955, 0, 1, 0, -0.2955, 0, 0.9553, 4.55, 1.2, 6.55)
 material_override = ExtResource("30_sack")
 mesh = SubResource("Cosy_24")
 
 [node name="Sack2" type="MeshInstance3D" parent="Visuals"]
-transform = Transform3D(0.3624, 0, 0.932, 0, 1, 0, -0.932, 0, 0.3624, 4.85, 1.2, 6.75)
+transform = Transform3D(0.3624, 0, 0.932, 0, 1, 0, -0.932, 0, 0.3624, 4.3, 1.2, 6.75)
 material_override = ExtResource("30_sack")
 mesh = SubResource("Cosy_25")
 
@@ -1058,25 +1256,251 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.73, 2.47, 1.24)
 material_override = ExtResource("28_darkwood")
 mesh = SubResource("Blocks_12")
 
-[node name="HangingPan" type="MeshInstance3D" parent="Visuals"]
-transform = Transform3D(0, -1, 0, 1, 0, 0, 0, 0, 1, 5.64, 2.45, 4)
-material_override = ExtResource("34_iron")
-mesh = SubResource("Blocks_13")
+[node name="BilgeBoard" type="MeshInstance3D" parent="Visuals"]
+transform = Transform3D(0.8412, -0.5408, 0, 0.5408, 0.8412, 0, 0, 0, 1, 5.35, 1.225, 4.475)
+material_override = ExtResource("2_nifss")
+mesh = SubResource("Detail_1")
 
-[node name="HangingPanHandle" type="MeshInstance3D" parent="Visuals"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5.64, 2.8, 4)
-material_override = ExtResource("34_iron")
-mesh = SubResource("Blocks_14")
-
-[node name="HangingSpoon" type="MeshInstance3D" parent="Visuals"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5.65, 2.6, 4.45)
+[node name="Rib1" type="MeshInstance3D" parent="Visuals"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5.6, 2.475, 1.6)
 material_override = ExtResource("28_darkwood")
-mesh = SubResource("Blocks_15")
+mesh = SubResource("Detail_2")
 
-[node name="HangingSpoonBowl" type="MeshInstance3D" parent="Visuals"]
-transform = Transform3D(0, -1, 0, 1, 0, 0, 0, 0, 1, 5.65, 2.38, 4.45)
+[node name="Rib2" type="MeshInstance3D" parent="Visuals"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5.6, 2.475, 3.85)
 material_override = ExtResource("28_darkwood")
-mesh = SubResource("Blocks_16")
+mesh = SubResource("Detail_3")
+
+[node name="Rib3" type="MeshInstance3D" parent="Visuals"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5.6, 2.475, 6.1)
+material_override = ExtResource("28_darkwood")
+mesh = SubResource("Detail_4")
+
+[node name="Rib4" type="MeshInstance3D" parent="Visuals"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5.6, 2.475, 7.55)
+material_override = ExtResource("28_darkwood")
+mesh = SubResource("Detail_5")
+
+[node name="KneeStarboard1" type="MeshInstance3D" parent="Visuals"]
+transform = Transform3D(-1, 0, 0, 0, -1, 0, 0, 0, 1, 5.51, 3.11, 2.5)
+material_override = ExtResource("28_darkwood")
+mesh = SubResource("Detail_6")
+
+[node name="KneePort1" type="MeshInstance3D" parent="Visuals"]
+transform = Transform3D(1, 0, 0, 0, -1, 0, 0, 0, -1, -3.13, 3.11, 2.5)
+material_override = ExtResource("28_darkwood")
+mesh = SubResource("Detail_6")
+
+[node name="KneeStarboard2" type="MeshInstance3D" parent="Visuals"]
+transform = Transform3D(-1, 0, 0, 0, -1, 0, 0, 0, 1, 5.51, 3.11, 4.95)
+material_override = ExtResource("28_darkwood")
+mesh = SubResource("Detail_6")
+
+[node name="KneePort2" type="MeshInstance3D" parent="Visuals"]
+transform = Transform3D(1, 0, 0, 0, -1, 0, 0, 0, -1, -3.13, 3.11, 4.95)
+material_override = ExtResource("28_darkwood")
+mesh = SubResource("Detail_6")
+
+[node name="KneeStarboard3" type="MeshInstance3D" parent="Visuals"]
+transform = Transform3D(-1, 0, 0, 0, -1, 0, 0, 0, 1, 5.51, 3.11, 7.4)
+material_override = ExtResource("28_darkwood")
+mesh = SubResource("Detail_6")
+
+[node name="KneePort3" type="MeshInstance3D" parent="Visuals"]
+transform = Transform3D(1, 0, 0, 0, -1, 0, 0, 0, -1, -3.13, 3.11, 7.4)
+material_override = ExtResource("28_darkwood")
+mesh = SubResource("Detail_6")
+
+[node name="CentrePost" type="MeshInstance3D" parent="Visuals"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.6, 2.12, 4.95)
+material_override = ExtResource("28_darkwood")
+mesh = SubResource("Detail_7")
+
+[node name="CobwebAftStarboard" type="MeshInstance3D" parent="Visuals"]
+transform = Transform3D(-1, 0, 0, 0, 1, 0, 0, 0, -1, 5.35, 3.25, 7.71)
+mesh = SubResource("Detail_9")
+surface_material_override/0 = SubResource("Detail_8")
+cast_shadow = 0
+
+[node name="CobwebAftPort" type="MeshInstance3D" parent="Visuals"]
+transform = Transform3D(0, 0, 1, 0, 1, 0, -1, 0, 0, -3.31, 3.25, 7.45)
+mesh = SubResource("Detail_11")
+surface_material_override/0 = SubResource("Detail_10")
+cast_shadow = 0
+
+[node name="CobwebForeStarboard" type="MeshInstance3D" parent="Visuals"]
+transform = Transform3D(0, 0, -1, 0, 1, 0, 1, 0, 0, 5.69, 3.3, 1.45)
+mesh = SubResource("Detail_13")
+surface_material_override/0 = SubResource("Detail_12")
+cast_shadow = 0
+
+[node name="ScuffStove" type="MeshInstance3D" parent="Visuals"]
+transform = Transform3D(1, 0, 0, 0, 0, 1, 0, -1, 0, 3.4, 1.023, 2.75)
+mesh = SubResource("Detail_15")
+surface_material_override/0 = SubResource("Detail_14")
+cast_shadow = 0
+
+[node name="ScuffCounters" type="MeshInstance3D" parent="Visuals"]
+transform = Transform3D(1, 0, 0, 0, 0, 1, 0, -1, 0, 0, 1.023, 2.3)
+mesh = SubResource("Detail_17")
+surface_material_override/0 = SubResource("Detail_16")
+cast_shadow = 0
+
+[node name="ScuffDoorway" type="MeshInstance3D" parent="Visuals"]
+transform = Transform3D(1, 0, 0, 0, 0, 1, 0, -1, 0, -2.7, 1.023, 7.2)
+mesh = SubResource("Detail_19")
+surface_material_override/0 = SubResource("Detail_18")
+cast_shadow = 0
+
+[node name="SootCeiling" type="MeshInstance3D" parent="Visuals"]
+transform = Transform3D(1, 0, 0, 0, 0, -1, 0, 1, 0, 3.7, 3.595, 1.7)
+mesh = SubResource("Detail_21")
+surface_material_override/0 = SubResource("Detail_20")
+cast_shadow = 0
+
+[node name="SootBulkhead" type="MeshInstance3D" parent="Visuals"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.5, 2.8, 1.16)
+mesh = SubResource("Detail_23")
+surface_material_override/0 = SubResource("Detail_22")
+cast_shadow = 0
+
+[node name="PanHook" type="Node3D" parent="Visuals"]
+transform = Transform3D(0, 0, 1, 0, 1, 0, -1, 0, 0, 5.62, 2.95, 4.15)
+script = ExtResource("12_swing")
+swing_degrees = 2.5
+period = 2.3
+phase = 0.15
+
+[node name="PanHookPeg" type="MeshInstance3D" parent="Visuals"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5.64, 2.97, 4.15)
+material_override = ExtResource("28_darkwood")
+mesh = SubResource("Detail_24")
+
+[node name="Handle" type="MeshInstance3D" parent="Visuals/PanHook"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.17, 0)
+material_override = ExtResource("34_iron")
+mesh = SubResource("Detail_25")
+
+[node name="Pan" type="MeshInstance3D" parent="Visuals/PanHook"]
+transform = Transform3D(1, 0, 0, 0, 0, -1, 0, 1, 0, 0, -0.52, 0)
+material_override = ExtResource("34_iron")
+mesh = SubResource("Detail_26")
+
+[node name="SpoonHook" type="Node3D" parent="Visuals"]
+transform = Transform3D(0, 0, 1, 0, 1, 0, -1, 0, 0, 5.62, 2.95, 4.55)
+script = ExtResource("12_swing")
+swing_degrees = 2.5
+period = 2.3
+phase = 0.55
+
+[node name="SpoonHookPeg" type="MeshInstance3D" parent="Visuals"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5.64, 2.97, 4.55)
+material_override = ExtResource("28_darkwood")
+mesh = SubResource("Detail_27")
+
+[node name="Handle" type="MeshInstance3D" parent="Visuals/SpoonHook"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.21, 0)
+material_override = ExtResource("28_darkwood")
+mesh = SubResource("Detail_28")
+
+[node name="Bowl" type="MeshInstance3D" parent="Visuals/SpoonHook"]
+transform = Transform3D(1, 0, 0, 0, 0, -1, 0, 1, 0, 0, -0.43, 0)
+material_override = ExtResource("28_darkwood")
+mesh = SubResource("Detail_29")
+
+[node name="CoatPeg1" type="MeshInstance3D" parent="Visuals"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.25, 2.6, 7.67)
+material_override = ExtResource("28_darkwood")
+mesh = SubResource("Detail_30")
+
+[node name="CoatPeg2" type="MeshInstance3D" parent="Visuals"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.55, 2.6, 7.67)
+material_override = ExtResource("28_darkwood")
+mesh = SubResource("Detail_31")
+
+[node name="Oilskin" type="MeshInstance3D" parent="Visuals"]
+transform = Transform3D(0.9996, -0.03, 0, 0.03, 0.9996, 0, 0, 0, 1, -1.25, 2.13, 7.65)
+material_override = ExtResource("39_oilskin")
+mesh = SubResource("Detail_32")
+
+[node name="OilskinSleeveLeft" type="MeshInstance3D" parent="Visuals"]
+transform = Transform3D(0.9928, 0.1197, 0, -0.1197, 0.9928, 0, 0, 0, 1, -1.52, 2.2, 7.64)
+material_override = ExtResource("39_oilskin")
+mesh = SubResource("Detail_33")
+
+[node name="OilskinSleeveRight" type="MeshInstance3D" parent="Visuals"]
+transform = Transform3D(0.9928, -0.1197, 0, 0.1197, 0.9928, 0, 0, 0, 1, -0.98, 2.2, 7.64)
+material_override = ExtResource("39_oilskin")
+mesh = SubResource("Detail_34")
+
+[node name="HatBrim" type="MeshInstance3D" parent="Visuals"]
+transform = Transform3D(1, 0, 0, 0, 0.1987, -0.9801, 0, 0.9801, 0.1987, -0.55, 2.45, 7.6)
+material_override = ExtResource("39_oilskin")
+mesh = SubResource("Detail_35")
+
+[node name="HatCrown" type="MeshInstance3D" parent="Visuals"]
+transform = Transform3D(1, 0, 0, 0, 0.1987, -0.9801, 0, 0.9801, 0.1987, -0.55, 2.46, 7.53)
+material_override = ExtResource("39_oilskin")
+mesh = SubResource("Detail_36")
+
+[node name="NetCoil" type="MeshInstance3D" parent="Visuals"]
+transform = Transform3D(1, 0, 0, 0, 0.55, 0, 0, 0, 1, -2.85, 1.06, 4.6)
+material_override = ExtResource("40_net")
+mesh = SubResource("Detail_37")
+
+[node name="NetLump" type="MeshInstance3D" parent="Visuals"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.85, 1.16, 4.6)
+material_override = ExtResource("40_net")
+mesh = SubResource("Detail_38")
+
+[node name="SeaChart" type="MeshInstance3D" parent="Visuals"]
+transform = Transform3D(0, 0, 1, 0, 1, 0, -1, 0, 0, -3.31, 2.3, 4.4)
+mesh = SubResource("Detail_40")
+surface_material_override/0 = SubResource("Detail_39")
+
+[node name="ChartPin1" type="MeshInstance3D" parent="Visuals"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3.3, 2.57, 3.98)
+material_override = ExtResource("21_brass")
+mesh = SubResource("Detail_41")
+
+[node name="ChartPin2" type="MeshInstance3D" parent="Visuals"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3.3, 2.57, 4.82)
+material_override = ExtResource("21_brass")
+mesh = SubResource("Detail_42")
+
+[node name="ChartPin3" type="MeshInstance3D" parent="Visuals"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3.3, 2.03, 3.98)
+material_override = ExtResource("21_brass")
+mesh = SubResource("Detail_43")
+
+[node name="ChartPin4" type="MeshInstance3D" parent="Visuals"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3.3, 2.03, 4.82)
+material_override = ExtResource("21_brass")
+mesh = SubResource("Detail_44")
+
+[node name="HearthSlab" type="MeshInstance3D" parent="Visuals"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.4, 1.025, 1.95)
+material_override = ExtResource("35_stone")
+mesh = SubResource("Detail_45")
+
+[node name="Hammock" type="MeshInstance3D" parent="Visuals"]
+transform = Transform3D(2.2, 0, 0, 0, 0.5, 0, 0, 0, 0.8, 1, 2.5, 11.5)
+material_override = ExtResource("30_sack")
+mesh = SubResource("Detail_46")
+
+[node name="HammockRope1" type="MeshInstance3D" parent="Visuals"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.3, 3.75, 11.5)
+material_override = ExtResource("28_darkwood")
+mesh = SubResource("Detail_47")
+
+[node name="HammockRope2" type="MeshInstance3D" parent="Visuals"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.3, 3.75, 11.5)
+material_override = ExtResource("28_darkwood")
+mesh = SubResource("Detail_48")
+
+[node name="CentrePostShape" type="CollisionShape3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.6, 2.12, 4.95)
+shape = SubResource("Detail_49")
 
 [node name="Shelter" type="Area3D" parent="."]
 script = ExtResource("11_shelter")

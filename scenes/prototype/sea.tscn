@@ -1,34 +1,41 @@
-[gd_scene format=3]
+[gd_scene format=3 uid="uid://ctpgvenmhd26t"]
 
 [ext_resource type="Material" path="res://assets/placeholder/materials/greybox_sand.tres" id="2_dlk4p"]
 [ext_resource type="Material" path="res://assets/placeholder/materials/greybox_grass.tres" id="3_nk5mb"]
 [ext_resource type="Material" path="res://assets/placeholder/materials/greybox_dark_wood.tres" id="4_8v0wy"]
 [ext_resource type="PackedScene" path="res://scenes/prototype/ship.tscn" id="5_ahqms"]
-[ext_resource type="Script" path="res://scripts/ship/ship.gd" id="6_ivyv4"]
 [ext_resource type="PackedScene" path="res://scenes/prototype/player.tscn" id="7_p3dpl"]
 [ext_resource type="PackedScene" path="res://ui/hud_3d.tscn" id="8_hud"]
 [ext_resource type="PackedScene" path="res://scenes/prototype/weather/sea_surface.tscn" id="9_sea"]
 [ext_resource type="PackedScene" path="res://scenes/prototype/weather/weather.tscn" id="10_weather"]
-[ext_resource type="Shader" path="res://shaders/night_sky.gdshader" id="11_sky"]
+[ext_resource type="Shader" uid="uid://onbwj0r4wa7r" path="res://shaders/night_sky.gdshader" id="11_sky"]
 
 [sub_resource type="FastNoiseLite" id="Noise_Cloud"]
 frequency = 0.008
 fractal_octaves = 4
 
 [sub_resource type="NoiseTexture2D" id="Texture_Cloud"]
-width = 512
-height = 512
-seamless = true
 noise = SubResource("Noise_Cloud")
+seamless = true
 
 [sub_resource type="ShaderMaterial" id="Material_NightSky"]
 shader = ExtResource("11_sky")
+shader_parameter/top_color = Color(0.02, 0.028, 0.042, 1)
+shader_parameter/horizon_color = Color(0.09, 0.105, 0.125, 1)
+shader_parameter/below_color = Color(0.01, 0.014, 0.02, 1)
+shader_parameter/moon_color = Color(0.86, 0.9, 1, 1)
+shader_parameter/moon_energy = 4.0
+shader_parameter/moon_degrees = 3.0
+shader_parameter/halo_strength = 0.35
 shader_parameter/cloud_noise = SubResource("Texture_Cloud")
+shader_parameter/cloud_cover = 0.62
+shader_parameter/cloud_color = Color(0.06, 0.07, 0.085, 1)
+shader_parameter/lining_color = Color(0.55, 0.62, 0.75, 1)
+shader_parameter/cloud_speed = 0.006
 
 [sub_resource type="Sky" id="Sky_fgrll"]
 sky_material = SubResource("Material_NightSky")
 process_mode = 3
-radiance_size = 3
 
 [sub_resource type="Environment" id="Environment_r0v5v"]
 background_mode = 2
@@ -47,9 +54,9 @@ glow_hdr_threshold = 0.9
 fog_enabled = true
 fog_mode = 1
 fog_light_color = Color(0.13, 0.155, 0.18, 1)
+fog_density = 1.0
 fog_sky_affect = 0.5
 fog_depth_curve = 0.8
-fog_depth_begin = 10.0
 fog_depth_end = 45.0
 volumetric_fog_enabled = true
 volumetric_fog_density = 0.012
@@ -188,22 +195,22 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -40)
 [node name="Route" type="Path3D" parent="." unique_id=931347176]
 curve = SubResource("Curve3D_ycoyo")
 
-[node name="Ship" type="AnimatableBody3D" parent="." unique_id=200548129 node_paths=PackedStringArray("route") instance=ExtResource("5_ahqms")]
+[node name="Ship" parent="." unique_id=200548129 node_paths=PackedStringArray("route") instance=ExtResource("5_ahqms")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -25, 0, 40)
-script = ExtResource("6_ivyv4")
 route = NodePath("../Route")
 loop_route = true
 
-[node name="Player" parent="." instance=ExtResource("7_p3dpl")]
+[node name="Player" parent="." unique_id=1279594075 instance=ExtResource("7_p3dpl")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -23.5, 5.35, 51)
 
-[node name="Hud3D" parent="." node_paths=PackedStringArray("player") instance=ExtResource("8_hud")]
+[node name="Hud3D" parent="." unique_id=793774154 node_paths=PackedStringArray("player") instance=ExtResource("8_hud")]
 player = NodePath("../Player")
 
-[node name="SeaSurface" parent="." node_paths=PackedStringArray("ship") instance=ExtResource("9_sea")]
+[node name="SeaSurface" parent="." unique_id=1271721852 node_paths=PackedStringArray("ship") instance=ExtResource("9_sea")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.0070040226, 0, 0.003826499)
 ship = NodePath("../Ship")
 
-[node name="Weather" parent="." node_paths=PackedStringArray("sea", "camera", "ship") instance=ExtResource("10_weather")]
+[node name="Weather" parent="." unique_id=1009376343 node_paths=PackedStringArray("sea", "camera", "ship") instance=ExtResource("10_weather")]
 sea = NodePath("../SeaSurface")
 camera = NodePath("../Player/CameraRig/Camera3D")
 ship = NodePath("../Ship")

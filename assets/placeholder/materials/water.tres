@@ -1,6 +1,6 @@
-[gd_resource type="ShaderMaterial" format=3]
+[gd_resource type="ShaderMaterial" format=4 uid="uid://dskl38t5klncq"]
 
-[ext_resource type="Shader" path="res://shaders/water.gdshader" id="1_2f1w5"]
+[ext_resource type="Shader" uid="uid://dhsx7hgqd23rd" path="res://shaders/water.gdshader" id="1_2f1w5"]
 
 [sub_resource type="FastNoiseLite" id="FastNoiseLite_fx4jl"]
 seed = 1
@@ -42,22 +42,24 @@ seamless = true
 [resource]
 render_priority = 0
 shader = ExtResource("1_2f1w5")
-shader_parameter/wave_count = null
-shader_parameter/wave_a = null
-shader_parameter/wave_b = null
-shader_parameter/wave_time = null
-shader_parameter/hull_inverse = null
-shader_parameter/hull_half = null
-shader_parameter/wake = null
-shader_parameter/rain = null
-shader_parameter/deep_color = null
-shader_parameter/crest_color = null
-shader_parameter/foam_color = null
-shader_parameter/roughness_water = null
+shader_parameter/wave_count = 0
+shader_parameter/wave_a = PackedVector4Array(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0)
+shader_parameter/wave_b = PackedVector4Array(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0)
+shader_parameter/wave_time = 0.0
+shader_parameter/hull_inverse = Projection(1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1)
+shader_parameter/hull_half = Vector2(6, 15)
+shader_parameter/wake = 0.0
+shader_parameter/rain = 0.0
+shader_parameter/deep_color = Color(0.025, 0.06, 0.075, 1)
+shader_parameter/crest_color = Color(0.07, 0.22, 0.23, 1)
+shader_parameter/foam_color = Color(0.62, 0.68, 0.7, 1)
+shader_parameter/roughness_water = 0.04
 shader_parameter/detail_a = SubResource("NoiseTexture2D_jfevy")
 shader_parameter/detail_b = SubResource("NoiseTexture2D_hsf1a")
-shader_parameter/detail_scale = null
-shader_parameter/detail_strength = null
+shader_parameter/detail_scale = 0.06
+shader_parameter/detail_strength = 0.5
 shader_parameter/foam_noise = SubResource("NoiseTexture2D_ftbjq")
-shader_parameter/crest_foam_from = null
-shader_parameter/hull_foam_width = null
+shader_parameter/crest_foam_from = 0.55
+shader_parameter/hull_foam_width = 1.4
+shader_parameter/night_glow = 0.6
+shader_parameter/sky_reflection = Color(0.2, 0.24, 0.28, 1)
