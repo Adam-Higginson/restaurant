@@ -22,4 +22,7 @@ jobs:
           version: 'installed'   # use the plugin committed in addons/gdUnit4
           paths: 'res://tests'
           timeout: 5
-          arguments: '-c'        # run every test instead of stopping a suite at its first failure
+          # -c runs every test instead of stopping a suite at its first failure.
+          # --fixed-fps 60 runs frames back to back at a fixed 1/60 s each instead
+          # of waiting for the real clock, so the suite finishes in about a minute.
+          arguments: '-c --fixed-fps 60'
