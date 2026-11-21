@@ -47,7 +47,7 @@ func _process(delta: float) -> void:
 
 
 func _unhandled_input(event: InputEvent) -> void:
-	if not accepts_event(event):
+	if not accepts_event(event, Input.mouse_mode):
 		return
 	if event.is_action_pressed("interact"):
 		get_viewport().set_input_as_handled()
@@ -90,12 +90,13 @@ func tool_to_use() -> HandTool:
 	return null
 
 
-## Whether this should act on [param event]. Mouse clicks only count while
-## the mouse is captured: with the cursor free, a click just captures it
-## again (the camera rig does that), so it mustn't also chop or put down.
-static func accepts_event(event: InputEvent) -> bool:
+## Whether this should act on [param event], given the current
+## [param mouse_mode]. Mouse clicks only count while the mouse is captured:
+## with the cursor free, a click just captures it again (the camera rig does
+## that), so it mustn't also chop or put down.
+static func accepts_event(event: InputEvent, mouse_mode: Input.MouseMode) -> bool:
 	if event is InputEventMouseButton:
-		return Input.mouse_mode == Input.MOUSE_MODE_CAPTURED
+		return mouse_mode == Input.MOUSE_MODE_CAPTURED
 	return true
 
 

@@ -165,16 +165,18 @@ func test_use_tool_with_no_tool_that_fits_does_nothing() -> void:
 
 
 func test_mouse_clicks_count_only_while_the_mouse_is_captured() -> void:
-	# A click with the cursor free only captures the mouse again. Headless
-	# Godot never captures the mouse, so here every click is ignored.
+	# A click with the cursor free only captures the mouse again.
 	var click: InputEventMouseButton = InputEventMouseButton.new()
 	click.button_index = MOUSE_BUTTON_RIGHT
 	click.pressed = true
-	assert_int(Input.mouse_mode).is_not_equal(Input.MOUSE_MODE_CAPTURED)
-	assert_bool(InteractionDetector3D.accepts_event(click)).is_false()
+	var captured: Input.MouseMode = Input.MOUSE_MODE_CAPTURED
+	var free: Input.MouseMode = Input.MOUSE_MODE_VISIBLE
+	assert_bool(InteractionDetector3D.accepts_event(click, captured)).is_true()
+	assert_bool(InteractionDetector3D.accepts_event(click, free)).is_false()
 	var key: InputEventKey = InputEventKey.new()
 	key.physical_keycode = KEY_E
-	assert_bool(InteractionDetector3D.accepts_event(key)).is_true()
+	assert_bool(InteractionDetector3D.accepts_event(key, free)).is_true()
+	assert_bool(InteractionDetector3D.accepts_event(key, captured)).is_true()
 
 
 func test_a_disabled_one_ignores_direct_use() -> void:
