@@ -1,7 +1,7 @@
 extends GameTestSuite
 ## Tests for CameraRig: orbiting, pitch limits, following the player, the
-## spring arm pulling in when something is in the way, and gliding to and
-## from a camera zone's fixed shot.
+## spring arm pulling in when something is in the way, zooming, and gliding
+## to and from a camera zone's fixed shot.
 
 const NEAR: Vector3 = Vector3(0.05, 0.05, 0.05)
 
@@ -75,6 +75,40 @@ func test_the_arm_is_full_length_in_open_space() -> void:
 	await physics_ticks(runner, 5)
 
 	assert_float(arm.get_hit_length()).is_equal_approx(arm.spring_length, 0.01)
+
+
+func test_the_wheel_zooms_out_and_in() -> void:
+	var rig: CameraRig = _rig_of(new_player_3d_on_floor())
+	var runner: GdUnitSceneRunner = scene_runner(rig.get_parent().get_parent())
+	var start: float = rig.zoom
+
+	await press(runner, "zoom_out")
+	assert_float(rig.zoom).is_equal_approx(start + rig.zoom_step, 0.001)
+
+	await press(runner, "zoom_in")
+	await press(runner, "zoom_in")
+	assert_float(rig.zoom).is_equal_approx(start - rig.zoom_step, 0.001)
+
+
+func test_zoom_stays_within_its_limits() -> void:
+	var rig: CameraRig = _rig_of(new_player_3d_on_floor())
+	scene_runner(rig.get_parent().get_parent())
+
+	rig.zoom = 100.0
+	assert_float(rig.zoom).is_equal(rig.zoom_max)
+	rig.zoom = -3.0
+	assert_float(rig.zoom).is_equal(rig.zoom_min)
+
+
+func test_the_arm_eases_to_the_zoom() -> void:
+	var rig: CameraRig = _rig_of(new_player_3d_on_floor())
+	var arm: SpringArm3D = rig.get_node("Pitch/SpringArm3D") as SpringArm3D
+	var runner: GdUnitSceneRunner = scene_runner(rig.get_parent().get_parent())
+
+	rig.zoom = rig.zoom_max
+	await physics_ticks(runner, 60)
+
+	assert_float(arm.spring_length).is_equal_approx(rig.zoom_max, 0.05)
 
 
 func test_the_arm_pulls_in_when_something_is_in_the_way() -> void:

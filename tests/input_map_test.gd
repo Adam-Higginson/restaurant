@@ -44,8 +44,8 @@ func test_one_button_does_everything() -> void:
 
 func test_toolbar_slots_are_selectable_from_keyboard_and_controller() -> void:
 	# No single action has both: the keyboard picks slots 1 to 12 directly
-	# (1-9, 0, - and =), and the controller cycles with the bumpers. The scroll
-	# wheel goes both ways.
+	# (1-9, 0, - and =), and the controller cycles with the bumpers. The
+	# scroll wheel zooms the camera instead.
 	for i: int in Toolbar.SLOT_COUNT:
 		var action: StringName = StringName("select_slot_%d" % (i + 1))
 		assert_bool(_has_event(action, "InputEventKey")).override_failure_message(
@@ -53,7 +53,12 @@ func test_toolbar_slots_are_selectable_from_keyboard_and_controller() -> void:
 		).is_true()
 	for action: StringName in [&"select_slot_next", &"select_slot_previous"]:
 		assert_bool(_has_event(action, "InputEventJoypadButton")).is_true()
-		assert_bool(_has_event(action, "InputEventMouseButton")).is_true()
+		assert_bool(_has_event(action, "InputEventMouseButton")).is_false()
+
+
+func test_the_scroll_wheel_zooms_the_camera() -> void:
+	assert_array(_mouse_buttons(&"zoom_in")).contains_exactly([MOUSE_BUTTON_WHEEL_UP])
+	assert_array(_mouse_buttons(&"zoom_out")).contains_exactly([MOUSE_BUTTON_WHEEL_DOWN])
 
 
 func test_the_mouse_buttons_interact_and_use_tools() -> void:
