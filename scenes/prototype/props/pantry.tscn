@@ -1,0 +1,54 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://scripts/props/storage_prop_3d.gd" id="1_hcdsu"]
+[ext_resource type="Script" path="res://scripts/data/item.gd" id="2_84ndg"]
+[ext_resource type="Resource" path="res://data/items/lettuce.tres" id="3_g7815"]
+[ext_resource type="Resource" path="res://data/items/tomato.tres" id="4_laobp"]
+[ext_resource type="Material" path="res://assets/placeholder/materials/greybox_wood.tres" id="5_12nj7"]
+[ext_resource type="Material" path="res://assets/placeholder/materials/greybox_dark_wood.tres" id="6_72gnv"]
+[ext_resource type="Script" path="res://scripts/interaction/interactable_3d.gd" id="7_d7ys4"]
+[ext_resource type="PackedScene" path="res://ui/container_panel.tscn" id="8_f6ssd"]
+
+[sub_resource type="BoxMesh" id="BoxMesh_klmwk"]
+size = Vector3(1.1, 1.8, 0.6)
+
+[sub_resource type="BoxMesh" id="BoxMesh_c2ck7"]
+size = Vector3(0.9, 1.5, 0.04)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_ylnee"]
+size = Vector3(1.1, 1.8, 0.6)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_3bupp"]
+size = Vector3(1.1, 1, 0.7)
+
+[node name="Pantry" type="StaticBody3D" unique_id=783196520]
+script = ExtResource("1_hcdsu")
+display_name = "Pantry"
+slots = 12
+start_items = Dictionary[ExtResource("2_84ndg"), int]({
+ExtResource("3_g7815"): 3,
+ExtResource("4_laobp"): 3
+})
+
+[node name="Mesh" type="MeshInstance3D" parent="." unique_id=24910583]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.9, 0)
+material_override = ExtResource("5_12nj7")
+mesh = SubResource("BoxMesh_klmwk")
+
+[node name="Doors" type="MeshInstance3D" parent="." unique_id=1701428497]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.9, 0.31)
+material_override = ExtResource("6_72gnv")
+mesh = SubResource("BoxMesh_c2ck7")
+
+[node name="Shape" type="CollisionShape3D" parent="." unique_id=343775664]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.9, 0)
+shape = SubResource("BoxShape3D_ylnee")
+
+[node name="Interactable" type="Area3D" parent="." unique_id=243850609]
+script = ExtResource("7_d7ys4")
+
+[node name="Shape" type="CollisionShape3D" parent="Interactable" unique_id=800010841]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5, 0)
+shape = SubResource("BoxShape3D_3bupp")
+
+[node name="ContainerPanel" parent="." unique_id=683735547 instance=ExtResource("8_f6ssd")]
