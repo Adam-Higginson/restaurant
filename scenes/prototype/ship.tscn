@@ -5,8 +5,9 @@
 [ext_resource type="Material" path="res://assets/placeholder/materials/greybox_dark_wood.tres" id="3_t630l"]
 [ext_resource type="Material" path="res://assets/placeholder/materials/greybox_cloth.tres" id="4_dp3rt"]
 [ext_resource type="PackedScene" path="res://scenes/prototype/props/counter.tscn" id="6_counter"]
-[ext_resource type="Resource" path="res://data/items/tomato.tres" id="7_tomato"]
+[ext_resource type="PackedScene" path="res://scenes/prototype/props/pantry.tscn" id="7_pantry"]
 [ext_resource type="Resource" path="res://data/items/chopping_board.tres" id="8_board"]
+[ext_resource type="PackedScene" path="res://scenes/prototype/props/plate_rack.tscn" id="9_rack"]
 
 [sub_resource type="BoxMesh" id="Mesh_Hull"]
 size = Vector3(12, 2.5, 30)
@@ -333,10 +334,15 @@ shape = SubResource("Shape_BunkShape")
 
 [node name="Galley" type="Node3D" parent="."]
 
+[node name="Pantry" parent="Galley" instance=ExtResource("7_pantry")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.65, 1, 1.45)
+
 [node name="Counter" parent="Galley" instance=ExtResource("6_counter")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.6, 1, 1.45)
-start_item = ExtResource("7_tomato")
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.55, 1, 1.45)
 
 [node name="BoardCounter" parent="Galley" instance=ExtResource("6_counter")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.6, 1, 1.45)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.55, 1, 1.45)
 start_item = ExtResource("8_board")
+
+[node name="PlateRack" parent="Galley" instance=ExtResource("9_rack")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.65, 1, 1.45)
