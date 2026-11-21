@@ -5,7 +5,7 @@ extends GameTestSuite
 const PLAYER_SCENE: String = "res://scenes/prototype/player.tscn"
 const SHIP_SCENE: String = "res://scenes/prototype/ship.tscn"
 ## Where the player stands on the ship's aft deck, in the ship's own space.
-const ON_DECK: Vector3 = Vector3(1.5, 4.05, 8.0)
+const ON_DECK: Vector3 = Vector3(1.5, 5.35, 11.0)
 const NEAR: Vector3 = Vector3(0.05, 0.05, 0.05)
 const KNIFE: HandTool = preload("res://data/tools/chefs_knife.tres")
 const TOMATO: Item = preload("res://data/items/tomato.tres")

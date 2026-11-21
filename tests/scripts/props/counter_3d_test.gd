@@ -11,7 +11,7 @@ const CHOPPED_LETTUCE: Item = preload("res://data/items/chopped_lettuce.tres")
 ## A counter 1.2 m ahead of the player (who faces -Z), within reach.
 const AHEAD: Vector3 = Vector3(0, 0, -1.2)
 ## In front of the galley's BoardCounter, facing it, in the ship's own space.
-const AT_BOARD: Vector3 = Vector3(0.9, 1.05, 3.4)
+const AT_BOARD: Vector3 = Vector3(0.6, 1.05, 2.35)
 
 
 func test_shows_its_start_item() -> void:
