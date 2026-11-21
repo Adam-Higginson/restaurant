@@ -124,6 +124,8 @@ A growing glossary of the Godot concepts this project uses: what each one is, in
 
 **CSG shapes.** *Constructive solid geometry*: simple shapes (`CSGBox3D`, `CSGCylinder3D`) that combine, with a child set to *Subtraction* cutting itself out of its parent. Quick for blocking out levels; slower than plain meshes, so best for a few pieces. *Ours:* the galley's starboard wall is a `CSGBox3D` with two cylinders cut out for the portholes.
 
+**Override materials.** A mesh's own materials can be replaced per instance without touching the mesh: `material_override` covers the whole mesh, `set_surface_override_material()` one surface. *Ours:* `ThirdPartyModel` gives pack models the N64 grain shader this way, keeping each model's own colours.
+
 **`@tool` scripts.** A script marked `@tool` also runs inside the editor, so it can show things while you edit (here, models loaded at runtime). Anything it adds without an *owner* isn't saved into the scene. *Ours:* `ThirdPartyModel` shows pack models in the editor without saving them.
 
 **Particle collision and heightfields.** Particles don't use the physics engine. They collide with special collider nodes instead. A `GPUParticlesCollisionHeightField3D` photographs everything inside its box from above into a height map, and particles that go below it have hit something. It's cheap and ideal for rain, but it can't see under overhangs. *Ours:* the ship's `RainCatcher` covers the whole ship, so drops land on the deck, rails and sail, and the deck keeps the galley dry.
