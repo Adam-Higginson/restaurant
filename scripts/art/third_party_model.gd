@@ -48,6 +48,10 @@ const GRAIN: Texture2D = preload("res://assets/placeholder/materials/n64_grain.t
 @export var grain: bool = true
 ## How many metres one copy of the grain covers on this model.
 @export var grain_metres: float = 0.2
+## How fine a version of the model to draw: Godot keeps simplified copies of
+## every imported mesh (levels of detail), and low values pick the cruder,
+## lower-poly ones, for the chunky N64 look. 1 is Godot's usual choice.
+@export var detail: float = 0.05
 
 ## The loaded model, or null when its file isn't there.
 var model: Node3D = null
@@ -77,6 +81,7 @@ func dress() -> bool:
 	_fit(model)
 	if grain:
 		_use_n64(model, {})
+	_set_detail(model)
 	_show_stand_ins(false)
 	return true
 
@@ -158,6 +163,15 @@ static func n64_material(source: BaseMaterial3D, metres: float) -> ShaderMateria
 	material.set_shader_parameter(&"grain", GRAIN)
 	material.set_shader_parameter(&"grain_metres", metres)
 	return material
+
+
+# Draws every mesh in the model at the chosen level of detail.
+func _set_detail(node: Node) -> void:
+	var shape: GeometryInstance3D = node as GeometryInstance3D
+	if shape != null:
+		shape.lod_bias = detail
+	for child: Node in node.get_children():
+		_set_detail(child)
 
 
 # Shows or hides the greybox. In the editor this is done on the renderer

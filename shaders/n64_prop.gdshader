@@ -16,8 +16,13 @@ uniform sampler2D grain : filter_nearest, repeat_enable, hint_default_white;
 // One copy of the grain covers this many metres.
 uniform float grain_metres = 0.2;
 // How strongly the grain shows.
-uniform float grain_strength : hint_range(0.0, 1.0) = 0.45;
+uniform float grain_strength : hint_range(0.0, 1.0) = 0.3;
 uniform float roughness : hint_range(0.0, 1.0) = 0.8;
+// Light each face as one flat colour, so the model's facets show like N64
+// models' did, instead of smooth modern shading.
+uniform bool faceted = true;
+// How many shades of each colour channel: fewer is more like a small palette.
+uniform float colour_levels = 10.0;
 
 varying vec3 object_pos;
 varying vec3 object_normal;
@@ -37,6 +42,12 @@ void fragment() {
 			: (a.x >= a.z ? object_pos.zy : object_pos.xy);
 	float speck = texture(grain, spot / grain_metres).r;
 	vec3 base = albedo_color.rgb * texture(albedo_texture, UV).rgb;
-	ALBEDO = base * (1.0 + (speck - 0.5) * 2.0 * grain_strength);
+	vec3 colour = base * (1.0 + (speck - 0.5) * 2.0 * grain_strength);
+	ALBEDO = floor(colour * colour_levels + 0.5) / colour_levels;
+	if (faceted) {
+		// The face's own direction, from how its position changes across
+		// neighbouring pixels: the same for the whole face, so it's flat.
+		NORMAL = normalize(cross(dFdy(VERTEX), dFdx(VERTEX)));
+	}
 	ROUGHNESS = roughness;
 }
