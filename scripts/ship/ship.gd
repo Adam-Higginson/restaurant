@@ -42,6 +42,8 @@ var _time: float = 0.0
 func _ready() -> void:
 	if _has_route():
 		global_transform = _transform_at(0.0)
+		# A jump, not a move: draw it there at once rather than gliding over.
+		reset_physics_interpolation()
 	if sail_on_ready:
 		set_sail()
 
