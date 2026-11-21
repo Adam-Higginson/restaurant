@@ -26,6 +26,16 @@ func test_shows_the_model_and_hides_the_greybox() -> void:
 	assert_bool(greybox.visible).is_false()
 
 
+func test_gives_the_model_the_chunky_n64_grain() -> void:
+	var dresser: ThirdPartyModel = _new_dresser(STAND_IN_MODEL)[0] as ThirdPartyModel
+	var mesh: MeshInstance3D = dresser.model.get_node("Mesh") as MeshInstance3D
+	# Our counter colours itself with one material over the whole mesh.
+	var material: ShaderMaterial = mesh.material_override as ShaderMaterial
+	assert_object(material).is_not_null()
+	assert_object(material.shader).is_same(ThirdPartyModel.N64_SHADER)
+	assert_object(material.get_shader_parameter(&"grain")).is_same(ThirdPartyModel.GRAIN)
+
+
 func test_fits_evenly_inside_its_box() -> void:
 	var dresser: ThirdPartyModel = _new_dresser(STAND_IN_MODEL, Vector3(2.2, 5.0, 5.0))[0] \
 			as ThirdPartyModel

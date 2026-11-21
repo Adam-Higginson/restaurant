@@ -33,8 +33,11 @@ uniform float dry_roughness : hint_range(0.0, 1.0) = 0.85;
 uniform float grain_bump : hint_range(0.0, 10.0) = 3.0;
 
 group_uniforms planks;
-// Plank width in metres; 0 for no planks. Planks run along the ship (z).
+// Plank width in metres on floors and ceilings; 0 for no planks. They run
+// along the ship (z).
 uniform float plank_width = 0.0;
+// Plank width in metres on walls, which run level; 0 for no planks.
+uniform float wall_plank_width = 0.0;
 // Each plank is this long before a butt joint.
 uniform float plank_length = 3.0;
 uniform float seam_darkness : hint_range(0.0, 1.0) = 0.55;
@@ -105,12 +108,10 @@ vec3 hash3(vec2 cell) {
 }
 
 
-// How dark a plank seam is at [param p] on a deck: 1 in a seam, 0 on wood.
-float seam(vec2 p) {
-	if (plank_width <= 0.0) {
-		return 0.0;
-	}
-	float across = p.x / plank_width;
+// How dark a plank seam is at [param p] (across the boards, then along
+// them) for boards [param width] wide: 1 in a seam, 0 on wood.
+float seam(vec2 p, float width) {
+	float across = p.x / width;
 	float plank = floor(across);
 	// Butt joints are staggered from plank to plank.
 	float along = p.y / plank_length + hash3(vec2(plank, 0.0)).x;
@@ -147,8 +148,8 @@ vec2 ripples(vec2 p, float t) {
 
 
 // Which plank (x) and which length of it (y) [param p] is on.
-vec2 plank_cell(vec2 p) {
-	float plank = floor(p.x / plank_width);
+vec2 plank_cell(vec2 p, float width) {
+	float plank = floor(p.x / width);
 	float along = p.y / plank_length + hash3(vec2(plank, 0.0)).x;
 	return vec2(plank, floor(along));
 }
@@ -180,7 +181,23 @@ void fragment() {
 	float up = clamp(n.y, 0.0, 1.0);
 	float exposed = smoothstep(-0.4, 0.1, n.y);
 	float side = 1.0 - abs(n.y);
-	bool planked = plank_width > 0.0 && up > 0.9;
+	// Boards: on floors and ceilings they run along the ship; on walls they
+	// run level. Work out where this point is in board terms (across, along)
+	// and which way "across" and "along" point.
+	float width = 0.0;
+	vec2 board = vec2(0.0);
+	vec3 across_axis = vec3(1.0, 0.0, 0.0);
+	vec3 along_axis = vec3(0.0, 0.0, 1.0);
+	if (abs(n.y) > 0.9 && plank_width > 0.0) {
+		width = plank_width;
+		board = surface_pos.xz;
+	} else if (abs(n.y) < 0.1 && wall_plank_width > 0.0) {
+		width = wall_plank_width;
+		along_axis = abs(n.x) > abs(n.z) ? vec3(0.0, 0.0, 1.0) : vec3(1.0, 0.0, 0.0);
+		across_axis = vec3(0.0, 1.0, 0.0);
+		board = vec2(surface_pos.y, dot(surface_pos, along_axis));
+	}
+	bool planked = width > 0.0;
 
 	// Each plank: its own shade, its grain shifted so neighbours don't match,
 	// and a slight tip so it catches the light differently.
@@ -188,16 +205,16 @@ void fragment() {
 	float shade = 1.0;
 	vec2 lean = vec2(0.0);
 	if (planked) {
-		vec3 h = hash3(plank_cell(surface_pos.xz) + 17.0);
+		vec3 h = hash3(plank_cell(board, width) + 17.0);
 		shade = 1.0 + plank_tint * (h.x * 2.0 - 1.0);
 		// The grain runs along the board (the texture's grain runs across
 		// the image, so turn it), stretched like a long board's, and each
 		// board shows its own stretch of the texture.
-		uv = vec2(surface_pos.z * 0.45, surface_pos.x) + h.yz * 7.0;
+		uv = vec2(board.y * 0.45, board.x) + h.yz * 7.0;
 		lean = (h.zy - 0.5) * plank_warp;
 		// Rounded edges: near a long edge the board curves down to the seam.
-		float across = fract(surface_pos.x / plank_width);
-		float to_edge = min(across, 1.0 - across) * plank_width;
+		float across = fract(board.x / width);
+		float to_edge = min(across, 1.0 - across) * width;
 		float round_off = 1.0 - smoothstep(0.0, bevel, to_edge);
 		lean.x += (across < 0.5 ? -1.0 : 1.0) * round_off * 0.7;
 	}
@@ -212,7 +229,7 @@ void fragment() {
 	vec2 grain_slope = vec2(height_u - height_here, height_v - height_here) * grain_bump;
 
 	vec3 base = albedo.rgb * grain * shade;
-	float in_seam = planked ? seam(surface_pos.xz) : 0.0;
+	float in_seam = planked ? seam(board, width) : 0.0;
 	base *= 1.0 - seam_darkness * in_seam;
 
 	// Soaked: darker and richer (a power darkens the darks most), and a little
@@ -247,7 +264,7 @@ void fragment() {
 	mat3 frame = texture_frame(n);
 	float flatten = 1.0 - puddle;
 	vec3 bent = n - (frame[0] * grain_slope.x + frame[1] * grain_slope.y) * flatten;
-	bent += vec3(lean.x, 0.0, lean.y) * flatten;
+	bent += (across_axis * lean.x + along_axis * lean.y) * flatten;
 	vec2 slope = ripples(surface_pos.xz / ripple_cell, TIME);
 	slope *= ripple_strength * up * wet * mix(0.25, 1.0, puddle);
 	bent = normalize(bent + vec3(slope.x, 0.0, slope.y));

@@ -14,6 +14,9 @@ extends Node
 @export_file("*.png", "*.jpg") var path: String = ""
 ## The shader parameter that takes the texture.
 @export var parameter: StringName = &"albedo_texture"
+## Shrink the texture to this many pixels across (and down) as it loads, for
+## the chunky N64 look; 0 keeps it as it is.
+@export var pixels: int = 0
 
 
 func _ready() -> void:
@@ -27,5 +30,17 @@ func apply() -> bool:
 	var texture: Texture2D = load(path) as Texture2D
 	if texture == null:
 		return false
+	if pixels > 0:
+		texture = shrunk(texture, pixels)
 	material.set_shader_parameter(parameter, texture)
 	return true
+
+
+## A copy of [param texture] shrunk to [param size] pixels square, averaging
+## the pixels it merges so the colours stay true.
+static func shrunk(texture: Texture2D, size: int) -> ImageTexture:
+	var image: Image = texture.get_image()
+	if image.is_compressed():
+		image.decompress()
+	image.resize(size, size, Image.INTERPOLATE_BILINEAR)
+	return ImageTexture.create_from_image(image)

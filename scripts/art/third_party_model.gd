@@ -16,6 +16,12 @@ extends Node3D
 ##
 ## Models from the packs are built at their own scale, so the model is
 ## fitted into [member fit_size] (sitting on this node's origin, centred).
+## Their smooth flat colours are given the chunky N64 grain
+## (shaders/n64_prop.gdshader).
+
+const N64_SHADER: Shader = preload("res://shaders/n64_prop.gdshader")
+## The chunky grain laid over models: a 32 x 32 noise texture of our own.
+const GRAIN: Texture2D = preload("res://assets/placeholder/materials/n64_grain.tres")
 
 ## The model file, under res://assets/third_party/.
 @export_file("*.gltf", "*.glb") var path: String = "":
@@ -38,8 +44,10 @@ extends Node3D
 			dress()
 ## Greybox meshes to hide while the model shows.
 @export var stand_ins: Array[VisualInstance3D] = []
-## Small blocky textures, N64 style, instead of smooth filtering.
-@export var nearest_filter: bool = true
+## Lay the chunky N64 grain over the model's colours.
+@export var grain: bool = true
+## How many metres one copy of the grain covers on this model.
+@export var grain_metres: float = 0.2
 
 ## The loaded model, or null when its file isn't there.
 var model: Node3D = null
@@ -67,8 +75,8 @@ func dress() -> bool:
 		return false
 	add_child(model)
 	_fit(model)
-	if nearest_filter:
-		_use_nearest(model)
+	if grain:
+		_use_n64(model, {})
 	_show_stand_ins(false)
 	return true
 
@@ -110,15 +118,46 @@ func _bounds(node: Node, transform_so_far: Transform3D) -> AABB:
 	return box
 
 
-func _use_nearest(node: Node) -> void:
+# Gives every surface the N64 prop shader, keeping its own colour and
+# texture. [param made] remembers each converted material, so surfaces that
+# shared one still do.
+func _use_n64(node: Node, made: Dictionary) -> void:
 	var mesh_node: MeshInstance3D = node as MeshInstance3D
-	if mesh_node != null and mesh_node.mesh != null:
+	var override: BaseMaterial3D = null
+	if mesh_node != null:
+		override = mesh_node.material_override as BaseMaterial3D
+	if override != null:
+		# One material over the whole mesh: convert that instead.
+		var whole: ShaderMaterial = made.get(override, null)
+		if whole == null:
+			whole = n64_material(override, grain_metres)
+			made[override] = whole
+		mesh_node.material_override = whole
+	elif mesh_node != null and mesh_node.mesh != null:
 		for surface: int in mesh_node.mesh.get_surface_count():
-			var material: BaseMaterial3D = mesh_node.mesh.surface_get_material(surface) as BaseMaterial3D
-			if material != null:
-				material.texture_filter = BaseMaterial3D.TEXTURE_FILTER_NEAREST_WITH_MIPMAPS
+			var source: BaseMaterial3D = mesh_node.mesh.surface_get_material(surface) as BaseMaterial3D
+			if source == null:
+				continue
+			var converted: ShaderMaterial = made.get(source, null)
+			if converted == null:
+				converted = n64_material(source, grain_metres)
+				made[source] = converted
+			mesh_node.set_surface_override_material(surface, converted)
 	for child: Node in node.get_children():
-		_use_nearest(child)
+		_use_n64(child, made)
+
+
+## The N64 prop material for a model surface painted with [param source]:
+## the same colour and texture, with chunky grain every [param metres].
+static func n64_material(source: BaseMaterial3D, metres: float) -> ShaderMaterial:
+	var material: ShaderMaterial = ShaderMaterial.new()
+	material.shader = N64_SHADER
+	material.set_shader_parameter(&"albedo_color", source.albedo_color)
+	if source.albedo_texture != null:
+		material.set_shader_parameter(&"albedo_texture", source.albedo_texture)
+	material.set_shader_parameter(&"grain", GRAIN)
+	material.set_shader_parameter(&"grain_metres", metres)
+	return material
 
 
 # Shows or hides the greybox. In the editor this is done on the renderer

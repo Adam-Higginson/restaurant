@@ -8,6 +8,20 @@
 [ext_resource type="Script" path="res://scripts/art/third_party_model.gd" id="20_model"]
 [ext_resource type="Material" path="res://assets/placeholder/materials/brass.tres" id="21_brass"]
 [ext_resource type="Shader" path="res://shaders/rain_glass.gdshader" id="22_glass"]
+[ext_resource type="PackedScene" path="res://scenes/prototype/props/lantern.tscn" id="23_lantern"]
+[ext_resource type="PackedScene" path="res://scenes/prototype/props/porthole.tscn" id="24_porthole"]
+[ext_resource type="PackedScene" path="res://scenes/prototype/props/barrel.tscn" id="25_barrel"]
+[ext_resource type="Script" path="res://scripts/props/motes.gd" id="26_motes"]
+[ext_resource type="Material" path="res://assets/placeholder/materials/prop_wood.tres" id="27_propwood"]
+[ext_resource type="Material" path="res://assets/placeholder/materials/dark_prop_wood.tres" id="28_darkwood"]
+[ext_resource type="Material" path="res://assets/placeholder/materials/clay.tres" id="29_clay"]
+[ext_resource type="Material" path="res://assets/placeholder/materials/sackcloth.tres" id="30_sack"]
+[ext_resource type="Material" path="res://assets/placeholder/materials/rug.tres" id="31_rug"]
+[ext_resource type="Material" path="res://assets/placeholder/materials/rope.tres" id="32_rope"]
+[ext_resource type="Material" path="res://assets/placeholder/materials/herbs.tres" id="33_herbs"]
+[ext_resource type="Material" path="res://assets/placeholder/materials/iron.tres" id="34_iron"]
+[ext_resource type="Material" path="res://assets/placeholder/materials/stone.tres" id="35_stone"]
+[ext_resource type="Script" path="res://scripts/camera/camera_zone.gd" id="36_zone"]
 [ext_resource type="Material" path="res://assets/placeholder/materials/greybox_dark_wood.tres" id="3_t630l"]
 [ext_resource type="Material" path="res://assets/placeholder/materials/greybox_cloth.tres" id="4_dp3rt"]
 [ext_resource type="PackedScene" path="res://scenes/prototype/props/counter.tscn" id="6_counter"]
@@ -203,6 +217,187 @@ emission_energy_multiplier = 4.0
 [sub_resource type="BoxShape3D" id="Shape_Shelter"]
 size = Vector3(11.4, 3.8, 13.5)
 
+[sub_resource type="BoxMesh" id="Cosy_1"]
+size = Vector3(9.1, 0.1, 6.65)
+
+[sub_resource type="BoxMesh" id="Cosy_2"]
+size = Vector3(0.24, 0.2, 6.65)
+
+[sub_resource type="BoxMesh" id="Cosy_3"]
+size = Vector3(0.24, 0.2, 6.65)
+
+[sub_resource type="BoxMesh" id="Cosy_4"]
+size = Vector3(9.1, 0.18, 0.2)
+
+[sub_resource type="BoxMesh" id="Cosy_5"]
+size = Vector3(0.16, 2.6, 6.65)
+
+[sub_resource type="BoxMesh" id="Cosy_6"]
+size = Vector3(7.82, 2.6, 0.16)
+
+[sub_resource type="BoxMesh" id="Cosy_7"]
+size = Vector3(1.1999999999999997, 0.3999999999999999, 0.16)
+
+[sub_resource type="BoxMesh" id="Cosy_8"]
+size = Vector3(0.12, 2.2, 0.22)
+
+[sub_resource type="BoxMesh" id="Cosy_9"]
+size = Vector3(0.12, 2.2, 0.22)
+
+[sub_resource type="BoxMesh" id="Cosy_10"]
+size = Vector3(2.0, 0.012, 2.9)
+
+[sub_resource type="BoxMesh" id="Cosy_11"]
+size = Vector3(0.3, 0.05, 1.2)
+
+[sub_resource type="BoxMesh" id="Cosy_12"]
+size = Vector3(0.24, 0.2, 0.05)
+
+[sub_resource type="BoxMesh" id="Cosy_13"]
+size = Vector3(0.24, 0.2, 0.05)
+
+[sub_resource type="CylinderMesh" id="Cosy_14"]
+top_radius = 0.07500000000000001
+bottom_radius = 0.1
+height = 0.26
+radial_segments = 10
+rings = 1
+
+[sub_resource type="CylinderMesh" id="Cosy_15"]
+top_radius = 0.05500000000000001
+bottom_radius = 0.07500000000000001
+height = 0.04
+radial_segments = 10
+rings = 1
+
+[sub_resource type="CylinderMesh" id="Cosy_16"]
+top_radius = 0.0975
+bottom_radius = 0.13
+height = 0.32
+radial_segments = 10
+rings = 1
+
+[sub_resource type="CylinderMesh" id="Cosy_17"]
+top_radius = 0.07150000000000001
+bottom_radius = 0.0975
+height = 0.04
+radial_segments = 10
+rings = 1
+
+[sub_resource type="CylinderMesh" id="Cosy_18"]
+top_radius = 0.0675
+bottom_radius = 0.09
+height = 0.22
+radial_segments = 10
+rings = 1
+
+[sub_resource type="CylinderMesh" id="Cosy_19"]
+top_radius = 0.0495
+bottom_radius = 0.0675
+height = 0.04
+radial_segments = 10
+rings = 1
+
+[sub_resource type="BoxMesh" id="Cosy_20"]
+size = Vector3(0.3, 0.05, 1.0)
+
+[sub_resource type="CylinderMesh" id="Cosy_21"]
+top_radius = 0.0825
+bottom_radius = 0.11
+height = 0.24
+radial_segments = 10
+rings = 1
+
+[sub_resource type="CylinderMesh" id="Cosy_22"]
+top_radius = 0.07500000000000001
+bottom_radius = 0.1
+height = 0.2
+radial_segments = 10
+rings = 1
+
+[sub_resource type="BoxMesh" id="Cosy_23"]
+size = Vector3(0.12, 0.03, 0.03)
+
+[sub_resource type="SphereMesh" id="Cosy_24"]
+radius = 0.24
+height = 0.5
+radial_segments = 8
+rings = 5
+
+[sub_resource type="SphereMesh" id="Cosy_25"]
+radius = 0.24
+height = 0.5
+radial_segments = 8
+rings = 5
+
+[sub_resource type="TorusMesh" id="Cosy_26"]
+inner_radius = 0.12
+outer_radius = 0.24
+rings = 12
+ring_segments = 6
+
+[sub_resource type="BoxMesh" id="Cosy_27"]
+size = Vector3(0.01, 0.2, 0.01)
+
+[sub_resource type="CylinderMesh" id="Cosy_28"]
+top_radius = 0.03
+bottom_radius = 0.07
+height = 0.22
+radial_segments = 6
+rings = 1
+
+[sub_resource type="BoxMesh" id="Cosy_29"]
+size = Vector3(0.01, 0.2, 0.01)
+
+[sub_resource type="CylinderMesh" id="Cosy_30"]
+top_radius = 0.03
+bottom_radius = 0.07
+height = 0.22
+radial_segments = 6
+rings = 1
+
+[sub_resource type="BoxMesh" id="Cosy_31"]
+size = Vector3(0.01, 0.2, 0.01)
+
+[sub_resource type="CylinderMesh" id="Cosy_32"]
+top_radius = 0.03
+bottom_radius = 0.07
+height = 0.22
+radial_segments = 6
+rings = 1
+
+[sub_resource type="BoxMesh" id="Cosy_33"]
+size = Vector3(0.01, 0.2, 0.01)
+
+[sub_resource type="CylinderMesh" id="Cosy_34"]
+top_radius = 0.03
+bottom_radius = 0.07
+height = 0.22
+radial_segments = 6
+rings = 1
+
+[sub_resource type="BoxMesh" id="Cosy_35"]
+size = Vector3(0.01, 0.2, 0.01)
+
+[sub_resource type="CylinderMesh" id="Cosy_36"]
+top_radius = 0.03
+bottom_radius = 0.07
+height = 0.22
+radial_segments = 6
+rings = 1
+
+[sub_resource type="BoxShape3D" id="Cosy_37"]
+size = Vector3(4.6, 2.4, 3.6)
+
+[sub_resource type="BoxShape3D" id="Cosy_38"]
+size = Vector3(0.16, 2.6, 6.65)
+
+[sub_resource type="BoxShape3D" id="Cosy_39"]
+size = Vector3(7.82, 2.6, 0.16)
+
+[sub_resource type="BoxShape3D" id="Cosy_40"]
+size = Vector3(1.1999999999999997, 0.3999999999999999, 0.16)
+
 [node name="Ship" type="AnimatableBody3D" unique_id=200548129]
 script = ExtResource("1_7ykrf")
 
@@ -229,14 +424,14 @@ size = Vector3(0.3, 4, 30)
 material = ExtResource("2_nifss")
 
 [node name="PortholeByStove" type="CSGCylinder3D" parent="Visuals/WallStarboard"]
-transform = Transform3D(0, -1, 0, 1, 0, 0, 0, 0, 1, 0, -0.2, 4.3)
+transform = Transform3D(0, -1, 0, 1, 0, 0, 0, 0, 1, 0, -0.65, 5.2)
 operation = 2
-radius = 0.28
+radius = 0.37
 height = 0.6
 sides = 16
 
 [node name="PortholeByTable" type="CSGCylinder3D" parent="Visuals/WallStarboard"]
-transform = Transform3D(0, -1, 0, 1, 0, 0, 0, 0, 1, 0, -0.2, 10.2)
+transform = Transform3D(0, -1, 0, 1, 0, 0, 0, 0, 1, 0, -0.7, 11)
 operation = 2
 radius = 0.28
 height = 0.6
@@ -338,98 +533,6 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5.2, 1.575, 13)
 material_override = ExtResource("4_dp3rt")
 mesh = SubResource("Mesh_BunkMattress")
 
-[node name="BeamFore" type="MeshInstance3D" parent="Visuals"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.1, 4.9, 3.0)
-material_override = ExtResource("3_t630l")
-mesh = SubResource("Mesh_BeamShort")
-
-[node name="BeamMid" type="MeshInstance3D" parent="Visuals"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.1, 4.9, 6.5)
-material_override = ExtResource("3_t630l")
-mesh = SubResource("Mesh_BeamShort")
-
-[node name="BeamAft" type="MeshInstance3D" parent="Visuals"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 4.9, 9.8)
-material_override = ExtResource("3_t630l")
-mesh = SubResource("Mesh_BeamLong")
-
-[node name="BeamStern" type="MeshInstance3D" parent="Visuals"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 4.9, 13.3)
-material_override = ExtResource("3_t630l")
-mesh = SubResource("Mesh_BeamLong")
-
-[node name="GalleyLanternFore" type="Node3D" parent="Visuals"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 4.8, 3.0)
-script = ExtResource("12_swing")
-swing_degrees = 3.0
-period = 4.2
-phase = 0.2
-
-[node name="Cord" type="MeshInstance3D" parent="Visuals/GalleyLanternFore"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.225, 0)
-material_override = ExtResource("3_t630l")
-mesh = SubResource("Mesh_Cord")
-
-[node name="Glow" type="MeshInstance3D" parent="Visuals/GalleyLanternFore"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.6, 0)
-mesh = SubResource("Mesh_Lantern")
-surface_material_override/0 = SubResource("Material_LanternGlow")
-cast_shadow = 0
-
-[node name="Light" type="OmniLight3D" parent="Visuals/GalleyLanternFore"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.6, 0)
-light_color = Color(1, 0.7, 0.42, 1)
-light_energy = 1.2
-shadow_enabled = true
-omni_range = 7.0
-
-[node name="GalleyLanternAft" type="Node3D" parent="Visuals"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.3, 4.8, 9.8)
-script = ExtResource("12_swing")
-swing_degrees = 3.0
-period = 4.2
-phase = 0.6
-
-[node name="Cord" type="MeshInstance3D" parent="Visuals/GalleyLanternAft"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.225, 0)
-material_override = ExtResource("3_t630l")
-mesh = SubResource("Mesh_Cord")
-
-[node name="Glow" type="MeshInstance3D" parent="Visuals/GalleyLanternAft"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.6, 0)
-mesh = SubResource("Mesh_Lantern")
-surface_material_override/0 = SubResource("Material_LanternGlow")
-cast_shadow = 0
-
-[node name="Light" type="OmniLight3D" parent="Visuals/GalleyLanternAft"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.6, 0)
-light_color = Color(1, 0.7, 0.42, 1)
-light_energy = 1.2
-shadow_enabled = true
-omni_range = 7.0
-
-[node name="PortholeByStoveRim" type="MeshInstance3D" parent="Visuals"]
-transform = Transform3D(0, -1, 0, 1, 0, 0, 0, 0, 1, 5.69, 2.8, 4.3)
-material_override = ExtResource("21_brass")
-mesh = SubResource("Mesh_PortholeRim")
-
-[node name="PortholeByStoveGlass" type="MeshInstance3D" parent="Visuals"]
-transform = Transform3D(0, 0, -1, 0, 1, 0, 1, 0, 0, 5.78, 2.8, 4.3)
-mesh = SubResource("Mesh_PortholeGlass")
-surface_material_override/0 = SubResource("Material_PortholeGlass")
-cast_shadow = 0
-
-[node name="PortholeByTableRim" type="MeshInstance3D" parent="Visuals"]
-transform = Transform3D(0, -1, 0, 1, 0, 0, 0, 0, 1, 5.69, 2.8, 10.2)
-material_override = ExtResource("21_brass")
-mesh = SubResource("Mesh_PortholeRim")
-
-[node name="PortholeByTableGlass" type="MeshInstance3D" parent="Visuals"]
-transform = Transform3D(0, 0, -1, 0, 1, 0, 1, 0, 0, 5.78, 2.8, 10.2)
-mesh = SubResource("Mesh_PortholeGlass")
-surface_material_override/0 = SubResource("Material_PortholeGlass")
-cast_shadow = 0
-
 [node name="MastLanternArm" type="MeshInstance3D" parent="Visuals"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.45, 8.23, -4)
 material_override = ExtResource("3_t630l")
@@ -455,78 +558,6 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3.85, 7.95, 3)
 material_override = ExtResource("3_t630l")
 mesh = SubResource("Mesh_HatchArm")
 
-[node name="MastLantern" type="Node3D" parent="Visuals"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.55, 8.2, -4)
-script = ExtResource("12_swing")
-phase = 0.0
-
-[node name="Cord" type="MeshInstance3D" parent="Visuals/MastLantern"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.225, 0)
-material_override = ExtResource("3_t630l")
-mesh = SubResource("Mesh_Cord")
-
-[node name="Glow" type="MeshInstance3D" parent="Visuals/MastLantern"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.6, 0)
-mesh = SubResource("Mesh_Lantern")
-surface_material_override/0 = SubResource("Material_LanternGlow")
-cast_shadow = 0
-
-[node name="Light" type="OmniLight3D" parent="Visuals/MastLantern"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.6, 0)
-light_color = Color(1, 0.68, 0.38, 1)
-light_energy = 1.6
-light_volumetric_fog_energy = 2.0
-shadow_enabled = true
-omni_range = 8.0
-
-[node name="SternLantern" type="Node3D" parent="Visuals"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 7.9, 14.15)
-script = ExtResource("12_swing")
-phase = 0.37
-
-[node name="Cord" type="MeshInstance3D" parent="Visuals/SternLantern"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.225, 0)
-material_override = ExtResource("3_t630l")
-mesh = SubResource("Mesh_Cord")
-
-[node name="Glow" type="MeshInstance3D" parent="Visuals/SternLantern"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.6, 0)
-mesh = SubResource("Mesh_Lantern")
-surface_material_override/0 = SubResource("Material_LanternGlow")
-cast_shadow = 0
-
-[node name="Light" type="OmniLight3D" parent="Visuals/SternLantern"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.6, 0)
-light_color = Color(1, 0.68, 0.38, 1)
-light_energy = 1.6
-light_volumetric_fog_energy = 2.0
-shadow_enabled = true
-omni_range = 8.0
-
-[node name="HatchLantern" type="Node3D" parent="Visuals"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4.4, 7.9, 3)
-script = ExtResource("12_swing")
-phase = 0.71
-
-[node name="Cord" type="MeshInstance3D" parent="Visuals/HatchLantern"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.225, 0)
-material_override = ExtResource("3_t630l")
-mesh = SubResource("Mesh_Cord")
-
-[node name="Glow" type="MeshInstance3D" parent="Visuals/HatchLantern"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.6, 0)
-mesh = SubResource("Mesh_Lantern")
-surface_material_override/0 = SubResource("Material_LanternGlow")
-cast_shadow = 0
-
-[node name="Light" type="OmniLight3D" parent="Visuals/HatchLantern"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.6, 0)
-light_color = Color(1, 0.68, 0.38, 1)
-light_energy = 1.6
-light_volumetric_fog_energy = 2.0
-shadow_enabled = true
-omni_range = 8.0
-
 [node name="RainCatcher" type="GPUParticlesCollisionHeightField3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8, 0)
 size = Vector3(14, 20, 32)
@@ -537,25 +568,29 @@ update_mode = 1
 script = ExtResource("14_tex")
 material = ExtResource("10_wet")
 path = "res://assets/third_party/sbs_textures_128/128x128/Wood/Synth-Wood_13-128x128.png"
+pixels = 32
 
 [node name="GalleyWoodTexture" type="Node" parent="."]
 script = ExtResource("14_tex")
 material = ExtResource("2_nifss")
 path = "res://assets/third_party/sbs_textures_128/128x128/Wood/Synth-Wood_15-128x128.png"
+pixels = 32
 
 [node name="GalleyFloorTexture" type="Node" parent="."]
 script = ExtResource("14_tex")
 material = ExtResource("17_floor")
 path = "res://assets/third_party/sbs_textures_128/128x128/Wood/Synth-Wood_14-128x128.png"
+pixels = 32
 
 [node name="TrimTexture" type="Node" parent="."]
 script = ExtResource("14_tex")
 material = ExtResource("13_wetdark")
 path = "res://assets/third_party/sbs_textures_128/128x128/Wood/Synth-Wood_01-128x128.png"
+pixels = 32
 
 [node name="SurfaceSpace" type="Node" parent="."]
 script = ExtResource("16_space")
-materials = Array[ShaderMaterial]([ExtResource("10_wet"), ExtResource("13_wetdark"), ExtResource("2_nifss"), ExtResource("17_floor")])
+materials = Array[ShaderMaterial]([ExtResource("10_wet"), ExtResource("13_wetdark"), ExtResource("2_nifss"), ExtResource("17_floor"), ExtResource("27_propwood"), ExtResource("28_darkwood"), ExtResource("29_clay"), ExtResource("30_sack"), ExtResource("31_rug"), ExtResource("32_rope"), ExtResource("35_stone")])
 
 [node name="HatchDrips" type="GPUParticles3D" parent="."]
 transform = Transform3D(0, 0, -1, 0, 1, 0, 1, 0, 0, -3.52, 4.98, 5.075)
@@ -664,12 +699,6 @@ start_item = ExtResource("8_board")
 [node name="PlateRack" parent="Galley" instance=ExtResource("9_rack")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.65, 1, 1.45)
 
-[node name="Stove" parent="Galley" instance=ExtResource("18_stove")]
-transform = Transform3D(0, 0, -1, 0, 1, 0, 1, 0, 0, 5.2, 1, 6)
-
-[node name="CrewTable" parent="Galley" instance=ExtResource("19_table")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.3, 1, 9.8)
-
 [node name="Model" type="Node3D" parent="Galley/Counter" node_paths=PackedStringArray("stand_ins")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)
 script = ExtResource("20_model")
@@ -708,35 +737,347 @@ fit_size = Vector3(1.1, 1.8, 0.6)
 stretch = true
 stand_ins = [NodePath("../Mesh"), NodePath("../Doors")]
 
-[node name="JarShelf" type="Node3D" parent="Galley"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3.0, 1.33)
-script = ExtResource("20_model")
-path = "res://assets/third_party/kaykit_furniture/Assets/gltf/shelf_B_large_decorated.gltf"
-fit_size = Vector3(2.2, 0.9, 0.35)
-
 [node name="KnifeRack" type="Node3D" parent="Galley"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.55, 2.3, 1.2)
 script = ExtResource("20_model")
 path = "res://assets/third_party/tiny_treats_charming_kitchen/Assets/gltf/wall_knife_rack.gltf"
 fit_size = Vector3(0.6, 0.4, 0.08)
 
-[node name="CrateCarrots" type="Node3D" parent="Galley"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4.7, 1, 1.75)
-script = ExtResource("20_model")
-path = "res://assets/third_party/kaykit_restaurant/Assets/gltf/crate_carrots.gltf"
-fit_size = Vector3(0.6, 0.3, 0.6)
+[node name="GalleyCeiling" type="MeshInstance3D" parent="Visuals"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.15, 3.65, 4.475)
+material_override = ExtResource("17_floor")
+mesh = SubResource("Cosy_1")
 
-[node name="CrateTomatoes" type="Node3D" parent="Galley"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4.7, 1.29, 1.75)
-script = ExtResource("20_model")
-path = "res://assets/third_party/kaykit_restaurant/Assets/gltf/crate_tomatoes.gltf"
-fit_size = Vector3(0.6, 0.3, 0.6)
+[node name="GalleyBeamPort" type="MeshInstance3D" parent="Visuals"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.6, 3.5, 4.475)
+material_override = ExtResource("28_darkwood")
+mesh = SubResource("Cosy_2")
 
-[node name="CratePotatoes" type="Node3D" parent="Galley"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4.0, 1, 1.75)
+[node name="GalleyBeamStarboard" type="MeshInstance3D" parent="Visuals"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.6, 3.5, 4.475)
+material_override = ExtResource("28_darkwood")
+mesh = SubResource("Cosy_3")
+
+[node name="GalleyCrossBeam" type="MeshInstance3D" parent="Visuals"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.15, 3.51, 4.9)
+material_override = ExtResource("28_darkwood")
+mesh = SubResource("Cosy_4")
+
+[node name="CorridorWall" type="MeshInstance3D" parent="Visuals"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3.4, 2.3, 4.475)
+material_override = ExtResource("2_nifss")
+mesh = SubResource("Cosy_5")
+
+[node name="PartitionStarboard" type="MeshInstance3D" parent="Visuals"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.79, 2.3, 7.8)
+material_override = ExtResource("2_nifss")
+mesh = SubResource("Cosy_6")
+
+[node name="PartitionLintel" type="MeshInstance3D" parent="Visuals"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.72, 3.4, 7.8)
+material_override = ExtResource("2_nifss")
+mesh = SubResource("Cosy_7")
+
+[node name="DoorPostPort" type="MeshInstance3D" parent="Visuals"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3.26, 2.1, 7.8)
+material_override = ExtResource("28_darkwood")
+mesh = SubResource("Cosy_8")
+
+[node name="DoorPostStarboard" type="MeshInstance3D" parent="Visuals"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.18, 2.1, 7.8)
+material_override = ExtResource("28_darkwood")
+mesh = SubResource("Cosy_9")
+
+[node name="MastLantern" parent="Visuals" instance=ExtResource("23_lantern")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.55, 8.2, -4)
+phase = 0.0
+light_energy = 1.6
+light_range = 8.0
+
+[node name="SternLantern" parent="Visuals" instance=ExtResource("23_lantern")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 7.9, 14.15)
+phase = 0.37
+light_energy = 1.6
+light_range = 8.0
+
+[node name="HatchLantern" parent="Visuals" instance=ExtResource("23_lantern")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4.4, 7.9, 3)
+phase = 0.71
+light_energy = 1.6
+light_range = 8.0
+
+[node name="GalleyLanternFore" parent="Visuals" instance=ExtResource("23_lantern")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.6, 3.4, 2.7)
+phase = 0.2
+light_energy = 1.3
+light_range = 6.0
+swing_degrees = 3.0
+period = 4.2
+
+[node name="GalleyLanternAft" parent="Visuals" instance=ExtResource("23_lantern")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.6, 3.4, 6.9)
+phase = 0.6
+light_energy = 1.3
+light_range = 6.0
+swing_degrees = 3.0
+period = 4.2
+
+[node name="BunkLantern" parent="Visuals" instance=ExtResource("23_lantern")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2, 4.8, 11.5)
+phase = 0.45
+light_energy = 0.9
+light_range = 6.0
+swing_degrees = 3.0
+period = 4.2
+
+[node name="PortholeGalley" parent="Visuals" instance=ExtResource("24_porthole")]
+transform = Transform3D(0, 0, -1.35, 0, 1.35, 0, 1.35, 0, 0, 5.7, 2.35, 5.2)
+
+[node name="PortholeBunks" parent="Visuals" instance=ExtResource("24_porthole")]
+transform = Transform3D(0, 0, -1, 0, 1, 0, 1, 0, 0, 5.7, 2.3, 11)
+
+[node name="Rug" type="MeshInstance3D" parent="Visuals"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.75, 1.026, 5)
+material_override = ExtResource("31_rug")
+mesh = SubResource("Cosy_10")
+
+[node name="CrewTable" parent="Galley" instance=ExtResource("19_table")]
+transform = Transform3D(0, 0, 1, 0, 1, 0, -1, 0, 0, 3.75, 1, 5)
+
+[node name="Stove" parent="Galley" instance=ExtResource("18_stove")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.4, 1, 1.75)
+
+[node name="CrockShelf" type="MeshInstance3D" parent="Visuals"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5.55, 2.55, 3.1)
+material_override = ExtResource("27_propwood")
+mesh = SubResource("Cosy_11")
+
+[node name="CrockShelfBracket1" type="MeshInstance3D" parent="Visuals"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5.58, 2.43, 2.65)
+material_override = ExtResource("28_darkwood")
+mesh = SubResource("Cosy_12")
+
+[node name="CrockShelfBracket2" type="MeshInstance3D" parent="Visuals"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5.58, 2.43, 3.55)
+material_override = ExtResource("28_darkwood")
+mesh = SubResource("Cosy_13")
+
+[node name="Crock1" type="MeshInstance3D" parent="Visuals"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5.55, 2.705, 2.72)
+material_override = ExtResource("29_clay")
+mesh = SubResource("Cosy_14")
+
+[node name="Crock1Lid" type="MeshInstance3D" parent="Visuals"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5.55, 2.855, 2.72)
+material_override = ExtResource("29_clay")
+mesh = SubResource("Cosy_15")
+
+[node name="Crock2" type="MeshInstance3D" parent="Visuals"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5.55, 2.735, 3.02)
+material_override = ExtResource("29_clay")
+mesh = SubResource("Cosy_16")
+
+[node name="Crock2Lid" type="MeshInstance3D" parent="Visuals"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5.55, 2.915, 3.02)
+material_override = ExtResource("29_clay")
+mesh = SubResource("Cosy_17")
+
+[node name="Crock3" type="MeshInstance3D" parent="Visuals"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5.55, 2.685, 3.35)
+material_override = ExtResource("29_clay")
+mesh = SubResource("Cosy_18")
+
+[node name="Crock3Lid" type="MeshInstance3D" parent="Visuals"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5.55, 2.815, 3.35)
+material_override = ExtResource("29_clay")
+mesh = SubResource("Cosy_19")
+
+[node name="ShelfJar" type="Node3D" parent="Visuals"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5.55, 2.575, 3.6)
 script = ExtResource("20_model")
-path = "res://assets/third_party/kaykit_restaurant/Assets/gltf/crate_potatoes.gltf"
-fit_size = Vector3(0.6, 0.3, 0.6)
+path = "res://assets/third_party/kaykit_restaurant/Assets/gltf/jar_B_medium.gltf"
+fit_size = Vector3(0.16, 0.22, 0.16)
+grain_metres = 0.15
+
+[node name="LowerShelf" type="MeshInstance3D" parent="Visuals"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5.55, 1.95, 3.1)
+material_override = ExtResource("27_propwood")
+mesh = SubResource("Cosy_20")
+
+[node name="LowCrock1" type="MeshInstance3D" parent="Visuals"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5.55, 2.095, 2.8)
+material_override = ExtResource("29_clay")
+mesh = SubResource("Cosy_21")
+
+[node name="LowCrock2" type="MeshInstance3D" parent="Visuals"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5.55, 2.075, 3.25)
+material_override = ExtResource("29_clay")
+mesh = SubResource("Cosy_22")
+
+[node name="PanPeg" type="MeshInstance3D" parent="Visuals"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5.64, 2.75, 4)
+material_override = ExtResource("28_darkwood")
+mesh = SubResource("Cosy_23")
+
+[node name="HangingPan" type="Node3D" parent="Visuals"]
+transform = Transform3D(0, 1, 0, 0, 0, -1, -1, 0, 0, 5.66, 2.72, 4)
+script = ExtResource("20_model")
+path = "res://assets/third_party/kaykit_restaurant/Assets/gltf/pan_A.gltf"
+fit_size = Vector3(0.5, 0.06, 0.32)
+grain_metres = 0.15
+
+[node name="HangingLadle" type="Node3D" parent="Visuals"]
+transform = Transform3D(0, 1, 0, 0, 0, -1, -1, 0, 0, 5.66, 2.7, 4.25)
+script = ExtResource("20_model")
+path = "res://assets/third_party/tiny_treats_charming_kitchen/Assets/gltf/spatula.gltf"
+fit_size = Vector3(0.3, 0.05, 0.08)
+grain_metres = 0.15
+
+[node name="Barrel1" parent="Galley" instance=ExtResource("25_barrel")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5.15, 1, 7.3)
+
+[node name="Barrel2" parent="Galley" instance=ExtResource("25_barrel")]
+transform = Transform3D(0.2675, 0, 0.9636, 0, 1, 0, -0.9636, 0, 0.2675, 4.5, 1, 7.4)
+
+[node name="Barrel3" parent="Galley" instance=ExtResource("25_barrel")]
+transform = Transform3D(-0.8569, 0, 0.5155, 0, 1, 0, -0.5155, 0, -0.8569, 5.2, 1, 1.7)
+
+[node name="Barrel4" parent="Galley" instance=ExtResource("25_barrel")]
+transform = Transform3D(-0.7259, 0, -0.6878, 0, 1, 0, 0.6878, 0, -0.7259, -2.85, 1, 1.75)
+
+[node name="Sack1" type="MeshInstance3D" parent="Visuals"]
+transform = Transform3D(0.9553, 0, 0.2955, 0, 1, 0, -0.2955, 0, 0.9553, 5.25, 1.2, 6.55)
+material_override = ExtResource("30_sack")
+mesh = SubResource("Cosy_24")
+
+[node name="Sack2" type="MeshInstance3D" parent="Visuals"]
+transform = Transform3D(0.3624, 0, 0.932, 0, 1, 0, -0.932, 0, 0.3624, 4.85, 1.2, 6.75)
+material_override = ExtResource("30_sack")
+mesh = SubResource("Cosy_25")
+
+[node name="RopeCoil" type="MeshInstance3D" parent="Visuals"]
+transform = Transform3D(1, 0, 0, 0, 0.5, 0, 0, 0, 1, -2.6, 1.04, 7.2)
+material_override = ExtResource("32_rope")
+mesh = SubResource("Cosy_26")
+
+[node name="HerbString1" type="MeshInstance3D" parent="Visuals"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.6, 3.3, 3.6)
+material_override = ExtResource("28_darkwood")
+mesh = SubResource("Cosy_27")
+
+[node name="Herbs1" type="MeshInstance3D" parent="Visuals"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.6, 3.1, 3.6)
+material_override = ExtResource("33_herbs")
+mesh = SubResource("Cosy_28")
+
+[node name="HerbString2" type="MeshInstance3D" parent="Visuals"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.6, 3.3, 3.95)
+material_override = ExtResource("28_darkwood")
+mesh = SubResource("Cosy_29")
+
+[node name="Herbs2" type="MeshInstance3D" parent="Visuals"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.6, 3.1, 3.95)
+material_override = ExtResource("33_herbs")
+mesh = SubResource("Cosy_30")
+
+[node name="HerbString3" type="MeshInstance3D" parent="Visuals"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.6, 3.3, 4.3)
+material_override = ExtResource("28_darkwood")
+mesh = SubResource("Cosy_31")
+
+[node name="Herbs3" type="MeshInstance3D" parent="Visuals"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.6, 3.1, 4.3)
+material_override = ExtResource("33_herbs")
+mesh = SubResource("Cosy_32")
+
+[node name="HerbString4" type="MeshInstance3D" parent="Visuals"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.6, 3.3, 5.6)
+material_override = ExtResource("28_darkwood")
+mesh = SubResource("Cosy_33")
+
+[node name="Herbs4" type="MeshInstance3D" parent="Visuals"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.6, 3.1, 5.6)
+material_override = ExtResource("33_herbs")
+mesh = SubResource("Cosy_34")
+
+[node name="HerbString5" type="MeshInstance3D" parent="Visuals"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.6, 3.3, 5.95)
+material_override = ExtResource("28_darkwood")
+mesh = SubResource("Cosy_35")
+
+[node name="Herbs5" type="MeshInstance3D" parent="Visuals"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.6, 3.1, 5.95)
+material_override = ExtResource("33_herbs")
+mesh = SubResource("Cosy_36")
+
+[node name="Motes" type="GPUParticles3D" parent="Galley"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.6, 2.3, 4.8)
+script = ExtResource("26_motes")
+extents = Vector3(1.6, 0.8, 2.2)
+
+[node name="TableView" type="Area3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.4, 2.2, 5.6)
+script = ExtResource("36_zone")
+
+[node name="Shape" type="CollisionShape3D" parent="TableView"]
+shape = SubResource("Cosy_37")
+
+[node name="Shot" type="Marker3D" parent="TableView"]
+transform = Transform3D(0.06, 0.0599, -0.9964, 0, 0.9982, 0.06, 0.9982, -0.0036, 0.0599, -1.8, -0.15, -1.2)
+
+[node name="CorridorWallShape" type="CollisionShape3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3.4, 2.3, 4.475)
+shape = SubResource("Cosy_38")
+
+[node name="PartitionStarboardShape" type="CollisionShape3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.79, 2.3, 7.8)
+shape = SubResource("Cosy_39")
+
+[node name="PartitionLintelShape" type="CollisionShape3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.72, 3.4, 7.8)
+shape = SubResource("Cosy_40")
+
+[node name="PropWoodTexture" type="Node" parent="."]
+script = ExtResource("14_tex")
+material = ExtResource("27_propwood")
+path = "res://assets/third_party/sbs_textures_128/128x128/Wood/Synth-Wood_14-128x128.png"
+pixels = 32
+
+[node name="DarkWoodTexture" type="Node" parent="."]
+script = ExtResource("14_tex")
+material = ExtResource("28_darkwood")
+path = "res://assets/third_party/sbs_textures_128/128x128/Wood/Synth-Wood_09-128x128.png"
+pixels = 32
+
+[node name="ClayTexture" type="Node" parent="."]
+script = ExtResource("14_tex")
+material = ExtResource("29_clay")
+path = "res://assets/third_party/sbs_textures_128/128x128/Stone/Synth-Stone_08-128x128.png"
+pixels = 32
+
+[node name="SackTexture" type="Node" parent="."]
+script = ExtResource("14_tex")
+material = ExtResource("30_sack")
+path = "res://assets/third_party/sbs_textures_128/128x128/Fabric/Synth-Fabric_13-128x128.png"
+pixels = 32
+
+[node name="RugTexture" type="Node" parent="."]
+script = ExtResource("14_tex")
+material = ExtResource("31_rug")
+path = "res://assets/third_party/sbs_textures_128/128x128/Fabric/Synth-Fabric_04-128x128.png"
+pixels = 32
+
+[node name="RopeTexture" type="Node" parent="."]
+script = ExtResource("14_tex")
+material = ExtResource("32_rope")
+path = "res://assets/third_party/sbs_textures_128/128x128/Fabric/Synth-Fabric_03-128x128.png"
+pixels = 32
+
+[node name="StoneTexture" type="Node" parent="."]
+script = ExtResource("14_tex")
+material = ExtResource("35_stone")
+path = "res://assets/third_party/sbs_textures_128/128x128/Stone/Synth-Stone_09-128x128.png"
+pixels = 32
 
 [node name="Shelter" type="Area3D" parent="."]
 script = ExtResource("11_shelter")

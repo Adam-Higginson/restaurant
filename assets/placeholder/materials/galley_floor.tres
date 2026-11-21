@@ -26,9 +26,9 @@ noise = SubResource("Noise_Streak")
 [resource]
 shader = ExtResource("1_shader")
 shader_parameter/exposure = 0.0
-shader_parameter/albedo = Color(0.62, 0.5, 0.4, 1)
+shader_parameter/albedo = Color(0.66, 0.56, 0.42, 1)
 shader_parameter/albedo_texture = ExtResource("2_grid")
-shader_parameter/texture_metres = 1.0
+shader_parameter/texture_metres = 0.5
 shader_parameter/dry_roughness = 0.8
 shader_parameter/plank_width = 0.2
 shader_parameter/plank_length = 3.0

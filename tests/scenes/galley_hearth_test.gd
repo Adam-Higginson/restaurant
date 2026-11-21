@@ -50,6 +50,43 @@ func test_the_galley_stays_dry_in_the_rain() -> void:
 	assert_bool(deck_exposure == null or deck_exposure == 1.0).is_true()
 
 
+func test_the_lanterns_glow_as_bright_as_set() -> void:
+	var lantern: Lantern = (load("res://scenes/prototype/props/lantern.tscn") as PackedScene) 			.instantiate() as Lantern
+	lantern.light_energy = 0.7
+	lantern.light_range = 3.0
+	add_child(lantern)
+	auto_free(lantern)
+	var light: OmniLight3D = lantern.get_node("Light") as OmniLight3D
+	assert_float(light.light_energy).is_equal_approx(0.7, 0.0001)
+	assert_float(light.omni_range).is_equal_approx(3.0, 0.0001)
+
+
+func test_golden_motes_drift_with_the_ship() -> void:
+	var ship: Ship = new_moored_ship_with_player(Vector3(0, 1.05, 6))[0] as Ship
+	scene_runner(ship.get_parent())
+	var motes: Motes = ship.get_node("Galley/Motes") as Motes
+	assert_bool(motes.local_coords).is_true()
+	assert_bool(motes.emitting).is_true()
+
+
+func test_you_walk_in_through_the_doorway_from_the_bunks() -> void:
+	var ship: Ship = new_moored_ship_with_player(Vector3(-2.72, 1.05, 8.6))[0] as Ship
+	var runner: GdUnitSceneRunner = scene_runner(ship.get_parent())
+	await physics_ticks(runner, 5)
+
+	# Up on the stick walks away from the camera, towards the bow.
+	await walk(runner, "move_up", 60)
+
+	var player: Player3D = runner.find_child("Player") as Player3D
+	assert_float(ship.to_local(player.global_position).z).is_less(7.0)
+
+
+func test_the_table_has_a_framed_shot() -> void:
+	var ship: Ship = new_moored_ship_with_player(Vector3(0, 1.05, 6))[0] as Ship
+	var view: CameraZone = ship.get_node("TableView") as CameraZone
+	assert_object(view.get_node("Shot") as Marker3D).is_not_null()
+
+
 func test_the_portholes_are_cut_through_the_wall() -> void:
 	var ship: Ship = new_moored_ship_with_player(Vector3(0, 1.05, 6))[0] as Ship
 	var wall: CSGBox3D = ship.get_node("Visuals/WallStarboard") as CSGBox3D
