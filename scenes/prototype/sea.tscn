@@ -9,16 +9,26 @@
 [ext_resource type="PackedScene" path="res://ui/hud_3d.tscn" id="8_hud"]
 [ext_resource type="PackedScene" path="res://scenes/prototype/weather/sea_surface.tscn" id="9_sea"]
 [ext_resource type="PackedScene" path="res://scenes/prototype/weather/weather.tscn" id="10_weather"]
+[ext_resource type="Shader" path="res://shaders/night_sky.gdshader" id="11_sky"]
 
-[sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_mqylf"]
-sky_top_color = Color(0.03, 0.04, 0.06, 1)
-sky_horizon_color = Color(0.1, 0.12, 0.14, 1)
-ground_bottom_color = Color(0.01, 0.014, 0.02, 1)
-ground_horizon_color = Color(0.1, 0.12, 0.14, 1)
-sky_energy_multiplier = 0.5
+[sub_resource type="FastNoiseLite" id="Noise_Cloud"]
+frequency = 0.008
+fractal_octaves = 4
+
+[sub_resource type="NoiseTexture2D" id="Texture_Cloud"]
+width = 512
+height = 512
+seamless = true
+noise = SubResource("Noise_Cloud")
+
+[sub_resource type="ShaderMaterial" id="Material_NightSky"]
+shader = ExtResource("11_sky")
+shader_parameter/cloud_noise = SubResource("Texture_Cloud")
 
 [sub_resource type="Sky" id="Sky_fgrll"]
-sky_material = SubResource("ProceduralSkyMaterial_mqylf")
+sky_material = SubResource("Material_NightSky")
+process_mode = 3
+radiance_size = 3
 
 [sub_resource type="Environment" id="Environment_r0v5v"]
 background_mode = 2
@@ -36,7 +46,7 @@ glow_bloom = 0.05
 fog_enabled = true
 fog_mode = 1
 fog_light_color = Color(0.13, 0.155, 0.18, 1)
-fog_sky_affect = 1.0
+fog_sky_affect = 0.5
 fog_depth_curve = 0.8
 fog_depth_begin = 10.0
 fog_depth_end = 45.0
