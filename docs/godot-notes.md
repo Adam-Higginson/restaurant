@@ -50,7 +50,7 @@ A growing glossary of the Godot concepts this project uses: what each one is, in
 
 **OmniLight3D.** A light bulb: shines in every direction from a point, fading out by its `omni_range`. *Ours:* the warm `GalleyLight` below deck.
 
-**Camera3D.** What the player sees. The one marked `current` is used. *Ours:* the `Camera3D` at the end of the player's `SpringArm3D` (`scenes/prototype/player.tscn`).
+**Camera3D.** What the player sees. The one marked `current` is used. *Ours:* the player's `CameraRig/Camera3D` (`scenes/prototype/player.tscn`), which the rig places each frame, at the spring arm's `FreeSpot` or a camera zone's shot.
 
 **StandardMaterial3D and texture filtering.** A material sets a surface's colour, texture and shininess. *Texture filter* decides how texture pixels are blended when stretched: *Linear* blurs them, *Nearest* keeps them as crisp blocks (the N64/OoT look). "With mipmaps" also uses smaller copies far away, to stop shimmering. Godot has no project-wide setting for this in 3D, so we set it on each material. **Triplanar** mapping projects the texture from the sides, so boxes of any size get evenly sized squares without UV unwrapping. *Ours:* `assets/placeholder/materials/greybox_*.tres`, all sharing the 16-pixel `greybox_grid.png` (one square per metre).
 
@@ -62,9 +62,9 @@ A growing glossary of the Godot concepts this project uses: what each one is, in
 
 **Basis, yaw and pitch.** A `Basis` is a node's rotation (and scale), stored as its three axes. *Yaw* turns left and right about the up axis; *pitch* tilts up and down. Rotating a direction with `.rotated(Vector3.UP, yaw)` turns it the way the camera faces. *Ours:* `Player3D.camera_relative()` makes "up" on the stick mean "away from the camera".
 
-**Camera rig (nested nodes for each rotation).** Put yaw on one node and pitch on a child, so turning never tilts the horizon and tilting never twists the turn. *Ours:* `CameraRig` (yaw) → `Pitch` → `SpringArm3D` → `Camera3D`.
+**Camera rig (nested nodes for each rotation).** Put yaw on one node and pitch on a child, so turning never tilts the horizon and tilting never twists the turn. *Ours:* `CameraRig` (yaw) → `Pitch` → `SpringArm3D` → `FreeSpot`.
 
-**SpringArm3D.** Casts a shape from itself out along its +Z axis for `spring_length` metres, and moves its children (the camera) to where the shape first hits something, so walls and masts never come between the camera and the player. `get_hit_length()` says how far out it got. A cast ignores anything it starts inside, so the player's own capsule doesn't stop it. *Ours:* `Player/CameraRig/Pitch/SpringArm3D`, 5 m long with a small sphere.
+**SpringArm3D.** Casts a shape from itself out along its +Z axis for `spring_length` metres, and moves its children (for us, the `FreeSpot` marker the camera follows) to where the shape first hits something, so walls and masts never come between the camera and the player. `get_hit_length()` says how far out it got. A cast ignores anything it starts inside, so the player's own capsule doesn't stop it. *Ours:* `Player/CameraRig/Pitch/SpringArm3D`, 5 m long with a small sphere.
 
 **`top_level`.** Makes a node ignore its parent's transform: it stays a child in the tree but moves in world space by itself. *Ours:* `CameraRig`, which follows the player in its own `_process` instead of moving with it.
 
@@ -74,7 +74,17 @@ A growing glossary of the Godot concepts this project uses: what each one is, in
 
 **Mouse capture and `InputEventMouseMotion`.** `Input.mouse_mode = Input.MOUSE_MODE_CAPTURED` hides the cursor and locks it to the window, so the mouse can turn the camera forever without hitting the screen edge. Each movement arrives as an `InputEventMouseMotion` whose `relative` is how far it moved. Mouse movement can't be an Input Map action, so the camera reads it in `_unhandled_input`. *Ours:* `CameraRig`. Esc releases the mouse, and a click captures it again.
 
-*Still to come with the prototype tickets: `Area3D`, ...*
+**Area3D and `body_entered` / `body_exited`.** An invisible volume (shaped by a `CollisionShape3D` child) that notices physics bodies overlapping it, but doesn't block them. It emits `body_entered(body)` when one starts overlapping and `body_exited(body)` when it stops, checked on physics ticks. It notices every body its collision mask covers, so check what came in. *Ours:* `CameraZone` (`scripts/camera/camera_zone.gd`), which reacts only to a `Player3D`.
+
+**Marker3D.** An empty node that only marks a position and rotation, drawn as a small cross in the editor. Like a camera, it "looks" along its -Z axis. *Ours:* the galley's `GalleyCameraZone/Shot` (where the fixed camera sits) and the rig's `FreeSpot` (where the free camera would be).
+
+**`Transform3D.interpolate_with()`.** Returns a transform part-way between two others: `a.interpolate_with(b, 0.25)` is a quarter of the way from `a` to `b`. Positions move in a straight line, and rotations turn smoothly the short way round. *Ours:* `CameraRig._place_camera()` glides the camera between the free spot and a fixed shot.
+
+**`lerp_angle()` and `move_toward()`.** `lerp_angle(a, b, t)` goes part-way between two angles the short way round, so going from 170° to -170° passes through 180°, not 0°. `move_toward(from, to, step)` moves a number towards a target by at most `step`, and never overshoots. *Ours:* `CameraRig.view_yaw` (lerp_angle) and `_update_blend()` (move_toward, so leaving half way just reverses the glide).
+
+**Easing (`smoothstep`, `ease`).** Turns a value that grows steadily from 0 to 1 into one that starts or ends gently, so motion doesn't jolt. `smoothstep(0, 1, t)` is slow at both ends; `ease(t, curve)` gives a family of shapes picked by `curve`. *Ours:* `CameraRig.blend_curve()` (your turn in #63).
+
+*Still to come with the prototype tickets: ...*
 
 ## Testing
 
