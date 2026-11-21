@@ -5,6 +5,10 @@
 [ext_resource type="Material" path="res://assets/placeholder/materials/greybox_dark_wood.tres" id="3_g4u1m"]
 [ext_resource type="Material" path="res://assets/placeholder/materials/greybox_wood.tres" id="4_ttec1"]
 [ext_resource type="Script" path="res://scripts/player/camera_rig.gd" id="5_qlp8k"]
+[ext_resource type="Resource" path="res://data/tools/chefs_knife.tres" id="6_knife"]
+[ext_resource type="Script" path="res://scripts/data/hand_tool.gd" id="9_tool"]
+[ext_resource type="Script" path="res://scripts/interaction/interaction_detector_3d.gd" id="7_detect"]
+[ext_resource type="Script" path="res://scripts/player/carried_stack_3d.gd" id="8_stack"]
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_raosb"]
 radius = 0.4
@@ -31,10 +35,25 @@ size = Vector3(0.14, 0.3, 0.36)
 [sub_resource type="SphereShape3D" id="SphereShape3D_jaqp2"]
 radius = 0.25
 
+[sub_resource type="SphereShape3D" id="SphereShape3D_reach"]
+radius = 0.35
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_arrow"]
+top_radius = 0.12
+bottom_radius = 0.0
+height = 0.22
+radial_segments = 4
+rings = 1
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_arrow"]
+shading_mode = 0
+albedo_color = Color(1, 0.85, 0.25, 1)
+
 [node name="Player" type="CharacterBody3D" unique_id=1530964768]
 floor_constant_speed = true
 floor_snap_length = 0.2
 script = ExtResource("1_ydnt8")
+start_tools = Array[ExtResource("9_tool")]([ExtResource("6_knife")])
 
 [node name="Shape" type="CollisionShape3D" parent="." unique_id=1347474155]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.9, 0)
@@ -86,3 +105,21 @@ margin = 0.1
 [node name="Camera3D" type="Camera3D" parent="CameraRig" unique_id=86618845]
 top_level = true
 current = true
+
+[node name="InteractionDetector" type="Area3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.9, -0.7)
+script = ExtResource("7_detect")
+
+[node name="Shape" type="CollisionShape3D" parent="InteractionDetector"]
+shape = SubResource("SphereShape3D_reach")
+
+[node name="FocusArrow" type="MeshInstance3D" parent="InteractionDetector"]
+physics_interpolation_mode = 2
+top_level = true
+cast_shadow = 0
+mesh = SubResource("CylinderMesh_arrow")
+material_override = SubResource("StandardMaterial3D_arrow")
+
+[node name="CarriedStack" type="Node3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.95, 0)
+script = ExtResource("8_stack")

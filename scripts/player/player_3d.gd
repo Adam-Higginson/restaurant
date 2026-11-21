@@ -2,7 +2,8 @@ class_name Player3D
 extends CharacterBody3D
 ## The player in 3D. Walks relative to the camera, turns to face the way it
 ## walks, falls under gravity, and rides whatever floor it stands on, so the
-## ship's deck carries it along as the ship sails.
+## ship's deck carries it along as the ship sails. Carries a stack of items in
+## its [member arms] and hand tools on its [member belt].
 ##
 ## When the camera switches (walking into or out of a [CameraZone]) while you
 ## hold a direction, the player keeps walking the same way until you let go
@@ -21,17 +22,32 @@ extends CharacterBody3D
 ## How far, in degrees, you must swing the stick while walking through a
 ## camera switch before "up" follows the new camera.
 @export var reaim_degrees: float = 45.0
+## The tools on the belt at the start, from the first slot on.
+@export var start_tools: Array[HandTool] = []
 
 ## The flat direction the model faces, in world space.
 var facing: Vector3:
 	get:
 		return -_model.global_basis.z
 
+## Whether the player walked on the last physics tick, from your input
+## (riding the sailing ship doesn't count).
+var is_walking: bool:
+	get:
+		return _walking
+
+## What the player is carrying. Created once and never replaced, so signal
+## connections to it keep working.
+var arms: Arms = Arms.new()
+## The player's hand tools. Created once and never replaced, like [member arms].
+var belt: ToolBelt = ToolBelt.new()
+
 ## The player's camera. Camera zones tell it when to use their fixed shot.
 var camera_rig: CameraRig:
 	get:
 		return _camera_rig
 
+var _walking: bool = false
 ## The camera yaw movement used last tick.
 var _move_yaw: float = 0.0
 ## Whether movement is held to [member _held_yaw] after a camera switch.
@@ -46,6 +62,11 @@ var _zone_seen: CameraZone
 @onready var _camera_rig: CameraRig = $CameraRig
 
 
+func _ready() -> void:
+	for i: int in mini(start_tools.size(), ToolBelt.SLOT_COUNT):
+		belt.set_tool(i, start_tools[i])
+
+
 func _physics_process(delta: float) -> void:
 	var input: Vector2 = Input.get_vector("move_left", "move_right", "move_up", "move_down")
 	var direction: Vector3 = camera_relative(input, _movement_yaw(input))
@@ -56,8 +77,27 @@ func _physics_process(delta: float) -> void:
 	# Moves and slides along walls. Standing on a moving body (the ship),
 	# it also adds that body's velocity, which is how the deck carries us.
 	move_and_slide()
-	if not direction.is_zero_approx():
+	_walking = not direction.is_zero_approx()
+	if _walking:
 		_face(direction, delta)
+
+
+func _unhandled_input(event: InputEvent) -> void:
+	if event.is_action_pressed("rotate_stack"):
+		get_viewport().set_input_as_handled()
+		arms.rotate()
+	elif event.is_action_pressed("select_slot_next"):
+		get_viewport().set_input_as_handled()
+		belt.select_next()
+	elif event.is_action_pressed("select_slot_previous"):
+		get_viewport().set_input_as_handled()
+		belt.select_previous()
+	else:
+		for i: int in ToolBelt.SLOT_COUNT:
+			if event.is_action_pressed("select_slot_%d" % (i + 1)):
+				get_viewport().set_input_as_handled()
+				belt.select(i)
+				return
 
 
 ## Turns stick or WASD [param input] (as from [method Input.get_vector]: x is

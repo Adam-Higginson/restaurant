@@ -172,4 +172,4 @@ script = ExtResource("6_ivyv4")
 route = NodePath("../Route")
 
 [node name="Player" parent="." instance=ExtResource("7_p3dpl")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -23.5, 4.05, 48)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -23.5, 5.35, 51)

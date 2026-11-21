@@ -5,8 +5,11 @@ extends GameTestSuite
 const PLAYER_SCENE: String = "res://scenes/prototype/player.tscn"
 const SHIP_SCENE: String = "res://scenes/prototype/ship.tscn"
 ## Where the player stands on the ship's aft deck, in the ship's own space.
-const ON_DECK: Vector3 = Vector3(1.5, 4.05, 8.0)
+const ON_DECK: Vector3 = Vector3(1.5, 5.35, 11.0)
 const NEAR: Vector3 = Vector3(0.05, 0.05, 0.05)
+const KNIFE: HandTool = preload("res://data/tools/chefs_knife.tres")
+const TOMATO: Item = preload("res://data/items/tomato.tres")
+const LETTUCE: Item = preload("res://data/items/lettuce.tres")
 
 
 # --- Camera-relative directions -----------------------------------------------
@@ -133,6 +136,58 @@ func test_turning_the_free_camera_mid_walk_still_steers() -> void:
 
 	var moved: Vector3 = player.global_position - turned_at
 	assert_vector(moved.normalized()).is_equal_approx(Vector3.LEFT, NEAR)
+
+
+func test_is_walking_only_while_moving() -> void:
+	var player: Player3D = new_player_3d_on_floor()
+	var runner: GdUnitSceneRunner = scene_runner(player.get_parent())
+	await physics_ticks(runner, 5)
+	assert_bool(player.is_walking).is_false()
+
+	runner.simulate_action_press("move_up")
+	await physics_ticks(runner, 3)
+	assert_bool(player.is_walking).is_true()
+
+	runner.simulate_action_release("move_up")
+	await physics_ticks(runner, 2)
+	assert_bool(player.is_walking).is_false()
+
+
+# --- Arms and belt ------------------------------------------------------------
+
+func test_starts_with_the_knife_selected() -> void:
+	var player: Player3D = new_player_3d_on_floor()
+	scene_runner(player.get_parent())
+
+	assert_object(player.belt.selected_tool()).is_same(KNIFE)
+	assert_bool(player.arms.is_empty()).is_true()
+
+
+func test_rotate_stack_key_rotates_the_arms() -> void:
+	var player: Player3D = new_player_3d_on_floor()
+	var runner: GdUnitSceneRunner = scene_runner(player.get_parent())
+	var tomato: ItemInstance = ItemInstance.new(TOMATO)
+	var lettuce: ItemInstance = ItemInstance.new(LETTUCE)
+	player.arms.add(tomato)
+	player.arms.add(lettuce)
+
+	await press(runner, "rotate_stack")
+
+	assert_object(player.arms.top()).is_same(tomato)
+
+
+func test_slot_keys_select_belt_slots() -> void:
+	var player: Player3D = new_player_3d_on_floor()
+	var runner: GdUnitSceneRunner = scene_runner(player.get_parent())
+
+	await press(runner, "select_slot_3")
+	assert_int(player.belt.selected_index).is_equal(2)
+
+	await press(runner, "select_slot_next")
+	assert_int(player.belt.selected_index).is_equal(3)
+
+	await press(runner, "select_slot_previous")
+	assert_int(player.belt.selected_index).is_equal(2)
 
 
 func test_faces_the_way_it_walks() -> void:

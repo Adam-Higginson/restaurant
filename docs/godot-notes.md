@@ -76,13 +76,23 @@ A growing glossary of the Godot concepts this project uses: what each one is, in
 
 **Area3D and `body_entered` / `body_exited`.** An invisible volume (shaped by a `CollisionShape3D` child) that notices physics bodies overlapping it, but doesn't block them. It emits `body_entered(body)` when one starts overlapping and `body_exited(body)` when it stops, checked on physics ticks. It notices every body its collision mask covers, so check what came in. *Ours:* `CameraZone` (`scripts/camera/camera_zone.gd`), which reacts only to a `Player3D`.
 
-**Marker3D.** An empty node that only marks a position and rotation, drawn as a small cross in the editor. Like a camera, it "looks" along its -Z axis. *Ours:* the galley's `GalleyCameraZone/Shot` (where the fixed camera sits) and the rig's `FreeSpot` (where the free camera would be).
+**Marker3D.** An empty node that only marks a position and rotation, drawn as a small cross in the editor. Like a camera, it "looks" along its -Z axis. *Ours:* a `CameraZone`'s `Shot` (where its fixed camera sits) and the rig's `FreeSpot` (where the free camera would be).
 
 **`Transform3D.interpolate_with()`.** Returns a transform part-way between two others: `a.interpolate_with(b, 0.25)` is a quarter of the way from `a` to `b`. Positions move in a straight line, and rotations turn smoothly the short way round. *Ours:* `CameraRig._place_camera()` glides the camera between the free spot and a fixed shot.
 
 **`lerp_angle()` and `move_toward()`.** `lerp_angle(a, b, t)` goes part-way between two angles the short way round, so going from 170° to -170° passes through 180°, not 0°. `move_toward(from, to, step)` moves a number towards a target by at most `step`, and never overshoots. *Ours:* `CameraRig.view_yaw` (lerp_angle) and `_update_blend()` (move_toward, so leaving half way just reverses the glide).
 
 **Easing (`smoothstep`, `ease`).** Turns a value that grows steadily from 0 to 1 into one that starts or ends gently, so motion doesn't jolt. `smoothstep(0, 1, t)` is slow at both ends; `ease(t, curve)` gives a family of shapes picked by `curve`. *Ours:* `CameraRig.blend_curve()` (your turn in #63).
+
+**Collision layers and masks.** Every physics object is *on* some layers (`collision_layer`) and *looks at* some layers (`collision_mask`), as bit flags: layer 2 is `1 << 1`. An area only notices things on layers its mask covers. *Ours:* `Interactable3D` sits on layer 2 and the player's `InteractionDetector3D` looks only at layer 2, so the detector never notices walls or camera zones, and camera zones never notice interactables.
+
+**`monitoring` and `monitorable`.** An `Area3D` with `monitoring` on notices others (and gets `get_overlapping_areas()`); one with `monitorable` on can be noticed. Turning off the side you don't need saves work. *Ours:* interactables are monitorable only; the detector is monitoring only.
+
+**Building nodes in code.** `MeshInstance3D.new()`, a `BoxMesh` or `CylinderMesh` with a size, and `add_child()` make scenery from a script, which suits things that change shape often. Free the old ones with `remove_child()` then `queue_free()`, so the old and new never show at once. *Ours:* `ItemModel.build()`, used by `Counter3D` and `CarriedStack3D`.
+
+**Static variables.** `static var` belongs to the class, not to each instance, so every user shares one copy. *Ours:* `ItemModel._materials`, one material per colour for every item model.
+
+**`RefCounted` logic classes.** A script that `extends RefCounted` isn't a node: it lives as long as something refers to it, and can be tested without a scene. Keeping rules in one and having a node wrap it splits "what happens" from "how it looks". *Ours:* `CounterSlot` (wrapped by `Counter3D`), `Arms`, `ToolBelt`.
 
 *Still to come with the prototype tickets: ...*
 
