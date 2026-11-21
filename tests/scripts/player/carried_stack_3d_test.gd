@@ -1,9 +1,8 @@
 extends GameTestSuite
-## Tests for CarriedStack3D: one model per carried item, stacked bottom
-## first, rebuilt when the arms change, and bobbing only while walking.
+## Tests for CarriedStack3D: a model of the carried item, rebuilt when the
+## arms change, and bobbing only while walking.
 
 const TOMATO: Item = preload("res://data/items/tomato.tres")
-const LETTUCE: Item = preload("res://data/items/lettuce.tres")
 const PLATE: Item = preload("res://data/items/plate.tres")
 
 
@@ -14,41 +13,35 @@ func test_shows_nothing_with_empty_arms() -> void:
 	assert_int(_stack(player).get_child_count()).is_equal(0)
 
 
-func test_shows_one_model_per_item_bottom_first() -> void:
+func test_shows_the_carried_item() -> void:
 	var player: Player3D = new_player_3d_on_floor()
 	scene_runner(player.get_parent())
 
 	player.arms.add(ItemInstance.new(TOMATO))
-	player.arms.add(ItemInstance.new(LETTUCE))
-
-	var models: Array[Node] = _stack(player).get_children()
-	assert_int(models.size()).is_equal(2)
-	assert_float((models[1] as Node3D).position.y).is_greater((models[0] as Node3D).position.y)
-
-
-func test_rebuilds_when_an_item_is_taken() -> void:
-	var player: Player3D = new_player_3d_on_floor()
-	scene_runner(player.get_parent())
-	player.arms.add(ItemInstance.new(TOMATO))
-	player.arms.add(ItemInstance.new(LETTUCE))
-
-	player.arms.take_top()
 
 	assert_int(_stack(player).get_child_count()).is_equal(1)
 
 
-func test_an_item_on_a_full_plate_clears_its_food() -> void:
+func test_clears_when_the_item_is_put_down() -> void:
+	var player: Player3D = new_player_3d_on_floor()
+	scene_runner(player.get_parent())
+	player.arms.add(ItemInstance.new(TOMATO))
+
+	player.arms.take_top()
+
+	assert_int(_stack(player).get_child_count()).is_equal(0)
+
+
+func test_a_carried_plate_shows_its_food() -> void:
 	var player: Player3D = new_player_3d_on_floor()
 	scene_runner(player.get_parent())
 	var plate: ItemInstance = ItemInstance.new(PLATE)
 	plate.contents.add_item(ItemInstance.new(TOMATO))
+
 	player.arms.add(plate)
 
-	player.arms.add(ItemInstance.new(LETTUCE))
-
-	var top: Node3D = _stack(player).get_child(1) as Node3D
-	assert_float(top.position.y).is_greater_equal(ItemModel.height_of(plate))
-	assert_float(ItemModel.height_of(plate)).is_greater(ItemModel.vessel_height(PLATE))
+	var model: Node3D = _stack(player).get_child(0) as Node3D
+	assert_object(model.find_child("Food0", true, false)).is_not_null()
 
 
 func test_bob_starts_at_rest_and_peaks_a_quarter_bob_in() -> void:

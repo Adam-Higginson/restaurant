@@ -163,13 +163,18 @@ func test_starts_with_the_knife_selected() -> void:
 	assert_bool(player.arms.is_empty()).is_true()
 
 
-func test_rotate_stack_key_rotates_the_arms() -> void:
+func test_carries_one_item_at_a_time() -> void:
+	var player: Player3D = new_player_3d_on_floor()
+	assert_bool(player.arms.add(ItemInstance.new(TOMATO))).is_true()
+	assert_bool(player.arms.add(ItemInstance.new(LETTUCE))).is_false()
+	assert_object(player.arms.top().item).is_same(TOMATO)
+
+
+func test_the_rotate_stack_key_does_nothing_in_3d() -> void:
 	var player: Player3D = new_player_3d_on_floor()
 	var runner: GdUnitSceneRunner = scene_runner(player.get_parent())
 	var tomato: ItemInstance = ItemInstance.new(TOMATO)
-	var lettuce: ItemInstance = ItemInstance.new(LETTUCE)
 	player.arms.add(tomato)
-	player.arms.add(lettuce)
 
 	await press(runner, "rotate_stack")
 

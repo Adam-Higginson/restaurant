@@ -2,8 +2,8 @@ class_name Player3D
 extends CharacterBody3D
 ## The player in 3D. Walks relative to the camera, turns to face the way it
 ## walks, falls under gravity, and rides whatever floor it stands on, so the
-## ship's deck carries it along as the ship sails. Carries a stack of items in
-## its [member arms] and hand tools on its [member belt].
+## ship's deck carries it along as the ship sails. Carries one item in its
+## [member arms] and hand tools on its [member belt].
 ##
 ## When the camera switches (walking into or out of a [CameraZone]) while you
 ## hold a direction, the player keeps walking the same way until you let go
@@ -36,9 +36,9 @@ var is_walking: bool:
 	get:
 		return _walking
 
-## What the player is carrying. Created once and never replaced, so signal
-## connections to it keep working.
-var arms: Arms = Arms.new()
+## What the player is carrying: one item at a time (OoT style). Created once
+## and never replaced, so signal connections to it keep working.
+var arms: Arms = Arms.new(1)
 ## The player's hand tools. Created once and never replaced, like [member arms].
 var belt: ToolBelt = ToolBelt.new()
 
@@ -83,10 +83,7 @@ func _physics_process(delta: float) -> void:
 
 
 func _unhandled_input(event: InputEvent) -> void:
-	if event.is_action_pressed("rotate_stack"):
-		get_viewport().set_input_as_handled()
-		arms.rotate()
-	elif event.is_action_pressed("select_slot_next"):
+	if event.is_action_pressed("select_slot_next"):
 		get_viewport().set_input_as_handled()
 		belt.select_next()
 	elif event.is_action_pressed("select_slot_previous"):
