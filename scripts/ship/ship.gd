@@ -21,6 +21,9 @@ const LOOK_STEP: float = 0.5
 @export var speed: float = 3.0
 ## Whether to set sail as soon as the scene starts.
 @export var sail_on_ready: bool = true
+## Whether to sail round and round the route forever instead of mooring at
+## its end. The route should be a closed loop (its last point on its first).
+@export var loop_route: bool = false
 
 ## Whether the ship is under way. False before it sets sail and once moored.
 var is_sailing: bool:
@@ -52,6 +55,11 @@ func _physics_process(delta: float) -> void:
 	if not _sailing or speed <= 0.0:
 		return
 	var length: float = route.curve.get_baked_length()
+	if loop_route:
+		# Round again: past the end is the start of the next lap.
+		_distance = fposmod(_distance + speed * delta, length)
+		global_transform = _transform_at(_distance)
+		return
 	# Clamp, so a long frame stops the ship at the end rather than past it.
 	_distance = minf(_distance + speed * delta, length)
 	global_transform = _transform_at(_distance)
@@ -78,8 +86,8 @@ func _has_route() -> bool:
 func _transform_at(distance: float) -> Transform3D:
 	var curve: Curve3D = route.curve
 	var length: float = curve.get_baked_length()
-	var behind: Vector3 = route.to_global(curve.sample_baked(maxf(distance - LOOK_STEP, 0.0)))
-	var ahead: Vector3 = route.to_global(curve.sample_baked(minf(distance + LOOK_STEP, length)))
+	var behind: Vector3 = route.to_global(curve.sample_baked(_along(distance - LOOK_STEP, length)))
+	var ahead: Vector3 = route.to_global(curve.sample_baked(_along(distance + LOOK_STEP, length)))
 	var heading: Vector3 = ahead - behind
 	# Ignore any climb or dip in the route, so the deck never tilts.
 	heading.y = 0.0
@@ -87,3 +95,11 @@ func _transform_at(distance: float) -> Transform3D:
 	if not heading.is_zero_approx():
 		basis_now = Basis.looking_at(heading, Vector3.UP)
 	return Transform3D(basis_now, route.to_global(curve.sample_baked(distance)))
+
+
+# A distance along the route, kept on it: wrapped round a loop, or held at
+# the ends of a one-way route.
+func _along(distance: float, length: float) -> float:
+	if loop_route:
+		return fposmod(distance, length)
+	return clampf(distance, 0.0, length)

@@ -139,6 +139,29 @@ func test_stays_put_without_a_route() -> void:
 	assert_vector(ship.global_position).is_equal(Vector3.ZERO)
 
 
+# --- Looping -----------------------------------------------------------------
+
+func test_a_looping_ship_sails_round_and_round_without_mooring() -> void:
+	# A 40 m square loop, sailed at 30 m/s: one and a half laps in two seconds.
+	var square: Array[Vector3] = [Vector3.ZERO, Vector3(0, 0, -10), Vector3(10, 0, -10),
+			Vector3(10, 0, 0), Vector3.ZERO]
+	var ship: Ship = _new_ship(square, 30.0)
+	ship.loop_route = true
+	var moorings: Array[bool] = []
+	ship.moored.connect(func() -> void: moorings.append(true))
+	var runner: GdUnitSceneRunner = scene_runner(ship.get_parent())
+
+	ship.set_sail()
+	await physics_ticks(runner, 120)
+
+	assert_bool(ship.is_sailing).is_true()
+	assert_array(moorings).is_empty()
+	# Still on the square, not run off past its end.
+	var pos: Vector3 = ship.global_position
+	assert_float(pos.x).is_between(-0.01, 10.01)
+	assert_float(pos.z).is_between(-10.01, 0.01)
+
+
 # --- Velocity ----------------------------------------------------------------
 
 func test_velocity_is_forward_at_speed_while_sailing() -> void:
