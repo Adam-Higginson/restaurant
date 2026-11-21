@@ -103,6 +103,10 @@ func _make_streaks() -> GPUParticles3D:
 	particles.process_material = process
 	particles.draw_pass_1 = mesh
 	particles.collision_base_size = 0.02
+	# Drops fall about 0.3 m a step at 60 steps a second, less than the deck
+	# is thick, so none is ever drawn poking through into the galley.
+	particles.fixed_fps = 60
+	particles.interpolate = false
 	particles.visibility_aabb = AABB(Vector3(-20, -25, -20), Vector3(40, 30, 40))
 	particles.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
 	return particles

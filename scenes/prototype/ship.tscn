@@ -8,7 +8,10 @@
 [ext_resource type="PackedScene" path="res://scenes/prototype/props/pantry.tscn" id="7_pantry"]
 [ext_resource type="Resource" path="res://data/items/chopping_board.tres" id="8_board"]
 [ext_resource type="PackedScene" path="res://scenes/prototype/props/plate_rack.tscn" id="9_rack"]
-[ext_resource type="Material" path="res://assets/placeholder/materials/greybox_wet_wood.tres" id="10_wet"]
+[ext_resource type="Material" path="res://assets/placeholder/materials/wet_deck.tres" id="10_wet"]
+[ext_resource type="Material" path="res://assets/placeholder/materials/wet_dark_wood.tres" id="13_wetdark"]
+[ext_resource type="Script" path="res://scripts/art/third_party_texture.gd" id="14_tex"]
+[ext_resource type="Script" path="res://scripts/weather/drips.gd" id="15_drips"]
 [ext_resource type="Script" path="res://scripts/weather/shelter_zone.gd" id="11_shelter"]
 [ext_resource type="Script" path="res://scripts/props/swinging.gd" id="12_swing"]
 
@@ -213,22 +216,22 @@ mesh = SubResource("Mesh_DeckPortStrip")
 
 [node name="RailPort" type="MeshInstance3D" parent="Visuals"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -5.9, 5.8, 0)
-material_override = ExtResource("3_t630l")
+material_override = ExtResource("13_wetdark")
 mesh = SubResource("Mesh_RailPort")
 
 [node name="RailStarboard" type="MeshInstance3D" parent="Visuals"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5.9, 5.8, 0)
-material_override = ExtResource("3_t630l")
+material_override = ExtResource("13_wetdark")
 mesh = SubResource("Mesh_RailStarboard")
 
 [node name="RailBow" type="MeshInstance3D" parent="Visuals"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 5.8, -14.9)
-material_override = ExtResource("3_t630l")
+material_override = ExtResource("13_wetdark")
 mesh = SubResource("Mesh_RailBow")
 
 [node name="RailStern" type="MeshInstance3D" parent="Visuals"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 5.8, 14.9)
-material_override = ExtResource("3_t630l")
+material_override = ExtResource("13_wetdark")
 mesh = SubResource("Mesh_RailStern")
 
 [node name="Ramp" type="MeshInstance3D" parent="Visuals"]
@@ -238,12 +241,12 @@ mesh = SubResource("Mesh_Ramp")
 
 [node name="Mast" type="MeshInstance3D" parent="Visuals"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 12.3, -4)
-material_override = ExtResource("3_t630l")
+material_override = ExtResource("13_wetdark")
 mesh = SubResource("Mesh_Mast")
 
 [node name="Yard" type="MeshInstance3D" parent="Visuals"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 16.3, -3.7)
-material_override = ExtResource("3_t630l")
+material_override = ExtResource("13_wetdark")
 mesh = SubResource("Mesh_Yard")
 
 [node name="Sail" type="MeshInstance3D" parent="Visuals"]
@@ -253,12 +256,12 @@ mesh = SubResource("Mesh_Sail")
 
 [node name="WheelPost" type="MeshInstance3D" parent="Visuals"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 5.85, 12)
-material_override = ExtResource("3_t630l")
+material_override = ExtResource("13_wetdark")
 mesh = SubResource("Mesh_WheelPost")
 
 [node name="Wheel" type="MeshInstance3D" parent="Visuals"]
 transform = Transform3D(1, 0, 0, 0, 0, -1, 0, 1, 0, 0, 6.5, 12.22)
-material_override = ExtResource("3_t630l")
+material_override = ExtResource("13_wetdark")
 mesh = SubResource("Mesh_Wheel")
 
 [node name="BunkFrame" type="MeshInstance3D" parent="Visuals"]
@@ -355,6 +358,28 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8, 0)
 size = Vector3(14, 20, 32)
 resolution = 1
 update_mode = 1
+
+[node name="DeckTexture" type="Node" parent="."]
+script = ExtResource("14_tex")
+material = ExtResource("10_wet")
+path = "res://assets/third_party/sbs_textures_128/128x128/Wood/Synth-Wood_13-128x128.png"
+
+[node name="TrimTexture" type="Node" parent="."]
+script = ExtResource("14_tex")
+material = ExtResource("13_wetdark")
+path = "res://assets/third_party/sbs_textures_128/128x128/Wood/Synth-Wood_01-128x128.png"
+
+[node name="HatchDrips" type="GPUParticles3D" parent="."]
+transform = Transform3D(0, 0, -1, 0, 1, 0, 1, 0, 0, -3.52, 4.98, 5.075)
+script = ExtResource("15_drips")
+length = 7.8
+rate = 10.0
+
+[node name="SailDrips" type="GPUParticles3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 9.95, -3.65)
+script = ExtResource("15_drips")
+length = 7.4
+rate = 14.0
 
 [node name="HullShape" type="CollisionShape3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.25, 0)

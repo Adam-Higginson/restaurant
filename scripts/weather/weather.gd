@@ -2,8 +2,9 @@ class_name Weather
 extends Node
 ## The weather at sea: how hard it's raining, and whether the player is under
 ## a roof. One rain intensity drives everything that shows it: the rain
-## falling ([RainEffect]), the rings on the sea ([Sea]) and the sound
-## ([Ambience]).
+## falling ([RainEffect]), the rings on the sea ([Sea]), the sound
+## ([Ambience]) and how wet every surface looks (the [code]wetness[/code]
+## shader global, read by shaders/wet_surface.gdshader).
 ##
 ## It listens to every [ShelterZone] (the "shelters" group) to know when the
 ## player is under cover.
@@ -12,6 +13,10 @@ extends Node
 signal intensity_changed(intensity: float)
 ## Emitted when the player goes under a roof or back out.
 signal sheltered_changed(sheltered: bool)
+
+## The shader global every wet surface reads (Project Settings > Shader
+## Globals).
+const WETNESS: StringName = &"wetness"
 
 ## How hard it's raining: 0 dry, 1 a downpour.
 @export_range(0.0, 1.0) var intensity: float = 0.8:
@@ -58,6 +63,9 @@ func _listen_to_shelters() -> void:
 
 # Shows the current rain everywhere it's shown.
 func _apply() -> void:
+	RenderingServer.global_shader_parameter_set(WETNESS, intensity)
+	if is_inside_tree():
+		get_tree().call_group(&"drips", &"set_wetness", intensity)
 	if is_instance_valid(sea):
 		sea.rain = intensity
 	if is_instance_valid(rain):

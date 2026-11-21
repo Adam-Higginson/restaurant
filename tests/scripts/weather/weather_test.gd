@@ -37,6 +37,25 @@ func test_the_rain_and_the_sea_follow_the_intensity() -> void:
 	assert_bool(weather.rain.is_raining()).is_false()
 
 
+func test_wetness_is_a_shader_global_every_material_can_read() -> void:
+	# The headless test renderer doesn't keep global values, so this checks the
+	# global is declared; the drips test checks the weather sends it out.
+	var setting: String = "shader_globals/" + String(Weather.WETNESS)
+	assert_bool(ProjectSettings.has_setting(setting)).is_true()
+	var declared: Dictionary = ProjectSettings.get_setting(setting)
+	assert_str(str(declared["type"])).is_equal("float")
+
+
+func test_the_deck_and_its_trim_are_wet_surfaces() -> void:
+	var ship: Ship = new_moored_ship_with_player(ON_DECK)[0] as Ship
+	var wet_shader: Shader = load("res://shaders/wet_surface.gdshader") as Shader
+	for path: String in ["Visuals/DeckAft", "Visuals/DeckFore", "Visuals/RailPort", "Visuals/Mast"]:
+		var mesh: MeshInstance3D = ship.get_node(path) as MeshInstance3D
+		var material: ShaderMaterial = mesh.material_override as ShaderMaterial
+		assert_object(material).is_not_null()
+		assert_object(material.shader).is_same(wet_shader)
+
+
 func test_the_galley_is_sheltered_and_the_deck_is_not() -> void:
 	var rig: Array[Node3D] = new_moored_ship_with_player(ON_DECK)
 	var ship: Ship = rig[0] as Ship
