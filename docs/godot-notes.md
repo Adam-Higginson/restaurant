@@ -118,9 +118,17 @@ A growing glossary of the Godot concepts this project uses: what each one is, in
 
 **Fresnel.** Water (and glass) reflects more the flatter you look across it: almost a mirror at a glancing angle, see-through looking straight down. *Ours:* the water shader adds a misty sky reflection by Fresnel, which is what lets the swell's shape show at night.
 
-**GPUParticles3D.** Thousands of small meshes moved on the graphics card, set up with a `ParticleProcessMaterial` (where they start, which way and how fast they go, how they grow and fade). `local_coords = false` leaves them where they were born when the emitter moves. *Ours:* `RainEffect` builds the rain streaks and splashes in code and keeps them around the camera.
+**GPUParticles3D.** Thousands of small meshes moved on the graphics card, set up with a `ParticleProcessMaterial` (where they start, which way and how fast they go, how they grow and fade). `local_coords = false` leaves them where they were born when the emitter moves. *Ours:* `RainEffect` builds the rain streaks and splashes in code and keeps them around the camera; `Drips` drip off the hatch rim and the sail.
 
 **Fog: depth and volumetric.** The `Environment`'s *depth* fog fades things between two distances from the camera (we start at 10 m, so rooms stay clear). *Volumetric* fog fills the air itself, so lights glow as haloes and cones in it (Forward+ only). *Ours:* `sea.tscn`'s `WorldEnvironment`, with each lantern's `light_volumetric_fog_energy`.
+
+**Particle collision and heightfields.** Particles don't use the physics engine. They collide with special collider nodes instead. A `GPUParticlesCollisionHeightField3D` photographs everything inside its box from above into a height map, and particles that go below it have hit something. It's cheap and ideal for rain, but it can't see under overhangs. *Ours:* the ship's `RainCatcher` covers the whole ship, so drops land on the deck, rails and sail, and the deck keeps the galley dry.
+
+**Particle shaders and sub-emitters.** A `shader_type particles` shader replaces the `ParticleProcessMaterial`: `start()` places each particle and `process()` moves it every step. `COLLIDED` says it hit a collider, and `emit_subparticle()` starts a particle in another system, the *sub-emitter* (set by `GPUParticles3D.sub_emitter`). *Ours:* `shaders/rain_drops.gdshader` turns each drop that lands into one splash ring, then removes the drop.
+
+**Global shader uniforms.** A `global uniform` is a setting shared by every shader that declares it, listed under Project Settings → Shader Globals and set once from code with `RenderingServer.global_shader_parameter_set()`. *Ours:* `wetness`, which `Weather` sets from the rain and `shaders/wet_surface.gdshader` reads on every wet material.
+
+**Sky shaders.** A `shader_type sky` shader colours the sky in every direction (`EYEDIR`), and it also feeds the scene's ambient light and reflections. `LIGHT0_DIRECTION` points at the first directional light. Using `TIME` means the sky changes every frame, so the `Sky` resource is set to the real-time process mode. *Ours:* `shaders/night_sky.gdshader` draws the moon where the `Moon` light is, with drifting cloud.
 
 **Audio buses and effects.** Sounds play on a *bus*, like a channel on a mixing desk; a bus can have effects (a low-pass filter muffles high sounds) and sends into `Master`. The layout lives in `default_bus_layout.tres`. *Ours:* the `Ambience` bus, whose low-pass filter `Ambience` closes as you go below deck.
 
