@@ -91,6 +91,11 @@ func test_the_galley_shot_sails_with_the_ship() -> void:
 	ship.set_sail()
 
 	await physics_ticks(runner, 60)
+	# Stop, then let a few frames draw. The camera moves once per drawn frame,
+	# so while sailing it trails by however many ticks a slow machine runs
+	# between frames.
+	ship.speed = 0.0
+	await physics_ticks(runner, 10)
 
 	assert_float(ship.global_position.length()).is_greater(2.0)
 	assert_vector(camera.global_position).is_equal_approx(shot.global_position, NEAR)
