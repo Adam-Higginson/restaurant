@@ -16,7 +16,8 @@ extends Node3D
 ## The rig is [member Node3D.top_level] with physics interpolation off. Every
 ## rendered frame it moves to where the player is [i]drawn[/i] and applies
 ## turns straight away, so the camera follows smoothly and looking around
-## never waits for a physics tick.
+## never waits for a physics tick. It also turns with the floor the player
+## stands on, so a turning ship doesn't swing the view round.
 
 ## How far the camera can tilt down, in degrees.
 const PITCH_MIN_DEGREES: float = -70.0
@@ -115,6 +116,7 @@ func _process(delta: float) -> void:
 				"camera_down")
 		# Right turns clockwise seen from above, which is a negative yaw.
 		orbit(-stick.x * stick_speed * delta, -stick.y * stick_speed * delta)
+	_turn_with_platform(delta)
 	# Ease towards the chosen zoom; the same each frame however fast the game
 	# runs, because the step is 1 - e^(-ease * delta).
 	_arm.spring_length = lerpf(_arm.spring_length, zoom, 1.0 - exp(-zoom_ease * delta))
@@ -195,6 +197,15 @@ static func blend_curve(t: float) -> float:
 # Moves the rig above where the player is drawn this frame. With physics
 # interpolation on, that's part-way between the player's last two physics
 # positions, so the camera glides instead of stepping 60 times a second.
+# Turns with whatever the player stands on (the ship as it sails its loop),
+# so the view stays put relative to the deck instead of slowly swinging round.
+func _turn_with_platform(delta: float) -> void:
+	var body: CharacterBody3D = _target as CharacterBody3D
+	if body == null or not body.is_on_floor():
+		return
+	yaw += body.get_platform_angular_velocity().y * delta
+
+
 func _follow_target() -> void:
 	if _target == null:
 		return

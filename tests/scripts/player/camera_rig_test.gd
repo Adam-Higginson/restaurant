@@ -111,6 +111,37 @@ func test_the_arm_eases_to_the_zoom() -> void:
 	assert_float(arm.spring_length).is_equal_approx(rig.zoom_max, 0.05)
 
 
+func test_the_view_turns_with_a_turning_ship() -> void:
+	# A tight loop sailed fast, so the ship turns a long way in two seconds.
+	var rig_nodes: Array[Node3D] = new_moored_ship_with_player(Vector3(0, 5.35, 11))
+	var ship: Ship = rig_nodes[0] as Ship
+	var player: Player3D = rig_nodes[1] as Player3D
+	var k: float = 0.5523 * 15.0
+	var loop: Curve3D = Curve3D.new()
+	loop.add_point(Vector3.ZERO, Vector3(0, 0, k), Vector3(0, 0, -k))
+	loop.add_point(Vector3(-15, 0, -15), Vector3(k, 0, 0), Vector3(-k, 0, 0))
+	loop.add_point(Vector3(-30, 0, 0), Vector3(0, 0, -k), Vector3(0, 0, k))
+	loop.add_point(Vector3(-15, 0, 15), Vector3(-k, 0, 0), Vector3(k, 0, 0))
+	loop.add_point(Vector3.ZERO, Vector3(0, 0, k), Vector3(0, 0, -k))
+	ship.route.curve = loop
+	ship.loop_route = true
+	ship.speed = 10.0
+	var rig: CameraRig = _rig_of(player)
+	var runner: GdUnitSceneRunner = scene_runner(ship.get_parent())
+	await physics_ticks(runner, 10)
+	var before: float = angle_difference(CameraRig.yaw_of(ship.global_basis), rig.yaw)
+
+	ship.set_sail()
+	await physics_ticks(runner, 120)
+	await get_tree().process_frame
+
+	var turned: float = absf(angle_difference(CameraRig.yaw_of(ship.global_basis), 0.0))
+	assert_float(turned).is_greater(0.5)
+	var after: float = angle_difference(CameraRig.yaw_of(ship.global_basis), rig.yaw)
+	# The view kept its angle to the deck (within a few degrees).
+	assert_float(absf(angle_difference(before, after))).is_less(deg_to_rad(5.0))
+
+
 func test_the_arm_pulls_in_when_something_is_in_the_way() -> void:
 	var player: Player3D = new_player_3d_on_floor()
 	var rig: CameraRig = _rig_of(player)
