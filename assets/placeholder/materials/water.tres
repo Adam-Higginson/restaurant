@@ -1,0 +1,63 @@
+[gd_resource type="ShaderMaterial" format=3]
+
+[ext_resource type="Shader" path="res://shaders/water.gdshader" id="1_2f1w5"]
+
+[sub_resource type="FastNoiseLite" id="FastNoiseLite_fx4jl"]
+seed = 1
+frequency = 0.03
+fractal_octaves = 4
+
+[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_jfevy"]
+width = 256
+height = 256
+noise = SubResource("FastNoiseLite_fx4jl")
+seamless = true
+as_normal_map = true
+bump_strength = 4.0
+
+[sub_resource type="FastNoiseLite" id="FastNoiseLite_fjp70"]
+seed = 2
+frequency = 0.05
+fractal_octaves = 4
+
+[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_hsf1a"]
+width = 256
+height = 256
+noise = SubResource("FastNoiseLite_fjp70")
+seamless = true
+as_normal_map = true
+bump_strength = 4.0
+
+[sub_resource type="FastNoiseLite" id="FastNoiseLite_w24vu"]
+seed = 3
+frequency = 0.04
+fractal_octaves = 4
+
+[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_ftbjq"]
+width = 256
+height = 256
+noise = SubResource("FastNoiseLite_w24vu")
+seamless = true
+
+[resource]
+render_priority = 0
+shader = ExtResource("1_2f1w5")
+shader_parameter/wave_count = null
+shader_parameter/wave_a = null
+shader_parameter/wave_b = null
+shader_parameter/wave_time = null
+shader_parameter/hull_inverse = null
+shader_parameter/hull_half = null
+shader_parameter/wake = null
+shader_parameter/rain = null
+shader_parameter/deep_color = null
+shader_parameter/crest_color = null
+shader_parameter/foam_color = null
+shader_parameter/roughness_water = null
+shader_parameter/detail_a = SubResource("NoiseTexture2D_jfevy")
+shader_parameter/detail_b = SubResource("NoiseTexture2D_hsf1a")
+shader_parameter/detail_scale = null
+shader_parameter/detail_strength = null
+shader_parameter/foam_noise = SubResource("NoiseTexture2D_ftbjq")
+shader_parameter/crest_foam_from = null
+shader_parameter/hull_foam_width = null

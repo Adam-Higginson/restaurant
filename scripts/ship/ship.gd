@@ -25,6 +25,11 @@ const LOOK_STEP: float = 0.5
 ## Seconds for one full roll, side to side and back.
 @export var rock_period: float = 4.0
 
+## How the swell tilts the hull's visuals, in radians: pitch (x, bow up) and
+## roll (y, starboard up). Set by the [Sea] each physics tick; the gentle
+## rocking is added on top.
+var swell_tilt: Vector2 = Vector2.ZERO
+
 ## Whether the ship is under way. False before it sets sail and once moored.
 var is_sailing: bool:
 	get:
@@ -51,7 +56,7 @@ func _ready() -> void:
 func _physics_process(delta: float) -> void:
 	# Rock on physics ticks, in step with the ship's movement.
 	_time += delta
-	_visuals.rotation.z = deg_to_rad(_rock_angle(_time))
+	_visuals.rotation = Vector3(swell_tilt.x, 0.0, swell_tilt.y + deg_to_rad(_rock_angle(_time)))
 	if not _sailing or speed <= 0.0:
 		return
 	var length: float = route.curve.get_baked_length()

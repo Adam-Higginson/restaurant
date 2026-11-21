@@ -1,0 +1,35 @@
+[gd_resource type="Resource" script_class="WaveSettings" format=3]
+
+[ext_resource type="Script" path="res://scripts/sea/wave_layer.gd" id="1_adjfo"]
+[ext_resource type="Script" path="res://scripts/sea/wave_settings.gd" id="2_2h7sp"]
+
+[sub_resource type="Resource" id="Resource_56dnl"]
+script = ExtResource("1_adjfo")
+direction_degrees = 20.0
+wavelength = 95.0
+amplitude = 1.3
+steepness = 0.35
+
+[sub_resource type="Resource" id="Resource_j5lh4"]
+script = ExtResource("1_adjfo")
+direction_degrees = 55.0
+wavelength = 58.0
+amplitude = 0.7
+
+[sub_resource type="Resource" id="Resource_6qdcw"]
+script = ExtResource("1_adjfo")
+wavelength = 15.0
+amplitude = 0.16
+steepness = 0.5
+
+[sub_resource type="Resource" id="Resource_snsew"]
+script = ExtResource("1_adjfo")
+direction_degrees = 110.0
+wavelength = 9.0
+amplitude = 0.08
+steepness = 0.5
+
+[resource]
+script = ExtResource("2_2h7sp")
+layers = Array[ExtResource("1_adjfo")]([SubResource("Resource_56dnl"), SubResource("Resource_j5lh4"), SubResource("Resource_6qdcw"), SubResource("Resource_snsew")])
+time_scale = 0.8
