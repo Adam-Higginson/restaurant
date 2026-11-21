@@ -28,6 +28,9 @@ uniform sampler2D albedo_texture : source_color, filter_nearest_mipmap, repeat_e
 // One copy of the texture covers this many metres.
 uniform float texture_metres = 1.0;
 uniform float dry_roughness : hint_range(0.0, 1.0) = 0.85;
+// How much the grain stands out: the texture's light and dark read as raised
+// and sunken, so light catches along the grain.
+uniform float grain_bump : hint_range(0.0, 10.0) = 3.0;
 
 group_uniforms planks;
 // Plank width in metres; 0 for no planks. Planks run along the ship (z).
@@ -35,12 +38,20 @@ uniform float plank_width = 0.0;
 // Each plank is this long before a butt joint.
 uniform float plank_length = 3.0;
 uniform float seam_darkness : hint_range(0.0, 1.0) = 0.55;
+// How much planks differ in shade from one another.
+uniform float plank_tint : hint_range(0.0, 0.5) = 0.14;
+// How much each plank is tipped or cupped, so each catches the light its own
+// way.
+uniform float plank_warp : hint_range(0.0, 0.2) = 0.05;
+// How far in from a plank's edge it starts rounding down to the seam, in metres.
+uniform float bevel : hint_range(0.0, 0.1) = 0.03;
 
 group_uniforms wet;
 // How much soaking darkens it: high for porous wood, low for paint or metal.
 uniform float soak : hint_range(0.0, 1.0) = 0.6;
-// How shiny the soaked (not pooled) surface gets.
-uniform float soaked_roughness : hint_range(0.0, 1.0) = 0.5;
+// How shiny the soaked (not pooled) surface gets. Wood drinks water in, so it
+// stays fairly rough; only standing water is glossy.
+uniform float soaked_roughness : hint_range(0.0, 1.0) = 0.62;
 // Whether water pools on its top: 1 for decks, 0 for rails and posts.
 uniform float puddles : hint_range(0.0, 1.0) = 1.0;
 // How much of the top is under water when soaked.
@@ -130,6 +141,33 @@ vec2 ripples(vec2 p, float t) {
 }
 
 
+// Which plank (x) and which length of it (y) [param p] is on.
+vec2 plank_cell(vec2 p) {
+	float plank = floor(p.x / plank_width);
+	float along = p.y / plank_length + hash3(vec2(plank, 0.0)).x;
+	return vec2(plank, floor(along));
+}
+
+
+// The two directions a face's texture runs in, in surface space, matching
+// surface_uv(): across (u) and down (v).
+mat3 texture_frame(vec3 n) {
+	vec3 a = abs(n);
+	if (a.y >= a.x && a.y >= a.z) {
+		return mat3(vec3(1.0, 0.0, 0.0), vec3(0.0, 0.0, 1.0), n);
+	}
+	if (a.x >= a.z) {
+		return mat3(vec3(0.0, 0.0, 1.0), vec3(0.0, -1.0, 0.0), n);
+	}
+	return mat3(vec3(1.0, 0.0, 0.0), vec3(0.0, -1.0, 0.0), n);
+}
+
+
+float brightness(vec3 c) {
+	return dot(c, vec3(0.3, 0.59, 0.11));
+}
+
+
 void fragment() {
 	vec3 n = normalize(surface_normal);
 	float wet = clamp(wetness, 0.0, 1.0);
@@ -137,21 +175,52 @@ void fragment() {
 	float up = clamp(n.y, 0.0, 1.0);
 	float exposed = smoothstep(-0.4, 0.1, n.y);
 	float side = 1.0 - abs(n.y);
+	bool planked = plank_width > 0.0 && up > 0.9;
 
+	// Each plank: its own shade, its grain shifted so neighbours don't match,
+	// and a slight tip so it catches the light differently.
 	vec2 uv = surface_uv(surface_pos, n);
-	vec3 base = albedo.rgb * texture(albedo_texture, uv / texture_metres).rgb;
-	float in_seam = up > 0.9 ? seam(surface_pos.xz) : 0.0;
+	float shade = 1.0;
+	vec2 lean = vec2(0.0);
+	if (planked) {
+		vec3 h = hash3(plank_cell(surface_pos.xz) + 17.0);
+		shade = 1.0 + plank_tint * (h.x * 2.0 - 1.0);
+		uv += h.yz * 7.0;
+		lean = (h.zy - 0.5) * plank_warp;
+		// Rounded edges: near a long edge the board curves down to the seam.
+		float across = fract(surface_pos.x / plank_width);
+		float to_edge = min(across, 1.0 - across) * plank_width;
+		float round_off = 1.0 - smoothstep(0.0, bevel, to_edge);
+		lean.x += (across < 0.5 ? -1.0 : 1.0) * round_off * 0.7;
+	}
+
+	// The grain, and its relief: brighter texels read as raised.
+	vec2 tex_uv = uv / texture_metres;
+	vec2 texel = 1.0 / vec2(textureSize(albedo_texture, 0));
+	vec3 grain = texture(albedo_texture, tex_uv).rgb;
+	float height_here = brightness(grain);
+	float height_u = brightness(texture(albedo_texture, tex_uv + vec2(texel.x, 0.0)).rgb);
+	float height_v = brightness(texture(albedo_texture, tex_uv + vec2(0.0, texel.y)).rgb);
+	vec2 grain_slope = vec2(height_u - height_here, height_v - height_here) * grain_bump;
+
+	vec3 base = albedo.rgb * grain * shade;
+	float in_seam = planked ? seam(surface_pos.xz) : 0.0;
 	base *= 1.0 - seam_darkness * in_seam;
 
-	// Soaked: darker and richer (a power darkens the darks most), a bit glossier.
+	// Soaked: darker and richer (a power darkens the darks most), and a little
+	// glossier, unevenly: some patches drink more water and stay dull.
 	float soaked = wet * exposed;
 	vec3 colour = pow(base, vec3(1.0 + 0.8 * soak * soaked)) * (1.0 - 0.35 * soak * soaked);
-	float rough = mix(dry_roughness, soaked_roughness, soaked);
+	float patchy = texture(puddle_noise, surface_pos.xz * puddle_scale * 3.7 + 0.31).r;
+	float sheen = soaked * smoothstep(0.3, 0.75, patchy);
+	// The grain's dark lines (end grain, cracks) hold water and stay rougher.
+	float rough = mix(dry_roughness, soaked_roughness, sheen);
+	rough = clamp(rough + (0.5 - height_here) * 0.25, 0.0, 1.0);
 
-	// Standing water: on flat tops, in the noise's low spots, and in the seams.
+	// Standing water: on flat tops, in the noise's low spots, and along seams.
 	float low = texture(puddle_noise, surface_pos.xz * puddle_scale).r;
 	float pooled = smoothstep(1.0 - puddle_cover, 1.0 - puddle_cover + 0.12, low);
-	pooled = max(pooled, in_seam * 0.8);
+	pooled = max(pooled, in_seam * 0.45);
 	float puddle = puddles * pooled * step(0.9, up) * smoothstep(0.35, 0.8, wet);
 	// A film of water hides the wood under it: what you see is mostly the
 	// reflection, so the colour goes towards a dark, neutral water.
@@ -165,14 +234,19 @@ void fragment() {
 	rough = mix(rough, 0.12, streak);
 	colour *= 1.0 - 0.12 * streak;
 
-	// Rain rings tilt the surface: faint on soaked wood, strong in puddles.
+	// The surface's shape: grain relief and plank lean, flattened where water
+	// stands over them, plus rain rings (faint on wood, strong in puddles).
+	mat3 frame = texture_frame(n);
+	float flatten = 1.0 - puddle;
+	vec3 bent = n - (frame[0] * grain_slope.x + frame[1] * grain_slope.y) * flatten;
+	bent += vec3(lean.x, 0.0, lean.y) * flatten;
 	vec2 slope = ripples(surface_pos.xz / ripple_cell, TIME);
 	slope *= ripple_strength * up * wet * mix(0.25, 1.0, puddle);
-	vec3 bent = normalize(n + vec3(slope.x, 0.0, slope.y));
+	bent = normalize(bent + vec3(slope.x, 0.0, slope.y));
 
 	ALBEDO = colour;
 	ROUGHNESS = rough;
-	SPECULAR = 0.5;
+	SPECULAR = 0.4;
 	// Back from the surface's space to the world (the inverse of a turn is its
 	// transpose), then to the camera's view.
 	vec3 bent_world = transpose(mat3(to_surface_space)) * bent;

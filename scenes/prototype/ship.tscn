@@ -148,6 +148,21 @@ size = Vector3(0.9, 0.65, 2)
 [sub_resource type="BoxMesh" id="Mesh_Lantern"]
 size = Vector3(0.22, 0.3, 0.22)
 
+[sub_resource type="BoxMesh" id="Mesh_BracketPost"]
+size = Vector3(0.14, 2.7, 0.14)
+
+[sub_resource type="BoxShape3D" id="Shape_BracketPost"]
+size = Vector3(0.14, 2.7, 0.14)
+
+[sub_resource type="BoxMesh" id="Mesh_MastArm"]
+size = Vector3(0.4, 0.06, 0.06)
+
+[sub_resource type="BoxMesh" id="Mesh_SternArm"]
+size = Vector3(0.06, 0.06, 0.7)
+
+[sub_resource type="BoxMesh" id="Mesh_HatchArm"]
+size = Vector3(1.25, 0.06, 0.06)
+
 [sub_resource type="BoxMesh" id="Mesh_Cord"]
 size = Vector3(0.025, 0.45, 0.025)
 
@@ -282,8 +297,33 @@ light_energy = 2.0
 shadow_enabled = true
 omni_range = 13.0
 
+[node name="MastLanternArm" type="MeshInstance3D" parent="Visuals"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.45, 8.23, -4)
+material_override = ExtResource("3_t630l")
+mesh = SubResource("Mesh_MastArm")
+
+[node name="SternLanternPost" type="MeshInstance3D" parent="Visuals"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 6.65, 14.7)
+material_override = ExtResource("3_t630l")
+mesh = SubResource("Mesh_BracketPost")
+
+[node name="SternLanternArm" type="MeshInstance3D" parent="Visuals"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 7.95, 14.4)
+material_override = ExtResource("3_t630l")
+mesh = SubResource("Mesh_SternArm")
+
+[node name="HatchLanternPost" type="MeshInstance3D" parent="Visuals"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3.25, 6.65, 3)
+material_override = ExtResource("3_t630l")
+mesh = SubResource("Mesh_BracketPost")
+
+[node name="HatchLanternArm" type="MeshInstance3D" parent="Visuals"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3.85, 7.95, 3)
+material_override = ExtResource("3_t630l")
+mesh = SubResource("Mesh_HatchArm")
+
 [node name="MastLantern" type="Node3D" parent="Visuals"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.45, 8.2, -4)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.55, 8.2, -4)
 script = ExtResource("12_swing")
 phase = 0.0
 
@@ -307,7 +347,7 @@ shadow_enabled = true
 omni_range = 8.0
 
 [node name="SternLantern" type="Node3D" parent="Visuals"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 7.2, 14.2)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 7.9, 14.15)
 script = ExtResource("12_swing")
 phase = 0.37
 
@@ -331,7 +371,7 @@ shadow_enabled = true
 omni_range = 8.0
 
 [node name="HatchLantern" type="Node3D" parent="Visuals"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3.3, 6.9, 1.4)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4.4, 7.9, 3)
 script = ExtResource("12_swing")
 phase = 0.71
 
@@ -385,6 +425,14 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 9.95, -3.65)
 script = ExtResource("15_drips")
 length = 7.4
 rate = 14.0
+
+[node name="SternLanternPostShape" type="CollisionShape3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 6.65, 14.7)
+shape = SubResource("Shape_BracketPost")
+
+[node name="HatchLanternPostShape" type="CollisionShape3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3.25, 6.65, 3)
+shape = SubResource("Shape_BracketPost")
 
 [node name="HullShape" type="CollisionShape3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.25, 0)
