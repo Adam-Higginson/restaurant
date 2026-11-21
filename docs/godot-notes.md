@@ -94,6 +94,12 @@ A growing glossary of the Godot concepts this project uses: what each one is, in
 
 **`RefCounted` logic classes.** A script that `extends RefCounted` isn't a node: it lives as long as something refers to it, and can be tested without a scene. Keeping rules in one and having a node wrap it splits "what happens" from "how it looks". *Ours:* `CounterSlot` (wrapped by `Counter3D`), `Arms`, `ToolBelt`.
 
+**Pausing the game and `process_mode`.** Setting `get_tree().paused = true` stops every node whose `process_mode` is *Inherit* (the default) or *Pausable*: no `_process`, `_physics_process` or input. Nodes set to *Always* keep running, which is how a pause menu can still be used. Physics bodies freeze too, so a moving `AnimatableBody3D` stops where it is. *Ours:* `ContainerPanel` (`ui/container_panel.tscn`, `process_mode` Always) pauses while open, which stops the ship and the camera rig until you close it.
+
+**CanvasLayer in a 3D scene.** A `CanvasLayer` draws its 2D controls flat on top of the screen, whatever its parent is, so a 3D prop can carry its own UI as a child. Its `layer` number decides which layers draw over which. *Ours:* the `ContainerPanel` child of `scenes/prototype/props/pantry.tscn`.
+
+**Typed dictionary exports.** `@export var start_items: Dictionary[Item, int]` shows in the Inspector as a list of key/value pairs, with the key limited to an `Item` resource and the value to a whole number. *Ours:* the pantry's starting stock, `StorageProp3D.start_items`.
+
 *Still to come with the prototype tickets: ...*
 
 ## Testing
