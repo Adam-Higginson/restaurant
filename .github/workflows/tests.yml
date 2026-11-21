@@ -21,7 +21,9 @@ jobs:
           godot-version: '4.7.2'
           version: 'installed'   # use the plugin committed in addons/gdUnit4
           paths: 'res://tests'
-          timeout: 5
+          # Minutes for the whole run. The galley scene suites alone take about
+          # two and a quarter on CI, so 5 was too tight once they landed.
+          timeout: 10
           # -c runs every test instead of stopping a suite at its first failure.
           # --fixed-fps 60 runs frames back to back at a fixed 1/60 s each instead
           # of waiting for the real clock, so the suite finishes in about a minute.
