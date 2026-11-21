@@ -113,7 +113,9 @@ float seam(vec2 p) {
 	float along = p.y / plank_length + hash3(vec2(plank, 0.0)).x;
 	float side = 1.0 - smoothstep(0.0, 0.04, min(fract(across), 1.0 - fract(across)));
 	float joint = 1.0 - smoothstep(0.0, 0.006, min(fract(along), 1.0 - fract(along)));
-	return max(side, joint);
+	// Some seams are packed tight and barely show; others are open and dark.
+	float gap = 0.45 + 0.55 * hash3(vec2(plank, floor(along)) + 3.0).x;
+	return max(side, joint) * gap;
 }
 
 
@@ -185,7 +187,10 @@ void fragment() {
 	if (planked) {
 		vec3 h = hash3(plank_cell(surface_pos.xz) + 17.0);
 		shade = 1.0 + plank_tint * (h.x * 2.0 - 1.0);
-		uv += h.yz * 7.0;
+		// The grain runs along the board (the texture's grain runs across
+		// the image, so turn it), stretched like a long board's, and each
+		// board shows its own stretch of the texture.
+		uv = vec2(surface_pos.z * 0.45, surface_pos.x) + h.yz * 7.0;
 		lean = (h.zy - 0.5) * plank_warp;
 		// Rounded edges: near a long edge the board curves down to the seam.
 		float across = fract(surface_pos.x / plank_width);
