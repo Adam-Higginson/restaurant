@@ -105,6 +105,41 @@ func place_player(runner: GdUnitSceneRunner, pos: Vector2) -> Player:
 	return player
 
 
+## Finds the 3D player (the node named "Player") in the running scene, stops
+## it, and puts it at [param pos] in world space.
+func place_player_3d(runner: GdUnitSceneRunner, pos: Vector3) -> Player3D:
+	var player: Player3D = runner.find_child("Player") as Player3D
+	player.global_position = pos
+	player.velocity = Vector3.ZERO
+	# A jump, not a move: draw it there at once rather than gliding over.
+	player.reset_physics_interpolation()
+	return player
+
+
+## A 3D player standing at the origin on a big flat floor, in a small world
+## that's freed after the test. Hand the world (its parent) to scene_runner.
+func new_player_3d_on_floor() -> Player3D:
+	var world: Node3D = Node3D.new()
+	auto_free(world)
+	world.add_child(static_box(Vector3(40, 1, 40), Vector3(0, -0.5, 0)))
+	var scene: PackedScene = load("res://scenes/prototype/player.tscn") as PackedScene
+	var player: Player3D = scene.instantiate() as Player3D
+	world.add_child(player)
+	return player
+
+
+## A solid, unmoving box of [param size] centred at [param pos], for test worlds.
+func static_box(size: Vector3, pos: Vector3) -> StaticBody3D:
+	var body: StaticBody3D = StaticBody3D.new()
+	body.position = pos
+	var shape: CollisionShape3D = CollisionShape3D.new()
+	var box: BoxShape3D = BoxShape3D.new()
+	box.size = size
+	shape.shape = box
+	body.add_child(shape)
+	return body
+
+
 # Whether each region's floor is on its map: the map's nearest polygon to one
 # of the region's own vertices belongs to the region.
 func _regions_are_on_their_maps(regions: Array[NavigationRegion2D]) -> bool:

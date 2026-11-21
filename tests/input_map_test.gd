@@ -63,6 +63,27 @@ func test_debug_keys_are_on_the_keyboard() -> void:
 		).is_true()
 
 
+func test_the_camera_turns_with_the_right_stick() -> void:
+	# On keyboard and mouse the camera follows the mouse, which CameraRig
+	# reads directly: mouse movement can't be bound to an action.
+	var axes: Dictionary[StringName, Vector2] = {
+		&"camera_left": Vector2(JOY_AXIS_RIGHT_X, -1.0),
+		&"camera_right": Vector2(JOY_AXIS_RIGHT_X, 1.0),
+		&"camera_up": Vector2(JOY_AXIS_RIGHT_Y, -1.0),
+		&"camera_down": Vector2(JOY_AXIS_RIGHT_Y, 1.0),
+	}
+	for action: StringName in axes:
+		var bound: Array[Vector2] = []
+		if InputMap.has_action(action):
+			for event: InputEvent in InputMap.action_get_events(action):
+				var motion: InputEventJoypadMotion = event as InputEventJoypadMotion
+				if motion != null:
+					bound.append(Vector2(motion.axis, motion.axis_value))
+		assert_array(bound).override_failure_message(
+			"%s isn't bound to the right stick" % action
+		).contains([axes[action]])
+
+
 func _has_event(action: StringName, event_class: String) -> bool:
 	if not InputMap.has_action(action):
 		return false
