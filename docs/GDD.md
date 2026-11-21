@@ -1,76 +1,112 @@
 # Game Design Document
 
-Working title: **Restaurant** (TBD)
+Working title: **TBD** (the repo is still called `restaurant`)
 
 ## Pitch
-A cosy top-down restaurant game in the spirit of Stardew Valley. You run a small restaurant on your own in a town full of people: buy ingredients, cook, serve the townsfolk and earn money. Your restaurant becomes the town's living room, where you get to know everyone through the food you cook for them. Over time the restaurant grows into a full farm-to-table operation, where you grow and raise the ingredients you cook with.
+A cosy 3D adventure in the spirit of Ocarina of Time. You're pulled from the sea by a lantern spirit who promises to take you home, and you join the crew of a ship sailing between fog-wrapped islands. You remember home only as tastes and sounds, so you search for it by cooking and humming. Ashore, you explore, gather, solve puzzles and duel fog-touched creatures. Aboard, the ship's galley is the warm heart of it all, where the crew you gather eat together every evening.
 
 ## Pillars
-1. **Cosy, not stressful.** Busy moments, but nothing burns and nobody shouts. Failing costs you a sale, never progress or friendship.
-2. **People are the heart.** Every customer is someone from town with tastes, habits and a story. The rush is the seasoning, not the meal.
-3. **Hands-on.** You walk your character between stations and tables. The restaurant is a place, not a menu.
-4. **Farm to table (long-term).** Every dish should feel traceable to where its ingredients came from.
-5. **Growth you can see.** More money leads to more dishes, a nicer restaurant, staff, a growing town and a better star rating.
+1. **Wonder.** Like Kokiri Forest at the start of OoT, a real place where everything is new. Every island has new sights, sounds, tastes and textures, and there's always something round the next corner.
+2. **Safe hearth, dangerous shore.** The ship is home: nothing ever attacks it. Danger, duels and puzzles live ashore, so coming back aboard always feels like relief.
+3. **Food and music are the map.** Cooking and humming are how you search for home, how you prepare for adventure, and how you get to know the crew.
+4. **People are the heart.** The crew are the people from the islands that weren't home. Together they become home.
+5. **Hands-on.** You walk your character between stations, across the deck and over the islands. The ship is a place, not a menu.
 
-## Core loop (MVP)
-Time always moves, like Stardew Valley. There are no fixed phases: you choose when to open, when to close and when to go to bed.
+## Story
+- **The rescue:** a young adult sinks in dark water. A small, warm light drifts down and a hand of flame takes theirs. It's a **lantern spirit** (he/him), and he pulls them aboard a ship.
+- **The promise:** the lantern promises to get them home. He's sure they came from the nearest island. He's wrong, and he keeps being cheerfully wrong, island after island ("perhaps your home *moved*?"). Over time his guesses get more tender: he quietly hopes he's wrong, because if they find home, they'll leave the ship.
+- **Memory:** the player remembers home only as **tastes and sounds**: a bread with something bitter and green in it, and three notes of a song. They search by cooking that taste and humming that tune to the people they meet, who recognise flavours and melodies and point the way ("That's sea-fennel. That only grows in the north."). The melody gains notes and the dish gets closer as the voyage goes on.
+- **The crew:** each crew member comes from an island that turned out not to be home. The first is the gruff **heron captain**. The second (in the Prologue) is a **mossy rock cook**.
+- **The ending question:** when you finally find home, do you stay?
+- The wider story is still to be written.
 
-- **The calendar:** four seasons (Spring, Summer, Autumn, Winter) of 28 days each, and 7-day weeks. Day 1 is Spring 1, a Monday, in year 1, and after Winter 28 comes Spring 1 of the next year. Dates read like "Spring 2, Tuesday".
-- **The clock** runs from 6:00 to 2:00 in 10-minute steps, about 20 real minutes per day (one step every ~10 real seconds). It shows 12-hour time ("6:40 pm") by default, with a 24-hour option. It stops while any panel is open (shop, container, summary, the bed's question).
-- **Light:** the room's light follows the clock: a warm dawn at 6:00, plain daylight from about 9:00, golden in the early evening, a lavender dusk around 20:30, then a dark blue night from 22:00. Lamps over the tables, in the kitchen, by the door and in the back room fade up as it gets dark (from about 18:00, fully on by 21:00) and cast warm pools of light, and walls cast shadows. The HUD and panels are never tinted.
-- **Getting late:** at midnight a small "Getting late…" note appears at the top of the screen and fades away after a few seconds. It's a nudge, not a warning.
-- **Morning:** you wake in bed in the back room at 6:00. Yesterday's orders are waiting in the delivery crate by the door. Carry them to the fridge and cupboard, set up the kitchen, and order tomorrow's ingredients at the shop board.
-- **Open and close whenever you like** by flipping the sign on the door (E). While it says Open, townsfolk arrive, sit and order one dish. Fetch the ingredients, prepare and cook them, carry the dish to the customer and get paid. Customers left waiting too long leave without paying.
-- **Mealtimes:** for now one customer comes at lunch and one at dinner (see Customers → MVP), so choosing when to be open decides who you serve. Later they trickle in at most times, with peaks around lunch (12:00–14:00) and dinner (18:00–21:00) (#54).
-- **Closing:** flipping the sign to Closed stops new customers. Anyone already seated stays until they're served or run out of patience.
-- **Bed:** go to bed (E on the bed) at any time to end the day. The bed asks "Go to bed?" first, adding "The restaurant will close." while it's open. If the restaurant is still open, it closes and anyone still seated leaves without paying, counting as lost. If you're still up at 2:00, you fall asleep where you stand and wake in bed. No penalty in the MVP.
-- **The night:** when the day ends, the game pauses and the screen fades to black. Behind it the next day starts and you're moved to the bed. The new date fades in as a title card ("Spring 2, Tuesday"), holds for a moment, then the screen fades back in on the morning at 6:00. About 4 seconds in all.
-- **Summary:** when the day ends, a summary shows earnings, ingredients spent, customers served and customers lost, between the fade to black and the morning. Continue to the next morning. (Not built yet: today the night goes straight to the morning.)
+## A day is a song
+A day has four parts, like a song:
+- **Morning ashore, the verse:** different every day. Explore an island, gather ingredients, solve its puzzles, duel what lives there, meet its people.
+- **Afternoon sailing, the bridge:** the crew sails on through the fog. Wonders at scale drift past (towering kelp, a heron the size of a lighthouse, a sea arch carved like a face).
+- **Evening in the galley, the chorus:** cook dinner, and the crew gathers at the galley table to eat, talk and play music. It comes back every day, growing richer as the crew grows.
+- **Night on deck, the outro:** hum the memory melody into the fog, and hope something answers.
 
-Everything stays where you left it between days: ingredients in storage or the crate, and food on counters. Nothing decays in the MVP.
+The ship's bell marks the day, as on real ships: eight bells calls everyone down to dinner.
+
+## The ship
+- A big wooden ship with a small crew. A **crew member steers** by default. Taking the wheel yourself comes later.
+- **Deck:** open to the sky, with the mast, the wheel, the ship's bell and the hatch down below.
+- **Below deck:**
+  - **The galley:** the kitchen and the mess in one room, so the crew eats at a table beside the stove.
+  - **The pantry.**
+  - **Your bunk.**
+- The ship **really moves** between islands. Its rocking is visual only: the floor stays level, so nothing slides off the counters.
+- **Mooring:** at an island, a **gangplank** connects the ship to the shore. **Ring the ship's bell** while aboard to set sail.
+
+## Islands
+Each island is a verse with its own sound, palette, ingredients and people. You often hear an island through the fog before you see it.
+- **Gathering:** ingredients behave like part of the island. Some need a trick, a tool or the right time: a fruit that only opens at noon, mushrooms that grow when you hum.
+- **Puzzles:** OoT-style environmental puzzles, often musical. On the Bell Rocks, you ring bells in the order of your memory melody.
+- **Fog-touched creatures:** the fog sometimes gets into creatures and makes them wild. Defeating one **clears the fog** from it: it shakes itself off and wanders away peacefully. Combat is rescue, never killing.
+- **People:** islanders to talk to, taste and listen to, and sometimes to invite aboard.
+
+## Combat
+OoT-style duels: lock on, read the enemy, strike at the opening.
+- **Lock-on:** the lantern flies to the target and hovers over it, and the player strafes around it. His glow shows the fight's state: he flickers before the enemy strikes and brightens at an opening.
+- **The cook's kit is the adventure kit:**
+  - The **knife** strikes quickly and precisely.
+  - The **frying pan** parries. Time it right for a big *clang* that staggers the enemy.
+  - Later, the **ladle** sweeps, the **pepper grinder** makes creatures sneeze, and the lantern lights dark places and burns webs.
+
+  The tool belt is the item bar, and new utensils open new parts of old islands.
+- **Hearts:** the player's health.
+- **Enemies have rhythms:** a readable windup, an attack, then an opening. Learning a fight is like learning a recipe.
+
+### Preparation
+- **Dinner is the briefing:** crew gossip at the table tells you what's on tomorrow's island ("the crabs hate pepper", "the tide goes out at four bells").
+- **Tonight's meal is tomorrow's blessing:** what the crew eats at dinner shapes the next day ashore (a hearty stew for an extra heart, ginger soup against the cold).
+- **The basket:** you carry at most 3 things (the arms), so packing for an island is a real choice: healing buns, a jar of honey to lure something, pepper.
+- **Taste weaknesses:** creatures react to food (pepper makes them sneeze, honey distracts, smoke makes them sleepy), so cooking knowledge is combat knowledge.
+
+### Defeat
+When you lose a fight, **the lantern pulls you out**, echoing how you met. You reappear at the island's landing with half of what you were carrying. (Later: each rescue dims him a little, and a warm meal by the stove rekindles him.)
 
 ## Player
-- One character, top-down 4-direction movement.
-- Acts on the object in front of them (containers, counters, the stove, pans, tables, the shop board, the door sign, the bed).
-- **Arms:** carries up to **3 items** stacked above their head: ingredients, prepared food, and utensils (chopping board, frying pan, saucepan, plates, bowls). A plate or bowl carries whatever is on it. Each item takes one slot. The stack bobs as they walk. Utensils are carried from place to place like food; they never go on the belt.
-- **Tool belt:** a small row of slots (4) for hand tools, always with you. The MVP has one tool, the knife. One slot is selected at a time. Tools can only be used with empty arms: put everything down first.
+- A young adult, rescued at sea. Their name and look are to be decided.
+- 3D movement relative to the camera, turning to face the way they walk.
+- Acts on the thing in front of them: counters, the pantry, the stove, pans, the bell, the gangplank, plants, people.
+- **Arms:** carry up to **3 items** stacked above the head: ingredients, prepared food and utensils (chopping board, frying pan, saucepan, plates, bowls). A plate or bowl carries whatever is on it. Each item takes one slot. Only the top item is active: putting down uses it, and anything you pick up goes on top.
+- **Tool belt:** 4 slots for hand tools, always with you. One slot is selected at a time. Tools are used with empty arms only. The knife is on the belt from the start, and the belt doubles as the item bar ashore.
+
+### Camera
+- **Free third-person camera** on deck and on islands, orbited with the right stick or mouse. A spring arm pulls it in when a wall or the mast is in the way.
+- **Fixed, framed shots** in tight interiors like the galley, as in OoT's houses and shops. Walking into the galley blends to its shot, and leaving blends back. Movement always follows the active camera.
+- **Lock-on** frames the player and the target together.
 
 ### Controls
-One button, **interact**, does everything with the thing in front of you: picking up, putting down and working it. **Use tool** uses the selected belt tool.
+One button, **interact**, does everything with the thing in front of you.
 
-**The interact rule:** if what you're holding (the top of your stack) goes here, it goes in or on; otherwise you use the object. Every object follows it, so new ones (the stove, the sink) need no new buttons. When a container or the stove would do the wrong thing, rotate your stack (Q) so something else is on top.
+**The interact rule:** if what you're holding (the top of your stack) goes here, it goes in or on; otherwise you use the object. Every object follows it, so new ones need no new buttons. When something would do the wrong thing, rotate your stack (Q) so something else is on top.
 
-| Action | Keyboard | Controller (Xbox naming) | Does |
+| Action | Keyboard / mouse | Controller (Xbox naming) | Does |
 |---|---|---|---|
-| Move | WASD / arrows | Left stick / D-pad | Walk in 4 directions |
-| Interact | E or Space | X or A | Put your top item on a counter, into a utensil, or away in a container if it fits; otherwise take the top item from a counter, board or pan (or an empty utensil itself), or a whole plate or bowl. Serve a customer. Bring a bowl or plate to a pan to tip the pan into it. Take a clean plate or bowl from the rack, open a container, turn a burner on or off, fill a pan at the sink, flip the door sign, go to bed. |
+| Move | WASD / arrows | Left stick | Walk, relative to the camera |
+| Camera | Mouse | Right stick | Orbit the free camera |
+| Interact | E or Space | X or A | Put down, pick up, put away, open, ring, talk, gather |
 | Use tool | F | B | Use the selected belt tool on what you're facing (the knife chops). Empty arms only. |
 | Rotate stack | Q | Right bumper | Rotate the stack, so a different item is on top |
-| Select belt slot | 1–4 / scroll | Left bumper (cycle) | Choose the active tool. Cycling goes through every slot, empty ones too. |
+| Select belt slot | 1–4 / scroll | Left bumper (cycle) | Choose the active tool |
+| Lock-on, attack, parry | To be set in #66 | To be set in #66 | Duels |
 
-Only the top item of the stack is active: putting down uses that one, and anything you pick up goes on top.
+Each action is a named action in Godot's Input Map with keyboard and controller bound, so gameplay code never checks a specific key. Panels must be usable with the D-pad.
 
-Each action is a named action in Godot's Input Map with both the keyboard and the controller bound, so gameplay code never checks a specific key or button. Core play must never need the mouse, and panels (shop, containers, summary) must be usable with the D-pad.
-
-## Starting kit (day one)
-| Thing | Kind | Starts |
-|---|---|---|
-| Cheap chef's knife | Belt tool | On the belt |
-| Basic chopping board | Utensil (carried in arms) | On a counter |
-| Basic frying pan | Utensil (carried in arms) | On a stove burner |
-| Basic saucepan | Utensil (carried in arms) | On the other stove burner |
-| Basic fridge (12 slots) | Storage furniture | Placed in the kitchen |
-| Basic cupboard (12 slots) | Storage furniture | Placed in the kitchen |
-| Plate rack, bowl rack | Fixed kitchen fittings | Always give a clean plate or bowl (Interact) |
-| Counters, stove (2 burners), sink | Fixed kitchen fittings | Placed in the kitchen |
-
-## Storage
-- The **fridge** holds chilled food, and the **cupboard** holds dry food. Every food item says which kind of storage it needs.
-- Containers have a fixed number of slots, and each item uses one. Bigger containers are a later upgrade.
-- Interact on a container while your top item is food it accepts (and there's room) puts it away. Otherwise, with empty arms, other food, a plate, or at the crate, it opens a small panel showing its contents. Picking an item puts it in your arms if you have space.
-- Containers hold any **solid** food, raw or prepared, so you can prep ahead: chop tomatoes and onions in the morning, or make sandwiches ready to fry. Each slot holds one piece of food, keeping its quality. Liquids can't be stored in the MVP (jars are on the roadmap).
-- Bought ingredients arrive in the **delivery crate** by the door at 6:00 the next morning. The crate has no limit and works like a container you can only take from.
-- Furniture is fixed in place in the MVP. Later it can be moved (see the roadmap).
+## Crew and meals
+- For now you cook **for the crew only**. There are no paying customers and no money.
+- **Mealtimes:** dinner in the galley every evening. The crew sit at the galley table, and you serve each of them a dish.
+- Each crew member has tastes (loves, likes, dislikes) and a dish that means home to them. Getting it right, without being told how, is how you become family.
+- **Dinner gives:**
+  - gossip (tomorrow's briefing),
+  - tomorrow's blessing,
+  - the crew's mood,
+  - the next pieces of each crew member's story.
+- **Music at the table:** crew members play instruments (the accordion-playing lantern, for one). Each recruit can add a part to the galley's song.
+- Still to design: whether meals other than dinner exist, how crew mood works, and what quality does now that there are no tips (probably a stronger blessing).
 
 ## Cooking
 Cooking is hands-on and works like a small chemistry system, in the spirit of Breath of the Wild: food reacts to where you put it. Every state food can be in is a named, designed item (tomato, sliced tomato, diced tomato, boiling water, tomato soup), so only combinations someone designed exist. Anything else simply doesn't react.
@@ -86,157 +122,127 @@ A **reaction** is a rule: when everything it needs is present together, for long
 
 **Elements** come in two kinds:
 - **Instant** elements arrive in one-off steps and don't stay. Each press of Use tool with the knife adds one **cut**. Cuts chain through cut levels: lettuce → chopped lettuce (3 cuts); tomato → sliced tomato (2 cuts) → diced tomato (3 more). You choose where to stop.
-- **Timed** elements stay while their source does and count seconds. A lit burner provides **fire** to the pan on it, so any heat source (a stove now, an oven or campfire later) works for any fire recipe. Turning the burner off pauses reactions without losing progress.
+- **Timed** elements stay while their source does and count seconds. A lit stove provides **fire** to the pan on it, so any heat source (the galley stove now, a campfire ashore later) works for any fire recipe. Turning the heat off pauses reactions without losing progress.
 
 A vessel keeps checking its contents. **Every reaction whose items are all present runs**, each with its own progress, moving forward while its elements are present, so a potato and a carrot can boil side by side in the same water. Consumed food is claimed by its reaction; required items can be shared. If two reactions want the same food, the one that uses more items wins, even taking over from a smaller reaction that already started. Taking food out of a vessel cancels its reactions, losing their progress. When a reaction finishes, its consumed food is swapped for the result, which may let the next reaction start.
 
 **Building up beats dumping in.** Because each step makes a new intermediate item, the order you add things matters without the game tracking it. A sauce built up step by step (oil, then garlic, then tomato) goes through the proper reactions. Dumping everything in at once triggers a separate, designed **shortcut reaction** that gives the same dish at a lower quality. Cooking never fails outright and never burns.
 
 ### Quality
-- Each piece of food has a quality from ★ to ★★★. Shop ingredients and water from the sink are ★, the normal quality.
+- Each piece of food has a quality from ★ to ★★★. Gathered ingredients and water are ★, the normal quality.
 - Each reaction has a quality: proper steps are ★★★, shortcuts are ★.
 - A reaction's result is the average of its ingredients' average quality and the reaction's own quality, **rounded up**. One rushed step pulls a dish down a little, and careful steps afterwards pull it back up.
-- Quality only ever adds: a ★ dish pays the menu price, ★★ adds a 25% tip and ★★★ a 50% tip.
-
-### Vessels and fittings
-- **Counter:** holds one item, food or a utensil.
-- **Chopping board:** holds one food item (a bigger board can be an upgrade later). With empty arms and the knife selected, each Use tool on the board's counter is one cut. A progress bar shows how far the current cut level is. Interact takes the food off (losing progress towards the next cut level), and only an empty board is picked up itself. Its food would travel with it, like a plate's.
-- **Plate and bowl:** hold up to 3 food items, and assemble what's on them instantly when it matches a reaction (chopped lettuce + sliced tomato on a plate → Garden Salad). Food goes on while the plate sits on a counter. Interact always takes the plate whole, with its food, and customers are served it that way. Food that matches nothing just sits there; there's no way to take it back off yet (a bin is a possible follow-up). Racks give clean ones without limit (Interact); washing up is on the roadmap.
-- **Vessels don't nest:** only food goes into a board, plate, bowl or pan, never another utensil.
-- **Saucepan and frying pan:** hold up to 3 food items, and cook on the two-burner stove. Interact puts what you're holding into the pan if it fits; otherwise it turns the burner on or off. A progress bar shows each running reaction. Finished food waits in the pan.
-- **Sink:** Interact while holding an empty saucepan fills it with water.
-- **Getting food out of a pan:** with nothing that goes in it, Interact takes the top solid item. Bring a plate or bowl and the pan's whole contents, liquids and solids, are tipped into it. Each food item is either a liquid (water, boiling water, soup) or a solid.
-- The intended fun is juggling: both burners cook on their own while you chop, plate and serve.
-
-## MVP menu
-| Dish | Proper (★★★) | Shortcut (★ or ★★) | Price |
-|---|---|---|---|
-| Garden Salad | Chop lettuce, slice tomato, put both on a plate | Whole lettuce and tomato on a plate | 12 |
-| Tomato Soup | Fill the saucepan at the sink, boil it (4s) → boiling water. Add diced tomato and chopped onion, boil (8s). Tip it into a bowl. | Diced tomato and chopped onion into cold water, then turn the burner on (12s) | 18 |
-| Grilled Cheese | Bread + cheese on a plate → sandwich. Melt butter in the hot frying pan (2s), add the sandwich, fry (6s). | Sandwich straight into the frying pan without butter (6s) | 15 |
-
-| Ingredient | Storage | Shop price |
-|---|---|---|
-| Lettuce | Fridge | 3 |
-| Tomato | Fridge | 3 |
-| Cheese | Fridge | 4 |
-| Butter | Fridge | 2 |
-| Onion | Cupboard | 2 |
-| Bread | Cupboard | 3 |
+- Quality only ever adds. What it adds now there are no tips is still open: most likely a stronger blessing and a happier crew.
 
 Worked example: a tomato (★) sliced properly gives (1 + 3) / 2 = ★★ sliced tomato. Chopped lettuce and sliced tomato (both ★★) on a plate give (2 + 3) / 2 = 2.5, rounded up to a ★★★ Garden Salad. Whole lettuce and tomato on a plate give (1 + 1) / 2 = a ★ salad.
 
-Water is free from the sink. Tomato is shared by two dishes, which makes stocking up a small decision. The numbers are starting points for balancing.
+### Vessels and fittings
+- **Counter:** holds one item, food or a utensil.
+- **Chopping board:** holds one food item. With empty arms and the knife selected, each Use tool on the board's counter is one cut. A progress bar shows how far the current cut level is. Interact takes the food off (losing progress towards the next cut level), and only an empty board is picked up itself.
+- **Plate and bowl:** hold up to 3 food items, and assemble what's on them instantly when it matches a reaction (chopped lettuce + sliced tomato on a plate → Garden Salad). Food goes on while the plate sits on a counter. Interact always takes the plate whole, with its food, and the crew are served it that way. A rack gives clean ones without limit.
+- **Vessels don't nest:** only food goes into a board, plate, bowl or pan, never another utensil.
+- **Saucepan and frying pan:** hold up to 3 food items, and cook on the galley stove. Interact puts what you're holding into the pan if it fits; otherwise it turns the heat on or off. Finished food waits in the pan.
+- **Water barrel** (was the sink): Interact while holding an empty saucepan fills it with water.
+- **Getting food out of a pan:** with nothing that goes in it, Interact takes the top solid item. Bring a plate or bowl and the pan's whole contents, liquids and solids, are tipped into it.
+- The intended fun is juggling: the stove cooks on its own while you chop, plate and serve.
 
-## Customers
-Customers are **townsfolk**: a fixed cast of hand-written people, like Stardew Valley's villagers. Every face in the dining room is someone with a name, tastes, habits and a story. Getting to know them is the heart of the game, and the cooking rush is the seasoning.
+### Dishes so far
+| Dish | Proper (★★★) | Shortcut |
+|---|---|---|
+| Garden Salad | Chop lettuce, slice tomato, put both on a plate | Whole lettuce and tomato on a plate |
+| Tomato Soup | Fill the saucepan at the water barrel, boil it (4s) → boiling water. Add diced tomato and chopped onion, boil (8s). Tip it into a bowl. | Diced tomato and chopped onion into cold water, then heat (12s) |
+| Grilled Cheese | Bread + cheese on a plate → sandwich. Melt butter in the hot frying pan (2s), add the sandwich, fry (6s). | Sandwich straight into the frying pan without butter (6s) |
 
-### Vision (long-term)
-- **The cast:** about 25–30 townsfolk in the full game. For now you only meet them in the restaurant: their lives happen offstage and you hear about them over meals. A walkable town comes later.
-- **Why they visit:** each person has a routine (the blacksmith comes for lunch on weekdays, the night-owl writer drops in late), so your opening hours decide who you meet. Weather, town events and how much they like you vary it. Your menu and reputation draw new people in: putting soup on the menu might be what finally brings the soup lover through the door.
-- **Ordering:** each person has hidden **loves, likes and dislikes**. They order from your menu by taste, and you discover their preferences by watching and chatting. Sometimes they ask for a **craving** ("something warm", "something with cheese") or an off-menu dish instead, which becomes a small goal.
-- **Waiting:** each person has their own patience. The retired teacher will wait all evening; the busy builder won't. When patience runs out they leave politely ("I'll pop back another time"): you lose the sale, never friendship. Next visit they might tease you about it, with no mechanical cost.
-- **Getting to know them:** friendship grows by serving dishes they like (loved dishes and high quality count most), chatting to them at their table, and giving gifts. Each person has a written **storyline** that advances as friendship grows, with moments you help through cooking: a birthday cake, a comfort meal after bad news.
-- **What friendship gives you:** family recipes and techniques, ingredients and new suppliers (the farmer drops off eggs), friends you can hire as staff, and friends who wait longer, tip more and bring others along.
-- **A social room:** friends, families and couples arrive together and share a table. You overhear chatter as you walk past: gossip, story hints, reactions to your food. The town's own stories happen in your restaurant: first dates, reconciliations, birthday parties.
-- **Pacing:** busy but player-paced. The room fills to match your capacity (tables and menu), new arrivals wait for seats to free up, and patience is generous. Lively, rarely frantic.
-- **Reputation:** a visible **star rating** that rises with good service and quality and unlocks things such as newcomers moving to town. **Critics** visit to award Michelin-style stars. Their visits are announced ahead (a letter, town gossip) so you can prepare. A bad review just means trying again next season. You never lose stars.
-- **New arrivals:** the town starts with a smaller cast and new people move in as your reputation grows, so each newcomer is an event.
+Garden Salad works today. Tomato Soup and Grilled Cheese need the stove, pans and water barrel.
 
-### MVP
-- **The cast:** 6 townsfolk, each a `Person` resource with a name, a placeholder colour, loved, liked and disliked dishes, and their patience in real seconds:
+## Storage
+- The galley **pantry** (and later the hold) stores ingredients. Containers have a fixed number of slots, and each item uses one.
+- Interact on a container while your top item is food it accepts (and there's room) puts it away. Otherwise it opens a small panel showing its contents, and picking an item puts it in your arms if you have space.
+- Containers hold any **solid** food, raw or prepared, so you can prep ahead. Liquids can't be stored yet.
+- Whether chilled and dry storage stay separate aboard a ship (an ice box?) is still open.
 
-  | Name | Who | Patience | Loves | Likes | Dislikes |
-  |---|---|---|---|---|---|
-  | Bram | blacksmith | 90 s | Grilled Cheese | Tomato Soup | Garden Salad |
-  | Wren | retired teacher | 180 s | Tomato Soup | Garden Salad | – |
-  | Milo | builder | 90 s | Grilled Cheese | Garden Salad | – |
-  | Pip | schoolkid | 120 s | Garden Salad | Grilled Cheese | Tomato Soup |
-  | Isla | night-owl writer | 120 s | Garden Salad | Tomato Soup | – |
-  | Hazel | farmer | 150 s | Tomato Soup | Garden Salad | Grilled Cheese |
+## Music
+- The user composes the score.
+- **A mix:** a score underneath (themes for the galley, the deck, the open sea and each island, shifting with time and weather), with music from inside the world woven in. The crew play at dinner, islanders sing, and the player hums.
+- **The memory melody:** a fragment of a song from home, a few notes at first. The player can hum it (the lantern accompanies them), and they learn more of it on the voyage. The full theme is only heard when it's complete.
+- Islands can be heard before they're seen, and their melody merges into the score as you arrive.
 
-- **Arriving:** on a fixed schedule for now: one customer at lunch (due 12:30) and one at dinner (due 19:00), each at most once a day. If the restaurant isn't open when they're due, they come as soon as it opens, until 14:00 for lunch and 21:00 for dinner; after that, nobody comes for that meal. Random arrivals with mealtime peaks may replace this (#54), and personal routines come later.
-- **Who comes:** a random townsperson who isn't already inside and has something on the menu they'd order. Someone who dislikes every dish on the menu never comes. They walk in from the door and find their way around the tables to a random free table's seat. If every table is full or nobody can come, the arrival is skipped.
-- **Walking:** customers walk through the player and each other rather than bumping (#53 decides whether to keep this).
-- **Ordering:** they pick a dish from the menu weighted by taste: a loved dish counts 3, a liked one 2, anything else 1, and a disliked dish is never ordered. The order shows in a speech bubble above their head, with their name below them. The menu is Garden Salad (12) for now; Tomato Soup and Grilled Cheese join it when they can be cooked (#37, #38).
-- **Patience:** a bar above their head drains in real time while they wait at the table, and pauses whenever the clock does (any panel open). If it empties they say "I'll pop back another time" and walk out of the door, and the sale is lost.
-- **Closing and the night:** flipping the sign to Closed doesn't send seated customers away. Anyone still inside when the day ends is gone by the morning. Those still waiting (or walking in) count as lost; anyone eating has already paid.
-- **Serving:** face their table and interact (E or Space) while the top of your stack is a plate or bowl holding exactly the dish they ordered. They pay the menu price plus the quality tip (★★ +25%, ★★★ +50%). A **loved dish** also shows a heart and adds a bonus tip of 25% of the price (a starting number for balancing). Each tip rounds up to a whole coin on its own. Their bubble shows what they paid ("+15G ♥") for a couple of seconds, then clears so you can see the plate. Anything else (a wrong dish, an empty plate, extra food on it, loose food) isn't accepted and stays in your arms. The plate sits on the table while they eat for 8 seconds (paused with the clock), then they say "Thank you!", leave with the plate and free the table.
-- **Lost customers:** anyone who runs out of patience, or is still waiting when the day ends, counts as lost for the day's summary.
-- **Tables:** 4 tables, one diner each. Groups come later.
-- Not in the MVP: routines, friendship, chatting, gifts, storylines, cravings, groups, the star rating and critics.
+## Look and feel
+N64 / OoT style with modern rendering. The reference is a ship's galley at night: a heron in a raincoat, a mossy rock cook in an apron and an accordion-playing lantern at a table, lit by hanging lanterns, with rain at the porthole.
+- **Models:** low-poly with flat faces. The characters are chunky folk-tale creatures.
+- **Textures:** small, blocky and low-resolution, with nearest-neighbour filtering.
+- **Lighting:** modern, where the cosiness comes from. Warm lantern point lights with soft shadows, glowing emissive flames, a stove fire that lights the room.
+- **Particles:** steam from pots, drifting embers, fireflies.
+- **Sea and sky:** fog, good-looking water, weather.
+- High resolution: no pixelated low-resolution viewport. This needs the Forward+ renderer.
+- Placeholder art is simple coloured shapes (greybox) until real models are made.
 
-## Economy
-- Start with 50 coins and an empty fridge and cupboard. On day one a starter delivery is waiting in the crate (2 each of lettuce, tomato, onion, bread and cheese; butter joins with Grilled Cheese), so there's something to cook before your first order arrives.
-- Money is spent in the shop and earned from customers (menu price plus quality tips). No other sinks in the MVP.
-- No lose condition. A bad day is just a bad day.
+## MVP: the Prologue
+A tiny complete story arc that proves the "day is a song" loop and ends on the game's hook.
+1. **The rescue:** black water, a warm light, a hand of flame. You wake in your bunk. The heron captain is gruff, and the lantern is certain: "The nearest island, that'll be your home!"
+2. **Evening one, the galley:** cook your first meal (Garden Salad) for the captain. Dinner gossip hints at the island ("mind the fog-crabs"). The meal gives tomorrow's blessing (+1 heart).
+3. **Night on deck:** hum the three notes you remember. Nothing answers yet.
+4. **Morning ashore, the first island:**
+   - **Gather** 2–3 ingredients, one of which needs a trick.
+   - **Solve the bell puzzle:** ring the bells in the order of your memory melody.
+   - **Duel fog-crabs** with the knife and a frying-pan parry, with the lantern as lock-on. Defeat means the lantern pulls you out.
+   - **Recruit** the mossy rock cook, who was trapped behind the puzzle. He tastes your food: "That bread you described... that's not from here."
+5. **Afternoon, sailing on:** the island slips into the fog, and one wonder drifts by.
+6. **Evening two:** dinner for three. The lantern, sheepish: "...Next island. *Definitely* the next one." End card.
 
-## UI
-- **HUD:** money, day number, clock, and whether the restaurant is open. Until the HUD is built (#13), a temporary label in the top left shows the date, time, open state and money ("Spring 3, Wednesday · 6:40 pm · Open · 62G"). Money is written with a G, for gold.
-- **Question panel:** a small yes/no question ("Go to bed?") with an optional detail line. It pauses the game while open, Yes has focus so a controller can answer, and Esc or cancel means No.
-- **Night fade:** a full-screen fade to black with the new date as a title card, drawn above everything else.
-- **Notices:** short notes at the top centre ("Getting late…") that fade in, stay for 3 seconds and fade away by themselves. A new note replaces the old one.
-- **Belt bar** showing the belt slots and the selected tool, dimmed while the arms aren't empty.
-- **Held item label** above the belt bar naming the top carried item and its quality ("Sliced Tomato ★★", "Plate: Garden Salad ★★★").
-- **Quality pips:** food in the world shows 1–3 small dots for its stars, as a placeholder until there's real art.
-- **Shop panel** at the shop board by the door. Orders arrive the next morning.
-- **Container panel** for taking food out of the fridge, cupboard and crate: the container's name, one row per item and quality ("Tomato ★ ×2") in the order they arrived, and a Close button. Picking a row puts one in your arms and the panel stays open, so you can take several. With full arms the rows are disabled and it says "Arms full"; an empty container says "Empty". It pauses the game while open, the first row has focus for the D-pad, and Esc or cancel closes it.
-- **End-of-day summary** screen, including tips.
+**In:**
+- The deck (free camera), the galley (fixed camera) and the bunk.
+- The ship sailing a fixed route, with the crew at the wheel.
+- The lantern companion.
+- One island, one enemy type, one puzzle.
+- Two crew members and two or three dishes.
+- A three-note hum.
+- Three music tracks: galley, deck, island.
+
+### Prototype first
+Before the Prologue, a greybox **Prototype** milestone proves the hardest new pieces without story or art: the sailing ship, the 3D player and free camera, camera zones, 3D cooking, the lantern, the duel, ship to island, and a galley mood pass (#60–#68).
+
+## Out of scope for the MVP
+Taking the wheel, the sea chart, storms, bosses, more islands, crew field abilities, money and trading, weather, the lantern dimming, saving and loading, menus and settings, real art.
+
+## Open questions
+- The title, and the player character's name and look.
+- The story beyond the Prologue: where home is, the lantern's secret, why the player was in the sea.
+- How crew mood works, and what quality gives without tips.
+- Meals other than dinner, and food for the lantern.
+- Money and trading: is there any economy at all?
+- Storage aboard: one pantry or chilled and dry, and the hold.
+- How much of a day is player-paced vs clock-driven (the 2D game's clock ran 6:00–2:00).
+
+## Future roadmap
+Rough, all post-MVP:
+1. More islands, each a verse with its own sound, ingredients, puzzles and creatures.
+2. Recruiting crew, crew stories and friendship, and crew field abilities (bring one ashore: the heron reaches high ledges, the rock cook holds switches down).
+3. Taking the wheel, the sea chart, wind and steering.
+4. Storms as "dungeons" at sea, weathered from the galley.
+5. Bosses that guard a note of a melody, fighting in time with their theme.
+6. More kitchen tools as adventure items: the ladle, the pepper grinder, the whisk.
+7. Night-sea wonders: bioluminescence, whale song, stars, phantom islands that only appear in the right conditions.
+8. The ship as a museum of the voyage: each island leaves something aboard.
+9. More cooking: a campfire ashore, the sieve, servings, jars, cold as an element, washing up.
+10. Save and load.
 
 ## Architecture notes
+These cover the pure-logic code that carries over to 3D. The 2D world layer (player, interaction, props, customers, navigation, lighting, the tilemap level) is legacy: it is rebuilt in 3D in the Prototype tickets and then deleted.
+
 - Definitions are `Resource` files under `res://data/`, listed in `res://data/catalog.tres` (`Catalog`):
-  - `Item` (`data/items/`): anything physical. Every food state (tomato, sliced tomato, Garden Salad) and every utensil (chopping board, plate). A vessel has a `capacity` (how much food fits; 0 for everything else) and `carried_whole` (plates and bowls yes, boards and pans no). A `storage` kind says where food is put away: `FRIDGE`, `CUPBOARD`, or `NONE` for utensils, plates and liquids. Fields like liquid/solid (#37) are added when a feature needs them.
+  - `Item` (`data/items/`): anything physical. Every food state and every utensil. A vessel has a `capacity` (how much food fits; 0 for everything else) and `carried_whole` (plates and bowls yes, boards and pans no). A `storage` kind says where food is put away.
   - `Element` (`data/elements/`): cut, fire, later cold. Instant or timed.
   - `HandTool` (`data/tools/`): a belt tool, and the `Element` it applies (the knife applies cut). Kept apart from `Item` because tools never go in the arms.
   - `Reaction` (`data/reactions/`): consumed items, required items (including the vessel), elements, amount, result and quality.
-  - Prices aren't on items: the shop (#12) and the menu (#9) hold what's sold and for how much, so anything can be bought or put on the menu.
-- Definitions are shared and never change. A physical thing in the world is an `ItemInstance` (`scripts/cooking/`) pointing at its `Item` and holding its own quality (and later freshness). Arms, vessels and counters hold these. A vessel's instance also owns its `VesselContents`, so its food goes wherever it goes.
-- A `Counter` passes Interact and Use tool through to a vessel on it. A stove burner can be a counter that also adds fire. `ItemDraw` (`scripts/visuals/`) draws any instance, its food and its progress the same way on counters, in the arms and later on the stove.
-- A `Dispenser` prop gives a fresh item on Interact without limit: the plate rack, and (temporarily, until the shop #12) a lettuce bin and a tomato bin.
-- `VesselContents` is the cooking logic of one vessel, with no nodes, so it's unit tested on its own. Its changes (`add_item`, `remove_item`, `add_element`, `remove_element`, `tick`) run the reaction engine inside them; its `get_` methods only read. Board and pan nodes feed it input and time, and redraw from its signals (`contents_changed`, `reaction_started`, `reaction_progressed`, `reaction_cancelled`, `reaction_finished`).
-- Arms, the tool belt and each container's contents are gameplay state in scripts, not in UI scripts. UI reads them and listens to signals.
-- Interact and use tool are routed the same way: the player's `InteractionDetector` sends each press to the focused `Interactable`, which emits `interacted(player)` or `tool_used(player, tool)` for its prop to handle. Each prop applies the interact rule itself. The empty-arms rule for tools is checked there.
-- A container's contents are a `StorageContents` (`scripts/state/`, no nodes): a list of `ItemInstance`s with a capacity (0 for no limit), the storage kind it accepts and a take-only flag, with no notion of where the food came from. `put_away()` follows the player's rules (the right kind of food, not a vessel, room left, never into the crate); `add()` is how deliveries arrive, ignoring kind and take-only. `take_into(arms, item, quality)` moves the oldest matching piece onto the arms. It emits `changed`.
-- A `StorageProp` (`scripts/props/storage_prop.gd`) is one script for the fridge, cupboard and crate scenes (`scenes/props/`), set up with exports: name, kind, slots, take-only, colour and `start_items` (the crate's starter delivery). It owns its contents, so they stay put between days. Interact (`act(arms)`) puts the top item away if it fits and otherwise opens its own `ContainerPanel` (`ui/`, display only). The crate is in the `delivery_crate` group so the shop can find it.
-- Each townsperson is a `Person` resource (`data/people/`): name, placeholder colour, loved, liked and disliked dishes, and patience. Later it grows routines, friendship and a storyline. A customer in the dining room is a `Customer` node (`scenes/customer.tscn`) pointing at its `Person` and its order, and each townsperson is inside at most once.
-- Money and the day number live in the `Game` autoload (`scripts/state/game_state.gd`), so any script can use `Game.money` and so on.
-- The clock and the restaurant's open/closed state are gameplay state too, replacing the old prep/service/summary phases. `Game` holds a `GameClock` (`scripts/time/`, no nodes) and the open state, with `set_open()`, `end_day()` and `start_next_day()`. Other code listens to its signals: `time_changed`, `open_changed`, `day_ended` and `day_changed`. The clock emits `reached_end` at 2:00 and `Game` ends the day; it never ends the day itself. Each open panel pauses it as its own source, so closing one can't restart it while another is open. `Calendar` (`scripts/time/`) is static functions turning a day number into a season, weekday and year.
-- `DayCycle` (`scripts/time/day_cycle.gd`, a node in the main scene) runs the day: it ticks the clock with real time, shows the midnight note, and plays the night when `day_ended` fires. The night is one function that awaits each step in turn (fade out, start the next day, move the player to the `WakeSpot` marker, show the date, fade in) and emits `morning_started` at the end. The game is paused throughout, and the fade keeps running because its process mode is Always.
-- `ScreenFade` and `Notice` (`ui/`) are display only: the day cycle decides when they show and what they say. Each animates with its own Tween, and `ScreenFade`'s methods can be awaited.
-- `DayLight` (`scripts/visuals/day_light.gd`) is a `CanvasModulate` in the main scene. A `Gradient` sets the room's colour and a `Curve` the lamps' level, both keyed from 6:00 (0) to 2:00 (1) and editable in the Inspector. Each clock step drifts to the new values with a one-second tween; a new day snaps straight to the morning. Each `Lamp` prop (`scenes/props/lamp.tscn`) is a `PointLight2D` with a radial texture and a per-lamp `max_energy`, and joins the `lamps` group so the day light finds every lamp without knowing where they are. Solid tiles in the placeholder tileset have occluders on its occlusion layer, so walls cast shadows.
-- The menu is a `Menu` resource (`data/menu.tres`): a `Dictionary[Item, int]` of dishes and prices.
-- A `Table` prop (`scripts/props/table.gd`) has one seat and knows its `diner`. Interact at the table offers the top of the stack to the diner (`serve_from(arms)`), and the table draws their plate while they eat. It forgets the diner when they leave the scene.
-- `Customer.serve(plate)` accepts a plate holding exactly their order while they're waiting, works out a `Bill` (`scripts/customers/bill.gd`, no nodes: price, quality tip, loved tip) from the menu, and emits `served(customer, bill)`. They then eat for `eat_seconds` and leave. A customer also emits `gave_up` when their patience runs out and `stood_up` when they get up to leave, fed or not.
-- `DayStats` (`scripts/state/day_stats.gd`, no nodes) is the day's tally: customers served and lost, earnings and tips. `Game.stats` holds one, created once and cleared by `start_next_day()`, so the end-of-day summary (#14) can still read it after the day ends.
-- `CustomerSpawner` (`scripts/customers/`, a node in the main scene) brings customers in. An `ArrivalPlanner` (no nodes) decides when, from `Arrival` resources (`data/arrivals/`, a due time and an until time each), checked on every clock step and when the sign opens. The spawner picks who and which table with a `RandomNumberGenerator` that tests seed, tracks which tables are taken (seating each customer at their `Table`), and clears everyone on `day_changed`, behind the night's black screen. It also settles up: on `served` it pays the bill into `Game` and records it in `Game.stats`; on `gave_up`, and on `day_ended` for anyone still waiting, it records a lost customer. A `Customer` walks with a `NavigationAgent2D`, waits with a `PatienceMeter` (no nodes), and emits `seated` and `left`.
-- `FloorNavigation` (`scripts/navigation/`, a `NavigationRegion2D` in the restaurant) bakes the walkable floor when the scene starts, cutting out the collision shapes of everything in the `navigation_source` group (the tiles and the props), so it always matches the layout. Debug → Visible Navigation shows it while the game runs.
-- `DebugKeys` (`scripts/debug/`) gives testing shortcuts in debug builds only: F9 skips an hour, F10 toggles ×20 fast forward, F11 brings a customer in now.
-- Orders placed at the shop are held as pending until the next morning, then moved into the crate.
-
-## Out of scope for the MVP
-Saving and loading, menus and settings, friendship and the other long-term customer features (see Customers), real art and audio, decor and upgrades, multiple customers per table, ingredient decay, moving furniture, energy, washing up, the sieve, the ladle, and storing liquids.
-
-## Future roadmap
-Rough order, all post-MVP:
-1. Save and load.
-2. More dishes that show off building up (marinara: oil, then garlic, then tomato; boiled potatoes), staples like oil and salt, tools (whisk, peeler) and stations (oven, grill).
-3. **Cold** as a timed element provided by the fridge (or a freezer), for chilled recipes like jelly, ice cream or a set cheesecake.
-4. Reactions with several results: splitting (a loaf into slices) and byproducts (an egg and its shell). Needs a rule for results that don't fit in the vessel.
-5. **Sieve:** bring a sieve and a bowl to a pan, and the solids go into the bowl while the liquid stays in the pan, ready for the next batch.
-6. **Ladle and servings:** one pot of soup serves several bowls, ladled out one at a time.
-7. **Jars and bottles:** bring a jar to a pan and the liquid pours in, solids stay behind. Jars go in the fridge or cupboard and pour back into a pan later, so you can make garlic oil in the morning for the evening's sauces.
-8. Washing up: served plates and bowls come back dirty and need washing at the sink.
-9. Movable furniture: lift a fridge or cupboard above your head with empty arms (it must be empty inside) and place it elsewhere.
-10. Ingredient decay: food loses freshness over time, slower in the fridge. Fresher food earns more.
-11. Energy: how much you slept sets the next day's energy. Low energy makes you walk and chop a bit slower, but never stops you playing.
-12. Restaurant upgrades: more tables, decor, better utensils (a faster knife, a bigger pan).
-13. Atmosphere: windows that show the sky changing with the time of day (#50), and a light switch so the player can turn the lamps on and off (#51).
-14. **Farming:** plant, water and harvest crops that fill your storage. Later, animals for eggs, milk and cheese.
-15. Farm-to-table bonus: dishes made with home-grown ingredients sell for more.
-16. **Townsfolk and friendship:** routines, friendship from serving, chatting and gifts, storylines, cravings, and the cast growing towards 25–30 (design epic #46).
-17. **Reputation and critics:** a star rating, announced critic visits and Michelin-style stars (design epic #47).
-18. **Groups and social dining:** groups and couples sharing tables, overheard chatter, town events in the restaurant (design epic #48).
-19. Hiring staff (waiter, cook) from among your friends, to automate parts of the loop.
-20. A walkable town where townsfolk live out their routines.
-21. Seasons that affect crops and the menu.
-22. More storage: bigger fridges and cupboards, a walk-in pantry, more arm and belt space (design epic #28).
+  - `Person` (`data/people/`): a character with tastes. Will describe crew members.
+- Definitions are shared and never change. A physical thing in the world is an `ItemInstance` (`scripts/cooking/`) pointing at its `Item` and holding its own quality. Arms, vessels and counters hold these. A vessel's instance also owns its `VesselContents`, so its food goes wherever it goes.
+- `VesselContents` is the cooking logic of one vessel, with no nodes, so it's unit tested on its own. Its changes (`add_item`, `remove_item`, `add_element`, `remove_element`, `tick`) run the reaction engine inside them; its `get_` methods only read. It emits `contents_changed`, `reaction_started`, `reaction_progressed`, `reaction_cancelled` and `reaction_finished` for the world to redraw from.
+- Arms (`scripts/player/arms.gd`), the tool belt (`tool_belt.gd`) and each container's contents are gameplay state in scripts, not in UI scripts. UI reads them and listens to signals.
+- A container's contents are a `StorageContents` (`scripts/state/`, no nodes): a list of `ItemInstance`s with a capacity, the storage kind it accepts and a take-only flag. `put_away()` follows the player's rules; `add()` ignores them (deliveries); `take_into(arms, item, quality)` moves the oldest matching piece onto the arms. It emits `changed`.
+- Interact and use tool are routed the same way: the player's interaction detector sends each press to the focused interactable, which hands it to its prop. Each prop applies the interact rule itself. The 3D versions (`Area3D`) keep this design (#64).
+- Shared state lives in the `Game` autoload (`scripts/state/game_state.gd`). `GameClock` and `Calendar` (`scripts/time/`) are pure logic. Whether the clock-driven day stays is an open question.
+- `DayLight` (`scripts/visuals/day_light.gd`) maps the time of day to colours and lamp levels. In 3D it will drive the sun, sky and lanterns.
+- `DebugKeys` (`scripts/debug/`) gives testing shortcuts in debug builds only.
+- The 3D prototype lives in `scenes/prototype/` until it replaces `scenes/main.tscn`.
+- Godot concepts are explained in `docs/godot-notes.md`.
