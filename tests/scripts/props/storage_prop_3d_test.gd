@@ -98,7 +98,7 @@ func test_interact_takes_a_tomato_out_through_the_panel() -> void:
 
 func test_prompt_says_put_away_or_open() -> void:
 	var pantry: StorageProp3D = _new_pantry()
-	var hand: Arms = Arms.new(1)
+	var hand: Toolbar = Toolbar.new()
 	assert_str(pantry.interact_prompt(hand)).is_equal("Open Pantry")
 	hand.add(ItemInstance.new(TOMATO))
 	assert_str(pantry.interact_prompt(hand)).is_equal("Put away Tomato")

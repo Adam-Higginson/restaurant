@@ -122,6 +122,28 @@ func test_a_garden_salad_from_start_to_finish_while_sailing() -> void:
 	assert_float(ship.global_position.distance_to(start)).is_greater(1.0)
 
 
+func test_one_pantry_visit_takes_lettuce_and_a_tomato() -> void:
+	var rig: Array[Node3D] = new_moored_ship_with_player(_spot_at(0.0))
+	var ship: Ship = rig[0] as Ship
+	var player: Player3D = rig[1] as Player3D
+	var runner: GdUnitSceneRunner = scene_runner(ship.get_parent())
+	await physics_ticks(runner, 5)
+
+	await _go_to(runner, ship, "Pantry")
+	await press(runner, "interact")
+	var panel: ContainerPanel = _station(ship, "Pantry").get_node("ContainerPanel") 			as ContainerPanel
+	for food_name: String in ["Lettuce", "Tomato"]:
+		for button: Button in panel.get_rows():
+			if button.text.begins_with(food_name):
+				button.pressed.emit()
+				break
+	await press(runner, "ui_cancel")
+
+	assert_int(player.toolbar.size()).is_equal(2)
+	assert_object(player.toolbar.top().item).is_same(TOMATO)
+	assert_object(player.toolbar.get_item(1).item).is_same(LETTUCE)
+
+
 # Opens the pantry, takes one of the food named [param food_name], and closes it.
 func _take_from_pantry(runner: GdUnitSceneRunner, ship: Ship, food_name: String) -> void:
 	await _go_to(runner, ship, "Pantry")

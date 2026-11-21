@@ -153,46 +153,56 @@ func test_is_walking_only_while_moving() -> void:
 	assert_bool(player.is_walking).is_false()
 
 
-# --- Arms and belt ------------------------------------------------------------
+# --- Toolbar -----------------------------------------------------------------
 
 func test_starts_with_the_knife_selected() -> void:
 	var player: Player3D = new_player_3d_on_floor()
 	scene_runner(player.get_parent())
 
-	assert_object(player.belt.selected_tool()).is_same(KNIFE)
+	assert_object(player.toolbar.selected_tool()).is_same(KNIFE)
 	assert_bool(player.arms.is_empty()).is_true()
 
 
-func test_carries_one_item_at_a_time() -> void:
+func test_arms_is_the_toolbar() -> void:
+	var player: Player3D = new_player_3d_on_floor()
+	assert_object(player.arms).is_same(player.toolbar)
+
+
+func test_carries_several_items_holding_the_last_picked_up() -> void:
 	var player: Player3D = new_player_3d_on_floor()
 	assert_bool(player.arms.add(ItemInstance.new(TOMATO))).is_true()
-	assert_bool(player.arms.add(ItemInstance.new(LETTUCE))).is_false()
-	assert_object(player.arms.top().item).is_same(TOMATO)
+	assert_bool(player.arms.add(ItemInstance.new(LETTUCE))).is_true()
+	assert_int(player.arms.size()).is_equal(2)
+	assert_object(player.arms.top().item).is_same(LETTUCE)
 
 
 func test_the_rotate_stack_key_does_nothing_in_3d() -> void:
 	var player: Player3D = new_player_3d_on_floor()
 	var runner: GdUnitSceneRunner = scene_runner(player.get_parent())
-	var tomato: ItemInstance = ItemInstance.new(TOMATO)
-	player.arms.add(tomato)
+	player.arms.add(ItemInstance.new(TOMATO))
+	var lettuce: ItemInstance = ItemInstance.new(LETTUCE)
+	player.arms.add(lettuce)
 
 	await press(runner, "rotate_stack")
 
-	assert_object(player.arms.top()).is_same(tomato)
+	assert_object(player.arms.top()).is_same(lettuce)
 
 
-func test_slot_keys_select_belt_slots() -> void:
+func test_slot_keys_select_toolbar_slots() -> void:
 	var player: Player3D = new_player_3d_on_floor()
 	var runner: GdUnitSceneRunner = scene_runner(player.get_parent())
 
 	await press(runner, "select_slot_3")
-	assert_int(player.belt.selected_index).is_equal(2)
+	assert_int(player.toolbar.selected_index).is_equal(2)
+
+	await press(runner, "select_slot_12")
+	assert_int(player.toolbar.selected_index).is_equal(11)
 
 	await press(runner, "select_slot_next")
-	assert_int(player.belt.selected_index).is_equal(3)
+	assert_int(player.toolbar.selected_index).is_equal(0)
 
 	await press(runner, "select_slot_previous")
-	assert_int(player.belt.selected_index).is_equal(2)
+	assert_int(player.toolbar.selected_index).is_equal(11)
 
 
 func test_faces_the_way_it_walks() -> void:

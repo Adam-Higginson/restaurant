@@ -134,9 +134,10 @@ func test_use_tool_sends_the_selected_knife() -> void:
 	assert_array(tools).contains_exactly([KNIFE])
 
 
-func test_use_tool_does_nothing_while_carrying() -> void:
+func test_use_tool_while_holding_an_item_uses_the_tool_that_fits() -> void:
 	var player: Player3D = new_player_3d_on_floor()
 	var target: Interactable3D = _add_interactable(player, AHEAD)
+	target.describe_tool = func(_by: Player3D, tool: HandTool) -> String: return tool.verb
 	var runner: GdUnitSceneRunner = scene_runner(player.get_parent())
 	var tools: Array[HandTool] = []
 	target.tool_used.connect(func(_p: Player3D, tool: HandTool) -> void: tools.append(tool))
@@ -145,21 +146,35 @@ func test_use_tool_does_nothing_while_carrying() -> void:
 
 	await press(runner, "use_tool")
 
-	assert_array(tools).is_empty()
+	assert_array(tools).contains_exactly([KNIFE])
 
 
-func test_use_tool_with_an_empty_slot_selected_does_nothing() -> void:
+func test_use_tool_with_no_tool_that_fits_does_nothing() -> void:
 	var player: Player3D = new_player_3d_on_floor()
 	var target: Interactable3D = _add_interactable(player, AHEAD)
 	var runner: GdUnitSceneRunner = scene_runner(player.get_parent())
 	var tools: Array[HandTool] = []
 	target.tool_used.connect(func(_p: Player3D, tool: HandTool) -> void: tools.append(tool))
-	player.belt.select(1)
+	# An empty slot, at something no tool works on.
+	player.toolbar.select(1)
 	await _settle(player)
 
 	await press(runner, "use_tool")
 
 	assert_array(tools).is_empty()
+
+
+func test_mouse_clicks_count_only_while_the_mouse_is_captured() -> void:
+	# A click with the cursor free only captures the mouse again. Headless
+	# Godot never captures the mouse, so here every click is ignored.
+	var click: InputEventMouseButton = InputEventMouseButton.new()
+	click.button_index = MOUSE_BUTTON_RIGHT
+	click.pressed = true
+	assert_int(Input.mouse_mode).is_not_equal(Input.MOUSE_MODE_CAPTURED)
+	assert_bool(InteractionDetector3D.accepts_event(click)).is_false()
+	var key: InputEventKey = InputEventKey.new()
+	key.physical_keycode = KEY_E
+	assert_bool(InteractionDetector3D.accepts_event(key)).is_true()
 
 
 func test_a_disabled_one_ignores_direct_use() -> void:
@@ -198,7 +213,7 @@ func test_prompts_come_from_the_focused_interactable() -> void:
 	assert_str(_detector(player).tool_prompt()).is_equal("Chop")
 
 
-func test_no_tool_prompt_while_carrying() -> void:
+func test_tool_prompt_shows_while_holding_an_item() -> void:
 	var player: Player3D = new_player_3d_on_floor()
 	var target: Interactable3D = _add_interactable(player, AHEAD)
 	target.describe_tool = func(_by: Player3D, tool: HandTool) -> String: return tool.verb
@@ -207,7 +222,7 @@ func test_no_tool_prompt_while_carrying() -> void:
 
 	player.arms.add(ItemInstance.new(TOMATO))
 
-	assert_str(_detector(player).tool_prompt()).is_empty()
+	assert_str(_detector(player).tool_prompt()).is_equal("Chop")
 
 
 func test_a_disabled_or_undescribed_interactable_has_no_prompt() -> void:

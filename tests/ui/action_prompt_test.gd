@@ -52,7 +52,7 @@ func test_names_controller_buttons_after_a_controller_press() -> void:
 	prompt._input(pad_press)
 	await physics_ticks(runner, 2)
 
-	assert_bool(prompt.using_pad).is_true()
+	assert_int(prompt.device).is_equal(ActionPrompt.Device.PAD)
 	assert_str(_line(prompt, "InteractLine").text).is_equal("[X] Pick up Chopping Board")
 
 	var key: InputEventKey = InputEventKey.new()
@@ -61,7 +61,7 @@ func test_names_controller_buttons_after_a_controller_press() -> void:
 	prompt._input(key)
 	await physics_ticks(runner, 2)
 
-	assert_bool(prompt.using_pad).is_false()
+	assert_int(prompt.device).is_equal(ActionPrompt.Device.KEYBOARD)
 	assert_str(_line(prompt, "InteractLine").text).is_equal("[E] Pick up Chopping Board")
 
 
@@ -74,19 +74,51 @@ func test_a_drifting_stick_keeps_the_keyboard_names() -> void:
 	drift.axis_value = 0.2
 
 	prompt._input(drift)
-	assert_bool(prompt.using_pad).is_false()
+	assert_int(prompt.device).is_equal(ActionPrompt.Device.KEYBOARD)
 
 	drift.axis_value = -0.8
 	prompt._input(drift)
-	assert_bool(prompt.using_pad).is_true()
+	assert_int(prompt.device).is_equal(ActionPrompt.Device.PAD)
+
+
+func test_names_mouse_buttons_after_a_click() -> void:
+	var player: Player3D = new_player_3d_on_floor()
+	_add_board(player)
+	var prompt: ActionPrompt = _prompt(new_hud_3d(player))
+	var runner: GdUnitSceneRunner = scene_runner(player.get_parent())
+	player.arms.add(ItemInstance.new(LETTUCE))
+	await physics_ticks(runner, 5)
+	await press(runner, "interact")
+
+	var click: InputEventMouseButton = InputEventMouseButton.new()
+	click.button_index = MOUSE_BUTTON_MIDDLE
+	click.pressed = true
+	prompt._input(click)
+
+	assert_int(prompt.device).is_equal(ActionPrompt.Device.MOUSE)
+	assert_str(_line(prompt, "InteractLine").text).is_equal("[RMB] Take Lettuce")
+	assert_str(_line(prompt, "ToolLine").text).is_equal("[LMB] Chop")
 
 
 func test_button_names_come_from_the_input_map() -> void:
-	assert_str(ActionPrompt.button_name(&"interact", false)).is_equal("E")
-	assert_str(ActionPrompt.button_name(&"interact", true)).is_equal("X")
-	assert_str(ActionPrompt.button_name(&"use_tool", false)).is_equal("F")
-	assert_str(ActionPrompt.button_name(&"use_tool", true)).is_equal("B")
-	assert_str(ActionPrompt.button_name(&"no_such_action", false)).is_equal("?")
+	var keys: ActionPrompt.Device = ActionPrompt.Device.KEYBOARD
+	var mouse: ActionPrompt.Device = ActionPrompt.Device.MOUSE
+	var pad: ActionPrompt.Device = ActionPrompt.Device.PAD
+	assert_str(ActionPrompt.button_name(&"interact", keys)).is_equal("E")
+	assert_str(ActionPrompt.button_name(&"interact", mouse)).is_equal("RMB")
+	assert_str(ActionPrompt.button_name(&"interact", pad)).is_equal("X")
+	assert_str(ActionPrompt.button_name(&"use_tool", keys)).is_equal("F")
+	assert_str(ActionPrompt.button_name(&"use_tool", mouse)).is_equal("LMB")
+	assert_str(ActionPrompt.button_name(&"use_tool", pad)).is_equal("B")
+	# No mouse button for walking: fall back to the key.
+	assert_str(ActionPrompt.button_name(&"move_up", mouse)).is_equal("W")
+	assert_str(ActionPrompt.button_name(&"no_such_action", keys)).is_equal("?")
+
+
+func test_mouse_button_names() -> void:
+	assert_str(ActionPrompt.mouse_button_name(MOUSE_BUTTON_LEFT)).is_equal("LMB")
+	assert_str(ActionPrompt.mouse_button_name(MOUSE_BUTTON_RIGHT)).is_equal("RMB")
+	assert_str(ActionPrompt.mouse_button_name(MOUSE_BUTTON_XBUTTON1)).is_equal("Mouse 8")
 
 
 func test_xbox_button_names() -> void:

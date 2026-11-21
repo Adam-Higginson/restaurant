@@ -1,7 +1,8 @@
 class_name HeldItemLabel3D
 extends Label
-## Names what the 3D player holds and its quality, e.g. "Sliced Tomato ★★",
-## or "Plate: Garden Salad ★★★" for a plate. Empty with free hands.
+## Names the item selected on the 3D player's toolbar (what they hold) and its
+## quality, e.g. "Sliced Tomato ★★", or "Plate: Garden Salad ★★★" for a plate.
+## Empty when a tool or an empty slot is selected.
 ##
 ## Display only: it reads the player's [Arms] and updates when they change.
 ## [Hud3D] hands it the player. The wording comes from the legacy 2D

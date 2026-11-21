@@ -88,11 +88,13 @@ func test_interact_hands_the_player_a_plate() -> void:
 	assert_object(player.arms.top().item).is_same(PLATE)
 
 
-func test_prompt_offers_a_plate_to_free_hands_only() -> void:
+func test_prompt_offers_a_plate_until_the_toolbar_is_full() -> void:
 	var rack: Dispenser3D = _new_rack()
-	var hand: Arms = Arms.new(1)
-	assert_str(rack.interact_prompt(hand)).is_equal("Take Plate")
+	var hand: Toolbar = Toolbar.new()
 	hand.add(ItemInstance.new(TOMATO))
+	assert_str(rack.interact_prompt(hand)).is_equal("Take Plate")
+	while not hand.is_full():
+		hand.add(ItemInstance.new(TOMATO))
 	assert_str(rack.interact_prompt(hand)).is_empty()
 
 

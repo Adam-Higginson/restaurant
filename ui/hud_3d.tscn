@@ -1,23 +1,23 @@
 [gd_scene format=3]
 
 [ext_resource type="Script" path="res://ui/hud_3d.gd" id="1_hud"]
-[ext_resource type="Script" path="res://ui/belt_bar_3d.gd" id="2_belt"]
+[ext_resource type="Script" path="res://ui/toolbar_bar.gd" id="2_belt"]
 [ext_resource type="Script" path="res://ui/held_item_label_3d.gd" id="3_held"]
 [ext_resource type="Script" path="res://ui/action_prompt.gd" id="4_prompt"]
 
 [node name="Hud3D" type="CanvasLayer"]
 script = ExtResource("1_hud")
 
-[node name="BeltBar" type="Control" parent="."]
+[node name="Toolbar" type="Control" parent="."]
 unique_name_in_owner = true
 anchors_preset = 7
 anchor_left = 0.5
 anchor_top = 1.0
 anchor_right = 0.5
 anchor_bottom = 1.0
-offset_left = -35.0
+offset_left = -107.0
 offset_top = -21.0
-offset_right = 35.0
+offset_right = 107.0
 offset_bottom = -5.0
 grow_horizontal = 2
 grow_vertical = 0

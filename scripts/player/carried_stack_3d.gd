@@ -1,7 +1,7 @@
 class_name CarriedStack3D
 extends Node3D
-## Shows the item the player carries as a small model above their head.
-## Bobs gently while the player walks.
+## Shows the item selected on the player's toolbar (what they hold) as a small
+## model above their head. Bobs gently while the player walks.
 ##
 ## Display only: it reads the player's [Arms] and rebuilds when they change.
 
@@ -41,7 +41,7 @@ static func bob_offset(walked: float, height: float, rate: float) -> float:
 	return sin(walked * rate * TAU) * height
 
 
-# Throws the old model away and builds one of what's carried now.
+# Throws the old model away and builds one of what's held now.
 func _rebuild() -> void:
 	for child: Node in get_children():
 		remove_child(child)

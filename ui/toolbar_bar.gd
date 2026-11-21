@@ -1,11 +1,12 @@
-class_name BeltBar3D
+class_name ToolbarBar
 extends Control
-## The 3D player's belt bar at the bottom of the screen: one box per belt
-## slot, the selected one outlined, each tool as a placeholder shape in its
-## colour. Dimmed while the player holds anything, as tools need free hands.
+## The 3D player's toolbar along the bottom of the screen, as in Stardew
+## Valley: one box per slot, the selected one outlined. Tools are drawn as a
+## handle with a head in the tool's colour, items as a square in theirs, and a
+## plate or bowl as a flat dish with a dot for any food on it.
 ##
-## Display only: it reads the player's [ToolBelt] and [Arms] and redraws when
-## they change. [Hud3D] hands it the player.
+## Display only: it reads the player's [Toolbar] and redraws when it changes.
+## [Hud3D] hands it the player.
 
 const SLOT_SIZE: int = 16
 const GAP: int = 2
@@ -13,44 +14,44 @@ const SLOT_COLOR: Color = Color(0.1, 0.09, 0.09, 0.75)
 const SLOT_BORDER_COLOR: Color = Color(0.35, 0.32, 0.3, 1)
 const SELECTED_COLOR: Color = Color(1, 1, 1, 1)
 const HANDLE_COLOR: Color = Color(0.45, 0.3, 0.18, 1)
-const DIMMED: Color = Color(1, 1, 1, 0.4)
 
 var _player: Player3D = null
 
 
 func _ready() -> void:
 	custom_minimum_size = Vector2(
-		ToolBelt.SLOT_COUNT * (SLOT_SIZE + GAP) - GAP, SLOT_SIZE
+		Toolbar.SLOT_COUNT * (SLOT_SIZE + GAP) - GAP, SLOT_SIZE
 	)
 
 
 func _draw() -> void:
 	if _player == null:
 		return
-	var belt: ToolBelt = _player.belt
-	for i: int in ToolBelt.SLOT_COUNT:
-		var slot: Rect2 = Rect2(i * (SLOT_SIZE + GAP), 0, SLOT_SIZE, SLOT_SIZE)
+	var toolbar: Toolbar = _player.toolbar
+	for i: int in Toolbar.SLOT_COUNT:
+		var slot: Rect2 = slot_rect(i)
 		draw_rect(slot, SLOT_COLOR)
 		PixelDraw.outline(self, slot, SLOT_BORDER_COLOR)
-		var tool: HandTool = belt.get_tool(i)
+		var tool: HandTool = toolbar.get_tool(i)
+		var item: ItemInstance = toolbar.get_item(i)
 		if tool != null:
 			_draw_tool(slot, tool)
-		if i == belt.selected_index:
+		elif item != null:
+			_draw_item(slot, item)
+		if i == toolbar.selected_index:
 			PixelDraw.outline(self, slot.grow(1.0), SELECTED_COLOR)
 
 
-## Starts showing [param player]'s belt.
+## Starts showing [param player]'s toolbar.
 func setup(player: Player3D) -> void:
 	_player = player
-	_player.belt.changed.connect(queue_redraw)
-	_player.arms.changed.connect(_update_dimmed)
-	_update_dimmed()
+	_player.toolbar.changed.connect(queue_redraw)
 	queue_redraw()
 
 
-## Whether the bar is dimmed because the player's hands are full.
-func is_dimmed() -> bool:
-	return modulate == DIMMED
+## Where slot [param index] is drawn, in the bar's own space.
+func slot_rect(index: int) -> Rect2:
+	return Rect2(index * (SLOT_SIZE + GAP), 0, SLOT_SIZE, SLOT_SIZE)
 
 
 # A placeholder until there's real art: a handle with a head in the tool's
@@ -61,5 +62,13 @@ func _draw_tool(slot: Rect2, tool: HandTool) -> void:
 	draw_rect(Rect2(slot.position.x + 7, middle - 1, 6, 3), tool.color)
 
 
-func _update_dimmed() -> void:
-	modulate = Color.WHITE if _player.arms.is_empty() else DIMMED
+# A placeholder: food is a square in its colour; a vessel is a flat dish, with
+# a dot in the colour of its first food.
+func _draw_item(slot: Rect2, instance: ItemInstance) -> void:
+	if not instance.is_vessel():
+		draw_rect(Rect2(slot.position + Vector2(4, 4), Vector2(8, 8)), instance.item.color)
+		return
+	draw_rect(Rect2(slot.position + Vector2(2, 9), Vector2(12, 3)), instance.item.color)
+	var food: Array[ItemInstance] = instance.contents.get_contents()
+	if not food.is_empty():
+		draw_rect(Rect2(slot.position + Vector2(6, 5), Vector2(4, 4)), food[0].item.color)

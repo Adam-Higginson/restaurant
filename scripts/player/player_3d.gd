@@ -2,8 +2,8 @@ class_name Player3D
 extends CharacterBody3D
 ## The player in 3D. Walks relative to the camera, turns to face the way it
 ## walks, falls under gravity, and rides whatever floor it stands on, so the
-## ship's deck carries it along as the ship sails. Carries one item in its
-## [member arms] and hand tools on its [member belt].
+## ship's deck carries it along as the ship sails. Carries tools and items on
+## its [member toolbar]; the selected item is what it holds.
 ##
 ## When the camera switches (walking into or out of a [CameraZone]) while you
 ## hold a direction, the player keeps walking the same way until you let go
@@ -22,7 +22,7 @@ extends CharacterBody3D
 ## How far, in degrees, you must swing the stick while walking through a
 ## camera switch before "up" follows the new camera.
 @export var reaim_degrees: float = 45.0
-## The tools on the belt at the start, from the first slot on.
+## The tools on the toolbar at the start, from the first slot on.
 @export var start_tools: Array[HandTool] = []
 
 ## The flat direction the model faces, in world space.
@@ -36,11 +36,14 @@ var is_walking: bool:
 	get:
 		return _walking
 
-## What the player is carrying: one item at a time (OoT style). Created once
-## and never replaced, so signal connections to it keep working.
-var arms: Arms = Arms.new(1)
-## The player's hand tools. Created once and never replaced, like [member arms].
-var belt: ToolBelt = ToolBelt.new()
+## The player's tools and items, with one slot selected. Created once and
+## never replaced, so signal connections to it keep working.
+var toolbar: Toolbar = Toolbar.new()
+## The [member toolbar], seen as [Arms] by the cooking rules, the pantry and
+## the plate rack: its "top" item is the selected one.
+var arms: Arms:
+	get:
+		return toolbar
 
 ## The player's camera. Camera zones tell it when to use their fixed shot.
 var camera_rig: CameraRig:
@@ -63,8 +66,8 @@ var _zone_seen: CameraZone
 
 
 func _ready() -> void:
-	for i: int in mini(start_tools.size(), ToolBelt.SLOT_COUNT):
-		belt.set_tool(i, start_tools[i])
+	for i: int in mini(start_tools.size(), Toolbar.SLOT_COUNT):
+		toolbar.set_tool(i, start_tools[i])
 
 
 func _physics_process(delta: float) -> void:
@@ -85,15 +88,15 @@ func _physics_process(delta: float) -> void:
 func _unhandled_input(event: InputEvent) -> void:
 	if event.is_action_pressed("select_slot_next"):
 		get_viewport().set_input_as_handled()
-		belt.select_next()
+		toolbar.select_next()
 	elif event.is_action_pressed("select_slot_previous"):
 		get_viewport().set_input_as_handled()
-		belt.select_previous()
+		toolbar.select_previous()
 	else:
-		for i: int in ToolBelt.SLOT_COUNT:
+		for i: int in Toolbar.SLOT_COUNT:
 			if event.is_action_pressed("select_slot_%d" % (i + 1)):
 				get_viewport().set_input_as_handled()
-				belt.select(i)
+				toolbar.select(i)
 				return
 
 
