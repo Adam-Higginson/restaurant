@@ -16,7 +16,7 @@ uniform sampler2D grain : filter_nearest, repeat_enable, hint_default_white;
 // One copy of the grain covers this many metres.
 uniform float grain_metres = 0.2;
 // How strongly the grain shows.
-uniform float grain_strength : hint_range(0.0, 1.0) = 0.3;
+uniform float grain_strength : hint_range(0.0, 1.0) = 0.12;
 uniform float roughness : hint_range(0.0, 1.0) = 0.8;
 // Light each face as one flat colour, so the model's facets show like N64
 // models' did, instead of smooth modern shading.
