@@ -50,11 +50,31 @@ A growing glossary of the Godot concepts this project uses: what each one is, in
 
 **OmniLight3D.** A light bulb: shines in every direction from a point, fading out by its `omni_range`. *Ours:* the warm `GalleyLight` below deck.
 
-**Camera3D.** What the player sees. The one marked `current` is used. *Ours:* a temporary `DeckCamera` on the ship in `sea.tscn`, replaced by the follow camera in #62.
+**Camera3D.** What the player sees. The one marked `current` is used. *Ours:* the `Camera3D` at the end of the player's `SpringArm3D` (`scenes/prototype/player.tscn`).
 
 **StandardMaterial3D and texture filtering.** A material sets a surface's colour, texture and shininess. *Texture filter* decides how texture pixels are blended when stretched: *Linear* blurs them, *Nearest* keeps them as crisp blocks (the N64/OoT look). "With mipmaps" also uses smaller copies far away, to stop shimmering. Godot has no project-wide setting for this in 3D, so we set it on each material. **Triplanar** mapping projects the texture from the sides, so boxes of any size get evenly sized squares without UV unwrapping. *Ours:* `assets/placeholder/materials/greybox_*.tres`, all sharing the 16-pixel `greybox_grid.png` (one square per metre).
 
-*Still to come with the prototype tickets: `CharacterBody3D`, `Area3D`, `SpringArm3D`, ...*
+**CharacterBody3D and `move_and_slide()`.** A body moved by its own script rather than by physics forces: you set its `velocity`, then call `move_and_slide()`, which moves it, slides it along walls and slopes, and works out whether it's on the floor (`is_on_floor()`). If the floor is a moving body, it adds that floor's velocity too (the *platform velocity*), including turning. *Ours:* `Player3D` (`scripts/player/player_3d.gd`). That's how the ship's deck carries the player as it sails and turns.
+
+**`get_gravity()`.** A physics body's gravity where it stands (the project's default, 9.8 m/s² downwards, unless an area changes it). Characters add it to their velocity each tick while in the air. *Ours:* `Player3D._physics_process`.
+
+**`Input.get_vector()`.** Reads four actions (left, right, up, down) as one `Vector2`, already combining keys and a stick, with the deadzone applied and the length capped at 1. *Ours:* the player's movement and the camera's right stick.
+
+**Basis, yaw and pitch.** A `Basis` is a node's rotation (and scale), stored as its three axes. *Yaw* turns left and right about the up axis; *pitch* tilts up and down. Rotating a direction with `.rotated(Vector3.UP, yaw)` turns it the way the camera faces. *Ours:* `Player3D.camera_relative()` makes "up" on the stick mean "away from the camera".
+
+**Camera rig (nested nodes for each rotation).** Put yaw on one node and pitch on a child, so turning never tilts the horizon and tilting never twists the turn. *Ours:* `CameraRig` (yaw) → `Pitch` → `SpringArm3D` → `Camera3D`.
+
+**SpringArm3D.** Casts a shape from itself out along its +Z axis for `spring_length` metres, and moves its children (the camera) to where the shape first hits something, so walls and masts never come between the camera and the player. `get_hit_length()` says how far out it got. A cast ignores anything it starts inside, so the player's own capsule doesn't stop it. *Ours:* `Player/CameraRig/Pitch/SpringArm3D`, 5 m long with a small sphere.
+
+**`top_level`.** Makes a node ignore its parent's transform: it stays a child in the tree but moves in world space by itself. *Ours:* `CameraRig`, which follows the player in its own `_process` instead of moving with it.
+
+**Physics interpolation.** Physics runs 60 times a second, but screens can draw 144 frames or more. With *Project Settings → Physics → Common → Physics Interpolation* on, Godot draws physics objects part-way between their last two positions, so movement looks smooth at any frame rate. Anything moved by a jump (spawning, teleporting) calls `reset_physics_interpolation()` so it doesn't glide there. Nodes that move every frame themselves (like a camera) turn it off with `physics_interpolation_mode`. *Ours:* turned on in #62. `Ship._ready()` and `place_player_3d()` reset it after a jump.
+
+**`get_global_transform_interpolated()`.** Where a physics-interpolated node is *drawn* this frame, rather than where physics last put it. Use it from `_process` to follow a physics body smoothly. *Ours:* `CameraRig._follow_target()`.
+
+**Mouse capture and `InputEventMouseMotion`.** `Input.mouse_mode = Input.MOUSE_MODE_CAPTURED` hides the cursor and locks it to the window, so the mouse can turn the camera forever without hitting the screen edge. Each movement arrives as an `InputEventMouseMotion` whose `relative` is how far it moved. Mouse movement can't be an Input Map action, so the camera reads it in `_unhandled_input`. *Ours:* `CameraRig`. Esc releases the mouse, and a click captures it again.
+
+*Still to come with the prototype tickets: `Area3D`, ...*
 
 ## Testing
 
