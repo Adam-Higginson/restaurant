@@ -184,11 +184,11 @@ Worked example: a tomato (★) sliced properly gives (1 + 3) / 2 = ★★ sliced
 | Dish | Proper (★★★) | Shortcut |
 |---|---|---|
 | Garden Salad | Chop lettuce, slice tomato, put both on a plate | Whole lettuce and tomato on a plate |
-| Tomato Soup | Fill the saucepan at the water barrel, boil it (4s) → boiling water. Add diced tomato and chopped onion, boil (8s). Tip it into a bowl. | Diced tomato and chopped onion into cold water, then heat (12s) |
+| Tomato Soup | Fill the saucepan with rainwater at the water butt on deck, boil it on the hearth (4s) → boiling water. Add diced tomato and chopped onion (3 cuts), boil (8s). Ladle it into a bowl from the stack on the table. | Diced tomato and chopped onion into cold water, then heat (12s) |
 | Grilled Cheese | Bread + cheese on a plate → sandwich. Melt butter in the hot frying pan (2s), add the sandwich, fry (6s). | Sandwich straight into the frying pan without butter (6s) |
 | Pan-fried Herring | Catch a herring, fillet it on the board (3 cuts), fry the fillet in the pan on the hob (6s). | A whole herring straight into the pan (9s) |
 
-Garden Salad works today. Tomato Soup and Grilled Cheese need the stove, pans and water barrel.
+Garden Salad, Tomato Soup and Pan-fried Herring work today. The hearth has two hobs (a saucepan where the stew pot was, and a frying pan); bowls are stacked on the crew table. Grilled Cheese still needs butter and the sandwich step.
 
 **Caught, not bought:** a **herring** from the rod at the starboard rail (fish only bite while the ship is hove to: ring the bell). Fillet it on the chopping board (3 cuts) for a **herring fillet**, fried in the pan on the galley **hob** (the hearth's hot iron top, which gives fire to whatever vessel sits on it; lift the pan off and cooking pauses). The fish keep in the fridge.
 

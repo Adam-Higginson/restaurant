@@ -214,6 +214,8 @@
 [ext_resource type="PackedScene" uid="uid://h0bonhearth0a" path="res://scenes/prototype/props/hob.tscn" id="91_hob"]
 [ext_resource type="PackedScene" uid="uid://bedsideyourbk" path="res://scenes/prototype/props/bedside.tscn" id="92_bedside"]
 [ext_resource type="PackedScene" uid="uid://memorynoteyrs" path="res://scenes/prototype/props/memory_note.tscn" id="93_note"]
+[ext_resource type="Resource" uid="uid://sa0cepanc0pp" path="res://data/items/saucepan.tres" id="94_saucepan"]
+[ext_resource type="PackedScene" uid="uid://b0wlstackgal0" path="res://scenes/prototype/props/bowl_stack.tscn" id="95_bowls"]
 
 [sub_resource type="BoxMesh" id="Mesh_Hull"]
 size = Vector3(12, 2.5, 30)
@@ -1430,6 +1432,13 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.4, 1, 1.75)
 [node name="Hob" parent="Galley" unique_id=1784302211 instance=ExtResource("91_hob")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.72, 1.97, 1.9)
 
+[node name="SoupHob" parent="Galley" unique_id=1784302212 instance=ExtResource("91_hob")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.08, 1.97, 1.9)
+start_item = ExtResource("94_saucepan")
+
+[node name="BowlStack" parent="Galley" unique_id=1784302213 instance=ExtResource("95_bowls")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.6, 1.82, 4.7)
+
 [node name="Barrel1" parent="Galley" unique_id=257442477 instance=ExtResource("25_barrel")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4.85, 1, 7.3)
 
@@ -1469,7 +1478,7 @@ transform = Transform3D(0, 0, -1, 0, 1, 0, 1, 0, 0, 5.55, 2.575, 3.55)
 transform = Transform3D(-1, 0, -8.742278e-08, 0, 1, 0, 8.742278e-08, 0, -1, 1.15, 2.4, 7.7)
 
 [node name="Kettle" parent="Galley" unique_id=1777275318 instance=ExtResource("49_kettle")]
-transform = Transform3D(0.8191083, 0, -0.5735458, 0, 1, 0, 0.5735458, 0, 0.8191083, 3.95, 1.97, 2.2)
+transform = Transform3D(0.8191083, 0, -0.5735458, 0, 1, 0, 0.5735458, 0, 0.8191083, 4.05, 1.97, 1.45)
 
 [node name="Mug1" parent="Galley" unique_id=1746633817 instance=ExtResource("50_mug")]
 transform = Transform3D(0.766065, 0, 0.6428048, 0, 1, 0, -0.6428048, 0, 0.766065, 2.25, 1.82, 4.6)

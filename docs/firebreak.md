@@ -62,3 +62,10 @@ He has a voice now: a few warm words float beside him, always facing you, one li
 - you walk out onto the bow at night, towards the far light in the fog: "A light! That's it. That's home. Probably. Almost certainly. Maybe." (not at dawn, when the fog's thinned, and not every time: he has a think between guesses).
 - `scripts/companion/lantern_voice.gd` (a billboard `Label3D` with a queue and fades), `scripts/companion/lantern_lines.gd` (all his lines, picked at random, never the same twice running; **easy to rewrite in your own voice**), `scripts/companion/lookout.gd` + `scenes/prototype/props/lookout.tscn` (an area at the bow).
 - Tests: `tests/scripts/companion/lantern_voice_test.gd` (8: queueing and quiet, no repeats, each moment he speaks at, not at dawn, the think between guesses).
+
+### 9. Rainwater Tomato Soup, the way the GDD designed it
+The storm feeds the galley. The water butt on deck (port waist) is open to the rain; carry the **saucepan** up from the hearth and Interact ("Fill Saucepan with rainwater"). Back on its hob, the water boils (4s); add diced tomato and **chopped onion** (onions chop in 3 cuts now) and it boils into **Tomato Soup** (8s, ★★★ done properly). Everything dumped into cold water is the rough ★ shortcut (12s), exactly as the cooking design says. Holding a **bowl** from the new stack on the crew table, Interact at the saucepan to ladle it in. Your first soup brings back a memory ("Rain on the roof").
+- The hearth now has two hobs: the **saucepan** where the decorative stew pot was (so the stove's steam rises from your soup) and the frying pan; the kettle moved to the back corner.
+- `scripts/props/water_butt.gd` + `scenes/prototype/props/water_butt.tscn`, `scenes/prototype/props/bowl_stack.tscn` (a `Dispenser3D`).
+- Data: `saucepan`, `bowl`, `rainwater`, `boiling_water`, `chopped_onion`; reactions `chop_onion`, `boil_water`, `tomato_soup`, `tomato_soup_shortcut`; memory `rain_on_the_roof`.
+- Tests: `tests/scripts/cooking/tomato_soup_test.gd` (filling at the butt with Interact, nothing for empty hands, ★★★ soup, the ★ shortcut, ladling into a bowl, the memory), and the catalog checks the four reactions.

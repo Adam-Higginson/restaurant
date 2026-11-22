@@ -1,0 +1,34 @@
+[gd_scene format=3 uid="uid://waterbuttrain"]
+
+[ext_resource type="Script" path="res://scripts/props/water_butt.gd" id="1_butt"]
+[ext_resource type="Resource" path="res://data/items/rainwater.tres" id="2_rain"]
+[ext_resource type="Script" path="res://scripts/interaction/interactable_3d.gd" id="3_reach"]
+[ext_resource type="Material" path="res://assets/placeholder/materials/water.tres" id="4_water"]
+
+[sub_resource type="CylinderMesh" id="Surface"]
+top_radius = 0.36
+bottom_radius = 0.36
+height = 0.01
+radial_segments = 12
+rings = 1
+
+[sub_resource type="BoxShape3D" id="Reach"]
+size = Vector3(1.1, 1.3, 1.1)
+
+[node name="WaterButt" type="Node3D"]
+script = ExtResource("1_butt")
+water = ExtResource("2_rain")
+
+[node name="Surface" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.11, 0)
+material_override = ExtResource("4_water")
+cast_shadow = 0
+mesh = SubResource("Surface")
+
+[node name="Reach" type="Area3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.8, 0)
+script = ExtResource("3_reach")
+focus_height = 1.6
+
+[node name="Shape" type="CollisionShape3D" parent="Reach"]
+shape = SubResource("Reach")

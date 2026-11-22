@@ -1,0 +1,46 @@
+[gd_scene format=3 uid="uid://b0wlstackgal0"]
+
+[ext_resource type="Script" path="res://scripts/props/dispenser_3d.gd" id="1_dispenser"]
+[ext_resource type="Resource" path="res://data/items/bowl.tres" id="2_bowl"]
+[ext_resource type="Script" path="res://scripts/interaction/interactable_3d.gd" id="3_reach"]
+[ext_resource type="Material" path="res://assets/placeholder/materials/crockery.tres" id="4_crock"]
+
+[sub_resource type="CylinderMesh" id="Bowl"]
+top_radius = 0.13
+bottom_radius = 0.08
+height = 0.07
+radial_segments = 10
+rings = 1
+
+[sub_resource type="BoxShape3D" id="Reach"]
+size = Vector3(0.6, 0.6, 0.6)
+
+[node name="BowlStack" type="StaticBody3D"]
+script = ExtResource("1_dispenser")
+item = ExtResource("2_bowl")
+
+[node name="Bowl1" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.035, 0)
+material_override = ExtResource("4_crock")
+mesh = SubResource("Bowl")
+
+[node name="Bowl2" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.01, 0.085, 0.005)
+material_override = ExtResource("4_crock")
+mesh = SubResource("Bowl")
+
+[node name="Bowl3" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.005, 0.135, 0.01)
+material_override = ExtResource("4_crock")
+mesh = SubResource("Bowl")
+
+[node name="Interactable" type="Area3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.2, 0)
+script = ExtResource("3_reach")
+focus_height = 0.8
+
+[node name="Shape" type="CollisionShape3D" parent="Interactable"]
+shape = SubResource("Reach")
+
+[node name="ItemSpot" type="Node3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.17, 0)
