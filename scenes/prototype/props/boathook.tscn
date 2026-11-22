@@ -1,0 +1,58 @@
+[gd_scene format=3]
+
+[ext_resource type="Material" path="res://assets/placeholder/materials/prop_wood.tres" id="1_wood"]
+[ext_resource type="Material" path="res://assets/placeholder/materials/iron.tres" id="2_iron"]
+
+[sub_resource type="CylinderMesh" id="Mesh_Pole"]
+top_radius = 0.02
+bottom_radius = 0.024
+height = 2.3
+radial_segments = 6
+rings = 1
+
+[sub_resource type="CylinderMesh" id="Mesh_Collar"]
+top_radius = 0.028
+bottom_radius = 0.028
+height = 0.12
+radial_segments = 6
+rings = 1
+
+[sub_resource type="CylinderMesh" id="Mesh_Spike"]
+top_radius = 0.004
+bottom_radius = 0.016
+height = 0.16
+radial_segments = 6
+rings = 1
+
+[sub_resource type="BoxMesh" id="Mesh_HookOut"]
+size = Vector3(0.11, 0.024, 0.024)
+
+[sub_resource type="BoxMesh" id="Mesh_HookDown"]
+size = Vector3(0.024, 0.1, 0.024)
+
+[node name="Boathook" type="Node3D"]
+
+[node name="Pole" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.15, 0)
+material_override = ExtResource("1_wood")
+mesh = SubResource("Mesh_Pole")
+
+[node name="Collar" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.26, 0)
+material_override = ExtResource("2_iron")
+mesh = SubResource("Mesh_Collar")
+
+[node name="Spike" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.4, 0)
+material_override = ExtResource("2_iron")
+mesh = SubResource("Mesh_Spike")
+
+[node name="HookOut" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.07, 2.27, 0)
+material_override = ExtResource("2_iron")
+mesh = SubResource("Mesh_HookOut")
+
+[node name="HookDown" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.123, 2.21, 0)
+material_override = ExtResource("2_iron")
+mesh = SubResource("Mesh_HookDown")
