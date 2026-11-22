@@ -2,7 +2,7 @@
 
 [ext_resource type="Shader" path="res://shaders/sail.gdshader" id="1_88pp1"]
 [ext_resource type="Texture2D" path="res://assets/placeholder/textures/canvas.png" id="2_kfn2g"]
-[ext_resource type="Material" uid="uid://2lj0z7hvppc7f" path="res://assets/placeholder/materials/wet_rope.tres" id="3_j0a2s"]
+[ext_resource type="Material" uid="uid://jowvs14ra7v2" path="res://assets/placeholder/materials/wet_rope.tres" id="3_j0a2s"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_1"]
 shader = ExtResource("1_88pp1")

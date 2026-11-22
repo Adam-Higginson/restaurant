@@ -1,7 +1,7 @@
 [gd_scene format=3 uid="uid://nfvkjxjkf75xz"]
 
 [ext_resource type="Material" path="res://assets/placeholder/materials/brass.tres" id="1_sann4"]
-[ext_resource type="Material" uid="uid://8xzzkxef16wgf" path="res://assets/placeholder/materials/window_glow.tres" id="2_6aswu"]
+[ext_resource type="Material" uid="uid://c1q1uh1fjkweb" path="res://assets/placeholder/materials/window_glow.tres" id="2_6aswu"]
 [ext_resource type="Material" path="res://assets/placeholder/materials/iron.tres" id="3_thu3s"]
 
 [sub_resource type="CylinderMesh" id="CylinderMesh_1"]

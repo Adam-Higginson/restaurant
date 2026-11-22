@@ -1,4 +1,4 @@
-[gd_scene format=3 uid="uid://f1sh1ngspot0a"]
+[gd_scene format=3 uid="uid://b6emgljj5hx8i"]
 
 [ext_resource type="Script" path="res://scripts/fishing/fishing_spot.gd" id="1_spot"]
 [ext_resource type="Resource" path="res://data/items/herring.tres" id="2_herring"]

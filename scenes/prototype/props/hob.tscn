@@ -1,4 +1,4 @@
-[gd_scene format=3 uid="uid://h0bonhearth0a"]
+[gd_scene format=3 uid="uid://hxhdjrnfqhq"]
 
 [ext_resource type="Script" path="res://scripts/props/hob.gd" id="1_hob"]
 [ext_resource type="Resource" path="res://data/items/frying_pan.tres" id="2_pan"]

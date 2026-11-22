@@ -1,9 +1,9 @@
 [gd_scene format=3 uid="uid://dmwsmhjke2aft"]
 
-[ext_resource type="Material" uid="uid://apmxhjggurfpb" path="res://assets/placeholder/materials/wet_prop_wood.tres" id="1_xhaxv"]
+[ext_resource type="Material" uid="uid://pmxhjggurfpb" path="res://assets/placeholder/materials/wet_prop_wood.tres" id="1_xhaxv"]
 [ext_resource type="Material" path="res://assets/placeholder/materials/iron.tres" id="2_a16o1"]
 [ext_resource type="Material" path="res://assets/placeholder/materials/water.tres" id="3_pp7g7"]
-[ext_resource type="Material" uid="uid://2lj0z7hvppc7f" path="res://assets/placeholder/materials/wet_rope.tres" id="4_nfkc5"]
+[ext_resource type="Material" uid="uid://jowvs14ra7v2" path="res://assets/placeholder/materials/wet_rope.tres" id="4_nfkc5"]
 
 [sub_resource type="CylinderMesh" id="CylinderMesh_1"]
 top_radius = 0.18

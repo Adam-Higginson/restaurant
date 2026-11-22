@@ -1,6 +1,6 @@
 [gd_scene format=3 uid="uid://tfxgvnx8564as"]
 
-[ext_resource type="Material" uid="uid://apmxhjggurfpb" path="res://assets/placeholder/materials/wet_prop_wood.tres" id="1_ce34w"]
+[ext_resource type="Material" uid="uid://pmxhjggurfpb" path="res://assets/placeholder/materials/wet_prop_wood.tres" id="1_ce34w"]
 [ext_resource type="Material" path="res://assets/placeholder/materials/wet_dark_wood.tres" id="2_0ymhx"]
 [ext_resource type="Material" path="res://assets/placeholder/materials/chart.tres" id="3_j321x"]
 [ext_resource type="PackedScene" path="res://scenes/prototype/dressing/navigator_things.tscn" id="4_ugiv1"]

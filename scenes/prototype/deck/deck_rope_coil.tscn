@@ -1,6 +1,6 @@
 [gd_scene format=3 uid="uid://ufnf34z753g1a"]
 
-[ext_resource type="Material" uid="uid://2lj0z7hvppc7f" path="res://assets/placeholder/materials/wet_rope.tres" id="1_wxiwq"]
+[ext_resource type="Material" uid="uid://jowvs14ra7v2" path="res://assets/placeholder/materials/wet_rope.tres" id="1_wxiwq"]
 
 [sub_resource type="TorusMesh" id="TorusMesh_1"]
 inner_radius = 0.085

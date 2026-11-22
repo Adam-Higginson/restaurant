@@ -2,7 +2,7 @@
 
 [ext_resource type="Material" path="res://assets/placeholder/materials/wet_dark_wood.tres" id="1_nekr0"]
 [ext_resource type="Material" path="res://assets/placeholder/materials/iron.tres" id="2_o62t8"]
-[ext_resource type="Material" uid="uid://apmxhjggurfpb" path="res://assets/placeholder/materials/wet_prop_wood.tres" id="3_dj5jo"]
+[ext_resource type="Material" uid="uid://pmxhjggurfpb" path="res://assets/placeholder/materials/wet_prop_wood.tres" id="3_dj5jo"]
 
 [sub_resource type="CylinderMesh" id="CylinderMesh_1"]
 top_radius = 0.27

@@ -1,9 +1,9 @@
 [gd_scene format=3 uid="uid://h6ph4i432h4dh"]
 
-[ext_resource type="Material" uid="uid://apmxhjggurfpb" path="res://assets/placeholder/materials/wet_prop_wood.tres" id="1_eudpd"]
+[ext_resource type="Material" uid="uid://pmxhjggurfpb" path="res://assets/placeholder/materials/wet_prop_wood.tres" id="1_eudpd"]
 [ext_resource type="Material" path="res://assets/placeholder/materials/wet_dark_wood.tres" id="2_ctqom"]
 [ext_resource type="Material" path="res://assets/placeholder/materials/brass.tres" id="3_testm"]
-[ext_resource type="Material" uid="uid://8xzzkxef16wgf" path="res://assets/placeholder/materials/window_glow.tres" id="4_dgexr"]
+[ext_resource type="Material" uid="uid://c1q1uh1fjkweb" path="res://assets/placeholder/materials/window_glow.tres" id="4_dgexr"]
 
 [sub_resource type="BoxMesh" id="BoxMesh_1"]
 size = Vector3(0.44, 0.82, 0.44)

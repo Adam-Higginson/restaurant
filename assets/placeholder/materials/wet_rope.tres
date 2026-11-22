@@ -1,4 +1,4 @@
-[gd_resource type="ShaderMaterial" format=3 uid="uid://2lj0z7hvppc7f"]
+[gd_resource type="ShaderMaterial" format=3 uid="uid://jowvs14ra7v2"]
 
 [ext_resource type="Shader" path="res://shaders/wet_surface.gdshader" id="1_lfw2n"]
 [ext_resource type="Texture2D" path="res://assets/placeholder/greybox_grid.png" id="2_qcsf8"]

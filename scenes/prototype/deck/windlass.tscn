@@ -1,10 +1,10 @@
 [gd_scene format=3 uid="uid://wwdo4eby2kwa8"]
 
 [ext_resource type="Material" path="res://assets/placeholder/materials/wet_dark_wood.tres" id="1_wm2s3"]
-[ext_resource type="Material" uid="uid://apmxhjggurfpb" path="res://assets/placeholder/materials/wet_prop_wood.tres" id="2_vxsif"]
+[ext_resource type="Material" uid="uid://pmxhjggurfpb" path="res://assets/placeholder/materials/wet_prop_wood.tres" id="2_vxsif"]
 [ext_resource type="Material" path="res://assets/placeholder/materials/iron.tres" id="3_hnx4r"]
-[ext_resource type="Material" uid="uid://ws5sb0dgg6ugy" path="res://assets/placeholder/materials/hold_dark.tres" id="4_3wurq"]
-[ext_resource type="Material" uid="uid://kxlt7ax4cc05u" path="res://assets/placeholder/materials/tarred_rope.tres" id="5_nt112"]
+[ext_resource type="Material" uid="uid://dh4gdpq6m6hn5" path="res://assets/placeholder/materials/hold_dark.tres" id="4_3wurq"]
+[ext_resource type="Material" uid="uid://c7r3054l6xanc" path="res://assets/placeholder/materials/tarred_rope.tres" id="5_nt112"]
 
 [sub_resource type="BoxMesh" id="BoxMesh_1"]
 size = Vector3(2.9, 0.12, 0.6)

@@ -1,4 +1,4 @@
-[gd_scene format=3 uid="uid://supperspotn00k"]
+[gd_scene format=3 uid="uid://cp7jmlvmrpdhw"]
 
 [ext_resource type="Script" path="res://scripts/props/supper_spot.gd" id="1_supper"]
 [ext_resource type="Script" path="res://scripts/interaction/interactable_3d.gd" id="2_reach"]

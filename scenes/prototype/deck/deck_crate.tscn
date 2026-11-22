@@ -1,6 +1,6 @@
 [gd_scene format=3 uid="uid://xcf68q0pn3via"]
 
-[ext_resource type="Material" uid="uid://apmxhjggurfpb" path="res://assets/placeholder/materials/wet_prop_wood.tres" id="1_jsmsw"]
+[ext_resource type="Material" uid="uid://pmxhjggurfpb" path="res://assets/placeholder/materials/wet_prop_wood.tres" id="1_jsmsw"]
 [ext_resource type="Material" path="res://assets/placeholder/materials/wet_dark_wood.tres" id="2_vjseq"]
 
 [sub_resource type="BoxMesh" id="BoxMesh_1"]

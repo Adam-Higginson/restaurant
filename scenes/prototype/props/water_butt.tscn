@@ -1,4 +1,4 @@
-[gd_scene format=3 uid="uid://waterbuttrain"]
+[gd_scene format=3 uid="uid://cxr1s1ak0qvpt"]
 
 [ext_resource type="Script" path="res://scripts/props/water_butt.gd" id="1_butt"]
 [ext_resource type="Resource" path="res://data/items/rainwater.tres" id="2_rain"]

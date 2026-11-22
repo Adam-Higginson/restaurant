@@ -1,4 +1,4 @@
-[gd_resource type="Resource" script_class="Reaction" format=3 uid="uid://f1lletherr1ng"]
+[gd_resource type="Resource" script_class="Reaction" format=3 uid="uid://b56psrj47k5vo"]
 
 [ext_resource type="Script" path="res://scripts/data/item.gd" id="1_item"]
 [ext_resource type="Resource" path="res://data/items/herring.tres" id="2_herring"]
