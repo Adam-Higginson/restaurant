@@ -10,26 +10,85 @@ permissions:
   checks: write
   pull-requests: write
 
+env:
+  GODOT_VERSION: '4.7.2-stable'
+  GODOT: /home/runner/godot/godot
+
 jobs:
   gdunit4:
     name: gdUnit4
     runs-on: ubuntu-latest
+    # A backstop: the test run below stops itself well before this.
+    timeout-minutes: 15
     steps:
       - uses: actions/checkout@v4
-      - uses: godot-gdunit-labs/gdUnit4-action@v1
+
+      # We run Godot ourselves rather than through gdUnit4-action, so that a
+      # hang can be made to print where Godot was stuck (see "Run the tests").
+      - name: Cache Godot
+        id: cache-godot
+        uses: actions/cache@v4
         with:
-          godot-version: '4.7.2'
-          version: 'installed'   # use the plugin committed in addons/gdUnit4
-          paths: 'res://tests'
-          # Minutes for the whole run. Headless it takes under one, so 5 leaves
-          # room while still catching a big slowdown early.
-          timeout: 5
-          # Headless, like run_tests.sh: nothing is drawn. Without it the tests
-          # run on a virtual display and every frame of the lit 3D scenes is
-          # rendered on the CPU, which made CI take nearly ten minutes.
-          headless: true
-          # -c runs every test instead of stopping a suite at its first failure.
-          # --fixed-fps 60 runs frames back to back at a fixed 1/60 s each instead
-          # of waiting for the real clock, so the suite finishes in about a minute.
-          # --ignoreHeadlessMode lets gdUnit v6 run scene tests headless.
-          arguments: '-c --fixed-fps 60 --ignoreHeadlessMode'
+          path: /home/runner/godot
+          key: godot-${{ env.GODOT_VERSION }}-linux
+
+      - name: Install Godot ${{ env.GODOT_VERSION }}
+        if: steps.cache-godot.outputs.cache-hit != 'true'
+        run: |
+          mkdir -p /home/runner/godot
+          package=Godot_v${GODOT_VERSION}_linux.x86_64
+          wget -q https://github.com/godotengine/godot-builds/releases/download/${GODOT_VERSION}/${package}.zip
+          unzip -q ${package}.zip -d /home/runner/godot
+          mv /home/runner/godot/${package} "$GODOT"
+          chmod u+x "$GODOT"
+
+      - name: Import the project
+        run: |
+          "$GODOT" --version
+          "$GODOT" --headless --path . --import
+
+      # The same command gdUnit4-action ran, through gdUnit's own command line tool:
+      # --headless: nothing is drawn, like run_tests.sh. Drawn on the CPU-only
+      #   runner, every frame of the lit 3D scenes made CI take nearly ten minutes.
+      # -c runs every test instead of stopping a suite at its first failure.
+      # --fixed-fps 60 runs frames back to back at a fixed 1/60 s each instead
+      #   of waiting for the real clock, so the suite finishes in a minute or two.
+      # --ignoreHeadlessMode lets gdUnit v6 run scene tests headless.
+      #
+      # If Godot hasn't finished after 4 minutes it has hung (it has, now and
+      # then, after every test passed). timeout then sends SIGSEGV rather than
+      # a plain stop, so Godot's crash handler prints a backtrace: where it
+      # was stuck.
+      - name: Run the tests
+        run: |
+          set +e
+          timeout -s SEGV -k 30 240 "$GODOT" --path . -s -d --remote-debug tcp://127.0.0.1:0 \
+              res://addons/gdUnit4/bin/GdUnitCmdTool.gd \
+              --headless --audio-driver Dummy --add res://tests \
+              -c --fixed-fps 60 --ignoreHeadlessMode 2>&1 | tee godot.log
+          code=${PIPESTATUS[0]}
+          if [ "$code" -eq 124 ]; then
+            echo "::error::Godot hung and was stopped after 4 minutes. The backtrace above shows where it was stuck."
+          fi
+          echo "Run tests ends with $code"
+          exit $code
+
+      - name: Publish the test report
+        if: ${{ !cancelled() }}
+        uses: dorny/test-reporter@d1b5dff021aa968b288b02285a8bf47471c5928a # v3.2.0
+        with:
+          name: test-report.xml
+          path: 'reports/**/*.xml'
+          reporter: java-junit
+          fail-on-error: 'false'
+          fail-on-empty: 'false'
+          use-actions-summary: 'false'
+
+      - name: Keep the logs when something went wrong
+        if: ${{ failure() }}
+        uses: actions/upload-artifact@v4
+        with:
+          name: godot-log
+          path: |
+            godot.log
+            reports/
