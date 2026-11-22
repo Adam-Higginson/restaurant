@@ -8,6 +8,8 @@ extends Node
 
 ## Emitted when [member dawn] changes.
 signal changed(dawn: float)
+## Emitted when a new day begins (you've slept through to morning).
+signal day_began(day: int)
 
 ## Sky shader colours at night and at dawn.
 const SKY: Dictionary[String, Array] = {
@@ -27,7 +29,11 @@ const SKY_NUMBERS: Dictionary[String, Vector2] = {
 ## 0 night, 1 dawn.
 @export_range(0.0, 1.0) var dawn: float = 0.0:
 	set(value):
+		var was_morning: bool = dawn >= 0.5
 		dawn = clampf(value, 0.0, 1.0)
+		if dawn >= 0.5 and not was_morning:
+			day += 1
+			day_began.emit(day)
 		if is_node_ready():
 			_apply()
 		changed.emit(dawn)
@@ -42,6 +48,9 @@ const SKY_NUMBERS: Dictionary[String, Vector2] = {
 ## How hard it rains at night, and at dawn.
 @export var night_rain: float = 0.8
 @export var dawn_rain: float = 0.15
+
+## Which day at sea it is, from 1. Moves on each time night turns to morning.
+var day: int = 1
 
 
 func _ready() -> void:

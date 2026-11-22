@@ -89,3 +89,9 @@ Run `sea.tscn` and it opens on black: "Somewhere at sea". The fade lifts on the 
 - **Bug fixed along the way:** sleeping (feature 6) switched the player's physics off, so on a sailing ship the deck sailed away from under you while you slept. The player now has `controls_enabled` (stand still, but the deck still carries you), used by sleeping and the opening.
 - Tests: `tests/scripts/story/opening_test.gd` (you wake by your bunk and can't move until the fade's done, the lantern speaks, you stay aboard while the ship sails on, skipping starts you where you stand).
 - **Note:** F5 still runs the old 2D restaurant (`main.tscn` is the project's main scene). To play the 3D game, open `scenes/prototype/sea.tscn` and press F6. Making `sea.tscn` the main scene is a project-setting change I've left for you to decide.
+
+### 13. A recipe book in the galley, and days at sea
+Learning the dishes is now part of the game: the galley's **recipe book** lies open on the cook's stool at the head of the table. Read it (Interact) and its pages come up one after another on the card: Garden Salad, Tomato Soup, Pan-fried Herring, each in a few short steps (with a wry line about the shortcut). And the days now count: each time you sleep through to morning the title says which ("Day 2. Morning").
+- `scripts/data/recipe.gd` (a `Recipe`: dish, title, steps), `data/recipes/*.tres` in the catalog's new `recipes`; `scripts/props/recipe_book.gd` + `scenes/prototype/props/recipe_book.tscn`; `MemoryCard.show_card()` shows any page.
+- `TimeOfDay.day` and `day_began`; the bedside's morning title uses it.
+- Tests: `tests/scripts/props/recipe_book_test.gd` (a page per recipe, every recipe's dish is something a reaction makes, each morning is a new day).

@@ -1,0 +1,11 @@
+[gd_resource type="Resource" script_class="Recipe" format=3 uid="uid://rec1pesherr1n"]
+
+[ext_resource type="Script" path="res://scripts/data/recipe.gd" id="1_recipe"]
+[ext_resource type="Resource" path="res://data/items/pan_fried_herring.tres" id="2_dish"]
+
+[resource]
+script = ExtResource("1_recipe")
+id = &"pan_fried_herring"
+dish = ExtResource("2_dish")
+title = "Pan-fried Herring"
+steps = PackedStringArray("Ring the bell to stop the ship; fish from the rod at the rail.", "Fillet the herring on the board (3 cuts).", "Fry the fillet in the pan on the hearth (6s).", "A whole fish in the pan will do. Just.")

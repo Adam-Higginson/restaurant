@@ -34,6 +34,15 @@ func _ready() -> void:
 	Game.memories.remembered.connect(show_memory)
 
 
+## Shows a card with [param title] and [param lines] (a page of the recipe
+## book, say), after any already showing or waiting.
+func show_card(title: String, lines: PackedStringArray) -> void:
+	var page: Memory = Memory.new()
+	page.title = title
+	page.lines = lines
+	show_memory(page)
+
+
 ## Shows [param memory], after any already showing or waiting.
 func show_memory(memory: Memory) -> void:
 	_queue.append(memory)

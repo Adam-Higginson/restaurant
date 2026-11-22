@@ -48,7 +48,10 @@ func sleep(player: Player3D) -> void:
 	var morning: bool = time == null or not time.is_morning()
 	if time != null:
 		time.dawn = 1.0 if morning else 0.0
-	await _fade.show_title("Morning" if morning else "Night")
+	var title: String = "Night"
+	if morning:
+		title = "Day %d. Morning" % time.day if time != null else "Morning"
+	await _fade.show_title(title)
 	await get_tree().create_timer(sleep_seconds).timeout
 	await _fade.fade_in()
 	player.controls_enabled = true

@@ -13,6 +13,8 @@ const PATH: String = "res://data/catalog.tres"
 @export var people: Array[Person] = []
 ## The memories of home that cooking and fishing bring back.
 @export var memories: Array[Memory] = []
+## The recipes written in the galley's recipe book.
+@export var recipes: Array[Recipe] = []
 
 
 ## Loads the game's catalog.

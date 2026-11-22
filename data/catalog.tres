@@ -56,6 +56,10 @@
 [ext_resource type="Resource" path="res://data/reactions/tomato_soup.tres" id="62_soupr"]
 [ext_resource type="Resource" path="res://data/reactions/tomato_soup_shortcut.tres" id="63_soupr"]
 [ext_resource type="Resource" path="res://data/memories/rain_on_the_roof.tres" id="45_mem"]
+[ext_resource type="Script" path="res://scripts/data/recipe.gd" id="69_recipe"]
+[ext_resource type="Resource" path="res://data/recipes/garden_salad.tres" id="70_rec"]
+[ext_resource type="Resource" path="res://data/recipes/tomato_soup.tres" id="71_rec"]
+[ext_resource type="Resource" path="res://data/recipes/pan_fried_herring.tres" id="72_rec"]
 
 [resource]
 script = ExtResource("23_itf3g")
@@ -65,3 +69,4 @@ reactions = Array[ExtResource("17_gx03v")]([ExtResource("18_dxvgn"), ExtResource
 tools = Array[ExtResource("24_tool")]([ExtResource("25_knife")])
 people = Array[ExtResource("17_7671r")]([ExtResource("18_5u5l8"), ExtResource("19_lcsjk"), ExtResource("20_vx4vr"), ExtResource("21_cta3b"), ExtResource("22_wwfey"), ExtResource("23_rhhc8")])
 memories = Array[ExtResource("39_memory")]([ExtResource("40_mem"), ExtResource("41_mem"), ExtResource("42_mem"), ExtResource("43_mem"), ExtResource("44_mem"), ExtResource("45_mem")])
+recipes = Array[ExtResource("69_recipe")]([ExtResource("70_rec"), ExtResource("71_rec"), ExtResource("72_rec")])
