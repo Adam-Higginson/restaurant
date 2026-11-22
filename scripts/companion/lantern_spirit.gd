@@ -38,6 +38,12 @@ signal attention_changed(target: Node3D)
 ## How long a blink takes, in seconds.
 @export var blink_seconds: float = 0.14
 
+## How much warmth he loses a minute, 0 to 1. A warm meal shared with him
+## brings it back (see [SupperSpot]).
+@export var warmth_per_minute: float = 0.025
+## The least warmth he fades to: dim, but never out.
+@export var min_warmth: float = 0.25
+
 ## The player he follows. Set by the scene (he's in the player's scene).
 @export var player: Player3D
 ## The player's interaction detector, which tells him what you're facing.
@@ -48,7 +54,19 @@ var attention: Node3D:
 	get:
 		return _attention
 
+## How warm and bright he is, 0 to 1: it fades slowly, and a shared meal
+## rekindles him. His light's brightness and reach follow it.
+var warmth: float = 1.0:
+	set(value):
+		warmth = clampf(value, min_warmth, 1.0)
+		if warmth > 0.45:
+			_said_dim = false
+
 var _attention: Node3D = null
+## Somewhere he's been asked to go for a moment (a meal on a table).
+var _visit: Node3D = null
+var _visit_left: float = 0.0
+var _said_dim: bool = false
 var _candidate: Node3D = null
 var _candidate_time: float = 0.0
 var _velocity: Vector3 = Vector3.ZERO
@@ -85,6 +103,8 @@ func _physics_process(delta: float) -> void:
 		return
 	_time += delta
 	_notice(delta)
+	_cool(delta)
+	_visit_left = maxf(_visit_left - delta, 0.0)
 	# Ride along with whatever the player stands on, then drift towards where
 	# he wants to be.
 	_spot += player.get_platform_velocity() * delta
@@ -95,8 +115,6 @@ func _physics_process(delta: float) -> void:
 	var pull: Vector3 = (goal - _spot) * stiffness - _velocity * damping
 	_velocity += pull * delta
 	_spot += _velocity * delta
-	if _excited > 0.0 and _excited - delta <= 0.0 and is_instance_valid(_light):
-		_light.base_energy = 1.35 if _attention != null else 1.1
 	_excited = maxf(_excited - delta, 0.0)
 	var hop: float = absf(sin(_time * 14.0)) * 0.14 * minf(_excited, 1.0)
 	global_position = _spot + Vector3.UP * (bob_offset(_time) + hop)
@@ -115,6 +133,24 @@ func snap_to_player() -> void:
 	_spot = goal_spot()
 	global_position = _spot
 	reset_physics_interpolation()
+
+
+## Warms him back up by [param amount] (0 to 1): a meal shared with him.
+func rekindle(amount: float) -> void:
+	warmth += amount
+	_apply_warmth()
+
+
+## Goes to hover just over [param place] for [param seconds] (to eat
+## something set down there), then comes back.
+func visit(place: Node3D, seconds: float) -> void:
+	_visit = place
+	_visit_left = seconds
+
+
+## Whether he's off visiting somewhere just now.
+func is_visiting() -> bool:
+	return _visit_left > 0.0 and is_instance_valid(_visit)
 
 
 ## Says [param line], in a few words floating beside him, with a hop.
@@ -152,6 +188,8 @@ func blink() -> void:
 ## Where he wants to be now: hovering over what he's looking at, or by the
 ## player's shoulder.
 func goal_spot() -> Vector3:
+	if _visit_left > 0.0 and is_instance_valid(_visit):
+		return _visit.global_position + Vector3.UP * 0.45
 	if is_instance_valid(_attention):
 		var toward_player: Vector3 = player.global_position - _attention.global_position
 		toward_player.y = 0.0
@@ -188,13 +226,31 @@ func _notice(delta: float) -> void:
 		_set_attention(_candidate)
 
 
+# Fades a little, and lets you know when he's getting low.
+func _cool(delta: float) -> void:
+	warmth -= warmth_per_minute * delta / 60.0
+	_apply_warmth()
+	if warmth < 0.4 and not _said_dim:
+		_said_dim = true
+		say(LanternLines.pick(LanternLines.DIM))
+
+
+# His light follows his warmth: dimmer and closer in when he's cold.
+func _apply_warmth() -> void:
+	if not is_instance_valid(_light):
+		return
+	_light.omni_range = lerpf(2.4, 4.5, warmth)
+	var bright: float = 1.35 if _attention != null else 1.1
+	if _excited <= 0.0:
+		_light.base_energy = bright * lerpf(0.4, 1.0, warmth)
+
+
 func _set_attention(target: Node3D) -> void:
 	if target == _attention:
 		return
 	_attention = target
 	# A little brighter when he's interested in something.
-	if is_instance_valid(_light):
-		_light.base_energy = 1.35 if target != null else 1.1
+	_apply_warmth()
 	attention_changed.emit(target)
 
 

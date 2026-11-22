@@ -69,3 +69,10 @@ The storm feeds the galley. The water butt on deck (port waist) is open to the r
 - `scripts/props/water_butt.gd` + `scenes/prototype/props/water_butt.tscn`, `scenes/prototype/props/bowl_stack.tscn` (a `Dispenser3D`).
 - Data: `saucepan`, `bowl`, `rainwater`, `boiling_water`, `chopped_onion`; reactions `chop_onion`, `boil_water`, `tomato_soup`, `tomato_soup_shortcut`; memory `rain_on_the_roof`.
 - Tests: `tests/scripts/cooking/tomato_soup_test.gd` (filling at the butt with Interact, nothing for empty hands, ★★★ soup, the ★ shortcut, ladling into a bowl, the memory), and the catalog checks the four reactions.
+
+### 10. Supper by the stove rekindles the lantern
+The GDD says "a warm meal by the stove rekindles him", so now it does, and cooking has a reason beyond memories. The lantern has a **warmth** that fades slowly (about 30 minutes from full to his dimmest; never out): his light gets dimmer and reaches less far, and when he's low he says so ("I'm a bit... dim. Is there soup?"). Carry a bowl or plate with a dish down to the little round table by the bunk room's stove and Interact ("Share Tomato Soup with the lantern"): the dish sits on the table, he drifts down to it, it's gone, and he glows warm again ("Oh, that's warm all the way through."). A ★★★ dish warms him far more than a ★ one. You keep the bowl.
+- `LanternSpirit` gained `warmth`, `rekindle()`, `visit()`; his light's energy and range follow his warmth. New lines `SUPPER` and `DIM`.
+- `scripts/props/supper_spot.gd` + `scenes/prototype/props/supper_spot.tscn` on the nook's round table in `ship.tscn`.
+- Tests: `tests/scripts/props/supper_spot_test.gd` (fades but never out, says when he's low, sharing soup at the table warms him and empties the bowl, nothing to share in an empty bowl, a better dish warms more).
+- Tuning to try: `warmth_per_minute` (how fast he fades) and `base_warmth` / `per_star` (how much a dish gives).

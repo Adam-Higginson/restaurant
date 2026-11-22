@@ -29,6 +29,18 @@ const HOVE_TO: PackedStringArray = [
 	"Stopping? Good. I like it when the sea holds still.",
 	"The fish will come now. Fish like quiet.",
 ]
+## You've shared a meal with him.
+const SUPPER: PackedStringArray = [
+	"Oh, that's warm all the way through.",
+	"Mm. Tastes like a Tuesday. A good one.",
+	"I'm glowing. Am I glowing? I'm glowing.",
+	"You cook like someone who's been missed.",
+]
+## His warmth is running low.
+const DIM: PackedStringArray = [
+	"I'm a bit... dim. Is there soup?",
+	"Is it me, or is it darker in here? It's me, isn't it.",
+]
 ## You're at the bow at night, looking towards the far light.
 const FAR_LIGHT: PackedStringArray = [
 	"A light! That's it. That's home. Probably. Almost certainly. Maybe.",
