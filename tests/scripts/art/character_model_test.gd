@@ -244,6 +244,22 @@ func test_the_boy_and_girl_wear_the_peasant_outfit() -> void:
 			assert_str(path).starts_with("res://assets/third_party/")
 
 
+func test_the_intros_castaway_is_the_same_character_as_the_player() -> void:
+	var castaway: Node = (load("res://scenes/prototype/intro/castaway.tscn") as PackedScene) 			.instantiate()
+	auto_free(castaway)
+	var player: Node = (load("res://scenes/prototype/player.tscn") as PackedScene).instantiate()
+	auto_free(player)
+	var theirs: CharacterModel = castaway.get_node("Character") as CharacterModel
+	var ours: CharacterModel = player.get_node("Model/Character") as CharacterModel
+
+	assert_object(theirs.boy).is_same(ours.boy)
+	assert_object(theirs.girl).is_same(ours.girl)
+	assert_array(Array(theirs.animation_files)).is_equal(Array(ours.animation_files))
+	# Drifting in the water, limbs loose, rather than standing.
+	assert_str(String(theirs.idle_animation)).is_equal("NinjaJump_Idle")
+	assert_int(theirs.stand_ins.size()).is_equal(5)
+
+
 # A player whose character is built from the stand-in files.
 func _new_dressed_player() -> Player3D:
 	CharacterModel.packs_enabled = true
