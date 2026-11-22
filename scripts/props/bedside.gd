@@ -60,7 +60,7 @@ func sleep(player: Player3D) -> void:
 		var spirit: LanternSpirit = player.get_node_or_null("LanternSpirit") as LanternSpirit
 		if spirit != null:
 			spirit.snap_to_player()
-			spirit.say(LanternLines.pick(LanternLines.MORNING))
+			spirit.tell(LanternLines.pick(LanternLines.MORNING))
 	_save(player)
 	woke.emit(morning)
 
@@ -69,7 +69,7 @@ func sleep(player: Player3D) -> void:
 func _save(player: Player3D) -> void:
 	var spirit: LanternSpirit = player.get_node_or_null("LanternSpirit") as LanternSpirit
 	var warmth: float = spirit.warmth if spirit != null else 1.0
-	SaveGame.write(SaveGame.capture(Game.memories, _time_of_day(), warmth))
+	SaveGame.write(SaveGame.capture(Game.memories, _time_of_day(), warmth, Game.dialogue))
 
 
 func _time_of_day() -> TimeOfDay:

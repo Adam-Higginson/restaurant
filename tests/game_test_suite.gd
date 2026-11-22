@@ -160,6 +160,15 @@ func new_moored_ship_with_player(pos: Vector3) -> Array[Node3D]:
 	return [ship, player]
 
 
+## [param player]'s lantern, told to follow at their shoulder rather than
+## stay at his home on the ship, for tests of how he follows and what he
+## says when he's beside you.
+func lantern_at_shoulder(player: Node3D) -> LanternSpirit:
+	var spirit: LanternSpirit = player.get_node("LanternSpirit") as LanternSpirit
+	spirit.leave_home()
+	return spirit
+
+
 ## A [Hud3D] for [param player], added to the player's world, so it's freed
 ## with it. Add it before the scene runs.
 func new_hud_3d(player: Player3D) -> Hud3D:

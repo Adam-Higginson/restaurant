@@ -11,6 +11,8 @@ extends Control
 
 ## Emitted when a line has finished typing out.
 signal typed
+## Emitted as each letter of a line appears.
+signal letter_typed(letter: String)
 
 const BACKGROUND: Color = Color(0.04, 0.1, 0.13, 0.88)
 const BACKGROUND_EDGE: Color = Color(0.1, 0.2, 0.23, 0.9)
@@ -54,6 +56,8 @@ var _typing: bool = false
 var _letters: float = 0.0
 ## Whether the line showing is the last, so the arrow becomes a square.
 var _last: bool = false
+## Seconds left of a pause after a letter, before the next appears.
+var _pause: float = 0.0
 var _selected: int = 0
 ## Every choice on offer, and the first one in view.
 var _options: PackedStringArray = PackedStringArray()
@@ -75,10 +79,7 @@ func _process(delta: float) -> void:
 		return
 	_time += delta
 	if _typing:
-		_letters += letters_per_second * delta
-		_text.visible_characters = int(_letters)
-		if _text.visible_characters >= _text.get_total_character_count():
-			finish_typing()
+		_type(delta)
 	# The arrow bobs and the cursor flickers.
 	queue_redraw()
 
@@ -106,6 +107,7 @@ func show_line(person: Person, text: String, is_last: bool = false) -> void:
 	_text.text = to_bbcode(text)
 	_text.visible_characters = 0
 	_letters = 0.0
+	_pause = 0.0
 	_last = is_last
 	_typing = true
 	show()
@@ -174,12 +176,55 @@ func close() -> void:
 	hide()
 
 
+## How long the typing waits after [param letter] before going on, in
+## seconds: a breath at the end of a sentence, so lines read like speech.
+static func pause_after(letter: String) -> float:
+	# TODO(your turn): every letter comes at the same pace, so a line reads
+	# like a ticker. Make it linger after punctuation.
+	# Hints:
+	# - Return a number of seconds: 0.0 for ordinary letters, a little for a
+	#   comma, more for the end of a sentence. Try 0.12 for "," and 0.3 for
+	#   ".", "!" and "?" and tune by feel.
+	# - A match statement reads well here:  match letter:  ",":  return 0.12
+	# - "…" (one character) and ":" and ";" are worth a pause too.
+	# - Test: test_pause_after_is_never_negative in
+	#   tests/ui/dialogue_box_test.gd passes already. Add a case that checks
+	#   a full stop waits longer than a comma, and a comma longer than "a".
+	# - See it: F5, talk to the Captain by the stove.
+	if letter.is_empty():
+		return 0.0
+	return 0.0
+
+
 ## Turns a line as written into the BBCode a [RichTextLabel] draws:
 ## [code]*sea-fennel*[/code] becomes amber, and square brackets stay as typed.
 static func to_bbcode(text: String) -> String:
 	var safe: String = text.replace("[", "[lb]")
 	var stars: RegEx = RegEx.create_from_string("\\*([^*]+)\\*")
 	return stars.sub(safe, "[color=#%s]$1[/color]" % AMBER.to_html(false), true)
+
+
+# Shows the letters that are due, one at a time, each announced so it can
+# sound, and stopping for a moment where pause_after says to.
+func _type(delta: float) -> void:
+	if _pause > 0.0:
+		_pause -= delta
+		return
+	_letters += letters_per_second * delta
+	var total: int = _text.get_total_character_count()
+	var words: String = _text.get_parsed_text()
+	var showing: int = _text.visible_characters
+	while showing < mini(int(_letters), total):
+		var letter: String = words[showing] if showing < words.length() else ""
+		showing += 1
+		letter_typed.emit(letter)
+		_pause = pause_after(letter)
+		if _pause > 0.0:
+			_letters = float(showing)
+			break
+	_text.visible_characters = showing
+	if showing >= total:
+		finish_typing()
 
 
 # The panel, its brass border and a rivet in each corner.

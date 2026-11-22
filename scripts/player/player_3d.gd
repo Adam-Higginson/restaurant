@@ -106,6 +106,16 @@ func _unhandled_input(event: InputEvent) -> void:
 				return
 
 
+## Turns the model to face [param point], a place in the world, at once
+## (to face whoever you're talking to).
+func face_towards(point: Vector3) -> void:
+	var away: Vector3 = point - global_position
+	away.y = 0.0
+	if away.length() < 0.01:
+		return
+	_model.global_rotation.y = atan2(-away.x, -away.z)
+
+
 ## Turns stick or WASD [param input] (as from [method Input.get_vector]: x is
 ## right, y is down) into a flat world direction, for a camera turned
 ## [param yaw] radians about the up axis. Pushing up walks away from the camera.

@@ -5,6 +5,12 @@
 [ext_resource type="Material" path="res://assets/placeholder/materials/gull_beak.tres" id="3_beak"]
 [ext_resource type="Material" path="res://assets/placeholder/materials/oilskin.tres" id="4_oilskin"]
 [ext_resource type="Material" path="res://assets/placeholder/materials/hold_dark.tres" id="5_dark"]
+[ext_resource type="Script" path="res://scripts/people/crewmate.gd" id="6_crewmate"]
+[ext_resource type="Script" path="res://scripts/interaction/interactable_3d.gd" id="7_reach"]
+[ext_resource type="Resource" path="res://data/people/heron.tres" id="8_heron"]
+
+[sub_resource type="BoxShape3D" id="Reach"]
+size = Vector3(1.3, 1.8, 1.3)
 
 [sub_resource type="CapsuleShape3D" id="Body"]
 radius = 0.4
@@ -75,6 +81,17 @@ radial_segments = 8
 rings = 1
 
 [node name="Heron" type="StaticBody3D"]
+script = ExtResource("6_crewmate")
+person = ExtResource("8_heron")
+talk = &"heron"
+
+[node name="Reach" type="Area3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.9, 0)
+script = ExtResource("7_reach")
+focus_height = 2.1
+
+[node name="Shape" type="CollisionShape3D" parent="Reach"]
+shape = SubResource("Reach")
 
 [node name="Shape" type="CollisionShape3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.9, 0)

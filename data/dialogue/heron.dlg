@@ -1,0 +1,95 @@
+# The heron captain. Gruff, few words, kinder than he lets on.
+# Placeholder writing: rewrite freely. See scripts/dialogue/dialogue_script.gd
+# for how these files are written.
+
+~ start
+? not met_heron
+-> first
+? morning
+-> at_the_wheel
+? talked.heron >= 4
+heron: You again. Sit, if you're stopping.
+? else
+heron: Bit of a rough night out there, isn't it?
+-> ask
+
+# The first meeting. At night he's by the stove with the lantern, so the
+# camera frames the two of them; in the morning he's alone at the wheel.
+~ first
+? night
+@shot stove_nook
+heron: So. You're the one the lamp fished out.
+? night
+lantern: I pulled! They held on!
+heron: Hm. Can you cook?
+- A little. -> cook_little
+- I remember tastes. Not much else. -> cook_tastes
+- Who are you? -> who
+
+~ cook_little
+heron: A little is more than the rest of us. The *galley*'s forward, through the door.
+-> met
+
+~ cook_tastes
+heron: Tastes. Hm. That's a start. Better than a name, some would say.
+-> met
+
+~ who
+heron: Captain. That'll do for now.
+heron: The galley's forward, through the door. We eat at eight bells.
+-> met
+
+~ met
+set met_heron
+heron: Mind the *wet planks* by the hatch.
+@shot free
+-> END
+
+~ at_the_wheel
+? raining
+heron: Still spitting. It'll clear.
+? else
+heron: Fog's lifting. About time.
+-> ask
+
+~ ask
+- How's the weather looking? -> weather
+? not asked_heading
+- Where are we headed? -> heading
+? asked_heading
+- Tell me about that light again. -> light
+? sailing
+- Who's steering? -> steering
+- Nothing, just checking in. -> bye
+
+~ weather
+? raining
+heron: Wet. It'll be wet tomorrow. Then we'll see.
+? else
+heron: Clearing. Don't trust it.
+-> ask
+
+~ heading
+set asked_heading
+heron: Wherever that lamp of yours says. Again.
+heron: There's a *light* off the bow, most nights. He's sure it's your home.
+heron: He's been sure before.
+-> ask
+
+~ light
+heron: Somebody keeps it lit. That's all I know, and all I need to.
+-> ask
+
+~ steering
+? night
+heron: She steers herself in a blow like this. Wheel's lashed.
+? else
+heron: I am. So make it quick.
+-> ask
+
+~ bye
+? talked.heron >= 2
+heron: Hm. Go on, then.
+? else
+heron: Hm.
+-> END

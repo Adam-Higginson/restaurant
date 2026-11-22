@@ -1,5 +1,7 @@
 [gd_scene format=3 uid="uid://cpaljq6iky4fj"]
 
+[ext_resource type="PackedScene" path="res://scenes/prototype/people/heron.tscn" id="200_heron"]
+[ext_resource type="Script" path="res://scripts/people/crew_station.gd" id="201_station"]
 [ext_resource type="Script" path="res://scripts/ship/ship.gd" id="1_7ykrf"]
 
 [ext_resource type="Material" path="res://assets/placeholder/materials/galley_wood.tres" id="2_nifss"]
@@ -2136,3 +2138,24 @@ shape = SubResource("Deck_BelfryStarboardShape")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.6, -18.4)
 script = ExtResource("90_spray")
 ship = NodePath("..")
+
+[node name="Crew" type="Node3D" parent="."]
+
+[node name="HeronNight" type="Marker3D" parent="Crew"]
+transform = Transform3D(-0.4472136, 0, -0.8944272, 0, 1, 0, 0.8944272, 0, -0.4472136, -1.9, 1, 10.75)
+
+[node name="HeronMorning" type="Marker3D" parent="Crew"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 7.3, 12.8)
+
+[node name="Heron" parent="Crew" instance=ExtResource("200_heron")]
+transform = Transform3D(-0.4472136, 0, -0.8944272, 0, 1, 0, 0.8944272, 0, -0.4472136, -1.9, 1, 10.75)
+
+[node name="Station" type="Node" parent="Crew/Heron" node_paths=PackedStringArray("night_spot", "morning_spot")]
+script = ExtResource("201_station")
+night_spot = NodePath("../../HeronNight")
+morning_spot = NodePath("../../HeronMorning")
+
+[node name="Shots" type="Node3D" parent="."]
+
+[node name="StoveNook" type="Marker3D" parent="Shots" groups=["shots"]]
+transform = Transform3D(-0.837, -0.104, 0.537, 0, 0.982, 0.19, -0.547, 0.159, -0.822, 0.3, 2.6, 8.4)

@@ -1,5 +1,7 @@
 [gd_scene format=3]
 
+[ext_resource type="PackedScene" path="res://ui/dialogue_box.tscn" id="20_box"]
+[ext_resource type="Script" path="res://ui/dialogue_sounds.gd" id="21_sounds"]
 [ext_resource type="Script" path="res://ui/hud_3d.gd" id="1_hud"]
 [ext_resource type="Script" path="res://ui/toolbar_bar.gd" id="2_belt"]
 [ext_resource type="Script" path="res://ui/held_item_label_3d.gd" id="3_held"]
@@ -75,3 +77,10 @@ grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
 script = ExtResource("9_memory")
+
+[node name="DialogueBox" parent="." instance=ExtResource("20_box")]
+unique_name_in_owner = true
+
+[node name="DialogueSounds" type="Node" parent="."]
+unique_name_in_owner = true
+script = ExtResource("21_sounds")

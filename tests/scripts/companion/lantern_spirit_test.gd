@@ -93,7 +93,7 @@ func test_he_blinks() -> void:
 
 
 func _spirit(rig: Array[Node3D]) -> LanternSpirit:
-	return rig[1].get_node("LanternSpirit") as LanternSpirit
+	return lantern_at_shoulder(rig[1])
 
 
 # How far he is from his place by the player's shoulder, bob aside.

@@ -65,7 +65,7 @@ func _play() -> void:
 	var time: TimeOfDay = get_tree().get_first_node_in_group(&"time_of_day") as TimeOfDay
 	var heading: String = title
 	if not saved.is_empty():
-		SaveGame.restore(saved, Game.memories, time, spirit)
+		SaveGame.restore(saved, Game.memories, time, spirit, Game.dialogue)
 		var morning: bool = time != null and time.is_morning()
 		var day: int = saved.get("day", 1)
 		heading = "Day %d. %s" % [day, "Morning" if morning else "Night"]
