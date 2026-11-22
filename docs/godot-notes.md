@@ -120,7 +120,7 @@ A growing glossary of the Godot concepts this project uses: what each one is, in
 
 **Fresnel.** Water (and glass) reflects more the flatter you look across it: almost a mirror at a glancing angle, see-through looking straight down. *Ours:* the water shader adds a misty sky reflection by Fresnel, which is what lets the swell's shape show at night.
 
-**GPUParticles3D.** Thousands of small meshes moved on the graphics card, set up with a `ParticleProcessMaterial` (where they start, which way and how fast they go, how they grow and fade). `local_coords = false` leaves them where they were born when the emitter moves. *Ours:* `RainEffect` builds the rain streaks and splashes in code and keeps them around the camera; `Drips` drip off the hatch rim and the sail.
+**GPUParticles3D.** Thousands of small meshes moved on the graphics card, set up with a `ParticleProcessMaterial` (where they start, which way and how fast they go, how they grow and fade). `local_coords = false` leaves them where they were born when the emitter moves. *Ours:* `RainEffect` builds the rain streaks and splashes in code and keeps them around the camera; `Drips` drip off the hatch rim and the sail; `GalleyStove` builds its steam, embers and chimney smoke.
 
 **Fog: depth and volumetric.** The `Environment`'s *depth* fog fades things between two distances from the camera (we start at 10 m, so rooms stay clear). *Volumetric* fog fills the air itself, so lights glow as haloes and cones in it (Forward+ only). *Ours:* `sea.tscn`'s `WorldEnvironment`, with each lantern's `light_volumetric_fog_energy`.
 
@@ -141,6 +141,16 @@ A growing glossary of the Godot concepts this project uses: what each one is, in
 **Audio buses and effects.** Sounds play on a *bus*, like a channel on a mixing desk; a bus can have effects (a low-pass filter muffles high sounds) and sends into `Master`. The layout lives in `default_bus_layout.tres`. *Ours:* the `Ambience` bus, whose low-pass filter `Ambience` closes as you go below deck.
 
 **`call_deferred()`.** Runs a function at the end of the current frame instead of now, once everything else has caught up (for instance, once every node in a new scene is ready). *Ours:* `Weather` listens to the shelter zones that way, so zones later in the tree have joined their group.
+
+**Groups and `call_group()`.** A group is a named tag a node joins (`add_to_group(&"name")`). `get_tree().call_group(&"name", &"method", args)` calls that method on every node in it, so the caller doesn't need to know who's listening, or how many. *Ours:* `Weather` tells the "drips" group how wet it is; `Lightning` tells the "lightning_lit" group how bright each flash is, and every `Porthole` joins it.
+
+**ReflectionProbe (and a room's own ambient light).** Captures its box of the scene so shiny things inside reflect the room rather than the sky. With *interior* on, it also replaces the sky's ambient light inside its box with an `ambient_color` you choose. *Ours:* `GalleyProbe` gives the galley a dim, warm ambient light, so corners stay dark below deck while the deck keeps the night sky's.
+
+**SSAO (screen-space ambient occlusion).** An `Environment` setting that darkens creases, corners and the ground under things, where light would struggle to reach. It only darkens ambient light (and a little direct light, with `ssao_light_affect`). *Ours:* turned on, subtly, in the sea scene's environment.
+
+**SpotLight3D.** A torch: a cone of light from a point, fading to its range, with `spot_angle` for how wide. *Ours:* each `Porthole`'s cold blue `Moonlight`, aimed down onto the galley floor.
+
+**Instance uniforms.** `instance uniform float flash;` in a shader is a value each mesh using that material has its own of, set with `set_instance_shader_parameter()`, so many meshes can share one material but differ. *Ours:* each porthole's glass lights up on its own when `Lightning` flashes.
 
 *Still to come with the prototype tickets: ...*
 
