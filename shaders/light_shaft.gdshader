@@ -35,5 +35,8 @@ void fragment() {
 	float down = pow(max(1.0 - UV.y, 0.0), fade) * smoothstep(0.0, 0.06, UV.y);
 	// Faint streaks running down it, drifting.
 	float streaks = 0.55 + 0.45 * noise(vec2(UV.x * 14.0, UV.y * 1.5 - TIME * 0.04));
-	ALBEDO = colour.rgb * flash * energy * facing * down * streaks;
+	// A shaft right in front of the camera (or one it's passing through)
+	// would white the picture out, so it thins to nothing close up.
+	float close_up = smoothstep(2.5, 10.0, -VERTEX.z);
+	ALBEDO = colour.rgb * flash * energy * facing * down * streaks * close_up;
 }

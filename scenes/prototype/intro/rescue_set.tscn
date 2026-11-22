@@ -4,7 +4,6 @@
 [ext_resource type="PackedScene" path="res://scenes/prototype/intro/castaway.tscn" id="2_qsrks"]
 [ext_resource type="PackedScene" path="res://scenes/prototype/lantern_body.tscn" id="3_rqkdy"]
 [ext_resource type="Script" path="res://scripts/companion/lantern_face.gd" id="4_nx0ag"]
-[ext_resource type="PackedScene" path="res://scenes/prototype/props/boathook.tscn" id="5_vvpxu"]
 
 [node name="RescueSet" type="Node3D" unique_id=1722548210]
 
@@ -18,11 +17,11 @@ script = ExtResource("1_ejl8o")
 height_above = 0.5
 
 [node name="TheRail" type="Marker3D" parent="Shots" unique_id=1132034457 groups=["shots"]]
-transform = Transform3D(0.40135863, -0.44491565, -0.80060065, 0, 0.87409353, -0.48575768, 0.915921, 0.19496304, 0.350825, -14.5, 0.8, 4.5)
+transform = Transform3D(0.551062, -0.567931, -0.61138, -0, 0.732662, -0.680593, 0.834465, 0.375049, 0.403742, -10.9, 0.6, 3.6)
 
 [node name="Float" type="Node" parent="Shots/TheRail" unique_id=1092106892]
 script = ExtResource("1_ejl8o")
-height_above = 0.8
+height_above = 0.6
 
 [node name="Marks" type="Node3D" parent="." unique_id=583183069]
 
@@ -57,9 +56,3 @@ streaked = true
 cracked = true
 light = NodePath("../LanternGlow")
 light_energy = 1.3
-
-[node name="ReachingBoathook" type="Node3D" parent="Props" unique_id=778325693 groups=["props"]]
-visible = false
-
-[node name="Boathook" type="Node3D" parent="Props/ReachingBoathook" unique_id=1296053555 instance=ExtResource("5_vvpxu")]
-transform = Transform3D(-2.573397, -1.3958333, 0.43203658, 1.4611659, -2.4583333, 0.7609004, 0, 0.875, 2.826969, -5.77, 6.55, 0.74)

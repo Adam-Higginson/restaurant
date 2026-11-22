@@ -78,6 +78,8 @@ var _last_tree: DialogueTree = null
 var _last_section: StringName = DialogueTree.START
 var _last_player: Player3D = null
 var _last_speaker: Crewmate = null
+## Whether what's in the box was said in passing (see [method say_aside]).
+var _aside: bool = false
 var _last_was_cutscene: bool = false
 
 
@@ -212,8 +214,9 @@ func where() -> String:
 func hold(by: Node) -> int:
 	if not _active or _skipping:
 		return -1
-	# Whatever was last said has been read: the box steps aside for the scene.
-	if box != null:
+	# Whatever was last said has been read: the box steps aside for the
+	# scene. (Something said in passing stays: it goes when its time is up.)
+	if box != null and not _aside:
 		box.close()
 	_last_hold += 1
 	_holds[_last_hold] = by.get_instance_id()
@@ -273,6 +276,31 @@ func stop() -> void:
 	_runner.stop()
 
 
+## Has [param speaker_id] (a [Person]'s id) say [param text] in passing: it
+## shows in the dialogue box like any line, but the script doesn't wait for
+## it to be read and the box doesn't step aside when a cue holds the
+## script. Whoever asked puts it away with [method end_aside]. See
+## [SpeechCues].
+func say_aside(speaker_id: StringName, text: String) -> void:
+	_aside = true
+	if box != null:
+		box.show_line(_people.find_person(speaker_id), text, true, false)
+
+
+## Puts away what was said in passing, if it's still up.
+func end_aside() -> void:
+	if not _aside:
+		return
+	_aside = false
+	if box != null:
+		box.close()
+
+
+## Whether something said in passing is up.
+func is_aside_up() -> bool:
+	return _aside
+
+
 ## Skips the cutscene under way: the script runs to its end now, with every
 ## wait and fade made instant. It stops at a choice, if it comes to one.
 ## Does nothing in an ordinary conversation.
@@ -281,6 +309,7 @@ func skip() -> void:
 		return
 	_skipping = true
 	_skip_held = 0.0
+	_aside = false
 	if box != null:
 		box.close()
 	skip_started.emit()
@@ -344,6 +373,7 @@ func _on_line_shown(line: DialogueStep) -> void:
 		_runner.advance()
 		return
 	var speaker: Person = _people.find_person(line.speaker) if line.speaker != &"" else null
+	_aside = false
 	if box != null:
 		box.show_line(speaker, line.text)
 	line_said.emit(speaker)
@@ -373,6 +403,7 @@ func _on_finished() -> void:
 	_cutscene = false
 	if was_skipping:
 		skip_ended.emit()
+	_aside = false
 	if box != null:
 		box.close()
 	if is_instance_valid(_player):

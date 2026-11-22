@@ -60,6 +60,8 @@ var _typing: bool = false
 var _letters: float = 0.0
 ## Whether the line showing is the last, so the arrow becomes a square.
 var _last: bool = false
+## Whether the line showing is waiting to be read (an arrow invites a press).
+var _waits: bool = true
 ## Seconds left of a pause after a letter, before the next appears.
 var _pause: float = 0.0
 var _selected: int = 0
@@ -94,14 +96,15 @@ func _draw() -> void:
 		_draw_name_plank()
 	if _choices.visible:
 		_draw_cursor()
-	elif not _typing:
+	elif not _typing and _waits:
 		_draw_arrow()
 
 
 ## Types out [param text] as said by [param person]. With no person there's
 ## no name (a narrator). [param is_last] says nothing follows, so the arrow
-## shows a square instead.
-func show_line(person: Person, text: String, is_last: bool = false) -> void:
+## shows a square instead. With [param waits] false the line isn't waiting
+## to be read (it will go by itself), so there's no arrow at all.
+func show_line(person: Person, text: String, is_last: bool = false, waits: bool = true) -> void:
 	_choices.hide()
 	_text.show()
 	_name.visible = person != null
@@ -113,6 +116,7 @@ func show_line(person: Person, text: String, is_last: bool = false) -> void:
 	_letters = 0.0
 	_pause = 0.0
 	_last = is_last
+	_waits = waits
 	_typing = true
 	show()
 	queue_redraw()

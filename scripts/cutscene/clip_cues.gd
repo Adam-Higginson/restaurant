@@ -8,6 +8,9 @@ extends CueHandler
 ## [code]@play lantern_descends[/code] plays the clip of that name and holds
 ## the script until it ends. [code]@start drifting[/code] starts one and
 ## carries straight on, for a clip that loops under whatever comes next.
+## [code]@queue offered[/code] lines one up to follow whatever its
+## AnimationPlayer is playing now, and carries straight on too: a clip that
+## plays once, then a loop that takes over from it.
 ## Skipping a cutscene jumps each clip to its last frame, so everything it
 ## moves ends up where it should be.
 
@@ -16,7 +19,7 @@ const GROUP: StringName = &"clips"
 
 
 func cues() -> Array[StringName]:
-	return [&"play", &"start"]
+	return [&"play", &"start", &"queue"]
 
 
 ## The AnimationPlayer that has a clip called [param clip], or null.
@@ -39,6 +42,13 @@ func _perform(cue: StringName, args: PackedStringArray) -> void:
 		return
 	if is_skipping():
 		_jump_to_end(player, clip)
+		return
+	if cue == &"queue":
+		# With nothing playing there's nothing to follow: it just starts.
+		if player.is_playing():
+			player.queue(clip)
+		else:
+			player.play(clip)
 		return
 	player.play(clip)
 	if cue == &"start":

@@ -80,6 +80,12 @@ static var _heads: Dictionary[String, ArrayMesh] = {}
 @export var n64: bool = true
 ## How fine a version of the model to draw (see [member ThirdPartyModel.detail]).
 @export var detail: float = 0.3
+## Whether the character's eyes are shut: asleep, or out cold. A clip can
+## move it.
+@export var eyes_shut: bool = false:
+	set(value):
+		eyes_shut = value
+		_show_eyes()
 
 ## The character, or null while the greybox shows.
 var character: Node3D = null
@@ -337,6 +343,7 @@ func _build(parts: CharacterParts) -> void:
 	left_hand = _hand("hand_l")
 	_stride_speed = _measure_stride(walk_animation)
 	_run_stride_speed = _measure_stride(run_animation)
+	_show_eyes()
 	pose = Pose.IDLE
 	play(Pose.IDLE)
 
@@ -472,6 +479,15 @@ func _measure_stride(anim_name: StringName) -> float:
 			swept += alongs[sample + 1] - alongs[sample]
 			time_down += step
 	return swept / time_down if time_down > 0.0 and swept > 0.0 else 0.0
+
+
+# Shuts or opens the eyes: shut, the eyeballs aren't drawn, which leaves
+# the lids' own shadowed hollow.
+func _show_eyes() -> void:
+	if skeleton == null:
+		return
+	for mesh: MeshInstance3D in skeleton.find_children("Eyes", "MeshInstance3D", true, false):
+		mesh.visible = not eyes_shut
 
 
 func _hand(bone: String) -> BoneAttachment3D:
