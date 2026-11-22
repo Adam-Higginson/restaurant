@@ -21,10 +21,15 @@ jobs:
           godot-version: '4.7.2'
           version: 'installed'   # use the plugin committed in addons/gdUnit4
           paths: 'res://tests'
-          # Minutes for the whole run. The galley scene suites alone take about
-          # two and a quarter on CI, so 5 was too tight once they landed.
-          timeout: 10
+          # Minutes for the whole run. Headless it takes under one, so 5 leaves
+          # room while still catching a big slowdown early.
+          timeout: 5
+          # Headless, like run_tests.sh: nothing is drawn. Without it the tests
+          # run on a virtual display and every frame of the lit 3D scenes is
+          # rendered on the CPU, which made CI take nearly ten minutes.
+          headless: true
           # -c runs every test instead of stopping a suite at its first failure.
           # --fixed-fps 60 runs frames back to back at a fixed 1/60 s each instead
           # of waiting for the real clock, so the suite finishes in about a minute.
-          arguments: '-c --fixed-fps 60'
+          # --ignoreHeadlessMode lets gdUnit v6 run scene tests headless.
+          arguments: '-c --fixed-fps 60 --ignoreHeadlessMode'
