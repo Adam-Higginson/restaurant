@@ -47,8 +47,13 @@ func _join_conversation() -> void:
 		return
 	conversation.box = _dialogue_box
 	_dialogue_sounds.setup(conversation, _dialogue_box)
-	conversation.started.connect(func(_tree_id: StringName) -> void: _show_play_parts(false))
-	conversation.ended.connect(func(_tree_id: StringName) -> void: _show_play_parts(true))
+	conversation.started.connect(func(_tree_id: StringName) -> void:
+		_show_play_parts(false)
+		# A cutscene is a picture, not play: nothing of the HUD over it.
+		_hearts.modulate.a = 0.0 if conversation.is_cutscene() else 1.0)
+	conversation.ended.connect(func(_tree_id: StringName) -> void:
+		_show_play_parts(true)
+		_hearts.modulate.a = 1.0)
 
 
 func _show_play_parts(shown: bool) -> void:

@@ -15,6 +15,8 @@ func test_every_cue_written_properly_is_fine() -> void:
 		"hide heron", "show heron", "home heron",
 		"stage underwater", "stage off", "play lantern_descends", "start drifting",
 		"sound splash", "muffle on", "muffle off", "lightning",
+		"look hook_lantern determined", "look lantern asleep", "look lantern fogged",
+		"look lantern mended",
 	]
 	for written: String in fine:
 		assert_str(_error(written)).override_failure_message("@%s" % written).is_empty()
@@ -31,6 +33,7 @@ func test_a_cue_written_wrongly_says_how_its_written() -> void:
 		"hide", "show heron now", "home",
 		"stage", "stage a b", "play", "play a b", "start", "sound", "sound a b",
 		"muffle", "muffle half", "muffle on now", "lightning now",
+		"look", "look lantern", "look lantern grumpy", "look lantern calm now",
 	]
 	for written: String in wrong:
 		var cue: String = written.split(" ")[0]
