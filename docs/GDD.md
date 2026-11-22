@@ -188,6 +188,8 @@ Worked example: a tomato (★) sliced properly gives (1 + 3) / 2 = ★★ sliced
 
 Garden Salad works today. Tomato Soup and Grilled Cheese need the stove, pans and water barrel.
 
+**Caught, not bought:** a **herring** from the rod at the starboard rail (fish only bite while the ship is hove to: ring the bell). Fillet it on the chopping board (3 cuts) for a **herring fillet**, ready for a fire recipe once the stove cooks. Both keep in the fridge.
+
 ## Storage
 - The galley **pantry** (and later the hold) stores ingredients. Containers have a fixed number of slots, and each item uses one.
 - Interact on a container while holding food it accepts (and there's room) puts it away. Otherwise it opens a small panel showing its contents, and picking an item puts it on your toolbar if there's a free slot. While you hold food the container accepts, Interact puts it away instead, so select an empty slot or a tool to open it.

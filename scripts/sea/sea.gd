@@ -38,6 +38,8 @@ var _material: ShaderMaterial = null
 
 
 func _ready() -> void:
+	# So things aboard (a fishing float) can find the water's height.
+	add_to_group(&"sea")
 	_material = material_override as ShaderMaterial
 	_follow_ship()
 	_apply()

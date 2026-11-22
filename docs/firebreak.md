@@ -19,3 +19,10 @@ Walk up the forecastle stairs; at the top, face the bell rope and press Interact
 - `Ship` gained `heave_to()`, `get_under_way()`, `way` (0 to 1 of full speed) and `ease_seconds`; the sea's wake and the bow spray follow `way`. `Swinging` gained `kick()` for a big swing that dies away.
 - Tests: `tests/scripts/ship/ships_bell_test.gd` (eases to a stop, stays put, eases back up, the bell toggles and its prompt says which, pulling the rope with Interact rings it, the bell swings hard).
 - This is the start of #67's "ring the bell to set sail"; mooring at an island still needs the gangplank.
+
+### 3. Fishing from the rail, into the galley
+A rod in a holder at the starboard rail (by the chimney), with a bait bucket. Interact to cast; the bobber floats out on the real swell (it reads the sea's wave height). Fish only bite while the ship is hove to, which gives the bell a reason: under way the prompt says "Reel in (they bite when hove to)". After a wait the bobber dips and bobs; your lantern hops about excitedly; you have a moment to Interact ("Strike!"). Land it and a **herring** goes in your toolbar. Below, on the chopping board, 3 cuts make a **herring fillet** (a new reaction), ready for when the stove cooks.
+- `scripts/fishing/fishing_line.gd` (the pure logic: cast, wait in still water, bite, strike or it gets away), `scripts/fishing/fishing_spot.gd` + `scenes/prototype/props/fishing_spot.tscn`.
+- Data: `data/items/herring.tres`, `herring_fillet.tres`, `data/reactions/fillet_herring.tres`, added to the catalog (and to the GDD's dishes).
+- `Sea` joins a `sea` group so things aboard can ask the water's height; `LanternSpirit.excite()`.
+- Tests: `tests/scripts/fishing/` (6 for the line, 5 for the spot: cast with Interact, strike lands a herring in the toolbar, nothing bites under way, the lantern gets excited, the fillet reaction).

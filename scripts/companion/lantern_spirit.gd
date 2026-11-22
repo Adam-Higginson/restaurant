@@ -57,6 +57,8 @@ var _spot: Vector3 = Vector3.ZERO
 var _time: float = 0.0
 var _blink_wait: float = 0.0
 var _blink_left: float = 0.0
+## Seconds left of an excited little dance.
+var _excited: float = 0.0
 var _rng: RandomNumberGenerator = RandomNumberGenerator.new()
 
 @onready var _body: Node3D = $Body
@@ -90,7 +92,11 @@ func _physics_process(delta: float) -> void:
 	var pull: Vector3 = (goal - _spot) * stiffness - _velocity * damping
 	_velocity += pull * delta
 	_spot += _velocity * delta
-	global_position = _spot + Vector3.UP * bob_offset(_time)
+	if _excited > 0.0 and _excited - delta <= 0.0 and is_instance_valid(_light):
+		_light.base_energy = 1.35 if _attention != null else 1.1
+	_excited = maxf(_excited - delta, 0.0)
+	var hop: float = absf(sin(_time * 14.0)) * 0.14 * minf(_excited, 1.0)
+	global_position = _spot + Vector3.UP * (bob_offset(_time) + hop)
 	_face(delta)
 
 
@@ -106,6 +112,20 @@ func snap_to_player() -> void:
 	_spot = goal_spot()
 	global_position = _spot
 	reset_physics_interpolation()
+
+
+## Hops about excitedly for a moment, a little brighter: something's
+## happening (a fish on the line).
+func excite() -> void:
+	_excited = 1.6
+	blink()
+	if is_instance_valid(_light):
+		_light.base_energy = 1.7
+
+
+## Whether he's in the middle of an excited hop.
+func is_excited() -> bool:
+	return _excited > 0.0
 
 
 ## Blinks once, now.

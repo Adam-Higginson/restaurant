@@ -32,11 +32,14 @@
 [ext_resource type="Resource" path="res://data/people/hazel.tres" id="23_rhhc8"]
 [ext_resource type="Script" path="res://scripts/data/hand_tool.gd" id="24_tool"]
 [ext_resource type="Resource" path="res://data/tools/chefs_knife.tres" id="25_knife"]
+[ext_resource type="Resource" path="res://data/items/herring.tres" id="26_herring"]
+[ext_resource type="Resource" path="res://data/items/herring_fillet.tres" id="27_fillet"]
+[ext_resource type="Resource" path="res://data/reactions/fillet_herring.tres" id="28_fillet_herring"]
 
 [resource]
 script = ExtResource("23_itf3g")
-items = Array[ExtResource("3_ri6n3")]([ExtResource("4_n75ka"), ExtResource("5_wvss8"), ExtResource("6_0uqn3"), ExtResource("7_5q4dk"), ExtResource("8_l2ssu"), ExtResource("9_kruv5"), ExtResource("10_7671r"), ExtResource("11_5u5l8"), ExtResource("12_lcsjk"), ExtResource("13_vx4vr"), ExtResource("14_cta3b"), ExtResource("15_wwfey"), ExtResource("16_rhhc8")])
+items = Array[ExtResource("3_ri6n3")]([ExtResource("4_n75ka"), ExtResource("5_wvss8"), ExtResource("6_0uqn3"), ExtResource("7_5q4dk"), ExtResource("8_l2ssu"), ExtResource("9_kruv5"), ExtResource("10_7671r"), ExtResource("11_5u5l8"), ExtResource("12_lcsjk"), ExtResource("13_vx4vr"), ExtResource("14_cta3b"), ExtResource("15_wwfey"), ExtResource("16_rhhc8"), ExtResource("26_herring"), ExtResource("27_fillet")])
 elements = Array[ExtResource("1_sq7co")]([ExtResource("2_gpcun")])
-reactions = Array[ExtResource("17_gx03v")]([ExtResource("18_dxvgn"), ExtResource("19_qdmq8"), ExtResource("20_oyiyi"), ExtResource("21_m07uu"), ExtResource("22_3onb0")])
+reactions = Array[ExtResource("17_gx03v")]([ExtResource("18_dxvgn"), ExtResource("19_qdmq8"), ExtResource("20_oyiyi"), ExtResource("21_m07uu"), ExtResource("22_3onb0"), ExtResource("28_fillet_herring")])
 tools = Array[ExtResource("24_tool")]([ExtResource("25_knife")])
 people = Array[ExtResource("17_7671r")]([ExtResource("18_5u5l8"), ExtResource("19_lcsjk"), ExtResource("20_vx4vr"), ExtResource("21_cta3b"), ExtResource("22_wwfey"), ExtResource("23_rhhc8")])

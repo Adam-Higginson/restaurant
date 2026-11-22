@@ -5,7 +5,7 @@ extends GameTestSuite
 
 ## Items with no reaction producing them: what the shop and the kitchen provide.
 const RAW: Array[String] = [
-	"lettuce", "tomato", "onion", "bread", "cheese", "chopping_board", "plate",
+	"lettuce", "tomato", "onion", "bread", "cheese", "chopping_board", "plate", "herring",
 ]
 
 var _catalog: Catalog
@@ -25,7 +25,7 @@ func test_catalog_has_the_mvp_items() -> void:
 		&"lettuce", &"tomato", &"onion", &"bread", &"cheese",
 		&"chopped_lettuce", &"sliced_tomato", &"diced_tomato",
 		&"garden_salad", &"tomato_soup", &"grilled_cheese",
-		&"chopping_board", &"plate",
+		&"chopping_board", &"plate", &"herring", &"herring_fillet",
 	])
 
 
@@ -64,7 +64,7 @@ func test_garden_salad_reactions_match_design_doc() -> void:
 func test_storage_kinds_match_design_doc() -> void:
 	var fridge: Array[StringName] = [
 		&"lettuce", &"tomato", &"cheese", &"chopped_lettuce", &"sliced_tomato",
-		&"diced_tomato", &"garden_salad", &"grilled_cheese",
+		&"diced_tomato", &"garden_salad", &"grilled_cheese", &"herring", &"herring_fillet",
 	]
 	var cupboard: Array[StringName] = [&"onion", &"bread"]
 	for item: Item in _catalog.items:
