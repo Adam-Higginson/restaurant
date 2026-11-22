@@ -1,0 +1,23 @@
+[gd_scene format=3 uid="uid://d0bpsnh03rlia"]
+
+[ext_resource type="Material" path="res://assets/placeholder/materials/recipe.tres" id="1_v54rd"]
+[ext_resource type="Material" path="res://assets/placeholder/materials/brass.tres" id="2_kam4e"]
+
+[sub_resource type="QuadMesh" id="QuadMesh_vl644"]
+size = Vector2(0.15, 0.2)
+
+[sub_resource type="BoxMesh" id="BoxMesh_ibbb3"]
+size = Vector3(0.012, 0.012, 0.012)
+
+[node name="PinnedLetter" type="Node3D" unique_id=18120452]
+
+[node name="Sheet" type="MeshInstance3D" parent="." unique_id=547028018]
+transform = Transform3D(0.9986295, -0.05233596, 0, 0.05233596, 0.9986295, 0, 0, 0, 1, 0, 0, 0.004)
+material_override = ExtResource("1_v54rd")
+cast_shadow = 0
+mesh = SubResource("QuadMesh_vl644")
+
+[node name="Pin" type="MeshInstance3D" parent="." unique_id=555190187]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.08, 0.008)
+material_override = ExtResource("2_kam4e")
+mesh = SubResource("BoxMesh_ibbb3")

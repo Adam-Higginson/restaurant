@@ -1,16 +1,23 @@
 extends GameTestSuite
 ## Tests for the bunk room aft of the galley: bunks down both sides, your own
-## bunk, the stern windows, its light, and room to walk. The player walks at
-## 5 m/s, so 12 physics ticks a metre; up on the stick is towards the bow,
-## down towards the stern, right towards starboard.
+## bunk, the stern windows, its low ceiling, the stove in the middle, its
+## light, and room to walk. The player walks at 5 m/s, so 12 physics ticks a
+## metre; up on the stick is towards the bow, down towards the stern, right
+## towards starboard.
 
 ## Our own pieces that dress the bunk room (#88).
 const PIECES: Array[String] = [
 	"props/bunk_bay", "props/sea_chest", "props/crate", "dressing/hammock",
 	"dressing/hammock_blanket", "dressing/boots", "dressing/sock_line", "dressing/fiddle",
 	"dressing/kit_bag", "dressing/book_stack", "dressing/sketchbook",
-	"dressing/fishing_tackle", "dressing/your_things",
+	"dressing/fishing_tackle", "dressing/your_things", "props/bunk_stove", "dressing/candle",
+	"dressing/folded_blankets", "dressing/yarn_basket", "dressing/sheepskin",
+	"dressing/playing_cards", "dressing/pinned_drawing", "dressing/pinned_letter",
+	"dressing/pressed_flower",
 ]
+## Ship space: the bunk room's floor, and the underside of its ceiling.
+const FLOOR_Y: float = 1.0
+const CEILING_Y: float = 4.0
 
 
 func test_bunks_line_both_sides() -> void:
@@ -50,7 +57,7 @@ func test_the_stern_has_two_windows_through_it() -> void:
 		assert_object(ship.get_node("Visuals/PortholeStern" + side) as Porthole).is_not_null()
 
 
-func test_only_the_two_aisle_lanterns_cast_shadows() -> void:
+func test_only_the_stove_and_one_lantern_cast_shadows() -> void:
 	var ship: Ship = new_moored_ship_with_player(Vector3(0, 1.05, 11))[0] as Ship
 	var runner: GdUnitSceneRunner = scene_runner(ship.get_parent())
 	await physics_ticks(runner, 2)
@@ -62,7 +69,31 @@ func test_only_the_two_aisle_lanterns_cast_shadows() -> void:
 				and room.has_point(ship.to_local(light.global_position)):
 			shadowed.append(str(ship.get_path_to(light)))
 	assert_array(shadowed).override_failure_message(
-			"Lights casting shadows in the bunk room: %s" % [shadowed]).has_size(2)
+			"Lights casting shadows in the bunk room: %s" % [shadowed]) 			.contains_exactly_in_any_order(["BunkRoom/Stove/FireLight", "Visuals/BunkLantern/Light"])
+
+
+func test_a_low_ceiling_closes_the_room_except_over_the_ramp() -> void:
+	var ship: Ship = new_moored_ship_with_player(Vector3(-2.72, 1.05, 7.0))[0] as Ship
+	var runner: GdUnitSceneRunner = scene_runner(ship.get_parent())
+	await physics_ticks(runner, 2)
+	# Looking straight up from head height: the middle, the port stern corner,
+	# beside the hatch, and over your bunk's aisle.
+	for spot: Vector3 in [Vector3(0, 2.6, 11.3), Vector3(-4.0, 2.6, 13.0), Vector3(-3.0, 2.6, 8.4),
+			Vector3(4.0, 2.6, 13.5)]:
+		var hit: float = _ceiling_above(ship, spot)
+		assert_float(hit).override_failure_message("Above %s the ceiling is at %.2f" % [spot, hit]) 				.is_between(CEILING_Y - 0.05, CEILING_Y + 0.05)
+	# Over the ramp's foot it's open up through the hatch.
+	assert_float(_ceiling_above(ship, Vector3(-4.6, 2.6, 8.4))).is_equal(INF)
+
+
+func test_the_stove_warms_the_middle_of_the_room() -> void:
+	var ship: Ship = new_moored_ship_with_player(Vector3(0, 1.05, 9.3))[0] as Ship
+	var stove: Node3D = ship.get_node("BunkRoom/Stove") as Node3D
+	assert_float(absf(stove.position.x)).is_less(1.5)
+	assert_float(stove.position.z).is_between(10.5, 13.0)
+	var fire: Flicker = stove.get_node("FireLight") as Flicker
+	assert_object(fire).is_not_null()
+	assert_bool(fire.shadow_enabled).is_true()
 
 
 func test_the_bunk_room_has_its_own_dim_ambient_light() -> void:
@@ -107,6 +138,22 @@ func test_you_can_walk_from_the_galley_door_to_the_stern() -> void:
 	assert_float(_player_on(ship, runner).z).is_greater(13.0)
 
 
+func test_you_can_walk_round_the_stove() -> void:
+	var ship: Ship = new_moored_ship_with_player(Vector3(1.8, 1.05, 9.3))[0] as Ship
+	var runner: GdUnitSceneRunner = scene_runner(ship.get_parent())
+	await physics_ticks(runner, 5)
+
+	await walk(runner, "move_right", 40)
+	await walk(runner, "move_down", 50)
+	await walk(runner, "move_left", 80)
+
+	# Along the front, down past the starboard bunks, and back across the
+	# stern behind the stove, to the door's side of the room.
+	var at: Vector3 = _player_on(ship, runner)
+	assert_float(at.x).is_less(-1.5)
+	assert_float(at.z).is_greater(13.0)
+
+
 func test_you_can_walk_from_the_ramp_foot_to_your_bunk() -> void:
 	var ship: Ship = new_moored_ship_with_player(Vector3(-4.0, 1.05, 9.2))[0] as Ship
 	var runner: GdUnitSceneRunner = scene_runner(ship.get_parent())
@@ -119,6 +166,18 @@ func test_you_can_walk_from_the_ramp_foot_to_your_bunk() -> void:
 	var at: Vector3 = _player_on(ship, runner)
 	assert_float(at.x).is_greater(3.6)
 	assert_float(at.z).is_greater(12.8)
+
+
+## How high (in ship space) a ray going straight up from [param from] first
+## hits something, or INF if nothing is there before the deck's top.
+func _ceiling_above(ship: Ship, from: Vector3) -> float:
+	var query: PhysicsRayQueryParameters3D = PhysicsRayQueryParameters3D.create(
+			ship.to_global(from), ship.to_global(Vector3(from.x, 5.6, from.z)))
+	var hit: Dictionary = ship.get_world_3d().direct_space_state.intersect_ray(query)
+	if hit.is_empty():
+		return INF
+	var point: Vector3 = hit["position"]
+	return ship.to_local(point).y
 
 
 func _player_on(ship: Ship, runner: GdUnitSceneRunner) -> Vector3:

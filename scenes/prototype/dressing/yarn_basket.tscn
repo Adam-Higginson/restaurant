@@ -1,0 +1,92 @@
+[gd_scene format=3 uid="uid://bsx5plsxdy7n1"]
+
+[ext_resource type="Material" path="res://assets/placeholder/materials/sackcloth.tres" id="1_5ulkt"]
+[ext_resource type="Material" path="res://assets/placeholder/materials/rope.tres" id="2_qy4ef"]
+[ext_resource type="Material" path="res://assets/placeholder/materials/red_cloth.tres" id="3_cdfio"]
+[ext_resource type="Material" path="res://assets/placeholder/materials/linen.tres" id="4_50d4m"]
+[ext_resource type="Material" path="res://assets/placeholder/materials/oilskin.tres" id="5_yrgtp"]
+[ext_resource type="Material" path="res://assets/placeholder/materials/quilt_green.tres" id="6_1kabo"]
+[ext_resource type="Material" path="res://assets/placeholder/materials/prop_wood.tres" id="7_s4a0g"]
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_8c7c7"]
+top_radius = 0.19
+bottom_radius = 0.17
+height = 0.16
+radial_segments = 8
+rings = 1
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_ysw5r"]
+top_radius = 0.195
+bottom_radius = 0.195
+height = 0.025
+radial_segments = 8
+rings = 1
+
+[sub_resource type="SphereMesh" id="SphereMesh_nvaq4"]
+radius = 0.07
+height = 0.14
+radial_segments = 6
+rings = 3
+
+[sub_resource type="SphereMesh" id="SphereMesh_gx24a"]
+radius = 0.065
+height = 0.13
+radial_segments = 6
+rings = 3
+
+[sub_resource type="SphereMesh" id="SphereMesh_ciw6m"]
+radius = 0.06
+height = 0.12
+radial_segments = 6
+rings = 3
+
+[sub_resource type="BoxMesh" id="BoxMesh_xbsoy"]
+size = Vector3(0.16, 0.22, 0.02)
+
+[sub_resource type="BoxMesh" id="BoxMesh_ufnt1"]
+size = Vector3(0.008, 0.008, 0.3)
+
+[sub_resource type="BoxMesh" id="BoxMesh_ee5n2"]
+size = Vector3(0.008, 0.008, 0.3)
+
+[node name="YarnBasket" type="Node3D" unique_id=846965033]
+
+[node name="Basket" type="MeshInstance3D" parent="." unique_id=195245010]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.08, 0)
+material_override = ExtResource("1_5ulkt")
+mesh = SubResource("CylinderMesh_8c7c7")
+
+[node name="Rim" type="MeshInstance3D" parent="." unique_id=1451500519]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.165, 0)
+material_override = ExtResource("2_qy4ef")
+mesh = SubResource("CylinderMesh_ysw5r")
+
+[node name="YarnRed" type="MeshInstance3D" parent="." unique_id=1788868744]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.06, 0.18, 0.03)
+material_override = ExtResource("3_cdfio")
+mesh = SubResource("SphereMesh_nvaq4")
+
+[node name="YarnCream" type="MeshInstance3D" parent="." unique_id=1558322843]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.07, 0.17, -0.04)
+material_override = ExtResource("4_50d4m")
+mesh = SubResource("SphereMesh_gx24a")
+
+[node name="YarnMustard" type="MeshInstance3D" parent="." unique_id=1779437719]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.02, 0.19, 0.09)
+material_override = ExtResource("5_yrgtp")
+mesh = SubResource("SphereMesh_ciw6m")
+
+[node name="Knitting" type="MeshInstance3D" parent="." unique_id=695996098]
+transform = Transform3D(0.9191581, 0.19537309, 0.34202012, -0.2079117, 0.9781476, 0, -0.33454618, -0.07110999, 0.9396926, 0.17, 0.1, 0.04)
+material_override = ExtResource("6_1kabo")
+mesh = SubResource("BoxMesh_xbsoy")
+
+[node name="NeedleA" type="MeshInstance3D" parent="." unique_id=189987042]
+transform = Transform3D(0.8660254, 0.28678823, 0.40957603, 0, 0.81915206, -0.57357645, -0.5, 0.49673176, 0.7094065, 0, 0.25, 0)
+material_override = ExtResource("7_s4a0g")
+mesh = SubResource("BoxMesh_ufnt1")
+
+[node name="NeedleB" type="MeshInstance3D" parent="." unique_id=500252240]
+transform = Transform3D(0.70710677, 0.45451945, 0.5416752, 0, 0.76604444, -0.6427876, -0.70710677, 0.45451945, 0.5416752, 0.03, 0.25, 0.02)
+material_override = ExtResource("7_s4a0g")
+mesh = SubResource("BoxMesh_ee5n2")

@@ -1,0 +1,53 @@
+[gd_scene format=3 uid="uid://d08lwq6m82onj"]
+
+[ext_resource type="Material" path="res://assets/placeholder/materials/fleece.tres" id="1_i7cu1"]
+
+[sub_resource type="BoxMesh" id="BoxMesh_qrw7m"]
+size = Vector3(0.62, 0.03, 0.86)
+
+[sub_resource type="BoxMesh" id="BoxMesh_rg4mi"]
+size = Vector3(0.16, 0.025, 0.12)
+
+[sub_resource type="BoxMesh" id="BoxMesh_mxc0c"]
+size = Vector3(0.16, 0.025, 0.12)
+
+[sub_resource type="BoxMesh" id="BoxMesh_emw7j"]
+size = Vector3(0.16, 0.025, 0.12)
+
+[sub_resource type="BoxMesh" id="BoxMesh_vlhrh"]
+size = Vector3(0.16, 0.025, 0.12)
+
+[sub_resource type="BoxMesh" id="BoxMesh_2ogdj"]
+size = Vector3(0.22, 0.025, 0.12)
+
+[node name="Sheepskin" type="Node3D" unique_id=138094486]
+
+[node name="Hide" type="MeshInstance3D" parent="." unique_id=1866163899]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.015, 0)
+material_override = ExtResource("1_i7cu1")
+mesh = SubResource("BoxMesh_qrw7m")
+
+[node name="LegLB" type="MeshInstance3D" parent="." unique_id=2118012773]
+transform = Transform3D(0.90630776, 0, 0.42261827, 0, 1, 0, -0.42261827, 0, 0.90630776, -0.36, 0.013, -0.33)
+material_override = ExtResource("1_i7cu1")
+mesh = SubResource("BoxMesh_rg4mi")
+
+[node name="LegLF" type="MeshInstance3D" parent="." unique_id=1944004825]
+transform = Transform3D(0.90630776, 0, -0.42261827, 0, 1, 0, 0.42261827, 0, 0.90630776, -0.36, 0.013, 0.33)
+material_override = ExtResource("1_i7cu1")
+mesh = SubResource("BoxMesh_mxc0c")
+
+[node name="LegRB" type="MeshInstance3D" parent="." unique_id=2028310399]
+transform = Transform3D(0.90630776, 0, -0.42261827, 0, 1, 0, 0.42261827, 0, 0.90630776, 0.36, 0.013, -0.33)
+material_override = ExtResource("1_i7cu1")
+mesh = SubResource("BoxMesh_emw7j")
+
+[node name="LegRF" type="MeshInstance3D" parent="." unique_id=1529986278]
+transform = Transform3D(0.90630776, 0, 0.42261827, 0, 1, 0, -0.42261827, 0, 0.90630776, 0.36, 0.013, 0.33)
+material_override = ExtResource("1_i7cu1")
+mesh = SubResource("BoxMesh_vlhrh")
+
+[node name="Neck" type="MeshInstance3D" parent="." unique_id=1690380849]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.013, -0.48)
+material_override = ExtResource("1_i7cu1")
+mesh = SubResource("BoxMesh_2ogdj")

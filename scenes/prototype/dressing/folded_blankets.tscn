@@ -1,0 +1,30 @@
+[gd_scene format=3 uid="uid://bnroex408f4eh"]
+
+[ext_resource type="Material" path="res://assets/placeholder/materials/quilt_blue.tres" id="1_63me7"]
+[ext_resource type="Material" path="res://assets/placeholder/materials/quilt_red.tres" id="2_54wqu"]
+
+[sub_resource type="BoxMesh" id="BoxMesh_orqyr"]
+size = Vector3(0.52, 0.08, 0.38)
+
+[sub_resource type="BoxMesh" id="BoxMesh_v32em"]
+size = Vector3(0.46, 0.07, 0.34)
+
+[sub_resource type="BoxMesh" id="BoxMesh_bmyvc"]
+size = Vector3(0.12, 0.05, 0.1)
+
+[node name="FoldedBlankets" type="Node3D" unique_id=339562853]
+
+[node name="Lower" type="MeshInstance3D" parent="." unique_id=1259998062]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.04, 0)
+material_override = ExtResource("1_63me7")
+mesh = SubResource("BoxMesh_orqyr")
+
+[node name="Upper" type="MeshInstance3D" parent="." unique_id=2108143235]
+transform = Transform3D(0.99026805, 0, 0.1391731, 0, 1, 0, -0.1391731, 0, 0.99026805, 0.02, 0.115, 0.01)
+material_override = ExtResource("2_54wqu")
+mesh = SubResource("BoxMesh_v32em")
+
+[node name="Corner" type="MeshInstance3D" parent="." unique_id=1888217101]
+transform = Transform3D(0.8528685, -0.15038373, 0.5, 0.17364818, 0.9848077, 0, -0.49240386, 0.08682409, 0.8660254, 0.2, 0.17, 0.12)
+material_override = ExtResource("2_54wqu")
+mesh = SubResource("BoxMesh_bmyvc")

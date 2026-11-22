@@ -1,0 +1,82 @@
+[gd_scene format=3 uid="uid://dg3rw3f2q7ue7"]
+
+[ext_resource type="Material" path="res://assets/placeholder/materials/linen.tres" id="1_os3at"]
+[ext_resource type="Material" path="res://assets/placeholder/materials/brass.tres" id="2_l6r7s"]
+[ext_resource type="Material" path="res://assets/placeholder/materials/herbs.tres" id="3_v3u48"]
+[ext_resource type="Material" path="res://assets/placeholder/materials/red_cloth.tres" id="4_gl5jo"]
+[ext_resource type="Material" path="res://assets/placeholder/materials/oilskin.tres" id="5_x48tx"]
+
+[sub_resource type="QuadMesh" id="QuadMesh_6uaqb"]
+size = Vector2(0.12, 0.16)
+
+[sub_resource type="BoxMesh" id="BoxMesh_idcms"]
+size = Vector3(0.012, 0.012, 0.012)
+
+[sub_resource type="BoxMesh" id="BoxMesh_cfqsa"]
+size = Vector3(0.008, 0.08, 0.004)
+
+[sub_resource type="BoxMesh" id="BoxMesh_vflca"]
+size = Vector3(0.018, 0.018, 0.004)
+
+[sub_resource type="BoxMesh" id="BoxMesh_8unmv"]
+size = Vector3(0.018, 0.018, 0.004)
+
+[sub_resource type="BoxMesh" id="BoxMesh_xi5ba"]
+size = Vector3(0.018, 0.018, 0.004)
+
+[sub_resource type="BoxMesh" id="BoxMesh_aroxy"]
+size = Vector3(0.018, 0.018, 0.004)
+
+[sub_resource type="BoxMesh" id="BoxMesh_7s2s0"]
+size = Vector3(0.018, 0.018, 0.004)
+
+[sub_resource type="BoxMesh" id="BoxMesh_amqk2"]
+size = Vector3(0.012, 0.012, 0.005)
+
+[node name="PressedFlower" type="Node3D" unique_id=777997416]
+
+[node name="Sheet" type="MeshInstance3D" parent="." unique_id=78758122]
+transform = Transform3D(0.9986295, -0.05233596, 0, 0.05233596, 0.9986295, 0, 0, 0, 1, 0, 0, 0.004)
+material_override = ExtResource("1_os3at")
+cast_shadow = 0
+mesh = SubResource("QuadMesh_6uaqb")
+
+[node name="Pin" type="MeshInstance3D" parent="." unique_id=2124506818]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.06, 0.008)
+material_override = ExtResource("2_l6r7s")
+mesh = SubResource("BoxMesh_idcms")
+
+[node name="Stem" type="MeshInstance3D" parent="." unique_id=1586476503]
+transform = Transform3D(0.99026805, -0.1391731, 0, 0.1391731, 0.99026805, 0, 0, 0, 1, 0, -0.03, 0.008)
+material_override = ExtResource("3_v3u48")
+mesh = SubResource("BoxMesh_cfqsa")
+
+[node name="Petal1" type="MeshInstance3D" parent="." unique_id=1917681639]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.006, 0.042, 0.008)
+material_override = ExtResource("4_gl5jo")
+mesh = SubResource("BoxMesh_vflca")
+
+[node name="Petal2" type="MeshInstance3D" parent="." unique_id=717759198]
+transform = Transform3D(0.30901697, -0.95105654, 0, 0.95105654, 0.30901697, 0, 0, 0, 1, 0.010167961, 0.03025329, 0.008)
+material_override = ExtResource("4_gl5jo")
+mesh = SubResource("BoxMesh_8unmv")
+
+[node name="Petal3" type="MeshInstance3D" parent="." unique_id=387071611]
+transform = Transform3D(-0.80901706, -0.5877852, 0, 0.5877852, -0.80901706, 0, 0, 0, 1, 0.0039923494, 0.011246711, 0.008)
+material_override = ExtResource("4_gl5jo")
+mesh = SubResource("BoxMesh_xi5ba")
+
+[node name="Petal4" type="MeshInstance3D" parent="." unique_id=1863282554]
+transform = Transform3D(-0.80901706, 0.5877851, 0, -0.5877851, -0.80901706, 0, 0, 0, 1, -0.015992349, 0.011246711, 0.008)
+material_override = ExtResource("4_gl5jo")
+mesh = SubResource("BoxMesh_aroxy")
+
+[node name="Petal5" type="MeshInstance3D" parent="." unique_id=2115819477]
+transform = Transform3D(0.30901712, 0.9510565, 0, -0.9510565, 0.30901712, 0, 0, 0, 1, -0.02216796, 0.03025329, 0.008)
+material_override = ExtResource("4_gl5jo")
+mesh = SubResource("BoxMesh_7s2s0")
+
+[node name="Middle" type="MeshInstance3D" parent="." unique_id=541392816]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.006, 0.025, 0.009)
+material_override = ExtResource("5_x48tx")
+mesh = SubResource("BoxMesh_amqk2")
