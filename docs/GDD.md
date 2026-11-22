@@ -95,6 +95,16 @@ OoT-style duels: lock on, read the enemy, strike at the opening.
 - **Hearts:** the player's health.
 - **Enemies have rhythms:** a readable windup, an attack, then an opening. Learning a fight is like learning a recipe.
 
+**The first duel (greybox, #66).** Open `scenes/prototype/islands/duel_arena.tscn` and press F6: a patch of island with a landing and two fog-crabs, until an island can be sailed to (#67).
+- **Lock-on is held** (Shift, middle click or the left trigger). It takes the nearest fog-touched creature within 9 m and lets go when you release it, when the creature is more than 12 m away, or when its fog clears. While it's held you face the creature, so walking sideways circles it; the camera swings round behind you, a little to one side so you don't hide what you're fighting, and can't be turned; and the lantern hovers over it. With nothing in reach, the button turns the camera to look the way you face. (Hold or toggle is one setting on the player's `LockOn` node, for a settings menu later.)
+- **The knife is Use tool.** With nothing in front of you for a tool to work on, Use tool swings the knife (half a second a swing) at any fog-touched creature within 2 m in front of you. At a chopping board it still chops.
+- **The pan is Parry** (R or the right trigger), and you must be carrying a frying pan, in any toolbar slot. It goes up for 0.3 s; a hit that lands in that time is turned away and staggers the creature. Then it's down for 0.4 s, so mashing the button doesn't work, unless it parried, when it's ready again at once.
+- **Three hearts,** in the top-left corner of the HUD. A fog-crab's hit costs half a heart.
+- **The fog-crab** notices you within 7 m. It rears up, shaking, for 0.8 s (the tell), creeping closer; lunges (the hit lands as the lunge starts, if you're within 2 m: back away and it misses); then sags for 1.2 s (the opening). A parried lunge staggers it for 1.5 s instead. Strikes only count while it's open or staggered. The third clears its fog: it shakes itself off and wanders away, and can't be locked on to or hurt any more. Its fog thins with each strike.
+- **The lantern's light is the fight's state:** it flickers hard while the creature you're locked on to rears up, and burns bright and steady while it's open.
+- **Defeat:** with no hearts left, the lantern pulls you back to the island's landing with your hearts full. You keep your tools (the knife), and lose half the items you carry, rounded down, from the last toolbar slots first; a utensil counts as an item, so the pan can go. The creature that beat you forgets the strikes it took. (The arena hands the pan back if you lose it, so there's always a way to parry there.)
+- Every number above is a setting on the `Duellist`, `LockOn` or `FogCrab` node, to tune in the Inspector.
+
 ### Preparation
 - **Dinner is the briefing:** crew gossip at the table tells you what's on tomorrow's island ("the crabs hate pepper", "the tide goes out at four bells").
 - **Tonight's meal is tomorrow's blessing:** what the crew eats at dinner shapes the next day ashore (a hearty stew for an extra heart, ginger soup against the cold).
@@ -115,7 +125,7 @@ When you lose a fight, **the lantern pulls you out**, echoing how you met. You r
 - **Free third-person camera** everywhere you walk: on deck, below deck in the galley, and on islands, orbited with the right stick or mouse. A spring arm pulls it in when a wall or the mast is in the way. It keeps its direction in the world when the ship turns, rather than turning with the deck. With a mouse, the cursor is captured while playing: Esc frees it and a click captures it again.
 - **The galley is roomy enough for the free camera** (a plank ceiling 2.65 m up and the full width of the hull), so cooking uses the same camera and controls as everywhere else. Below deck, the ceilings and their beams stop the camera's spring arm, so it's pulled in under them rather than rising into the space below the deck. We tried a fixed shot there first (#63), but it looked at the player's back while they cooked at the counters.
 - **Fixed, framed shots** are kept for spaces too tight for the free camera, like your bunk or an island shop, as in OoT's houses. A *camera zone* blends to its shot as you walk in, and back to the free camera's angle from before as you leave. The camera can't be turned in a fixed shot. Movement always follows the active camera, except that if the camera switches while you hold a direction, you keep walking the same way until you let go or swing the stick, so a switch never turns you round.
-- **Lock-on** frames the player and the target together.
+- **Lock-on** frames the player and the target together: the free camera swings round behind the player and a little to one side (see Combat). A fixed shot wins over it.
 
 ### Controls
 One button, **interact**, does everything with the thing in front of you.
@@ -132,7 +142,9 @@ One button, **interact**, does everything with the thing in front of you.
 | Move (in a conversation) | W and S / arrows | Left stick or D-pad | Move between replies |
 | Use tool | F / left click | B | Use the selected tool, or the tool that fits what you're facing (the knife chops) |
 | Select toolbar slot | 1–9, 0, -, = / scroll | Bumpers (cycle) | Choose what you hold |
-| Lock-on, attack, parry | To be set in #66 | To be set in #66 | Duels |
+| Use tool (nothing to work on) | F / left click | B | Swing the knife |
+| Lock-on (hold) | Shift / middle click | Left trigger | Face and circle the nearest fog-touched creature; with none near, look the way you face |
+| Parry | R | Right trigger | Raise the frying pan for a moment, if you carry one |
 
 Each action is a named action in Godot's Input Map with keyboard and controller bound, so gameplay code never checks a specific key. Panels must be usable with the D-pad. While a panel is open the mouse cursor is freed so it can be clicked, and it's captured again when the panel closes.
 
