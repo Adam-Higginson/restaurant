@@ -147,13 +147,13 @@ size = Vector3(1.25, 0.06, 0.06)
 size = Vector3(9.1, 0.1, 6.65)
 
 [sub_resource type="BoxMesh" id="Cosy_5"]
-size = Vector3(0.16, 2.6, 6.65)
+size = Vector3(0.16, 4, 6.65)
 
 [sub_resource type="BoxMesh" id="Cosy_6"]
-size = Vector3(7.82, 2.6, 0.16)
+size = Vector3(7.82, 4, 0.16)
 
 [sub_resource type="BoxMesh" id="Cosy_7"]
-size = Vector3(1.2, 0.4, 0.16)
+size = Vector3(1.2, 1.8, 0.16)
 
 [sub_resource type="BoxMesh" id="Cosy_8"]
 size = Vector3(0.12, 2.2, 0.22)
@@ -414,13 +414,13 @@ size = Vector3(0.3, 1.1, 0.3)
 size = Vector3(0.9, 0.65, 2)
 
 [sub_resource type="BoxShape3D" id="Cosy_38"]
-size = Vector3(0.16, 2.6, 6.65)
+size = Vector3(0.16, 4, 6.65)
 
 [sub_resource type="BoxShape3D" id="Cosy_39"]
-size = Vector3(7.82, 2.6, 0.16)
+size = Vector3(7.82, 4, 0.16)
 
 [sub_resource type="BoxShape3D" id="Cosy_40"]
-size = Vector3(1.2, 0.4, 0.16)
+size = Vector3(1.2, 1.8, 0.16)
 
 [sub_resource type="BoxShape3D" id="Detail_49"]
 size = Vector3(0.26, 2.24, 0.26)
@@ -611,17 +611,17 @@ material_override = ExtResource("17_floor")
 mesh = SubResource("Cosy_1")
 
 [node name="CorridorWall" type="MeshInstance3D" parent="Visuals" unique_id=845896058]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3.4, 2.3, 4.475)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3.4, 3, 4.475)
 material_override = ExtResource("2_nifss")
 mesh = SubResource("Cosy_5")
 
 [node name="PartitionStarboard" type="MeshInstance3D" parent="Visuals" unique_id=1158781059]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.79, 2.3, 7.8)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.79, 3, 7.8)
 material_override = ExtResource("2_nifss")
 mesh = SubResource("Cosy_6")
 
 [node name="PartitionLintel" type="MeshInstance3D" parent="Visuals" unique_id=933019532]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.72, 3.4, 7.8)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.72, 4.1, 7.8)
 material_override = ExtResource("2_nifss")
 mesh = SubResource("Cosy_7")
 
@@ -1240,15 +1240,15 @@ transform = Transform3D(-1, 0, -8.742278e-08, 0, 1, 0, 8.742278e-08, 0, -1, 2.4,
 transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, -3.12, 2.9, 4.3)
 
 [node name="CorridorWallShape" type="CollisionShape3D" parent="." unique_id=326694443]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3.4, 2.3, 4.475)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3.4, 3, 4.475)
 shape = SubResource("Cosy_38")
 
 [node name="PartitionStarboardShape" type="CollisionShape3D" parent="." unique_id=128364431]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.79, 2.3, 7.8)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.79, 3, 7.8)
 shape = SubResource("Cosy_39")
 
 [node name="PartitionLintelShape" type="CollisionShape3D" parent="." unique_id=2014598924]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.72, 3.4, 7.8)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.72, 4.1, 7.8)
 shape = SubResource("Cosy_40")
 
 [node name="PropWoodTexture" type="Node" parent="." unique_id=1579357156]
