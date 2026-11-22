@@ -50,7 +50,7 @@ func test_the_deck_and_its_trim_are_wet_surfaces() -> void:
 	var ship: Ship = new_moored_ship_with_player(ON_DECK)[0] as Ship
 	var wet_shader: Shader = load("res://shaders/wet_surface.gdshader") as Shader
 	for path: String in ["Visuals/DeckAft", "Visuals/DeckFore",
-			"Visuals/UpperDeck/Structure/BulwarkPort/CapRail",
+			"Visuals/UpperDeck/Structure/BulwarkPort/CapRail1",
 			"Visuals/UpperDeck/Masts/MainMast/Lower"]:
 		var mesh: MeshInstance3D = ship.get_node(path) as MeshInstance3D
 		var material: ShaderMaterial = mesh.material_override as ShaderMaterial

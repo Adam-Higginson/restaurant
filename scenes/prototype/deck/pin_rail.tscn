@@ -1,8 +1,8 @@
 [gd_scene format=3 uid="uid://aupp776zkv43p"]
 
 [ext_resource type="Material" path="res://assets/placeholder/materials/wet_dark_wood.tres" id="1_rdeah"]
-[ext_resource type="Material" path="res://assets/placeholder/materials/wet_prop_wood.tres" id="2_i08kc"]
-[ext_resource type="Material" path="res://assets/placeholder/materials/wet_rope.tres" id="3_gvinq"]
+[ext_resource type="Material" uid="uid://apmxhjggurfpb" path="res://assets/placeholder/materials/wet_prop_wood.tres" id="2_i08kc"]
+[ext_resource type="Material" uid="uid://2lj0z7hvppc7f" path="res://assets/placeholder/materials/wet_rope.tres" id="3_gvinq"]
 
 [sub_resource type="BoxMesh" id="BoxMesh_lkame"]
 size = Vector3(0.14, 0.1, 2.4)
@@ -32,111 +32,111 @@ ring_segments = 4
 [sub_resource type="BoxShape3D" id="BoxShape3D_wt5p2"]
 size = Vector3(0.24, 0.8, 2.4)
 
-[node name="PinRail" type="StaticBody3D" unique_id=1189585492]
+[node name="PinRail" type="StaticBody3D" unique_id=1847730167]
 
-[node name="Rail" type="MeshInstance3D" parent="." unique_id=134787090]
+[node name="Rail" type="MeshInstance3D" parent="." unique_id=95688916]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.72, 0)
 material_override = ExtResource("1_rdeah")
 mesh = SubResource("BoxMesh_lkame")
 
-[node name="Bracket-1" type="MeshInstance3D" parent="." unique_id=1159566676]
+[node name="Bracket-1" type="MeshInstance3D" parent="." unique_id=222593969]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.05, 0.56, -1)
 material_override = ExtResource("1_rdeah")
 mesh = SubResource("BoxMesh_37k2w")
 
-[node name="Bracket1" type="MeshInstance3D" parent="." unique_id=639343307]
+[node name="Bracket1" type="MeshInstance3D" parent="." unique_id=1227623659]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.05, 0.56, 1)
 material_override = ExtResource("1_rdeah")
 mesh = SubResource("BoxMesh_37k2w")
 
-[node name="Pin1" type="MeshInstance3D" parent="." unique_id=1192105132]
+[node name="Pin1" type="MeshInstance3D" parent="." unique_id=1351988669]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.74, -1)
 material_override = ExtResource("2_i08kc")
 cast_shadow = 0
 mesh = SubResource("CylinderMesh_opi4g")
 
-[node name="Pin2" type="MeshInstance3D" parent="." unique_id=1619328954]
+[node name="Pin2" type="MeshInstance3D" parent="." unique_id=173413105]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.74, -0.6)
 material_override = ExtResource("2_i08kc")
 cast_shadow = 0
 mesh = SubResource("CylinderMesh_opi4g")
 
-[node name="Pin3" type="MeshInstance3D" parent="." unique_id=1551549581]
+[node name="Pin3" type="MeshInstance3D" parent="." unique_id=1898469195]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.74, -0.2)
 material_override = ExtResource("2_i08kc")
 cast_shadow = 0
 mesh = SubResource("CylinderMesh_opi4g")
 
-[node name="Pin4" type="MeshInstance3D" parent="." unique_id=1384336070]
+[node name="Pin4" type="MeshInstance3D" parent="." unique_id=411651106]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.74, 0.2)
 material_override = ExtResource("2_i08kc")
 cast_shadow = 0
 mesh = SubResource("CylinderMesh_opi4g")
 
-[node name="Pin5" type="MeshInstance3D" parent="." unique_id=1870597394]
+[node name="Pin5" type="MeshInstance3D" parent="." unique_id=1178481850]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.74, 0.6)
 material_override = ExtResource("2_i08kc")
 cast_shadow = 0
 mesh = SubResource("CylinderMesh_opi4g")
 
-[node name="Pin6" type="MeshInstance3D" parent="." unique_id=2083602261]
+[node name="Pin6" type="MeshInstance3D" parent="." unique_id=297477516]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.74, 1)
 material_override = ExtResource("2_i08kc")
 cast_shadow = 0
 mesh = SubResource("CylinderMesh_opi4g")
 
-[node name="Coil1" type="Node3D" parent="." unique_id=476945432]
+[node name="Coil1" type="Node3D" parent="." unique_id=135450739]
 transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, -0.1, 0.68, -1)
 
-[node name="Coil" type="MeshInstance3D" parent="Coil1" unique_id=997975744]
+[node name="Coil" type="MeshInstance3D" parent="Coil1" unique_id=63232319]
 transform = Transform3D(1, 0, 0, 0, -6.556708e-08, -1, 0, 1.5, -4.371139e-08, 0, -0.2, 0)
 material_override = ExtResource("3_gvinq")
 mesh = SubResource("TorusMesh_esn0o")
 
-[node name="Hitch" type="MeshInstance3D" parent="Coil1" unique_id=384628900]
+[node name="Hitch" type="MeshInstance3D" parent="Coil1" unique_id=2087189511]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.03, 0)
 material_override = ExtResource("3_gvinq")
 mesh = SubResource("TorusMesh_gl6ge")
 
-[node name="Coil3" type="Node3D" parent="." unique_id=1176914294]
+[node name="Coil3" type="Node3D" parent="." unique_id=1372900650]
 transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, -0.1, 0.68, -0.2)
 
-[node name="Coil" type="MeshInstance3D" parent="Coil3" unique_id=1768563942]
+[node name="Coil" type="MeshInstance3D" parent="Coil3" unique_id=1101550991]
 transform = Transform3D(1, 0, 0, 0, -6.556708e-08, -1, 0, 1.5, -4.371139e-08, 0, -0.2, 0)
 material_override = ExtResource("3_gvinq")
 mesh = SubResource("TorusMesh_esn0o")
 
-[node name="Hitch" type="MeshInstance3D" parent="Coil3" unique_id=454070275]
+[node name="Hitch" type="MeshInstance3D" parent="Coil3" unique_id=1651740854]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.03, 0)
 material_override = ExtResource("3_gvinq")
 mesh = SubResource("TorusMesh_gl6ge")
 
-[node name="Coil4" type="Node3D" parent="." unique_id=1177723272]
+[node name="Coil4" type="Node3D" parent="." unique_id=526707091]
 transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, -0.1, 0.68, 0.2)
 
-[node name="Coil" type="MeshInstance3D" parent="Coil4" unique_id=1158035499]
+[node name="Coil" type="MeshInstance3D" parent="Coil4" unique_id=550812885]
 transform = Transform3D(1, 0, 0, 0, -6.556708e-08, -1, 0, 1.5, -4.371139e-08, 0, -0.2, 0)
 material_override = ExtResource("3_gvinq")
 mesh = SubResource("TorusMesh_esn0o")
 
-[node name="Hitch" type="MeshInstance3D" parent="Coil4" unique_id=467511789]
+[node name="Hitch" type="MeshInstance3D" parent="Coil4" unique_id=2119762509]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.03, 0)
 material_override = ExtResource("3_gvinq")
 mesh = SubResource("TorusMesh_gl6ge")
 
-[node name="Coil6" type="Node3D" parent="." unique_id=950940291]
+[node name="Coil6" type="Node3D" parent="." unique_id=51718893]
 transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, -0.1, 0.68, 1)
 
-[node name="Coil" type="MeshInstance3D" parent="Coil6" unique_id=679476423]
+[node name="Coil" type="MeshInstance3D" parent="Coil6" unique_id=1033278706]
 transform = Transform3D(1, 0, 0, 0, -6.556708e-08, -1, 0, 1.5, -4.371139e-08, 0, -0.2, 0)
 material_override = ExtResource("3_gvinq")
 mesh = SubResource("TorusMesh_esn0o")
 
-[node name="Hitch" type="MeshInstance3D" parent="Coil6" unique_id=1281182833]
+[node name="Hitch" type="MeshInstance3D" parent="Coil6" unique_id=2039089525]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.03, 0)
 material_override = ExtResource("3_gvinq")
 mesh = SubResource("TorusMesh_gl6ge")
 
-[node name="Shape" type="CollisionShape3D" parent="." unique_id=1242865443]
+[node name="Shape" type="CollisionShape3D" parent="." unique_id=367103237]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.04, 0.4, 0)
 shape = SubResource("BoxShape3D_wt5p2")

@@ -21,6 +21,17 @@ func test_drops_move_with_what_they_drip_from() -> void:
 	assert_bool(_new_drips().local_coords).is_true()
 
 
+func test_a_spout_pours_out_sideways_before_falling() -> void:
+	var drips: Drips = Drips.new()
+	drips.spout = 1.5
+	add_child(drips)
+	auto_free(drips)
+	var motion: ParticleProcessMaterial = drips.process_material as ParticleProcessMaterial
+
+	assert_float(motion.direction.z).is_greater(0.5)
+	assert_float(motion.initial_velocity_min).is_greater(1.0)
+
+
 func test_more_drops_for_a_faster_rate() -> void:
 	var slow: Drips = _new_drips(4.0)
 	var fast: Drips = _new_drips(20.0)

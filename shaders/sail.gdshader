@@ -27,7 +27,7 @@ uniform float texture_metres = 1.0;
 // square on a stretched quad.
 uniform vec2 size = vec2(1.0, 1.0);
 // How much light comes through the cloth from behind.
-uniform vec3 backlight_colour : source_color = vec3(0.45, 0.36, 0.25);
+uniform vec3 backlight_colour : source_color = vec3(0.28, 0.22, 0.15);
 // How much soaking darkens the canvas.
 uniform float soak : hint_range(0.0, 1.0) = 0.35;
 

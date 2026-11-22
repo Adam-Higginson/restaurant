@@ -1,7 +1,7 @@
 [gd_scene format=3 uid="uid://uej8bhza1w1hc"]
 
 [ext_resource type="Material" path="res://assets/placeholder/materials/wet_dark_wood.tres" id="1_nqrof"]
-[ext_resource type="Material" path="res://assets/placeholder/materials/wet_rope.tres" id="2_eamys"]
+[ext_resource type="Material" uid="uid://2lj0z7hvppc7f" path="res://assets/placeholder/materials/wet_rope.tres" id="2_eamys"]
 
 [sub_resource type="BoxMesh" id="BoxMesh_tmj0p"]
 size = Vector3(0.24, 0.85, 0.24)
@@ -21,53 +21,53 @@ size = Vector3(0.9, 0.14, 0.18)
 [sub_resource type="BoxShape3D" id="BoxShape3D_heo5j"]
 size = Vector3(0.9, 0.9, 0.3)
 
-[node name="Bitts" type="StaticBody3D" unique_id=1336419612]
+[node name="Bitts" type="StaticBody3D" unique_id=585956077]
 
-[node name="PostPort" type="MeshInstance3D" parent="." unique_id=375429366]
+[node name="PostPort" type="MeshInstance3D" parent="." unique_id=777546444]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.3, 0.425, 0)
 material_override = ExtResource("1_nqrof")
 mesh = SubResource("BoxMesh_tmj0p")
 
-[node name="CapPort" type="MeshInstance3D" parent="." unique_id=1411627892]
+[node name="CapPort" type="MeshInstance3D" parent="." unique_id=764569175]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.3, 0.88, 0)
 material_override = ExtResource("1_nqrof")
 mesh = SubResource("BoxMesh_2agc8")
 
-[node name="TurnsPort" type="MeshInstance3D" parent="." unique_id=1243789584]
+[node name="TurnsPort" type="MeshInstance3D" parent="." unique_id=481116508]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.3, 0.55, 0)
 material_override = ExtResource("2_eamys")
 mesh = SubResource("TorusMesh_o2rd6")
 
-[node name="Turns2Port" type="MeshInstance3D" parent="." unique_id=2057250912]
+[node name="Turns2Port" type="MeshInstance3D" parent="." unique_id=2023027351]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.3, 0.63, 0)
 material_override = ExtResource("2_eamys")
 mesh = SubResource("TorusMesh_o2rd6")
 
-[node name="PostStarboard" type="MeshInstance3D" parent="." unique_id=908488303]
+[node name="PostStarboard" type="MeshInstance3D" parent="." unique_id=1834866511]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.3, 0.425, 0)
 material_override = ExtResource("1_nqrof")
 mesh = SubResource("BoxMesh_tmj0p")
 
-[node name="CapStarboard" type="MeshInstance3D" parent="." unique_id=794581792]
+[node name="CapStarboard" type="MeshInstance3D" parent="." unique_id=182308946]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.3, 0.88, 0)
 material_override = ExtResource("1_nqrof")
 mesh = SubResource("BoxMesh_2agc8")
 
-[node name="TurnsStarboard" type="MeshInstance3D" parent="." unique_id=1889334421]
+[node name="TurnsStarboard" type="MeshInstance3D" parent="." unique_id=793630884]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.3, 0.55, 0)
 material_override = ExtResource("2_eamys")
 mesh = SubResource("TorusMesh_o2rd6")
 
-[node name="Turns2Starboard" type="MeshInstance3D" parent="." unique_id=257801045]
+[node name="Turns2Starboard" type="MeshInstance3D" parent="." unique_id=184695169]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.3, 0.63, 0)
 material_override = ExtResource("2_eamys")
 mesh = SubResource("TorusMesh_o2rd6")
 
-[node name="Crossbar" type="MeshInstance3D" parent="." unique_id=2052639493]
+[node name="Crossbar" type="MeshInstance3D" parent="." unique_id=104775534]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.7, 0)
 material_override = ExtResource("1_nqrof")
 mesh = SubResource("BoxMesh_w3wva")
 
-[node name="Shape" type="CollisionShape3D" parent="." unique_id=1978517325]
+[node name="Shape" type="CollisionShape3D" parent="." unique_id=1843074959]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.45, 0)
 shape = SubResource("BoxShape3D_heo5j")

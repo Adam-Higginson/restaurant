@@ -25,7 +25,7 @@ noise = SubResource("Noise_Streak")
 
 [resource]
 shader = ExtResource("1_shader")
-shader_parameter/albedo = Color(0.66, 0.5, 0.36, 1)
+shader_parameter/albedo = Color(0.6, 0.5, 0.42, 1)
 shader_parameter/albedo_texture = ExtResource("2_grid")
 shader_parameter/texture_metres = 0.5
 shader_parameter/dry_roughness = 0.85
@@ -36,9 +36,9 @@ shader_parameter/width_variety = 0.55
 shader_parameter/nails = 1.0
 shader_parameter/beam_spacing = 0.9
 shader_parameter/soak = 0.6
-shader_parameter/soaked_roughness = 0.62
+shader_parameter/soaked_roughness = 0.42
 shader_parameter/puddles = 1.0
-shader_parameter/puddle_cover = 0.24
+shader_parameter/puddle_cover = 0.3
 shader_parameter/puddle_noise = SubResource("Texture_Puddle")
 shader_parameter/puddle_scale = 0.15
 shader_parameter/ripple_cell = 0.3

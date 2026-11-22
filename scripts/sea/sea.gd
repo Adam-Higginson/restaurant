@@ -16,6 +16,9 @@ extends MeshInstance3D
 ## Half the hull's width and length, in metres: where the water is cut out,
 ## and where hull foam forms.
 @export var hull_half: Vector2 = Vector2(6.0, 15.0)
+## How far the pointed bow reaches forward of that box at the waterline, in
+## metres. The water is cut out and foams round it too.
+@export var bow_reach: float = 3.6
 ## The plane moves in steps this long, so its vertices never slide across the
 ## waves (which would make them shimmer).
 @export var grid_step: float = 4.0
@@ -89,6 +92,7 @@ func _apply() -> void:
 	_material.set_shader_parameter("wave_time", _time * settings.time_scale)
 	_material.set_shader_parameter("rain", rain)
 	_material.set_shader_parameter("hull_half", hull_half)
+	_material.set_shader_parameter("bow_reach", bow_reach)
 	if is_instance_valid(ship):
 		var hull: Transform3D = ship.get_global_transform_interpolated()
 		_material.set_shader_parameter("hull_inverse", Projection(hull.affine_inverse()))

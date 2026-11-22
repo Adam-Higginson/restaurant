@@ -96,8 +96,21 @@ func _droplet() -> QuadMesh:
 	material.billboard_mode = BaseMaterial3D.BILLBOARD_PARTICLES
 	material.vertex_color_use_as_albedo = true
 	material.albedo_color = Color(0.82, 0.88, 0.92)
+	material.albedo_texture = _droplet_texture()
+	material.texture_filter = BaseMaterial3D.TEXTURE_FILTER_NEAREST
 	material.emission_enabled = true
 	material.emission = Color(0.22, 0.27, 0.32)
 	material.disable_receive_shadows = true
 	mesh.material = material
 	return mesh
+
+
+# A round blob of water, eight pixels across, its edge a little see-through.
+func _droplet_texture() -> ImageTexture:
+	var image: Image = Image.create(8, 8, false, Image.FORMAT_RGBA8)
+	for y: int in 8:
+		for x: int in 8:
+			var from_centre: float = Vector2(x - 3.5, y - 3.5).length()
+			var alpha: float = 1.0 if from_centre < 2.6 else (0.5 if from_centre < 3.6 else 0.0)
+			image.set_pixel(x, y, Color(1, 1, 1, alpha))
+	return ImageTexture.create_from_image(image)

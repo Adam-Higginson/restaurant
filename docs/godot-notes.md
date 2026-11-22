@@ -28,6 +28,10 @@ A growing glossary of the Godot concepts this project uses: what each one is, in
 
 **Renderer: Compatibility vs Forward+.** Godot has three renderers. *Compatibility* (OpenGL) runs on almost anything, but has simple 3D lighting. *Forward+* (Vulkan/D3D12) supports many lights with shadows, glow, volumetric fog, screen-space effects and good water. The 3D look we want needs it. *Ours:* switched in #61.
 
+**Screen-space reflections (SSR).** An `Environment` setting that makes glossy surfaces mirror whatever else is on screen, worked out from the image itself, so it costs little but can't reflect things off-screen. It only shows on smooth surfaces (low roughness). *Ours:* on in `sea.tscn`, so lanterns mirror in the deck's puddles and wet seams (#90).
+
+**Tonemapping and colour grading.** The renderer works in brightnesses beyond white; *tonemapping* squeezes them into what a screen shows. *AgX* keeps bright lights from going flat white and keeps their colour. A *colour correction* texture then regrades every pixel: our `Grade_Night` gradient lifts the darks towards teal and the brights towards amber. *Ours:* the `Environment` in `sea.tscn` (#90).
+
 ## 3D
 
 **Units and axes.** One unit is one metre. Y is up, and a node's "forward" is its **-Z** axis (so a ship facing north looks down -Z). *Ours:* the ship is 24 m long and 8 m wide, and sails at 3 m/s.
@@ -163,6 +167,16 @@ A growing glossary of the Godot concepts this project uses: what each one is, in
 **Alpha scissor.** A material's transparency mode where each pixel is either fully drawn or not drawn at all, cut where the texture's alpha is below a threshold. It's cheap (no sorting, it still casts and takes shadows) and keeps pixel art's hard edges. *Ours:* the braided rug (`braided_rug.tres`): an oval cut from a square plane.
 
 *Still to come with the prototype tickets: ...*
+
+**SurfaceTool.** Builds a mesh from triangles in code: give it vertices (and normals) three at a time, then `commit()` an `ArrayMesh`. Godot treats triangles listed *clockwise* (seen from the outside) as front faces. *Ours:* the pointed bow and its deck, from the hull's outline at three heights (in `scenes/prototype/deck/upper_deck.tscn`) (#90).
+
+**ConvexPolygonShape3D.** A collision shape made from any set of points: Godot wraps the tightest convex shape round them. *Ours:* `BowDeckShape`, the floor over the pointed bow (#90).
+
+**AudioStreamPlayer3D.** Plays a sound from a place in the world: it gets quieter with distance and pans to where it is relative to the camera. *Ours:* `SoundSpot` (`scripts/weather/sound_spot.gd`), the creaks and groans placed round the deck (#90).
+
+**Billboards and render modes.** A shader's `render_mode` line switches whole features on or off: `unshaded` skips lighting, `blend_add` adds its colour to what's behind (good for glows), `fog_disabled` ignores fog. Setting `MODELVIEW_MATRIX` from the camera's rotation makes a quad always face the camera (a *billboard*). *Ours:* `shaders/far_light.gdshader`, the faint light out in the fog (#90).
+
+**Signed distance to a shape.** A function giving how far a point is from a shape's edge: positive outside, negative inside. It makes cut-outs and bands of effect easy (inside: hide; within 1.4 m: foam). *Ours:* `hull_distance()` in `shaders/water.gdshader`, the distance to the hull's pointed outline (a polygon), which cuts the sea out of the hull and wraps foam round the bow (#90).
 
 ## Testing
 

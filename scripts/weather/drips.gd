@@ -2,7 +2,9 @@ class_name Drips
 extends GPUParticles3D
 ## Water dripping off an edge: the hatch rim, the foot of the sail. Drops
 ## form somewhere along a line ([member length] long, along local x), fall
-## and vanish when they hit something a particle collider covers.
+## and vanish when they hit something a particle collider covers. With a
+## [member spout], the water pours out sideways first, like the rain running
+## off the deck through a scupper.
 ##
 ## Drips only fall while it's wet: the [Weather] calls [method set_wetness]
 ## on everything in the "drips" group.
@@ -11,6 +13,9 @@ extends GPUParticles3D
 @export var length: float = 2.0
 ## Drops a second along the whole edge when soaked.
 @export var rate: float = 12.0
+## How fast the water pours out sideways (along local +z), in metres a
+## second: 0 for drops that just fall, more for a spout.
+@export var spout: float = 0.0
 
 ## How wet it is, 0 to 1: how many of the drops fall.
 var wetness: float = 1.0:
@@ -29,6 +34,11 @@ func _ready() -> void:
 	process.spread = 0.0
 	process.initial_velocity_min = 0.0
 	process.initial_velocity_max = 0.3
+	if spout > 0.0:
+		process.direction = Vector3(0.0, -0.25, 1.0).normalized()
+		process.spread = 8.0
+		process.initial_velocity_min = spout * 0.8
+		process.initial_velocity_max = spout * 1.2
 	process.gravity = Vector3(0.0, -9.8, 0.0)
 	process.particle_flag_align_y = true
 	process.collision_mode = ParticleProcessMaterial.COLLISION_HIDE_ON_CONTACT
@@ -50,7 +60,8 @@ func _ready() -> void:
 	local_coords = true
 	collision_base_size = 0.02
 	cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
-	visibility_aabb = AABB(Vector3(-length, -12.0, -1.0), Vector3(length * 2.0, 13.0, 2.0))
+	var reach: float = 1.0 + spout * 1.6
+	visibility_aabb = AABB(Vector3(-length, -12.0, -1.0), Vector3(length * 2.0, 13.0, reach + 1.0))
 	wetness = wetness
 
 
