@@ -1,0 +1,293 @@
+[gd_scene format=3]
+
+[ext_resource type="Shader" path="res://shaders/nameboard_gilt.gdshader" id="1_ah4m5"]
+[ext_resource type="FontFile" path="res://assets/fonts/VarelaRound-Regular.ttf" id="2_m38hy"]
+[ext_resource type="Script" path="res://scripts/intro/name_gilt.gd" id="3_jk4ff"]
+[ext_resource type="Material" path="res://assets/placeholder/materials/iron.tres" id="4_cf5ua"]
+[ext_resource type="Script" path="res://scripts/intro/stern_swing.gd" id="5_100y2"]
+[ext_resource type="PackedScene" path="res://scenes/prototype/lantern_body.tscn" id="6_bif2u"]
+[ext_resource type="Script" path="res://scripts/companion/lantern_face.gd" id="7_38f7w"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_xelty"]
+render_priority = 0
+shader = ExtResource("1_ah4m5")
+shader_parameter/gold = null
+shader_parameter/tarnish = null
+shader_parameter/lamp = null
+shader_parameter/lamp_glow = null
+shader_parameter/reach = null
+shader_parameter/flash = null
+shader_parameter/shine = null
+
+[sub_resource type="TextMesh" id="TextMesh_5aj8q"]
+text = "SALT AND EMBER"
+font = ExtResource("2_m38hy")
+font_size = 64
+pixel_size = 0.0034
+depth = 0.03
+
+[sub_resource type="BoxMesh" id="BoxMesh_pe1s4"]
+size = Vector3(0.06, 0.06, 0.7)
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_l76a8"]
+top_radius = 0.012
+bottom_radius = 0.012
+height = 1.5
+radial_segments = 5
+rings = 1
+
+[sub_resource type="Animation" id="Animation_wianm"]
+length = 1.5
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Swing:swinging")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Swing/HookLantern:position")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.3, 0.75, 1.5),
+"transitions": PackedFloat32Array(1, 0.5, 2, 1),
+"update": 0,
+"values": [Vector3(0, -1.85, 0), Vector3(0, -1.5, 0.15), Vector3(0.2, -3, 1.5), Vector3(0.3, -8, 2.6)]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("Swing/HookLantern:rotation")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0, 0.75),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Vector3(0, 3.1415927, 0), Vector3(1.2, 3.1415927, 0)]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("Swing/HookLantern/Body:lean")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0, 0.6),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Vector3(0, 0, 0), Vector3(0, 0, -1)]
+}
+tracks/4/type = "value"
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/path = NodePath("Swing/HookLantern:visible")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/keys = {
+"times": PackedFloat32Array(0, 1.5),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [true, false]
+}
+
+[sub_resource type="Animation" id="Animation_2558b"]
+length = 0.9
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Swing:swinging")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Swing/HookLantern:position")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.25, 0.9),
+"transitions": PackedFloat32Array(1, 0.5, 1),
+"update": 0,
+"values": [Vector3(0, -1.85, 0), Vector3(0, -1.77, 0), Vector3(0, -1.85, 0)]
+}
+
+[sub_resource type="Animation" id="Animation_srkac"]
+length = 0.1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Swing/HookLantern:visible")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Swing:swinging")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
+}
+
+[sub_resource type="Animation" id="Animation_t0bpr"]
+length = 0.1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Swing/HookLantern:visible")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Swing:swinging")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("Swing/HookLantern:position")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector3(0, -1.85, 0)]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("Swing/HookLantern:rotation")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector3(0, 3.1415927, 0)]
+}
+
+[sub_resource type="Animation" id="Animation_aduj4"]
+length = 1.2
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Swing/HookLantern:rotation")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.8),
+"transitions": PackedFloat32Array(0.5, 1),
+"update": 0,
+"values": [Vector3(0, 3.1415927, 0), Vector3(-0.35, 3.1415927, 0)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Swing/HookLantern:position")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.4, 0.8),
+"transitions": PackedFloat32Array(1, 0.5, 1),
+"update": 0,
+"values": [Vector3(0, -1.85, 0), Vector3(0, -1.73, 0), Vector3(0, -1.85, 0)]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_yxevo"]
+_data = {
+&"dives": SubResource("Animation_wianm"),
+&"hears": SubResource("Animation_2558b"),
+&"off_watch": SubResource("Animation_srkac"),
+&"takes_watch": SubResource("Animation_t0bpr"),
+&"welcome": SubResource("Animation_aduj4")
+}
+
+[node name="SternWatch" type="Node3D" unique_id=873895150]
+
+[node name="Name" type="MeshInstance3D" parent="." unique_id=1283651078 node_paths=PackedStringArray("lamp", "lamp_face")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 5.035, 16.085)
+material_override = SubResource("ShaderMaterial_xelty")
+cast_shadow = 0
+mesh = SubResource("TextMesh_5aj8q")
+script = ExtResource("3_jk4ff")
+lamp = NodePath("../Swing/HookLantern")
+lamp_face = NodePath("../Swing/HookLantern/Body")
+
+[node name="HookArm" type="MeshInstance3D" parent="." unique_id=1664955679]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 7.32, 16.2)
+material_override = ExtResource("4_cf5ua")
+mesh = SubResource("BoxMesh_pe1s4")
+
+[node name="Swing" type="Node3D" parent="." unique_id=4361032]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 7.3, 16.5)
+script = ExtResource("5_100y2")
+
+[node name="Chain" type="MeshInstance3D" parent="Swing" unique_id=1712549888]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.75, 0)
+material_override = ExtResource("4_cf5ua")
+mesh = SubResource("CylinderMesh_l76a8")
+
+[node name="HookLantern" type="Node3D" parent="Swing" unique_id=1483206092]
+transform = Transform3D(-1, 0, -8.742278e-08, 0, 1, 0, 8.742278e-08, 0, -1, 0, -1.85, 0)
+visible = false
+
+[node name="Glow" type="OmniLight3D" parent="Swing/HookLantern" unique_id=2035740464]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.1, -0.12)
+light_color = Color(1, 0.72, 0.4, 1)
+light_energy = 1.8
+omni_range = 1.7
+omni_attenuation = 1.4
+
+[node name="Body" type="Node3D" parent="Swing/HookLantern" unique_id=2137672381 node_paths=PackedStringArray("light") instance=ExtResource("6_bif2u")]
+transform = Transform3D(1.7, 0, 0, 0, 1.7, 0, 0, 0, 1.7, 0, 0, 0)
+script = ExtResource("7_38f7w")
+look_name = "hook_lantern"
+streaked = true
+light = NodePath("../Glow")
+light_energy = 1.8
+
+[node name="Shots" type="Node3D" parent="." unique_id=1160865289]
+
+[node name="TheBoard" type="Marker3D" parent="Shots" unique_id=1628404058 groups=["shots"]]
+transform = Transform3D(1, 0, 0, 0, 0.97544104, 0.22026065, 0, -0.22026065, 0.97544104, 0, 5.5, 17.6)
+
+[node name="Clips" type="AnimationPlayer" parent="." unique_id=1119508766 groups=["clips"]]
+libraries/ = SubResource("AnimationLibrary_yxevo")

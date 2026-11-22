@@ -13,40 +13,53 @@
 #   Shots and Marks; the rescue's are in scenes/prototype/intro/rescue_set.tscn.
 # - Clips (@play, @start) are animations. The underwater ones are in
 #   scenes/prototype/intro/underwater.tscn: open it, select Clips, and the
-#   timeline at the bottom of the editor shows them. title_drift and dive
-#   are in rescue_set.tscn.
-# - The title's words are the Name label in scenes/prototype/intro/title_stage.tscn.
+#   timeline at the bottom of the editor shows them.
+# - The title is her nameboard at the stern: the letters, the hook, the
+#   lantern on it and his clips (takes_watch, hears, dives, welcome) are in
+#   scenes/prototype/intro/stern_watch.tscn.
+# - His looks (@look) are listed in scripts/companion/lantern_face.gd.
 #
 # To tune one beat: set Start Section on the Opening node to its name and
 # the game opens there. While it runs, F8 reads this file again and replays
 # the section you're in.
 
-# The title, over the open sea at night. It waits for any button. A saved
-# voyage carries on from here; a new one goes under.
+# Her name. The lantern on his hook at the stern, swinging, lights the
+# carved board a few letters at a time. It waits for any button. A saved
+# voyage carries on from here; on a new one, he hears something.
 ~ start
 @hide heron
-@shot title_sea cut
-@start title_drift
-@stage title
+@play takes_watch
+@look hook_lantern tired
+@shot the_board cut
 @fade in 3.0
 @wait_for any Press any button
 @sound confirm
-@stage off
 ? saved_voyage
 -> carry_on
--> under
+-> he_hears
 
-# A saved voyage: to black, and the Opening shows which day it is.
+# A saved voyage: he turns from her name to the lit windows, pleased to see
+# you. Then to black, and the Opening shows which day it is.
 ~ carry_on
+@look hook_lantern pleased
+@play welcome
+@wait 0.8
 @show heron
 @fade out 0.8
+@play off_watch
 @shot free cut
 
-# The camera tips down and goes through the surface.
-~ under
-@play dive
-@stage underwater
-@muffle on
+# He's heard something. The swinging stops, and he's off the hook and over
+# the side, and her name goes dark.
+~ he_hears
+@play takes_watch
+@shot the_board cut
+@look hook_lantern surprised
+@play hears
+@wait 0.4
+@look hook_lantern determined
+@play dives
+@wait 1.2
 -> dark
 
 # The dark. You sink, and the light of the surface goes with it.
@@ -61,16 +74,20 @@
 ~ light
 @stage underwater
 @muffle on
+@look sinking_lantern determined
 @play lantern_descends
+@look sinking_lantern pleading
 -> reach
 
 # The reach. It waits, however long, until you take it.
 ~ reach
 @stage underwater
 @muffle on
+@look sinking_lantern pleading
 @start offered
 @wait_for interact Take his hand
 @sound grasp
+@look sinking_lantern effort
 @play taken
 @fade out 0.4
 -> surface
@@ -80,6 +97,7 @@
 @stage off
 @muffle off
 @show castaway
+@look rescued_lantern tired
 @shot from_the_water cut
 @fade in 0.4
 @wait 3.0
@@ -88,6 +106,7 @@
 # The boathook. A tall thin shape at the rail against the lightning.
 ~ boathook
 @show castaway
+@look rescued_lantern worried
 @place heron rail
 @show heron
 @show reaching_boathook
@@ -101,6 +120,7 @@
 @hide reaching_boathook
 @hide heron
 @shot free cut
+@play off_watch
 -> title
 
 # Black, and where we are. The captain isn't in the bunk room yet.

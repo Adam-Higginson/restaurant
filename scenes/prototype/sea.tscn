@@ -12,7 +12,7 @@
 [ext_resource type="Script" path="res://scripts/cutscene/clip_cues.gd" id="309_clips"]
 [ext_resource type="Script" path="res://scripts/cutscene/storm_cues.gd" id="310_storm"]
 [ext_resource type="Script" path="res://scripts/cutscene/sound_cues.gd" id="311_sounds"]
-[ext_resource type="PackedScene" path="res://scenes/prototype/intro/title_stage.tscn" id="312_title"]
+[ext_resource type="Script" path="res://scripts/cutscene/look_cues.gd" id="312_looks"]
 [ext_resource type="PackedScene" path="res://scenes/prototype/intro/underwater_stage.tscn" id="313_underwater"]
 [ext_resource type="PackedScene" path="res://ui/cutscene_prompt.tscn" id="314_prompt"]
 [ext_resource type="AudioStream" path="res://assets/audio/ui/confirmation_001.wav" id="315_confirm"]
@@ -315,6 +315,9 @@ script = ExtResource("309_clips")
 script = ExtResource("310_storm")
 weather = NodePath("../Weather")
 
+[node name="LookCues" type="Node" parent="."]
+script = ExtResource("312_looks")
+
 [node name="SoundCues" type="Node" parent="."]
 script = ExtResource("311_sounds")
 
@@ -331,8 +334,6 @@ stream = ExtResource("317_hook")
 volume_db = 6.0
 
 [node name="Stages" type="Node" parent="."]
-
-[node name="Title" parent="Stages" instance=ExtResource("312_title")]
 
 [node name="Underwater" parent="Stages" instance=ExtResource("313_underwater")]
 
