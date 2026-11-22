@@ -4,7 +4,7 @@ extends GameTestSuite
 
 const ACTIONS: Array[StringName] = [
 	&"move_up", &"move_down", &"move_left", &"move_right",
-	&"interact", &"use_tool",
+	&"interact", &"use_tool", &"lock_on", &"parry",
 ]
 
 
@@ -67,6 +67,16 @@ func test_the_mouse_buttons_interact_and_use_tools() -> void:
 	assert_array(_mouse_buttons(&"use_tool")).contains_exactly([MOUSE_BUTTON_LEFT])
 
 
+func test_lock_on_and_parry_are_on_the_triggers_shift_and_r() -> void:
+	# Like OoT: target on the left trigger, shield on the right. See Controls
+	# in docs/GDD.md.
+	assert_array(_keys(&"lock_on")).contains_exactly([KEY_SHIFT])
+	assert_array(_mouse_buttons(&"lock_on")).contains_exactly([MOUSE_BUTTON_MIDDLE])
+	assert_array(_axes(&"lock_on")).contains_exactly([JOY_AXIS_TRIGGER_LEFT])
+	assert_array(_keys(&"parry")).contains_exactly([KEY_R])
+	assert_array(_axes(&"parry")).contains_exactly([JOY_AXIS_TRIGGER_RIGHT])
+
+
 func test_debug_keys_are_on_the_keyboard() -> void:
 	# Testing shortcuts (DebugKeys), not part of play, so keyboard only.
 	for action: StringName in [&"debug_skip_hour", &"debug_fast_forward", &"debug_spawn_customer"]:
@@ -102,6 +112,22 @@ func _mouse_buttons(action: StringName) -> Array[MouseButton]:
 		if event is InputEventMouseButton:
 			buttons.append((event as InputEventMouseButton).button_index)
 	return buttons
+
+
+func _keys(action: StringName) -> Array[Key]:
+	var keys: Array[Key] = []
+	for event: InputEvent in InputMap.action_get_events(action):
+		if event is InputEventKey:
+			keys.append((event as InputEventKey).physical_keycode)
+	return keys
+
+
+func _axes(action: StringName) -> Array[JoyAxis]:
+	var axes: Array[JoyAxis] = []
+	for event: InputEvent in InputMap.action_get_events(action):
+		if event is InputEventJoypadMotion:
+			axes.append((event as InputEventJoypadMotion).axis)
+	return axes
 
 
 func _has_event(action: StringName, event_class: String) -> bool:

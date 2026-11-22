@@ -198,6 +198,38 @@ A growing glossary of the Godot concepts this project uses: what each one is, in
 
 **AudioStreamWAV made in code.** A sound is just numbers: fill a `PackedByteArray` with a wave's samples, give it to an `AudioStreamWAV`, and an `AudioStreamPlayer` plays it. `pitch_scale` then plays it higher or lower. *Ours:* the typing blip in `ui/dialogue_sounds.gd`, pitched per speaker.
 
+## Duels (#66)
+
+**State machine.** A thing that is always in exactly one of a few named states, with rules for when it moves to the next. In GDScript it's an `enum` for the states, a variable holding the current one, and a `match` that says what each state does. It keeps "what is it doing now?" in one place instead of a tangle of flags. *Ours:* `CrabCycle` (`scripts/combat/crab_cycle.gd`): idle, windup, attack, opening, staggered, cleared.
+
+**Stepping logic with `delta`.** `_physics_process(delta)` is told how many seconds have passed since the last tick (1/60). Logic that only ever adds up `delta` doesn't care who is calling it, so a test can hand it any amount of time and check exactly what happened. *Ours:* `CrabCycle.tick(delta)` and `ParryWindow.tick(delta)`; `FogCrab` and `Duellist` call them every physics tick, and the tests call them with whole seconds.
+
+**Groups, for finding many nodes.** As well as finding "the" one of something, `get_tree().get_nodes_in_group(name)` gives every node in a group, and `remove_from_group` takes a node out again. *Ours:* everything in `lock_on_target` can be locked on to and struck; a fog-crab leaves it when its fog clears. The player's `Duellist` is in `duellist`, and the place a defeat puts you is in `landing`.
+
+**Groups set in a scene.** A node can be put in a group in the editor: select it, open the **Node** dock (beside the Inspector), then **Groups**. In the `.tscn` it's saved as `groups=["landing"]`. *Ours:* `Landing` in `duel_arena.tscn`.
+
+**`lerp_angle`.** Like `lerp` (a value part-way between two others), but for angles: it goes the short way round, so easing from 350° to 10° turns 20°, not 340° backwards. *Ours:* `CameraRig._swing_to_target()` eases the camera's yaw towards the locked-on target.
+
+**Easing that ignores frame rate.** `value = lerp(value, goal, 1.0 - exp(-speed * delta))` moves a fixed fraction of the remaining distance per second, however many frames that second has. Plain `lerp(value, goal, 0.1)` would move faster on a faster machine. *Ours:* the camera's zoom and its lock-on swing.
+
+**`atan2` for "which way is it?"** `atan2(-x, -z)` turns a flat direction into the yaw (turn about the up axis) that points a node's forward (-Z) along it. *Ours:* `CameraRig.yaw_along()`, `Player3D.face_towards()`, and the fog-crab turning to face you.
+
+**Angles between directions (`angle_to`).** `a.angle_to(b)` on two `Vector2`s gives the angle from one to the other. Comparing it with half an arc says whether something is "in front". *Ours:* `Duellist.in_reach()`: the knife hits what's within 2 m and inside a 120° arc ahead.
+
+**Signals between plain objects.** Signals aren't only for nodes: a `RefCounted` can declare and emit them too. *Ours:* `Hearts.changed` redraws the `HeartsBar`; `CrabCycle.attacked` tells the `FogCrab` to land its hit; `CrabCycle.state_changed` sets the lantern's light.
+
+**Input Map actions for triggers.** A controller's triggers are *axes* (how far they're pulled), not buttons: bind them as "Joypad Axis 4" (left) and "5" (right). The action's *deadzone* is how far they must be pulled to count as pressed. *Ours:* `lock_on` and `parry` in Project Settings > Input Map, with a deadzone of 0.5.
+
+**`is_action_pressed` and `is_action_released` on an event.** In `_unhandled_input(event)`, these say whether this event is a button going down or coming up, which is what a held button needs. *Ours:* `LockOn` locks on at the press and lets go at the release.
+
+**Sound files and AudioStreamPlayer.** Drop an `.ogg` or `.wav` into the project and Godot imports it as an `AudioStream` (the `.import` file beside it records how). An `AudioStreamPlayer` node plays whatever is in its `stream`, at its `volume_db`, heard the same wherever you are. *Ours:* the six players under `DuelSounds` in `player.tscn` (swing, slice, tink, pan up, clang, hurt).
+
+**AudioStreamPlayer3D.** The same, but the sound comes from the node's place in the world: quieter with distance, and from the left or right of the camera. *Ours:* the three players under `Sounds` in `fog_crab.tscn`, so the far crab's ticking stays far away.
+
+**AudioStreamRandomizer.** A resource that holds several recordings and plays one at random each time, never the same twice running, at a slightly different pitch (`random_pitch`). A sound heard over and over stops feeling stamped out. Give it to a player as its `stream`. *Ours:* one `.tres` per sound in `assets/audio/combat/` (`clang.tres`, `swing.tres`, `crab_click.tres`...). Open one in the Inspector to see its recordings and press play on each.
+
+**A node that only listens.** Sound doesn't belong in the rules, so the rules just emit signals and a separate node connects to them and plays things. Remove the node and the game still works, silently. `signal.connect(play.bind(NAME))` connects one function to many signals, each with its own argument. *Ours:* `DuelSounds` listens to `Duellist`; `CrabSounds` listens to the crab's `CrabCycle`.
+
 ## Overheard chatter (#94)
 
 **SubViewport and ViewportTexture.** A `SubViewport` is a little off-screen screen: whatever is inside it (here a 2D `Control`) is drawn into a picture, and `get_texture()` hands that picture to anything that shows textures. Drawing a 2D thing once and showing it on a flat panel in the 3D world is how 2D UI gets a place in the world. *Ours:* `SpeechBubble3D` (`ui/speech_bubble_3d.gd`) draws a `SpeechBubble` into one and shows it on a `QuadMesh`.

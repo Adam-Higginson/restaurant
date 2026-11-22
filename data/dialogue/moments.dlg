@@ -5,7 +5,7 @@
 # See scripts/dialogue/remark.gd for the tags and guards a section can have.
 #
 # Moments: returned, remembered, caught, morning, hove_to, supper, dim,
-# far_light, island.
+# far_light, island, pulled_out, fog_cleared.
 # Placeholder writing: rewrite freely.
 
 # (His first words, the night he pulled you from the sea, are in the opening
@@ -98,3 +98,23 @@ lantern: That's where the light lives. I knew it. I didn't, but I knew it.
 
 ~ island_3 [on island]
 lantern: Do you think it remembers you? Islands are very good at remembering.
+
+# A fog-touched creature has beaten you, and he's pulled you back to the landing.
+~ pulled_out_1 [on pulled_out]
+lantern: Got you! I've got you. You dropped some things. I didn't count.
+
+~ pulled_out_2 [on pulled_out]
+lantern: Up you come. It didn't mean it. It's the fog that pinches.
+
+~ pulled_out_3 [on pulled_out]
+lantern: That's twice I've pulled you out of somewhere. I'm keeping score. Kindly.
+
+# You've cleared the fog from a creature.
+~ fog_cleared_1 [on fog_cleared]
+lantern: Look at it go! It only wanted its head clear. [shout]
+
+~ fog_cleared_2 [on fog_cleared]
+lantern: There. All shaken off. It'll remember being a crab now.
+
+~ fog_cleared_3 [on fog_cleared]
+lantern: Oh, well done. Gently done.

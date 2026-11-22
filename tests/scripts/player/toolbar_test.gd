@@ -131,3 +131,36 @@ func test_rotate_does_nothing() -> void:
 	_toolbar.add(ItemInstance.new(LETTUCE))
 	_toolbar.rotate()
 	assert_object(_toolbar.top().item).is_same(LETTUCE)
+
+
+func test_take_item_empties_any_slot_whatever_is_selected() -> void:
+	_toolbar.add(ItemInstance.new(TOMATO))
+	_toolbar.add(ItemInstance.new(LETTUCE))
+	_toolbar.select(0)
+	_changes = 0
+
+	var taken: ItemInstance = _toolbar.take_item(1)
+
+	assert_object(taken.item).is_same(TOMATO)
+	assert_object(_toolbar.get_item(1)).is_null()
+	assert_object(_toolbar.get_item(2).item).is_same(LETTUCE)
+	assert_int(_toolbar.selected_index).is_equal(0)
+	assert_int(_changes).is_equal(1)
+
+
+func test_take_item_from_an_empty_or_tool_slot_takes_nothing() -> void:
+	assert_object(_toolbar.take_item(0)).is_null()
+	assert_object(_toolbar.take_item(5)).is_null()
+	assert_object(_toolbar.take_item(-1)).is_null()
+	assert_object(_toolbar.get_tool(0)).is_same(KNIFE)
+	assert_int(_changes).is_equal(0)
+
+
+func test_has_item_finds_a_kind_of_item_in_any_slot() -> void:
+	_toolbar.add(ItemInstance.new(TOMATO))
+	_toolbar.add(ItemInstance.new(LETTUCE))
+	_toolbar.select(0)
+
+	assert_bool(_toolbar.has_item(&"tomato")).is_true()
+	assert_bool(_toolbar.has_item(&"lettuce")).is_true()
+	assert_bool(_toolbar.has_item(&"frying_pan")).is_false()

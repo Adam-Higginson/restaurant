@@ -57,18 +57,27 @@ func finishes_within(work: Callable, seconds: float = 2.0) -> bool:
 
 
 ## Waits until every navigation region in the running scene is on its map,
-## so paths can be found, and returns whether that happened within
-## [param max_ticks] physics ticks. Maps update in the background: a new
-## region first joins the map empty, and its floor arrives a tick or two later.
-func wait_for_navigation(runner: GdUnitSceneRunner, max_ticks: int = 60) -> bool:
+## so paths can be found, and returns whether that happened. Maps update in
+## the background: a new region first joins the map empty, and its floor
+## arrives a tick or two later.
+##
+## It waits at least [param max_ticks] physics ticks and at least
+## [param seconds] of real time before giving up. The map is built on another
+## thread, and with --fixed-fps the ticks alone can all pass in a few
+## milliseconds, before that thread has had its turn on a busy machine.
+func wait_for_navigation(runner: GdUnitSceneRunner, max_ticks: int = 60,
+		seconds: float = 3.0) -> bool:
 	var regions: Array[NavigationRegion2D] = []
 	for node: Node in runner.scene().find_children("*", "NavigationRegion2D", true, false):
 		regions.append(node as NavigationRegion2D)
 	var tree: SceneTree = runner.scene().get_tree()
-	for i: int in max_ticks:
+	var deadline: int = Time.get_ticks_msec() + int(seconds * 1000.0)
+	var ticks: int = 0
+	while ticks < max_ticks or Time.get_ticks_msec() < deadline:
 		if _regions_are_on_their_maps(regions):
 			return true
 		await tree.physics_frame
+		ticks += 1
 	return _regions_are_on_their_maps(regions)
 
 
@@ -168,6 +177,34 @@ func lantern_at_shoulder(player: Node3D) -> LanternSpirit:
 	var spirit: LanternSpirit = player.get_node("LanternSpirit") as LanternSpirit
 	spirit.leave_home()
 	return spirit
+
+
+## A [FogCrab] at [param pos] in [param player]'s world, so it's freed with
+## it. Add it before the scene runs.
+func new_fog_crab(player: Player3D, pos: Vector3) -> FogCrab:
+	var scene: PackedScene = load("res://scenes/prototype/creatures/fog_crab.tscn") as PackedScene
+	var crab: FogCrab = scene.instantiate() as FogCrab
+	crab.position = pos
+	player.get_parent().add_child(crab)
+	return crab
+
+
+## [param player]'s [Duellist]: their hearts, knife strike and pan parry.
+func duellist_of(player: Player3D) -> Duellist:
+	return player.get_node("Duellist") as Duellist
+
+
+## Holds [param action] down and waits two physics ticks, without letting go
+## (for buttons that are held, like lock-on). Let go with [method release].
+func hold(runner: GdUnitSceneRunner, action: String) -> void:
+	runner.simulate_action_press(action)
+	await physics_ticks(runner, 2)
+
+
+## Lets go of [param action] and waits two physics ticks.
+func release(runner: GdUnitSceneRunner, action: String) -> void:
+	runner.simulate_action_release(action)
+	await physics_ticks(runner, 2)
 
 
 ## The first line of each of the lantern's remarks for [param moment] (in

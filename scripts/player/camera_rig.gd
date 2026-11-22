@@ -11,7 +11,9 @@ extends Node3D
 ## Inside a [CameraZone] (the galley), the camera glides to the zone's fixed
 ## shot instead, and glides back when the player leaves. A cutscene can ask
 ## for a shot of its own with [method hold_shot], which wins over any zone
-## until [method release_shot]. The spring arm only
+## until [method release_shot]. While the player is locked on to something
+## ([member look_target]) the free camera swings round behind the player,
+## a little to one side, so both stay in view, and can't be turned. The spring arm only
 ## moves a [code]FreeSpot[/code] marker, where the free camera would be; the
 ## rig places the real [Camera3D] somewhere between that spot and the shot.
 ##
@@ -42,6 +44,14 @@ const PITCH_MAX_DEGREES: float = 15.0
 @export var zoom_step: float = 0.75
 ## How quickly the arm eases to a new zoom: higher is snappier.
 @export var zoom_ease: float = 10.0
+## How quickly the camera swings round to a locked-on target: higher is snappier.
+@export var lock_ease: float = 8.0
+## The tilt the camera settles at while locked on, in degrees (negative looks down).
+@export var lock_pitch_degrees: float = -22.0
+## How far round to one side of "straight behind the player" the camera sits
+## while locked on, in degrees. Straight behind, the player would stand
+## exactly between the camera and the target and hide it.
+@export var lock_side_degrees: float = 32.0
 
 ## Left/right turn in radians. 0 looks along -Z (Godot's forward).
 var yaw: float:
@@ -94,6 +104,10 @@ var is_fixed: bool:
 	get:
 		return is_instance_valid(_held) or active_zone != null
 
+## What the player is locked on to, or null. While it's set the free camera
+## sits behind the player looking at it. Set by [LockOn].
+var look_target: Node3D = null
+
 ## Zones the player is inside, in the order they entered. The last one wins.
 var _zones: Array[CameraZone] = []
 ## A shot asked for by a cutscene, or null.
@@ -121,7 +135,11 @@ func _ready() -> void:
 
 func _process(delta: float) -> void:
 	# Fixed shots are framed by hand, so the camera can't be turned in them.
-	if not is_fixed:
+	if is_fixed:
+		pass
+	elif is_locked():
+		_swing_to_target(delta)
+	else:
 		var stick: Vector2 = Input.get_vector("camera_left", "camera_right", "camera_up",
 				"camera_down")
 		# Right turns clockwise seen from above, which is a negative yaw.
@@ -145,7 +163,7 @@ func _unhandled_input(event: InputEvent) -> void:
 	elif event is InputEventMouseButton and (event as InputEventMouseButton).pressed:
 		Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
 	elif event is InputEventMouseMotion and Input.mouse_mode == Input.MOUSE_MODE_CAPTURED \
-			and not is_fixed:
+			and not is_fixed and not is_locked():
 		var motion: Vector2 = (event as InputEventMouseMotion).relative
 		orbit(-motion.x * mouse_sensitivity, -motion.y * mouse_sensitivity)
 
@@ -155,6 +173,19 @@ func _unhandled_input(event: InputEvent) -> void:
 func orbit(yaw_degrees: float, pitch_degrees: float) -> void:
 	yaw += deg_to_rad(yaw_degrees)
 	pitch += deg_to_rad(pitch_degrees)
+
+
+## Whether the camera is following a locked-on target (see [member look_target]).
+func is_locked() -> bool:
+	return is_instance_valid(look_target)
+
+
+## Turns the free camera at once to look along [param direction], a flat
+## world direction: behind the player, if it's the way they face.
+func look_along(direction: Vector3) -> void:
+	if Vector2(direction.x, direction.z).is_zero_approx():
+		return
+	yaw = yaw_along(direction)
 
 
 ## Starts gliding to [param zone]'s fixed shot. Called by the zone when the
@@ -212,6 +243,11 @@ static func yaw_of(rotation_basis: Basis) -> float:
 	return atan2(-forward.x, -forward.z)
 
 
+## The yaw that looks along [param direction], ignoring any up or down in it.
+static func yaw_along(direction: Vector3) -> float:
+	return atan2(-direction.x, -direction.z)
+
+
 ## Shapes the glide: [param t] runs steadily from 0 to 1 over
 ## [member blend_seconds], and this says how far along the camera is at each
 ## point. It must give 0 at the start and 1 at the end.
@@ -231,6 +267,20 @@ func _turn_with_platform(delta: float) -> void:
 	if body == null or not body.is_on_floor():
 		return
 	yaw += body.get_platform_angular_velocity().y * delta
+
+
+# Eases the free camera round to look from the player towards the locked-on
+# target, and to the lock-on tilt. lerp_angle takes the short way round.
+func _swing_to_target(delta: float) -> void:
+	if _target == null:
+		return
+	var away: Vector3 = look_target.global_position - _target.global_position
+	if Vector2(away.x, away.z).length() < 0.01:
+		return
+	# The same each frame however fast the game runs (see the zoom).
+	var step: float = 1.0 - exp(-lock_ease * delta)
+	yaw = lerp_angle(yaw, yaw_along(away) + deg_to_rad(lock_side_degrees), step)
+	pitch = lerp_angle(pitch, deg_to_rad(lock_pitch_degrees), step)
 
 
 func _follow_target() -> void:

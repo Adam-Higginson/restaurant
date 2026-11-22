@@ -285,6 +285,66 @@ func test_blend_curve_runs_from_free_to_the_shot() -> void:
 		last = now
 
 
+# --- Lock-on -------------------------------------------------------------------
+
+func test_yaw_along_a_direction_looks_that_way() -> void:
+	assert_float(CameraRig.yaw_along(Vector3.FORWARD)).is_equal_approx(0.0, 0.001)
+	assert_float(CameraRig.yaw_along(Vector3.LEFT)).is_equal_approx(PI / 2.0, 0.001)
+	assert_float(CameraRig.yaw_along(Vector3.RIGHT)).is_equal_approx(-PI / 2.0, 0.001)
+	# Any up or down in it is ignored.
+	assert_float(CameraRig.yaw_along(Vector3(-1, 5, 0))).is_equal_approx(PI / 2.0, 0.001)
+
+
+func test_look_along_turns_the_camera_at_once() -> void:
+	var rig: CameraRig = _rig_of(new_player_3d_on_floor())
+	scene_runner(rig.get_parent().get_parent())
+
+	rig.look_along(Vector3.LEFT)
+	assert_float(rig.yaw).is_equal_approx(PI / 2.0, 0.001)
+
+	# No direction to look along: nothing changes.
+	rig.look_along(Vector3.UP)
+	assert_float(rig.yaw).is_equal_approx(PI / 2.0, 0.001)
+
+
+func test_a_locked_camera_ignores_the_mouse() -> void:
+	var player: Player3D = new_player_3d_on_floor()
+	var rig: CameraRig = _rig_of(player)
+	var target: Node3D = Node3D.new()
+	target.position = Vector3(0, 0, -4)
+	player.get_parent().add_child(target)
+	var runner: GdUnitSceneRunner = scene_runner(player.get_parent())
+	await physics_ticks(runner, 5)
+	rig.look_target = target
+	await physics_ticks(runner, 60)
+	var motion: InputEventMouseMotion = InputEventMouseMotion.new()
+	motion.relative = Vector2(200, 0)
+
+	rig._unhandled_input(motion)
+	await physics_ticks(runner, 2)
+
+	assert_bool(rig.is_locked()).is_true()
+	assert_float(rig.yaw).is_equal_approx(deg_to_rad(rig.lock_side_degrees), 0.02)
+
+
+func test_a_fixed_shot_wins_over_lock_on() -> void:
+	var player: Player3D = new_player_3d_on_floor()
+	var rig: CameraRig = _rig_of(player)
+	var zone: CameraZone = _add_far_zone(rig)
+	var target: Node3D = Node3D.new()
+	target.position = Vector3(4, 0, 0)
+	player.get_parent().add_child(target)
+	var runner: GdUnitSceneRunner = scene_runner(player.get_parent())
+	await physics_ticks(runner, 5)
+
+	rig.enter_zone(zone)
+	rig.look_target = target
+	await physics_ticks(runner, 60)
+
+	# The free camera underneath hasn't swung round to the target.
+	assert_float(rig.yaw).is_equal_approx(0.0, 0.01)
+
+
 func _rig_of(player: Player3D) -> CameraRig:
 	return player.get_node("CameraRig") as CameraRig
 

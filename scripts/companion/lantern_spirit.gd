@@ -14,6 +14,16 @@ extends Node3D
 ## comes back to you.
 signal attention_changed(target: Node3D)
 
+## What his light is saying about a fight. See [method set_mood].
+enum Mood {
+	## Nothing to say: his usual glow.
+	CALM,
+	## Flickering hard: something is about to strike.
+	WARNING,
+	## Bright and steady: there's an opening.
+	OPEN,
+}
+
 ## A marker in this group is his home: he stays there instead of following.
 const HOME_GROUP: StringName = &"lantern_home"
 ## The file of his reactions to things you do, in [code]data/dialogue[/code]:
@@ -72,11 +82,22 @@ var warmth: float = 1.0:
 		if warmth > 0.45:
 			_said_dim = false
 
+## What his light is saying about a fight (see [method set_mood]).
+var mood: Mood:
+	get:
+		return _mood
+
 ## Where he lives, if anywhere: he hovers there rather than following you,
 ## and you go to him. Found by [constant HOME_GROUP] when the scene starts.
 var home: Node3D = null
 
 var _attention: Node3D = null
+## What he's been sent to hover over in a fight (the lock-on target), or null.
+var _watched: Node3D = null
+var _mood: Mood = Mood.CALM
+## His light's usual waver, kept so a fight can change it and put it back.
+var _calm_amount: float = 0.0
+var _calm_speed: float = 0.0
 ## Whether he's been told to leave home and follow, so he doesn't look for
 ## a home again.
 var _left_home: bool = false
@@ -111,6 +132,8 @@ func _ready() -> void:
 	_rng.randomize()
 	_moments = RemarkPicker.new(_rng)
 	_blink_wait = _rng.randf_range(blink_min, blink_max)
+	_calm_amount = _light.amount
+	_calm_speed = _light.speed
 	if is_instance_valid(detector):
 		detector.focus_changed.connect(_on_focus_changed)
 	Game.memories.remembered.connect(func(_memory: Memory) -> void:
@@ -182,6 +205,24 @@ func visit(place: Node3D, seconds: float) -> void:
 ## Whether he's off visiting somewhere just now.
 func is_visiting() -> bool:
 	return _visit_left > 0.0 and is_instance_valid(_visit)
+
+
+## Sends him to hover over [param target] and watch it (what the player is
+## locked on to), or with null, calls him back. At home he stays put.
+func watch(target: Node3D) -> void:
+	_watched = target
+
+
+## What he's been sent to watch, or null.
+func watching() -> Node3D:
+	return _watched if is_instance_valid(_watched) else null
+
+
+## Makes his light say something about a fight: flickering hard as a
+## warning, bright and steady for an opening, or back to his usual glow.
+func set_mood(value: Mood) -> void:
+	_mood = value
+	_apply_warmth()
 
 
 ## Leaves home to follow at the player's shoulder, as he used to, and
@@ -272,12 +313,10 @@ func goal_spot() -> Vector3:
 		return _visit.global_position + Vector3.UP * 0.45
 	if is_instance_valid(home):
 		return home.global_position
+	if is_instance_valid(_watched):
+		return _hover_over(_watched)
 	if is_instance_valid(_attention):
-		var toward_player: Vector3 = player.global_position - _attention.global_position
-		toward_player.y = 0.0
-		var lean: Vector3 = toward_player.normalized() * 0.35 if toward_player.length() > 0.01 \
-				else Vector3.ZERO
-		return _attention.global_position + Vector3.UP * hover_height + lean
+		return _hover_over(_attention)
 	return follow_spot(player.global_position, player.facing, follow_offset)
 
 
@@ -288,6 +327,15 @@ static func follow_spot(player_position: Vector3, facing: Vector3, offset: Vecto
 	forward = forward.normalized() if forward.length() > 0.001 else Vector3.FORWARD
 	var right: Vector3 = forward.cross(Vector3.UP)
 	return player_position + right * offset.x + Vector3.UP * offset.y - forward * offset.z
+
+
+# The spot just above [param what], leaning a little towards the player.
+func _hover_over(what: Node3D) -> Vector3:
+	var toward_player: Vector3 = player.global_position - what.global_position
+	toward_player.y = 0.0
+	var lean: Vector3 = toward_player.normalized() * 0.35 if toward_player.length() > 0.01 \
+			else Vector3.ZERO
+	return what.global_position + Vector3.UP * hover_height + lean
 
 
 ## How far up or down his bob has taken him at [param time] seconds.
@@ -323,7 +371,16 @@ func _apply_warmth() -> void:
 		return
 	_light.omni_range = lerpf(2.4, 4.5, warmth)
 	var bright: float = 1.35 if _attention != null else 1.1
-	if _excited <= 0.0:
+	_light.amount = _calm_amount
+	_light.speed = _calm_speed
+	match _mood:
+		Mood.WARNING:
+			_light.amount = 0.9
+			_light.speed = 26.0
+		Mood.OPEN:
+			bright = 2.6
+	# A fight's signal matters more than an excited hop's extra glow.
+	if _excited <= 0.0 or _mood != Mood.CALM:
 		_light.base_energy = bright * lerpf(0.4, 1.0, warmth)
 
 
@@ -365,6 +422,8 @@ func _face(delta: float) -> void:
 		if not is_in_earshot():
 			return
 		look = player.global_position - global_position
+	elif is_instance_valid(_watched):
+		look = _watched.global_position - global_position
 	elif is_instance_valid(_attention):
 		look = _attention.global_position - global_position
 	look.y = 0.0
