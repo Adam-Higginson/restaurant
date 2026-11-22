@@ -69,7 +69,7 @@ func test_sleeping_in_your_bunk_brings_the_morning_and_back() -> void:
 	await bedside.sleep(player)
 
 	assert_bool(time.is_morning()).is_true()
-	assert_bool(player.is_physics_processing()).is_true()
+	assert_bool(player.controls_enabled).is_true()
 	assert_str(bedside.prompt()).is_equal("Rest until nightfall")
 
 	await bedside.sleep(player)
@@ -90,7 +90,7 @@ func test_you_cannot_walk_off_while_asleep() -> void:
 	await physics_ticks(runner, 3)
 
 	assert_bool(bedside.is_sleeping).is_true()
-	assert_bool(player.is_physics_processing()).is_false()
+	assert_bool(player.controls_enabled).is_false()
 
 
 # A time of day with its own sky, moon and weather.

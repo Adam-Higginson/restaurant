@@ -42,8 +42,7 @@ func sleep(player: Player3D) -> void:
 	if _sleeping:
 		return
 	_sleeping = true
-	player.set_physics_process(false)
-	player.velocity = Vector3.ZERO
+	player.controls_enabled = false
 	await _fade.fade_out()
 	var time: TimeOfDay = _time_of_day()
 	var morning: bool = time == null or not time.is_morning()
@@ -52,7 +51,7 @@ func sleep(player: Player3D) -> void:
 	await _fade.show_title("Morning" if morning else "Night")
 	await get_tree().create_timer(sleep_seconds).timeout
 	await _fade.fade_in()
-	player.set_physics_process(true)
+	player.controls_enabled = true
 	_sleeping = false
 	if morning:
 		var spirit: LanternSpirit = player.get_node_or_null("LanternSpirit") as LanternSpirit

@@ -82,3 +82,10 @@ The far light now has a source. Out in the fog (the centre of the ship's circlin
 - `scenes/prototype/islands/lighthouse_island.tscn` (chunky low-poly cylinders), `shaders/distant_silhouette.gdshader` (ignores the fog and fades itself, paler towards the top), `scripts/weather/distant_island.gd` (the `TimeOfDay` sets how much shows through a `distant` group).
 - The lookout at the bow picks the light or the island depending on the time; new `ISLAND` lines.
 - Tests: the island's reveal follows the dawn (`time_of_day_test`), and the lantern spots the island from the bow at dawn (`lantern_voice_test`).
+
+### 12. The game has a beginning
+Run `sea.tscn` and it opens on black: "Somewhere at sea". The fade lifts on the bunk room at night, the camera looking aft over your shoulder at your bunk, the stove and the stern windows with rain on them, and the lantern says his first words: "There you are." / "You were in the water. I pulled. You held on. Good holding." / "I'll get you home. I know exactly where it is. Roughly." Then you're free to explore, read your note, go up into the storm.
+- `scripts/story/opening.gd` (the `Opening` node in `sea.tscn`, with its own `ScreenFade`; tick **Skip** in the Inspector to start on deck as before).
+- **Bug fixed along the way:** sleeping (feature 6) switched the player's physics off, so on a sailing ship the deck sailed away from under you while you slept. The player now has `controls_enabled` (stand still, but the deck still carries you), used by sleeping and the opening.
+- Tests: `tests/scripts/story/opening_test.gd` (you wake by your bunk and can't move until the fade's done, the lantern speaks, you stay aboard while the ship sails on, skipping starts you where you stand).
+- **Note:** F5 still runs the old 2D restaurant (`main.tscn` is the project's main scene). To play the 3D game, open `scenes/prototype/sea.tscn` and press F6. Making `sea.tscn` the main scene is a project-setting change I've left for you to decide.

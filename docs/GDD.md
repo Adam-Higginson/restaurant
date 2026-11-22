@@ -21,6 +21,9 @@ A cosy 3D adventure in the spirit of Ocarina of Time. You're pulled from the sea
 - **The ending question:** when you finally find home, do you stay?
 - The wider story is still to be written.
 
+## How it begins (first sketch)
+Black, and a title: "Somewhere at sea". You wake standing by your bunk at night, the storm outside, the bunk room warm and lamplit, the camera looking aft over your shoulder at your bunk, the stove and the stern windows. The lantern is at your shoulder: "There you are." / "You were in the water. I pulled. You held on. Good holding." / "I'll get you home. I know exactly where it is. Roughly." Then the ship is yours. (In `sea.tscn`, the `Opening` node; untick its Skip to start on deck.)
+
 ## A day is a song
 A day has four parts, like a song:
 - **Morning ashore, the verse:** different every day. Explore an island, gather ingredients, solve its puzzles, duel what lives there, meet its people.

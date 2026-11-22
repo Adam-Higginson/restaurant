@@ -12,6 +12,8 @@
 [ext_resource type="Shader" path="res://shaders/far_light.gdshader" id="12_far"]
 [ext_resource type="Script" path="res://scripts/weather/time_of_day.gd" id="13_time"]
 [ext_resource type="PackedScene" uid="uid://l1ghth0use1sl" path="res://scenes/prototype/islands/lighthouse_island.tscn" id="14_island"]
+[ext_resource type="Script" path="res://scripts/story/opening.gd" id="15_opening"]
+[ext_resource type="PackedScene" path="res://ui/screen_fade.tscn" id="16_fade"]
 
 [sub_resource type="FastNoiseLite" id="Noise_Cloud"]
 frequency = 0.008
@@ -257,3 +259,11 @@ script = ExtResource("13_time")
 world = NodePath("../WorldEnvironment")
 moon = NodePath("../Moon")
 weather = NodePath("../Weather")
+
+[node name="Opening" type="Node" parent="." unique_id=1418227362 node_paths=PackedStringArray("player", "ship")]
+script = ExtResource("15_opening")
+player = NodePath("../Player")
+ship = NodePath("../Ship")
+
+[node name="ScreenFade" parent="Opening" unique_id=1418227363 instance=ExtResource("16_fade")]
+layer = 20
