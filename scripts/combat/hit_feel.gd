@@ -101,7 +101,7 @@ static func strike_ticks(cut: KnifeCut, cleared: bool, flipped: bool) -> int:
 	return cut.hitstop_ticks
 
 
-func _on_strike_landed(crab: FogCrab, cleared: bool, cut: KnifeCut) -> void:
+func _on_strike_landed(crab: Crab, cleared: bool, cut: KnifeCut) -> void:
 	var flipped: bool = crab.is_flipped() and cut.flips_lunging
 	_hit_stop.freeze(strike_ticks(cut, cleared, flipped))
 	# The bigger the blow, the bigger the shake.

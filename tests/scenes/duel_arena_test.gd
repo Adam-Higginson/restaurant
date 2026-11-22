@@ -40,7 +40,7 @@ func test_the_crabs_at_the_landing_leave_you_alone() -> void:
 	await physics_ticks(runner, 240)
 
 	assert_int(duellist_of(player).hearts.halves).is_equal(6)
-	assert_int((runner.find_child("FogCrab") as FogCrab).cycle.state).is_equal(
+	assert_int((runner.find_child("NearCrab") as Crab).cycle.state).is_equal(
 			CrabCycle.State.IDLE)
 
 
@@ -48,7 +48,7 @@ func test_a_duel_won_parry_then_strike_until_the_fog_clears() -> void:
 	var runner: GdUnitSceneRunner = scene_runner(ARENA)
 	await physics_ticks(runner, 10)
 	var player: Player3D = place_player_3d(runner, BY_THE_CRAB)
-	var crab: FogCrab = runner.find_child("FogCrab") as FogCrab
+	var crab: Crab = runner.find_child("NearCrab") as Crab
 	await physics_ticks(runner, 2)
 	await hold(runner, "lock_on")
 	assert_object(player.lock_target).is_same(crab)

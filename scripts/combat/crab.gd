@@ -1,4 +1,4 @@
-class_name FogCrab
+class_name Crab
 extends CharacterBody3D
 ## A fog-touched crab: the fog has got into it and made it wild. It fights
 ## whoever comes near, in a rhythm you can read: it rears up (the tell),

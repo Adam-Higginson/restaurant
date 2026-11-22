@@ -1,6 +1,6 @@
 [gd_scene format=3]
 
-[ext_resource type="Script" path="res://scripts/combat/fog_crab.gd" id="1_crab"]
+[ext_resource type="Script" path="res://scripts/combat/crab.gd" id="1_crab"]
 [ext_resource type="Script" path="res://scripts/combat/crab_sounds.gd" id="2_sounds"]
 [ext_resource type="Script" path="res://scripts/art/third_party_model.gd" id="3_model"]
 [ext_resource type="AudioStream" path="res://assets/audio/combat/crab_click.tres" id="10_crab_click"]
@@ -54,7 +54,7 @@ rings = 3
 _data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(1, 0), 0.0, 0.0, 0, 0]
 point_count = 2
 
-[node name="FogCrab" type="CharacterBody3D"]
+[node name="Crab" type="CharacterBody3D"]
 floor_snap_length = 0.2
 script = ExtResource("1_crab")
 

@@ -20,7 +20,7 @@ func after_test() -> void:
 func test_a_strike_that_counts_freezes_the_game_briefly() -> void:
 	var player: Player3D = new_player_3d_on_floor()
 	stand_firm(player)
-	new_fog_crab(player, CLOSE)
+	new_crab(player, CLOSE)
 	var runner: GdUnitSceneRunner = scene_runner(player.get_parent())
 	await physics_ticks(runner, FIRST_OPENING)
 
@@ -34,7 +34,7 @@ func test_a_strike_that_counts_freezes_the_game_briefly() -> void:
 func test_the_strike_that_clears_the_fog_freezes_longer() -> void:
 	var player: Player3D = new_player_3d_on_floor()
 	stand_firm(player)
-	var crab: FogCrab = new_fog_crab(player, CLOSE)
+	var crab: Crab = new_crab(player, CLOSE)
 	crab.fog = 1
 	var runner: GdUnitSceneRunner = scene_runner(player.get_parent())
 	await physics_ticks(runner, FIRST_OPENING)
@@ -59,7 +59,7 @@ func test_each_cut_freezes_for_its_own_time_and_longer_to_clear_or_flip() -> voi
 
 func test_a_perfect_parry_freezes_like_a_flip() -> void:
 	var player: Player3D = new_player_3d_on_floor()
-	new_fog_crab(player, CLOSE)
+	new_crab(player, CLOSE)
 	var runner: GdUnitSceneRunner = scene_runner(player.get_parent())
 	player.toolbar.add(ItemInstance.new(preload("res://data/items/frying_pan.tres")))
 	await physics_ticks(runner, 45)
@@ -75,7 +75,7 @@ func test_a_perfect_parry_freezes_like_a_flip() -> void:
 
 func test_a_strike_that_doesnt_count_doesnt_freeze() -> void:
 	var player: Player3D = new_player_3d_on_floor()
-	new_fog_crab(player, CLOSE)
+	new_crab(player, CLOSE)
 	var runner: GdUnitSceneRunner = scene_runner(player.get_parent())
 	# Still rearing up: not open.
 	await physics_ticks(runner, 10)

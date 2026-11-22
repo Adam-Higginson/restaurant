@@ -13,7 +13,7 @@ extends RefCounted
 ## done fighting for good.
 ##
 ## Plain data with no node: [method tick] moves time on, so tests can step it
-## exactly. [FogCrab] owns one and acts it out.
+## exactly. [Crab] owns one and acts it out.
 
 ## Emitted when the crab moves to a new state.
 signal state_changed(state: State)

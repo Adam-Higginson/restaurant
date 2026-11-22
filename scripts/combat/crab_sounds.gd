@@ -6,7 +6,7 @@ extends Node3D
 ## legs tick quietly as it wanders off. Flipped, it lands on its back with a
 ## thud, and its legs clatter frantically until it's up again.
 ##
-## A child of the [FogCrab]. Each sound is a child [AudioStreamPlayer3D]
+## A child of the [Crab]. Each sound is a child [AudioStreamPlayer3D]
 ## (heard from where the crab is, quieter with distance) whose stream is an
 ## [AudioStreamRandomizer] in [code]assets/audio/combat/[/code].
 
@@ -37,7 +37,7 @@ var _since_click: float = 0.0
 ## The click's loudness as set in the scene.
 var _click_db: float = 0.0
 
-@onready var _crab: FogCrab = get_parent() as FogCrab
+@onready var _crab: Crab = get_parent() as Crab
 @onready var _click: AudioStreamPlayer3D = $Click
 
 

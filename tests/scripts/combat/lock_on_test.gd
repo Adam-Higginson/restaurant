@@ -32,7 +32,7 @@ func test_distance_ignores_height() -> void:
 
 func test_holding_locks_on_to_the_crab_in_reach() -> void:
 	var player: Player3D = new_player_3d_on_floor()
-	var crab: FogCrab = _passive_crab(player, AHEAD)
+	var crab: Crab = _passive_crab(player, AHEAD)
 	var runner: GdUnitSceneRunner = scene_runner(player.get_parent())
 	await physics_ticks(runner, 5)
 
@@ -61,7 +61,7 @@ func test_letting_go_releases_the_target() -> void:
 func test_it_picks_the_nearer_of_two_crabs() -> void:
 	var player: Player3D = new_player_3d_on_floor()
 	_passive_crab(player, Vector3(6, 0, 0))
-	var near: FogCrab = _passive_crab(player, AHEAD)
+	var near: Crab = _passive_crab(player, AHEAD)
 	var runner: GdUnitSceneRunner = scene_runner(player.get_parent())
 	await physics_ticks(runner, 5)
 
@@ -88,7 +88,7 @@ func test_with_nothing_in_reach_the_camera_swings_behind_you() -> void:
 
 func test_lock_on_lets_go_when_the_target_gets_too_far() -> void:
 	var player: Player3D = new_player_3d_on_floor()
-	var crab: FogCrab = _passive_crab(player, AHEAD)
+	var crab: Crab = _passive_crab(player, AHEAD)
 	var runner: GdUnitSceneRunner = scene_runner(player.get_parent())
 	await physics_ticks(runner, 5)
 	await hold(runner, "lock_on")
@@ -102,7 +102,7 @@ func test_lock_on_lets_go_when_the_target_gets_too_far() -> void:
 
 func test_lock_on_lets_go_when_the_crabs_fog_clears() -> void:
 	var player: Player3D = new_player_3d_on_floor()
-	var crab: FogCrab = _passive_crab(player, AHEAD)
+	var crab: Crab = _passive_crab(player, AHEAD)
 	crab.fog = 1
 	var runner: GdUnitSceneRunner = scene_runner(player.get_parent())
 	await physics_ticks(runner, 5)
@@ -135,7 +135,7 @@ func test_you_cant_lock_on_while_you_cant_act() -> void:
 
 func test_in_toggle_mode_a_press_locks_and_a_second_lets_go() -> void:
 	var player: Player3D = new_player_3d_on_floor()
-	var crab: FogCrab = _passive_crab(player, AHEAD)
+	var crab: Crab = _passive_crab(player, AHEAD)
 	var runner: GdUnitSceneRunner = scene_runner(player.get_parent())
 	await physics_ticks(runner, 5)
 	_lock_on(player).mode = LockOn.Mode.TOGGLE
@@ -151,7 +151,7 @@ func test_in_toggle_mode_a_press_locks_and_a_second_lets_go() -> void:
 
 func test_locked_on_you_face_the_target_while_walking_sideways() -> void:
 	var player: Player3D = new_player_3d_on_floor()
-	var crab: FogCrab = _passive_crab(player, AHEAD)
+	var crab: Crab = _passive_crab(player, AHEAD)
 	var runner: GdUnitSceneRunner = scene_runner(player.get_parent())
 	await physics_ticks(runner, 5)
 	await hold(runner, "lock_on")
@@ -199,7 +199,7 @@ func test_the_camera_swings_round_to_look_at_the_target() -> void:
 
 func test_the_lantern_hovers_over_the_target_and_comes_back() -> void:
 	var player: Player3D = new_player_3d_on_floor()
-	var crab: FogCrab = _passive_crab(player, AHEAD)
+	var crab: Crab = _passive_crab(player, AHEAD)
 	var spirit: LanternSpirit = player.get_node("LanternSpirit") as LanternSpirit
 	var runner: GdUnitSceneRunner = scene_runner(player.get_parent())
 	await physics_ticks(runner, 5)
@@ -223,8 +223,8 @@ func _lock_on(player: Player3D) -> LockOn:
 
 
 # A crab that never notices the player: it stands where it's put.
-func _passive_crab(player: Player3D, pos: Vector3) -> FogCrab:
-	var crab: FogCrab = new_fog_crab(player, pos)
+func _passive_crab(player: Player3D, pos: Vector3) -> Crab:
+	var crab: Crab = new_crab(player, pos)
 	crab.notice_range = 0.0
 	return crab
 

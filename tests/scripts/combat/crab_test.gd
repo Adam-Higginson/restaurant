@@ -12,13 +12,13 @@ const CLOSE: Vector3 = Vector3(0, 0, -1.3)
 
 
 func test_it_walks_while_it_moves_and_stands_still_otherwise() -> void:
-	assert_str(String(FogCrab.animation_for(true))).is_equal("walk")
-	assert_str(String(FogCrab.animation_for(false))).is_equal("idle")
+	assert_str(String(Crab.animation_for(true))).is_equal("walk")
+	assert_str(String(Crab.animation_for(false))).is_equal("idle")
 
 
 func test_without_its_model_the_greybox_crab_stays() -> void:
 	var player: Player3D = new_player_3d_on_floor()
-	var crab: FogCrab = new_fog_crab(player, Vector3(0, 0, -15))
+	var crab: Crab = new_crab(player, Vector3(0, 0, -15))
 	_dresser(crab).path = "res://assets/third_party/not_here.glb"
 	var runner: GdUnitSceneRunner = scene_runner(player.get_parent())
 	await physics_ticks(runner, 2)
@@ -29,7 +29,7 @@ func test_without_its_model_the_greybox_crab_stays() -> void:
 
 func test_standing_by_it_plays_its_idle() -> void:
 	var player: Player3D = new_player_3d_on_floor()
-	var crab: FogCrab = _new_rigged_crab(player, Vector3(0, 0, -15))
+	var crab: Crab = _new_rigged_crab(player, Vector3(0, 0, -15))
 	var runner: GdUnitSceneRunner = scene_runner(player.get_parent())
 	await physics_ticks(runner, 5)
 
@@ -39,7 +39,7 @@ func test_standing_by_it_plays_its_idle() -> void:
 
 func test_scuttling_in_it_plays_its_walk() -> void:
 	var player: Player3D = new_player_3d_on_floor()
-	var crab: FogCrab = _new_rigged_crab(player, Vector3(0, 0, -5))
+	var crab: Crab = _new_rigged_crab(player, Vector3(0, 0, -5))
 	var runner: GdUnitSceneRunner = scene_runner(player.get_parent())
 
 	# Rearing up, it closes the distance.
@@ -50,7 +50,7 @@ func test_scuttling_in_it_plays_its_walk() -> void:
 
 func test_its_claws_lift_through_its_arms_as_it_rears_up() -> void:
 	var player: Player3D = new_player_3d_on_floor()
-	var crab: FogCrab = _new_rigged_crab(player, CLOSE)
+	var crab: Crab = _new_rigged_crab(player, CLOSE)
 	var runner: GdUnitSceneRunner = scene_runner(player.get_parent())
 	await physics_ticks(runner, 2)
 	var skeleton: Skeleton3D = crab.find_children("*", "Skeleton3D", true, false)[0] as Skeleton3D
@@ -68,7 +68,7 @@ func test_its_claws_lift_through_its_arms_as_it_rears_up() -> void:
 func test_a_strike_flashes_the_real_model_white() -> void:
 	var player: Player3D = new_player_3d_on_floor()
 	stand_firm(player)
-	var crab: FogCrab = _new_rigged_crab(player, CLOSE)
+	var crab: Crab = _new_rigged_crab(player, CLOSE)
 	var runner: GdUnitSceneRunner = scene_runner(player.get_parent())
 	# Its first blow lands and freezes the game; then it's open.
 	await physics_ticks(runner, 70 + HitStop.HURT_TICKS)
@@ -88,7 +88,7 @@ func test_a_strike_flashes_the_real_model_white() -> void:
 func test_flipped_it_rolls_onto_its_back_and_back_up() -> void:
 	var player: Player3D = new_player_3d_on_floor()
 	stand_firm(player)
-	var crab: FogCrab = new_fog_crab(player, CLOSE)
+	var crab: Crab = new_crab(player, CLOSE)
 	var runner: GdUnitSceneRunner = scene_runner(player.get_parent())
 	# Mid-lunge, just after its first blow.
 	await physics_ticks(runner, 49 + HitStop.HURT_TICKS)
@@ -110,7 +110,7 @@ func test_flipped_it_rolls_onto_its_back_and_back_up() -> void:
 func test_flipped_its_legs_scrabble_at_the_air() -> void:
 	var player: Player3D = new_player_3d_on_floor()
 	stand_firm(player)
-	var crab: FogCrab = _new_rigged_crab(player, CLOSE)
+	var crab: Crab = _new_rigged_crab(player, CLOSE)
 	var runner: GdUnitSceneRunner = scene_runner(player.get_parent())
 	await physics_ticks(runner, 49 + HitStop.HURT_TICKS)
 
@@ -121,11 +121,11 @@ func test_flipped_its_legs_scrabble_at_the_air() -> void:
 
 
 # A fog crab at [param pos] wearing the stand-in model.
-func _new_rigged_crab(player: Player3D, pos: Vector3) -> FogCrab:
-	var crab: FogCrab = new_fog_crab(player, pos)
+func _new_rigged_crab(player: Player3D, pos: Vector3) -> Crab:
+	var crab: Crab = new_crab(player, pos)
 	_dresser(crab).path = RIG
 	return crab
 
 
-func _dresser(crab: FogCrab) -> ThirdPartyModel:
+func _dresser(crab: Crab) -> ThirdPartyModel:
 	return crab.get_node("Model/Crab") as ThirdPartyModel

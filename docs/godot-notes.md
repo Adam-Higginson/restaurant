@@ -204,7 +204,7 @@ A growing glossary of the Godot concepts this project uses: what each one is, in
 
 **State machine.** A thing that is always in exactly one of a few named states, with rules for when it moves to the next. In GDScript it's an `enum` for the states, a variable holding the current one, and a `match` that says what each state does. It keeps "what is it doing now?" in one place instead of a tangle of flags. *Ours:* `CrabCycle` (`scripts/combat/crab_cycle.gd`): idle, windup, attack, opening, staggered, cleared.
 
-**Stepping logic with `delta`.** `_physics_process(delta)` is told how many seconds have passed since the last tick (1/60). Logic that only ever adds up `delta` doesn't care who is calling it, so a test can hand it any amount of time and check exactly what happened. *Ours:* `CrabCycle.tick(delta)` and `ParryWindow.tick(delta)`; `FogCrab` and `Duellist` call them every physics tick, and the tests call them with whole seconds.
+**Stepping logic with `delta`.** `_physics_process(delta)` is told how many seconds have passed since the last tick (1/60). Logic that only ever adds up `delta` doesn't care who is calling it, so a test can hand it any amount of time and check exactly what happened. *Ours:* `CrabCycle.tick(delta)` and `ParryWindow.tick(delta)`; `Crab` and `Duellist` call them every physics tick, and the tests call them with whole seconds.
 
 **Groups, for finding many nodes.** As well as finding "the" one of something, `get_tree().get_nodes_in_group(name)` gives every node in a group, and `remove_from_group` takes a node out again. *Ours:* everything in `lock_on_target` can be locked on to and struck; a fog-crab leaves it when its fog clears. The player's `Duellist` is in `duellist`, and the place a defeat puts you is in `landing`.
 
@@ -218,7 +218,7 @@ A growing glossary of the Godot concepts this project uses: what each one is, in
 
 **Angles between directions (`angle_to`).** `a.angle_to(b)` on two `Vector2`s gives the angle from one to the other. Comparing it with half an arc says whether something is "in front". *Ours:* `Duellist.in_reach()`: the knife hits what's within 2 m and inside a 120° arc ahead.
 
-**Signals between plain objects.** Signals aren't only for nodes: a `RefCounted` can declare and emit them too. *Ours:* `Hearts.changed` redraws the `HeartsBar`; `CrabCycle.attacked` tells the `FogCrab` to land its hit; `CrabCycle.state_changed` sets the lantern's light.
+**Signals between plain objects.** Signals aren't only for nodes: a `RefCounted` can declare and emit them too. *Ours:* `Hearts.changed` redraws the `HeartsBar`; `CrabCycle.attacked` tells the `Crab` to land its hit; `CrabCycle.state_changed` sets the lantern's light.
 
 **Input Map actions for triggers.** A controller's triggers are *axes* (how far they're pulled), not buttons: bind them as "Joypad Axis 4" (left) and "5" (right). The action's *deadzone* is how far they must be pulled to count as pressed. *Ours:* `lock_on` and `parry` in Project Settings > Input Map, with a deadzone of 0.5.
 
@@ -226,7 +226,7 @@ A growing glossary of the Godot concepts this project uses: what each one is, in
 
 **Sound files and AudioStreamPlayer.** Drop an `.ogg` or `.wav` into the project and Godot imports it as an `AudioStream` (the `.import` file beside it records how). An `AudioStreamPlayer` node plays whatever is in its `stream`, at its `volume_db`, heard the same wherever you are. *Ours:* the six players under `DuelSounds` in `player.tscn` (swing, slice, tink, pan up, clang, hurt).
 
-**AudioStreamPlayer3D.** The same, but the sound comes from the node's place in the world: quieter with distance, and from the left or right of the camera. *Ours:* the three players under `Sounds` in `fog_crab.tscn`, so the far crab's ticking stays far away.
+**AudioStreamPlayer3D.** The same, but the sound comes from the node's place in the world: quieter with distance, and from the left or right of the camera. *Ours:* the three players under `Sounds` in `crab.tscn`, so the far crab's ticking stays far away.
 
 **AudioStreamRandomizer.** A resource that holds several recordings and plays one at random each time, never the same twice running, at a slightly different pitch (`random_pitch`). A sound heard over and over stops feeling stamped out. Give it to a player as its `stream`. *Ours:* one `.tres` per sound in `assets/audio/combat/` (`clang.tres`, `swing.tres`, `crab_click.tres`...). Open one in the Inspector to see its recordings and press play on each.
 
@@ -272,7 +272,7 @@ A growing glossary of the Godot concepts this project uses: what each one is, in
 
 **`CPUParticles3D` one-shot bursts.** A particle emitter whose particles are meshes. With `one_shot` and `explosiveness` 1 it throws all its particles at once; `restart()` throws another burst. CPU particles need no shader compiled the first time they fire, so there's no stutter on the first hit. *Ours:* the crab's `Chips` and `Wisps`, the pan's `Sparks`.
 
-**`material_overlay`.** A second material drawn over a mesh on top of its own, without replacing it. *Ours:* `FogCrab` lays a white unshaded one over every mesh of its model for the flash when struck.
+**`material_overlay`.** A second material drawn over a mesh on top of its own, without replacing it. *Ours:* `Crab` lays a white unshaded one over every mesh of its model for the flash when struck.
 
 **`ImmediateMesh`.** A mesh you rebuild in code every frame: `clear_surfaces()`, then `surface_begin`, a colour and a point per vertex, `surface_end`. *Ours:* `KnifeTrail`, a ribbon through where the blade has been.
 
@@ -280,13 +280,13 @@ A growing glossary of the Godot concepts this project uses: what each one is, in
 
 **Audio bus effects.** Every sound goes through a bus (`Master`, `Ambience`), and a bus can have effects such as a low-pass filter. Its settings can change while the game runs: `AudioServer.get_bus_effect` gives you the effect, and `set_bus_effect_enabled` turns it on and off. *Ours:* the `Muffle` low-pass on Master (`default_bus_layout.tres`), swept down by `HitFeel` when you're hurt.
 
-**Skeletons and bones (`Skeleton3D`).** An animated model is a mesh "skinned" to a skeleton: each vertex follows a few bones by weight, so turning a bone bends the mesh. Bones are named and posed in code with `set_bone_pose_rotation` and `set_bone_pose_scale`. *Ours:* `CharacterModel` puts every part on one skeleton and scales the head bone; `FogCrab` lifts the claws through the arm bones.
+**Skeletons and bones (`Skeleton3D`).** An animated model is a mesh "skinned" to a skeleton: each vertex follows a few bones by weight, so turning a bone bends the mesh. Bones are named and posed in code with `set_bone_pose_rotation` and `set_bone_pose_scale`. *Ours:* `CharacterModel` puts every part on one skeleton and scales the head bone; `Crab` lifts the claws through the arm bones.
 
 **`BoneAttachment3D`.** A node that follows one bone of a skeleton, so anything under it moves with that bone. *Ours:* `CharacterModel.right_hand` and `left_hand`, which hold the knife and pan.
 
 **`AnimationPlayer` and `AnimationLibrary`.** Animations live in libraries on a player, named `library/animation`. Each track moves one thing, for a bone written `path/to/Skeleton3D:bone`, so changing the path points an animation at another skeleton with the same bone names. Godot drops a `_Loop` ending from imported names and makes those animations loop. *Ours:* `CharacterModel.retarget` copies the Universal Animation Library's animations onto our skeleton, keeping only rotations.
 
-**Advancing an animation by hand.** With `callback_mode_process` set to Manual, an `AnimationPlayer` only moves on when you call `advance(delta)`. You can then adjust its bones after it, in the same frame. *Ours:* `FogCrab._animate` plays the crab's walk, then lifts its claws on top.
+**Advancing an animation by hand.** With `callback_mode_process` set to Manual, an `AnimationPlayer` only moves on when you call `advance(delta)`. You can then adjust its bones after it, in the same frame. *Ours:* `Crab._animate` plays the crab's walk, then lifts its claws on top.
 
 **Mesh arrays (`ArrayMesh`).** `surface_get_arrays` gives a mesh's raw data (positions, bone indices and weights, and the index list of triangles), and `add_surface_from_arrays` builds a mesh from data. *Ours:* `CharacterModel.cut_out` keeps only the triangles the head and neck bones move, to take a head off a whole body.
 

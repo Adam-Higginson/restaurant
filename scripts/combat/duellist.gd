@@ -28,7 +28,7 @@ signal cut_started(cut: KnifeCut)
 signal struck(hit: bool)
 ## Emitted for each crab a cut counts on (or flips). [param cleared] says
 ## whether it was the cut that cleared its fog.
-signal strike_landed(crab: FogCrab, cleared: bool, cut: KnifeCut)
+signal strike_landed(crab: Crab, cleared: bool, cut: KnifeCut)
 ## Emitted when a swing reaches a creature that isn't open, so it doesn't count.
 signal glanced
 ## Emitted when the pan goes up.
@@ -133,7 +133,7 @@ var _land_left: float = 0.0
 ## Seconds left before another blow can land.
 var _invulnerable_left: float = 0.0
 ## The crab whose fight the lantern is showing, or null.
-var _shown: FogCrab = null
+var _shown: Crab = null
 ## Whether the knife and pan are in the character's hands, rather than
 ## posed by code in front of the greybox.
 var _in_hands: bool = false
@@ -359,7 +359,7 @@ func _on_cut_started(cut: KnifeCut) -> void:
 func _land(cut: KnifeCut) -> void:
 	var hit: bool = false
 	var reached: bool = false
-	for crab: FogCrab in _crabs():
+	for crab: Crab in _crabs():
 		if not in_reach(_player.global_position, _player.facing, crab.global_position,
 				cut.reach, cut.arc_degrees):
 			continue
@@ -376,10 +376,10 @@ func _land(cut: KnifeCut) -> void:
 		glanced.emit()
 
 
-func _crabs() -> Array[FogCrab]:
-	var found: Array[FogCrab] = []
-	for node: Node in get_tree().get_nodes_in_group(FogCrab.GROUP):
-		var crab: FogCrab = node as FogCrab
+func _crabs() -> Array[Crab]:
+	var found: Array[Crab] = []
+	for node: Node in get_tree().get_nodes_in_group(Crab.GROUP):
+		var crab: Crab = node as Crab
 		if crab != null:
 			found.append(crab)
 	return found
@@ -390,7 +390,7 @@ func _crabs() -> Array[FogCrab]:
 func _on_target_changed(target: Node3D) -> void:
 	if is_instance_valid(_shown):
 		_shown.cycle.state_changed.disconnect(_on_crab_state_changed)
-	_shown = target as FogCrab
+	_shown = target as Crab
 	_spirit.watch(target)
 	if _shown == null:
 		_spirit.set_mood(LanternSpirit.Mood.CALM)
