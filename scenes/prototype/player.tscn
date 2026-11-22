@@ -13,7 +13,13 @@
 [ext_resource type="Script" path="res://scripts/combat/lock_on.gd" id="21_lock"]
 [ext_resource type="Script" path="res://scripts/combat/duellist.gd" id="22_duel"]
 [ext_resource type="Material" path="res://assets/placeholder/materials/iron.tres" id="23_iron"]
-[ext_resource type="Script" path="res://scripts/combat/clang.gd" id="24_clang"]
+[ext_resource type="Script" path="res://scripts/combat/duel_sounds.gd" id="24_sounds"]
+[ext_resource type="AudioStream" path="res://assets/audio/combat/swing.tres" id="30_swing"]
+[ext_resource type="AudioStream" path="res://assets/audio/combat/slice.tres" id="31_slice"]
+[ext_resource type="AudioStream" path="res://assets/audio/combat/tink.tres" id="32_tink"]
+[ext_resource type="AudioStream" path="res://assets/audio/combat/pan_up.tres" id="33_pan_up"]
+[ext_resource type="AudioStream" path="res://assets/audio/combat/clang.tres" id="34_clang"]
+[ext_resource type="AudioStream" path="res://assets/audio/combat/hurt.tres" id="35_hurt"]
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_raosb"]
 radius = 0.4
@@ -168,8 +174,32 @@ script = ExtResource("21_lock")
 [node name="Duellist" type="Node" parent="."]
 script = ExtResource("22_duel")
 
-[node name="Clang" type="AudioStreamPlayer" parent="."]
-script = ExtResource("24_clang")
+[node name="DuelSounds" type="Node" parent="."]
+script = ExtResource("24_sounds")
+
+[node name="Swing" type="AudioStreamPlayer" parent="DuelSounds"]
+stream = ExtResource("30_swing")
+volume_db = 8.0
+
+[node name="Slice" type="AudioStreamPlayer" parent="DuelSounds"]
+stream = ExtResource("31_slice")
+volume_db = -9.0
+
+[node name="Tink" type="AudioStreamPlayer" parent="DuelSounds"]
+stream = ExtResource("32_tink")
+volume_db = -2.0
+
+[node name="PanUp" type="AudioStreamPlayer" parent="DuelSounds"]
+stream = ExtResource("33_pan_up")
+volume_db = -10.0
+
+[node name="Clang" type="AudioStreamPlayer" parent="DuelSounds"]
+stream = ExtResource("34_clang")
+volume_db = 6.0
+
+[node name="Hurt" type="AudioStreamPlayer" parent="DuelSounds"]
+stream = ExtResource("35_hurt")
+volume_db = -6.0
 
 [node name="LanternSpirit" parent="." unique_id=1650650065 node_paths=PackedStringArray("player", "detector") instance=ExtResource("20_spirit")]
 player = NodePath("..")

@@ -1,6 +1,10 @@
 [gd_scene format=3]
 
 [ext_resource type="Script" path="res://scripts/combat/fog_crab.gd" id="1_crab"]
+[ext_resource type="Script" path="res://scripts/combat/crab_sounds.gd" id="2_sounds"]
+[ext_resource type="AudioStream" path="res://assets/audio/combat/crab_click.tres" id="10_crab_click"]
+[ext_resource type="AudioStream" path="res://assets/audio/combat/crab_lunge.tres" id="11_crab_lunge"]
+[ext_resource type="AudioStream" path="res://assets/audio/combat/fog_clear.tres" id="12_fog_clear"]
 
 [sub_resource type="SphereShape3D" id="SphereShape3D_body"]
 radius = 0.5
@@ -89,3 +93,25 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5, 0)
 cast_shadow = 0
 material_override = SubResource("StandardMaterial3D_fog")
 mesh = SubResource("SphereMesh_fog")
+
+[node name="Sounds" type="Node3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5, 0)
+script = ExtResource("2_sounds")
+
+[node name="Click" type="AudioStreamPlayer3D" parent="Sounds"]
+stream = ExtResource("10_crab_click")
+volume_db = 6.0
+unit_size = 8.0
+max_distance = 40.0
+
+[node name="Lunge" type="AudioStreamPlayer3D" parent="Sounds"]
+stream = ExtResource("11_crab_lunge")
+volume_db = 5.0
+unit_size = 8.0
+max_distance = 40.0
+
+[node name="Clear" type="AudioStreamPlayer3D" parent="Sounds"]
+stream = ExtResource("12_fog_clear")
+volume_db = 3.0
+unit_size = 8.0
+max_distance = 40.0

@@ -1,0 +1,10 @@
+[gd_resource type="AudioStreamRandomizer" format=3]
+
+[ext_resource type="AudioStream" path="res://assets/audio/combat/knifeSlice.ogg" id="1"]
+[ext_resource type="AudioStream" path="res://assets/audio/combat/knifeSlice2.ogg" id="2"]
+
+[resource]
+random_pitch = 1.08
+streams_count = 2
+stream_0/stream = ExtResource("1")
+stream_1/stream = ExtResource("2")

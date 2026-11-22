@@ -222,7 +222,13 @@ A growing glossary of the Godot concepts this project uses: what each one is, in
 
 **`is_action_pressed` and `is_action_released` on an event.** In `_unhandled_input(event)`, these say whether this event is a button going down or coming up, which is what a held button needs. *Ours:* `LockOn` locks on at the press and lets go at the release.
 
-**Sound files and AudioStreamPlayer.** Drop an `.ogg` or `.wav` into the project and Godot imports it as an `AudioStream` (the `.import` file beside it records how). An `AudioStreamPlayer` node plays whatever is in its `stream`; `pitch_scale` plays it a little higher or lower. Playing one of several recordings at a slightly different pitch each time stops a repeated sound feeling mechanical. *Ours:* `Clang` (`scripts/combat/clang.gd`), the `Clang` node on the player: five metal knocks in `assets/audio/combat/`, rung by `Duellist` when a parry lands.
+**Sound files and AudioStreamPlayer.** Drop an `.ogg` or `.wav` into the project and Godot imports it as an `AudioStream` (the `.import` file beside it records how). An `AudioStreamPlayer` node plays whatever is in its `stream`, at its `volume_db`, heard the same wherever you are. *Ours:* the six players under `DuelSounds` in `player.tscn` (swing, slice, tink, pan up, clang, hurt).
+
+**AudioStreamPlayer3D.** The same, but the sound comes from the node's place in the world: quieter with distance, and from the left or right of the camera. *Ours:* the three players under `Sounds` in `fog_crab.tscn`, so the far crab's ticking stays far away.
+
+**AudioStreamRandomizer.** A resource that holds several recordings and plays one at random each time, never the same twice running, at a slightly different pitch (`random_pitch`). A sound heard over and over stops feeling stamped out. Give it to a player as its `stream`. *Ours:* one `.tres` per sound in `assets/audio/combat/` (`clang.tres`, `swing.tres`, `crab_click.tres`...). Open one in the Inspector to see its recordings and press play on each.
+
+**A node that only listens.** Sound doesn't belong in the rules, so the rules just emit signals and a separate node connects to them and plays things. Remove the node and the game still works, silently. `signal.connect(play.bind(NAME))` connects one function to many signals, each with its own argument. *Ours:* `DuelSounds` listens to `Duellist`; `CrabSounds` listens to the crab's `CrabCycle`.
 
 ## Overheard chatter (#94)
 

@@ -11,7 +11,9 @@ extends Node
 ## - Use tool, with nothing here for a tool to work on, swings the knife at
 ##   whatever is in front (the [InteractionDetector3D] says when).
 ## - Parry raises the pan for a moment, if there's a frying pan anywhere on
-##   the toolbar. A hit landing in that moment is turned away, with a clang.
+##   the toolbar. A hit landing in that moment is turned away.
+## - What all of this sounds like is [DuelSounds]' job, which listens to the
+##   signals below.
 ## - With no hearts left, the lantern pulls the player back to the landing
 ##   (a node in the [constant LANDING_GROUP] group) and half of what they
 ##   carry is lost.
@@ -19,6 +21,8 @@ extends Node
 ## Emitted when the knife is swung. [param hit] says whether it counted on
 ## anything.
 signal struck(hit: bool)
+## Emitted when a swing reaches a creature that isn't open, so it doesn't count.
+signal glanced
 ## Emitted when the pan goes up.
 signal pan_raised
 ## Emitted when a hit is turned away by the pan.
@@ -64,7 +68,6 @@ var _shown: FogCrab = null
 @onready var _spirit: LanternSpirit = $"../LanternSpirit"
 @onready var _knife: Node3D = $"../Model/Knife"
 @onready var _pan: Node3D = $"../Model/Pan"
-@onready var _clang: Clang = $"../Clang"
 
 
 func _ready() -> void:
@@ -108,15 +111,19 @@ func strike() -> bool:
 		return false
 	_strike_left = strike_seconds
 	var hit: bool = false
+	var reached: bool = false
 	for crab: FogCrab in _crabs():
 		if not in_reach(_player.global_position, _player.facing, crab.global_position,
 				strike_reach, strike_arc_degrees):
 			continue
+		reached = true
 		if crab.take_strike():
 			hit = true
 			if crab.is_cleared():
 				_spirit.remark(&"fog_cleared")
 	struck.emit(hit)
+	if reached and not hit:
+		glanced.emit()
 	return true
 
 
@@ -146,7 +153,6 @@ func raise_pan() -> bool:
 func receive_hit(halves: int) -> bool:
 	if parry.is_active() and has_pan():
 		parry.spend()
-		_clang.ring()
 		_spirit.excite()
 		parried.emit()
 		return false
