@@ -1,67 +1,72 @@
-[gd_scene format=3 uid="uid://ck4xu2mcu1558"]
+[gd_scene format=3 uid="uid://o7h3fy5go2ht"]
 
-[ext_resource type="Material" path="res://assets/placeholder/materials/iron.tres" id="1_e47nj"]
-[ext_resource type="Material" path="res://assets/placeholder/materials/wax.tres" id="2_voih7"]
-[ext_resource type="Material" path="res://assets/placeholder/materials/flame.tres" id="3_1p7v4"]
-[ext_resource type="Script" path="res://scripts/props/flicker.gd" id="4_nmna8"]
+[ext_resource type="Material" path="res://assets/placeholder/materials/iron.tres" id="1_voih7"]
+[ext_resource type="Material" path="res://assets/placeholder/materials/wax.tres" id="2_1p7v4"]
+[ext_resource type="Script" path="res://scripts/props/candle_flame.gd" id="3_nmna8"]
+[ext_resource type="Material" path="res://assets/placeholder/materials/flame.tres" id="4_pl0s2"]
+[ext_resource type="Script" path="res://scripts/props/flicker.gd" id="5_34yf3"]
 
-[sub_resource type="CylinderMesh" id="CylinderMesh_pl0s2"]
+[sub_resource type="CylinderMesh" id="CylinderMesh_exr41"]
 top_radius = 0.065
 bottom_radius = 0.06
 height = 0.015
 radial_segments = 8
 rings = 1
 
-[sub_resource type="BoxMesh" id="BoxMesh_34yf3"]
+[sub_resource type="BoxMesh" id="BoxMesh_0mnsv"]
 size = Vector3(0.05, 0.012, 0.015)
 
-[sub_resource type="CylinderMesh" id="CylinderMesh_exr41"]
+[sub_resource type="CylinderMesh" id="CylinderMesh_yn10w"]
 top_radius = 0.022
 bottom_radius = 0.024
 height = 0.1
 radial_segments = 6
 rings = 1
 
-[sub_resource type="BoxMesh" id="BoxMesh_0mnsv"]
+[sub_resource type="BoxMesh" id="BoxMesh_ycndn"]
 size = Vector3(0.012, 0.04, 0.012)
 
-[sub_resource type="BoxMesh" id="BoxMesh_yn10w"]
+[sub_resource type="BoxMesh" id="BoxMesh_q81ay"]
 size = Vector3(0.016, 0.035, 0.016)
 
-[node name="Candle" type="Node3D" unique_id=1599568112]
+[node name="Candle" type="Node3D" unique_id=1383662254]
 
-[node name="Dish" type="MeshInstance3D" parent="." unique_id=2049898423]
+[node name="Dish" type="MeshInstance3D" parent="." unique_id=1925904542]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.008, 0)
-material_override = ExtResource("1_e47nj")
-mesh = SubResource("CylinderMesh_pl0s2")
-
-[node name="Handle" type="MeshInstance3D" parent="." unique_id=1791237074]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.08, 0.012, 0)
-material_override = ExtResource("1_e47nj")
-mesh = SubResource("BoxMesh_34yf3")
-
-[node name="Wax" type="MeshInstance3D" parent="." unique_id=1876898704]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.065, 0)
-material_override = ExtResource("2_voih7")
+material_override = ExtResource("1_voih7")
 mesh = SubResource("CylinderMesh_exr41")
 
-[node name="Drip" type="MeshInstance3D" parent="." unique_id=1563528847]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.022, 0.07, 0.01)
-material_override = ExtResource("2_voih7")
+[node name="Handle" type="MeshInstance3D" parent="." unique_id=1669125677]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.08, 0.012, 0)
+material_override = ExtResource("1_voih7")
 mesh = SubResource("BoxMesh_0mnsv")
 
-[node name="Flame" type="MeshInstance3D" parent="." unique_id=2094181505]
-transform = Transform3D(0.70710677, 0, 0.70710677, 0, 1, 0, -0.70710677, 0, 0.70710677, 0, 0.135, 0)
-material_override = ExtResource("3_1p7v4")
-cast_shadow = 0
-mesh = SubResource("BoxMesh_yn10w")
+[node name="Wax" type="MeshInstance3D" parent="." unique_id=1353569252]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.065, 0)
+material_override = ExtResource("2_1p7v4")
+mesh = SubResource("CylinderMesh_yn10w")
 
-[node name="Light" type="OmniLight3D" parent="." unique_id=2144193943]
+[node name="Drip" type="MeshInstance3D" parent="." unique_id=635115425]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.022, 0.07, 0.01)
+material_override = ExtResource("2_1p7v4")
+mesh = SubResource("BoxMesh_ycndn")
+
+[node name="Wick" type="Node3D" parent="." unique_id=1957340396]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.115, 0)
+script = ExtResource("3_nmna8")
+
+[node name="Flame" type="MeshInstance3D" parent="Wick" unique_id=952254979]
+transform = Transform3D(0.70710677, 0, 0.70710677, 0, 1, 0, -0.70710677, 0, 0.70710677, 0, 0.02, 0)
+material_override = ExtResource("4_pl0s2")
+cast_shadow = 0
+mesh = SubResource("BoxMesh_q81ay")
+
+[node name="Light" type="OmniLight3D" parent="." unique_id=553263487]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.17, 0)
 light_color = Color(1, 0.62, 0.3, 1)
 light_energy = 0.45
 omni_range = 1.5
-script = ExtResource("4_nmna8")
+script = ExtResource("5_34yf3")
 base_energy = 0.45
 amount = 0.18
 speed = 7.0
