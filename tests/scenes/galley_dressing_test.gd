@@ -68,6 +68,20 @@ func test_you_cannot_walk_through_the_stool() -> void:
 
 	var player: Player3D = runner.find_child("Player") as Player3D
 	assert_float(ship.to_local(player.global_position).z).is_greater(5.5)
+	# It's low (as low as it's drawn), but you don't climb onto it either.
+	assert_float(ship.to_local(player.global_position).y).is_less(1.15)
+
+
+func test_the_stool_collides_where_it_is_drawn() -> void:
+	var stool: StaticBody3D = (load("res://scenes/prototype/dressing/stool.tscn") as PackedScene) 			.instantiate() as StaticBody3D
+	auto_free(stool)
+	var model: ThirdPartyModel = stool.get_node("Model") as ThirdPartyModel
+	var shape: CollisionShape3D = stool.get_node("Shape") as CollisionShape3D
+	var box: BoxShape3D = shape.shape as BoxShape3D
+	# The model is fitted into fit_size, standing on the floor; the shape
+	# fills the same box, so you bump into exactly what you see.
+	assert_vector(box.size).is_equal(model.fit_size)
+	assert_float(shape.position.y).is_equal_approx(model.fit_size.y / 2.0, 0.001)
 
 
 func test_crates_stool_and_bookshelf_are_solid() -> void:
