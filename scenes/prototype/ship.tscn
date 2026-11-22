@@ -524,6 +524,42 @@ size = Vector3(11.4, 0.1, 5.7)
 [sub_resource type="BoxShape3D" id="BoxShape3D_xpcgn"]
 size = Vector3(9.1, 0.1, 1.12)
 
+[sub_resource type="BoxShape3D" id="BoxShape3D_wb018"]
+size = Vector3(9.1, 0.1, 6.65)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_lpcyg"]
+size = Vector3(0.42, 0.36, 6.65)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_wwen8"]
+size = Vector3(0.42, 0.36, 6.65)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_m4wtu"]
+size = Vector3(9.1, 0.3, 0.34)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_0hebc"]
+size = Vector3(9.1, 0.3, 0.34)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_e2kx3"]
+size = Vector3(9.1, 0.3, 0.34)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_j4fk0"]
+size = Vector3(10.34, 0.3, 0.28)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_2b58a"]
+size = Vector3(9.06, 0.3, 0.28)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_xvtya"]
+size = Vector3(9.06, 0.3, 0.28)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_03mpn"]
+size = Vector3(9.06, 0.3, 0.28)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_kgj3w"]
+size = Vector3(0.28, 0.3, 5.7)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_absnv"]
+size = Vector3(0.28, 0.3, 6.82)
+
 [node name="Ship" type="AnimatableBody3D" unique_id=200548129]
 script = ExtResource("1_7ykrf")
 
@@ -1707,3 +1743,51 @@ shape = SubResource("BoxShape3D_03byx")
 [node name="BunkCeilingForeShape" type="CollisionShape3D" parent="." unique_id=2108093651]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.15, 4.05, 8.44)
 shape = SubResource("BoxShape3D_xpcgn")
+
+[node name="GalleyCeilingShape" type="CollisionShape3D" parent="." unique_id=527253700]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.15, 3.65, 4.475)
+shape = SubResource("BoxShape3D_wb018")
+
+[node name="GalleyBeamPortShape" type="CollisionShape3D" parent="." unique_id=52040810]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.6, 3.42, 4.475)
+shape = SubResource("BoxShape3D_lpcyg")
+
+[node name="GalleyBeamStarboardShape" type="CollisionShape3D" parent="." unique_id=145355465]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.6, 3.42, 4.475)
+shape = SubResource("BoxShape3D_wwen8")
+
+[node name="GalleyCrossBeam1Shape" type="CollisionShape3D" parent="." unique_id=1258012448]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.15, 3.45, 2.5)
+shape = SubResource("BoxShape3D_m4wtu")
+
+[node name="GalleyCrossBeam2Shape" type="CollisionShape3D" parent="." unique_id=1447169844]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.15, 3.45, 4.95)
+shape = SubResource("BoxShape3D_0hebc")
+
+[node name="GalleyCrossBeam3Shape" type="CollisionShape3D" parent="." unique_id=719341739]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.15, 3.45, 7.4)
+shape = SubResource("BoxShape3D_e2kx3")
+
+[node name="BunkBeam1Shape" type="CollisionShape3D" parent="." unique_id=105799344]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.53, 3.85, 9)
+shape = SubResource("BoxShape3D_j4fk0")
+
+[node name="BunkBeam2Shape" type="CollisionShape3D" parent="." unique_id=546900450]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3.85, 10.7)
+shape = SubResource("BoxShape3D_2b58a")
+
+[node name="BunkBeam3Shape" type="CollisionShape3D" parent="." unique_id=555509062]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3.85, 12.4)
+shape = SubResource("BoxShape3D_xvtya")
+
+[node name="BunkBeam4Shape" type="CollisionShape3D" parent="." unique_id=434234182]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3.85, 14)
+shape = SubResource("BoxShape3D_03mpn")
+
+[node name="BunkHeaderPortShape" type="CollisionShape3D" parent="." unique_id=1293391110]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4.6, 3.85, 11.85)
+shape = SubResource("BoxShape3D_kgj3w")
+
+[node name="BunkHeaderStarboardShape" type="CollisionShape3D" parent="." unique_id=827518501]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4.6, 3.85, 11.29)
+shape = SubResource("BoxShape3D_absnv")
