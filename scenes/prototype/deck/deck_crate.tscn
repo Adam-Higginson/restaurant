@@ -1,0 +1,90 @@
+[gd_scene format=3 uid="uid://xcf68q0pn3via"]
+
+[ext_resource type="Material" uid="uid://apmxhjggurfpb" path="res://assets/placeholder/materials/wet_prop_wood.tres" id="1_jsmsw"]
+[ext_resource type="Material" path="res://assets/placeholder/materials/wet_dark_wood.tres" id="2_vjseq"]
+
+[sub_resource type="BoxMesh" id="BoxMesh_fqmrk"]
+size = Vector3(0.58, 0.58, 0.58)
+
+[sub_resource type="BoxMesh" id="BoxMesh_vw74u"]
+size = Vector3(0.06, 0.6, 0.06)
+
+[sub_resource type="BoxMesh" id="BoxMesh_tm0sj"]
+size = Vector3(0.6, 0.06, 0.06)
+
+[sub_resource type="BoxMesh" id="BoxMesh_rf73k"]
+size = Vector3(0.06, 0.06, 0.6)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_62qfd"]
+size = Vector3(0.6, 0.6, 0.6)
+
+[node name="DeckCrate" type="StaticBody3D" unique_id=1267465599]
+
+[node name="Box" type="MeshInstance3D" parent="." unique_id=1009532243]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.3, 0)
+material_override = ExtResource("1_jsmsw")
+mesh = SubResource("BoxMesh_fqmrk")
+
+[node name="Corner1" type="MeshInstance3D" parent="." unique_id=1847649262]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.27, 0.3, -0.27)
+material_override = ExtResource("2_vjseq")
+mesh = SubResource("BoxMesh_vw74u")
+
+[node name="Corner2" type="MeshInstance3D" parent="." unique_id=1114472331]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.27, 0.3, -0.27)
+material_override = ExtResource("2_vjseq")
+mesh = SubResource("BoxMesh_vw74u")
+
+[node name="Corner3" type="MeshInstance3D" parent="." unique_id=992768876]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.27, 0.3, 0.27)
+material_override = ExtResource("2_vjseq")
+mesh = SubResource("BoxMesh_vw74u")
+
+[node name="Corner4" type="MeshInstance3D" parent="." unique_id=1764657820]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.27, 0.3, 0.27)
+material_override = ExtResource("2_vjseq")
+mesh = SubResource("BoxMesh_vw74u")
+
+[node name="BottomRimFore" type="MeshInstance3D" parent="." unique_id=1831876490]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.03, -0.27)
+material_override = ExtResource("2_vjseq")
+mesh = SubResource("BoxMesh_tm0sj")
+
+[node name="BottomRimAft" type="MeshInstance3D" parent="." unique_id=1276170228]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.03, 0.27)
+material_override = ExtResource("2_vjseq")
+mesh = SubResource("BoxMesh_tm0sj")
+
+[node name="BottomRimPort" type="MeshInstance3D" parent="." unique_id=1328800152]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.27, 0.03, 0)
+material_override = ExtResource("2_vjseq")
+mesh = SubResource("BoxMesh_rf73k")
+
+[node name="BottomRimStarboard" type="MeshInstance3D" parent="." unique_id=781829251]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.27, 0.03, 0)
+material_override = ExtResource("2_vjseq")
+mesh = SubResource("BoxMesh_rf73k")
+
+[node name="TopRimFore" type="MeshInstance3D" parent="." unique_id=1832415025]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.57, -0.27)
+material_override = ExtResource("2_vjseq")
+mesh = SubResource("BoxMesh_tm0sj")
+
+[node name="TopRimAft" type="MeshInstance3D" parent="." unique_id=508119962]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.57, 0.27)
+material_override = ExtResource("2_vjseq")
+mesh = SubResource("BoxMesh_tm0sj")
+
+[node name="TopRimPort" type="MeshInstance3D" parent="." unique_id=1607382075]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.27, 0.57, 0)
+material_override = ExtResource("2_vjseq")
+mesh = SubResource("BoxMesh_rf73k")
+
+[node name="TopRimStarboard" type="MeshInstance3D" parent="." unique_id=225639533]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.27, 0.57, 0)
+material_override = ExtResource("2_vjseq")
+mesh = SubResource("BoxMesh_rf73k")
+
+[node name="Shape" type="CollisionShape3D" parent="." unique_id=1466206210]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.3, 0)
+shape = SubResource("BoxShape3D_62qfd")

@@ -12,12 +12,18 @@ extends Swinging
 ## Whether its light casts shadows. Shadows from point lights are costly, so
 ## only the lanterns that light the important things cast them.
 @export var casts_shadows: bool = true
+## How much the flame makes the light waver, as a fraction of its brightness:
+## a little, so the light breathes without flashing.
+@export_range(0.0, 0.5) var flicker: float = 0.08
 
-@onready var _light: OmniLight3D = $Light
+@onready var _light: Flicker = $Light
 
 
 func _ready() -> void:
 	super()
-	_light.light_energy = light_energy
+	_light.base_energy = light_energy
+	_light.amount = flicker
+	_light.speed = 2.5
+	_light.light_energy = _light.energy_at(0.0)
 	_light.omni_range = light_range
 	_light.shadow_enabled = casts_shadows

@@ -4,6 +4,7 @@
 [ext_resource type="Script" path="res://scripts/weather/rain_effect.gd" id="2_yqodj"]
 [ext_resource type="Script" path="res://scripts/weather/ambience.gd" id="3_fodvc"]
 [ext_resource type="Script" path="res://scripts/weather/lightning.gd" id="4_light"]
+[ext_resource type="Script" path="res://scripts/weather/lightning_light.gd" id="5_flash"]
 
 [node name="Weather" type="Node" unique_id=91335981 node_paths=PackedStringArray("rain")]
 script = ExtResource("1_cr2av")
@@ -24,3 +25,10 @@ bus = &"Ambience"
 
 [node name="Lightning" type="Node" parent="." unique_id=1730245561]
 script = ExtResource("4_light")
+
+[node name="LightningLight" type="DirectionalLight3D" parent="." unique_id=1026036943]
+transform = Transform3D(-0.74329, 0.49800, -0.44666, 0.00000, 0.66769, 0.74444, 0.66896, 0.55334, -0.49629, 0, 30, 0)
+light_color = Color(0.78, 0.85, 1, 1)
+shadow_enabled = true
+directional_shadow_max_distance = 60.0
+script = ExtResource("5_flash")

@@ -1,109 +1,216 @@
 [gd_scene format=3 uid="uid://cpaljq6iky4fj"]
 
 [ext_resource type="Script" path="res://scripts/ship/ship.gd" id="1_7ykrf"]
+
 [ext_resource type="Material" path="res://assets/placeholder/materials/galley_wood.tres" id="2_nifss"]
+
 [ext_resource type="Material" path="res://assets/placeholder/materials/greybox_dark_wood.tres" id="3_t630l"]
-[ext_resource type="Material" path="res://assets/placeholder/materials/greybox_cloth.tres" id="4_dp3rt"]
+
 [ext_resource type="PackedScene" path="res://scenes/prototype/props/counter.tscn" id="6_counter"]
+
 [ext_resource type="PackedScene" path="res://scenes/prototype/props/pantry.tscn" id="7_pantry"]
+
 [ext_resource type="Resource" path="res://data/items/chopping_board.tres" id="8_board"]
+
 [ext_resource type="PackedScene" path="res://scenes/prototype/props/plate_rack.tscn" id="9_rack"]
+
 [ext_resource type="Material" path="res://assets/placeholder/materials/wet_deck.tres" id="10_wet"]
+
 [ext_resource type="Material" path="res://assets/placeholder/materials/rug_pattern.tres" id="11_jqluk"]
+
 [ext_resource type="Script" path="res://scripts/weather/shelter_zone.gd" id="11_shelter"]
+
 [ext_resource type="Script" path="res://scripts/props/swinging.gd" id="12_swing"]
+
 [ext_resource type="Material" path="res://assets/placeholder/materials/wet_dark_wood.tres" id="13_wetdark"]
+
 [ext_resource type="Script" path="res://scripts/art/third_party_texture.gd" id="14_tex"]
+
 [ext_resource type="Script" path="res://scripts/weather/drips.gd" id="15_drips"]
+
 [ext_resource type="Script" path="res://scripts/art/surface_space.gd" id="16_space"]
+
 [ext_resource type="Material" path="res://assets/placeholder/materials/galley_floor.tres" id="17_floor"]
+
 [ext_resource type="PackedScene" path="res://scenes/prototype/props/galley_stove.tscn" id="18_stove"]
+
 [ext_resource type="PackedScene" path="res://scenes/prototype/props/crew_table.tscn" id="19_table"]
+
 [ext_resource type="PackedScene" path="res://scenes/prototype/dressing/open_door.tscn" id="20_42wly"]
+
 [ext_resource type="Material" path="res://assets/placeholder/materials/braided_rug.tres" id="21_hn0g1"]
+
 [ext_resource type="Material" path="res://assets/placeholder/materials/rag_runner.tres" id="22_hn0g1"]
+
 [ext_resource type="PackedScene" path="res://scenes/prototype/props/lantern.tscn" id="23_lantern"]
+
 [ext_resource type="PackedScene" path="res://scenes/prototype/props/porthole.tscn" id="24_porthole"]
+
 [ext_resource type="PackedScene" path="res://scenes/prototype/props/barrel.tscn" id="25_barrel"]
+
 [ext_resource type="Script" path="res://scripts/props/motes.gd" id="26_motes"]
+
 [ext_resource type="Material" path="res://assets/placeholder/materials/prop_wood.tres" id="27_propwood"]
+
 [ext_resource type="Material" path="res://assets/placeholder/materials/dark_prop_wood.tres" id="28_darkwood"]
+
 [ext_resource type="Material" path="res://assets/placeholder/materials/clay.tres" id="29_clay"]
+
 [ext_resource type="Material" path="res://assets/placeholder/materials/sackcloth.tres" id="30_sack"]
+
 [ext_resource type="Material" path="res://assets/placeholder/materials/rug.tres" id="31_rug"]
+
 [ext_resource type="Material" path="res://assets/placeholder/materials/rope.tres" id="32_rope"]
+
 [ext_resource type="Material" path="res://assets/placeholder/materials/iron.tres" id="34_iron"]
+
 [ext_resource type="Material" path="res://assets/placeholder/materials/stone.tres" id="35_stone"]
+
 [ext_resource type="PackedScene" path="res://scenes/prototype/dressing/veg_crate.tscn" id="41_vegcrate"]
+
 [ext_resource type="PackedScene" path="res://scenes/prototype/dressing/pot_rail.tscn" id="43_potrail"]
+
 [ext_resource type="PackedScene" path="res://scenes/prototype/dressing/crockery_shelf.tscn" id="44_crockery"]
+
 [ext_resource type="PackedScene" path="res://scenes/prototype/dressing/jar_row.tscn" id="45_jars"]
+
 [ext_resource type="PackedScene" path="res://scenes/prototype/dressing/stool.tscn" id="46_stool"]
+
 [ext_resource type="PackedScene" path="res://scenes/prototype/dressing/firewood.tscn" id="47_6pw5v"]
+
 [ext_resource type="PackedScene" path="res://scenes/prototype/dressing/books.tscn" id="47_books"]
+
 [ext_resource type="PackedScene" path="res://scenes/prototype/dressing/coat_hooks.tscn" id="48_p2e1w"]
+
 [ext_resource type="PackedScene" path="res://scenes/prototype/dressing/picture_frame.tscn" id="48_picture"]
+
 [ext_resource type="PackedScene" path="res://scenes/prototype/dressing/ships_bell.tscn" id="49_bbi6x"]
+
 [ext_resource type="PackedScene" path="res://scenes/prototype/dressing/kettle.tscn" id="49_kettle"]
+
 [ext_resource type="PackedScene" path="res://scenes/prototype/dressing/dropped_jacket.tscn" id="50_7hlps"]
+
 [ext_resource type="PackedScene" path="res://scenes/prototype/dressing/mug.tscn" id="50_mug"]
+
 [ext_resource type="PackedScene" path="res://scenes/prototype/dressing/meat_rack.tscn" id="51_meat"]
+
 [ext_resource type="PackedScene" path="res://scenes/prototype/dressing/chart_corner.tscn" id="51_svp7d"]
+
 [ext_resource type="PackedScene" path="res://scenes/prototype/dressing/bookshelf.tscn" id="52_books"]
+
 [ext_resource type="PackedScene" path="res://scenes/prototype/dressing/recipe_note.tscn" id="52_rxgxf"]
+
 [ext_resource type="PackedScene" path="res://scenes/prototype/dressing/fishing_net.tscn" id="53_8yiph"]
+
 [ext_resource type="PackedScene" path="res://scenes/prototype/dressing/herb_pot.tscn" id="53_herbs"]
+
 [ext_resource type="PackedScene" path="res://scenes/prototype/dressing/lifebuoy.tscn" id="54_8gp50"]
+
 [ext_resource type="PackedScene" path="res://scenes/prototype/dressing/lettuce_crate.tscn" id="54_lettuce"]
+
 [ext_resource type="PackedScene" path="res://scenes/prototype/dressing/green_bottle.tscn" id="55_bottle"]
+
 [ext_resource type="PackedScene" path="res://scenes/prototype/dressing/ship_in_bottle.tscn" id="55_s5wn3"]
+
 [ext_resource type="Script" path="res://scripts/props/rocking.gd" id="56_rock"]
+
 [ext_resource type="PackedScene" path="res://scenes/prototype/props/bunk_bay.tscn" id="57_1yecb"]
+
 [ext_resource type="Material" path="res://assets/placeholder/materials/quilt_red.tres" id="58_alpw3"]
+
 [ext_resource type="Material" path="res://assets/placeholder/materials/quilt_blue.tres" id="59_dlopa"]
+
 [ext_resource type="Material" path="res://assets/placeholder/materials/quilt_green.tres" id="60_f3yei"]
+
 [ext_resource type="Material" path="res://assets/placeholder/materials/curtain.tres" id="60_q7k3o"]
+
 [ext_resource type="Material" path="res://assets/placeholder/materials/quilt_gold.tres" id="61_kupa5"]
+
 [ext_resource type="PackedScene" path="res://scenes/prototype/dressing/hammock.tscn" id="62_f40ia"]
+
 [ext_resource type="Material" path="res://assets/placeholder/materials/curtain_mustard.tres" id="62_wb018"]
+
 [ext_resource type="PackedScene" path="res://scenes/prototype/dressing/hammock_blanket.tscn" id="63_eqhox"]
+
 [ext_resource type="PackedScene" path="res://scenes/prototype/props/crate.tscn" id="64_578ro"]
+
 [ext_resource type="Material" path="res://assets/placeholder/materials/curtain_rust.tres" id="64_lpcyg"]
+
 [ext_resource type="PackedScene" path="res://scenes/prototype/props/sea_chest.tscn" id="65_53i4f"]
+
 [ext_resource type="PackedScene" path="res://scenes/prototype/dressing/book_stack.tscn" id="66_s26w3"]
+
 [ext_resource type="PackedScene" path="res://scenes/prototype/dressing/fiddle.tscn" id="67_dwq2y"]
+
 [ext_resource type="PackedScene" path="res://scenes/prototype/dressing/sketchbook.tscn" id="68_dcd13"]
+
 [ext_resource type="PackedScene" path="res://scenes/prototype/dressing/fishing_tackle.tscn" id="69_q7k3o"]
+
 [ext_resource type="PackedScene" path="res://scenes/prototype/dressing/kit_bag.tscn" id="70_wb018"]
+
 [ext_resource type="PackedScene" path="res://scenes/prototype/dressing/your_things.tscn" id="71_lpcyg"]
+
 [ext_resource type="PackedScene" path="res://scenes/prototype/dressing/sock_line.tscn" id="72_wwen8"]
+
 [ext_resource type="PackedScene" path="res://scenes/prototype/dressing/boots.tscn" id="73_m4wtu"]
+
 [ext_resource type="PackedScene" path="res://scenes/prototype/props/bunk_stove.tscn" id="77_wwen8"]
+
 [ext_resource type="PackedScene" path="res://scenes/prototype/dressing/candle.tscn" id="78_m4wtu"]
+
 [ext_resource type="PackedScene" path="res://scenes/prototype/dressing/playing_cards.tscn" id="79_0hebc"]
+
 [ext_resource type="PackedScene" path="res://scenes/prototype/dressing/yarn_basket.tscn" id="80_e2kx3"]
+
 [ext_resource type="PackedScene" path="res://scenes/prototype/dressing/pinned_drawing.tscn" id="81_j4fk0"]
+
 [ext_resource type="PackedScene" path="res://scenes/prototype/dressing/pinned_letter.tscn" id="82_2b58a"]
+
 [ext_resource type="PackedScene" path="res://scenes/prototype/dressing/pressed_flower.tscn" id="83_xvtya"]
+
 [ext_resource type="PackedScene" path="res://scenes/prototype/dressing/sheepskin.tscn" id="84_03mpn"]
+
 [ext_resource type="PackedScene" path="res://scenes/prototype/dressing/folded_blankets.tscn" id="85_kgj3w"]
+
 [ext_resource type="PackedScene" path="res://scenes/prototype/dressing/navigator_things.tscn" id="88_1bt7x"]
+
 [ext_resource type="PackedScene" path="res://scenes/prototype/dressing/pinned_map.tscn" id="89_g41xf"]
+
 [ext_resource type="PackedScene" path="res://scenes/prototype/dressing/lure_line.tscn" id="90_03byx"]
+
 [ext_resource type="PackedScene" path="res://scenes/prototype/dressing/travel_bags.tscn" id="91_xpcgn"]
+
 [ext_resource type="PackedScene" path="res://scenes/prototype/dressing/half_read_book.tscn" id="92_ppwwk"]
+
 [ext_resource type="PackedScene" path="res://scenes/prototype/dressing/keepsakes.tscn" id="93_a6oxs"]
+
 [ext_resource type="PackedScene" path="res://scenes/prototype/dressing/draped_shirt.tscn" id="94_t8n68"]
+
 [ext_resource type="PackedScene" path="res://scenes/prototype/dressing/hung_coat.tscn" id="95_5640u"]
+
 [ext_resource type="PackedScene" path="res://scenes/prototype/props/chest_of_drawers.tscn" id="96_3t2l2"]
+
 [ext_resource type="PackedScene" path="res://scenes/prototype/props/coat_rack.tscn" id="97_mg3c3"]
+
 [ext_resource type="PackedScene" path="res://scenes/prototype/dressing/hanging_net.tscn" id="98_kqcv6"]
+
 [ext_resource type="PackedScene" path="res://scenes/prototype/props/box_stack.tscn" id="99_yrujx"]
+
 [ext_resource type="PackedScene" path="res://scenes/prototype/dressing/rope_coil.tscn" id="100_crers"]
+
 [ext_resource type="PackedScene" path="res://scenes/prototype/props/round_table.tscn" id="101_wor5e"]
+
 [ext_resource type="PackedScene" path="res://scenes/prototype/dressing/cushions.tscn" id="102_gpim1"]
+
 [ext_resource type="PackedScene" path="res://scenes/prototype/dressing/accordion.tscn" id="103_s5b5q"]
+
 [ext_resource type="PackedScene" path="res://scenes/prototype/dressing/copper_pot.tscn" id="104_m27ys"]
+[ext_resource type="PackedScene" uid="uid://yaqw32nunyf2f" path="res://scenes/prototype/deck/upper_deck.tscn" id="90_upperdeck"]
+[ext_resource type="Material" uid="uid://anee52e2724zw" path="res://assets/placeholder/materials/wet_planking.tres" id="90_planking"]
+[ext_resource type="Material" uid="uid://apmxhjggurfpb" path="res://assets/placeholder/materials/wet_prop_wood.tres" id="90_propwood"]
+[ext_resource type="Material" uid="uid://2lj0z7hvppc7f" path="res://assets/placeholder/materials/wet_rope.tres" id="90_rope"]
+[ext_resource type="Material" uid="uid://kxlt7ax4cc05u" path="res://assets/placeholder/materials/tarred_rope.tres" id="90_tar"]
+[ext_resource type="Script" uid="uid://bny62dgwvun7x" path="res://scripts/sea/bow_spray.gd" id="90_spray"]
 
 [sub_resource type="BoxMesh" id="Mesh_Hull"]
 size = Vector3(12, 2.5, 30)
@@ -132,55 +239,8 @@ size = Vector3(9.5, 0.3, 7.85)
 [sub_resource type="BoxMesh" id="Mesh_DeckPortStrip"]
 size = Vector3(0.3, 0.3, 7.85)
 
-[sub_resource type="BoxMesh" id="Mesh_RailPort"]
-size = Vector3(0.2, 1, 30)
-
-[sub_resource type="BoxMesh" id="Mesh_RailStarboard"]
-size = Vector3(0.2, 1, 30)
-
-[sub_resource type="BoxMesh" id="Mesh_RailBow"]
-size = Vector3(11.6, 1, 0.2)
-
-[sub_resource type="BoxMesh" id="Mesh_RailStern"]
-size = Vector3(11.6, 1, 0.2)
-
 [sub_resource type="BoxMesh" id="Mesh_Ramp"]
 size = Vector3(1.8, 0.2, 8.6)
-
-[sub_resource type="CylinderMesh" id="Mesh_Mast"]
-top_radius = 0.3
-bottom_radius = 0.3
-height = 14.0
-radial_segments = 8
-rings = 1
-
-[sub_resource type="BoxMesh" id="Mesh_Yard"]
-size = Vector3(8, 0.25, 0.25)
-
-[sub_resource type="BoxMesh" id="Mesh_Sail"]
-size = Vector3(7.5, 6, 0.1)
-
-[sub_resource type="BoxMesh" id="Mesh_WheelPost"]
-size = Vector3(0.3, 1.1, 0.3)
-
-[sub_resource type="CylinderMesh" id="Mesh_Wheel"]
-top_radius = 0.6
-bottom_radius = 0.6
-height = 0.12
-radial_segments = 8
-rings = 1
-
-[sub_resource type="BoxMesh" id="Mesh_MastArm"]
-size = Vector3(0.4, 0.06, 0.06)
-
-[sub_resource type="BoxMesh" id="Mesh_BracketPost"]
-size = Vector3(0.14, 2.7, 0.14)
-
-[sub_resource type="BoxMesh" id="Mesh_SternArm"]
-size = Vector3(0.06, 0.06, 0.7)
-
-[sub_resource type="BoxMesh" id="Mesh_HatchArm"]
-size = Vector3(1.25, 0.06, 0.06)
 
 [sub_resource type="BoxMesh" id="Cosy_1"]
 size = Vector3(9.1, 0.1, 6.65)
@@ -445,9 +505,6 @@ size = Vector2(5.8, 0.8)
 [sub_resource type="BoxMesh" id="BoxMesh_g41xf"]
 size = Vector3(1.1, 0.04, 0.22)
 
-[sub_resource type="BoxShape3D" id="Shape_BracketPost"]
-size = Vector3(0.14, 2.7, 0.14)
-
 [sub_resource type="BoxShape3D" id="Shape_Hull"]
 size = Vector3(12, 2.5, 30)
 
@@ -478,27 +535,8 @@ size = Vector3(9.5, 0.3, 7.85)
 [sub_resource type="BoxShape3D" id="Shape_DeckPortStrip"]
 size = Vector3(0.3, 0.3, 7.85)
 
-[sub_resource type="BoxShape3D" id="Shape_RailPort"]
-size = Vector3(0.2, 1, 30)
-
-[sub_resource type="BoxShape3D" id="Shape_RailStarboard"]
-size = Vector3(0.2, 1, 30)
-
-[sub_resource type="BoxShape3D" id="Shape_RailBow"]
-size = Vector3(11.6, 1, 0.2)
-
-[sub_resource type="BoxShape3D" id="Shape_RailStern"]
-size = Vector3(11.6, 1, 0.2)
-
 [sub_resource type="BoxShape3D" id="Shape_Ramp"]
 size = Vector3(1.8, 0.2, 8.6)
-
-[sub_resource type="CylinderShape3D" id="Shape_Mast"]
-height = 14.0
-radius = 0.3
-
-[sub_resource type="BoxShape3D" id="Shape_WheelPost"]
-size = Vector3(0.3, 1.1, 0.3)
 
 [sub_resource type="BoxShape3D" id="Cosy_38"]
 size = Vector3(0.16, 4, 6.65)
@@ -577,6 +615,116 @@ size = Vector3(0.28, 0.3, 5.7)
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_absnv"]
 size = Vector3(0.28, 0.3, 6.82)
+
+[sub_resource type="BoxShape3D" id="Deck_BulwarkPortShape"]
+size = Vector3(0.36, 1.05, 21.1)
+
+[sub_resource type="BoxShape3D" id="Deck_ForecastlePortSideShape"]
+size = Vector3(0.36, 1.95, 4.2)
+
+[sub_resource type="BoxShape3D" id="Deck_QuarterdeckPortSideShape"]
+size = Vector3(0.36, 3.1, 4.7)
+
+[sub_resource type="BoxShape3D" id="Deck_BulwarkStarboardShape"]
+size = Vector3(0.36, 1.05, 21.1)
+
+[sub_resource type="BoxShape3D" id="Deck_ForecastleStarboardSideShape"]
+size = Vector3(0.36, 1.95, 4.2)
+
+[sub_resource type="BoxShape3D" id="Deck_QuarterdeckStarboardSideShape"]
+size = Vector3(0.36, 3.1, 4.7)
+
+[sub_resource type="ConvexPolygonShape3D" id="Deck_BowDeckShape"]
+points = PackedVector3Array(6, 6.2, -15, 6, 5.3, -15, 5.22, 6.2, -17.208, 5.22, 5.3, -17.208, 3.18, 6.2, -18.818, 3.18, 5.3, -18.818, 0, 6.2, -19.6, 0, 5.3, -19.6, -3.18, 6.2, -18.818, -3.18, 5.3, -18.818, -5.22, 6.2, -17.208, -5.22, 5.3, -17.208, -6, 6.2, -15, -6, 5.3, -15)
+
+[sub_resource type="BoxShape3D" id="Deck_BowBulwark1Shape"]
+size = Vector3(0.36, 1.05, 2.53403)
+
+[sub_resource type="BoxShape3D" id="Deck_BowBulwark2Shape"]
+size = Vector3(0.36, 1.05, 2.75103)
+
+[sub_resource type="BoxShape3D" id="Deck_BowBulwark3Shape"]
+size = Vector3(0.36, 1.05, 3.38218)
+
+[sub_resource type="BoxShape3D" id="Deck_BowBulwark4Shape"]
+size = Vector3(0.36, 1.05, 3.38218)
+
+[sub_resource type="BoxShape3D" id="Deck_BowBulwark5Shape"]
+size = Vector3(0.36, 1.05, 2.75103)
+
+[sub_resource type="BoxShape3D" id="Deck_BowBulwark6Shape"]
+size = Vector3(0.36, 1.05, 2.53403)
+
+[sub_resource type="BoxShape3D" id="Deck_SternShape"]
+size = Vector3(11.64, 3.1, 0.36)
+
+[sub_resource type="BoxShape3D" id="Deck_ForecastleShape"]
+size = Vector3(11.64, 0.9, 4.22)
+
+[sub_resource type="BoxShape3D" id="Deck_ForecastleStairsShape"]
+size = Vector3(2.4, 0.3, 1.66433)
+
+[sub_resource type="BoxShape3D" id="Deck_ForecastleRailPortShape"]
+size = Vector3(4.5, 1, 0.2)
+
+[sub_resource type="BoxShape3D" id="Deck_ForecastleRailStarboardShape"]
+size = Vector3(4.5, 1, 0.2)
+
+[sub_resource type="BoxShape3D" id="Deck_StairsPortShape"]
+size = Vector3(1.2, 0.3, 3.60555)
+
+[sub_resource type="BoxShape3D" id="Deck_StairwellRailPortShape"]
+size = Vector3(0.2, 1, 2.85)
+
+[sub_resource type="BoxShape3D" id="Deck_StairsStarboardShape"]
+size = Vector3(1.2, 0.3, 3.60555)
+
+[sub_resource type="BoxShape3D" id="Deck_StairwellRailStarboardShape"]
+size = Vector3(0.2, 1, 2.85)
+
+[sub_resource type="BoxShape3D" id="Deck_QuarterdeckFrontRailShape"]
+size = Vector3(9.2, 1, 0.2)
+
+[sub_resource type="BoxShape3D" id="Deck_CabinShape"]
+size = Vector3(9.2, 2, 2.8)
+
+[sub_resource type="BoxShape3D" id="Deck_QuarterdeckAftShape"]
+size = Vector3(11.64, 2, 1.72)
+
+[sub_resource type="BoxShape3D" id="Deck_HatchSideRailShape"]
+size = Vector3(0.18, 1, 7.2)
+
+[sub_resource type="BoxShape3D" id="Deck_HatchAftRailShape"]
+size = Vector3(2.4, 1, 0.18)
+
+[sub_resource type="BoxShape3D" id="Deck_HatchArchStarboardShape"]
+size = Vector3(0.22, 2.5, 0.22)
+
+[sub_resource type="BoxShape3D" id="Deck_HatchArchPortShape"]
+size = Vector3(0.22, 2.5, 0.22)
+
+[sub_resource type="BoxShape3D" id="Deck_CargoHatchShape"]
+size = Vector3(2.4, 0.32, 1.8)
+
+[sub_resource type="BoxShape3D" id="Deck_GalleySkylightShape"]
+size = Vector3(1.8, 0.32, 1.3)
+
+[sub_resource type="CylinderShape3D" id="Deck_MainMastShape"]
+height = 11
+radius = 0.38
+
+[sub_resource type="CylinderShape3D" id="Deck_MizzenShape"]
+height = 3
+radius = 0.28
+
+[sub_resource type="BoxShape3D" id="Deck_FlagLockerShape"]
+size = Vector3(1.14, 0.64, 0.64)
+
+[sub_resource type="BoxShape3D" id="Deck_BelfryPortShape"]
+size = Vector3(0.22, 2.9, 0.22)
+
+[sub_resource type="BoxShape3D" id="Deck_BelfryStarboardShape"]
+size = Vector3(0.22, 2.9, 0.22)
 
 [node name="Ship" type="AnimatableBody3D" unique_id=200548129]
 script = ExtResource("1_7ykrf")
@@ -666,80 +814,12 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -5.85, 5.15, 5.075)
 material_override = ExtResource("10_wet")
 mesh = SubResource("Mesh_DeckPortStrip")
 
-[node name="RailPort" type="MeshInstance3D" parent="Visuals" unique_id=1879663997]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -5.9, 5.8, 0)
-material_override = ExtResource("13_wetdark")
-mesh = SubResource("Mesh_RailPort")
-
-[node name="RailStarboard" type="MeshInstance3D" parent="Visuals" unique_id=721425728]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5.9, 5.8, 0)
-material_override = ExtResource("13_wetdark")
-mesh = SubResource("Mesh_RailStarboard")
-
-[node name="RailBow" type="MeshInstance3D" parent="Visuals" unique_id=1526408633]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 5.8, -14.9)
-material_override = ExtResource("13_wetdark")
-mesh = SubResource("Mesh_RailBow")
-
-[node name="RailStern" type="MeshInstance3D" parent="Visuals" unique_id=528558085]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 5.8, 14.9)
-material_override = ExtResource("13_wetdark")
-mesh = SubResource("Mesh_RailStern")
+[node name="UpperDeck" parent="Visuals" unique_id=1272191628 instance=ExtResource("90_upperdeck")]
 
 [node name="Ramp" type="MeshInstance3D" parent="Visuals" unique_id=762821746]
 transform = Transform3D(1, 0, 0, 0, 0.866, -0.5, 0, 0.5, 0.866, -4.6, 3.0634, 4.8239)
 material_override = ExtResource("3_t630l")
 mesh = SubResource("Mesh_Ramp")
-
-[node name="Mast" type="MeshInstance3D" parent="Visuals" unique_id=545549887]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 12.3, -4)
-material_override = ExtResource("13_wetdark")
-mesh = SubResource("Mesh_Mast")
-
-[node name="Yard" type="MeshInstance3D" parent="Visuals" unique_id=229014453]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 16.3, -3.7)
-material_override = ExtResource("13_wetdark")
-mesh = SubResource("Mesh_Yard")
-
-[node name="Sail" type="MeshInstance3D" parent="Visuals" unique_id=1754979180]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 13, -3.7)
-material_override = ExtResource("4_dp3rt")
-mesh = SubResource("Mesh_Sail")
-
-[node name="WheelPost" type="MeshInstance3D" parent="Visuals" unique_id=1253866956]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 5.85, 12)
-material_override = ExtResource("13_wetdark")
-mesh = SubResource("Mesh_WheelPost")
-
-[node name="Wheel" type="MeshInstance3D" parent="Visuals" unique_id=2025027167]
-transform = Transform3D(1, 0, 0, 0, 0, -1, 0, 1, 0, 0, 6.5, 12.22)
-material_override = ExtResource("13_wetdark")
-mesh = SubResource("Mesh_Wheel")
-
-[node name="MastLanternArm" type="MeshInstance3D" parent="Visuals" unique_id=1593008206]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.45, 8.23, -4)
-material_override = ExtResource("3_t630l")
-mesh = SubResource("Mesh_MastArm")
-
-[node name="SternLanternPost" type="MeshInstance3D" parent="Visuals" unique_id=489851564]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 6.65, 14.7)
-material_override = ExtResource("3_t630l")
-mesh = SubResource("Mesh_BracketPost")
-
-[node name="SternLanternArm" type="MeshInstance3D" parent="Visuals" unique_id=1110329536]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 7.95, 14.4)
-material_override = ExtResource("3_t630l")
-mesh = SubResource("Mesh_SternArm")
-
-[node name="HatchLanternPost" type="MeshInstance3D" parent="Visuals" unique_id=727601622]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3.25, 6.65, 3)
-material_override = ExtResource("3_t630l")
-mesh = SubResource("Mesh_BracketPost")
-
-[node name="HatchLanternArm" type="MeshInstance3D" parent="Visuals" unique_id=1237218405]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3.85, 7.95, 3)
-material_override = ExtResource("3_t630l")
-mesh = SubResource("Mesh_HatchArm")
 
 [node name="GalleyCeiling" type="MeshInstance3D" parent="Visuals" unique_id=773563194]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.15, 3.65, 4.475)
@@ -770,23 +850,6 @@ mesh = SubResource("Cosy_8")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.18, 2.1, 7.8)
 material_override = ExtResource("28_darkwood")
 mesh = SubResource("Cosy_9")
-
-[node name="MastLantern" parent="Visuals" unique_id=344248048 instance=ExtResource("23_lantern")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.55, 8.2, -4)
-light_energy = 1.6
-light_range = 8.0
-
-[node name="SternLantern" parent="Visuals" unique_id=923160369 instance=ExtResource("23_lantern")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 7.9, 14.15)
-light_energy = 1.6
-light_range = 8.0
-phase = 0.37
-
-[node name="HatchLantern" parent="Visuals" unique_id=1854669217 instance=ExtResource("23_lantern")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4.4, 7.9, 3)
-light_energy = 1.6
-light_range = 8.0
-phase = 0.71
 
 [node name="GalleyLanternFore" parent="Visuals" unique_id=449913935 instance=ExtResource("23_lantern")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.95, 3.3, 4.95)
@@ -1251,8 +1314,8 @@ material_override = ExtResource("28_darkwood")
 mesh = SubResource("BoxMesh_g41xf")
 
 [node name="RainCatcher" type="GPUParticlesCollisionHeightField3D" parent="." unique_id=16950638]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8, 0)
-size = Vector3(14, 20, 32)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8, -2)
+size = Vector3(16, 22, 40)
 resolution = 1
 update_mode = 1
 
@@ -1282,7 +1345,7 @@ pixels = 32
 
 [node name="SurfaceSpace" type="Node" parent="." unique_id=1907707367]
 script = ExtResource("16_space")
-materials = Array[ShaderMaterial]([ExtResource("10_wet"), ExtResource("13_wetdark"), ExtResource("2_nifss"), ExtResource("17_floor"), ExtResource("27_propwood"), ExtResource("28_darkwood"), ExtResource("29_clay"), ExtResource("30_sack"), ExtResource("31_rug"), ExtResource("32_rope"), ExtResource("35_stone")])
+materials = Array[ShaderMaterial]([ExtResource("10_wet"), ExtResource("13_wetdark"), ExtResource("2_nifss"), ExtResource("17_floor"), ExtResource("27_propwood"), ExtResource("28_darkwood"), ExtResource("29_clay"), ExtResource("30_sack"), ExtResource("31_rug"), ExtResource("32_rope"), ExtResource("35_stone"), ExtResource("90_planking"), ExtResource("90_propwood"), ExtResource("90_rope"), ExtResource("90_tar")])
 
 [node name="HatchDrips" type="GPUParticles3D" parent="." unique_id=504615591]
 transform = Transform3D(0, 0, -1, 0, 1, 0, 1, 0, 0, -3.52, 4.98, 5.075)
@@ -1291,18 +1354,10 @@ length = 7.8
 rate = 10.0
 
 [node name="SailDrips" type="GPUParticles3D" parent="." unique_id=1393077497]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 9.95, -3.65)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 9.5, -5.1)
 script = ExtResource("15_drips")
-length = 7.4
+length = 8.6
 rate = 14.0
-
-[node name="SternLanternPostShape" type="CollisionShape3D" parent="." unique_id=5441253]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 6.65, 14.7)
-shape = SubResource("Shape_BracketPost")
-
-[node name="HatchLanternPostShape" type="CollisionShape3D" parent="." unique_id=1451555475]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3.25, 6.65, 3)
-shape = SubResource("Shape_BracketPost")
 
 [node name="HullShape" type="CollisionShape3D" parent="." unique_id=1587234195]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.25, 0)
@@ -1344,33 +1399,9 @@ shape = SubResource("Shape_DeckBesideHatch")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -5.85, 5.15, 5.075)
 shape = SubResource("Shape_DeckPortStrip")
 
-[node name="RailPortShape" type="CollisionShape3D" parent="." unique_id=1138629966]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -5.9, 5.8, 0)
-shape = SubResource("Shape_RailPort")
-
-[node name="RailStarboardShape" type="CollisionShape3D" parent="." unique_id=406318643]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5.9, 5.8, 0)
-shape = SubResource("Shape_RailStarboard")
-
-[node name="RailBowShape" type="CollisionShape3D" parent="." unique_id=1339142476]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 5.8, -14.9)
-shape = SubResource("Shape_RailBow")
-
-[node name="RailSternShape" type="CollisionShape3D" parent="." unique_id=1049637089]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 5.8, 14.9)
-shape = SubResource("Shape_RailStern")
-
 [node name="RampShape" type="CollisionShape3D" parent="." unique_id=1568678436]
 transform = Transform3D(1, 0, 0, 0, 0.866, -0.5, 0, 0.5, 0.866, -4.6, 3.0634, 4.8239)
 shape = SubResource("Shape_Ramp")
-
-[node name="MastShape" type="CollisionShape3D" parent="." unique_id=596458507]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 12.3, -4)
-shape = SubResource("Shape_Mast")
-
-[node name="WheelPostShape" type="CollisionShape3D" parent="." unique_id=721423774]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 5.85, 12)
-shape = SubResource("Shape_WheelPost")
 
 [node name="Galley" type="Node3D" parent="." unique_id=1147062125]
 
@@ -1538,6 +1569,30 @@ pixels = 32
 script = ExtResource("14_tex")
 material = ExtResource("35_stone")
 path = "res://assets/third_party/sbs_textures_128/128x128/Stone/Synth-Stone_09-128x128.png"
+pixels = 32
+
+[node name="PlankingTexture" type="Node" parent="." unique_id=1752915310]
+script = ExtResource("14_tex")
+material = ExtResource("90_planking")
+path = "res://assets/third_party/sbs_textures_128/128x128/Wood/Synth-Wood_15-128x128.png"
+pixels = 32
+
+[node name="DeckPropWoodTexture" type="Node" parent="." unique_id=1231413089]
+script = ExtResource("14_tex")
+material = ExtResource("90_propwood")
+path = "res://assets/third_party/sbs_textures_128/128x128/Wood/Synth-Wood_14-128x128.png"
+pixels = 32
+
+[node name="DeckRopeTexture" type="Node" parent="." unique_id=487945806]
+script = ExtResource("14_tex")
+material = ExtResource("90_rope")
+path = "res://assets/third_party/sbs_textures_128/128x128/Fabric/Synth-Fabric_03-128x128.png"
+pixels = 32
+
+[node name="TarredRopeTexture" type="Node" parent="." unique_id=216636396]
+script = ExtResource("14_tex")
+material = ExtResource("90_tar")
+path = "res://assets/third_party/sbs_textures_128/128x128/Fabric/Synth-Fabric_03-128x128.png"
 pixels = 32
 
 [node name="CentrePostShape" type="CollisionShape3D" parent="." unique_id=284299955]
@@ -1901,4 +1956,154 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4.6, 3.85, 11.29)
 shape = SubResource("BoxShape3D_absnv")
 
 [editable path="Visuals/PortholeSternPort"]
+
 [editable path="Visuals/PortholeSternStarboard"]
+
+[node name="BulwarkPortShape" type="CollisionShape3D" parent="." unique_id=537378954]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -5.88, 5.825, -0.25)
+shape = SubResource("Deck_BulwarkPortShape")
+
+[node name="ForecastlePortSideShape" type="CollisionShape3D" parent="." unique_id=1632437902]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -5.88, 6.275, -12.9)
+shape = SubResource("Deck_ForecastlePortSideShape")
+
+[node name="QuarterdeckPortSideShape" type="CollisionShape3D" parent="." unique_id=299057610]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -5.88, 6.85, 12.65)
+shape = SubResource("Deck_QuarterdeckPortSideShape")
+
+[node name="BulwarkStarboardShape" type="CollisionShape3D" parent="." unique_id=1133001119]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5.88, 5.825, -0.25)
+shape = SubResource("Deck_BulwarkStarboardShape")
+
+[node name="ForecastleStarboardSideShape" type="CollisionShape3D" parent="." unique_id=1516222526]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5.88, 6.275, -12.9)
+shape = SubResource("Deck_ForecastleStarboardSideShape")
+
+[node name="QuarterdeckStarboardSideShape" type="CollisionShape3D" parent="." unique_id=1333954780]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5.88, 6.85, 12.65)
+shape = SubResource("Deck_QuarterdeckStarboardSideShape")
+
+[node name="BowDeckShape" type="CollisionShape3D" parent="." unique_id=1358703353]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)
+shape = SubResource("Deck_BowDeckShape")
+
+[node name="BowBulwark1Shape" type="CollisionShape3D" parent="." unique_id=765290583]
+transform = Transform3D(-0.946, 0, -0.32416, 0, 1, 0, 0.32416, 0, -0.946, 5.4417, 6.725, -16.014)
+shape = SubResource("Deck_BowBulwark1Shape")
+
+[node name="BowBulwark2Shape" type="CollisionShape3D" parent="." unique_id=1462383394]
+transform = Transform3D(-0.63112, 0, -0.77569, 0, 1, 0, 0.77569, 0, -0.63112, 4.074, 6.725, -17.923)
+shape = SubResource("Deck_BowBulwark2Shape")
+
+[node name="BowBulwark3Shape" type="CollisionShape3D" parent="." unique_id=2003596830]
+transform = Transform3D(-0.24574, 0, -0.96933, 0, 1, 0, 0.96933, 0, -0.24574, 1.5423, 6.725, -19.119)
+shape = SubResource("Deck_BowBulwark3Shape")
+
+[node name="BowBulwark4Shape" type="CollisionShape3D" parent="." unique_id=862028003]
+transform = Transform3D(0.24574, 0, -0.96933, 0, 1, 0, 0.96933, 0, 0.24574, -1.5423, 6.725, -19.119)
+shape = SubResource("Deck_BowBulwark4Shape")
+
+[node name="BowBulwark5Shape" type="CollisionShape3D" parent="." unique_id=1828672600]
+transform = Transform3D(0.63112, 0, -0.77569, 0, 1, 0, 0.77569, 0, 0.63112, -4.074, 6.725, -17.923)
+shape = SubResource("Deck_BowBulwark5Shape")
+
+[node name="BowBulwark6Shape" type="CollisionShape3D" parent="." unique_id=1069083867]
+transform = Transform3D(0.946, 0, -0.32416, 0, 1, 0, 0.32416, 0, 0.946, -5.4417, 6.725, -16.014)
+shape = SubResource("Deck_BowBulwark6Shape")
+
+[node name="SternShape" type="CollisionShape3D" parent="." unique_id=1337617091]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 6.85, 14.88)
+shape = SubResource("Deck_SternShape")
+
+[node name="ForecastleShape" type="CollisionShape3D" parent="." unique_id=2007758597]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 5.75, -12.71)
+shape = SubResource("Deck_ForecastleShape")
+
+[node name="ForecastleStairsShape" type="CollisionShape3D" parent="." unique_id=1856467835]
+transform = Transform3D(1, 0, 0, 0, 0.84118, -0.54076, 0, 0.54076, 0.84118, 0, 5.62382, -10.00611)
+shape = SubResource("Deck_ForecastleStairsShape")
+
+[node name="ForecastleRailPortShape" type="CollisionShape3D" parent="." unique_id=758531610]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3.55, 6.7, -10.75)
+shape = SubResource("Deck_ForecastleRailPortShape")
+
+[node name="ForecastleRailStarboardShape" type="CollisionShape3D" parent="." unique_id=668497441]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.55, 6.7, -10.75)
+shape = SubResource("Deck_ForecastleRailStarboardShape")
+
+[node name="StairsPortShape" type="CollisionShape3D" parent="." unique_id=1148767036]
+transform = Transform3D(1, 0, 0, 0, 0.83205, 0.5547, 0, -0.5547, 0.83205, -5.21, 6.17519, 11.69571)
+shape = SubResource("Deck_StairsPortShape")
+
+[node name="StairwellRailPortShape" type="CollisionShape3D" parent="." unique_id=685898221]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4.5, 7.8, 11.725)
+shape = SubResource("Deck_StairwellRailPortShape")
+
+[node name="StairsStarboardShape" type="CollisionShape3D" parent="." unique_id=894045626]
+transform = Transform3D(1, 0, 0, 0, 0.83205, 0.5547, 0, -0.5547, 0.83205, 5.21, 6.17519, 11.69571)
+shape = SubResource("Deck_StairsStarboardShape")
+
+[node name="StairwellRailStarboardShape" type="CollisionShape3D" parent="." unique_id=259514799]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4.5, 7.8, 11.725)
+shape = SubResource("Deck_StairwellRailStarboardShape")
+
+[node name="QuarterdeckFrontRailShape" type="CollisionShape3D" parent="." unique_id=1274326520]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 7.8, 10.38)
+shape = SubResource("Deck_QuarterdeckFrontRailShape")
+
+[node name="CabinShape" type="CollisionShape3D" parent="." unique_id=1670987807]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 6.3, 11.7)
+shape = SubResource("Deck_CabinShape")
+
+[node name="QuarterdeckAftShape" type="CollisionShape3D" parent="." unique_id=409061370]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 6.3, 13.96)
+shape = SubResource("Deck_QuarterdeckAftShape")
+
+[node name="HatchSideRailShape" type="CollisionShape3D" parent="." unique_id=188140427]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3.42, 5.8, 5.48)
+shape = SubResource("Deck_HatchSideRailShape")
+
+[node name="HatchAftRailShape" type="CollisionShape3D" parent="." unique_id=1558265936]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4.6, 5.8, 9.08)
+shape = SubResource("Deck_HatchAftRailShape")
+
+[node name="HatchArchStarboardShape" type="CollisionShape3D" parent="." unique_id=1463511439]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3.42, 6.55, 1.2)
+shape = SubResource("Deck_HatchArchStarboardShape")
+
+[node name="HatchArchPortShape" type="CollisionShape3D" parent="." unique_id=2144273710]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -5.72, 6.55, 1.2)
+shape = SubResource("Deck_HatchArchPortShape")
+
+[node name="CargoHatchShape" type="CollisionShape3D" parent="." unique_id=1918439803]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 5.45, -7.2)
+shape = SubResource("Deck_CargoHatchShape")
+
+[node name="GalleySkylightShape" type="CollisionShape3D" parent="." unique_id=918911733]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1, 5.45, 4.6)
+shape = SubResource("Deck_GalleySkylightShape")
+
+[node name="MainMastShape" type="CollisionShape3D" parent="." unique_id=900273604]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 10.8, -4)
+shape = SubResource("Deck_MainMastShape")
+
+[node name="MizzenShape" type="CollisionShape3D" parent="." unique_id=1087285134]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8.8, 14)
+shape = SubResource("Deck_MizzenShape")
+
+[node name="FlagLockerShape" type="CollisionShape3D" parent="." unique_id=1837518826]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.9, 7.62, 11.6)
+shape = SubResource("Deck_FlagLockerShape")
+
+[node name="BelfryPortShape" type="CollisionShape3D" parent="." unique_id=327537956]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.32, 7.65, -11.15)
+shape = SubResource("Deck_BelfryPortShape")
+
+[node name="BelfryStarboardShape" type="CollisionShape3D" parent="." unique_id=382299476]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.32, 7.65, -11.15)
+shape = SubResource("Deck_BelfryStarboardShape")
+
+[node name="BowSpray" type="GPUParticles3D" parent="." unique_id=1558910297 node_paths=PackedStringArray("ship")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.6, -18.4)
+script = ExtResource("90_spray")
+ship = NodePath("..")

@@ -18,9 +18,10 @@ amplitude = 0.7
 
 [sub_resource type="Resource" id="Resource_6qdcw"]
 script = ExtResource("1_adjfo")
-wavelength = 15.0
-amplitude = 0.16
-steepness = 0.5
+direction_degrees = 8.0
+wavelength = 24.0
+amplitude = 0.42
+steepness = 0.65
 
 [sub_resource type="Resource" id="Resource_snsew"]
 script = ExtResource("1_adjfo")

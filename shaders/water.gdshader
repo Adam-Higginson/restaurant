@@ -16,8 +16,11 @@ uniform float wave_time = 0.0;
 
 // --- The ship (for the hull cut-out, the hull foam and the wake) ----------
 uniform mat4 hull_inverse = mat4(1.0);
-// Half the hull's width (x) and length (y), in metres.
+// Half the hull's width (x) and length (y), in metres: the box from the
+// stern to where the bow starts.
 uniform vec2 hull_half = vec2(6.0, 15.0);
+// How far the pointed bow reaches forward of the box, at the waterline.
+uniform float bow_reach = 0.0;
 // How strong the wake is: 0 moored, 1 at full sail.
 uniform float wake = 0.0;
 
@@ -40,6 +43,11 @@ uniform sampler2D foam_noise : filter_linear_mipmap, repeat_enable;
 // How pointed a crest must be before it foams.
 uniform float crest_foam_from : hint_range(0.0, 1.0) = 0.55;
 uniform float hull_foam_width = 1.4;
+// How much wider the foam at the bow grows while the ship is under way.
+uniform float bow_wave = 1.6;
+// Pale glowing plankton stirred up in the foam along the hull and the wake.
+uniform vec4 glimmer_color : source_color = vec4(0.25, 0.85, 0.8, 1.0);
+uniform float glimmer : hint_range(0.0, 4.0) = 1.2;
 // How much crests and foam glow by themselves at night.
 uniform float night_glow : hint_range(0.0, 2.0) = 0.6;
 // The misty sky the surface mirrors at glancing angles.
@@ -50,11 +58,35 @@ varying vec3 v_normal;
 varying float v_height;
 varying float v_crest;
 
-// Signed distance from the hull's outline (negative inside), in metres.
+// Signed distance from the hull's waterline outline (negative inside), in
+// metres: a box from the stern forward, then a pointed bow. The outline is a
+// polygon, and this is the usual signed distance to a polygon: the nearest
+// edge gives the distance, and counting edge crossings gives the sign.
 float hull_distance(vec3 world) {
-	vec2 local = (hull_inverse * vec4(world, 1.0)).xz;
-	vec2 d = abs(local) - hull_half;
-	return length(max(d, 0.0)) + min(max(d.x, d.y), 0.0);
+	vec2 p = (hull_inverse * vec4(world, 1.0)).xz;
+	float hx = hull_half.x;
+	float hz = hull_half.y;
+	vec2 v[9] = {
+		vec2(hx, hz), vec2(-hx, hz), vec2(-hx, -hz),
+		vec2(-hx * 0.87, -hz - bow_reach * 0.48), vec2(-hx * 0.53, -hz - bow_reach * 0.83),
+		vec2(0.0, -hz - bow_reach),
+		vec2(hx * 0.53, -hz - bow_reach * 0.83), vec2(hx * 0.87, -hz - bow_reach * 0.48),
+		vec2(hx, -hz)
+	};
+	float d = dot(p - v[0], p - v[0]);
+	float s = 1.0;
+	for (int i = 0; i < 9; i++) {
+		int j = (i + 8) % 9;
+		vec2 e = v[j] - v[i];
+		vec2 w = p - v[i];
+		vec2 b = w - e * clamp(dot(w, e) / dot(e, e), 0.0, 1.0);
+		d = min(d, dot(b, b));
+		bvec3 c = bvec3(p.y >= v[i].y, p.y < v[j].y, e.x * w.y > e.y * w.x);
+		if (all(c) || all(not(c))) {
+			s *= -1.0;
+		}
+	}
+	return s * sqrt(d);
 }
 
 void vertex() {
@@ -142,9 +174,13 @@ void fragment() {
 	// Foam: on sharp crests, hugging the hull, and trailing behind the ship.
 	float noise = texture(foam_noise, v_world.xz * 0.08 + vec2(0.0, TIME * 0.03)).r;
 	float foam = smoothstep(crest_foam_from, 1.0, v_crest + noise * 0.25);
-	float hull_band = 1.0 - smoothstep(0.0, hull_foam_width, hull_d);
-	foam = max(foam, hull_band * smoothstep(0.25, 0.75, noise + 0.25));
 	vec2 local = (hull_inverse * vec4(v_world, 1.0)).xz;
+	// Under way, the bow shoulders the water aside in a wider wave of foam.
+	float at_bow = smoothstep(-hull_half.y + 3.0, -hull_half.y - bow_reach, local.y);
+	float band_width = hull_foam_width * (1.0 + bow_wave * wake * at_bow);
+	float hull_band = 1.0 - smoothstep(0.0, band_width, hull_d);
+	foam = max(foam, hull_band * smoothstep(0.25, 0.75, noise + 0.25));
+	float stirred = hull_band;
 	float behind = local.y - hull_half.y;
 	if (behind > 0.0 && wake > 0.0) {
 		float spread = hull_half.x * (0.7 + behind * 0.12);
@@ -152,7 +188,12 @@ void fragment() {
 		float fade = 1.0 - smoothstep(0.0, 45.0, behind);
 		float streaks = smoothstep(0.35, 0.8, texture(foam_noise, local * vec2(0.18, 0.05)).r);
 		foam = max(foam, across * fade * streaks * wake);
+		stirred = max(stirred, across * fade * wake);
 	}
+	// Where the water's been stirred, tiny specks glint and fade.
+	float specks = texture(foam_noise, v_world.xz * 1.3 + vec2(TIME * 0.11, -TIME * 0.07)).r;
+	float twinkle = smoothstep(0.7, 0.78, specks) * (0.6 + 0.4 * sin(TIME * 3.0 + specks * 40.0));
+	float glints = twinkle * stirred * foam;
 
 	ALBEDO = mix(water, foam_color.rgb, foam);
 	// A night sea has almost no light on it, so crests and foam glow a
@@ -164,7 +205,8 @@ void fragment() {
 	float fresnel = pow(1.0 - clamp(dot(NORMAL, VIEW), 0.0, 1.0), 4.0);
 	vec3 sky = sky_reflection.rgb * fresnel * (1.0 - foam);
 	EMISSION = sky + crest_color.rgb * glow * night_glow
-			+ foam_color.rgb * foam * night_glow * 0.35;
+			+ foam_color.rgb * foam * night_glow * 0.35
+			+ glimmer_color.rgb * glints * glimmer;
 	ROUGHNESS = mix(roughness_water, 0.85, foam);
 	METALLIC = 0.0;
 	SPECULAR = 0.5;

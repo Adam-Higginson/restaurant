@@ -50,6 +50,13 @@ uniform float plank_warp : hint_range(0.0, 0.2) = 0.05;
 uniform float bevel : hint_range(0.0, 0.1) = 0.03;
 // How much lighter the worn edges of boards are, rubbed by boots and hands.
 uniform float wear : hint_range(0.0, 1.0) = 0.25;
+// How much board widths vary: 0 all the same; higher splits more of them into
+// two narrower boards, as on a deck laid from whatever timber was to hand.
+uniform float width_variety : hint_range(0.0, 1.0) = 0.0;
+// Nail heads: 0 none, 1 a pair across every board over each deck beam.
+uniform float nails : hint_range(0.0, 1.0) = 0.0;
+// How far apart the beams under the boards are, so where the rows of nails go.
+uniform float beam_spacing = 0.9;
 
 group_uniforms wet;
 // How much the weather reaches it: 1 out in the rain, 0 indoors (the galley
@@ -110,14 +117,33 @@ vec3 hash3(vec2 cell) {
 }
 
 
+// Which board [param x] metres across the boards is on, for boards about
+// [param width] wide: (its number, how far across it from 0 to 1, its width
+// in metres). With width_variety, some boards are split into two narrower
+// ones near their middle.
+vec3 board_across(float x, float width) {
+	float stripe = floor(x / width);
+	float f = fract(x / width);
+	if (hash3(vec2(stripe, 7.0)).x < width_variety * 0.6) {
+		float split = 0.38 + 0.24 * hash3(vec2(stripe, 9.0)).y;
+		if (f < split) {
+			return vec3(stripe * 2.0, f / split, width * split);
+		}
+		return vec3(stripe * 2.0 + 1.0, (f - split) / (1.0 - split), width * (1.0 - split));
+	}
+	return vec3(stripe * 2.0, f, width);
+}
+
+
 // How dark a plank seam is at [param p] (across the boards, then along
 // them) for boards [param width] wide: 1 in a seam, 0 on wood.
 float seam(vec2 p, float width) {
-	float across = p.x / width;
-	float plank = floor(across);
+	vec3 board = board_across(p.x, width);
+	float plank = board.x;
 	// Butt joints are staggered from plank to plank.
 	float along = p.y / plank_length + hash3(vec2(plank, 0.0)).x;
-	float side = 1.0 - smoothstep(0.0, 0.04, min(fract(across), 1.0 - fract(across)));
+	float to_side = min(board.y, 1.0 - board.y) * board.z;
+	float side = 1.0 - smoothstep(0.0, 0.04 * width, to_side);
 	float joint = 1.0 - smoothstep(0.0, 0.006, min(fract(along), 1.0 - fract(along)));
 	// Some seams are packed tight and barely show; others are open and dark.
 	float gap = 0.45 + 0.55 * hash3(vec2(plank, floor(along)) + 3.0).x;
@@ -151,7 +177,7 @@ vec2 ripples(vec2 p, float t) {
 
 // Which plank (x) and which length of it (y) [param p] is on.
 vec2 plank_cell(vec2 p, float width) {
-	float plank = floor(p.x / width);
+	float plank = board_across(p.x, width).x;
 	float along = p.y / plank_length + hash3(vec2(plank, 0.0)).x;
 	return vec2(plank, floor(along));
 }
@@ -215,12 +241,13 @@ void fragment() {
 		uv = vec2(board.y * 0.45, board.x) + h.yz * 7.0;
 		lean = (h.zy - 0.5) * plank_warp;
 		// Rounded edges: near a long edge the board curves down to the seam.
-		float across = fract(board.x / width);
-		float to_edge = min(across, 1.0 - across) * width;
+		vec3 this_board = board_across(board.x, width);
+		float across = this_board.y;
+		float to_edge = min(across, 1.0 - across) * this_board.z;
 		float round_off = 1.0 - smoothstep(0.0, bevel, to_edge);
 		// Lived in: each board darkens or lightens along its length, and its
 		// long edges are worn lighter.
-		float along_board = fract(board.y / plank_length + hash3(vec2(floor(board.x / width), 0.0)).x);
+		float along_board = fract(board.y / plank_length + hash3(vec2(this_board.x, 0.0)).x);
 		shade *= 1.0 + plank_tint * 0.8 * (along_board - 0.5) * (h.y > 0.5 ? 1.0 : -1.0);
 		shade *= 1.0 + wear * (1.0 - smoothstep(0.0, bevel * 2.5, to_edge));
 		lean.x += (across < 0.5 ? -1.0 : 1.0) * round_off * 0.7;
@@ -238,6 +265,20 @@ void fragment() {
 	vec3 base = albedo.rgb * grain * shade;
 	float in_seam = planked ? seam(board, width) : 0.0;
 	base *= 1.0 - seam_darkness * in_seam;
+	// Nail heads: little dark iron squares, snapped to the texture's pixels so
+	// they're as blocky as the grain, a pair across each board over each beam.
+	float nail = 0.0;
+	if (planked && nails > 0.0) {
+		float px = texture_metres / float(textureSize(albedo_texture, 0).x);
+		vec2 snapped = (floor(board / px) + 0.5) * px;
+		vec3 nail_board = board_across(snapped.x, width);
+		float in_from_side = nail_board.y * nail_board.z;
+		float from_edge = min(in_from_side, nail_board.z - in_from_side);
+		float off_row = abs(from_edge - nail_board.z * 0.22);
+		float off_beam = abs(fract(snapped.y / beam_spacing + 0.5) - 0.5) * beam_spacing;
+		nail = nails * step(off_row, px * 0.9) * step(off_beam, px * 0.9);
+		base = mix(base, vec3(0.08, 0.075, 0.07), 0.85 * nail);
+	}
 
 	// Soaked: darker and richer (a power darkens the darks most), and a little
 	// glossier, unevenly: some patches drink more water and stay dull.
@@ -248,6 +289,7 @@ void fragment() {
 	// The grain's dark lines (end grain, cracks) hold water and stay rougher.
 	float rough = mix(dry_roughness, soaked_roughness, sheen);
 	rough = clamp(rough + (0.5 - height_here) * 0.25, 0.0, 1.0);
+	rough = mix(rough, 0.35, nail);
 
 	// Standing water: on flat tops, in the noise's low spots, and along seams.
 	float low = texture(puddle_noise, surface_pos.xz * puddle_scale).r;

@@ -1,0 +1,13 @@
+[gd_resource type="StandardMaterial3D" format=3 uid="uid://8xzzkxef16wgf"]
+
+[ext_resource type="Texture2D" path="res://assets/placeholder/materials/n64_grain.tres" id="1_c7ag6"]
+
+[resource]
+albedo_color = Color(1, 0.7, 0.36, 1)
+albedo_texture = ExtResource("1_c7ag6")
+emission_enabled = true
+emission = Color(1, 0.62, 0.28, 1)
+emission_energy_multiplier = 2.4
+uv1_scale = Vector3(6, 6, 6)
+uv1_triplanar = true
+texture_filter = 0
