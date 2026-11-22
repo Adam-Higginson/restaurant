@@ -14,7 +14,7 @@ A cosy 3D adventure in the spirit of Ocarina of Time. You're pulled from the sea
 
 ## Story
 - **The rescue:** a young adult sinks in dark water. A small, warm light drifts down and a hand of flame takes theirs. It's a **lantern spirit** (he/him), and he pulls them aboard a ship.
-- **The promise:** the lantern promises to get them home. He's sure they came from the nearest island. He's wrong, and he keeps being cheerfully wrong, island after island ("perhaps your home *moved*?"). Over time his guesses get more tender: he quietly hopes he's wrong, because if they find home, they'll leave the ship. **He talks (first sketch):** a few words float beside him at the moments that matter: a memory coming back ("Was that home? It sounded like home."), a fish landed ("A fish! Is home a fish? ...No. Probably not."), the ship stopping, waking at dawn, and standing at the bow at night looking at the far light ("A light! That's it. That's home. Probably. Almost certainly. Maybe."). His lines are in `scripts/companion/lantern_lines.gd`. **He follows you** at your shoulder, lighting the way, and drifts over to hover above whatever you stop at. **His warmth (first sketch):** he fades slowly over time (dimmer, his light reaching less far, never out), and says so when he's low ("I'm a bit... dim. Is there soup?"). Share a dish with him at the little round table by the bunk room's stove and he drifts down to it, it's gone, and he glows warm again, more for a better dish: the GDD's "a warm meal by the stove rekindles him", and a reason to cook well.
+- **The promise:** the lantern promises to get them home. He's sure they came from the nearest island. He's wrong, and he keeps being cheerfully wrong, island after island ("perhaps your home *moved*?"). Over time his guesses get more tender: he quietly hopes he's wrong, because if they find home, they'll leave the ship. **He talks (first sketch):** a few words float beside him at the moments that matter: a memory coming back ("Was that home? It sounded like home."), a fish landed ("A fish! Is home a fish? ...No. Probably not."), the ship stopping, waking at dawn, and standing at the bow at night looking at the far light ("A light! That's it. That's home. Probably. Almost certainly. Maybe."). His lines are in `scripts/companion/lantern_lines.gd`. **He has a home (first sketch, #93):** he lives at the little round table by the bunk room's stove, and you go to him to talk (Interact at the table). He no longer follows you about the ship. What he isn't there to see (a fish landed, the bell rung, the light off the bow, a memory coming back) he asks about when you next visit: "You smell of fish. Was it a good fish?" Near enough to see (about 8 m), he still says his line on the spot. His following (at your shoulder, hovering over what you stop at) is kept in the code for #65 to decide. **His warmth (first sketch):** he fades slowly over time (dimmer, his light reaching less far, never out), and says so when he's low ("I'm a bit... dim. Is there soup?"). Share a dish with him at the little round table by the bunk room's stove and he drifts down to it, it's gone, and he glows warm again, more for a better dish: the GDD's "a warm meal by the stove rekindles him", and a reason to cook well.
 - **Memory:** the player remembers home only as **tastes and sounds**: a bread with something bitter and green in it, and three notes of a song. They search by cooking that taste and humming that tune to the people they meet, who recognise flavours and melodies and point the way ("That's sea-fennel. That only grows in the north."). The melody gains notes and the dish gets closer as the voyage goes on.
   - **Tastes of home (first sketch):** the first time you make or catch certain things, a memory comes back: a few quiet lines that fade in at the top of the screen while the lantern lights up ("A fogged window": butter spitting in a black pan, a boat drawn in a steamed-up window, somebody calling down the stairs). Each comes back once and is kept in your memory book. So far: your first herring, filleting it, frying it, slicing a tomato and a Garden Salad. They're data (`data/memories/`), so writing more is just writing.
 - **The crew:** each crew member comes from an island that turned out not to be home. The first is the gruff **heron captain**. The second (in the Prologue) is a **mossy rock cook**.
@@ -45,7 +45,7 @@ The ship's bell marks the day, as on real ships: eight bells calls everyone down
   - **Masts and rigging:** a rope-wrapped main mast with a fighting top, topmast and pennant; shrouds with rope-ladder ratlines and deadeyes; stays to the bowsprit; slack running rigging that sags and bows forward in the wind; loose ends and a block that swing. The course is **reefed** (half set, billowing and breathing in the gusts); the topsail and the spanker are furled. Gulls hunch on the yard.
   - **Water everywhere:** rain runs off the yard-arms, the sail's corners, the boom and the gallery, and pours out of scuppers along both sides.
   - Walkways stay open round the mast, along both waists, past the hatch, to the foot of each stair, round the windlass and round the wheel; tests check them.
-  - The cabin behind the quarterdeck's door is a facade for now. The crew aren't on deck yet.
+  - The cabin behind the quarterdeck's door is a facade for now. The **heron captain** is at the wheel in the morning (see Conversations); the rest of the crew aren't on deck yet.
 - **Below deck:**
   - **The galley:** the kitchen and the mess in one room, so the crew eats at a table beside the stove. Its stations stand in a row along the bulkhead: the pantry, a counter, the chopping board on its counter, and the plate rack.
   - **The hearth:** the galley is a snug, low room (about 9 x 6.5 m, a plank ceiling 2.6 m up), closed off from the ramp's corridor and from the bunks aft, with posts down the walls under heavy beams. It's crammed with things like the reference image, but every corner is for something:
@@ -128,12 +128,27 @@ One button, **interact**, does everything with the thing in front of you.
 |---|---|---|---|
 | Move | WASD / arrows | Left stick | Walk, relative to the camera |
 | Camera | Mouse (Esc frees the cursor) | Right stick | Orbit the free camera |
-| Interact | E or Space / right click | X or A | Put down, pick up, put away, open, ring, talk, gather |
+| Interact | E or Space / right click | X or A | Put down, pick up, put away, open, ring, talk, gather. In a conversation: next line, or pick the reply |
+| Move (in a conversation) | W and S / arrows | Left stick or D-pad | Move between replies |
 | Use tool | F / left click | B | Use the selected tool, or the tool that fits what you're facing (the knife chops) |
 | Select toolbar slot | 1–9, 0, -, = / scroll | Bumpers (cycle) | Choose what you hold |
 | Lock-on, attack, parry | To be set in #66 | To be set in #66 | Duels |
 
 Each action is a named action in Godot's Input Map with keyboard and controller bound, so gameplay code never checks a specific key. Panels must be usable with the D-pad. While a panel is open the mouse cursor is freed so it can be clicked, and it's captured again when the panel closes.
+
+## Conversations
+Talking is how you get to know the crew, so it comes in two kinds (the second is #94).
+
+**A proper conversation (#93).** Stand in front of someone and Interact ("Talk to Captain"). A dark sea-teal box in a riveted brass frame opens at the bottom of the screen, the speaker's name on a little plank at its corner, and their words type out with a soft blip (lower for the gruff heron, higher for the lantern). Interact shows the rest of a line at once, then moves on. When there's a reply to pick, the choices are listed in the box with a small flame beside the one you're on: move with up and down, pick with Interact. Up to four show at once; a longer list scrolls.
+- **You stand still and turn to face each other**, but the world keeps running: the ship sails on and pots keep cooking.
+- **The camera stays yours** in an ordinary chat. A script can ask for a framed shot for a moment that matters (the heron's first greeting by the stove), and the camera glides there and back.
+- **People remember.** Scripts set and check flags (you've met, you've asked about the heading) and can ask about the world (night or morning, raining, sailing, which day). Flags are saved with the voyage.
+- **Who's aboard, and where:** the heron captain warms himself by the bunk room stove at night and stands at the wheel in the morning; he changes places while you sleep. The lantern is at his round table. (Crew who walk the ship through a full day are #95.)
+- **Writing them:** each conversation is a plain text file in `data/dialogue/` (`heron.dlg`, `lantern.dlg`), one statement to a line: `speaker: words`, `- a reply -> section`, `? condition` guarding the next line, `set flag`, `@shot name`, `-> section`. A test reads every file, so a typo fails the tests rather than a talk.
+
+**Overheard (#94, to come).** Small round speech bubbles float beside the crew's heads as they remark on things and chat to each other, placed in the world and always facing you, so you overhear them as you pass.
+
+The text is set in Varela Round, a soft rounded face like OoT's.
 
 ## Crew and meals
 - For now you cook **for the crew only**. There are no paying customers and no money.
@@ -312,4 +327,5 @@ These cover the pure-logic code that carries over to 3D. The 2D world layer (pla
 - `DayLight` (`scripts/visuals/day_light.gd`) maps the time of day to colours and lamp levels. In 3D it will drive the sun, sky and lanterns.
 - `DebugKeys` (`scripts/debug/`) gives testing shortcuts in debug builds only.
 - The 3D prototype lives in `scenes/prototype/` until it replaces `scenes/main.tscn`.
+- **Conversations** (`scripts/dialogue/`): `DialogueScript` reads a `.dlg` text file into a `DialogueTree` (steps in order, sections by name). `DialogueRunner` walks it with no nodes, so it's unit tested alone; it reads and changes a `DialogueState` (`Game.dialogue`: saved flags, plus facts the game answers on the spot, registered by `DialogueFacts`). `Conversation` is the one node that joins it to the world: it stops the player, shows lines in the `DialogueBox` (display only), reads the buttons and emits `cue` for the scene. `ShotCues` turns a `@shot` cue into `CameraRig.hold_shot`. A `Crewmate` is anyone you can talk to: a `Person` and the name of a script, nothing about any one character.
 - Godot concepts are explained in `docs/godot-notes.md`.

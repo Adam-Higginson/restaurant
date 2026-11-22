@@ -46,7 +46,7 @@ func test_he_never_says_the_same_thing_twice_running() -> void:
 func test_he_speaks_up_when_a_memory_comes_back() -> void:
 	var rig: Array[Node3D] = new_moored_ship_with_player(Vector3(0, 1.05, 6))
 	var runner: GdUnitSceneRunner = scene_runner(rig[0].get_parent())
-	var spirit: LanternSpirit = rig[1].get_node("LanternSpirit") as LanternSpirit
+	var spirit: LanternSpirit = lantern_at_shoulder(rig[1])
 	await physics_ticks(runner, 2)
 
 	Game.memories.notice(Catalog.load_default().find_item(&"garden_salad"))
@@ -60,7 +60,7 @@ func test_he_cheers_when_you_land_a_fish() -> void:
 	var spot: FishingSpot = rig[0].get_node("Visuals/UpperDeck/Dressing/FishingSpot") as FishingSpot
 	spot.line.min_wait = 0.1
 	spot.line.max_wait = 0.1
-	var spirit: LanternSpirit = rig[1].get_node("LanternSpirit") as LanternSpirit
+	var spirit: LanternSpirit = lantern_at_shoulder(rig[1])
 	await physics_ticks(runner, 5)
 	await walk(runner, "move_right", 2)
 
@@ -74,7 +74,7 @@ func test_he_cheers_when_you_land_a_fish() -> void:
 func test_he_notices_the_far_light_from_the_bow_at_night() -> void:
 	var rig: Array[Node3D] = new_moored_ship_with_player(Vector3(0, 6.25, -11.8))
 	var runner: GdUnitSceneRunner = scene_runner(rig[0].get_parent())
-	var spirit: LanternSpirit = rig[1].get_node("LanternSpirit") as LanternSpirit
+	var spirit: LanternSpirit = lantern_at_shoulder(rig[1])
 	await physics_ticks(runner, 5)
 
 	place_player_3d(runner, (rig[0] as Ship).to_global(ON_THE_BOW))
@@ -89,7 +89,7 @@ func test_at_dawn_he_spots_the_island_instead() -> void:
 	rig[0].get_parent().add_child(time)
 	time.dawn = 1.0
 	var runner: GdUnitSceneRunner = scene_runner(rig[0].get_parent())
-	var spirit: LanternSpirit = rig[1].get_node("LanternSpirit") as LanternSpirit
+	var spirit: LanternSpirit = lantern_at_shoulder(rig[1])
 	await physics_ticks(runner, 5)
 
 	place_player_3d(runner, (rig[0] as Ship).to_global(ON_THE_BOW))
@@ -116,7 +116,7 @@ func test_he_is_glad_when_you_stop_the_ship() -> void:
 	var ship: Ship = rig[0] as Ship
 	ship.set_sail()
 	var runner: GdUnitSceneRunner = scene_runner(ship.get_parent())
-	var spirit: LanternSpirit = rig[1].get_node("LanternSpirit") as LanternSpirit
+	var spirit: LanternSpirit = lantern_at_shoulder(rig[1])
 	await physics_ticks(runner, 5)
 
 	await walk(runner, "move_down", 2)

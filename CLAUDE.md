@@ -22,6 +22,7 @@ The full design lives in `docs/GDD.md`. Read it before starting a gameplay task,
 ## Public repo
 - This repo is public. Third-party art and audio go in `assets/third_party/`, which is gitignored: never commit anything from it, and never commit keys or tokens.
 - Our own placeholder art (generated, not third-party) lives in `assets/placeholder/` and is committed.
+- Two exceptions are committed because the game needs them to look and sound the same for everyone, each with its licence file beside it: fonts under the SIL Open Font Licence in `assets/fonts/`, and CC0 sounds in `assets/audio/`. Anything else third-party still needs asking first.
 
 ## Task tracking
 - The backlog is GitHub Project #1 owned by `Adam-Higginson` (kanban columns: Todo, In Progress, In Review, Done). Each task is an issue in `Adam-Higginson/restaurant` added to the board.
@@ -58,10 +59,9 @@ The full design lives in `docs/GDD.md`. Read it before starting a gameplay task,
   Put the same testing steps in the PR body.
 
 ## Keeping the user in the loop
-Claude writes most of the code. The user is learning Godot and wants to understand everything that goes in, so every code PR includes:
+Claude writes the code, all of it: nothing is left as an exercise. The user is learning Godot and wants to understand everything that goes in, so every code PR includes:
 - **How it works** (in the PR body): the scene tree, which script does what, how signals and data flow, and any new Godot concept in plain terms.
 - **An editor tour** (in the test steps): click-by-click where to look. Open this scene, select this node, see this Inspector setting, watch the Remote tree while it runs.
-- **One "your turn" piece:** a small, well-scoped part (a tuning value, a short function or a test) left as a `# TODO(your turn):` with hints. When the user says "check", read their change, run the relevant tests, and list issues (bugs first, then style).
 - **Glossary updates:** add each new Godot concept to `docs/godot-notes.md` (what it is in two lines, and where it's used in our code).
 
 ## Testing
@@ -70,8 +70,10 @@ Claude writes most of the code. The user is learning Godot and wants to understa
 - Test gameplay logic directly (storage, arms, money, recipes, the clock). Use `scene_runner(...)` with the `GameTestSuite` helpers for behaviour that needs a running scene. Don't test visuals.
 - Suites extend `GameTestSuite` (`tests/game_test_suite.gd`), not `GdUnitTestSuite` directly. Use its helpers: `physics_ticks(runner, n)` to wait, `walk(runner, action, ticks)` to move the player, `place_player(runner, pos)` to position it. Add new shared helpers there rather than copying them between suites.
 - When a test waits for movement or physics (areas, collisions), wait on physics ticks (`physics_ticks`), never `simulate_frames`. Rendered frames vary with machine speed, so frame-based waits can pass locally and fail in CI.
-- Run all tests from the command line (Git Bash): `./run_tests.sh`. Run one folder or suite with `./run_tests.sh -a res://tests/scripts/sea`.
-  - It runs gdUnit's own command with `--fixed-fps 60`. Every frame still advances exactly 1/60 s of game time, but Godot doesn't wait for the real clock between frames, so the suite takes about a minute instead of about four, with one frame per physics tick. CI runs the same way, also headless (`headless: true` in the workflow), so nothing is drawn on the CPU-only runner.
+- Run all tests from the command line (Git Bash): `./run_tests.sh`. It takes about 25 seconds. Run one folder or suite with `./run_tests.sh -a res://tests/scripts/sea`.
+  - With no arguments it splits the suites across several copies of Godot at once (three for every four processor cores; set `JOBS=4 ./run_tests.sh` to choose), balanced by how long each suite took last time, and prints any failures and one combined summary. Each copy's full output is in `reports/shard_<n>.log`. Always run the whole suite this way rather than `-a res://tests`, which runs one copy and takes over two minutes.
+  - Each copy gets a `TEST_SHARD` number and its own save file (`GameTestSuite.test_save`). Anything else tests write to disk must include it too, or two copies will write the same file.
+  - It runs gdUnit's own command with `--fixed-fps 60`. Every frame still advances exactly 1/60 s of game time, but Godot doesn't wait for the real clock between frames, with one frame per physics tick. A higher number isn't faster: tests wait for a number of ticks, and Godot already runs them as fast as one core can. CI runs one copy the same way, also headless (`headless: true` in the workflow), so nothing is drawn on the CPU-only runner.
   - It always passes `-c`, which turns off gdUnit's default fail-fast (otherwise each suite stops at its first failing test), and `--headless --ignoreHeadlessMode`. Input simulation works headless in this project.
   - Reports go to `reports/`, which is gitignored.
 - CI (`.github/workflows/tests.yml`) runs the tests on every PR and on pushes to `main`. A PR is only ready for review when the tests pass both locally and in CI.

@@ -9,7 +9,9 @@ extends Node3D
 ## wheel zooms in and out ([member zoom]), easing the arm to the new length.
 ##
 ## Inside a [CameraZone] (the galley), the camera glides to the zone's fixed
-## shot instead, and glides back when the player leaves. The spring arm only
+## shot instead, and glides back when the player leaves. A cutscene can ask
+## for a shot of its own with [method hold_shot], which wins over any zone
+## until [method release_shot]. The spring arm only
 ## moves a [code]FreeSpot[/code] marker, where the free camera would be; the
 ## rig places the real [Camera3D] somewhere between that spot and the shot.
 ##
@@ -86,8 +88,16 @@ var zoom: float = 5.0:
 	set(value):
 		zoom = clampf(value, zoom_min, zoom_max)
 
+## Whether the camera is on a fixed shot (a zone's, or one being held), so
+## it can't be turned.
+var is_fixed: bool:
+	get:
+		return is_instance_valid(_held) or active_zone != null
+
 ## Zones the player is inside, in the order they entered. The last one wins.
 var _zones: Array[CameraZone] = []
+## A shot asked for by a cutscene, or null.
+var _held: Marker3D = null
 ## The shot being glided to, or back from after leaving its zone.
 var _last_shot: Marker3D
 var _blend: float = 0.0
@@ -111,7 +121,7 @@ func _ready() -> void:
 
 func _process(delta: float) -> void:
 	# Fixed shots are framed by hand, so the camera can't be turned in them.
-	if active_zone == null:
+	if not is_fixed:
 		var stick: Vector2 = Input.get_vector("camera_left", "camera_right", "camera_up",
 				"camera_down")
 		# Right turns clockwise seen from above, which is a negative yaw.
@@ -135,7 +145,7 @@ func _unhandled_input(event: InputEvent) -> void:
 	elif event is InputEventMouseButton and (event as InputEventMouseButton).pressed:
 		Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
 	elif event is InputEventMouseMotion and Input.mouse_mode == Input.MOUSE_MODE_CAPTURED \
-			and active_zone == null:
+			and not is_fixed:
 		var motion: Vector2 = (event as InputEventMouseMotion).relative
 		orbit(-motion.x * mouse_sensitivity, -motion.y * mouse_sensitivity)
 
@@ -164,6 +174,25 @@ func leave_zone(zone: CameraZone) -> void:
 		_last_shot = still_in.shot
 
 
+## Glides to [param shot] and stays there, whatever zone the player is in,
+## until [method release_shot]. From the free camera it glides; from another
+## shot it cuts, as a film would.
+func hold_shot(shot: Marker3D) -> void:
+	_held = shot
+	_last_shot = shot
+
+
+## Lets go of a held shot: the camera glides back to the free camera, or to
+## the shot of the zone the player is standing in.
+func release_shot() -> void:
+	if _held == null:
+		return
+	_held = null
+	var still_in: CameraZone = active_zone
+	if still_in != null:
+		_last_shot = still_in.shot
+
+
 ## The yaw of something rotated by [param rotation_basis] (a camera or
 ## marker), looking along its -Z: the turn about the up axis that points
 ## Godot's forward the same way, ignoring any tilt.
@@ -180,18 +209,9 @@ static func yaw_of(rotation_basis: Basis) -> float:
 ## [member blend_seconds], and this says how far along the camera is at each
 ## point. It must give 0 at the start and 1 at the end.
 static func blend_curve(t: float) -> float:
-	# TODO(your turn): the glide moves at one steady speed, so it starts and
-	# stops with a jolt. Make it start gently and settle gently instead.
-	# Hints:
-	# - smoothstep(0.0, 1.0, t) is slow at both ends and quicker in between.
-	# - ease(t, -2.0) does much the same; try other curves (-3.0, 0.5, 2.0)
-	#   and see "ease" in the @GlobalScope docs (F1 in the editor, search ease).
-	# - Whatever you pick must still give 0 at t = 0 and 1 at t = 1.
-	# - Then tune blend_seconds on the CameraRig node in player.tscn by feel.
-	# - Test: test_blend_curve_runs_from_free_to_the_shot in
-	#   tests/scripts/player/camera_rig_test.gd. Add a case that checks your
-	#   curve starts gently, e.g. blend_curve(0.1) is less than 0.1.
-	return t
+	# Slow at both ends and quicker between, so it neither lurches off nor
+	# stops dead.
+	return smoothstep(0.0, 1.0, t)
 
 
 # Moves the rig above where the player is drawn this frame. With physics
@@ -213,7 +233,7 @@ func _follow_target() -> void:
 
 
 func _update_blend(delta: float) -> void:
-	var goal: float = 1.0 if active_zone != null else 0.0
+	var goal: float = 1.0 if is_fixed else 0.0
 	if blend_seconds <= 0.0:
 		_blend = goal
 	else:
@@ -236,7 +256,7 @@ func _place_camera() -> void:
 
 # The shot being used or glided back from, or null on the free camera.
 func _current_shot() -> Marker3D:
-	if _blend <= 0.0 and active_zone == null:
+	if _blend <= 0.0 and not is_fixed:
 		return null
 	if not is_instance_valid(_last_shot):
 		return null

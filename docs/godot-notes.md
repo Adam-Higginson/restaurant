@@ -178,6 +178,26 @@ A growing glossary of the Godot concepts this project uses: what each one is, in
 
 **Signed distance to a shape.** A function giving how far a point is from a shape's edge: positive outside, negative inside. It makes cut-outs and bands of effect easy (inside: hide; within 1.4 m: foam). *Ours:* `hull_distance()` in `shaders/water.gdshader`, the distance to the hull's pointed outline (a polygon), which cuts the sea out of the hull and wraps foam round the bow (#90).
 
+## Conversations (#93)
+
+**RichTextLabel and BBCode.** A label whose text can carry markup in square brackets: `[color=#ffbd57]wet planks[/color]` colours those words. Its `visible_characters` says how many letters to show, which is all a typewriter effect needs: raise it a little each frame. *Ours:* the `Text` node in `ui/dialogue_box.tscn`; `DialogueBox.to_bbcode()` turns `*words*` into a colour tag.
+
+**Drawing a control yourself (`_draw`).** A `Control` can paint itself with `draw_rect()` and friends inside `_draw()`, called again whenever you ask with `queue_redraw()`. Good for frames and cursors that need no picture file. *Ours:* the dialogue box's brass frame, name plank, "more" arrow and flame cursor.
+
+**FontVariation.** A resource that wraps a font and changes how it's drawn (weight, slant, spacing) without a second font file. Pointing every label at one variation means the font is swapped in one place. *Ours:* `assets/fonts/dialogue_font.tres` (Varela Round).
+
+**Groups, for finding one node.** A node can join a named group (`add_to_group`), and anything can ask the tree for it (`get_first_node_in_group`). It's a way to find "the" something without an autoload or a hard-wired path. *Ours:* the `Conversation` (group `conversation`), shot markers (`shots`), the lantern's home (`lantern_home`), like `TimeOfDay` before them.
+
+**RefCounted, for logic with no nodes.** A script that `extends RefCounted` is a plain object: no scene tree, freed by itself when nothing holds it. Logic written this way can be tested without running a scene. *Ours:* `DialogueRunner`, `DialogueState`, `DialogueScript`.
+
+**FileAccess and plain text files.** `FileAccess.get_file_as_string("res://...")` reads any file as text. Files Godot doesn't recognise aren't resources, so they need adding to an export's "non-resource files" filter when the game is exported. *Ours:* the `.dlg` conversations, read by `DialogueLibrary`.
+
+**RegEx.** A pattern for picking text apart: `RegEx.create_from_string(...)`, then `search()` gives the pieces in brackets. *Ours:* `DialogueScript`, to split `speaker: words [tag]` and `- reply -> section`.
+
+**InputEventAction and `set_input_as_handled`.** `_unhandled_input` is offered each press in turn, last node in the tree first; a node that uses a press calls `get_viewport().set_input_as_handled()` so nobody else also acts on it. *Ours:* `Conversation` takes Interact while you talk, so the press that ends a talk doesn't start another.
+
+**AudioStreamWAV made in code.** A sound is just numbers: fill a `PackedByteArray` with a wave's samples, give it to an `AudioStreamWAV`, and an `AudioStreamPlayer` plays it. `pitch_scale` then plays it higher or lower. *Ours:* the typing blip in `ui/dialogue_sounds.gd`, pitched per speaker.
+
 ## Testing
 
 **gdUnit4.** The test framework (`addons/gdUnit4`). Suites extend our `GameTestSuite` and have `test_...` functions. `scene_runner` loads a scene and lets a test press inputs and wait physics ticks. *Ours:* `tests/`.

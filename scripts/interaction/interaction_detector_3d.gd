@@ -47,7 +47,8 @@ func _process(delta: float) -> void:
 
 
 func _unhandled_input(event: InputEvent) -> void:
-	if not accepts_event(event, Input.mouse_mode):
+	# Not while asleep, in a cutscene or mid-conversation.
+	if not _player.controls_enabled or not accepts_event(event, Input.mouse_mode):
 		return
 	if event.is_action_pressed("interact"):
 		get_viewport().set_input_as_handled()
@@ -136,7 +137,7 @@ func _update_focus() -> void:
 
 # Floats the arrow over the focused interactable, bobbing gently, or hides it.
 func _place_arrow() -> void:
-	if not is_instance_valid(focused):
+	if not is_instance_valid(focused) or not _player.controls_enabled:
 		_arrow.hide()
 		return
 	_arrow.show()

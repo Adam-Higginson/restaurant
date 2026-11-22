@@ -1,0 +1,11 @@
+[gd_resource type="Resource" script_class="Person" format=3]
+
+[ext_resource type="Script" path="res://scripts/data/person.gd" id="1_person"]
+
+[resource]
+script = ExtResource("1_person")
+id = &"heron"
+display_name = "Captain"
+role = "the ship's captain, a gruff heron in a raincoat"
+color = Color(0.56, 0.62, 0.68, 1)
+voice_pitch = 0.72

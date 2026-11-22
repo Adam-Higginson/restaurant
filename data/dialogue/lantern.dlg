@@ -1,0 +1,99 @@
+# The lantern, at home on the round table by the stove. Cheerful, and
+# cheerfully wrong about where home is; underneath, a little tender.
+# Placeholder writing: rewrite freely.
+#
+# The news_* flags are set by the game when something happens that he wasn't
+# there to see (a fish caught, the bell rung, the light off the bow). He
+# asks about the first one waiting, then forgets it.
+
+~ start
+? news_fish
+-> fish
+? news_bell
+-> bell
+? news_island
+-> island
+? news_light
+-> light
+? news_memory
+-> memory
+? morning
+lantern: Morning! Did you sleep? I don't. I just glow quieter.
+? else
+lantern: There you are. I kept your place warm. Well. Warm-ish.
+-> ask
+
+~ fish
+clear news_fish
+lantern: You smell of fish. Was it a good fish?
+- A fine one. -> fish_fine
+- It looked like it knew the way. -> fish_knew
+
+~ fish_fine
+lantern: A fine fish! Is home a fish? ...No. Probably not.
+-> ask
+
+~ fish_knew
+lantern: They always do. They never say.
+-> ask
+
+~ bell
+clear news_bell
+lantern: I heard the bell! Are we stopping? I like it when the sea holds still.
+-> ask
+
+~ island
+clear news_island
+clear news_light
+lantern: You've been at the bow. Did you see it? The *island*? With the lighthouse?
+lantern: Lighthouses are for people who are lost. So, us.
+-> ask
+
+~ light
+clear news_light
+lantern: You've been up at the bow. Was the *light* there? Tell me it was there.
+- It was there. -> light_there
+- I'm not sure what I saw. -> light_unsure
+
+~ light_there
+lantern: That's it. That's home. Probably. Almost certainly. Maybe.
+-> ask
+
+~ light_unsure
+lantern: That's all right. I'm sure enough for both of us.
+-> ask
+
+~ memory
+clear news_memory
+lantern: You've got that look. You remembered something.
+lantern: Hold on to that one. And tell me, slower, when you're ready.
+-> ask
+
+~ ask
+- Where's home, do you think? -> home
+? not asked_follow
+- Why don't you come with me? -> follow
+? met_heron
+- Is the captain always like that? -> captain
+- Just saying hello. -> bye
+
+~ home
+? talked.lantern >= 3
+lantern: The next island. *Definitely* the next one.
+? else
+lantern: Close. I know exactly where it is. Roughly.
+-> ask
+
+~ follow
+set asked_follow
+lantern: I'd like to. But somebody has to keep the stove company.
+lantern: And you always come back here. So this is where I'll be.
+-> ask
+
+~ captain
+lantern: Always. He likes you, though. He said "hm" in the nice way.
+-> ask
+
+~ bye
+lantern: Hello! And goodbye. And hello again, later.
+-> END

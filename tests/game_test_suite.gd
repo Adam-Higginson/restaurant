@@ -7,12 +7,13 @@ extends GdUnitTestSuite
 ## speed and can pass locally but fail in CI.
 
 ## Where tests keep a voyage when something saves (sleeping), so they never
-## touch the real save.
-const TEST_SAVE: String = "user://test_voyage.save"
+## touch the real save. run_tests.sh runs several copies of Godot at once and
+## gives each a TEST_SHARD number, so each copy has a save file of its own.
+static var test_save: String = "user://test_voyage%s.save" % OS.get_environment("TEST_SHARD")
 
 
 func _init() -> void:
-	SaveGame.path = TEST_SAVE
+	SaveGame.path = test_save
 
 
 ## Waits for exactly [param ticks] physics ticks.
@@ -158,6 +159,15 @@ func new_moored_ship_with_player(pos: Vector3) -> Array[Node3D]:
 	player.position = pos
 	world.add_child(player)
 	return [ship, player]
+
+
+## [param player]'s lantern, told to follow at their shoulder rather than
+## stay at his home on the ship, for tests of how he follows and what he
+## says when he's beside you.
+func lantern_at_shoulder(player: Node3D) -> LanternSpirit:
+	var spirit: LanternSpirit = player.get_node("LanternSpirit") as LanternSpirit
+	spirit.leave_home()
+	return spirit
 
 
 ## A [Hud3D] for [param player], added to the player's world, so it's freed

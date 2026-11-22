@@ -14,6 +14,9 @@ extends Node3D
 ## comes back to you.
 signal attention_changed(target: Node3D)
 
+## A marker in this group is his home: he stays there instead of following.
+const HOME_GROUP: StringName = &"lantern_home"
+
 ## Where he floats relative to the player, in metres: to the right, up, and
 ## behind (along the way the player faces).
 @export var follow_offset: Vector3 = Vector3(0.55, 1.7, 0.45)
@@ -44,6 +47,10 @@ signal attention_changed(target: Node3D)
 ## The least warmth he fades to: dim, but never out.
 @export var min_warmth: float = 0.25
 
+## How near you must be for him to see what you do and say something about
+## it, in metres, when he's at home rather than at your shoulder.
+@export var earshot: float = 8.0
+
 ## The player he follows. Set by the scene (he's in the player's scene).
 @export var player: Player3D
 ## The player's interaction detector, which tells him what you're facing.
@@ -62,7 +69,16 @@ var warmth: float = 1.0:
 		if warmth > 0.45:
 			_said_dim = false
 
+## Where he lives, if anywhere: he hovers there rather than following you,
+## and you go to him. Found by [constant HOME_GROUP] when the scene starts.
+var home: Node3D = null
+
 var _attention: Node3D = null
+## Whether he's been told to leave home and follow, so he doesn't look for
+## a home again.
+var _left_home: bool = false
+## Where his home was last tick, so he rides along as the ship carries it.
+var _home_was: Vector3 = Vector3.ZERO
 ## Somewhere he's been asked to go for a moment (a meal on a table).
 var _visit: Node3D = null
 var _visit_left: float = 0.0
@@ -93,11 +109,12 @@ func _ready() -> void:
 	if is_instance_valid(detector):
 		detector.focus_changed.connect(_on_focus_changed)
 	Game.memories.remembered.connect(func(_memory: Memory) -> void:
-		hum()
-		say(LanternLines.pick(LanternLines.REMEMBERED)))
+		if is_in_earshot():
+			hum()
+		tell(LanternLines.pick(LanternLines.REMEMBERED), &"news_memory"))
 	# He's a child of the player, so he's ready before the player is: wait
 	# until the player has its model before finding its shoulder.
-	snap_to_player.call_deferred()
+	_settle.call_deferred()
 
 
 func _physics_process(delta: float) -> void:
@@ -107,9 +124,13 @@ func _physics_process(delta: float) -> void:
 	_notice(delta)
 	_cool(delta)
 	_visit_left = maxf(_visit_left - delta, 0.0)
-	# Ride along with whatever the player stands on, then drift towards where
-	# he wants to be.
-	_spot += player.get_platform_velocity() * delta
+	# Ride along with whatever carries him (his home, or what the player
+	# stands on), then drift towards where he wants to be.
+	if is_instance_valid(home):
+		_spot += home.global_position - _home_was
+		_home_was = home.global_position
+	else:
+		_spot += player.get_platform_velocity() * delta
 	var goal: Vector3 = goal_spot()
 	if _spot.distance_to(goal) > leash:
 		snap_to_player()
@@ -127,11 +148,14 @@ func _process(delta: float) -> void:
 	_blink(delta)
 
 
-## Puts him straight back by the player's shoulder, at rest.
+## Puts him straight back where he belongs, at rest: at home if he has one,
+## otherwise by the player's shoulder.
 func snap_to_player() -> void:
 	if not is_instance_valid(player):
 		return
 	_velocity = Vector3.ZERO
+	if is_instance_valid(home):
+		_home_was = home.global_position
 	_spot = goal_spot()
 	global_position = _spot
 	reset_physics_interpolation()
@@ -153,6 +177,34 @@ func visit(place: Node3D, seconds: float) -> void:
 ## Whether he's off visiting somewhere just now.
 func is_visiting() -> bool:
 	return _visit_left > 0.0 and is_instance_valid(_visit)
+
+
+## Leaves home to follow at the player's shoulder, as he used to, and
+## doesn't go back.
+func leave_home() -> void:
+	_left_home = true
+	home = null
+	snap_to_player()
+
+
+## Whether he's near enough to see what you're doing: always, at your
+## shoulder; within [member earshot] of you, at home.
+func is_in_earshot() -> bool:
+	if not is_instance_valid(home) or not is_instance_valid(player):
+		return true
+	return global_position.distance_to(player.global_position) <= earshot
+
+
+## Says [param line] if he's near enough to have seen what it's about.
+## Otherwise he missed it, and [param news] (if given) is flagged so he can
+## bring it up when you next talk to him. Returns whether he said it.
+func tell(line: String, news: StringName = &"") -> bool:
+	if is_in_earshot():
+		say(line)
+		return true
+	if news != &"":
+		Game.dialogue.set_flag(news)
+	return false
 
 
 ## Says [param line], in a few words floating beside him, with a hop.
@@ -197,11 +249,13 @@ func blink() -> void:
 	_blink_left = blink_seconds
 
 
-## Where he wants to be now: hovering over what he's looking at, or by the
-## player's shoulder.
+## Where he wants to be now: at home if he has one; otherwise hovering over
+## what he's looking at, or by the player's shoulder.
 func goal_spot() -> Vector3:
 	if _visit_left > 0.0 and is_instance_valid(_visit):
 		return _visit.global_position + Vector3.UP * 0.45
+	if is_instance_valid(home):
+		return home.global_position
 	if is_instance_valid(_attention):
 		var toward_player: Vector3 = player.global_position - _attention.global_position
 		toward_player.y = 0.0
@@ -244,7 +298,7 @@ func _cool(delta: float) -> void:
 	_apply_warmth()
 	if warmth < 0.4 and not _said_dim:
 		_said_dim = true
-		say(LanternLines.pick(LanternLines.DIM))
+		tell(LanternLines.pick(LanternLines.DIM))
 
 
 # His light follows his warmth: dimmer and closer in when he's cold.
@@ -255,6 +309,13 @@ func _apply_warmth() -> void:
 	var bright: float = 1.35 if _attention != null else 1.1
 	if _excited <= 0.0:
 		_light.base_energy = bright * lerpf(0.4, 1.0, warmth)
+
+
+# Finds his home, if the scene has one, and goes to where he belongs.
+func _settle() -> void:
+	if is_inside_tree() and not _left_home:
+		home = get_tree().get_first_node_in_group(HOME_GROUP) as Node3D
+	snap_to_player()
 
 
 func _set_attention(target: Node3D) -> void:
@@ -275,7 +336,12 @@ func _on_focus_changed(interactable: Interactable3D) -> void:
 # player faces.
 func _face(delta: float) -> void:
 	var look: Vector3 = player.facing
-	if is_instance_valid(_attention):
+	if is_instance_valid(home):
+		# At home he watches you, when you're near enough to watch.
+		if not is_in_earshot():
+			return
+		look = player.global_position - global_position
+	elif is_instance_valid(_attention):
 		look = _attention.global_position - global_position
 	look.y = 0.0
 	if look.length() < 0.01:

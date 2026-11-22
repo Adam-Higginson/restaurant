@@ -36,6 +36,14 @@ func lines_now() -> PackedStringArray:
 	return LanternLines.FAR_LIGHT
 
 
+## What you'd have to tell him about, if he isn't there to see it.
+func news_now() -> StringName:
+	var time: TimeOfDay = get_tree().get_first_node_in_group(&"time_of_day") as TimeOfDay
+	if time != null and time.is_morning():
+		return &"news_island"
+	return &"news_light"
+
+
 func _on_body_entered(body: Node3D) -> void:
 	var player: Player3D = body as Player3D
 	if player == null or not would_speak():
@@ -44,4 +52,4 @@ func _on_body_entered(body: Node3D) -> void:
 	if spirit == null:
 		return
 	_since = 0.0
-	spirit.say(LanternLines.pick(lines_now()))
+	spirit.tell(LanternLines.pick(lines_now()), news_now())

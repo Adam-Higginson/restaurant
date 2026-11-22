@@ -46,6 +46,11 @@ var memories: MemoryBook:
 	get:
 		return _memories
 
+## What conversations remember (flags) and can ask about (facts).
+var dialogue: DialogueState:
+	get:
+		return _dialogue
+
 var stats: DayStats:
 	get:
 		return _stats
@@ -67,6 +72,7 @@ var _day: int = 1
 var _clock: GameClock = GameClock.new()
 var _stats: DayStats = DayStats.new()
 var _memories: MemoryBook = MemoryBook.new(Catalog.load_default().memories)
+var _dialogue: DialogueState = DialogueState.new()
 var _is_open: bool = false
 var _is_day_over: bool = false
 
@@ -80,6 +86,7 @@ func _init() -> void:
 func new_game() -> void:
 	_stats.reset()
 	_memories.clear()
+	_dialogue.reset()
 	_set_money(STARTING_MONEY)
 	_is_day_over = false
 	# Clock first, so day_changed listeners already see 6:00 am.

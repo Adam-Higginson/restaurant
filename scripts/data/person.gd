@@ -21,6 +21,9 @@ const OTHER_WEIGHT: int = 1
 @export var loved: Array[Item] = []
 @export var liked: Array[Item] = []
 @export var disliked: Array[Item] = []
+## How high their voice is when their words type out in a conversation:
+## 1 is the ordinary blip, lower is deeper, higher is brighter.
+@export var voice_pitch: float = 1.0
 ## Real seconds they'll wait for their order before leaving.
 @export var patience_seconds: float = 120.0
 

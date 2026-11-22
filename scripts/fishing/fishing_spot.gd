@@ -88,14 +88,16 @@ func _on_interacted(player: Player3D) -> void:
 				var fish: ItemInstance = ItemInstance.new(fish_now)
 				if player.toolbar.add(fish):
 					caught.emit(fish)
-					_say(player, LanternLines.CAUGHT)
+					_tell(player, LanternLines.CAUGHT, &"news_fish")
 					Game.memories.notice(fish_now)
 
 
-func _say(player: Player3D, lines: PackedStringArray) -> void:
+# The lantern says one of [param lines] if he's near enough to have seen;
+# otherwise it's [param news] he'll bring up when you next talk to him.
+func _tell(player: Player3D, lines: PackedStringArray, news: StringName) -> void:
 	var spirit: LanternSpirit = player.get_node_or_null("LanternSpirit") as LanternSpirit
 	if spirit != null:
-		spirit.say(LanternLines.pick(lines))
+		spirit.tell(LanternLines.pick(lines), news)
 
 
 func _on_bitten() -> void:

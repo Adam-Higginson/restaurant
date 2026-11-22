@@ -1,9 +1,11 @@
 class_name SupperSpot
 extends Node3D
-## The little round table by the bunk room's stove, where you share supper
-## with the lantern: holding a bowl or plate with a dish in it, Interact. The
-## dish sits on the table a moment while he drifts down to it, then it's gone
-## and he glows warm again: more for a better dish. The bowl stays with you.
+## The little round table by the bunk room's stove, where the lantern lives
+## (its [code]Perch[/code] is his home) and where you share supper with him:
+## holding a bowl or plate with a dish in it, Interact. The dish sits on the
+## table a moment while he drifts down to it, then it's gone and he glows
+## warm again: more for a better dish. The bowl stays with you. With nothing
+## to share, Interact talks to him instead.
 
 ## Emitted when a meal is shared, with the dish and how much it warmed him.
 signal shared(dish: ItemInstance, warmth: float)
@@ -13,13 +15,16 @@ signal shared(dish: ItemInstance, warmth: float)
 @export var per_star: float = 0.15
 ## How long the dish sits on the table while he eats, in seconds.
 @export var eat_seconds: float = 2.5
+## The conversation Interact starts when you've nothing to share: a file in
+## [code]data/dialogue[/code].
+@export var talk: StringName = &"lantern"
 
 @onready var _reach: Interactable3D = $Reach
 @onready var _plate_spot: Node3D = $PlateSpot
 
 
 func _ready() -> void:
-	_reach.interacted.connect(share)
+	_reach.interacted.connect(use)
 	_reach.describe_interact = func(player: Player3D) -> String: return prompt(player.arms)
 
 
@@ -36,8 +41,23 @@ func dish_in(arms: Arms) -> ItemInstance:
 func prompt(arms: Arms) -> String:
 	var dish: ItemInstance = dish_in(arms)
 	if dish == null:
-		return ""
+		return "Talk to the lantern" if can_talk() else ""
 	return "Share %s with the lantern" % dish.item.display_name
+
+
+## Whether there's a conversation to have here.
+func can_talk() -> bool:
+	return talk != &"" and Conversation.find(self) != null
+
+
+## What Interact does: shares the dish [param player] holds, or with none,
+## talks to the lantern.
+func use(player: Player3D) -> void:
+	if share(player):
+		return
+	var conversation: Conversation = Conversation.find(self)
+	if conversation != null and talk != &"":
+		conversation.begin(talk, player)
 
 
 ## How much [param dish] warms him.

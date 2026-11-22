@@ -11,6 +11,9 @@ const PATH: String = "res://data/catalog.tres"
 @export var reactions: Array[Reaction] = []
 @export var tools: Array[HandTool] = []
 @export var people: Array[Person] = []
+## The ship's crew and company: people you talk to rather than serve. Kept
+## apart from [member people], who are the old restaurant's townsfolk.
+@export var crew: Array[Person] = []
 ## The memories of home that cooking and fishing bring back.
 @export var memories: Array[Memory] = []
 ## The recipes written in the galley's recipe book.
@@ -46,9 +49,12 @@ func find_tool(id: StringName) -> HandTool:
 	return null
 
 
-## The townsperson with [param id], or null if there isn't one.
+## The townsperson or crew member with [param id], or null if there isn't one.
 func find_person(id: StringName) -> Person:
 	for person: Person in people:
+		if person.id == id:
+			return person
+	for person: Person in crew:
 		if person.id == id:
 			return person
 	return null
