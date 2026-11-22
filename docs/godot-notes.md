@@ -156,7 +156,7 @@ A growing glossary of the Godot concepts this project uses: what each one is, in
 
 **Backlight (on a material).** `backlight_enabled` lets light that falls on the far side of a surface show through on the near side, tinted by the `backlight` colour, like a lamp behind thin cloth. *Ours:* the bunk curtains (`curtain*.tres`) and hammock canvas, so a drawn curtain glows when the lamp in its bunk is lit.
 
-**A ceiling the camera can't pass.** A collision shape well above the player's head is never touched by them, but the camera's `SpringArm3D` hits it, so the camera is pulled in under the ceiling rather than rising through it. *Ours:* `BunkCeilingShape` and `BunkCeilingForeShape` over the bunk room.
+**A ceiling the camera can't pass.** A collision shape well above the player's head is never touched by them, but the camera's `SpringArm3D` hits it, so the camera is pulled in under the ceiling rather than rising through it. *Ours:* `GalleyCeilingShape`, `BunkCeilingShape` and `BunkCeilingForeShape`, and a `…Shape` for each ceiling beam, in both rooms.
 
 *Still to come with the prototype tickets: ...*
 
