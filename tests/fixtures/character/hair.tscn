@@ -5,7 +5,8 @@
 [sub_resource type="BoxMesh" id="BoxMesh_y2d2t"]
 material = SubResource("StandardMaterial3D_wgn20")
 
-[node name="Hair" type="Node3D" unique_id=119636680]
+[node name="Hair" type="Node3D" unique_id=108082179]
 
-[node name="Hair" type="MeshInstance3D" parent="." unique_id=263572493]
+[node name="Hair" type="MeshInstance3D" parent="." unique_id=1468910174]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.5, 0)
 mesh = SubResource("BoxMesh_y2d2t")

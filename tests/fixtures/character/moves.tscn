@@ -14,7 +14,7 @@ tracks/1/enabled = true
 tracks/1/path = NodePath("Armature/Skeleton3D:pelvis")
 tracks/1/interp = 1
 tracks/1/loop_wrap = true
-tracks/1/keys = PackedFloat32Array(0, 1, 0, 0, 0)
+tracks/1/keys = PackedFloat32Array(0, 1, 0, 0.2, 0)
 tracks/2/type = "position_3d"
 tracks/2/imported = false
 tracks/2/enabled = true
@@ -44,7 +44,7 @@ tracks/1/enabled = true
 tracks/1/path = NodePath("Armature/Skeleton3D:pelvis")
 tracks/1/interp = 1
 tracks/1/loop_wrap = true
-tracks/1/keys = PackedFloat32Array(0, 1, 0, 0, 0)
+tracks/1/keys = PackedFloat32Array(0, 1, 0, 0.2, 0)
 tracks/2/type = "position_3d"
 tracks/2/imported = false
 tracks/2/enabled = true
@@ -74,7 +74,7 @@ tracks/1/enabled = true
 tracks/1/path = NodePath("Armature/Skeleton3D:pelvis")
 tracks/1/interp = 1
 tracks/1/loop_wrap = true
-tracks/1/keys = PackedFloat32Array(0, 1, 0, 0, 0)
+tracks/1/keys = PackedFloat32Array(0, 1, 0, 0.2, 0)
 tracks/2/type = "position_3d"
 tracks/2/imported = false
 tracks/2/enabled = true
@@ -104,7 +104,7 @@ tracks/1/enabled = true
 tracks/1/path = NodePath("Armature/Skeleton3D:pelvis")
 tracks/1/interp = 1
 tracks/1/loop_wrap = true
-tracks/1/keys = PackedFloat32Array(0, 1, 0, 0, 0)
+tracks/1/keys = PackedFloat32Array(0, 1, 0, 0.2, 0)
 tracks/2/type = "position_3d"
 tracks/2/imported = false
 tracks/2/enabled = true
@@ -128,7 +128,7 @@ _data = {
 &"Walk_Carry": SubResource("Animation_crb4d")
 }
 
-[node name="Moves" type="Node3D" unique_id=1491455436]
+[node name="Moves" type="Node3D" unique_id=113678385]
 
-[node name="AnimationPlayer" type="AnimationPlayer" parent="." unique_id=1744235470]
+[node name="AnimationPlayer" type="AnimationPlayer" parent="." unique_id=1418628122]
 libraries/ = SubResource("AnimationLibrary_v1ltu")

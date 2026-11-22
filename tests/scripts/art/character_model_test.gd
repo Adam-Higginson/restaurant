@@ -154,6 +154,19 @@ func test_the_hips_move_by_our_height_so_feet_stay_on_the_floor() -> void:
 	assert_vector(at).is_equal_approx(Vector3(0.11, 0.99, 0.0), Vector3.ONE * 0.0001)
 
 
+func test_its_feet_are_planted_on_the_floor() -> void:
+	var player: Player3D = _new_dressed_player()
+	var model: CharacterModel = _model(player)
+	var runner: GdUnitSceneRunner = scene_runner(player.get_parent())
+
+	await physics_ticks(runner, 5)
+
+	# The stand-in animation drops the hips 10 cm, which would sink the
+	# feet; the character is lifted to keep the soles on the floor.
+	assert_float(model.sole_height()).is_equal_approx(0.0, 0.005)
+	assert_float(model.character.position.y).is_greater(0.05)
+
+
 func test_only_the_head_is_cut_from_a_whole_body() -> void:
 	var skin: Skin = Skin.new()
 	skin.add_named_bind(&"pelvis", Transform3D.IDENTITY)

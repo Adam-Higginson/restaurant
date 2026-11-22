@@ -27,6 +27,8 @@ signal dressed(shown: bool)
 ## What the player can be doing, each with its own animation.
 enum Pose { IDLE, WALK, STRIKE, PARRY }
 
+## The toe joints, which the feet are planted by.
+const TOE_BONES: PackedStringArray = ["ball_l", "ball_r"]
 ## The bones the head is cut from the base character's body by.
 const HEAD_BONES: PackedStringArray = ["Head", "neck_01"]
 ## Bones whose position the animations may move (the whole body's sway and
@@ -87,6 +89,9 @@ var left_hand: BoneAttachment3D = null
 
 var _animator: AnimationPlayer = null
 var _duellist: Duellist = null
+## How high a toe joint is when its boot's sole is on the floor, in metres
+## above this node: measured from the rest pose when the character is built.
+var _toe_height: float = 0.0
 
 
 func _ready() -> void:
@@ -100,6 +105,7 @@ func _ready() -> void:
 func _process(_delta: float) -> void:
 	if _animator == null:
 		return
+	plant_feet()
 	var walking: bool = player != null and player.is_walking
 	var striking: bool = _duellist != null and _duellist.is_striking()
 	var parrying: bool = _duellist != null and _duellist.parry.is_active()
@@ -119,6 +125,35 @@ func dress() -> bool:
 	_show_stand_ins(false)
 	dressed.emit(true)
 	return true
+
+
+## Raises or lowers the character so the lower foot's sole is on the floor.
+## The animations come from a skeleton with other proportions, so without
+## this the boots sink into the ground in some poses and float in others.
+func plant_feet() -> void:
+	if skeleton == null:
+		return
+	var lowest: float = INF
+	for bone_name: String in TOE_BONES:
+		var bone: int = skeleton.find_bone(bone_name)
+		if bone < 0:
+			return
+		var toe: Vector3 = skeleton.global_transform * skeleton.get_bone_global_pose(bone).origin
+		lowest = minf(lowest, to_local(toe).y)
+	character.position.y = clampf(character.position.y + _toe_height - lowest, -0.2, 0.2)
+
+
+## How high the lower foot's sole is above the floor, in metres: 0 when
+## planted. For tests.
+func sole_height() -> float:
+	if skeleton == null:
+		return 0.0
+	var lowest: float = INF
+	for bone_name: String in TOE_BONES:
+		var bone: int = skeleton.find_bone(bone_name)
+		var toe: Vector3 = skeleton.global_transform * skeleton.get_bone_global_pose(bone).origin
+		lowest = minf(lowest, to_local(toe).y)
+	return lowest - _toe_height
 
 
 ## Plays the animation for [param next], blending from the last, unless it's
@@ -243,6 +278,8 @@ func _build(parts: CharacterParts) -> void:
 	character.rotation.y = PI
 	character.scale = Vector3.ONE * body_scale
 	skeleton = character.find_children("*", "Skeleton3D", true, false)[0] as Skeleton3D
+	# Measured on the outfit alone: its boots are what stand on the floor.
+	_toe_height = _rest_toe_height()
 	_add_head(parts.head_from)
 	for extra: String in [parts.hair, parts.eyebrows]:
 		if not extra.is_empty():
@@ -339,6 +376,22 @@ func _library(animator_root: Node) -> AnimationLibrary:
 						retarget(animator.get_animation(anim_name), to_skeleton, ratio))
 		source.free()
 	return library
+
+
+# How far a toe joint sits above the boot's sole at rest, in metres in this
+# node's space: the toe's rest height less the lowest point of the outfit.
+func _rest_toe_height() -> float:
+	var toe: int = skeleton.find_bone(TOE_BONES[0])
+	if toe < 0:
+		return 0.0
+	var toe_at: Vector3 = skeleton.global_transform * skeleton.get_bone_global_rest(toe).origin
+	var lowest: float = INF
+	for mesh: MeshInstance3D in skeleton.find_children("*", "MeshInstance3D", true, false):
+		var box: AABB = mesh.global_transform * mesh.get_aabb()
+		lowest = minf(lowest, to_local(box.position).y)
+	if lowest == INF:
+		lowest = 0.0
+	return to_local(toe_at).y - lowest
 
 
 func _hand(bone: String) -> BoneAttachment3D:
