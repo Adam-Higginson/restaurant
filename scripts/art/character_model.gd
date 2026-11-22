@@ -207,8 +207,11 @@ static func cut_out(body: ArrayMesh, skin: Skin, keep: PackedStringArray) -> Arr
 
 ## A copy of [param animation] that moves the skeleton at [param skeleton_path]
 ## (from the [AnimationPlayer]'s root), with only rotations, plus positions
-## for the [constant MOVING_BONES].
-static func retarget(animation: Animation, skeleton_path: NodePath) -> Animation:
+## for the [constant MOVING_BONES]. Those positions are multiplied by
+## [param height_ratio]: our hips' height over the animated skeleton's, so a
+## body with longer legs isn't pushed into the floor (or lifted off it).
+static func retarget(animation: Animation, skeleton_path: NodePath,
+		height_ratio: float = 1.0) -> Animation:
 	var copy: Animation = animation.duplicate(true) as Animation
 	for track: int in range(copy.get_track_count() - 1, -1, -1):
 		var path: NodePath = copy.track_get_path(track)
@@ -220,7 +223,17 @@ static func retarget(animation: Animation, skeleton_path: NodePath) -> Animation
 			copy.remove_track(track)
 			continue
 		copy.track_set_path(track, NodePath("%s:%s" % [skeleton_path, bone]))
+		if kind == Animation.TYPE_POSITION_3D and height_ratio != 1.0:
+			for key: int in copy.track_get_key_count(track):
+				var at: Vector3 = copy.track_get_key_value(track, key)
+				copy.track_set_key_value(track, key, at * height_ratio)
 	return copy
+
+
+## How high [param skeleton]'s hips are at rest, or 0 if it has none.
+static func hip_height(skeleton: Skeleton3D) -> float:
+	var hips: int = skeleton.find_bone("pelvis")
+	return skeleton.get_bone_global_rest(hips).origin.y if hips >= 0 else 0.0
 
 
 func _build(parts: CharacterParts) -> void:
@@ -310,13 +323,20 @@ func _library(animator_root: Node) -> AnimationLibrary:
 		if not ResourceLoader.exists(path):
 			continue
 		var source: Node = (load(path) as PackedScene).instantiate()
+		var ratio: float = 1.0
+		var skeletons: Array[Node] = source.find_children("*", "Skeleton3D", true, false)
+		if not skeletons.is_empty():
+			var theirs: float = hip_height(skeletons[0] as Skeleton3D)
+			var ours: float = hip_height(skeleton)
+			if theirs > 0.0 and ours > 0.0:
+				ratio = ours / theirs
 		for found: Node in source.find_children("*", "AnimationPlayer", true, false):
 			var animator: AnimationPlayer = found as AnimationPlayer
 			for anim_name: StringName in animator.get_animation_list():
 				if library.has_animation(anim_name):
 					library.remove_animation(anim_name)
 				library.add_animation(anim_name,
-						retarget(animator.get_animation(anim_name), to_skeleton))
+						retarget(animator.get_animation(anim_name), to_skeleton, ratio))
 		source.free()
 	return library
 

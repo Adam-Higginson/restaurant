@@ -141,6 +141,19 @@ func test_animations_turn_our_bones_without_stretching_them() -> void:
 	])
 
 
+func test_the_hips_move_by_our_height_so_feet_stay_on_the_floor() -> void:
+	var source: Animation = Animation.new()
+	var hips: int = source.add_track(Animation.TYPE_POSITION_3D)
+	source.track_set_path(hips, NodePath("Armature/Skeleton3D:pelvis"))
+	source.position_track_insert_key(hips, 0.0, Vector3(0.1, 0.9, 0.0))
+
+	# Our hips stand 1.1 times as high as the animated skeleton's.
+	var copy: Animation = CharacterModel.retarget(source, NodePath("Skeleton3D"), 1.1)
+
+	var at: Vector3 = copy.track_get_key_value(0, 0)
+	assert_vector(at).is_equal_approx(Vector3(0.11, 0.99, 0.0), Vector3.ONE * 0.0001)
+
+
 func test_only_the_head_is_cut_from_a_whole_body() -> void:
 	var skin: Skin = Skin.new()
 	skin.add_named_bind(&"pelvis", Transform3D.IDENTITY)
