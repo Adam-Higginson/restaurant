@@ -22,17 +22,14 @@ func test_open_curtains_are_bunched_at_the_ends() -> void:
 		assert_float(absf(layout.x)).is_greater(0.7)
 
 
-# TODO(your turn): write test_open_curtains_leave_the_middle_clear.
-# When a bunk's curtains are open you should be able to see in, so neither
-# curtain may reach the middle 1.2 m of the bay (x between -0.6 and 0.6).
-# Hints:
-# - curtain_layout(false, side) gives the curtain's middle (x) and how much of
-#   its full 1 m width it's spread to (y), so it covers
-#   x - y / 2 to x + y / 2.
-# - Check both sides (-1 and 1), like the tests above.
-# - Prove it can fail: change the 0.85 in curtain_layout to 0.3, run
-#   ./run_tests.sh -a res://tests/scripts/props/bunk_bay_test.gd, then put
-#   it back.
+func test_open_curtains_leave_the_middle_clear() -> void:
+	# Open, you can see in: neither curtain reaches the middle 1.2 m of the bay.
+	for side: int in [-1, 1]:
+		var layout: Vector2 = BunkBay.curtain_layout(false, side)
+		var near_edge: float = absf(layout.x) - layout.y / 2.0
+		assert_float(near_edge).override_failure_message(
+				"The %s curtain reaches %.2f m from the middle" % [
+				"left" if side < 0 else "right", near_edge]).is_greater_equal(0.6)
 
 
 func test_a_bay_is_dressed_for_whoever_sleeps_there() -> void:
