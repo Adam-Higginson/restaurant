@@ -1,8 +1,9 @@
 class_name Lookout
 extends Area3D
-## The bow, as a place to stand and look out. Walk out onto it at night and
-## your lantern notices the far light in the fog, and has a guess about it.
-## Not every time: he has a think between guesses.
+## The bow, as a place to stand and look out. Walk out onto it and your
+## lantern has a guess about what's out there: the far light in the fog at
+## night, the island it comes from at dawn. Not every time: he has a think
+## between guesses.
 
 ## Seconds before he'll guess again.
 @export var cooldown_seconds: float = 90.0
@@ -24,10 +25,15 @@ func _process(delta: float) -> void:
 
 ## Whether he'd say something if you walked out now.
 func would_speak() -> bool:
-	if _since < cooldown_seconds:
-		return false
+	return _since >= cooldown_seconds
+
+
+## What he'd guess about: the light at night, the island at dawn.
+func lines_now() -> PackedStringArray:
 	var time: TimeOfDay = get_tree().get_first_node_in_group(&"time_of_day") as TimeOfDay
-	return time == null or not time.is_morning()
+	if time != null and time.is_morning():
+		return LanternLines.ISLAND
+	return LanternLines.FAR_LIGHT
 
 
 func _on_body_entered(body: Node3D) -> void:
@@ -38,4 +44,4 @@ func _on_body_entered(body: Node3D) -> void:
 	if spirit == null:
 		return
 	_since = 0.0
-	spirit.say(LanternLines.pick(LanternLines.FAR_LIGHT))
+	spirit.say(LanternLines.pick(lines_now()))

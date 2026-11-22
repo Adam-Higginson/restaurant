@@ -2,7 +2,7 @@ extends GameTestSuite
 ## Tests for the lantern's voice: lines wait their turn and fade away, he
 ## never repeats himself twice running, and he speaks up when a memory comes
 ## back, when you land a fish, when you stop the ship, and when you look out
-## from the bow at night (not at dawn, and not every time).
+## from the bow (at the light at night, the island at dawn; not every time).
 
 ## Out on the bow, past the windlass.
 const ON_THE_BOW: Vector3 = Vector3(0, 6.25, -16.2)
@@ -83,7 +83,7 @@ func test_he_notices_the_far_light_from_the_bow_at_night() -> void:
 	assert_bool(spirit.saying() in LanternLines.FAR_LIGHT).is_true()
 
 
-func test_at_dawn_the_far_light_is_gone_and_he_says_nothing() -> void:
+func test_at_dawn_he_spots_the_island_instead() -> void:
 	var rig: Array[Node3D] = new_moored_ship_with_player(Vector3(0, 6.25, -11.8))
 	var time: TimeOfDay = TimeOfDay.new()
 	rig[0].get_parent().add_child(time)
@@ -95,7 +95,7 @@ func test_at_dawn_the_far_light_is_gone_and_he_says_nothing() -> void:
 	place_player_3d(runner, (rig[0] as Ship).to_global(ON_THE_BOW))
 	await physics_ticks(runner, 5)
 
-	assert_str(spirit.saying()).is_empty()
+	assert_bool(spirit.saying() in LanternLines.ISLAND).is_true()
 
 
 func test_he_has_a_think_between_guesses() -> void:

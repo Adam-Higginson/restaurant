@@ -48,6 +48,13 @@ const FAR_LIGHT: PackedStringArray = [
 	"Somebody's keeping that light lit. For somebody.",
 ]
 
+## You're at the bow at dawn, and the island has come out of the mist.
+const ISLAND: PackedStringArray = [
+	"There! An island. With a lighthouse. Lighthouses are for people who are lost. So, us.",
+	"That's where the light lives. I knew it. I didn't, but I knew it.",
+	"Do you think it remembers you? Islands are very good at remembering.",
+]
+
 static var _last: String = ""
 
 

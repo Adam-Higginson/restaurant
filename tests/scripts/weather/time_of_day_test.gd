@@ -35,6 +35,24 @@ func test_halfway_is_halfway() -> void:
 	assert_float(top.r).is_equal_approx(0.16, 0.001)
 
 
+func test_the_island_comes_out_of_the_mist_at_dawn() -> void:
+	var time: TimeOfDay = _rig()
+	var scene: PackedScene = load("res://scenes/prototype/islands/lighthouse_island.tscn") \
+			as PackedScene
+	var island: DistantIsland = scene.instantiate() as DistantIsland
+	add_child(island)
+	auto_free(island)
+	time.dawn = 0.0
+	var at_night: float = island.reveal
+
+	time.dawn = 1.0
+
+	assert_float(at_night).is_less(0.1)
+	assert_float(island.reveal).is_greater(0.4)
+	assert_float(island.silhouette.get_shader_parameter("reveal")).is_equal_approx(
+			island.reveal, 0.001)
+
+
 func test_sleeping_in_your_bunk_brings_the_morning_and_back() -> void:
 	var rig: Array[Node3D] = new_moored_ship_with_player(Vector3(4.0, 1.05, 13.4))
 	var ship: Ship = rig[0] as Ship

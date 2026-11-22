@@ -76,3 +76,9 @@ The GDD says "a warm meal by the stove rekindles him", so now it does, and cooki
 - `scripts/props/supper_spot.gd` + `scenes/prototype/props/supper_spot.tscn` on the nook's round table in `ship.tscn`.
 - Tests: `tests/scripts/props/supper_spot_test.gd` (fades but never out, says when he's low, sharing soup at the table warms him and empties the bowl, nothing to share in an empty bowl, a better dish warms more).
 - Tuning to try: `warmth_per_minute` (how fast he fades) and `base_warmth` / `per_star` (how much a dish gives).
+
+### 11. The lighthouse island behind the far light
+The far light now has a source. Out in the fog (the centre of the ship's circling route, about 150 m off) is an island with a lighthouse on its headland; the beacon sweeps from its lamp room. At night you see only the light and the faintest shape. At dawn the island comes out of the grey-rose mist as a ghostly silhouette: cliffs, a hill, sea stacks and the lighthouse. Walk out on the bow at dawn and the lantern has something to say about it ("There! An island. With a lighthouse. Lighthouses are for people who are lost. So, us."). It's a destination you can see but can't reach yet: a natural lead-in to #67 (mooring) and the first island.
+- `scenes/prototype/islands/lighthouse_island.tscn` (chunky low-poly cylinders), `shaders/distant_silhouette.gdshader` (ignores the fog and fades itself, paler towards the top), `scripts/weather/distant_island.gd` (the `TimeOfDay` sets how much shows through a `distant` group).
+- The lookout at the bow picks the light or the island depending on the time; new `ISLAND` lines.
+- Tests: the island's reveal follows the dawn (`time_of_day_test`), and the lantern spots the island from the bow at dawn (`lantern_voice_test`).

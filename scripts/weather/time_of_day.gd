@@ -82,6 +82,9 @@ func _apply() -> void:
 		moon.light_energy = lerpf(0.6, 1.3, dawn)
 	if is_instance_valid(weather):
 		weather.intensity = lerpf(night_rain, dawn_rain, dawn)
+	# Distant islands show through the mist at dawn.
+	if is_inside_tree():
+		get_tree().call_group(&"distant", &"set_dawn", dawn)
 	# The sea glows a little by itself at night so the swell reads in the dark;
 	# by day it doesn't need to, and it mirrors a paler sky.
 	var sea: Sea = get_tree().get_first_node_in_group(&"sea") as Sea if is_inside_tree() else null
