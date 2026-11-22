@@ -16,6 +16,8 @@
 [ext_resource type="PackedScene" path="res://scenes/prototype/intro/underwater_stage.tscn" id="313_underwater"]
 [ext_resource type="PackedScene" path="res://ui/cutscene_prompt.tscn" id="314_prompt"]
 [ext_resource type="AudioStream" path="res://assets/audio/ui/confirmation_001.wav" id="315_confirm"]
+[ext_resource type="AudioStream" path="res://assets/audio/intro/grasp.tres" id="316_grasp"]
+[ext_resource type="AudioStream" path="res://assets/audio/intro/hook.tres" id="317_hook"]
 [ext_resource type="Material" path="res://assets/placeholder/materials/greybox_sand.tres" id="2_dlk4p"]
 [ext_resource type="Material" path="res://assets/placeholder/materials/greybox_grass.tres" id="3_nk5mb"]
 [ext_resource type="Material" path="res://assets/placeholder/materials/greybox_dark_wood.tres" id="4_8v0wy"]
@@ -319,6 +321,14 @@ script = ExtResource("311_sounds")
 [node name="Confirm" type="AudioStreamPlayer" parent="SoundCues"]
 stream = ExtResource("315_confirm")
 volume_db = -8.0
+
+[node name="Grasp" type="AudioStreamPlayer" parent="SoundCues"]
+stream = ExtResource("316_grasp")
+volume_db = -4.0
+
+[node name="Hook" type="AudioStreamPlayer" parent="SoundCues"]
+stream = ExtResource("317_hook")
+volume_db = -2.0
 
 [node name="Stages" type="Node" parent="."]
 

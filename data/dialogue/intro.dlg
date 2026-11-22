@@ -70,6 +70,7 @@
 @muffle on
 @start offered
 @wait_for interact Take his hand
+@sound grasp
 @play taken
 @fade out 0.4
 -> surface
@@ -94,6 +95,7 @@
 @wait 0.7
 @lightning
 @wait 1.6
+@sound hook
 @fade out 0.2
 @hide castaway
 @hide reaching_boathook
