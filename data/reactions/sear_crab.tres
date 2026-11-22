@@ -1,0 +1,19 @@
+[gd_resource type="Resource" script_class="Reaction" format=3]
+
+[ext_resource type="Script" path="res://scripts/data/item.gd" id="1_item"]
+[ext_resource type="Resource" path="res://data/items/crab_meat.tres" id="2_food"]
+[ext_resource type="Script" path="res://scripts/data/element.gd" id="3_element"]
+[ext_resource type="Resource" path="res://data/elements/fire.tres" id="4_fire"]
+[ext_resource type="Resource" path="res://data/items/frying_pan.tres" id="5_pan"]
+[ext_resource type="Resource" path="res://data/items/pan_seared_crab.tres" id="6_dish"]
+[ext_resource type="Script" path="res://scripts/data/reaction.gd" id="7_reaction"]
+
+[resource]
+script = ExtResource("7_reaction")
+id = &"sear_crab"
+consumes = Array[ExtResource("1_item")]([ExtResource("2_food")])
+requires = Array[ExtResource("1_item")]([ExtResource("5_pan")])
+elements = Array[ExtResource("3_element")]([ExtResource("4_fire")])
+amount = 5.0
+result = ExtResource("6_dish")
+quality = 3
