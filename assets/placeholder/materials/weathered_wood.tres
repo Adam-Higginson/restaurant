@@ -1,0 +1,11 @@
+[gd_resource type="StandardMaterial3D" format=3 uid="uid://c34vbm114kfc5"]
+
+[ext_resource type="Texture2D" path="res://assets/placeholder/textures/weathered_wood.png" id="1_mld8s"]
+
+[resource]
+albedo_texture = ExtResource("1_mld8s")
+metallic_specular = 0.25
+roughness = 0.9
+uv1_scale = Vector3(4, 4, 4)
+uv1_triplanar = true
+texture_filter = 0
