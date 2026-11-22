@@ -266,6 +266,34 @@ A growing glossary of the Godot concepts this project uses: what each one is, in
 
 **Default arguments.** A parameter with `= value` can be left out by callers: `func hold_shot(shot: Marker3D, cut: bool = false)`. It lets a function grow a new option without changing the code that already calls it. *Ours:* `CameraRig.hold_shot` and `release_shot` gained `cut`; `ScreenFade.fade_in` and `fade_out` gained `seconds`.
 
+## Combat feel and models (#107)
+
+**`Engine.time_scale`.** Godot's dial for how fast game time passes: every `delta` is multiplied by it. Turned almost to 0 everything that moves by `delta` stops, but `_process` and `_physics_process` still run (with a tiny delta) and sound carries on. *Ours:* `HitStop` turns it down for a few physics ticks when a blow lands, and back up after, even if it's freed mid-freeze (`_exit_tree`).
+
+**`CPUParticles3D` one-shot bursts.** A particle emitter whose particles are meshes. With `one_shot` and `explosiveness` 1 it throws all its particles at once; `restart()` throws another burst. CPU particles need no shader compiled the first time they fire, so there's no stutter on the first hit. *Ours:* the crab's `Chips` and `Wisps`, the pan's `Sparks`.
+
+**`material_overlay`.** A second material drawn over a mesh on top of its own, without replacing it. *Ours:* `FogCrab` lays a white unshaded one over every mesh of its model for the flash when struck.
+
+**`ImmediateMesh`.** A mesh you rebuild in code every frame: `clear_surfaces()`, then `surface_begin`, a colour and a point per vertex, `surface_end`. *Ours:* `KnifeTrail`, a ribbon through where the blade has been.
+
+**Screen-reading shaders (`hint_screen_texture`).** A `canvas_item` shader can read what's already been drawn behind it, and change it: tint it, blur it, drain its colour. Whatever draws after it isn't affected. *Ours:* `HurtOverlay` (`shaders/hurt_overlay.gdshader`), the first thing in the HUD so the hearts and toolbar stay untouched.
+
+**Audio bus effects.** Every sound goes through a bus (`Master`, `Ambience`), and a bus can have effects such as a low-pass filter. Its settings can change while the game runs: `AudioServer.get_bus_effect` gives you the effect, and `set_bus_effect_enabled` turns it on and off. *Ours:* the `Muffle` low-pass on Master (`default_bus_layout.tres`), swept down by `HitFeel` when you're hurt.
+
+**Skeletons and bones (`Skeleton3D`).** An animated model is a mesh "skinned" to a skeleton: each vertex follows a few bones by weight, so turning a bone bends the mesh. Bones are named and posed in code with `set_bone_pose_rotation` and `set_bone_pose_scale`. *Ours:* `CharacterModel` puts every part on one skeleton and scales the head bone; `FogCrab` lifts the claws through the arm bones.
+
+**`BoneAttachment3D`.** A node that follows one bone of a skeleton, so anything under it moves with that bone. *Ours:* `CharacterModel.right_hand` and `left_hand`, which hold the knife and pan.
+
+**`AnimationPlayer` and `AnimationLibrary`.** Animations live in libraries on a player, named `library/animation`. Each track moves one thing, for a bone written `path/to/Skeleton3D:bone`, so changing the path points an animation at another skeleton with the same bone names. Godot drops a `_Loop` ending from imported names and makes those animations loop. *Ours:* `CharacterModel.retarget` copies the Universal Animation Library's animations onto our skeleton, keeping only rotations.
+
+**Advancing an animation by hand.** With `callback_mode_process` set to Manual, an `AnimationPlayer` only moves on when you call `advance(delta)`. You can then adjust its bones after it, in the same frame. *Ours:* `FogCrab._animate` plays the crab's walk, then lifts its claws on top.
+
+**Mesh arrays (`ArrayMesh`).** `surface_get_arrays` gives a mesh's raw data (positions, bone indices and weights, and the index list of triangles), and `add_surface_from_arrays` builds a mesh from data. *Ours:* `CharacterModel.cut_out` keeps only the triangles the head and neck bones move, to take a head off a whole body.
+
+**Static variables.** `static var` belongs to the class rather than to each node, so every instance (and tests) sees the same one. *Ours:* `CharacterModel.packs_enabled`, which tests switch off, and its cache of cut heads.
+
+**Blender's command line.** `blender -b file.blend --python script.py -- args` runs Blender without a window, opens the file and runs a Python script on it. *Ours:* `tools/blend_to_glb.py` turns the crab's `.blend` into a `.glb` Godot can import.
+
 ## The intro's water half (#102)
 
 **AnimationPlayer and clips.** An `AnimationPlayer` records properties changing over time (a position, a light's brightness) as animations with keyframes, and plays them back. Select one in the editor and the Animation panel at the bottom shows its timeline: pick a clip, drag the playhead to scrub, move keys to retime. A clip can loop. *Ours:* `Clips` in `scenes/prototype/intro/underwater.tscn` (`sinking`, `lantern_descends`, `offered`, `taken`) and in `rescue_set.tscn` (`title_drift`, `dive`), played by `ClipCues` for `@play` and `@start`.

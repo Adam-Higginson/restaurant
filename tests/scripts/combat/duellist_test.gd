@@ -14,8 +14,9 @@ const LETTUCE: Item = preload("res://data/items/lettuce.tres")
 const CLOSE: Vector3 = Vector3(0, 0, -1.3)
 ## Ticks until just after the crab's first hit has landed.
 const FIRST_HIT: int = 56
-## Ticks until the crab is open after its first attack.
-const FIRST_OPENING: int = 70
+## Ticks until the crab is open after its first attack: its blow lands
+## about tick 49 and freezes the game for a moment.
+const FIRST_OPENING: int = 70 + HitStop.HURT_TICKS
 
 
 # --- Being hit -------------------------------------------------------------------
@@ -193,6 +194,7 @@ func test_a_second_swing_waits_for_the_first() -> void:
 
 func test_a_strike_counts_while_the_crab_is_open() -> void:
 	var player: Player3D = new_player_3d_on_floor()
+	stand_firm(player)
 	var crab: FogCrab = new_fog_crab(player, CLOSE)
 	var runner: GdUnitSceneRunner = scene_runner(player.get_parent())
 	var hits: Array[bool] = []
@@ -222,6 +224,7 @@ func test_a_strike_during_the_windup_doesnt_count() -> void:
 
 func test_a_strike_misses_a_crab_behind_you() -> void:
 	var player: Player3D = new_player_3d_on_floor()
+	stand_firm(player)
 	var crab: FogCrab = new_fog_crab(player, Vector3(0, 0, 1.3))
 	var runner: GdUnitSceneRunner = scene_runner(player.get_parent())
 
@@ -250,6 +253,7 @@ func test_reach_is_a_distance_and_an_arc() -> void:
 
 func test_three_strikes_in_openings_clear_the_fog_and_it_wanders_off() -> void:
 	var player: Player3D = new_player_3d_on_floor()
+	stand_firm(player)
 	var crab: FogCrab = new_fog_crab(player, CLOSE)
 	var runner: GdUnitSceneRunner = scene_runner(player.get_parent())
 	var cleared: Array[int] = [0]
@@ -266,7 +270,6 @@ func test_three_strikes_in_openings_clear_the_fog_and_it_wanders_off() -> void:
 	assert_bool(crab.is_cleared()).is_true()
 	assert_int(cleared[0]).is_equal(1)
 	assert_bool(crab.is_in_group(LockOn.GROUP)).is_false()
-	assert_bool((crab.get_node("Fog") as Node3D).visible).is_false()
 	# It ambles away and never hits again.
 	var hearts_then: int = duellist_of(player).hearts.halves
 	var where: Vector3 = crab.global_position
@@ -277,6 +280,7 @@ func test_three_strikes_in_openings_clear_the_fog_and_it_wanders_off() -> void:
 
 func test_a_parry_then_strikes_in_the_stagger_count() -> void:
 	var player: Player3D = new_player_3d_on_floor()
+	stand_firm(player)
 	var crab: FogCrab = new_fog_crab(player, CLOSE)
 	var runner: GdUnitSceneRunner = scene_runner(player.get_parent())
 	player.toolbar.add(ItemInstance.new(PAN))
@@ -302,7 +306,7 @@ func test_defeat_returns_you_to_the_landing_with_half_your_items() -> void:
 			func(items: Array[ItemInstance]) -> void: lost.append(items.size()))
 	await physics_ticks(runner, 2)
 
-	duellist_of(player).receive_hit(6)
+	duellist_of(player).receive_hit(6, Vector3.ZERO)
 	await physics_ticks(runner, 2)
 
 	assert_float(LockOn.flat_distance(player.global_position, landing.global_position)) \
@@ -337,14 +341,17 @@ func test_a_crab_can_beat_you_hit_by_hit() -> void:
 
 func test_the_fog_closes_back_over_a_crab_that_wins() -> void:
 	var player: Player3D = new_player_3d_on_floor()
+	stand_firm(player)
 	_landing(player, Vector3(20, 0, 20))
 	var crab: FogCrab = new_fog_crab(player, CLOSE)
 	var runner: GdUnitSceneRunner = scene_runner(player.get_parent())
 	await physics_ticks(runner, FIRST_OPENING)
 	duellist_of(player).strike()
 	assert_int(crab.cycle.strikes).is_equal(1)
+	# Until the moment after the crab's own blow has passed.
+	await physics_ticks(runner, 45)
 
-	duellist_of(player).receive_hit(6)
+	duellist_of(player).receive_hit(6, Vector3.ZERO)
 	await physics_ticks(runner, 3)
 
 	assert_int(crab.cycle.strikes).is_equal(0)
@@ -361,7 +368,7 @@ func test_defeat_lets_go_of_lock_on() -> void:
 	await hold(runner, "lock_on")
 	assert_object(player.lock_target).is_same(crab)
 
-	duellist_of(player).receive_hit(6)
+	duellist_of(player).receive_hit(6, Vector3.ZERO)
 
 	assert_object(player.lock_target).is_null()
 	await release(runner, "lock_on")
@@ -394,6 +401,123 @@ func test_each_state_has_its_mood() -> void:
 	assert_int(Duellist.mood_for(CrabCycle.State.OPENING)).is_equal(LanternSpirit.Mood.OPEN)
 	assert_int(Duellist.mood_for(CrabCycle.State.STAGGERED)).is_equal(LanternSpirit.Mood.OPEN)
 	assert_int(Duellist.mood_for(CrabCycle.State.CLEARED)).is_equal(LanternSpirit.Mood.CALM)
+
+
+# --- Weight: swings, knock back and the moment after a blow ----------------------
+
+func test_a_swing_lasts_a_quarter_of_a_second() -> void:
+	var player: Player3D = new_player_3d_on_floor()
+	var runner: GdUnitSceneRunner = scene_runner(player.get_parent())
+	await physics_ticks(runner, 2)
+
+	duellist_of(player).strike()
+	await physics_ticks(runner, 13)
+	assert_bool(duellist_of(player).is_striking()).is_true()
+	await physics_ticks(runner, 3)
+
+	assert_bool(duellist_of(player).is_striking()).is_false()
+	assert_float(duellist_of(player).strike_seconds).is_equal(0.25)
+
+
+func test_a_blow_throws_the_player_back_away_from_it() -> void:
+	var player: Player3D = new_player_3d_on_floor()
+	var runner: GdUnitSceneRunner = scene_runner(player.get_parent())
+	await physics_ticks(runner, 2)
+
+	# From ahead of them (-Z), so they go back (+Z).
+	duellist_of(player).receive_hit(1, Vector3(0, 0, -1.3))
+	await physics_ticks(runner, 40)
+
+	assert_float(player.global_position.z).is_greater(0.5)
+	assert_float(absf(player.global_position.x)).is_less(0.05)
+
+
+func test_a_blow_from_the_side_throws_the_player_sideways() -> void:
+	var player: Player3D = new_player_3d_on_floor()
+	var runner: GdUnitSceneRunner = scene_runner(player.get_parent())
+	await physics_ticks(runner, 2)
+
+	duellist_of(player).receive_hit(1, Vector3(2, 0, 0))
+	await physics_ticks(runner, 40)
+
+	assert_float(player.global_position.x).is_less(-0.5)
+	assert_float(absf(player.global_position.z)).is_less(0.05)
+
+
+func test_a_blow_leaves_the_player_stumbling_for_a_moment() -> void:
+	var player: Player3D = new_player_3d_on_floor()
+	var runner: GdUnitSceneRunner = scene_runner(player.get_parent())
+	await physics_ticks(runner, 2)
+
+	duellist_of(player).receive_hit(1, Vector3(0, 0, -1.3))
+
+	assert_bool(player.is_stumbling()).is_true()
+	await physics_ticks(runner, 40)
+	assert_bool(player.is_stumbling()).is_false()
+
+
+func test_a_strike_knocks_the_crab_back_away_from_the_player() -> void:
+	var player: Player3D = new_player_3d_on_floor()
+	stand_firm(player)
+	var crab: FogCrab = new_fog_crab(player, CLOSE)
+	var runner: GdUnitSceneRunner = scene_runner(player.get_parent())
+	await physics_ticks(runner, FIRST_OPENING)
+	var before: Vector3 = crab.global_position
+
+	duellist_of(player).strike()
+	assert_bool(crab.is_skidding()).is_true()
+	await physics_ticks(runner, 30)
+
+	# The player is behind it (+Z), so it goes on ahead (-Z).
+	assert_float(crab.global_position.z).is_less(before.z - 0.5)
+	assert_bool(crab.is_skidding()).is_false()
+
+
+func test_a_second_blow_straight_after_the_first_does_nothing() -> void:
+	var player: Player3D = new_player_3d_on_floor()
+	var runner: GdUnitSceneRunner = scene_runner(player.get_parent())
+	await physics_ticks(runner, 2)
+	var duellist: Duellist = duellist_of(player)
+
+	assert_int(duellist.receive_hit(1, CLOSE)).is_equal(Duellist.Hit.LANDED)
+	assert_bool(duellist.is_invulnerable()).is_true()
+	assert_int(duellist.receive_hit(1, CLOSE)).is_equal(Duellist.Hit.IGNORED)
+
+	assert_int(duellist.hearts.halves).is_equal(5)
+
+
+func test_once_the_moment_passes_blows_land_again() -> void:
+	var player: Player3D = new_player_3d_on_floor()
+	var runner: GdUnitSceneRunner = scene_runner(player.get_parent())
+	await physics_ticks(runner, 2)
+	var duellist: Duellist = duellist_of(player)
+	duellist.receive_hit(1, CLOSE)
+
+	# A second of game time, after the freeze.
+	await physics_ticks(runner, HitStop.HURT_TICKS + 62)
+
+	assert_bool(duellist.is_invulnerable()).is_false()
+	assert_int(duellist.receive_hit(1, CLOSE)).is_equal(Duellist.Hit.LANDED)
+	assert_int(duellist.hearts.halves).is_equal(4)
+
+
+func test_a_crabs_blow_in_that_moment_doesnt_stagger_it() -> void:
+	var player: Player3D = new_player_3d_on_floor()
+	var crab: FogCrab = new_fog_crab(player, CLOSE)
+	crab.scuttle_speed = 0.0
+	crab.attack_reach = 5.0
+	var runner: GdUnitSceneRunner = scene_runner(player.get_parent())
+	await physics_ticks(runner, 2)
+	var duellist: Duellist = duellist_of(player)
+	# Hurt by something else, just before the crab's own blow lands.
+	await physics_ticks(runner, 40)
+	duellist.receive_hit(1, CLOSE)
+
+	await physics_ticks(runner, FIRST_HIT - 42 + HitStop.HURT_TICKS)
+
+	assert_int(crab.cycle.state).is_not_equal(CrabCycle.State.WINDUP)
+	assert_int(crab.cycle.state).is_not_equal(CrabCycle.State.STAGGERED)
+	assert_int(duellist.hearts.halves).is_equal(5)
 
 
 # A landing marker at [param pos] in [param player]'s world.

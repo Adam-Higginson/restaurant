@@ -3,6 +3,9 @@
 [ext_resource type="Material" path="res://assets/placeholder/materials/greybox_player.tres" id="1_body"]
 [ext_resource type="Material" path="res://assets/placeholder/materials/greybox_dark_wood.tres" id="2_eyes"]
 [ext_resource type="Material" path="res://assets/placeholder/materials/greybox_wood.tres" id="3_satchel"]
+[ext_resource type="Script" path="res://scripts/art/character_model.gd" id="4_character"]
+[ext_resource type="Resource" path="res://data/characters/boy.tres" id="5_boy"]
+[ext_resource type="Resource" path="res://data/characters/girl.tres" id="6_girl"]
 
 [sub_resource type="CapsuleMesh" id="Mesh_Body"]
 radius = 0.38
@@ -48,3 +51,11 @@ mesh = SubResource("Mesh_Eye")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.42, 0.7, 0)
 material_override = ExtResource("3_satchel")
 mesh = SubResource("Mesh_Satchel")
+
+[node name="Character" type="Node3D" parent="." node_paths=PackedStringArray("stand_ins")]
+script = ExtResource("4_character")
+boy = ExtResource("5_boy")
+girl = ExtResource("6_girl")
+animation_files = PackedStringArray("res://assets/third_party/quaternius_ual1/Universal Animation Library[Standard]/Unreal-Godot/UAL1_Standard.glb", "res://assets/third_party/quaternius_ual2/Universal Animation Library 2[Standard]/Unreal-Godot/UAL2_Standard.glb")
+idle_animation = &"Swim_Idle"
+stand_ins = [NodePath("../Body"), NodePath("../Head"), NodePath("../EyeLeft"), NodePath("../EyeRight"), NodePath("../Satchel")]

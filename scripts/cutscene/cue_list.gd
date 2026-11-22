@@ -30,6 +30,7 @@ const USAGE: Dictionary[StringName, String] = {
 	&"look": "@look hook_lantern determined (a look for his eyes: calm, surprised, "
 			+ "determined, worried, pleading, effort, tired, asleep, pleased; or for his "
 			+ "glass: fogged, clear, streaked, dry, cracked, mended)",
+	&"who_are_you": "@who_are_you (asks a boy or a girl, and waits for the answer)",
 }
 
 
@@ -67,7 +68,7 @@ static func _fits(cue: StringName, args: PackedStringArray) -> bool:
 			return args.size() == 1
 		&"muffle":
 			return args.size() == 1 and ["on", "off"].has(args[0])
-		&"lightning":
+		&"lightning", &"who_are_you":
 			return args.is_empty()
 		&"look":
 			return args.size() == 2 and LanternFace.knows(args[1])

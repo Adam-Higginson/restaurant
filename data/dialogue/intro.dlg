@@ -25,7 +25,8 @@
 
 # Her name. The lantern on his hook at the stern, swinging, lights the
 # carved board a few letters at a time. It waits for any button. A saved
-# voyage carries on from here; on a new one, he hears something.
+# voyage carries on from here; a new one asks who you are, then he hears
+# something.
 ~ start
 @hide heron
 @play takes_watch
@@ -36,7 +37,7 @@
 @sound confirm
 ? saved_voyage
 -> carry_on
--> he_hears
+-> who_are_you
 
 # A saved voyage: he turns from her name to the lit windows, pleased to see
 # you. Then to black, and the Opening shows which day it is.
@@ -48,6 +49,12 @@
 @fade out 0.8
 @play off_watch
 @shot free cut
+
+# A new voyage: who are you, a boy or a girl? Asked over her name, and it
+# waits for the answer.
+~ who_are_you
+@who_are_you
+-> he_hears
 
 # He's heard something. The swinging stops, and he's off the hook and over
 # the side, and her name goes dark.

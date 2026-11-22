@@ -8,9 +8,25 @@
 [ext_resource type="Script" path="res://ui/action_prompt.gd" id="4_prompt"]
 [ext_resource type="Script" path="res://ui/memory_card.gd" id="9_memory"]
 [ext_resource type="Script" path="res://ui/hearts_bar.gd" id="10_hearts"]
+[ext_resource type="Script" path="res://ui/hurt_overlay.gd" id="11_hurt"]
+[ext_resource type="Shader" path="res://shaders/hurt_overlay.gdshader" id="12_hurt_shader"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_hurt"]
+shader = ExtResource("12_hurt_shader")
 
 [node name="Hud3D" type="CanvasLayer"]
 script = ExtResource("1_hud")
+
+[node name="HurtOverlay" type="ColorRect" parent="."]
+unique_name_in_owner = true
+material = SubResource("ShaderMaterial_hurt")
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+script = ExtResource("11_hurt")
 
 [node name="Toolbar" type="Control" parent="."]
 unique_name_in_owner = true

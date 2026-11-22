@@ -14,6 +14,10 @@ static var test_save: String = "user://test_voyage%s.save" % OS.get_environment(
 
 func _init() -> void:
 	SaveGame.path = test_save
+	# Tests never build the player from the pack files, so they run the same
+	# with or without them (CI has none). CharacterModel's own tests turn it
+	# back on with small stand-in files.
+	CharacterModel.packs_enabled = false
 
 
 ## Waits for exactly [param ticks] physics ticks.
@@ -187,6 +191,13 @@ func new_fog_crab(player: Player3D, pos: Vector3) -> FogCrab:
 	crab.position = pos
 	player.get_parent().add_child(crab)
 	return crab
+
+
+## Keeps [param player] where they stand when a blow lands, instead of being
+## thrown back, so a crab in front stays within knife reach: for tests about
+## striking, not about being knocked back.
+func stand_firm(player: Player3D) -> void:
+	duellist_of(player).knockback_speed = 0.0
 
 
 ## [param player]'s [Duellist]: their hearts, knife strike and pan parry.

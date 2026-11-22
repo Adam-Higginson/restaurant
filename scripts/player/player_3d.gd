@@ -19,12 +19,17 @@ const GROUP: StringName = &"player"
 
 ## Walking speed in metres per second.
 @export var speed: float = 5.0
+## How many times faster you go while holding sprint (Shift, or clicking the
+## left stick in).
+@export var sprint_factor: float = 2.0
 ## How fast the model turns to face the way you walk, in degrees per second.
 ## Not used yet: the model turns at once.
 @export var turn_speed: float = 720.0
 ## How far, in degrees, you must swing the stick while walking through a
 ## camera switch before "up" follows the new camera.
 @export var reaim_degrees: float = 45.0
+## How fast a knock back dies away, in metres per second, per second.
+@export var knockback_fade: float = 20.0
 ## The tools on the toolbar at the start, from the first slot on.
 @export var start_tools: Array[HandTool] = []
 
@@ -36,6 +41,12 @@ var controls_enabled: bool = true
 var facing: Vector3:
 	get:
 		return -_model.global_basis.z
+
+## How fast the player moves when they walk, in metres per second: their
+## [member speed], or faster while sprinting.
+var move_speed: float:
+	get:
+		return speed * sprint_factor if is_sprinting() else speed
 
 ## Whether the player walked on the last physics tick, from your input
 ## (riding the sailing ship doesn't count).
@@ -62,6 +73,10 @@ var camera_rig: CameraRig:
 		return _camera_rig
 
 var _walking: bool = false
+## The flat velocity a blow threw the player back with, dying away.
+var _push: Vector3 = Vector3.ZERO
+## Seconds left of stumbling after a blow, while the stick is ignored.
+var _stumble_left: float = 0.0
 ## The camera yaw movement used last tick.
 var _move_yaw: float = 0.0
 ## Whether movement is held to [member _held_yaw] after a camera switch.
@@ -84,11 +99,13 @@ func _ready() -> void:
 
 func _physics_process(delta: float) -> void:
 	var input: Vector2 = Vector2.ZERO
-	if controls_enabled:
+	_stumble_left = maxf(_stumble_left - delta, 0.0)
+	if controls_enabled and not is_stumbling():
 		input = Input.get_vector("move_left", "move_right", "move_up", "move_down")
 	var direction: Vector3 = camera_relative(input, _movement_yaw(input))
-	velocity.x = direction.x * speed
-	velocity.z = direction.z * speed
+	velocity.x = direction.x * move_speed + _push.x
+	velocity.z = direction.z * move_speed + _push.z
+	_push = _push.move_toward(Vector3.ZERO, knockback_fade * delta)
 	if not is_on_floor():
 		velocity += get_gravity() * delta
 	# Moves and slides along walls. Standing on a moving body (the ship),
@@ -114,6 +131,24 @@ func _unhandled_input(event: InputEvent) -> void:
 				get_viewport().set_input_as_handled()
 				toolbar.select(i)
 				return
+
+
+## Throws the player along [param push], a flat velocity in metres per second
+## that dies away (see [member knockback_fade]), and has them stumble, deaf to
+## the stick, for [param stumble_seconds]. A zero push stops any knock back.
+func knock_back(push: Vector3, stumble_seconds: float) -> void:
+	_push = Vector3(push.x, 0.0, push.z)
+	_stumble_left = stumble_seconds
+
+
+## Whether the player is sprinting: holding sprint while they can move.
+func is_sprinting() -> bool:
+	return controls_enabled and not is_stumbling() and Input.is_action_pressed("sprint")
+
+
+## Whether the player is stumbling after a blow, so the stick does nothing.
+func is_stumbling() -> bool:
+	return _stumble_left > 0.0
 
 
 ## Turns the model to face [param point], a place in the world, at once

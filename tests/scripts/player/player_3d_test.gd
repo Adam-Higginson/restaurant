@@ -101,6 +101,36 @@ func test_keeps_its_heading_when_the_camera_switches_mid_walk() -> void:
 	assert_vector(moved.normalized()).is_equal_approx(Vector3.FORWARD, NEAR)
 
 
+func test_holding_sprint_goes_twice_as_far() -> void:
+	var player: Player3D = new_player_3d_on_floor()
+	var runner: GdUnitSceneRunner = scene_runner(player.get_parent())
+	await physics_ticks(runner, 2)
+	var start: Vector3 = player.global_position
+	await walk(runner, "move_up", 30)
+	var walked: float = player.global_position.distance_to(start)
+
+	start = player.global_position
+	runner.simulate_action_press("sprint")
+	await walk(runner, "move_up", 30)
+	runner.simulate_action_release("sprint")
+	var sprinted: float = player.global_position.distance_to(start)
+
+	assert_float(sprinted / walked).is_equal_approx(player.sprint_factor, 0.15)
+
+
+func test_you_cant_sprint_while_stumbling() -> void:
+	var player: Player3D = new_player_3d_on_floor()
+	var runner: GdUnitSceneRunner = scene_runner(player.get_parent())
+	await physics_ticks(runner, 2)
+	runner.simulate_action_press("sprint")
+
+	player.knock_back(Vector3.ZERO, 1.0)
+
+	assert_bool(player.is_sprinting()).is_false()
+	assert_float(player.move_speed).is_equal(player.speed)
+	runner.simulate_action_release("sprint")
+
+
 func test_follows_the_new_camera_after_letting_go() -> void:
 	var player: Player3D = new_player_3d_on_floor()
 	var runner: GdUnitSceneRunner = scene_runner(player.get_parent())

@@ -20,6 +20,14 @@
 [ext_resource type="AudioStream" path="res://assets/audio/combat/pan_up.tres" id="33_pan_up"]
 [ext_resource type="AudioStream" path="res://assets/audio/combat/clang.tres" id="34_clang"]
 [ext_resource type="AudioStream" path="res://assets/audio/combat/hurt.tres" id="35_hurt"]
+[ext_resource type="AudioStream" path="res://assets/audio/combat/heartbeat.tres" id="36_heartbeat"]
+[ext_resource type="Script" path="res://scripts/art/third_party_model.gd" id="37_model"]
+[ext_resource type="Script" path="res://scripts/art/character_model.gd" id="38_character"]
+[ext_resource type="Resource" path="res://data/characters/boy.tres" id="39_boy"]
+[ext_resource type="Resource" path="res://data/characters/girl.tres" id="39_girl"]
+[ext_resource type="Script" path="res://scripts/combat/hit_stop.gd" id="40_stop"]
+[ext_resource type="Script" path="res://scripts/combat/hit_feel.gd" id="41_feel"]
+[ext_resource type="Script" path="res://scripts/combat/knife_trail.gd" id="42_trail"]
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_raosb"]
 radius = 0.4
@@ -78,6 +86,14 @@ rings = 1
 shading_mode = 0
 albedo_color = Color(1, 0.85, 0.25, 1)
 
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_spark"]
+shading_mode = 0
+albedo_color = Color(1, 0.86, 0.45, 1)
+
+[sub_resource type="BoxMesh" id="BoxMesh_spark"]
+material = SubResource("StandardMaterial3D_spark")
+size = Vector3(0.04, 0.04, 0.04)
+
 [node name="Player" type="CharacterBody3D" unique_id=1530964768]
 floor_constant_speed = true
 floor_snap_length = 0.2
@@ -115,6 +131,14 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.42, 0.7, 0)
 material_override = ExtResource("4_ttec1")
 mesh = SubResource("BoxMesh_7uydm")
 
+[node name="Character" type="Node3D" parent="Model" node_paths=PackedStringArray("stand_ins", "player")]
+script = ExtResource("38_character")
+boy = ExtResource("39_boy")
+girl = ExtResource("39_girl")
+animation_files = PackedStringArray("res://assets/third_party/quaternius_ual1/Universal Animation Library[Standard]/Unreal-Godot/UAL1_Standard.glb", "res://assets/third_party/quaternius_ual2/Universal Animation Library 2[Standard]/Unreal-Godot/UAL2_Standard.glb")
+stand_ins = [NodePath("../Body"), NodePath("../Head"), NodePath("../EyeLeft"), NodePath("../EyeRight"), NodePath("../Satchel")]
+player = NodePath("../..")
+
 [node name="Knife" type="Node3D" parent="Model"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.9, 0)
 visible = false
@@ -124,11 +148,56 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -0.95)
 material_override = SubResource("StandardMaterial3D_blade")
 mesh = SubResource("BoxMesh_blade")
 
-[node name="Pan" type="MeshInstance3D" parent="Model"]
+[node name="KnifeModel" type="Node3D" parent="Model/Knife" node_paths=PackedStringArray("stand_ins")]
+transform = Transform3D(1, 0, 0, 0, 0, 1, 0, -1, 0, 0, 0, -0.35)
+script = ExtResource("37_model")
+path = "res://assets/third_party/kaykit_restaurant/Assets/gltf/knife.gltf"
+fit_size = Vector3(0.3, 1.15, 0.12)
+stand_ins = [NodePath("../Blade")]
+grain_metres = 0.08
+
+[node name="Heel" type="Marker3D" parent="Model/Knife"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -0.5)
+
+[node name="Tip" type="Marker3D" parent="Model/Knife"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -1.4)
+
+[node name="Pan" type="Node3D" parent="Model"]
 transform = Transform3D(1, 0, 0, 0, 0, -1, 0, 1, 0, 0, 1.0, -0.55)
 visible = false
+
+[node name="Plate" type="MeshInstance3D" parent="Model/Pan"]
 material_override = ExtResource("23_iron")
 mesh = SubResource("CylinderMesh_pan")
+
+[node name="PanModel" type="Node3D" parent="Model/Pan" node_paths=PackedStringArray("stand_ins")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.06, 0.18)
+script = ExtResource("37_model")
+path = "res://assets/third_party/kaykit_restaurant/Assets/gltf/pan_A.gltf"
+fit_size = Vector3(0.7, 0.2, 1.05)
+stand_ins = [NodePath("../Plate")]
+grain_metres = 0.08
+
+[node name="Sparks" type="CPUParticles3D" parent="Model"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.0, -0.6)
+emitting = false
+amount = 16
+lifetime = 0.3
+one_shot = true
+explosiveness = 1.0
+mesh = SubResource("BoxMesh_spark")
+direction = Vector3(0, 0.4, -1)
+spread = 55.0
+gravity = Vector3(0, -6, 0)
+initial_velocity_min = 4.0
+initial_velocity_max = 8.0
+scale_amount_min = 0.6
+scale_amount_max = 1.4
+
+[node name="KnifeTrail" type="MeshInstance3D" parent="." node_paths=PackedStringArray("heel", "tip")]
+script = ExtResource("42_trail")
+heel = NodePath("../Model/Knife/Heel")
+tip = NodePath("../Model/Knife/Tip")
 
 [node name="CameraRig" type="Node3D" parent="." unique_id=21507693]
 physics_interpolation_mode = 2
@@ -137,11 +206,11 @@ top_level = true
 script = ExtResource("5_qlp8k")
 
 [node name="Pitch" type="Node3D" parent="CameraRig" unique_id=1220587874]
-transform = Transform3D(1, 0, 0, 0, 0.9396926, 0.34202012, 0, -0.34202012, 0.9396926, 0, 0, 0)
+transform = Transform3D(1, 0, 0, 0, 0.9781476, 0.20791169, 0, -0.20791169, 0.9781476, 0, 0, 0)
 
 [node name="SpringArm3D" type="SpringArm3D" parent="CameraRig/Pitch" unique_id=242309488]
 shape = SubResource("SphereShape3D_jaqp2")
-spring_length = 5.0
+spring_length = 2.2
 margin = 0.1
 
 [node name="FreeSpot" type="Marker3D" parent="CameraRig/Pitch/SpringArm3D"]
@@ -174,6 +243,12 @@ script = ExtResource("21_lock")
 [node name="Duellist" type="Node" parent="."]
 script = ExtResource("22_duel")
 
+[node name="HitStop" type="Node" parent="."]
+script = ExtResource("40_stop")
+
+[node name="HitFeel" type="Node" parent="."]
+script = ExtResource("41_feel")
+
 [node name="DuelSounds" type="Node" parent="."]
 script = ExtResource("24_sounds")
 
@@ -200,6 +275,12 @@ volume_db = 6.0
 [node name="Hurt" type="AudioStreamPlayer" parent="DuelSounds"]
 stream = ExtResource("35_hurt")
 volume_db = -6.0
+
+[node name="Heartbeat" type="AudioStreamPlayer" parent="DuelSounds"]
+stream = ExtResource("36_heartbeat")
+volume_db = -4.0
+pitch_scale = 0.5
+max_polyphony = 2
 
 [node name="LanternSpirit" parent="." unique_id=1650650065 node_paths=PackedStringArray("player", "detector") instance=ExtResource("20_spirit")]
 player = NodePath("..")

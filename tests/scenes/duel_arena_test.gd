@@ -111,7 +111,7 @@ func test_a_pan_lost_in_defeat_is_given_back_here() -> void:
 	player.toolbar.add(pan)
 	player.toolbar.select(0)
 
-	duellist_of(player).receive_hit(6)
+	duellist_of(player).receive_hit(6, Vector3.ZERO)
 	await physics_ticks(runner, 2)
 
 	assert_bool(duellist_of(player).has_pan()).is_true()

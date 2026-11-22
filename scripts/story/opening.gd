@@ -4,13 +4,14 @@ extends Node
 ## [code]data/dialogue/intro.dlg[/code]). It opens on the title over the
 ## dark sea, and waits for a button.
 ##
-## A new voyage then goes under: the rescue, and you wake by your bunk at
-## night with the storm outside, the lantern across the room and the captain
-## in the doorway. Then the ship is yours.
+## A new voyage then asks who you are, a boy or a girl (the script's
+## [code]@who_are_you[/code], see [ChoiceCues]), and goes under: the rescue,
+## and you wake by your bunk at night with the storm outside, the lantern
+## across the room and the captain in the doorway. Then the ship is yours.
 ##
-## A saved voyage carries on instead: after the title, its day ("Day 3.
-## Morning"), and the lantern welcomes you back. The script can tell which
-## it is by asking [constant SAVED_FACT].
+## A saved voyage carries on instead, as whoever you were: after the title,
+## its day ("Day 3. Morning"), and the lantern welcomes you back. The script
+## can tell which it is by asking [constant SAVED_FACT].
 ##
 ## Set [member skip] to start straight on deck instead (tests and tools do).
 
@@ -74,6 +75,7 @@ func _play() -> void:
 	if carrying_on:
 		# Before the title, so the sea behind it is as the voyage left it.
 		SaveGame.restore(saved, Game.memories, time, spirit, Game.dialogue)
+		Game.set_look(SaveGame.look_of(saved))
 	Game.dialogue.set_fact(SAVED_FACT, func() -> int: return 1 if carrying_on else 0)
 	var played: bool = await _play_cutscene()
 	if carrying_on:

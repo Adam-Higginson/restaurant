@@ -4,7 +4,7 @@ extends GameTestSuite
 
 const ACTIONS: Array[StringName] = [
 	&"move_up", &"move_down", &"move_left", &"move_right",
-	&"interact", &"use_tool", &"lock_on", &"parry",
+	&"interact", &"use_tool", &"lock_on", &"parry", &"sprint",
 ]
 
 
@@ -67,14 +67,23 @@ func test_the_mouse_buttons_interact_and_use_tools() -> void:
 	assert_array(_mouse_buttons(&"use_tool")).contains_exactly([MOUSE_BUTTON_LEFT])
 
 
-func test_lock_on_and_parry_are_on_the_triggers_shift_and_r() -> void:
+func test_lock_on_and_parry_are_on_the_triggers_q_and_r() -> void:
 	# Like OoT: target on the left trigger, shield on the right. See Controls
 	# in docs/GDD.md.
-	assert_array(_keys(&"lock_on")).contains_exactly([KEY_SHIFT])
+	assert_array(_keys(&"lock_on")).contains_exactly([KEY_Q])
 	assert_array(_mouse_buttons(&"lock_on")).contains_exactly([MOUSE_BUTTON_MIDDLE])
 	assert_array(_axes(&"lock_on")).contains_exactly([JOY_AXIS_TRIGGER_LEFT])
 	assert_array(_keys(&"parry")).contains_exactly([KEY_R])
 	assert_array(_axes(&"parry")).contains_exactly([JOY_AXIS_TRIGGER_RIGHT])
+
+
+func test_sprint_is_shift_or_clicking_the_left_stick() -> void:
+	assert_array(_keys(&"sprint")).contains_exactly([KEY_SHIFT])
+	var buttons: Array[JoyButton] = []
+	for event: InputEvent in InputMap.action_get_events(&"sprint"):
+		if event is InputEventJoypadButton:
+			buttons.append((event as InputEventJoypadButton).button_index)
+	assert_array(buttons).contains_exactly([JOY_BUTTON_LEFT_STICK])
 
 
 func test_debug_keys_are_on_the_keyboard() -> void:

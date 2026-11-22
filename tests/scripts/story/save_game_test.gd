@@ -12,6 +12,7 @@ func before_test() -> void:
 func after_test() -> void:
 	SaveGame.erase()
 	Game.memories.clear()
+	Game.set_look(PlayerLook.Body.BOY)
 
 
 func test_a_voyage_saves_and_reads_back() -> void:
@@ -140,3 +141,42 @@ func test_a_save_from_before_conversations_still_loads() -> void:
 
 	assert_bool(data.is_empty()).is_false()
 	assert_dict(state.to_dict()).is_empty()
+
+
+func test_who_you_are_is_saved_and_read_back() -> void:
+	var book: MemoryBook = MemoryBook.new(Catalog.load_default().memories)
+
+	assert_bool(SaveGame.write(SaveGame.capture(book, null, 1.0, null,
+			PlayerLook.Body.GIRL))).is_true()
+
+	assert_int(SaveGame.look_of(SaveGame.read())).is_equal(PlayerLook.Body.GIRL)
+
+
+func test_a_save_from_before_looks_were_chosen_is_a_boy() -> void:
+	var book: MemoryBook = MemoryBook.new(Catalog.load_default().memories)
+	var old: Dictionary = SaveGame.capture(book, null, 0.7)
+	old.erase("look")
+
+	assert_int(SaveGame.look_of(old)).is_equal(PlayerLook.Body.BOY)
+
+
+func test_starting_again_you_are_who_you_were() -> void:
+	SaveGame.write({"version": SaveGame.VERSION, "memories": [], "day": 2,
+			"morning": true, "warmth": 1.0, "look": "girl"})
+	var rig: Array[Node3D] = new_moored_ship_with_player(Vector3(0, 5.35, 7.5))
+	var ship: Ship = rig[0] as Ship
+	var player: Player3D = rig[1] as Player3D
+	var opening: Opening = Opening.new()
+	opening.player = player
+	opening.ship = ship
+	opening.title_seconds = 0.1
+	var fade: ScreenFade = (load("res://ui/screen_fade.tscn") as PackedScene).instantiate() 			as ScreenFade
+	fade.name = "ScreenFade"
+	fade.fade_seconds = 0.1
+	opening.add_child(fade)
+	ship.get_parent().add_child(opening)
+	var runner: GdUnitSceneRunner = scene_runner(ship.get_parent())
+
+	await physics_ticks(runner, 10)
+
+	assert_int(Game.look).is_equal(PlayerLook.Body.GIRL)

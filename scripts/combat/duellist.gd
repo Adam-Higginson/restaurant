@@ -21,6 +21,9 @@ extends Node
 ## Emitted when the knife is swung. [param hit] says whether it counted on
 ## anything.
 signal struck(hit: bool)
+## Emitted for each crab a strike counts on. [param cleared] says whether it
+## was the strike that cleared its fog.
+signal strike_landed(crab: FogCrab, cleared: bool)
 ## Emitted when a swing reaches a creature that isn't open, so it doesn't count.
 signal glanced
 ## Emitted when the pan goes up.
@@ -31,6 +34,16 @@ signal parried
 signal hurt(halves: int)
 ## Emitted after a defeat, with the items that were lost.
 signal defeated(lost: Array[ItemInstance])
+
+## What became of a blow aimed at the player.
+enum Hit {
+	## It landed: hearts were lost.
+	LANDED,
+	## The pan turned it away.
+	PARRIED,
+	## It came while they were still reeling from the last one, and did nothing.
+	IGNORED,
+}
 
 ## The group the duellist is in, so creatures can find who to fight.
 const GROUP: StringName = &"duellist"
@@ -46,11 +59,31 @@ const PAN_ID: StringName = &"frying_pan"
 ## How wide the swing is, in degrees, centred on the way the player faces.
 @export var strike_arc_degrees: float = 120.0
 ## How long a swing takes, in seconds. Another can't start until it's done.
-@export var strike_seconds: float = 0.5
+@export var strike_seconds: float = 0.25
 ## How long the pan stays up after a press, in seconds: the parry window.
 @export var parry_window_seconds: float = 0.3
 ## How long after the window before the pan can go up again, in seconds.
 @export var parry_recovery_seconds: float = 0.4
+## How long after a blow lands before another can, in seconds.
+@export var invulnerable_seconds: float = 1.0
+## How hard a blow throws the player back, in metres per second.
+@export var knockback_speed: float = 7.0
+## How long a blow leaves the player stumbling, deaf to the stick, in seconds.
+@export var stumble_seconds: float = 0.3
+## How hard a strike that counts knocks a crab back, in metres per second.
+@export var strike_push: float = 6.0
+## Where the knife sits in the character's right hand, when there's a
+## character (not the greybox): scaled to fit a hand, the handle through the
+## curled fingers and the blade out by the thumb. The hand bone starts at the
+## wrist and runs along +Y to the knuckles; the right hand's fingers curl
+## round towards -X, so the hole in the fist is up and to that side.
+@export var knife_grip: Transform3D = Transform3D(
+		Basis(Vector3.UP, PI).scaled(Vector3.ONE * 0.35), Vector3(-0.006, 0.097, -0.16))
+## Where the pan sits in the character's left hand, when there's a character:
+## the handle through the curled fingers, the pan raised like a shield. The
+## left hand mirrors the right: its fingers curl round towards +X.
+@export var pan_grip: Transform3D = Transform3D(
+		Basis(Vector3.RIGHT, PI).scaled(Vector3.ONE * 0.6), Vector3(0.035, 0.115, 0.36))
 
 ## The player's health. Created once and never replaced.
 var hearts: Hearts = null
@@ -59,8 +92,16 @@ var parry: ParryWindow = ParryWindow.new()
 
 ## Seconds left of the current swing.
 var _strike_left: float = 0.0
+## Seconds left before another blow can land.
+var _invulnerable_left: float = 0.0
 ## The crab whose fight the lantern is showing, or null.
 var _shown: FogCrab = null
+## Whether the knife and pan are in the character's hands, rather than
+## posed by code in front of the greybox.
+var _in_hands: bool = false
+## Where the knife and pan sit on the greybox, to put them back.
+var _knife_home: Transform3D
+var _pan_home: Transform3D
 
 @onready var _player: Player3D = get_parent() as Player3D
 @onready var _detector: InteractionDetector3D = $"../InteractionDetector"
@@ -68,6 +109,8 @@ var _shown: FogCrab = null
 @onready var _spirit: LanternSpirit = $"../LanternSpirit"
 @onready var _knife: Node3D = $"../Model/Knife"
 @onready var _pan: Node3D = $"../Model/Pan"
+@onready var _model: Node3D = $"../Model"
+@onready var _character: CharacterModel = get_node_or_null("../Model/Character") as CharacterModel
 
 
 func _ready() -> void:
@@ -79,11 +122,17 @@ func _ready() -> void:
 	_lock_on.target_changed.connect(_on_target_changed)
 	_knife.hide()
 	_pan.hide()
+	_knife_home = _knife.transform
+	_pan_home = _pan.transform
+	if _character != null:
+		_character.dressed.connect(_hold)
+		_hold(_character.character != null)
 
 
 func _physics_process(delta: float) -> void:
 	parry.tick(delta)
 	_strike_left = maxf(_strike_left - delta, 0.0)
+	_invulnerable_left = maxf(_invulnerable_left - delta, 0.0)
 
 
 func _process(_delta: float) -> void:
@@ -117,8 +166,10 @@ func strike() -> bool:
 				strike_reach, strike_arc_degrees):
 			continue
 		reached = true
-		if crab.take_strike():
+		if crab.take_strike(flat_direction(_player.global_position, crab.global_position)
+				* strike_push):
 			hit = true
+			strike_landed.emit(crab, crab.is_cleared())
 			if crab.is_cleared():
 				_spirit.remark(&"fog_cleared")
 	struck.emit(hit)
@@ -148,19 +199,38 @@ func raise_pan() -> bool:
 	return true
 
 
-## A hit of [param halves] half-hearts arriving. Returns whether it landed:
-## false if the pan turned it away. Losing the last heart is a defeat.
-func receive_hit(halves: int) -> bool:
+## Whether a blow would do nothing right now, because the last one landed
+## too recently.
+func is_invulnerable() -> bool:
+	return _invulnerable_left > 0.0
+
+
+## A blow of [param halves] half-hearts arriving from [param from], a place in
+## the world. Says what became of it (see [enum Hit]). One that lands throws
+## the player back away from [param from]; losing the last heart is a defeat.
+func receive_hit(halves: int, from: Vector3) -> Hit:
 	if parry.is_active() and has_pan():
 		parry.spend()
 		_spirit.excite()
 		parried.emit()
-		return false
+		return Hit.PARRIED
+	if is_invulnerable():
+		return Hit.IGNORED
 	hearts.hurt(halves)
+	_invulnerable_left = invulnerable_seconds
+	_player.knock_back(flat_direction(from, _player.global_position) * knockback_speed,
+			stumble_seconds)
 	hurt.emit(halves)
 	if hearts.is_empty():
 		_fall()
-	return true
+	return Hit.LANDED
+
+
+## The flat direction from [param from] to [param to], ignoring height: the
+## way a blow pushes. Zero if they're in the same spot.
+static func flat_direction(from: Vector3, to: Vector3) -> Vector3:
+	var away: Vector3 = Vector3(to.x - from.x, 0.0, to.z - from.z)
+	return away.normalized() if away.length() > 0.001 else Vector3.ZERO
 
 
 ## Whether [param point] is within a swing from [param from], facing
@@ -187,6 +257,7 @@ func _fall() -> void:
 	if landing != null:
 		_player.global_position = landing.global_position
 		_player.velocity = Vector3.ZERO
+		_player.knock_back(Vector3.ZERO, 0.0)
 		# A jump, not a move: draw them there at once rather than gliding over.
 		_player.reset_physics_interpolation()
 	hearts.refill()
@@ -232,11 +303,30 @@ static func mood_for(state: CrabCycle.State) -> LanternSpirit.Mood:
 	return LanternSpirit.Mood.CALM
 
 
-# Shows the knife sweeping across in front during a swing, and the pan held
-# up while a parry would work.
+# Puts the knife and pan in the character's hands when [param in_hands],
+# or back on the greybox.
+func _hold(in_hands: bool) -> void:
+	_in_hands = in_hands and _character.right_hand != null
+	if _in_hands:
+		_knife.reparent(_character.right_hand, false)
+		_knife.transform = knife_grip
+		_pan.reparent(_character.left_hand, false)
+		_pan.transform = pan_grip
+	else:
+		if _knife.get_parent() != _model:
+			_knife.reparent(_model, false)
+		if _pan.get_parent() != _model:
+			_pan.reparent(_model, false)
+		_knife.transform = _knife_home
+		_pan.transform = _pan_home
+
+
+# Shows the knife during a swing and the pan held up while a parry would
+# work. In the character's hands the animation moves them; on the greybox,
+# the knife sweeps across in front.
 func _pose_knife_and_pan() -> void:
 	_knife.visible = _strike_left > 0.0
-	if _knife.visible:
+	if _knife.visible and not _in_hands:
 		var through: float = 1.0 - _strike_left / strike_seconds
 		_knife.rotation.y = lerpf(deg_to_rad(70.0), deg_to_rad(-70.0), through)
 	_pan.visible = parry.is_active()

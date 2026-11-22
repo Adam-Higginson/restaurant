@@ -1,0 +1,58 @@
+[gd_scene format=3]
+
+[sub_resource type="BoxMesh" id="BoxMesh_kk0we"]
+
+[sub_resource type="Animation" id="Animation_72hnd"]
+tracks/0/type = "rotation_3d"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Skeleton3D:body")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = PackedFloat32Array(0, 1, 0, 0, 0, 1)
+
+[sub_resource type="Animation" id="Animation_js0pb"]
+tracks/0/type = "rotation_3d"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Skeleton3D:body")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = PackedFloat32Array(0, 1, 0, 0, 0, 1)
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_mg7yy"]
+_data = {
+&"idle": SubResource("Animation_72hnd"),
+&"walk": SubResource("Animation_js0pb")
+}
+
+[node name="CrabRig" type="Node3D" unique_id=980686551]
+
+[node name="Skeleton3D" type="Skeleton3D" parent="." unique_id=1724811652]
+bones/0/name = "body"
+bones/0/parent = -1
+bones/0/rest = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)
+bones/0/enabled = true
+bones/0/position = Vector3(0, 0, 0)
+bones/0/rotation = Quaternion(0, 0, 0, 1)
+bones/0/scale = Vector3(1, 1, 1)
+bones/1/name = "left arm 1.1"
+bones/1/parent = 0
+bones/1/rest = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)
+bones/1/enabled = true
+bones/1/position = Vector3(0, 0, 0)
+bones/1/rotation = Quaternion(0, 0, 0, 1)
+bones/1/scale = Vector3(1, 1, 1)
+bones/2/name = "right arm 1.1"
+bones/2/parent = 0
+bones/2/rest = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)
+bones/2/enabled = true
+bones/2/position = Vector3(0, 0, 0)
+bones/2/rotation = Quaternion(0, 0, 0, 1)
+bones/2/scale = Vector3(1, 1, 1)
+
+[node name="Shell" type="MeshInstance3D" parent="Skeleton3D" unique_id=1123866256]
+mesh = SubResource("BoxMesh_kk0we")
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="." unique_id=425925999]
+libraries/ = SubResource("AnimationLibrary_mg7yy")
