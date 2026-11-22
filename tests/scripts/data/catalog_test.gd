@@ -6,6 +6,7 @@ extends GameTestSuite
 ## Items with no reaction producing them: what the shop and the kitchen provide.
 const RAW: Array[String] = [
 	"lettuce", "tomato", "onion", "bread", "cheese", "chopping_board", "plate", "herring",
+	"frying_pan",
 ]
 
 var _catalog: Catalog
@@ -25,7 +26,8 @@ func test_catalog_has_the_mvp_items() -> void:
 		&"lettuce", &"tomato", &"onion", &"bread", &"cheese",
 		&"chopped_lettuce", &"sliced_tomato", &"diced_tomato",
 		&"garden_salad", &"tomato_soup", &"grilled_cheese",
-		&"chopping_board", &"plate", &"herring", &"herring_fillet",
+		&"chopping_board", &"plate", &"herring", &"herring_fillet", &"frying_pan",
+		&"pan_fried_herring",
 	])
 
 
@@ -61,10 +63,20 @@ func test_garden_salad_reactions_match_design_doc() -> void:
 		&"garden_salad", 1)
 
 
+func test_herring_reactions_match_design_doc() -> void:
+	_assert_reaction(&"fillet_herring", [&"herring"], [&"chopping_board"], &"cut", 3,
+		&"herring_fillet", 3)
+	_assert_reaction(&"fry_herring", [&"herring_fillet"], [&"frying_pan"], &"fire", 6,
+		&"pan_fried_herring", 3)
+	_assert_reaction(&"fry_whole_herring", [&"herring"], [&"frying_pan"], &"fire", 9,
+		&"pan_fried_herring", 1)
+
+
 func test_storage_kinds_match_design_doc() -> void:
 	var fridge: Array[StringName] = [
 		&"lettuce", &"tomato", &"cheese", &"chopped_lettuce", &"sliced_tomato",
 		&"diced_tomato", &"garden_salad", &"grilled_cheese", &"herring", &"herring_fillet",
+		&"pan_fried_herring",
 	]
 	var cupboard: Array[StringName] = [&"onion", &"bread"]
 	for item: Item in _catalog.items:

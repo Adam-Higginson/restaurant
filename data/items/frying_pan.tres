@@ -1,0 +1,10 @@
+[gd_resource type="Resource" script_class="Item" format=3 uid="uid://fry1ngpan0ab"]
+
+[ext_resource type="Script" path="res://scripts/data/item.gd" id="1_item"]
+
+[resource]
+script = ExtResource("1_item")
+id = &"frying_pan"
+display_name = "Frying Pan"
+color = Color(0.2, 0.19, 0.19, 1)
+capacity = 1

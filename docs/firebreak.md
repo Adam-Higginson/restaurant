@@ -26,3 +26,10 @@ A rod in a holder at the starboard rail (by the chimney), with a bait bucket. In
 - Data: `data/items/herring.tres`, `herring_fillet.tres`, `data/reactions/fillet_herring.tres`, added to the catalog (and to the GDD's dishes).
 - `Sea` joins a `sea` group so things aboard can ask the water's height; `LanternSpirit.excite()`.
 - Tests: `tests/scripts/fishing/` (6 for the line, 5 for the spot: cast with Interact, strike lands a herring in the toolbar, nothing bites under way, the lantern gets excited, the fillet reaction).
+
+### 4. The hearth cooks: fire, a frying pan, Pan-fried Herring
+The first heat in the game. On the galley hearth's iron top, right of the stew pot, sits a **hob** (a trivet over glowing iron) with a **frying pan** on it. Whatever vessel is on the hob has **fire**, a timed element, so fire recipes cook second by second (the progress bar fills); lift the pan off and cooking pauses, keeping its progress. The full loop now works: ring the bell, fish, fillet on the board, fry in the pan: **Pan-fried Herring** (★★★ done properly; a whole herring thrown in is the ★ shortcut, as the cooking design asks).
+- `scripts/props/hob.gd` (a `Counter3D` that heats its vessel), `scenes/prototype/props/hob.tscn`, in `ship.tscn` under `Galley/Hob`.
+- Data: `data/elements/fire.tres`, `data/items/frying_pan.tres`, `pan_fried_herring.tres`, `data/reactions/fry_herring.tres` and `fry_whole_herring.tres`; in the catalog and the GDD's dishes table.
+- Tests: `tests/scripts/props/hob_test.gd` (the pan's over the fire, a fillet fries with the right quality, the shortcut, lifting it off pauses, it's on the hearth aboard), and the catalog checks the three herring reactions.
+- The frying pan draws as a dark slab for now, like the board.

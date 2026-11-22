@@ -35,11 +35,16 @@
 [ext_resource type="Resource" path="res://data/items/herring.tres" id="26_herring"]
 [ext_resource type="Resource" path="res://data/items/herring_fillet.tres" id="27_fillet"]
 [ext_resource type="Resource" path="res://data/reactions/fillet_herring.tres" id="28_fillet_herring"]
+[ext_resource type="Resource" path="res://data/elements/fire.tres" id="29_fire"]
+[ext_resource type="Resource" path="res://data/items/frying_pan.tres" id="30_pan"]
+[ext_resource type="Resource" path="res://data/items/pan_fried_herring.tres" id="31_fried"]
+[ext_resource type="Resource" path="res://data/reactions/fry_herring.tres" id="32_fry"]
+[ext_resource type="Resource" path="res://data/reactions/fry_whole_herring.tres" id="33_fry_whole"]
 
 [resource]
 script = ExtResource("23_itf3g")
-items = Array[ExtResource("3_ri6n3")]([ExtResource("4_n75ka"), ExtResource("5_wvss8"), ExtResource("6_0uqn3"), ExtResource("7_5q4dk"), ExtResource("8_l2ssu"), ExtResource("9_kruv5"), ExtResource("10_7671r"), ExtResource("11_5u5l8"), ExtResource("12_lcsjk"), ExtResource("13_vx4vr"), ExtResource("14_cta3b"), ExtResource("15_wwfey"), ExtResource("16_rhhc8"), ExtResource("26_herring"), ExtResource("27_fillet")])
-elements = Array[ExtResource("1_sq7co")]([ExtResource("2_gpcun")])
-reactions = Array[ExtResource("17_gx03v")]([ExtResource("18_dxvgn"), ExtResource("19_qdmq8"), ExtResource("20_oyiyi"), ExtResource("21_m07uu"), ExtResource("22_3onb0"), ExtResource("28_fillet_herring")])
+items = Array[ExtResource("3_ri6n3")]([ExtResource("4_n75ka"), ExtResource("5_wvss8"), ExtResource("6_0uqn3"), ExtResource("7_5q4dk"), ExtResource("8_l2ssu"), ExtResource("9_kruv5"), ExtResource("10_7671r"), ExtResource("11_5u5l8"), ExtResource("12_lcsjk"), ExtResource("13_vx4vr"), ExtResource("14_cta3b"), ExtResource("15_wwfey"), ExtResource("16_rhhc8"), ExtResource("26_herring"), ExtResource("27_fillet"), ExtResource("30_pan"), ExtResource("31_fried")])
+elements = Array[ExtResource("1_sq7co")]([ExtResource("2_gpcun"), ExtResource("29_fire")])
+reactions = Array[ExtResource("17_gx03v")]([ExtResource("18_dxvgn"), ExtResource("19_qdmq8"), ExtResource("20_oyiyi"), ExtResource("21_m07uu"), ExtResource("22_3onb0"), ExtResource("28_fillet_herring"), ExtResource("32_fry"), ExtResource("33_fry_whole")])
 tools = Array[ExtResource("24_tool")]([ExtResource("25_knife")])
 people = Array[ExtResource("17_7671r")]([ExtResource("18_5u5l8"), ExtResource("19_lcsjk"), ExtResource("20_vx4vr"), ExtResource("21_cta3b"), ExtResource("22_wwfey"), ExtResource("23_rhhc8")])
