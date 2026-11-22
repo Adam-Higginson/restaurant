@@ -7,10 +7,9 @@ extends StaticBody3D
 ##
 ## The steam, embers and smoke are particle systems built here in code, so
 ## their settings sit in one place (like [RainEffect]). They start at the
-## SteamSpot, EmberSpot and SmokeSpot markers. Steam and embers move with the
-## stove (local coordinates), so they rise straight up on a sailing ship. The
-## smoke is out in the open air, so it's left behind as the ship sails on
-## (world coordinates) and trails astern.
+## SteamSpot, EmberSpot and SmokeSpot markers. All three move with the stove
+## (local coordinates), so they don't smear as the ship sails; the smoke, out
+## in the wind on deck, leans astern as it rises.
 
 ## Puffs of steam a second from the pot.
 @export var steam_rate: float = 9.0
@@ -58,22 +57,23 @@ func _make_smoke() -> GPUParticles3D:
 	process.emission_sphere_radius = 0.1
 	process.direction = Vector3.UP
 	process.spread = 10.0
-	process.initial_velocity_min = 0.5
-	process.initial_velocity_max = 0.8
-	# It slows as it rises and drifts a little, swelling and thinning out.
-	process.gravity = Vector3(0.1, 0.05, 0.0)
-	process.damping_min = 0.15
-	process.damping_max = 0.3
+	process.initial_velocity_min = 1.0
+	process.initial_velocity_max = 1.4
+	# Warm, so it keeps rising, and the wind of the ship's sailing leans it
+	# astern (+z); it swells and thins out as it goes.
+	process.gravity = Vector3(0.0, 0.25, 0.55)
+	process.damping_min = 0.05
+	process.damping_max = 0.1
 	process.turbulence_enabled = true
-	process.turbulence_noise_strength = 0.3
+	process.turbulence_noise_strength = 0.12
 	process.turbulence_noise_scale = 2.0
 	process.scale_min = 0.8
 	process.scale_max = 1.2
 	process.scale_curve = _curve_texture([Vector2(0.0, 0.4), Vector2(1.0, 1.9)])
-	process.color_ramp = _fade([0.0, 0.15, 1.0], [0.0, 0.32, 0.0])
+	process.color_ramp = _fade([0.0, 0.15, 1.0], [0.0, 0.55, 0.0])
 
 	# Smoke is dark and lit by the night, unlike the bright steam indoors.
-	var material: StandardMaterial3D = _soft_material(Color(0.36, 0.36, 0.38, 1.0))
+	var material: StandardMaterial3D = _soft_material(Color(0.62, 0.62, 0.66, 1.0))
 	material.shading_mode = BaseMaterial3D.SHADING_MODE_PER_PIXEL
 	var mesh: QuadMesh = QuadMesh.new()
 	mesh.size = Vector2(0.5, 0.5)
@@ -81,7 +81,7 @@ func _make_smoke() -> GPUParticles3D:
 
 	var particles: GPUParticles3D = GPUParticles3D.new()
 	particles.name = "Smoke"
-	particles.local_coords = false
+	particles.local_coords = true
 	particles.lifetime = 4.0
 	particles.amount = maxi(ceili(smoke_rate * particles.lifetime), 1)
 	particles.preprocess = 4.0

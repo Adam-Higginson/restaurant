@@ -19,7 +19,7 @@ func test_the_stove_flickers_steams_and_sparks() -> void:
 	assert_bool(stove.embers().local_coords).is_true()
 
 
-func test_the_chimney_smokes_up_on_deck_and_it_trails_behind() -> void:
+func test_the_chimney_smokes_up_on_deck_leaning_astern() -> void:
 	var stove: GalleyStove = (load(STOVE_SCENE) as PackedScene).instantiate() as GalleyStove
 	add_child(stove)
 	auto_free(stove)
@@ -27,8 +27,11 @@ func test_the_chimney_smokes_up_on_deck_and_it_trails_behind() -> void:
 	# It comes out of the chimney top, above the deck (5.3 m up the ship, so
 	# 4.3 m above the galley floor the stove stands on).
 	assert_float(stove.to_local(stove.smoke().global_position).y).is_greater(4.3)
-	# Out in the open, it's left behind as the ship sails on.
-	assert_bool(stove.smoke().local_coords).is_false()
+	# It sails with the ship, and the wind leans it astern (+z) as it rises.
+	assert_bool(stove.smoke().local_coords).is_true()
+	var process: ParticleProcessMaterial = stove.smoke().process_material 			as ParticleProcessMaterial
+	assert_float(process.gravity.y).is_greater(0.0)
+	assert_float(process.gravity.z).is_greater(0.0)
 
 
 func test_the_galley_has_its_hearth_table_and_lanterns() -> void:
