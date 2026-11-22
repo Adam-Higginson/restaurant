@@ -34,7 +34,7 @@ func test_it_opens_on_her_name_and_waits_for_any_button() -> void:
 	_build()
 	var runner: GdUnitSceneRunner = scene_runner(_sea)
 	var hook_lantern: Node3D = _hook_lantern()
-	var gilt: NameGilt = _ship.get_node("SternWatch/Name") as NameGilt
+	var carved: CarvedName = _ship.get_node("SternWatch/Name") as CarvedName
 	var swing: SternSwing = _ship.get_node("SternWatch/Swing") as SternSwing
 	var face: LanternFace = hook_lantern.get_node("Body") as LanternFace
 	var underwater: Stage = _sea.get_node("Stages/Underwater") as Stage
@@ -55,7 +55,7 @@ func test_it_opens_on_her_name_and_waits_for_any_button() -> void:
 	assert_bool(hook_lantern.is_visible_in_tree()).is_true()
 	assert_bool(swing.swinging).is_true()
 	assert_int(face.expression).is_equal(LanternFace.Look.TIRED)
-	assert_float(gilt.lamp_glow()).is_greater(0.9)
+	assert_float(carved.lamp_glow()).is_greater(0.9)
 	# The gallery windows behind her name are off, so his light shows.
 	var dimmer: WindowDimmer = _ship.get_node("SternWatch/WindowDimmer") as WindowDimmer
 	assert_bool(dimmer.dimmed).is_true()
@@ -79,7 +79,7 @@ func test_it_opens_on_her_name_and_waits_for_any_button() -> void:
 	# Off the hook and over the side: her name is dark, and you're under.
 	assert_bool(await _reaches(runner, &"dark")).is_true()
 	assert_bool(hook_lantern.is_visible_in_tree()).is_false()
-	assert_float(gilt.lamp_glow()).is_equal(0.0)
+	assert_float(carved.lamp_glow()).is_equal(0.0)
 	assert_bool(dimmer.dimmed).is_false()
 	assert_bool(underwater.is_open).is_true()
 	assert_bool(_ambience().submerged).is_true()

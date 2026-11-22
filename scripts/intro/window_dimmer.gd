@@ -44,7 +44,7 @@ func _process(delta: float) -> void:
 		return
 	var target: float = dim_to if dimmed else 1.0
 	# Only touch the shared material while the level is actually moving.
-	if is_equal_approx(_level, target):
+	if _level == target:
 		return
 	if seconds <= 0.0:
 		_level = target

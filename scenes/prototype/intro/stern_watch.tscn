@@ -1,8 +1,8 @@
 [gd_scene format=3]
 
-[ext_resource type="Shader" path="res://shaders/nameboard_gilt.gdshader" id="1_ah4m5"]
+[ext_resource type="Shader" path="res://shaders/carved_name.gdshader" id="1_ah4m5"]
 [ext_resource type="FontVariation" path="res://assets/fonts/name_font.tres" id="2_m38hy"]
-[ext_resource type="Script" path="res://scripts/intro/name_gilt.gd" id="3_jk4ff"]
+[ext_resource type="Script" path="res://scripts/intro/carved_name.gd" id="3_jk4ff"]
 [ext_resource type="Material" path="res://assets/placeholder/materials/iron.tres" id="4_cf5ua"]
 [ext_resource type="Script" path="res://scripts/intro/stern_swing.gd" id="5_100y2"]
 [ext_resource type="PackedScene" path="res://scenes/prototype/lantern_body.tscn" id="6_bif2u"]
@@ -11,28 +11,11 @@
 [ext_resource type="Material" path="res://assets/placeholder/materials/window_glow.tres" id="9_glow"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_xelty"]
-render_priority = 0
 shader = ExtResource("1_ah4m5")
-shader_parameter/gold = null
-shader_parameter/tarnish = null
-shader_parameter/lamp = null
-shader_parameter/lamp_glow = null
-shader_parameter/reach = null
-shader_parameter/flash = null
-shader_parameter/shine = null
+shader_parameter/plank_size = Vector2(3.3, 0.42)
 
-[sub_resource type="TextMesh" id="TextMesh_5aj8q"]
-text = "SALT AND EMBER"
-font = ExtResource("2_m38hy")
-font_size = 64
-pixel_size = 0.0046
-depth = 0.035
-
-[sub_resource type="BoxMesh" id="Mesh_FrameRail"]
-size = Vector3(3.3, 0.024, 0.03)
-
-[sub_resource type="BoxMesh" id="Mesh_FrameEnd"]
-size = Vector3(0.024, 0.3, 0.03)
+[sub_resource type="QuadMesh" id="Mesh_NamePlank"]
+size = Vector2(3.3, 0.42)
 
 [sub_resource type="BoxMesh" id="BoxMesh_pe1s4"]
 size = Vector3(0.06, 0.06, 0.7)
@@ -274,41 +257,37 @@ _data = {
 
 [node name="SternWatch" type="Node3D" unique_id=873895150]
 
-[node name="Name" type="MeshInstance3D" parent="." unique_id=1283651078 node_paths=PackedStringArray("lamp", "lamp_face")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 5.03, 16.09)
+[node name="Name" type="MeshInstance3D" parent="." node_paths=PackedStringArray("lamp", "lamp_face")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 5.05, 16.095)
 material_override = SubResource("ShaderMaterial_xelty")
 cast_shadow = 0
-mesh = SubResource("TextMesh_5aj8q")
+mesh = SubResource("Mesh_NamePlank")
 script = ExtResource("3_jk4ff")
 lamp = NodePath("../Swing/HookLantern")
 lamp_face = NodePath("../Swing/HookLantern/Body")
 
-[node name="Frame" type="Node3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 5.05, 16.088)
+[node name="Mask" type="SubViewport" parent="Name"]
+disable_3d = true
+handle_input_locally = false
+size = Vector2i(2048, 261)
+render_target_update_mode = 1
 
-[node name="Top" type="MeshInstance3D" parent="Frame"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.138, 0)
-material_override = SubResource("ShaderMaterial_xelty")
-cast_shadow = 0
-mesh = SubResource("Mesh_FrameRail")
+[node name="Black" type="ColorRect" parent="Name/Mask"]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+color = Color(0, 0, 0, 1)
 
-[node name="Bottom" type="MeshInstance3D" parent="Frame"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.138, 0)
-material_override = SubResource("ShaderMaterial_xelty")
-cast_shadow = 0
-mesh = SubResource("Mesh_FrameRail")
-
-[node name="Left" type="MeshInstance3D" parent="Frame"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.638, 0, 0)
-material_override = SubResource("ShaderMaterial_xelty")
-cast_shadow = 0
-mesh = SubResource("Mesh_FrameEnd")
-
-[node name="Right" type="MeshInstance3D" parent="Frame"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.638, 0, 0)
-material_override = SubResource("ShaderMaterial_xelty")
-cast_shadow = 0
-mesh = SubResource("Mesh_FrameEnd")
+[node name="Words" type="Label" parent="Name/Mask"]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_fonts/font = ExtResource("2_m38hy")
+theme_override_font_sizes/font_size = 168
+text = "SALT AND EMBER"
+horizontal_alignment = 1
+vertical_alignment = 1
 
 [node name="HookArm" type="MeshInstance3D" parent="." unique_id=1664955679]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 7.32, 16.2)

@@ -1,7 +1,7 @@
 extends GameTestSuite
 ## Tests for the watch at the stern: the swing that dies away when it's
-## switched off, the gilt of the ship's name, which only shows by the
-## lamp's light and by lightning, and the lit windows turned down behind it.
+## switched off, the ship's carved name, lit from wherever the lamp is and
+## by lightning, and the lit windows turned down behind it.
 
 
 func test_it_swings_from_side_to_side_within_its_reach() -> void:
@@ -46,14 +46,14 @@ func test_her_name_is_lit_only_while_the_lamp_is_there() -> void:
 	var lamp: Node3D = Node3D.new()
 	auto_free(lamp)
 	add_child(lamp)
-	var gilt: NameGilt = _new_gilt()
-	assert_float(gilt.lamp_glow()).is_equal(0.0)
+	var carved: CarvedName = _new_name()
+	assert_float(carved.lamp_glow()).is_equal(0.0)
 
-	gilt.lamp = lamp
-	assert_float(gilt.lamp_glow()).is_equal(1.0)
+	carved.lamp = lamp
+	assert_float(carved.lamp_glow()).is_equal(1.0)
 
 	lamp.visible = false
-	assert_float(gilt.lamp_glow()).is_equal(0.0)
+	assert_float(carved.lamp_glow()).is_equal(0.0)
 
 
 func test_a_weaker_flame_lights_her_name_less() -> void:
@@ -61,14 +61,14 @@ func test_a_weaker_flame_lights_her_name_less() -> void:
 			.instantiate() as LanternFace
 	auto_free(face)
 	add_child(face)
-	var gilt: NameGilt = _new_gilt()
-	gilt.lamp = face
-	gilt.lamp_face = face
+	var carved: CarvedName = _new_name()
+	carved.lamp = face
+	carved.lamp_face = face
 
 	face.strength = 1.0
-	var strong: float = gilt.lamp_glow()
+	var strong: float = carved.lamp_glow()
 	face.strength = 0.0
-	var weak: float = gilt.lamp_glow()
+	var weak: float = carved.lamp_glow()
 
 	assert_float(strong).is_equal(1.0)
 	assert_float(weak).is_between(0.05, 0.5)
@@ -79,18 +79,50 @@ func test_the_letters_are_told_where_the_lamp_is_and_about_lightning() -> void:
 	auto_free(lamp)
 	add_child(lamp)
 	lamp.global_position = Vector3(1.5, 5, 16)
-	var gilt: NameGilt = _new_gilt()
-	gilt.lamp = lamp
-	gilt.set_lightning(0.7)
+	var carved: CarvedName = _new_name()
+	carved.lamp = lamp
+	carved.set_lightning(0.7)
 	await _frames(2)
 
-	var material: ShaderMaterial = gilt.material_override as ShaderMaterial
+	var material: ShaderMaterial = carved.material_override as ShaderMaterial
+	# Told in the plank's own space: the plank is at the origin here.
 	var sent: Vector3 = material.get_shader_parameter("lamp")
 	assert_vector(sent).is_equal_approx(Vector3(1.5, 5, 16), Vector3(0.001, 0.001, 0.001))
 	var flash: float = material.get_shader_parameter("flash")
 	var glow: float = material.get_shader_parameter("lamp_glow")
 	assert_float(flash).is_equal_approx(0.7, 0.001)
 	assert_float(glow).is_equal(1.0)
+
+
+func test_the_lamps_place_is_measured_from_the_plank_whichever_way_it_faces() -> void:
+	var lamp: Node3D = Node3D.new()
+	auto_free(lamp)
+	add_child(lamp)
+	lamp.global_position = Vector3(10, 2, 0)
+	var carved: CarvedName = _new_name()
+	carved.lamp = lamp
+	# The plank is 8 m along x and turned a quarter turn, as on a ship
+	# sailing another way.
+	carved.global_position = Vector3(8, 2, 0)
+	carved.rotation.y = PI / 2.0
+	await _frames(2)
+
+	var material: ShaderMaterial = carved.material_override as ShaderMaterial
+	var sent: Vector3 = material.get_shader_parameter("lamp")
+	assert_vector(sent).is_equal_approx(carved.to_local(lamp.global_position),
+			Vector3(0.001, 0.001, 0.001))
+	assert_float(sent.length()).is_equal_approx(2.0, 0.001)
+
+
+func test_the_name_is_written_on_the_mask_the_carving_is_cut_from() -> void:
+	var carved: CarvedName = _new_name()
+	assert_str(carved.written()).is_equal("SALT AND EMBER")
+
+	carved.text = "HERON"
+
+	assert_str(carved.written()).is_equal("HERON")
+	var words: Label = carved.get_node("Mask/Words") as Label
+	assert_str(words.text).is_equal("HERON")
 
 
 func test_the_windows_turn_down_gently_and_back_up() -> void:
@@ -183,11 +215,18 @@ func _new_swing() -> SternSwing:
 	return swing
 
 
-func _new_gilt() -> NameGilt:
-	var gilt: NameGilt = NameGilt.new()
-	auto_free(gilt)
+func _new_name() -> CarvedName:
+	var carved: CarvedName = CarvedName.new()
+	auto_free(carved)
 	var material: ShaderMaterial = ShaderMaterial.new()
-	material.shader = load("res://shaders/nameboard_gilt.gdshader") as Shader
-	gilt.material_override = material
-	add_child(gilt)
-	return gilt
+	material.shader = load("res://shaders/carved_name.gdshader") as Shader
+	carved.material_override = material
+	# The mask the letters are cut from: an off-screen screen with a label.
+	var mask: SubViewport = SubViewport.new()
+	mask.name = "Mask"
+	var words: Label = Label.new()
+	words.name = "Words"
+	mask.add_child(words)
+	carved.add_child(mask)
+	add_child(carved)
+	return carved

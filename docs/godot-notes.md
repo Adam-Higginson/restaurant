@@ -282,11 +282,15 @@ A growing glossary of the Godot concepts this project uses: what each one is, in
 
 ## The lantern's face and the nameboard (#114)
 
-**TextMesh.** A mesh made from text: give it a string, a font, a size and a depth, and it builds solid 3D letters. Change the string and the letters change. *Ours:* the ship's name on her stern (`Name` in `scenes/prototype/intro/stern_watch.tscn`).
+**Bump and normal maps, made in a shader.** A normal map tells the lighting which way each point of a flat surface is "really" facing, so a flat plank can be lit as if it had dents and ridges. Usually it's a texture; a shader can also work it out and write it to `NORMAL_MAP`. Because the lighting is real, a moving light makes highlights and shadows slide across the bumps. *Ours:* the ship's carved name (`shaders/carved_name.gdshader`): the slope of each cut is worked out from a mask of the text. The same slopes are also shaded directly by where the lantern is, so the lit and shadowed walls of the letters swing round as he does.
+
+**A SubViewport as a texture you draw yourself.** Put ordinary 2D nodes (here a `Label`) in a `SubViewport` and its picture becomes a texture a shader can read. Set it to draw once and it costs nothing afterwards. *Ours:* `Name/Mask` in `scenes/prototype/intro/stern_watch.tscn` writes "SALT AND EMBER" in white on black, and the carving is cut wherever that's white. Change the text on `Name` and the carving changes.
+
+**`to_local()`.** Turns a place in the world into a place measured from a node: its own origin, its own left and right. Something that depends on "where is the lamp relative to this plank" keeps working whichever way the ship is pointing. *Ours:* `CarvedName` gives its shader the lamp's place this way.
 
 **A material of your own (`duplicate()`).** Every instance of a scene shares the same material resource, so changing it on one changes them all. `material.duplicate()` makes a private copy for one instance. *Ours:* `LanternFace` copies its glass material in `_ready`, so fogging one lantern doesn't fog the others.
 
-**Driving a shader from a script.** A shader's `uniform` values are its dials. `material.set_shader_parameter("name", value)` turns one from code, every frame if you like, so game state can change how something is drawn. *Ours:* `LanternFace` sends his strength, lean, fog, streaks and crack to `lantern_glass.gdshader`; `NameGilt` sends the lamp's position to `nameboard_gilt.gdshader`, which lights each letter by how near the lamp is.
+**Driving a shader from a script.** A shader's `uniform` values are its dials. `material.set_shader_parameter("name", value)` turns one from code, every frame if you like, so game state can change how something is drawn. *Ours:* `LanternFace` sends his strength, lean, fog, streaks and crack to `lantern_glass.gdshader`; `CarvedName` sends the lamp's position to `carved_name.gdshader`, which lights the cuts of each letter from that side.
 
 **Easing towards a target.** Rather than jumping to a new value, move a fraction of the way there each frame: `value = lerp(value, target, 1.0 - exp(-speed * delta))`. It starts quickly and settles gently, and takes the same time whatever the frame rate. *Ours:* how his eyes change shape between looks.
 
