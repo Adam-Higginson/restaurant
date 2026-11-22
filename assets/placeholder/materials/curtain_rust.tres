@@ -1,0 +1,12 @@
+[gd_resource type="StandardMaterial3D" format=3 uid="uid://beu0rixli88i5"]
+
+[ext_resource type="Texture2D" path="res://assets/placeholder/textures/curtain_rust.png" id="1_c32ty"]
+
+[resource]
+albedo_texture = ExtResource("1_c32ty")
+metallic_specular = 0.1
+backlight_enabled = true
+backlight = Color(1, 0.55, 0.28, 1)
+uv1_scale = Vector3(2.5, 2.5, 2.5)
+uv1_triplanar = true
+texture_filter = 0
