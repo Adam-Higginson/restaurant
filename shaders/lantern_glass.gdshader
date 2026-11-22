@@ -27,6 +27,9 @@ uniform float speed = 1.6;
 uniform float seed = 0.0;
 // How strong his flame is, 0 to 1: its height, steadiness and colour.
 uniform float strength = 1.0;
+// How tall the flame stands against its usual height for his strength:
+// above 1 it bristles, below 1 it draws in (he's breathing out).
+uniform float swell = 1.0;
 // The way his flame tips, in his own space (x and z matter), up to 1.
 uniform vec3 lean = vec3(0.0);
 // How much the pane glows behind the flame, so his eyes always show.
@@ -71,7 +74,7 @@ void fragment() {
 	// Snap to the texel grid, so the flame is drawn in chunky squares.
 	vec2 uv = (floor(vec2(u, v) * texels) + 0.5) / texels;
 	// Weak, the flame is low and quick; strong, tall and steady.
-	float height = mix(0.3, 1.0, strength);
+	float height = mix(0.3, 1.0, strength) * max(swell, 0.05);
 	float up = uv.y / height;
 	float t = TIME * speed * mix(2.4, 1.0, strength) + seed * 17.0;
 	// The higher up, the further the flame is pushed the way he leans.
@@ -91,7 +94,9 @@ void fragment() {
 	vec3 colour = mix(ember_now, warm_now, smoothstep(0.1, 0.5, heat));
 	colour = mix(colour, hot_now, smoothstep(0.5, 0.9, heat));
 	float flicker = 0.85 + 0.15 * noise(vec2(t * 3.0, seed));
-	float bright = glow * mix(0.45, 1.0, strength) * flicker;
+	// Bristling, it burns a little brighter too.
+	float bright = glow * mix(0.45, 1.0, strength) * flicker
+			* (1.0 + 0.3 * clamp(swell - 1.0, -1.0, 1.0));
 	colour = colour * (0.4 + heat) * bright;
 	// A glow behind the flame, so his eyes are never lost against dark glass.
 	colour = max(colour, warm_now * backing * mix(0.5, 1.0, strength));

@@ -11,6 +11,7 @@ shader_parameter/texels = 7.0
 shader_parameter/glow = 1.9
 shader_parameter/strength = 1.0
 shader_parameter/lean = Vector3(0, 0, 0)
+shader_parameter/swell = 1.0
 shader_parameter/backing = 0.55
 shader_parameter/fog = 0.0
 shader_parameter/streaks = 0.0
@@ -45,6 +46,15 @@ size = Vector3(0.025, 0.21, 0.025)
 
 [sub_resource type="BoxMesh" id="Eye"]
 size = Vector3(0.026, 0.048, 0.01)
+
+[sub_resource type="BoxMesh" id="DoorRail"]
+size = Vector3(0.17, 0.014, 0.008)
+
+[sub_resource type="BoxMesh" id="DoorStile"]
+size = Vector3(0.014, 0.2, 0.008)
+
+[sub_resource type="BoxMesh" id="DoorLatch"]
+size = Vector3(0.022, 0.03, 0.014)
 
 [node name="Body" type="Node3D"]
 script = ExtResource("1_face")
@@ -110,3 +120,36 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.033, 0, 0)
 material_override = ExtResource("3_dark")
 cast_shadow = 0
 mesh = SubResource("Eye")
+
+[node name="Door" type="Node3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.085, 0, -0.094)
+
+[node name="Top" type="MeshInstance3D" parent="Door"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.085, 0.093, 0)
+material_override = ExtResource("2_iron")
+cast_shadow = 0
+mesh = SubResource("DoorRail")
+
+[node name="Bottom" type="MeshInstance3D" parent="Door"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.085, -0.093, 0)
+material_override = ExtResource("2_iron")
+cast_shadow = 0
+mesh = SubResource("DoorRail")
+
+[node name="Hinge" type="MeshInstance3D" parent="Door"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.007, 0, 0)
+material_override = ExtResource("2_iron")
+cast_shadow = 0
+mesh = SubResource("DoorStile")
+
+[node name="Edge" type="MeshInstance3D" parent="Door"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.163, 0, 0)
+material_override = ExtResource("2_iron")
+cast_shadow = 0
+mesh = SubResource("DoorStile")
+
+[node name="Latch" type="MeshInstance3D" parent="Door"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.163, -0.02, -0.006)
+material_override = ExtResource("2_iron")
+cast_shadow = 0
+mesh = SubResource("DoorLatch")

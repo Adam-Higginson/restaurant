@@ -124,6 +124,49 @@ func test_his_flame_tips_the_way_he_leans_but_only_so_far() -> void:
 	assert_float(sent.x).is_equal_approx(1.0, 0.001)
 
 
+func test_his_flame_stands_taller_when_it_swells_and_draws_in_again() -> void:
+	var face: LanternFace = _new_face()
+	face.strength = 0.5
+	face.snap()
+	var usual: float = face.flame_size()
+
+	face.swell = 2.0
+	face.snap()
+	assert_float(face.flame_size()).is_equal_approx(usual * 2.0, 0.001)
+	assert_float(_glass_number(face, "swell")).is_equal_approx(2.0, 0.001)
+
+	face.swell = 0.6
+	face.snap()
+	assert_float(face.flame_size()).is_less(usual)
+
+
+func test_swelling_eases_in_rather_than_jumping() -> void:
+	var face: LanternFace = _new_face()
+	face.blend_speed = 6.0
+	await _frames(2)
+
+	face.swell = 2.0
+	await _frames(3)
+
+	assert_float(face.flame_size()).is_between(1.01, 1.99)
+
+
+func test_his_door_is_shut_until_he_opens_it_and_then_swings_wide() -> void:
+	var face: LanternFace = _new_face()
+	var door: Node3D = face.get_node("Door") as Node3D
+	assert_float(face.door_open()).is_equal(0.0)
+	assert_float(door.rotation.y).is_equal_approx(0.0, 0.001)
+
+	face.door = 1.0
+	face.snap()
+
+	assert_float(face.door_open()).is_equal(1.0)
+	assert_float(door.rotation.y).is_equal_approx(LanternFace.DOOR_SWING, 0.001)
+	# It opens outwards, away from the flame: his front is -Z.
+	var edge: Node3D = door.get_node("Edge") as Node3D
+	assert_float(face.to_local(edge.global_position).z).is_less(-0.15)
+
+
 func test_his_glass_fogs_streaks_and_cracks() -> void:
 	var face: LanternFace = _new_face()
 	face.snap()

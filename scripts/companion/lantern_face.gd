@@ -8,17 +8,18 @@ extends Node3D
 ##   tired, thin lines for asleep.
 ## - His [b]flame[/b], drawn on his panes as pixel fire like every other
 ##   lantern aboard, follows [member strength] (lower, flickering harder
-##   and cooling from amber to blue as he weakens) and tips towards
-##   [member lean].
+##   and cooling from amber to blue as he weakens), tips towards
+##   [member lean], and stands taller or shrinks back with [member swell].
 ## - His [b]glass[/b] shows what he's been through: [member fogged],
-##   [member streaked] with rain, [member cracked].
+##   [member streaked] with rain, [member cracked]. Its front is a
+##   [member door] he can open.
 ##
 ## Everything eases to its new look over a moment rather than snapping. The
 ## same body is used wherever he appears (at your shoulder, on his hook at
 ## the stern, in the water), so he looks and acts the same everywhere. A
 ## cutscene directs one with [code]@look hook_lantern determined[/code]
-## (see [LookCues] and [method direct]); a clip can move [member strength]
-## and [member lean] on the timeline.
+## (see [LookCues] and [method direct]); a clip can move [member strength],
+## [member lean], [member swell] and [member door] on the timeline.
 
 ## A look for his eyes.
 enum Look {
@@ -84,6 +85,8 @@ const GLASS_WORDS: PackedStringArray = ["fogged", "clear", "streaked", "dry", "c
 ## His light at full strength, and at his weakest.
 const WARM: Color = Color(1.0, 0.72, 0.36)
 const COLD: Color = Color(0.42, 0.68, 1.0)
+## How far his door swings when it's wide open, in radians.
+const DOOR_SWING: float = 1.9
 
 ## What a script calls this one: [code]hook_lantern[/code]. Empty if no
 ## script directs it.
@@ -95,6 +98,12 @@ const COLD: Color = Color(0.42, 0.68, 1.0)
 ## The way his flame tips, in his own space: (1, 0, 0) leans it to his
 ## left as far as it goes. Longer than 1 counts as 1.
 @export var lean: Vector3 = Vector3.ZERO
+## How tall his flame stands against its usual height for his strength: 1
+## as usual, more when it bristles before an effort, less as he breathes
+## out. A clip moves it to make him pant.
+@export_range(0.0, 2.5) var swell: float = 1.0
+## How far the door in the front of his glass is open: 0 shut, 1 wide.
+@export_range(0.0, 1.0) var door: float = 0.0
 ## Whether his glass is clouded over: he's flustered.
 @export var fogged: bool = false
 ## Whether rain is running down his glass.
@@ -127,6 +136,8 @@ var _lift: float = 0.0
 ## The flame and glass now, each easing towards what's asked for.
 var _strength_now: float = 1.0
 var _lean_now: Vector3 = Vector3.ZERO
+var _swell_now: float = 1.0
+var _door_now: float = 0.0
 var _fog: float = 0.0
 var _streaks: float = 0.0
 var _crack: float = 0.0
@@ -140,6 +151,7 @@ var _glass_material: ShaderMaterial = null
 @onready var _eye_left: Node3D = $Eyes/EyeLeft
 @onready var _eye_right: Node3D = $Eyes/EyeRight
 @onready var _glass: MeshInstance3D = $Glass
+@onready var _door: Node3D = $Door
 @onready var _eye_spacing: float = absf(_eye_left.position.x)
 
 
@@ -161,6 +173,8 @@ func _process(delta: float) -> void:
 	_lift = lerpf(_lift, target_lift(), blend)
 	_strength_now = lerpf(_strength_now, strength, blend)
 	_lean_now = _lean_now.lerp(lean.limit_length(1.0), blend)
+	_swell_now = lerpf(_swell_now, swell, blend)
+	_door_now = lerpf(_door_now, door, blend)
 	# The glass changes more slowly: fog gathers, a crack creeps.
 	var slow: float = 1.0 - exp(-2.5 * delta)
 	_fog = lerpf(_fog, 1.0 if fogged else 0.0, slow)
@@ -176,6 +190,8 @@ func snap() -> void:
 	_lift = target_lift()
 	_strength_now = strength
 	_lean_now = lean.limit_length(1.0)
+	_swell_now = swell
+	_door_now = door
 	_fog = 1.0 if fogged else 0.0
 	_streaks = 1.0 if streaked else 0.0
 	_crack = 1.0 if cracked else 0.0
@@ -258,9 +274,15 @@ func flame_colour() -> Color:
 	return colour_for(_strength_now)
 
 
-## How tall his flame is right now, as a share of its full height.
+## How tall his flame is right now, as a share of its full height: more
+## than 1 while it bristles (see [member swell]).
 func flame_size() -> float:
-	return lerpf(0.3, 1.0, _strength_now)
+	return lerpf(0.3, 1.0, _strength_now) * _swell_now
+
+
+## How far his door is open right now, 0 to 1.
+func door_open() -> float:
+	return _door_now
 
 
 ## The way his flame is tipping right now, in his own space, up to 1 long.
@@ -300,6 +322,8 @@ func _apply() -> void:
 	# The shader draws his flame on the panes from these.
 	_glass_material.set_shader_parameter("strength", _strength_now)
 	_glass_material.set_shader_parameter("lean", _lean_now)
+	_glass_material.set_shader_parameter("swell", _swell_now)
+	_door.rotation.y = _door_now * DOOR_SWING
 	_glass_material.set_shader_parameter("fog", _fog)
 	_glass_material.set_shader_parameter("streaks", _streaks)
 	_glass_material.set_shader_parameter("crack", _crack)
