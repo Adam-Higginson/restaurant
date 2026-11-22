@@ -9,7 +9,7 @@ extends GameTestSuite
 const PAN: Item = preload("res://data/items/frying_pan.tres")
 const SOUND_DIR: String = "res://assets/audio/combat/"
 const SOUND_SETS: Array[String] = ["swing", "slice", "tink", "pan_up", "clang", "hurt",
-		"crab_click", "crab_lunge", "fog_clear", "heartbeat", "spin", "charge", "charged", "dodge",
+		"crab_click", "crab_lunge", "heartbeat", "spin", "charge", "charged", "dodge",
 		"land"]
 const CLOSE: Vector3 = Vector3(0, 0, -1.3)
 const FIRST_HIT: int = 56
@@ -53,7 +53,7 @@ func test_every_sound_node_has_its_stream() -> void:
 				as AudioStreamPlayer
 		assert_object(node.stream).override_failure_message("%s has no stream" % sound) \
 				.is_not_null()
-	for sound: StringName in [CrabSounds.CLICK, CrabSounds.LUNGE, CrabSounds.CLEAR,
+	for sound: StringName in [CrabSounds.CLICK, CrabSounds.LUNGE, CrabSounds.CRACK,
 			CrabSounds.FLIP] as Array[StringName]:
 		var node: AudioStreamPlayer3D = _crab_sounds(crab).get_node(NodePath(sound)) \
 				as AudioStreamPlayer3D
@@ -200,39 +200,21 @@ func test_a_far_off_crab_is_silent() -> void:
 	assert_int(_crab_sounds(crab).times_played(CrabSounds.LUNGE)).is_equal(0)
 
 
-func test_clearing_the_fog_chimes_once_and_it_ticks_away() -> void:
+func test_a_kill_cracks_its_shell_once_and_then_it_is_quiet() -> void:
 	var player: Player3D = new_player_3d_on_floor()
 	stand_firm(player)
 	var crab: Crab = new_crab(player, CLOSE)
-	crab.fog = 1
+	crab.health_override = 1
 	var runner: GdUnitSceneRunner = scene_runner(player.get_parent())
 	await physics_ticks(runner, FIRST_OPENING)
 
 	await strike_and_land(runner, player)
 	var clicks: int = _crab_sounds(crab).times_played(CrabSounds.CLICK)
-	# It shakes itself off for a second, then wanders.
-	await physics_ticks(runner, 180)
+	await physics_ticks(runner, 120)
 
-	assert_bool(crab.is_cleared()).is_true()
-	assert_int(_crab_sounds(crab).times_played(CrabSounds.CLEAR)).is_equal(1)
-	assert_int(_crab_sounds(crab).times_played(CrabSounds.CLICK)).is_greater(clicks)
-
-
-func test_the_wandering_tick_is_quieter_than_the_rattle() -> void:
-	var player: Player3D = new_player_3d_on_floor()
-	stand_firm(player)
-	var crab: Crab = new_crab(player, CLOSE)
-	crab.fog = 1
-	var click: AudioStreamPlayer3D = _crab_sounds(crab).get_node("Click") as AudioStreamPlayer3D
-	var runner: GdUnitSceneRunner = scene_runner(player.get_parent())
-	await physics_ticks(runner, 40)
-	var rattle_db: float = click.volume_db
-	await physics_ticks(runner, FIRST_OPENING - 40)
-
-	await strike_and_land(runner, player)
-	await physics_ticks(runner, 180)
-
-	assert_float(click.volume_db).is_less(rattle_db)
+	assert_bool(crab.is_dead()).is_true()
+	assert_int(_crab_sounds(crab).times_played(CrabSounds.CRACK)).is_equal(1)
+	assert_int(_crab_sounds(crab).times_played(CrabSounds.CLICK)).is_equal(clicks)
 
 
 func test_on_the_last_heart_the_heart_thumps_lub_dub() -> void:

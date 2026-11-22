@@ -18,8 +18,8 @@ const CLEAR_HZ: float = 20000.0
 
 ## How far a strike that counts shakes the camera, in metres.
 @export var strike_shake: float = 0.06
-## How far the strike that clears a crab shakes the camera, in metres.
-@export var clearing_shake: float = 0.14
+## How far the strike that kills a crab (or flips it) shakes the camera, in metres.
+@export var kill_shake: float = 0.14
 ## How far a parry shakes the camera, in metres.
 @export var parry_shake: float = 0.08
 ## How far a blow landing on the player shakes the camera, in metres.
@@ -91,22 +91,23 @@ static func muffle_hz(amount: float) -> float:
 
 
 ## How long [param cut] landing freezes the game, in physics ticks: its own
-## [member KnifeCut.hitstop_ticks], or longer if it cleared the fog or
-## flipped the crab.
-static func strike_ticks(cut: KnifeCut, cleared: bool, flipped: bool) -> int:
-	if cleared:
-		return maxi(cut.hitstop_ticks, HitStop.CLEARING_TICKS)
+## [member KnifeCut.hitstop_ticks], longer for a critical, and longer still
+## if it killed or flipped the crab.
+static func strike_ticks(cut: KnifeCut, killed: bool, flipped: bool,
+		critical: bool = false) -> int:
+	if killed:
+		return maxi(cut.hitstop_ticks, HitStop.KILL_TICKS)
 	if flipped:
 		return maxi(cut.hitstop_ticks, HitStop.FLIP_TICKS)
-	return cut.hitstop_ticks
+	return cut.hitstop_ticks + (HitStop.CRITICAL_EXTRA_TICKS if critical else 0)
 
 
-func _on_strike_landed(crab: Crab, cleared: bool, cut: KnifeCut) -> void:
+func _on_strike_landed(crab: Crab, killed: bool, cut: KnifeCut) -> void:
 	var flipped: bool = crab.is_flipped() and cut.flips_lunging
-	_hit_stop.freeze(strike_ticks(cut, cleared, flipped))
+	_hit_stop.freeze(strike_ticks(cut, killed, flipped, crab.last_hit_critical))
 	# The bigger the blow, the bigger the shake.
 	var shake: float = strike_shake * float(cut.hitstop_ticks) / 4.0
-	_camera_rig.shake(clearing_shake if cleared or flipped else shake)
+	_camera_rig.shake(kill_shake if killed or flipped else shake)
 
 
 func _on_parried() -> void:
@@ -117,7 +118,7 @@ func _on_parried() -> void:
 
 func _on_parried_perfectly() -> void:
 	_hit_stop.freeze(HitStop.FLIP_TICKS)
-	_camera_rig.shake(clearing_shake)
+	_camera_rig.shake(kill_shake)
 
 
 func _on_hurt(_halves: int) -> void:

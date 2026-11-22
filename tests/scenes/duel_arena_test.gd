@@ -44,7 +44,7 @@ func test_the_crabs_at_the_landing_leave_you_alone() -> void:
 			CrabCycle.State.IDLE)
 
 
-func test_a_duel_won_parry_then_strike_until_the_fog_clears() -> void:
+func test_a_duel_won_parry_then_strike_until_the_crab_dies() -> void:
 	var runner: GdUnitSceneRunner = scene_runner(ARENA)
 	await physics_ticks(runner, 10)
 	var player: Player3D = place_player_3d(runner, BY_THE_CRAB)
@@ -56,7 +56,7 @@ func test_a_duel_won_parry_then_strike_until_the_fog_clears() -> void:
 	# Read the crab as a player would: raise the pan late in its windup, and
 	# strike whenever it's open. Up to 20 seconds.
 	for tick: int in 1200:
-		if crab.is_cleared():
+		if crab.is_dead():
 			break
 		if crab.cycle.state == CrabCycle.State.WINDUP and crab.cycle.progress > 0.8:
 			runner.simulate_action_pressed("parry")
@@ -64,7 +64,7 @@ func test_a_duel_won_parry_then_strike_until_the_fog_clears() -> void:
 			runner.simulate_action_pressed("use_tool")
 		await physics_ticks(runner, 1)
 
-	assert_bool(crab.is_cleared()).is_true()
+	assert_bool(crab.is_dead()).is_true()
 	# Every hit was parried.
 	assert_int(duellist_of(player).hearts.halves).is_equal(6)
 	# Lock-on let go by itself, and the lantern came back.

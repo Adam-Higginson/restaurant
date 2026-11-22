@@ -100,10 +100,10 @@ func test_lock_on_lets_go_when_the_target_gets_too_far() -> void:
 	await release(runner, "lock_on")
 
 
-func test_lock_on_lets_go_when_the_crabs_fog_clears() -> void:
+func test_lock_on_lets_go_when_the_crab_dies() -> void:
 	var player: Player3D = new_player_3d_on_floor()
 	var crab: Crab = _passive_crab(player, AHEAD)
-	crab.fog = 1
+	crab.health_override = 1
 	var runner: GdUnitSceneRunner = scene_runner(player.get_parent())
 	await physics_ticks(runner, 5)
 	await hold(runner, "lock_on")
@@ -113,7 +113,7 @@ func test_lock_on_lets_go_when_the_crabs_fog_clears() -> void:
 	crab.take_strike()
 	await physics_ticks(runner, 3)
 
-	assert_bool(crab.is_cleared()).is_true()
+	assert_bool(crab.is_dead()).is_true()
 	assert_object(_lock_on(player).target).is_null()
 	await release(runner, "lock_on")
 

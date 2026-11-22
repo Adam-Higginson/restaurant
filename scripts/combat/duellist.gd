@@ -26,9 +26,9 @@ signal cut_started(cut: KnifeCut)
 ## Emitted when a cut reaches the moment it lands. [param hit] says whether
 ## it counted on anything.
 signal struck(hit: bool)
-## Emitted for each crab a cut counts on (or flips). [param cleared] says
-## whether it was the cut that cleared its fog.
-signal strike_landed(crab: Crab, cleared: bool, cut: KnifeCut)
+## Emitted for each crab a cut counts on (or flips). [param killed] says
+## whether it was the cut that killed it.
+signal strike_landed(crab: Crab, killed: bool, cut: KnifeCut)
 ## Emitted when a swing reaches a creature that isn't open, so it doesn't count.
 signal glanced
 ## Emitted when the pan goes up.
@@ -354,7 +354,7 @@ func _on_cut_started(cut: KnifeCut) -> void:
 	cut_started.emit(cut)
 
 
-# [param cut] meeting every fog-crab in its reach: each that's open takes
+# [param cut] meeting every crab in its reach: each that's open takes
 # its damage and is knocked back; a fillet flips one that's mid-lunge.
 func _land(cut: KnifeCut) -> void:
 	var hit: bool = false
@@ -368,9 +368,9 @@ func _land(cut: KnifeCut) -> void:
 				* cut.push
 		if crab.take_strike(push, cut.damage, cut.flips_lunging):
 			hit = true
-			strike_landed.emit(crab, crab.is_cleared(), cut)
-			if crab.is_cleared():
-				_spirit.remark(&"fog_cleared")
+			strike_landed.emit(crab, crab.is_dead(), cut)
+			if crab.is_dead():
+				_spirit.remark(&"crab_killed")
 	struck.emit(hit)
 	if reached and not hit:
 		glanced.emit()

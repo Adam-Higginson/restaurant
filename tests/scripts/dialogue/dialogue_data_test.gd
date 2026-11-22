@@ -6,7 +6,7 @@ extends GameTestSuite
 ## Every moment the game asks the lantern to react to.
 const MOMENTS: Array[StringName] = [&"returned", &"remembered", &"caught",
 		&"morning", &"hove_to", &"supper", &"dim", &"far_light", &"island", &"pulled_out",
-		&"fog_cleared"]
+		&"crab_killed"]
 
 
 func test_there_are_conversations_to_check() -> void:

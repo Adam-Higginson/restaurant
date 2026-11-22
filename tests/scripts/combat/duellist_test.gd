@@ -282,7 +282,7 @@ func test_a_strike_counts_while_the_crab_is_open() -> void:
 	await strike_and_land(runner, player)
 
 	assert_int(crab.cycle.state).is_equal(CrabCycle.State.OPENING)
-	assert_int(crab.cycle.damage_taken).is_equal(1)
+	assert_int(crab.cycle.damage_taken).is_equal(Duellist.CHOP.damage)
 	assert_array(hits).contains_exactly([true])
 
 
@@ -347,7 +347,7 @@ func test_three_taps_in_an_opening_chop_slice_and_cleave() -> void:
 		await physics_ticks(runner, 12)
 
 	assert_array(cuts).contains_exactly([&"chop", &"slice", &"cleave"])
-	assert_int(crab.cycle.damage_taken).is_equal(4)
+	assert_int(crab.cycle.damage_taken).is_equal(40)
 
 
 func test_a_pause_starts_the_chain_again() -> void:
@@ -485,7 +485,7 @@ func test_a_fillet_hits_all_round() -> void:
 	assert_int(crab.cycle.damage_taken).is_equal(Duellist.FILLET.damage)
 
 
-# --- Clearing the fog ------------------------------------------------------------
+# --- Killing the crab -------------------------------------------------------------
 
 func test_two_good_openings_clear_a_crab() -> void:
 	var player: Player3D = new_player_3d_on_floor()
@@ -500,41 +500,60 @@ func test_two_good_openings_clear_a_crab() -> void:
 
 	# Tapping all through every opening, for up to 10 seconds.
 	for tick: int in 600:
-		if crab.is_cleared():
+		if crab.is_dead():
 			break
 		if crab.cycle.is_open():
 			duellist_of(player).strike()
 		await physics_ticks(runner, 1)
 
-	assert_bool(crab.is_cleared()).is_true()
+	assert_bool(crab.is_dead()).is_true()
 	assert_int(openings[0]).is_equal(2)
 
-func test_strikes_in_openings_clear_the_fog_and_it_wanders_off() -> void:
+func test_strikes_in_openings_kill_it_and_it_never_hits_again() -> void:
 	var player: Player3D = new_player_3d_on_floor()
 	stand_firm(player)
 	var crab: Crab = new_crab(player, CLOSE)
-	crab.fog = 3
+	crab.health_override = 30
 	var runner: GdUnitSceneRunner = scene_runner(player.get_parent())
-	var cleared: Array[int] = [0]
-	crab.fog_cleared.connect(func() -> void: cleared[0] += 1)
+	var deaths: Array[int] = [0]
+	crab.died.connect(func() -> void: deaths[0] += 1)
 
 	# Strike whenever it's open, for up to 15 seconds.
 	for tick: int in 900:
-		if crab.is_cleared():
+		if crab.is_dead():
 			break
 		if crab.cycle.is_open():
 			duellist_of(player).strike()
 		await physics_ticks(runner, 1)
 
-	assert_bool(crab.is_cleared()).is_true()
-	assert_int(cleared[0]).is_equal(1)
+	assert_bool(crab.is_dead()).is_true()
+	assert_int(deaths[0]).is_equal(1)
 	assert_bool(crab.is_in_group(LockOn.GROUP)).is_false()
-	# It ambles away and never hits again.
+	# It lies still and never hits again.
 	var hearts_then: int = duellist_of(player).hearts.halves
 	var where: Vector3 = crab.global_position
-	await physics_ticks(runner, 240)
-	assert_float(crab.global_position.distance_to(where)).is_greater(1.0)
+	await physics_ticks(runner, 120)
+	assert_float(crab.global_position.distance_to(where)).is_less(0.3)
 	assert_int(duellist_of(player).hearts.halves).is_equal(hearts_then)
+
+
+func test_a_dead_crab_lies_there_then_sinks_and_is_gone() -> void:
+	var player: Player3D = new_player_3d_on_floor()
+	var crab: Crab = new_crab(player, Vector3(0, 0, -4))
+	crab.notice_range = 0.0
+	crab.health_override = 1
+	var runner: GdUnitSceneRunner = scene_runner(player.get_parent())
+	await physics_ticks(runner, 2)
+	crab.cycle.engage()
+	crab.cycle.tick(crab.windup_seconds + crab.attack_seconds)
+
+	crab.take_strike()
+	await physics_ticks(runner, int(crab.linger_seconds * 60.0) - 10)
+	assert_bool(is_instance_valid(crab)).is_true()
+	assert_float(crab.sunk_amount()).is_equal(0.0)
+	await physics_ticks(runner, int(crab.sink_seconds * 60.0) + 20)
+
+	assert_bool(is_instance_valid(crab)).is_false()
 
 
 func test_a_parry_then_strikes_in_the_stagger_count() -> void:
@@ -549,7 +568,7 @@ func test_a_parry_then_strikes_in_the_stagger_count() -> void:
 
 	await strike_and_land(runner, player)
 
-	assert_int(crab.cycle.damage_taken).is_equal(1)
+	assert_int(crab.cycle.damage_taken).is_equal(Duellist.CHOP.damage)
 
 
 # --- Defeat ----------------------------------------------------------------------
@@ -598,7 +617,7 @@ func test_a_crab_can_beat_you_hit_by_hit() -> void:
 	assert_int(duellist_of(player).hearts.halves).is_equal(2)
 
 
-func test_the_fog_closes_back_over_a_crab_that_wins() -> void:
+func test_a_crab_that_wins_is_whole_again() -> void:
 	var player: Player3D = new_player_3d_on_floor()
 	stand_firm(player)
 	_landing(player, Vector3(20, 0, 20))
@@ -606,7 +625,7 @@ func test_the_fog_closes_back_over_a_crab_that_wins() -> void:
 	var runner: GdUnitSceneRunner = scene_runner(player.get_parent())
 	await physics_ticks(runner, FIRST_OPENING)
 	await strike_and_land(runner, player)
-	assert_int(crab.cycle.damage_taken).is_equal(1)
+	assert_int(crab.cycle.damage_taken).is_equal(Duellist.CHOP.damage)
 	# Until the moment after the crab's own blow has passed.
 	await physics_ticks(runner, 45)
 
@@ -659,7 +678,7 @@ func test_each_state_has_its_mood() -> void:
 	assert_int(Duellist.mood_for(CrabCycle.State.ATTACK)).is_equal(LanternSpirit.Mood.CALM)
 	assert_int(Duellist.mood_for(CrabCycle.State.OPENING)).is_equal(LanternSpirit.Mood.OPEN)
 	assert_int(Duellist.mood_for(CrabCycle.State.STAGGERED)).is_equal(LanternSpirit.Mood.OPEN)
-	assert_int(Duellist.mood_for(CrabCycle.State.CLEARED)).is_equal(LanternSpirit.Mood.CALM)
+	assert_int(Duellist.mood_for(CrabCycle.State.DEAD)).is_equal(LanternSpirit.Mood.CALM)
 	assert_int(Duellist.mood_for(CrabCycle.State.FLIPPED)).is_equal(LanternSpirit.Mood.OPEN)
 
 
