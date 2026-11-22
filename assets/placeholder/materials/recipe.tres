@@ -1,0 +1,8 @@
+[gd_resource type="StandardMaterial3D" format=3 uid="uid://br8y6ysbvmpa5"]
+
+[ext_resource type="Texture2D" path="res://assets/placeholder/textures/recipe.png" id="1_tf4g0"]
+
+[resource]
+albedo_texture = ExtResource("1_tf4g0")
+roughness = 0.9
+texture_filter = 0
