@@ -115,6 +115,25 @@ func test_a_strike_plays_the_strike() -> void:
 	assert_int(model.pose).is_equal(CharacterModel.Pose.STRIKE)
 
 
+func test_the_walk_plays_as_fast_as_the_feet_must_go() -> void:
+	# Made for 1 m/s: walking at 2 plays it twice as fast, at 0.5 half.
+	assert_float(CharacterModel.walk_playback(2.0, 1.0)).is_equal_approx(2.0, 0.001)
+	assert_float(CharacterModel.walk_playback(0.5, 1.0)).is_equal_approx(0.5, 0.001)
+	# Within limits, and normal speed when the walk's speed isn't known.
+	assert_float(CharacterModel.walk_playback(20.0, 1.0)).is_equal_approx(4.0, 0.001)
+	assert_float(CharacterModel.walk_playback(2.0, 0.0)).is_equal_approx(1.0, 0.001)
+
+
+func test_aboard_the_ship_you_walk_slower() -> void:
+	var sea: Node = (load("res://scenes/prototype/sea.tscn") as PackedScene).instantiate()
+	auto_free(sea)
+	var aboard: Player3D = sea.get_node("Player") as Player3D
+	var anywhere: Player3D = (load("res://scenes/prototype/player.tscn") as PackedScene) 			.instantiate() as Player3D
+	auto_free(anywhere)
+
+	assert_float(aboard.speed).is_less(anywhere.speed)
+
+
 func test_the_pose_is_a_strike_or_parry_first_then_walking() -> void:
 	assert_int(CharacterModel.pose_for(false, false, false)).is_equal(CharacterModel.Pose.IDLE)
 	assert_int(CharacterModel.pose_for(true, false, false)).is_equal(CharacterModel.Pose.WALK)

@@ -92,6 +92,10 @@ var _duellist: Duellist = null
 ## How high a toe joint is when its boot's sole is on the floor, in metres
 ## above this node: measured from the rest pose when the character is built.
 var _toe_height: float = 0.0
+## How fast the walk animation moves its feet, played at normal speed, in
+## metres per second: the speed it was made for. Measured when built; 0 if
+## there's no walk.
+var _stride_speed: float = 0.0
 
 
 func _ready() -> void:
@@ -110,6 +114,9 @@ func _process(_delta: float) -> void:
 	var striking: bool = _duellist != null and _duellist.is_striking()
 	var parrying: bool = _duellist != null and _duellist.parry.is_active()
 	play(pose_for(walking, striking, parrying))
+	# Walk in step: the walk plays as fast as the feet must go to keep up.
+	var speed: float = player.speed if player != null else 0.0
+	_animator.speed_scale = walk_playback(speed, _stride_speed) if pose == Pose.WALK else 1.0
 
 
 ## Builds the character for who the player is now. Returns whether it's
@@ -181,6 +188,22 @@ func animation_for(of: Pose) -> StringName:
 		Pose.PARRY:
 			return parry_animation
 	return idle_animation
+
+
+## How fast to play the walk so its feet keep pace with walking at
+## [param speed] metres per second, for a walk made for [param stride_speed]:
+## faster than normal for a quicker walk, slower for a slower one. 1 if the
+## walk's speed isn't known.
+static func walk_playback(speed: float, stride_speed: float) -> float:
+	if stride_speed <= 0.0 or speed <= 0.0:
+		return 1.0
+	return clampf(speed / stride_speed, 0.3, 4.0)
+
+
+## The speed the walk animation was made for, in metres per second (see
+## [method walk_playback]). 0 without a character or a walk.
+func stride_speed() -> float:
+	return _stride_speed
 
 
 ## What to play: a strike or a parry wins over walking, and walking over
@@ -294,6 +317,7 @@ func _build(parts: CharacterParts) -> void:
 	_animator.add_animation_library(LIBRARY, _library(_animator.get_node(_animator.root_node)))
 	right_hand = _hand("hand_r")
 	left_hand = _hand("hand_l")
+	_stride_speed = _measure_stride()
 	pose = Pose.IDLE
 	play(Pose.IDLE)
 
@@ -392,6 +416,43 @@ func _rest_toe_height() -> float:
 	if lowest == INF:
 		lowest = 0.0
 	return to_local(toe_at).y - lowest
+
+
+# The speed the walk was made for: plays it through once, watching a toe.
+# While that foot is down it sweeps backwards under the body exactly as fast
+# as the body is meant to go forwards, so that's the speed.
+func _measure_stride() -> float:
+	var walk: StringName = StringName("%s/%s" % [LIBRARY, walk_animation])
+	var toe: int = skeleton.find_bone(TOE_BONES[0])
+	if not _animator.has_animation(walk) or toe < 0:
+		return 0.0
+	var length: float = _animator.get_animation(walk).length
+	if length <= 0.0:
+		return 0.0
+	const SAMPLES: int = 60
+	var step: float = length / SAMPLES
+	var heights: PackedFloat32Array = []
+	var alongs: PackedFloat32Array = []
+	_animator.play(walk)
+	for sample: int in SAMPLES + 1:
+		_animator.seek(step * sample, true)
+		var at: Vector3 = to_local(skeleton.global_transform
+				* skeleton.get_bone_global_pose(toe).origin)
+		heights.append(at.y)
+		alongs.append(at.z)
+	_animator.stop()
+	# Down is within 2 cm of the lowest the toe gets.
+	var lowest: float = INF
+	for height: float in heights:
+		lowest = minf(lowest, height)
+	var swept: float = 0.0
+	var time_down: float = 0.0
+	for sample: int in SAMPLES:
+		if heights[sample] < lowest + 0.02 and heights[sample + 1] < lowest + 0.02:
+			# Forward is -Z, so a planted foot moves towards +Z.
+			swept += alongs[sample + 1] - alongs[sample]
+			time_down += step
+	return swept / time_down if time_down > 0.0 and swept > 0.0 else 0.0
 
 
 func _hand(bone: String) -> BoneAttachment3D:

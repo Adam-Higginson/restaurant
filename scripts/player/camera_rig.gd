@@ -35,11 +35,11 @@ const SHAKE_FADE_SECONDS_PER_METRE: float = 1.6
 ## Degrees per second turned with the right stick pushed all the way.
 @export var stick_speed: float = 150.0
 ## How high above the player's feet the camera orbits, in metres.
-@export var height: float = 1.5
+@export var height: float = 1.3
 ## Seconds to glide between the free camera and a zone's fixed shot.
 @export var blend_seconds: float = 0.6
 ## The closest the free camera zooms in, in metres from the player.
-@export var zoom_min: float = 2.5
+@export var zoom_min: float = 1.4
 ## The furthest the free camera zooms out, in metres from the player.
 @export var zoom_max: float = 9.0
 ## How far one notch of the mouse wheel zooms, in metres.

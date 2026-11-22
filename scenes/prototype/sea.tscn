@@ -253,6 +253,7 @@ loop_route = true
 
 [node name="Player" parent="." unique_id=1279594075 instance=ExtResource("7_p3dpl")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -23.5, 5.35, 47)
+speed = 2.0
 
 [node name="Hud3D" parent="." unique_id=793774154 node_paths=PackedStringArray("player") instance=ExtResource("8_hud")]
 player = NodePath("../Player")
