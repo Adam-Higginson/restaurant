@@ -2,6 +2,7 @@
 
 [ext_resource type="Script" path="res://scripts/combat/fog_crab.gd" id="1_crab"]
 [ext_resource type="Script" path="res://scripts/combat/crab_sounds.gd" id="2_sounds"]
+[ext_resource type="Script" path="res://scripts/art/third_party_model.gd" id="3_model"]
 [ext_resource type="AudioStream" path="res://assets/audio/combat/crab_click.tres" id="10_crab_click"]
 [ext_resource type="AudioStream" path="res://assets/audio/combat/crab_lunge.tres" id="11_crab_lunge"]
 [ext_resource type="AudioStream" path="res://assets/audio/combat/fog_clear.tres" id="12_fog_clear"]
@@ -20,11 +21,6 @@ roughness = 0.8
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_eye"]
 albedo_color = Color(0.08, 0.07, 0.07, 1)
 
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_fog"]
-transparency = 1
-shading_mode = 0
-albedo_color = Color(0.42, 0.47, 0.58, 0.62)
-
 [sub_resource type="BoxMesh" id="BoxMesh_shell"]
 size = Vector3(1.0, 0.4, 0.7)
 
@@ -36,12 +32,6 @@ size = Vector3(0.08, 0.18, 0.08)
 
 [sub_resource type="BoxMesh" id="BoxMesh_leg"]
 size = Vector3(0.5, 0.08, 0.08)
-
-[sub_resource type="SphereMesh" id="SphereMesh_fog"]
-radius = 1.0
-height = 1.6
-radial_segments = 8
-rings = 4
 
 [sub_resource type="BoxMesh" id="BoxMesh_chip"]
 material = SubResource("StandardMaterial3D_shell")
@@ -108,11 +98,13 @@ transform = Transform3D(3, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.14, 0.2)
 material_override = SubResource("StandardMaterial3D_claw")
 mesh = SubResource("BoxMesh_leg")
 
-[node name="Fog" type="MeshInstance3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5, 0)
-cast_shadow = 0
-material_override = SubResource("StandardMaterial3D_fog")
-mesh = SubResource("SphereMesh_fog")
+[node name="Crab" type="Node3D" parent="Model" node_paths=PackedStringArray("stand_ins")]
+transform = Transform3D(-1, 0, 0, 0, 1, 0, 0, 0, -1, 0, 0, 0)
+script = ExtResource("3_model")
+path = "res://assets/third_party/oga_crab/crab.glb"
+fit_size = Vector3(3.0, 1.8, 3.0)
+stand_ins = [NodePath("../Shell"), NodePath("../ClawLeft"), NodePath("../ClawRight"), NodePath("../EyeLeft"), NodePath("../EyeRight"), NodePath("../LegsFront"), NodePath("../LegsBack")]
+grain_metres = 0.15
 
 [node name="Sounds" type="Node3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5, 0)

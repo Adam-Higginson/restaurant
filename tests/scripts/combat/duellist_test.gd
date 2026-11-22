@@ -270,7 +270,6 @@ func test_three_strikes_in_openings_clear_the_fog_and_it_wanders_off() -> void:
 	assert_bool(crab.is_cleared()).is_true()
 	assert_int(cleared[0]).is_equal(1)
 	assert_bool(crab.is_in_group(LockOn.GROUP)).is_false()
-	assert_bool((crab.get_node("Fog") as Node3D).visible).is_false()
 	# It ambles away and never hits again.
 	var hearts_then: int = duellist_of(player).hearts.halves
 	var where: Vector3 = crab.global_position

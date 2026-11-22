@@ -9,7 +9,9 @@ extends CharacterBody3D
 ##
 ## The rules live in its [member cycle] (a [CrabCycle]); this script walks
 ## it about, lands its hits on the [Duellist], and acts each state out with
-## its greybox model.
+## its model: the whole body rears, lunges and sags, and when the real
+## crab model is there ([ThirdPartyModel], greybox otherwise) its own idle
+## and walk play, and its claws rise through its arm bones.
 
 ## Emitted when its fog clears.
 signal fog_cleared
@@ -18,6 +20,13 @@ signal fog_cleared
 const GROUP: StringName = LockOn.GROUP
 ## How long it flashes white when a strike lands, in seconds.
 const FLASH_SECONDS: float = 0.12
+## The real model's animations: standing and scuttling.
+const IDLE_ANIMATION: StringName = &"idle"
+const WALK_ANIMATION: StringName = &"walk"
+## The real model's upper arm bones, which lift the claws.
+const ARM_BONES: PackedStringArray = ["left arm 1.1", "right arm 1.1"]
+## How far the claws lift at the height of the rear-up, in radians.
+const CLAW_LIFT: float = 0.9
 
 ## How long it rears up before attacking, in seconds: the tell.
 @export var windup_seconds: float = 0.8
@@ -60,6 +69,8 @@ var _skid: Vector3 = Vector3.ZERO
 ## Seconds left of the white flash after a strike that counted.
 var _flash_left: float = 0.0
 var _time: float = 0.0
+## How far the claws are lifted, from 0 to 1, set as it acts each state out.
+var _claws: float = 0.0
 ## Every mesh in its model, which the flash lays white over.
 var _meshes: Array[GeometryInstance3D] = []
 ## The white laid over its meshes as a strike lands. Unshaded, so it shows
@@ -67,13 +78,16 @@ var _meshes: Array[GeometryInstance3D] = []
 var _flash: StandardMaterial3D = StandardMaterial3D.new()
 ## Whether the flash is laid over the meshes right now.
 var _flashing: bool = false
+## The real model's animations and skeleton, or null on the greybox.
+var _animator: AnimationPlayer = null
+var _skeleton: Skeleton3D = null
 
 @onready var _model: Node3D = $Model
 @onready var _claw_left: Node3D = $Model/ClawLeft
 @onready var _claw_right: Node3D = $Model/ClawRight
-@onready var _fog: Node3D = $Fog
 @onready var _chips: CPUParticles3D = $Chips
 @onready var _wisps: CPUParticles3D = $Wisps
+@onready var _dresser: ThirdPartyModel = get_node_or_null("Model/Crab") as ThirdPartyModel
 
 
 func _ready() -> void:
@@ -89,6 +103,7 @@ func _ready() -> void:
 	_flash.transparency = BaseMaterial3D.TRANSPARENCY_ALPHA
 	_flash.albedo_color = Color(1.0, 1.0, 1.0, 0.85)
 	find_meshes()
+	_find_rig()
 
 
 func _physics_process(delta: float) -> void:
@@ -109,8 +124,9 @@ func _physics_process(delta: float) -> void:
 	move_and_slide()
 
 
-func _process(_delta: float) -> void:
+func _process(delta: float) -> void:
 	_act_out()
+	_animate(delta)
 
 
 ## A knife strike, knocking it back along [param push] (a flat velocity in
@@ -126,6 +142,24 @@ func take_strike(push: Vector3 = Vector3.ZERO) -> bool:
 	_chips.restart()
 	_wisps.restart()
 	return true
+
+
+## The real model's animation that should play: walking while it moves
+## across the ground, standing otherwise.
+static func animation_for(moving: bool) -> StringName:
+	return WALK_ANIMATION if moving else IDLE_ANIMATION
+
+
+## Which animation the real model is playing, or an empty name on the greybox.
+func playing() -> StringName:
+	if _animator == null:
+		return &""
+	return StringName(_animator.current_animation)
+
+
+## How far its claws are lifted now, from 0 (resting) to 1 (reared up).
+func claw_lift() -> float:
+	return _claws
 
 
 ## Whether it's being knocked back by a strike.
@@ -262,11 +296,8 @@ func _act_out() -> void:
 	_model.scale = Vector3(1.0, squash, 1.0)
 	_claw_left.position.y = 0.45 + claws
 	_claw_right.position.y = 0.45 + claws
+	_claws = clampf(claws / 0.5, 0.0, 1.0)
 	_show_flash(_flash_left > 0.0)
-	# The fog thins with each strike and is gone when it's cleared.
-	_fog.visible = not is_cleared()
-	var thin: float = 1.0 - 0.2 * float(cycle.strikes)
-	_fog.scale = Vector3.ONE * maxf(thin, 0.3)
 
 
 # Lays the white flash over every mesh, or takes it off.
@@ -277,3 +308,41 @@ func _show_flash(shown: bool) -> void:
 	for mesh: GeometryInstance3D in _meshes:
 		if is_instance_valid(mesh):
 			mesh.material_overlay = _flash if shown else null
+
+
+# Finds the real model's animations and skeleton, if it's showing. The
+# animations are moved on by hand ([method _animate]), so the claws can be
+# lifted after each frame's animation, not overwritten by it.
+func _find_rig() -> void:
+	_animator = null
+	_skeleton = null
+	if _dresser == null or _dresser.model == null:
+		return
+	var animators: Array[Node] = _dresser.model.find_children("*", "AnimationPlayer", true, false)
+	var skeletons: Array[Node] = _dresser.model.find_children("*", "Skeleton3D", true, false)
+	if animators.is_empty() or skeletons.is_empty():
+		return
+	_animator = animators[0] as AnimationPlayer
+	_skeleton = skeletons[0] as Skeleton3D
+	_animator.callback_mode_process = AnimationMixer.ANIMATION_CALLBACK_MODE_PROCESS_MANUAL
+	for anim_name: StringName in [IDLE_ANIMATION, WALK_ANIMATION]:
+		if _animator.has_animation(anim_name):
+			_animator.get_animation(anim_name).loop_mode = Animation.LOOP_LINEAR
+
+
+# Plays the real model's idle or walk, then lifts its claws.
+func _animate(delta: float) -> void:
+	if _animator == null:
+		return
+	var moving: bool = Vector2(velocity.x, velocity.z).length() > 0.1
+	var wanted: StringName = animation_for(moving)
+	if _animator.has_animation(wanted) and _animator.current_animation != String(wanted):
+		_animator.play(wanted, 0.15)
+	_animator.advance(delta)
+	for bone_name: String in ARM_BONES:
+		var bone: int = _skeleton.find_bone(bone_name)
+		if bone < 0:
+			continue
+		var turned: Quaternion = _skeleton.get_bone_pose_rotation(bone)
+		_skeleton.set_bone_pose_rotation(bone,
+				turned * Quaternion(Vector3.RIGHT, -CLAW_LIFT * _claws))
