@@ -1,4 +1,4 @@
-[gd_scene format=3]
+[gd_scene format=3 uid="uid://cpaljq6iky4fj"]
 
 [ext_resource type="Script" path="res://scripts/ship/ship.gd" id="1_7ykrf"]
 [ext_resource type="Material" path="res://assets/placeholder/materials/galley_wood.tres" id="2_nifss"]
@@ -9,6 +9,7 @@
 [ext_resource type="Resource" path="res://data/items/chopping_board.tres" id="8_board"]
 [ext_resource type="PackedScene" path="res://scenes/prototype/props/plate_rack.tscn" id="9_rack"]
 [ext_resource type="Material" path="res://assets/placeholder/materials/wet_deck.tres" id="10_wet"]
+[ext_resource type="Material" path="res://assets/placeholder/materials/rug_pattern.tres" id="11_jqluk"]
 [ext_resource type="Script" path="res://scripts/weather/shelter_zone.gd" id="11_shelter"]
 [ext_resource type="Script" path="res://scripts/props/swinging.gd" id="12_swing"]
 [ext_resource type="Material" path="res://assets/placeholder/materials/wet_dark_wood.tres" id="13_wetdark"]
@@ -18,6 +19,7 @@
 [ext_resource type="Material" path="res://assets/placeholder/materials/galley_floor.tres" id="17_floor"]
 [ext_resource type="PackedScene" path="res://scenes/prototype/props/galley_stove.tscn" id="18_stove"]
 [ext_resource type="PackedScene" path="res://scenes/prototype/props/crew_table.tscn" id="19_table"]
+[ext_resource type="PackedScene" path="res://scenes/prototype/dressing/open_door.tscn" id="20_42wly"]
 [ext_resource type="PackedScene" path="res://scenes/prototype/props/lantern.tscn" id="23_lantern"]
 [ext_resource type="PackedScene" path="res://scenes/prototype/props/porthole.tscn" id="24_porthole"]
 [ext_resource type="PackedScene" path="res://scenes/prototype/props/barrel.tscn" id="25_barrel"]
@@ -35,6 +37,7 @@
 [ext_resource type="PackedScene" path="res://scenes/prototype/dressing/crockery_shelf.tscn" id="44_crockery"]
 [ext_resource type="PackedScene" path="res://scenes/prototype/dressing/jar_row.tscn" id="45_jars"]
 [ext_resource type="PackedScene" path="res://scenes/prototype/dressing/stool.tscn" id="46_stool"]
+[ext_resource type="PackedScene" path="res://scenes/prototype/dressing/firewood.tscn" id="47_6pw5v"]
 [ext_resource type="PackedScene" path="res://scenes/prototype/dressing/books.tscn" id="47_books"]
 [ext_resource type="PackedScene" path="res://scenes/prototype/dressing/picture_frame.tscn" id="48_picture"]
 [ext_resource type="PackedScene" path="res://scenes/prototype/dressing/kettle.tscn" id="49_kettle"]
@@ -150,8 +153,8 @@ size = Vector3(0.12, 2.2, 0.22)
 [sub_resource type="BoxMesh" id="Cosy_9"]
 size = Vector3(0.12, 2.2, 0.22)
 
-[sub_resource type="BoxMesh" id="Cosy_10"]
-size = Vector3(2, 0.012, 2.9)
+[sub_resource type="PlaneMesh" id="PlaneMesh_jqluk"]
+size = Vector2(3.5, 2.5)
 
 [sub_resource type="BoxMesh" id="Cosy_11"]
 size = Vector3(0.3, 0.05, 1.2)
@@ -323,8 +326,20 @@ rings = 1
 [sub_resource type="BoxMesh" id="Detail_27"]
 size = Vector3(0.12, 0.03, 0.03)
 
-[sub_resource type="BoxMesh" id="Detail_45"]
-size = Vector3(1.6, 0.05, 1.3)
+[sub_resource type="BoxMesh" id="BoxMesh_42wly"]
+size = Vector3(2.4, 0.05, 1.45)
+
+[sub_resource type="BoxMesh" id="BoxMesh_6pw5v"]
+size = Vector3(0.2, 2.6, 0.1)
+
+[sub_resource type="BoxMesh" id="BoxMesh_t7qyq"]
+size = Vector3(0.2, 2.6, 0.1)
+
+[sub_resource type="BoxMesh" id="BoxMesh_1fqfs"]
+size = Vector3(0.1, 2.6, 0.2)
+
+[sub_resource type="BoxMesh" id="BoxMesh_f02mu"]
+size = Vector3(0.1, 2.6, 0.2)
 
 [sub_resource type="BoxShape3D" id="Shape_BracketPost"]
 size = Vector3(0.14, 2.7, 0.14)
@@ -404,6 +419,18 @@ size = Vector3(0.7, 0.45, 6.65)
 
 [sub_resource type="BoxShape3D" id="Shape_Shelter"]
 size = Vector3(11.4, 3.8, 13.5)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_uuyx4"]
+size = Vector3(0.2, 2.6, 0.1)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_oaj8g"]
+size = Vector3(0.2, 2.6, 0.1)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_p2e1w"]
+size = Vector3(0.1, 2.6, 0.2)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_bbi6x"]
+size = Vector3(0.1, 2.6, 0.2)
 
 [node name="Ship" type="AnimatableBody3D" unique_id=200548129]
 script = ExtResource("1_7ykrf")
@@ -612,7 +639,7 @@ light_range = 8.0
 phase = 0.71
 
 [node name="GalleyLanternFore" parent="Visuals" unique_id=449913935 instance=ExtResource("23_lantern")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.6, 3.24, 4.2)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.95, 3.3, 4.95)
 light_energy = 1.0
 light_range = 6.0
 swing_degrees = 3.0
@@ -620,7 +647,7 @@ period = 4.2
 phase = 0.2
 
 [node name="GalleyLanternAft" parent="Visuals" unique_id=2044144713 instance=ExtResource("23_lantern")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.6, 3.24, 5.8)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.15, 3.3, 4.95)
 light_energy = 1.0
 light_range = 6.0
 swing_degrees = 3.0
@@ -642,9 +669,9 @@ transform = Transform3D(0, 0, -1.35, 0, 1.35, 0, 1.35, 0, 0, 5.7, 2.35, 5.2)
 transform = Transform3D(0, 0, -1, 0, 1, 0, 1, 0, 0, 5.7, 2.3, 11)
 
 [node name="Rug" type="MeshInstance3D" parent="Visuals" unique_id=1177919460]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.75, 1.026, 5)
-material_override = ExtResource("31_rug")
-mesh = SubResource("Cosy_10")
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.55, 1.024, 4.95)
+material_override = ExtResource("11_jqluk")
+mesh = SubResource("PlaneMesh_jqluk")
 
 [node name="CrockShelf" type="MeshInstance3D" parent="Visuals" unique_id=218711784]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5.55, 2.55, 3.1)
@@ -715,12 +742,12 @@ mesh = SubResource("Cosy_22")
 script = ExtResource("56_rock")
 
 [node name="Sack1" type="MeshInstance3D" parent="Visuals" unique_id=1969830551]
-transform = Transform3D(0.9553, 0, 0.2955, 0, 1, 0, -0.2955, 0, 0.9553, 4.55, 1.2, 6.55)
+transform = Transform3D(0.9562657, 0, 0.29235974, 0, 1, 0, -0.29235974, 0, 0.9562657, -2.72, 1.2, 2.82)
 material_override = ExtResource("30_sack")
 mesh = SubResource("Cosy_24")
 
 [node name="Sack2" type="MeshInstance3D" parent="Visuals" unique_id=1967791123]
-transform = Transform3D(0.3624, 0, 0.932, 0, 1, 0, -0.932, 0, 0.3624, 4.3, 1.2, 6.75)
+transform = Transform3D(0.3745987, 0, 0.92716426, 0, 1, 0, -0.92716426, 0, 0.3745987, 4.72, 1.2, 4.4)
 material_override = ExtResource("30_sack")
 mesh = SubResource("Cosy_25")
 
@@ -853,7 +880,7 @@ material_override = ExtResource("28_darkwood")
 mesh = SubResource("Detail_6")
 
 [node name="CentrePost" type="MeshInstance3D" parent="Visuals" unique_id=1636694949]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.6, 2.12, 4.95)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3.17, 2.12, 4.95)
 material_override = ExtResource("28_darkwood")
 mesh = SubResource("Detail_7")
 
@@ -902,9 +929,9 @@ material_override = ExtResource("28_darkwood")
 mesh = SubResource("Detail_27")
 
 [node name="HearthSlab" type="MeshInstance3D" parent="Visuals" unique_id=1569686215]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.4, 1.025, 1.95)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.55, 1.025, 2.2)
 material_override = ExtResource("35_stone")
-mesh = SubResource("Detail_45")
+mesh = SubResource("BoxMesh_42wly")
 
 [node name="GalleyLanternCounters" parent="Visuals" unique_id=512058912 instance=ExtResource("23_lantern")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.6, 3.24, 1.6)
@@ -913,6 +940,29 @@ light_range = 5.5
 swing_degrees = 3.0
 period = 4.2
 phase = 0.35
+
+[node name="PartitionPost1" type="MeshInstance3D" parent="Visuals" unique_id=518977806]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.6, 2.3, 7.67)
+material_override = ExtResource("28_darkwood")
+mesh = SubResource("BoxMesh_6pw5v")
+
+[node name="PartitionPost2" type="MeshInstance3D" parent="Visuals" unique_id=2107497593]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.6, 2.3, 7.67)
+material_override = ExtResource("28_darkwood")
+mesh = SubResource("BoxMesh_t7qyq")
+
+[node name="CorridorPost1" type="MeshInstance3D" parent="Visuals" unique_id=1889035]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3.27, 2.3, 2.5)
+material_override = ExtResource("28_darkwood")
+mesh = SubResource("BoxMesh_1fqfs")
+
+[node name="CorridorPost2" type="MeshInstance3D" parent="Visuals" unique_id=177164244]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3.27, 2.3, 7.35)
+material_override = ExtResource("28_darkwood")
+mesh = SubResource("BoxMesh_f02mu")
+
+[node name="BunkDoor" parent="Visuals" unique_id=1367964293 instance=ExtResource("20_42wly")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.12, 1, 7.72)
 
 [node name="RainCatcher" type="GPUParticlesCollisionHeightField3D" parent="." unique_id=16950638]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8, 0)
@@ -1056,7 +1106,7 @@ start_item = ExtResource("8_board")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.65, 1, 1.45)
 
 [node name="CrewTable" parent="Galley" unique_id=1934072346 instance=ExtResource("19_table")]
-transform = Transform3D(0, 0, 1, 0, 1, 0, -1, 0, 0, 3.75, 1, 5)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.55, 1, 4.95)
 
 [node name="Stove" parent="Galley" unique_id=1039374703 instance=ExtResource("18_stove")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.4, 1, 1.75)
@@ -1068,7 +1118,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4.85, 1, 7.3)
 transform = Transform3D(0.2675, 0, 0.9636, 0, 1, 0, -0.9636, 0, 0.2675, 4.5, 1, 7.4)
 
 [node name="Barrel3" parent="Galley" unique_id=262011883 instance=ExtResource("25_barrel")]
-transform = Transform3D(-0.8569, 0, 0.5155, 0, 1, 0, -0.5155, 0, -0.8569, 4.85, 1, 1.75)
+transform = Transform3D(-0.8569, 0, 0.5155, 0, 1, 0, -0.5155, 0, -0.8569, 4.55, 1, 6.45)
 
 [node name="Barrel4" parent="Galley" unique_id=1328805726 instance=ExtResource("25_barrel")]
 transform = Transform3D(-0.7259, 0, -0.6878, 0, 1, 0, 0.6878, 0, -0.7259, -2.85, 1, 1.75)
@@ -1091,7 +1141,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.1, 2.75, 1.3)
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.65, 2.8, 1.45)
 
 [node name="Stool" parent="Galley" unique_id=1146224446 instance=ExtResource("46_stool")]
-transform = Transform3D(0.9211, 0, 0.3894, 0, 1, 0, -0.3894, 0, 0.9211, 2.3, 1, 2.95)
+transform = Transform3D(0.9659537, 0, 0.25882652, 0, 1, 0, -0.25882652, 0, 0.9659537, 3.15, 1, 4.95)
 
 [node name="Books" parent="Galley" unique_id=1973496325 instance=ExtResource("47_books")]
 transform = Transform3D(0, 0, -1, 0, 1, 0, 1, 0, 0, 5.55, 2.575, 3.55)
@@ -1100,20 +1150,20 @@ transform = Transform3D(0, 0, -1, 0, 1, 0, 1, 0, 0, 5.55, 2.575, 3.55)
 transform = Transform3D(0, 0, 1, 0, 1, 0, -1, 0, 0, -3.31, 2.3, 6.3)
 
 [node name="Kettle" parent="Galley" unique_id=1777275318 instance=ExtResource("49_kettle")]
-transform = Transform3D(0.8253, 0, -0.5646, 0, 1, 0, 0.5646, 0, 0.8253, 3.7, 1.87, 1.95)
+transform = Transform3D(0.8191083, 0, -0.5735458, 0, 1, 0, 0.5735458, 0, 0.8191083, 3.95, 1.97, 2.2)
 
 [node name="Mug1" parent="Galley" unique_id=1746633817 instance=ExtResource("50_mug")]
-transform = Transform3D(0.6967, 0, 0.7174, 0, 1, 0, -0.7174, 0, 0.6967, 3.55, 1.82, 4.55)
+transform = Transform3D(0.766065, 0, 0.6428048, 0, 1, 0, -0.6428048, 0, 0.766065, 2.25, 1.82, 4.6)
 
 [node name="Mug2" parent="Galley" unique_id=1425487603 instance=ExtResource("50_mug")]
-transform = Transform3D(0.3624, 0, -0.932, 0, 1, 0, 0.932, 0, 0.3624, 4, 1.82, 5.55)
+transform = Transform3D(0.93967265, 0, -0.34201285, 0, 1, 0, 0.34201285, 0, 0.93967265, 0.95, 1.82, 5.32)
 phase = 0.05
 
 [node name="MeatRack" parent="Galley" unique_id=1606966030 instance=ExtResource("51_meat")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.7, 3.3, 2.5)
 
 [node name="Bookshelf" parent="Galley" unique_id=1850797296 instance=ExtResource("52_books")]
-transform = Transform3D(0, 0, 1, 0, 1, 0, -1, 0, 0, -3.15, 1, 4.4)
+transform = Transform3D(0, 0, 1, 0, 1, 0, -1, 0, 0, -3.15, 1, 3.95)
 
 [node name="LettuceCrate" parent="Galley" unique_id=413615840 instance=ExtResource("54_lettuce")]
 transform = Transform3D(0.8776, 0, -0.4794, 0, 1, 0, 0.4794, 0, 0.8776, 4.65, 1, 3.5)
@@ -1122,10 +1172,13 @@ transform = Transform3D(0.8776, 0, -0.4794, 0, 1, 0, 0.4794, 0, 0.8776, 4.65, 1,
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4.85, 1.865, 7.3)
 
 [node name="HerbPot2" parent="Galley" unique_id=1606251523 instance=ExtResource("53_herbs")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3.12, 2.9, 4.15)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3.12, 2.9, 3.7)
 
 [node name="GreenBottle" parent="Galley" unique_id=1592694505 instance=ExtResource("55_bottle")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.5, 1.82, 5.35)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.6, 1.82, 4.6)
+
+[node name="Firewood" parent="Galley" unique_id=428997373 instance=ExtResource("47_6pw5v")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4.58, 1, 1.85)
 
 [node name="CorridorWallShape" type="CollisionShape3D" parent="." unique_id=326694443]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3.4, 2.3, 4.475)
@@ -1182,7 +1235,7 @@ path = "res://assets/third_party/sbs_textures_128/128x128/Stone/Synth-Stone_09-1
 pixels = 32
 
 [node name="CentrePostShape" type="CollisionShape3D" parent="." unique_id=284299955]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.6, 2.12, 4.95)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3.17, 2.12, 4.95)
 shape = SubResource("Detail_49")
 
 [node name="Rib1Shape" type="CollisionShape3D" parent="." unique_id=327549774]
@@ -1211,3 +1264,19 @@ script = ExtResource("11_shelter")
 [node name="Shape" type="CollisionShape3D" parent="Shelter" unique_id=1745390304]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3, 8)
 shape = SubResource("Shape_Shelter")
+
+[node name="PartitionPost1Shape" type="CollisionShape3D" parent="." unique_id=1205458082]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.6, 2.3, 7.67)
+shape = SubResource("BoxShape3D_uuyx4")
+
+[node name="PartitionPost2Shape" type="CollisionShape3D" parent="." unique_id=1217754546]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.6, 2.3, 7.67)
+shape = SubResource("BoxShape3D_oaj8g")
+
+[node name="CorridorPost1Shape" type="CollisionShape3D" parent="." unique_id=44691219]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3.27, 2.3, 2.5)
+shape = SubResource("BoxShape3D_p2e1w")
+
+[node name="CorridorPost2Shape" type="CollisionShape3D" parent="." unique_id=1327834301]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3.27, 2.3, 7.35)
+shape = SubResource("BoxShape3D_bbi6x")
