@@ -57,18 +57,27 @@ func finishes_within(work: Callable, seconds: float = 2.0) -> bool:
 
 
 ## Waits until every navigation region in the running scene is on its map,
-## so paths can be found, and returns whether that happened within
-## [param max_ticks] physics ticks. Maps update in the background: a new
-## region first joins the map empty, and its floor arrives a tick or two later.
-func wait_for_navigation(runner: GdUnitSceneRunner, max_ticks: int = 60) -> bool:
+## so paths can be found, and returns whether that happened. Maps update in
+## the background: a new region first joins the map empty, and its floor
+## arrives a tick or two later.
+##
+## It waits at least [param max_ticks] physics ticks and at least
+## [param seconds] of real time before giving up. The map is built on another
+## thread, and with --fixed-fps the ticks alone can all pass in a few
+## milliseconds, before that thread has had its turn on a busy machine.
+func wait_for_navigation(runner: GdUnitSceneRunner, max_ticks: int = 60,
+		seconds: float = 3.0) -> bool:
 	var regions: Array[NavigationRegion2D] = []
 	for node: Node in runner.scene().find_children("*", "NavigationRegion2D", true, false):
 		regions.append(node as NavigationRegion2D)
 	var tree: SceneTree = runner.scene().get_tree()
-	for i: int in max_ticks:
+	var deadline: int = Time.get_ticks_msec() + int(seconds * 1000.0)
+	var ticks: int = 0
+	while ticks < max_ticks or Time.get_ticks_msec() < deadline:
 		if _regions_are_on_their_maps(regions):
 			return true
 		await tree.physics_frame
+		ticks += 1
 	return _regions_are_on_their_maps(regions)
 
 
