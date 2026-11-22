@@ -3,24 +3,24 @@
 [ext_resource type="Shader" path="res://shaders/wet_surface.gdshader" id="1_270f2"]
 [ext_resource type="Texture2D" path="res://assets/placeholder/greybox_grid.png" id="2_a8w04"]
 
-[sub_resource type="FastNoiseLite" id="FastNoiseLite_2rmwg"]
+[sub_resource type="FastNoiseLite" id="FastNoiseLite_1"]
 frequency = 0.012
 fractal_octaves = 2
 
-[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_tcsly"]
+[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_2"]
 width = 256
 height = 256
-noise = SubResource("FastNoiseLite_2rmwg")
+noise = SubResource("FastNoiseLite_1")
 seamless = true
 
-[sub_resource type="FastNoiseLite" id="FastNoiseLite_e7vlk"]
+[sub_resource type="FastNoiseLite" id="FastNoiseLite_3"]
 seed = 7
 frequency = 0.06
 
-[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_tmto4"]
+[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_4"]
 width = 128
 height = 128
-noise = SubResource("FastNoiseLite_e7vlk")
+noise = SubResource("FastNoiseLite_3")
 seamless = true
 
 [resource]
@@ -41,10 +41,10 @@ shader_parameter/soak = 0.6
 shader_parameter/soaked_roughness = 0.62
 shader_parameter/puddles = 0.4
 shader_parameter/puddle_cover = 0.24
-shader_parameter/puddle_noise = SubResource("NoiseTexture2D_tcsly")
+shader_parameter/puddle_noise = SubResource("NoiseTexture2D_2")
 shader_parameter/puddle_scale = 0.15
 shader_parameter/ripple_cell = 0.3
 shader_parameter/ripple_rate = 1.3
 shader_parameter/ripple_strength = 0.6
-shader_parameter/streak_noise = SubResource("NoiseTexture2D_tmto4")
+shader_parameter/streak_noise = SubResource("NoiseTexture2D_4")
 shader_parameter/streaks = 1.0

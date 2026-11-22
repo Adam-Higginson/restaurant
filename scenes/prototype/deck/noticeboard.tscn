@@ -7,95 +7,95 @@
 [ext_resource type="Material" path="res://assets/placeholder/materials/drawing.tres" id="5_b4x3k"]
 [ext_resource type="Material" path="res://assets/placeholder/materials/brass.tres" id="6_lx5ki"]
 
-[sub_resource type="BoxMesh" id="BoxMesh_o1yny"]
+[sub_resource type="BoxMesh" id="BoxMesh_1"]
 size = Vector3(1, 0.74, 0.05)
 
-[sub_resource type="BoxMesh" id="BoxMesh_xi7k2"]
+[sub_resource type="BoxMesh" id="BoxMesh_2"]
 size = Vector3(0.88, 0.62, 0.02)
 
-[sub_resource type="BoxMesh" id="BoxMesh_rjmkr"]
+[sub_resource type="BoxMesh" id="BoxMesh_3"]
 size = Vector3(1.12, 0.05, 0.18)
 
-[sub_resource type="BoxMesh" id="BoxMesh_gtpck"]
+[sub_resource type="BoxMesh" id="BoxMesh_4"]
 size = Vector3(0.44, 0.32, 0.006)
 
-[sub_resource type="BoxMesh" id="BoxMesh_2rh1n"]
+[sub_resource type="BoxMesh" id="BoxMesh_5"]
 size = Vector3(0.17, 0.22, 0.006)
 
-[sub_resource type="BoxMesh" id="BoxMesh_2a5gj"]
+[sub_resource type="BoxMesh" id="BoxMesh_6"]
 size = Vector3(0.2, 0.14, 0.006)
 
-[sub_resource type="BoxMesh" id="BoxMesh_wftfw"]
+[sub_resource type="BoxMesh" id="BoxMesh_7"]
 size = Vector3(0.22, 0.16, 0.006)
 
-[sub_resource type="SphereMesh" id="SphereMesh_724cp"]
+[sub_resource type="SphereMesh" id="SphereMesh_8"]
 radius = 0.012
 height = 0.024
 radial_segments = 8
 rings = 4
 
-[node name="Noticeboard" type="Node3D" unique_id=1996010697]
+[node name="Noticeboard" type="Node3D" unique_id=992923709]
 
-[node name="Frame" type="MeshInstance3D" parent="." unique_id=214666888]
+[node name="Frame" type="MeshInstance3D" parent="." unique_id=1436294216]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -0.025)
 material_override = ExtResource("1_2ulbt")
-mesh = SubResource("BoxMesh_o1yny")
+mesh = SubResource("BoxMesh_1")
 
-[node name="Cork" type="MeshInstance3D" parent="." unique_id=404997220]
+[node name="Cork" type="MeshInstance3D" parent="." unique_id=1815684679]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -0.055)
 material_override = ExtResource("2_4jfrr")
-mesh = SubResource("BoxMesh_xi7k2")
+mesh = SubResource("BoxMesh_2")
 
-[node name="Roof" type="MeshInstance3D" parent="." unique_id=1776365681]
+[node name="Roof" type="MeshInstance3D" parent="." unique_id=230267137]
 transform = Transform3D(1, 0, 0, 0, 0.95105654, 0.309017, 0, -0.309017, 0.95105654, 0, 0.4, -0.08)
 material_override = ExtResource("1_2ulbt")
-mesh = SubResource("BoxMesh_rjmkr")
+mesh = SubResource("BoxMesh_3")
 
-[node name="Map" type="MeshInstance3D" parent="." unique_id=1559045771]
+[node name="Map" type="MeshInstance3D" parent="." unique_id=537878510]
 transform = Transform3D(0.9986295, 0.05233596, 0, -0.05233596, 0.9986295, 0, 0, 0, 1, -0.17, 0.06, -0.068)
 material_override = ExtResource("3_02k3q")
 cast_shadow = 0
-mesh = SubResource("BoxMesh_gtpck")
+mesh = SubResource("BoxMesh_4")
 
-[node name="Note1" type="MeshInstance3D" parent="." unique_id=1881644806]
+[node name="Note1" type="MeshInstance3D" parent="." unique_id=164045033]
 transform = Transform3D(0.9961947, -0.08715574, 0, 0.08715574, 0.9961947, 0, 0, 0, 1, 0.24, 0.12, -0.068)
 material_override = ExtResource("4_n2dyb")
 cast_shadow = 0
-mesh = SubResource("BoxMesh_2rh1n")
+mesh = SubResource("BoxMesh_5")
 
-[node name="Note2" type="MeshInstance3D" parent="." unique_id=735648079]
+[node name="Note2" type="MeshInstance3D" parent="." unique_id=1544271072]
 transform = Transform3D(0.9975641, 0.06975647, 0, -0.06975647, 0.9975641, 0, 0, 0, 1, 0.27, -0.16, -0.069)
 material_override = ExtResource("4_n2dyb")
 cast_shadow = 0
-mesh = SubResource("BoxMesh_2a5gj")
+mesh = SubResource("BoxMesh_6")
 
-[node name="Drawing" type="MeshInstance3D" parent="." unique_id=1301808193]
+[node name="Drawing" type="MeshInstance3D" parent="." unique_id=473478465]
 transform = Transform3D(0.9945219, -0.104528464, 0, 0.104528464, 0.9945219, 0, 0, 0, 1, -0.22, -0.2, -0.07)
 material_override = ExtResource("5_b4x3k")
 cast_shadow = 0
-mesh = SubResource("BoxMesh_wftfw")
+mesh = SubResource("BoxMesh_7")
 
-[node name="Pin1" type="MeshInstance3D" parent="." unique_id=186333090]
+[node name="Pin1" type="MeshInstance3D" parent="." unique_id=883509908]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.38, 0.2, -0.075)
 material_override = ExtResource("6_lx5ki")
-mesh = SubResource("SphereMesh_724cp")
+mesh = SubResource("SphereMesh_8")
 
-[node name="Pin2" type="MeshInstance3D" parent="." unique_id=1850615337]
+[node name="Pin2" type="MeshInstance3D" parent="." unique_id=1467020003]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.04, 0.2, -0.075)
 material_override = ExtResource("6_lx5ki")
-mesh = SubResource("SphereMesh_724cp")
+mesh = SubResource("SphereMesh_8")
 
-[node name="Pin3" type="MeshInstance3D" parent="." unique_id=1497870979]
+[node name="Pin3" type="MeshInstance3D" parent="." unique_id=957689683]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.24, 0.22, -0.075)
 material_override = ExtResource("6_lx5ki")
-mesh = SubResource("SphereMesh_724cp")
+mesh = SubResource("SphereMesh_8")
 
-[node name="Pin4" type="MeshInstance3D" parent="." unique_id=1421969021]
+[node name="Pin4" type="MeshInstance3D" parent="." unique_id=711130602]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.27, -0.1, -0.075)
 material_override = ExtResource("6_lx5ki")
-mesh = SubResource("SphereMesh_724cp")
+mesh = SubResource("SphereMesh_8")
 
-[node name="Pin5" type="MeshInstance3D" parent="." unique_id=1063715180]
+[node name="Pin5" type="MeshInstance3D" parent="." unique_id=1618921405]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.22, -0.13, -0.075)
 material_override = ExtResource("6_lx5ki")
-mesh = SubResource("SphereMesh_724cp")
+mesh = SubResource("SphereMesh_8")

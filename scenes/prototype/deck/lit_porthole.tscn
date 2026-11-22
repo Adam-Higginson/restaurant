@@ -4,96 +4,96 @@
 [ext_resource type="Material" uid="uid://8xzzkxef16wgf" path="res://assets/placeholder/materials/window_glow.tres" id="2_6aswu"]
 [ext_resource type="Material" path="res://assets/placeholder/materials/iron.tres" id="3_thu3s"]
 
-[sub_resource type="CylinderMesh" id="CylinderMesh_r3jjm"]
+[sub_resource type="CylinderMesh" id="CylinderMesh_1"]
 top_radius = 0.31
 bottom_radius = 0.31
 height = 0.1
 radial_segments = 12
 rings = 1
 
-[sub_resource type="CylinderMesh" id="CylinderMesh_xt0ki"]
+[sub_resource type="CylinderMesh" id="CylinderMesh_2"]
 top_radius = 0.24
 bottom_radius = 0.24
 height = 0.1
 radial_segments = 12
 rings = 1
 
-[sub_resource type="BoxMesh" id="BoxMesh_8xqdh"]
+[sub_resource type="BoxMesh" id="BoxMesh_3"]
 size = Vector3(0.48, 0.035, 0.03)
 
-[sub_resource type="BoxMesh" id="BoxMesh_n7irq"]
+[sub_resource type="BoxMesh" id="BoxMesh_4"]
 size = Vector3(0.035, 0.48, 0.03)
 
-[sub_resource type="SphereMesh" id="SphereMesh_waqyv"]
+[sub_resource type="SphereMesh" id="SphereMesh_5"]
 radius = 0.018
 height = 0.036
 radial_segments = 8
 rings = 4
 
-[node name="LitPorthole" type="Node3D" unique_id=620626073]
+[node name="LitPorthole" type="Node3D" unique_id=301008803]
 
-[node name="Rim" type="MeshInstance3D" parent="." unique_id=1034063761]
+[node name="Rim" type="MeshInstance3D" parent="." unique_id=922123103]
 transform = Transform3D(1, 0, 0, 0, -4.371139e-08, -1, 0, 1, -4.371139e-08, 0, 0, -0.03)
 material_override = ExtResource("1_sann4")
-mesh = SubResource("CylinderMesh_r3jjm")
+mesh = SubResource("CylinderMesh_1")
 
-[node name="Glass" type="MeshInstance3D" parent="." unique_id=346527794]
+[node name="Glass" type="MeshInstance3D" parent="." unique_id=1367851631]
 transform = Transform3D(1, 0, 0, 0, -4.371139e-08, -1, 0, 1, -4.371139e-08, 0, 0, -0.045)
 material_override = ExtResource("2_6aswu")
 cast_shadow = 0
-mesh = SubResource("CylinderMesh_xt0ki")
+mesh = SubResource("CylinderMesh_2")
 
-[node name="MullionAcross" type="MeshInstance3D" parent="." unique_id=697294214]
+[node name="MullionAcross" type="MeshInstance3D" parent="." unique_id=1809962950]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -0.1)
 material_override = ExtResource("3_thu3s")
-mesh = SubResource("BoxMesh_8xqdh")
+mesh = SubResource("BoxMesh_3")
 
-[node name="MullionDown" type="MeshInstance3D" parent="." unique_id=1552855910]
+[node name="MullionDown" type="MeshInstance3D" parent="." unique_id=1551626869]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -0.1)
 material_override = ExtResource("3_thu3s")
-mesh = SubResource("BoxMesh_n7irq")
+mesh = SubResource("BoxMesh_4")
 
-[node name="Rivet1" type="MeshInstance3D" parent="." unique_id=953494871]
+[node name="Rivet1" type="MeshInstance3D" parent="." unique_id=1246080293]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.25406688, 0.105237946, -0.085)
 material_override = ExtResource("1_sann4")
-mesh = SubResource("SphereMesh_waqyv")
+mesh = SubResource("SphereMesh_5")
 
-[node name="Rivet2" type="MeshInstance3D" parent="." unique_id=1717862235]
+[node name="Rivet2" type="MeshInstance3D" parent="." unique_id=187941667]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.105237946, 0.25406688, -0.085)
 material_override = ExtResource("1_sann4")
-mesh = SubResource("SphereMesh_waqyv")
+mesh = SubResource("SphereMesh_5")
 
-[node name="Rivet3" type="MeshInstance3D" parent="." unique_id=1704169191]
+[node name="Rivet3" type="MeshInstance3D" parent="." unique_id=593729950]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.105237946, 0.25406688, -0.085)
 material_override = ExtResource("1_sann4")
-mesh = SubResource("SphereMesh_waqyv")
+mesh = SubResource("SphereMesh_5")
 
-[node name="Rivet4" type="MeshInstance3D" parent="." unique_id=775921556]
+[node name="Rivet4" type="MeshInstance3D" parent="." unique_id=1899739898]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.25406688, 0.105237946, -0.085)
 material_override = ExtResource("1_sann4")
-mesh = SubResource("SphereMesh_waqyv")
+mesh = SubResource("SphereMesh_5")
 
-[node name="Rivet5" type="MeshInstance3D" parent="." unique_id=522066251]
+[node name="Rivet5" type="MeshInstance3D" parent="." unique_id=863157456]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.25406688, -0.105237946, -0.085)
 material_override = ExtResource("1_sann4")
-mesh = SubResource("SphereMesh_waqyv")
+mesh = SubResource("SphereMesh_5")
 
-[node name="Rivet6" type="MeshInstance3D" parent="." unique_id=1582760579]
+[node name="Rivet6" type="MeshInstance3D" parent="." unique_id=437027126]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.105237946, -0.25406688, -0.085)
 material_override = ExtResource("1_sann4")
-mesh = SubResource("SphereMesh_waqyv")
+mesh = SubResource("SphereMesh_5")
 
-[node name="Rivet7" type="MeshInstance3D" parent="." unique_id=22575036]
+[node name="Rivet7" type="MeshInstance3D" parent="." unique_id=1259905257]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.105237946, -0.25406688, -0.085)
 material_override = ExtResource("1_sann4")
-mesh = SubResource("SphereMesh_waqyv")
+mesh = SubResource("SphereMesh_5")
 
-[node name="Rivet8" type="MeshInstance3D" parent="." unique_id=285650421]
+[node name="Rivet8" type="MeshInstance3D" parent="." unique_id=185641119]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.25406688, -0.105237946, -0.085)
 material_override = ExtResource("1_sann4")
-mesh = SubResource("SphereMesh_waqyv")
+mesh = SubResource("SphereMesh_5")
 
-[node name="Glow" type="OmniLight3D" parent="." unique_id=182292105]
+[node name="Glow" type="OmniLight3D" parent="." unique_id=913750156]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -0.45)
 light_color = Color(1, 0.66, 0.34, 1)
 light_energy = 0.55

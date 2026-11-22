@@ -2,102 +2,102 @@
 
 [ext_resource type="Material" uid="uid://2lj0z7hvppc7f" path="res://assets/placeholder/materials/wet_rope.tres" id="1_wxiwq"]
 
-[sub_resource type="TorusMesh" id="TorusMesh_e7h6q"]
+[sub_resource type="TorusMesh" id="TorusMesh_1"]
 inner_radius = 0.085
 outer_radius = 0.155
 rings = 18
 ring_segments = 5
 
-[sub_resource type="TorusMesh" id="TorusMesh_5dk2q"]
+[sub_resource type="TorusMesh" id="TorusMesh_2"]
 inner_radius = 0.155
 outer_radius = 0.225
 rings = 18
 ring_segments = 5
 
-[sub_resource type="TorusMesh" id="TorusMesh_iwjen"]
+[sub_resource type="TorusMesh" id="TorusMesh_3"]
 inner_radius = 0.225
 outer_radius = 0.295
 rings = 18
 ring_segments = 5
 
-[sub_resource type="TorusMesh" id="TorusMesh_0q2xn"]
+[sub_resource type="TorusMesh" id="TorusMesh_4"]
 inner_radius = 0.295
 outer_radius = 0.365
 rings = 18
 ring_segments = 5
 
-[sub_resource type="TorusMesh" id="TorusMesh_vjwhy"]
+[sub_resource type="TorusMesh" id="TorusMesh_5"]
 inner_radius = 0.365
 outer_radius = 0.435
 rings = 18
 ring_segments = 5
 
-[sub_resource type="TorusMesh" id="TorusMesh_eu1sb"]
+[sub_resource type="TorusMesh" id="TorusMesh_6"]
 inner_radius = 0.135
 outer_radius = 0.205
 rings = 18
 ring_segments = 5
 
-[sub_resource type="TorusMesh" id="TorusMesh_c481u"]
+[sub_resource type="TorusMesh" id="TorusMesh_7"]
 inner_radius = 0.205
 outer_radius = 0.275
 rings = 18
 ring_segments = 5
 
-[sub_resource type="TorusMesh" id="TorusMesh_e8u4u"]
+[sub_resource type="TorusMesh" id="TorusMesh_8"]
 inner_radius = 0.275
 outer_radius = 0.345
 rings = 18
 ring_segments = 5
 
-[sub_resource type="CylinderMesh" id="CylinderMesh_hef1u"]
+[sub_resource type="CylinderMesh" id="CylinderMesh_9"]
 height = 1.0
 radial_segments = 6
 rings = 1
 
-[node name="DeckRopeCoil" type="Node3D" unique_id=1130649619]
+[node name="DeckRopeCoil" type="Node3D" unique_id=337159717]
 
-[node name="Turn1" type="MeshInstance3D" parent="." unique_id=2106250775]
+[node name="Turn1" type="MeshInstance3D" parent="." unique_id=1744460060]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.035, 0)
 material_override = ExtResource("1_wxiwq")
-mesh = SubResource("TorusMesh_e7h6q")
+mesh = SubResource("TorusMesh_1")
 
-[node name="Turn2" type="MeshInstance3D" parent="." unique_id=1094615488]
+[node name="Turn2" type="MeshInstance3D" parent="." unique_id=2009100599]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.035, 0)
 material_override = ExtResource("1_wxiwq")
-mesh = SubResource("TorusMesh_5dk2q")
+mesh = SubResource("TorusMesh_2")
 
-[node name="Turn3" type="MeshInstance3D" parent="." unique_id=1454102353]
+[node name="Turn3" type="MeshInstance3D" parent="." unique_id=88387278]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.035, 0)
 material_override = ExtResource("1_wxiwq")
-mesh = SubResource("TorusMesh_iwjen")
+mesh = SubResource("TorusMesh_3")
 
-[node name="Turn4" type="MeshInstance3D" parent="." unique_id=916981328]
+[node name="Turn4" type="MeshInstance3D" parent="." unique_id=1396514915]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.035, 0)
 material_override = ExtResource("1_wxiwq")
-mesh = SubResource("TorusMesh_0q2xn")
+mesh = SubResource("TorusMesh_4")
 
-[node name="Turn5" type="MeshInstance3D" parent="." unique_id=1712963164]
+[node name="Turn5" type="MeshInstance3D" parent="." unique_id=94340426]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.035, 0)
 material_override = ExtResource("1_wxiwq")
-mesh = SubResource("TorusMesh_vjwhy")
+mesh = SubResource("TorusMesh_5")
 
-[node name="Upper1" type="MeshInstance3D" parent="." unique_id=2117952371]
+[node name="Upper1" type="MeshInstance3D" parent="." unique_id=493598698]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.02, 0.09, -0.01)
 material_override = ExtResource("1_wxiwq")
-mesh = SubResource("TorusMesh_eu1sb")
+mesh = SubResource("TorusMesh_6")
 
-[node name="Upper2" type="MeshInstance3D" parent="." unique_id=1018181042]
+[node name="Upper2" type="MeshInstance3D" parent="." unique_id=516017332]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.02, 0.09, -0.01)
 material_override = ExtResource("1_wxiwq")
-mesh = SubResource("TorusMesh_c481u")
+mesh = SubResource("TorusMesh_7")
 
-[node name="Upper3" type="MeshInstance3D" parent="." unique_id=2064343887]
+[node name="Upper3" type="MeshInstance3D" parent="." unique_id=161518170]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.02, 0.09, -0.01)
 material_override = ExtResource("1_wxiwq")
-mesh = SubResource("TorusMesh_e8u4u")
+mesh = SubResource("TorusMesh_8")
 
-[node name="End" type="MeshInstance3D" parent="." unique_id=1571493350]
+[node name="End" type="MeshInstance3D" parent="." unique_id=1415028097]
 transform = Transform3D(0, 0.35, 0.043589983, 0.05999452, -0.005000001, 0.0005571115, 0.00081073696, 0.36999997, -0.04122624, 0.575, 0.0325, 0.235)
 material_override = ExtResource("1_wxiwq")
-mesh = SubResource("CylinderMesh_hef1u")
+mesh = SubResource("CylinderMesh_9")

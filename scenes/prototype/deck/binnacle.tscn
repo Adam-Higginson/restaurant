@@ -5,86 +5,86 @@
 [ext_resource type="Material" path="res://assets/placeholder/materials/brass.tres" id="3_testm"]
 [ext_resource type="Material" uid="uid://8xzzkxef16wgf" path="res://assets/placeholder/materials/window_glow.tres" id="4_dgexr"]
 
-[sub_resource type="BoxMesh" id="BoxMesh_15nf0"]
+[sub_resource type="BoxMesh" id="BoxMesh_1"]
 size = Vector3(0.44, 0.82, 0.44)
 
-[sub_resource type="BoxMesh" id="BoxMesh_7vdvd"]
+[sub_resource type="BoxMesh" id="BoxMesh_2"]
 size = Vector3(0.56, 0.1, 0.56)
 
-[sub_resource type="BoxMesh" id="BoxMesh_7nh6p"]
+[sub_resource type="BoxMesh" id="BoxMesh_3"]
 size = Vector3(0.52, 0.06, 0.52)
 
-[sub_resource type="CylinderMesh" id="CylinderMesh_bugb7"]
+[sub_resource type="CylinderMesh" id="CylinderMesh_4"]
 top_radius = 0.23
 bottom_radius = 0.23
 height = 0.22
 radial_segments = 10
 rings = 1
 
-[sub_resource type="SphereMesh" id="SphereMesh_rahxa"]
+[sub_resource type="SphereMesh" id="SphereMesh_5"]
 radius = 0.23
 height = 0.23
 radial_segments = 8
 rings = 4
 is_hemisphere = true
 
-[sub_resource type="CylinderMesh" id="CylinderMesh_88e6u"]
+[sub_resource type="CylinderMesh" id="CylinderMesh_6"]
 top_radius = 0.04
 bottom_radius = 0.05
 height = 0.08
 radial_segments = 6
 rings = 1
 
-[sub_resource type="BoxMesh" id="BoxMesh_0o6qg"]
+[sub_resource type="BoxMesh" id="BoxMesh_7"]
 size = Vector3(0.22, 0.12, 0.02)
 
-[sub_resource type="BoxShape3D" id="BoxShape3D_tqtm4"]
+[sub_resource type="BoxShape3D" id="BoxShape3D_8"]
 size = Vector3(0.56, 1.3, 0.56)
 
-[node name="Binnacle" type="StaticBody3D" unique_id=91568779]
+[node name="Binnacle" type="StaticBody3D" unique_id=933822508]
 
-[node name="Pedestal" type="MeshInstance3D" parent="." unique_id=1621621036]
+[node name="Pedestal" type="MeshInstance3D" parent="." unique_id=12518064]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.41, 0)
 material_override = ExtResource("1_eudpd")
-mesh = SubResource("BoxMesh_15nf0")
+mesh = SubResource("BoxMesh_1")
 
-[node name="Plinth" type="MeshInstance3D" parent="." unique_id=1288648133]
+[node name="Plinth" type="MeshInstance3D" parent="." unique_id=1449133378]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.05, 0)
 material_override = ExtResource("2_ctqom")
-mesh = SubResource("BoxMesh_7vdvd")
+mesh = SubResource("BoxMesh_2")
 
-[node name="Top" type="MeshInstance3D" parent="." unique_id=1243300785]
+[node name="Top" type="MeshInstance3D" parent="." unique_id=201704331]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.85, 0)
 material_override = ExtResource("2_ctqom")
-mesh = SubResource("BoxMesh_7nh6p")
+mesh = SubResource("BoxMesh_3")
 
-[node name="Hood" type="MeshInstance3D" parent="." unique_id=127054935]
+[node name="Hood" type="MeshInstance3D" parent="." unique_id=1881125472]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.99, 0)
 material_override = ExtResource("3_testm")
-mesh = SubResource("CylinderMesh_bugb7")
+mesh = SubResource("CylinderMesh_4")
 
-[node name="Dome" type="MeshInstance3D" parent="." unique_id=1896874557]
+[node name="Dome" type="MeshInstance3D" parent="." unique_id=776025801]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.1, 0)
 material_override = ExtResource("3_testm")
-mesh = SubResource("SphereMesh_rahxa")
+mesh = SubResource("SphereMesh_5")
 
-[node name="Knob" type="MeshInstance3D" parent="." unique_id=1339521327]
+[node name="Knob" type="MeshInstance3D" parent="." unique_id=2071101491]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.36, 0)
 material_override = ExtResource("3_testm")
-mesh = SubResource("CylinderMesh_88e6u")
+mesh = SubResource("CylinderMesh_6")
 
-[node name="Window" type="MeshInstance3D" parent="." unique_id=741671097]
+[node name="Window" type="MeshInstance3D" parent="." unique_id=1578539921]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0.225)
 material_override = ExtResource("4_dgexr")
 cast_shadow = 0
-mesh = SubResource("BoxMesh_0o6qg")
+mesh = SubResource("BoxMesh_7")
 
-[node name="Lamp" type="OmniLight3D" parent="." unique_id=818867565]
+[node name="Lamp" type="OmniLight3D" parent="." unique_id=1331893816]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.02, 0.4)
 light_color = Color(1, 0.72, 0.42, 1)
 light_energy = 0.45
 omni_range = 1.8
 
-[node name="Shape" type="CollisionShape3D" parent="." unique_id=564855322]
+[node name="Shape" type="CollisionShape3D" parent="." unique_id=775950494]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.65, 0)
-shape = SubResource("BoxShape3D_tqtm4")
+shape = SubResource("BoxShape3D_8")

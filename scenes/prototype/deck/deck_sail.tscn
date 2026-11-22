@@ -4,31 +4,31 @@
 [ext_resource type="Texture2D" path="res://assets/placeholder/textures/canvas.png" id="2_kfn2g"]
 [ext_resource type="Material" uid="uid://2lj0z7hvppc7f" path="res://assets/placeholder/materials/wet_rope.tres" id="3_j0a2s"]
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_oi3l8"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_1"]
 shader = ExtResource("1_88pp1")
 shader_parameter/canvas_texture = ExtResource("2_kfn2g")
 shader_parameter/texture_metres = 0.5
 shader_parameter/size = Vector2(9.4, 3.4)
 
-[sub_resource type="QuadMesh" id="QuadMesh_fd5oq"]
+[sub_resource type="QuadMesh" id="QuadMesh_2"]
 size = Vector2(9.4, 3.4)
 subdivide_width = 14
 subdivide_depth = 6
 
-[sub_resource type="CylinderMesh" id="CylinderMesh_8l3lk"]
+[sub_resource type="CylinderMesh" id="CylinderMesh_3"]
 height = 1.0
 radial_segments = 6
 rings = 1
 
-[node name="Sail" type="Node3D" unique_id=328118237]
+[node name="Sail" type="Node3D" unique_id=345038722]
 
-[node name="Canvas" type="MeshInstance3D" parent="." unique_id=859226365]
+[node name="Canvas" type="MeshInstance3D" parent="." unique_id=2104823249]
 transform = Transform3D(-1, 0, -8.742278e-08, 0, 1, 0, 8.742278e-08, 0, -1, 0, -1.7, 0)
-material_override = SubResource("ShaderMaterial_oi3l8")
+material_override = SubResource("ShaderMaterial_1")
 instance_shader_parameters/billow = 0.85
-mesh = SubResource("QuadMesh_fd5oq")
+mesh = SubResource("QuadMesh_2")
 
-[node name="FootRope" type="MeshInstance3D" parent="." unique_id=932222828]
+[node name="FootRope" type="MeshInstance3D" parent="." unique_id=1014761811]
 transform = Transform3D(0, 9.4, 0, 0.04, 0, 0, 0, 0, -0.04, 0, -3.4, 0)
 material_override = ExtResource("3_j0a2s")
-mesh = SubResource("CylinderMesh_8l3lk")
+mesh = SubResource("CylinderMesh_3")

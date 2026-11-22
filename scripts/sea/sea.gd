@@ -96,4 +96,4 @@ func _apply() -> void:
 	if is_instance_valid(ship):
 		var hull: Transform3D = ship.get_global_transform_interpolated()
 		_material.set_shader_parameter("hull_inverse", Projection(hull.affine_inverse()))
-		_material.set_shader_parameter("wake", 1.0 if ship.is_sailing else 0.0)
+		_material.set_shader_parameter("wake", ship.way)
