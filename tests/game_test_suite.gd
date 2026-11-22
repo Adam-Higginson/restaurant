@@ -7,12 +7,13 @@ extends GdUnitTestSuite
 ## speed and can pass locally but fail in CI.
 
 ## Where tests keep a voyage when something saves (sleeping), so they never
-## touch the real save.
-const TEST_SAVE: String = "user://test_voyage.save"
+## touch the real save. run_tests.sh runs several copies of Godot at once and
+## gives each a TEST_SHARD number, so each copy has a save file of its own.
+static var test_save: String = "user://test_voyage%s.save" % OS.get_environment("TEST_SHARD")
 
 
 func _init() -> void:
-	SaveGame.path = TEST_SAVE
+	SaveGame.path = test_save
 
 
 ## Waits for exactly [param ticks] physics ticks.
