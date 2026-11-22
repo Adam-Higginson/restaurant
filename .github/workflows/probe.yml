@@ -50,15 +50,9 @@ jobs:
       - name: Take the low-pass filter off the Ambience bus
         if: matrix.filter == 'off'
         run: |
-          python3 - <<'PY'
-          import re
-          p = 'default_bus_layout.tres'
-          s = open(p).read()
-          s = re.sub(r'bus/1/effect/0/[^
-]*
-', '', s)
-          open(p, 'w').write(s)
-          PY
+          grep -v '^bus/1/effect/0/' default_bus_layout.tres > layout.tmp
+          mv layout.tmp default_bus_layout.tres
+          echo "effects left:"
           grep -n effect default_bus_layout.tres || true
 
       - name: Import the project
