@@ -1,20 +1,21 @@
 [gd_scene format=3]
 
-[ext_resource type="Shader" path="res://shaders/underwater_lens.gdshader" id="1_l0ui7"]
-[ext_resource type="Script" path="res://scripts/intro/underwater_lens.gd" id="2_853cl"]
-[ext_resource type="Shader" path="res://shaders/sea_underside.gdshader" id="3_s1pck"]
-[ext_resource type="Script" path="res://scripts/intro/surface_glow.gd" id="4_2akkt"]
-[ext_resource type="Script" path="res://scripts/weather/lightning_light.gd" id="5_ncdnq"]
-[ext_resource type="PackedScene" path="res://scenes/prototype/intro/castaway.tscn" id="6_rahqi"]
-[ext_resource type="PackedScene" path="res://scenes/prototype/lantern_body.tscn" id="7_5q42c"]
-[ext_resource type="Shader" path="res://shaders/flame_hand.gdshader" id="8_n12d8"]
-[ext_resource type="Script" path="res://scripts/intro/flame_hand.gd" id="9_hgusb"]
-[ext_resource type="Shader" path="res://shaders/bubble.gdshader" id="10_13tl2"]
-[ext_resource type="Script" path="res://scripts/audio/optional_sound.gd" id="11_a6idw"]
-[ext_resource type="Shader" path="res://shaders/light_burst.gdshader" id="12_5sp6a"]
-[ext_resource type="Script" path="res://scripts/intro/light_burst.gd" id="13_w1y1v"]
+[ext_resource type="Shader" path="res://shaders/underwater_lens.gdshader" id="1_853cl"]
+[ext_resource type="Script" path="res://scripts/intro/underwater_lens.gd" id="2_s1pck"]
+[ext_resource type="Shader" path="res://shaders/sea_underside.gdshader" id="3_2akkt"]
+[ext_resource type="Script" path="res://scripts/intro/surface_glow.gd" id="4_ncdnq"]
+[ext_resource type="Script" path="res://scripts/weather/lightning_light.gd" id="5_rahqi"]
+[ext_resource type="PackedScene" path="res://scenes/prototype/intro/castaway.tscn" id="6_5q42c"]
+[ext_resource type="PackedScene" path="res://scenes/prototype/lantern_body.tscn" id="7_n12d8"]
+[ext_resource type="Shader" path="res://shaders/flame_hand.gdshader" id="8_hgusb"]
+[ext_resource type="Script" path="res://scripts/intro/flame_hand.gd" id="9_13tl2"]
+[ext_resource type="Shader" path="res://shaders/light_rays.gdshader" id="10_a6idw"]
+[ext_resource type="Shader" path="res://shaders/bubble.gdshader" id="11_5sp6a"]
+[ext_resource type="Script" path="res://scripts/audio/optional_sound.gd" id="12_w1y1v"]
+[ext_resource type="Shader" path="res://shaders/light_burst.gdshader" id="13_8cx30"]
+[ext_resource type="Script" path="res://scripts/intro/light_burst.gd" id="14_jsgrj"]
 
-[sub_resource type="Environment" id="Environment_8cx30"]
+[sub_resource type="Environment" id="Environment_lv5el"]
 background_mode = 1
 background_color = Color(0.004, 0.018, 0.03, 1)
 ambient_light_source = 2
@@ -33,9 +34,9 @@ volumetric_fog_length = 32.0
 volumetric_fog_detail_spread = 1.6
 volumetric_fog_ambient_inject = 0.15
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_jsgrj"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_ae1ut"]
 render_priority = -100
-shader = ExtResource("1_l0ui7")
+shader = ExtResource("1_853cl")
 shader_parameter/soak = null
 shader_parameter/deep = null
 shader_parameter/furthest = null
@@ -45,14 +46,14 @@ shader_parameter/heat = null
 shader_parameter/exposure = null
 shader_parameter/vignette = null
 
-[sub_resource type="QuadMesh" id="QuadMesh_lv5el"]
+[sub_resource type="QuadMesh" id="QuadMesh_2bi5t"]
 
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_ae1ut"]
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_4cqk1"]
 shading_mode = 0
 albedo_color = Color(0.004, 0.018, 0.03, 1)
 
-[sub_resource type="SphereMesh" id="SphereMesh_2bi5t"]
-material = SubResource("StandardMaterial3D_ae1ut")
+[sub_resource type="SphereMesh" id="SphereMesh_67quv"]
+material = SubResource("StandardMaterial3D_4cqk1")
 flip_faces = true
 radius = 70.0
 height = 140.0
@@ -68,9 +69,9 @@ height = 256
 noise = SubResource("FastNoiseLite_l0ui7")
 seamless = true
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_4cqk1"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_pmwu1"]
 render_priority = 0
-shader = ExtResource("3_s1pck")
+shader = ExtResource("3_2akkt")
 shader_parameter/ripples = SubResource("NoiseTexture2D_853cl")
 shader_parameter/tint = null
 shader_parameter/mirror_tint = null
@@ -86,9 +87,9 @@ shader_parameter/rain = null
 [sub_resource type="PlaneMesh" id="PlaneMesh_2akkt"]
 size = Vector2(120, 120)
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_67quv"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_nh030"]
 render_priority = 0
-shader = ExtResource("8_n12d8")
+shader = ExtResource("8_hgusb")
 shader_parameter/texels = null
 shader_parameter/hot = null
 shader_parameter/warm = null
@@ -105,81 +106,91 @@ shader_parameter/form = null
 shader_parameter/grip = null
 shader_parameter/aspect = null
 
-[sub_resource type="QuadMesh" id="QuadMesh_pmwu1"]
+[sub_resource type="QuadMesh" id="QuadMesh_4sb6r"]
 size = Vector2(1, 0.625)
 center_offset = Vector3(-0.5, 0, 0)
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_nh030"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_4pjtv"]
 render_priority = 0
-shader = ExtResource("10_13tl2")
+shader = ExtResource("10_a6idw")
+shader_parameter/colour = null
+shader_parameter/brightness = null
+shader_parameter/seed = null
+
+[sub_resource type="QuadMesh" id="QuadMesh_42bj5"]
+size = Vector2(2.4, 2.4)
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_ohrgi"]
+render_priority = 0
+shader = ExtResource("11_5sp6a")
 shader_parameter/tint = null
 shader_parameter/middle = null
 shader_parameter/rim = null
 
-[sub_resource type="SphereMesh" id="SphereMesh_4sb6r"]
-material = SubResource("ShaderMaterial_nh030")
+[sub_resource type="SphereMesh" id="SphereMesh_xedh0"]
+material = SubResource("ShaderMaterial_ohrgi")
 radius = 0.03
 height = 0.06
 radial_segments = 8
 rings = 4
 
-[sub_resource type="SphereMesh" id="SphereMesh_4pjtv"]
-material = SubResource("ShaderMaterial_nh030")
+[sub_resource type="SphereMesh" id="SphereMesh_p7sjk"]
+material = SubResource("ShaderMaterial_ohrgi")
 radius = 0.022
 height = 0.044
 radial_segments = 8
 rings = 4
 
-[sub_resource type="SphereMesh" id="SphereMesh_42bj5"]
-material = SubResource("ShaderMaterial_nh030")
+[sub_resource type="SphereMesh" id="SphereMesh_vecc8"]
+material = SubResource("ShaderMaterial_ohrgi")
 radius = 0.028
 height = 0.056
 radial_segments = 8
 rings = 4
 
 [sub_resource type="SphereMesh" id="SphereMesh_13tl2"]
-material = SubResource("ShaderMaterial_nh030")
+material = SubResource("ShaderMaterial_ohrgi")
 radius = 0.022
 height = 0.044
 radial_segments = 8
 rings = 4
 
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_ohrgi"]
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_16usi"]
 albedo_color = Color(0.8, 0.86, 0.9, 1)
 
 [sub_resource type="SphereMesh" id="SphereMesh_5sp6a"]
-material = SubResource("StandardMaterial3D_ohrgi")
+material = SubResource("StandardMaterial3D_16usi")
 radius = 0.012
 height = 0.024
 radial_segments = 8
 rings = 4
 
 [sub_resource type="SphereMesh" id="SphereMesh_w1y1v"]
-material = SubResource("ShaderMaterial_nh030")
+material = SubResource("ShaderMaterial_ohrgi")
 radius = 0.026
 height = 0.052
 radial_segments = 8
 rings = 4
 
-[sub_resource type="SphereMesh" id="SphereMesh_xedh0"]
-material = SubResource("ShaderMaterial_nh030")
+[sub_resource type="SphereMesh" id="SphereMesh_chxrw"]
+material = SubResource("ShaderMaterial_ohrgi")
 radius = 0.03
 height = 0.06
 radial_segments = 8
 rings = 4
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_p7sjk"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_gjmhq"]
 render_priority = 0
-shader = ExtResource("12_5sp6a")
+shader = ExtResource("13_8cx30")
 shader_parameter/colour = null
 shader_parameter/brightness = null
 shader_parameter/front = null
 
-[sub_resource type="SphereMesh" id="SphereMesh_vecc8"]
+[sub_resource type="SphereMesh" id="SphereMesh_h4uql"]
 radial_segments = 32
 rings = 16
 
-[sub_resource type="Animation" id="Animation_16usi"]
+[sub_resource type="Animation" id="Animation_5eg2c"]
 length = 4.8
 tracks/0/type = "value"
 tracks/0/imported = false
@@ -530,7 +541,7 @@ tracks/28/keys = {
 "values": [Vector3(-1.5, 1.5, 0.45)]
 }
 
-[sub_resource type="Animation" id="Animation_chxrw"]
+[sub_resource type="Animation" id="Animation_1k3hu"]
 length = 3.7
 tracks/0/type = "value"
 tracks/0/imported = false
@@ -881,7 +892,7 @@ tracks/28/keys = {
 "values": [Vector3(-1.5, 1.5, 0.45)]
 }
 
-[sub_resource type="Animation" id="Animation_gjmhq"]
+[sub_resource type="Animation" id="Animation_l5j6m"]
 length = 3.2
 tracks/0/type = "value"
 tracks/0/imported = false
@@ -1232,7 +1243,7 @@ tracks/28/keys = {
 "values": [Vector3(-1.5, 1.5, 0.45)]
 }
 
-[sub_resource type="Animation" id="Animation_h4uql"]
+[sub_resource type="Animation" id="Animation_ppwqo"]
 length = 3.5
 tracks/0/type = "value"
 tracks/0/imported = false
@@ -1583,7 +1594,7 @@ tracks/28/keys = {
 "values": [Vector3(-1.5, 1.5, 0.45)]
 }
 
-[sub_resource type="Animation" id="Animation_5eg2c"]
+[sub_resource type="Animation" id="Animation_hjlbx"]
 length = 6.0
 loop_mode = 1
 tracks/0/type = "value"
@@ -1935,7 +1946,7 @@ tracks/28/keys = {
 "values": [Vector3(-1.5, 1.5, 0.45)]
 }
 
-[sub_resource type="Animation" id="Animation_1k3hu"]
+[sub_resource type="Animation" id="Animation_qslim"]
 length = 3.4
 tracks/0/type = "value"
 tracks/0/imported = false
@@ -2286,7 +2297,7 @@ tracks/28/keys = {
 "values": [Vector3(-1.5, 1.5, 0.45)]
 }
 
-[sub_resource type="Animation" id="Animation_l5j6m"]
+[sub_resource type="Animation" id="Animation_dkx21"]
 length = 3.8
 tracks/0/type = "value"
 tracks/0/imported = false
@@ -2637,7 +2648,7 @@ tracks/28/keys = {
 "values": [Vector3(-1.5, 1.5, 0.45)]
 }
 
-[sub_resource type="Animation" id="Animation_ppwqo"]
+[sub_resource type="Animation" id="Animation_d2tav"]
 length = 8.0
 tracks/0/type = "value"
 tracks/0/imported = false
@@ -2988,7 +2999,7 @@ tracks/28/keys = {
 "values": [Vector3(-1.5, 1.5, 0.45)]
 }
 
-[sub_resource type="Animation" id="Animation_hjlbx"]
+[sub_resource type="Animation" id="Animation_den2n"]
 length = 1.9
 tracks/0/type = "value"
 tracks/0/imported = false
@@ -3339,54 +3350,54 @@ tracks/28/keys = {
 "values": [Vector3(-1.5, 1.5, 0.45)]
 }
 
-[sub_resource type="AnimationLibrary" id="AnimationLibrary_qslim"]
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_11f68"]
 _data = {
-&"flares": SubResource("Animation_16usi"),
-&"lantern_appears": SubResource("Animation_chxrw"),
-&"lantern_arrives": SubResource("Animation_gjmhq"),
-&"lantern_drives": SubResource("Animation_h4uql"),
-&"offered": SubResource("Animation_5eg2c"),
-&"opens_door": SubResource("Animation_1k3hu"),
-&"rising": SubResource("Animation_l5j6m"),
-&"sinking": SubResource("Animation_ppwqo"),
-&"taken": SubResource("Animation_hjlbx")
+&"flares": SubResource("Animation_5eg2c"),
+&"lantern_appears": SubResource("Animation_1k3hu"),
+&"lantern_arrives": SubResource("Animation_l5j6m"),
+&"lantern_drives": SubResource("Animation_ppwqo"),
+&"offered": SubResource("Animation_hjlbx"),
+&"opens_door": SubResource("Animation_qslim"),
+&"rising": SubResource("Animation_dkx21"),
+&"sinking": SubResource("Animation_d2tav"),
+&"taken": SubResource("Animation_den2n")
 }
 
 [node name="Underwater" type="Node3D" unique_id=700571466]
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="." unique_id=486641737]
-environment = SubResource("Environment_8cx30")
+environment = SubResource("Environment_lv5el")
 
 [node name="Camera" type="Camera3D" parent="." unique_id=1006802645]
 transform = Transform3D(1, 0, 0, 0, 0.99820054, -0.059964005, 0, 0.059964005, 0.99820054, 0, 1.2, 6.5)
 current = true
 fov = 65.0
 
-[node name="Lens" type="MeshInstance3D" parent="Camera" unique_id=486401534 node_paths=PackedStringArray("heat_source")]
+[node name="Lens" type="MeshInstance3D" parent="Camera" unique_id=829819133 node_paths=PackedStringArray("heat_source")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -1)
-material_override = SubResource("ShaderMaterial_jsgrj")
+material_override = SubResource("ShaderMaterial_ae1ut")
 cast_shadow = 0
 extra_cull_margin = 16384.0
-mesh = SubResource("QuadMesh_lv5el")
-script = ExtResource("2_853cl")
+mesh = SubResource("QuadMesh_2bi5t")
+script = ExtResource("2_s1pck")
 heat_source = NodePath("../../Lantern")
 
-[node name="Deep" type="MeshInstance3D" parent="." unique_id=419231229]
+[node name="Deep" type="MeshInstance3D" parent="." unique_id=338385099]
 cast_shadow = 0
-mesh = SubResource("SphereMesh_2bi5t")
+mesh = SubResource("SphereMesh_67quv")
 
 [node name="Surface" type="MeshInstance3D" parent="." unique_id=1657524249]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 10, 0)
-material_override = SubResource("ShaderMaterial_4cqk1")
+material_override = SubResource("ShaderMaterial_pmwu1")
 cast_shadow = 0
 mesh = SubResource("PlaneMesh_2akkt")
-script = ExtResource("4_2akkt")
+script = ExtResource("4_ncdnq")
 
 [node name="StormLight" type="DirectionalLight3D" parent="." unique_id=1653939318]
 transform = Transform3D(1, 0, 0, 0, -4.371139e-08, 1, 0, -1, -4.371139e-08, 0, 0, 0)
 light_color = Color(0.75, 0.85, 1, 1)
 light_volumetric_fog_energy = 0.6
-script = ExtResource("5_ncdnq")
+script = ExtResource("5_rahqi")
 peak_energy = 1.4
 
 [node name="Moonglow" type="DirectionalLight3D" parent="." unique_id=1431573173]
@@ -3395,7 +3406,7 @@ light_color = Color(0.5, 0.7, 1, 1)
 light_energy = 0.12
 light_volumetric_fog_energy = 0.3
 
-[node name="Castaway" parent="." unique_id=2019297073 instance=ExtResource("6_rahqi")]
+[node name="Castaway" parent="." unique_id=2019297073 instance=ExtResource("6_5q42c")]
 transform = Transform3D(0.83711946, -0.31049567, 0.45035928, 0.15892528, 0.9258315, 0.3428978, -0.5234251, -0.21547297, 0.8243771, 0, 7.5, 0)
 
 [node name="Character" parent="Castaway" index="5"]
@@ -3404,7 +3415,7 @@ blend_seconds = 0.8
 [node name="Lantern" type="Node3D" parent="." unique_id=1395549539]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.8, 11, -0.6)
 
-[node name="Body" parent="Lantern" unique_id=1061385630 node_paths=PackedStringArray("light") instance=ExtResource("7_5q42c")]
+[node name="Body" parent="Lantern" unique_id=1061385630 node_paths=PackedStringArray("light") instance=ExtResource("7_n12d8")]
 transform = Transform3D(-1.6311296, -0.076256774, -0.7573645, 0, 1.7909446, -0.18032488, 0.7611938, -0.16340736, -1.6229239, 0, 0, 0)
 look_name = "sinking_lantern"
 light = NodePath("../Light")
@@ -3418,35 +3429,42 @@ shadow_enabled = true
 omni_range = 6.5
 omni_attenuation = 1.3
 
-[node name="Far" type="OmniLight3D" parent="Lantern" unique_id=1888484715]
+[node name="Far" type="OmniLight3D" parent="Lantern" unique_id=1904630576]
 light_color = Color(0.2, 0.62, 0.72, 1)
 light_energy = 0.0
 light_volumetric_fog_energy = 0.0
 light_specular = 0.0
 omni_range = 15.0
 
-[node name="Hand" type="MeshInstance3D" parent="Lantern" unique_id=158622697 node_paths=PackedStringArray("face", "light")]
+[node name="Hand" type="MeshInstance3D" parent="Lantern" unique_id=1595257967 node_paths=PackedStringArray("face", "light", "rays")]
 transform = Transform3D(-0.99280864, 0.119712204, -8.742278e-08, 0.119712204, 0.99280864, 0, 8.679409e-08, -1.0465573e-08, -1, 0.14, -0.02, 0.22)
-material_override = SubResource("ShaderMaterial_67quv")
+material_override = SubResource("ShaderMaterial_nh030")
 cast_shadow = 0
-mesh = SubResource("QuadMesh_pmwu1")
-script = ExtResource("9_hgusb")
+mesh = SubResource("QuadMesh_4sb6r")
+script = ExtResource("9_13tl2")
 face = NodePath("../Body")
 light = NodePath("../PalmLight")
+rays = NodePath("../Rays")
 
-[node name="PalmLight" type="OmniLight3D" parent="Lantern" unique_id=1824990955]
+[node name="PalmLight" type="OmniLight3D" parent="Lantern" unique_id=350585123]
 light_energy = 0.0
 light_volumetric_fog_energy = 1.5
 omni_range = 2.6
 omni_attenuation = 1.6
 
-[node name="Trail" type="CPUParticles3D" parent="Lantern" unique_id=674820621]
+[node name="Rays" type="MeshInstance3D" parent="Lantern" unique_id=1838266083]
+visible = false
+material_override = SubResource("ShaderMaterial_4pjtv")
+cast_shadow = 0
+mesh = SubResource("QuadMesh_42bj5")
+
+[node name="Trail" type="CPUParticles3D" parent="Lantern" unique_id=439908269]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.25, 0)
 cast_shadow = 0
 emitting = false
 amount = 110
 lifetime = 4.5
-mesh = SubResource("SphereMesh_4sb6r")
+mesh = SubResource("SphereMesh_xedh0")
 emission_shape = 1
 emission_sphere_radius = 0.16
 direction = Vector3(0, 1, 0)
@@ -3457,13 +3475,13 @@ initial_velocity_max = 1.7
 scale_amount_min = 0.5
 scale_amount_max = 1.8
 
-[node name="Wisp" type="CPUParticles3D" parent="Lantern" unique_id=1404736340]
+[node name="Wisp" type="CPUParticles3D" parent="Lantern" unique_id=2055297133]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.2, 0)
 cast_shadow = 0
 emitting = false
 amount = 14
 lifetime = 3.5
-mesh = SubResource("SphereMesh_4pjtv")
+mesh = SubResource("SphereMesh_p7sjk")
 emission_shape = 1
 emission_sphere_radius = 0.1
 direction = Vector3(0, 1, 0)
@@ -3474,7 +3492,7 @@ initial_velocity_max = 0.9
 scale_amount_min = 0.5
 scale_amount_max = 1.8
 
-[node name="Gasp" type="CPUParticles3D" parent="Lantern" unique_id=1542320169]
+[node name="Gasp" type="CPUParticles3D" parent="Lantern" unique_id=1191416814]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.1, 0, 0.2)
 cast_shadow = 0
 emitting = false
@@ -3482,7 +3500,7 @@ amount = 60
 lifetime = 2.6
 one_shot = true
 explosiveness = 0.85
-mesh = SubResource("SphereMesh_42bj5")
+mesh = SubResource("SphereMesh_vecc8")
 emission_shape = 1
 emission_sphere_radius = 0.14
 direction = Vector3(0, 1, 0)
@@ -3493,9 +3511,9 @@ initial_velocity_max = 1.8
 scale_amount_min = 0.5
 scale_amount_max = 1.8
 
-[node name="Hiss" type="AudioStreamPlayer" parent="Lantern" unique_id=1411027569]
+[node name="Hiss" type="AudioStreamPlayer" parent="Lantern" unique_id=1429620721]
 volume_db = -80.0
-script = ExtResource("11_a6idw")
+script = ExtResource("12_w1y1v")
 recording = "res://assets/third_party/audio/lantern_hiss.ogg"
 loop = true
 
@@ -3552,7 +3570,7 @@ initial_velocity_max = 4.0
 scale_amount_min = 0.5
 scale_amount_max = 1.6
 
-[node name="DiveSplash" type="CPUParticles3D" parent="." unique_id=974701143]
+[node name="DiveSplash" type="CPUParticles3D" parent="." unique_id=1686848993]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.7, 9.8, -0.4)
 cast_shadow = 0
 emitting = false
@@ -3560,7 +3578,7 @@ amount = 120
 lifetime = 2.4
 one_shot = true
 explosiveness = 0.9
-mesh = SubResource("SphereMesh_xedh0")
+mesh = SubResource("SphereMesh_chxrw")
 emission_shape = 1
 emission_sphere_radius = 0.35
 direction = Vector3(0, -1, 0)
@@ -3571,14 +3589,14 @@ initial_velocity_max = 4.5
 scale_amount_min = 0.5
 scale_amount_max = 1.8
 
-[node name="Flare" type="MeshInstance3D" parent="." unique_id=1131421239]
-material_override = SubResource("ShaderMaterial_p7sjk")
+[node name="Flare" type="MeshInstance3D" parent="." unique_id=2006851388]
+material_override = SubResource("ShaderMaterial_gjmhq")
 cast_shadow = 0
 extra_cull_margin = 100.0
-mesh = SubResource("SphereMesh_vecc8")
-script = ExtResource("13_w1y1v")
+mesh = SubResource("SphereMesh_h4uql")
+script = ExtResource("14_jsgrj")
 
 [node name="Clips" type="AnimationPlayer" parent="." unique_id=400324578 groups=["clips"]]
-libraries/ = SubResource("AnimationLibrary_qslim")
+libraries/ = SubResource("AnimationLibrary_11f68")
 
 [editable path="Castaway"]

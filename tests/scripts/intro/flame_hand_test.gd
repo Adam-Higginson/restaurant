@@ -77,6 +77,35 @@ func test_the_light_in_its_palm_goes_out_with_it_and_dims_with_it() -> void:
 	assert_float(light.light_energy).is_equal(0.0)
 
 
+func test_shafts_of_light_fan_out_only_once_it_closes_on_yours() -> void:
+	var hand: FlameHand = _new_hand()
+	var rays: MeshInstance3D = MeshInstance3D.new()
+	rays.mesh = QuadMesh.new()
+	var fan: ShaderMaterial = ShaderMaterial.new()
+	fan.shader = preload("res://shaders/light_rays.gdshader")
+	rays.material_override = fan
+	hand.get_parent().add_child(rays)
+	hand.rays = rays
+	hand.rays_brightness = 2.0
+
+	# Held out but not taken: no shafts.
+	hand.reach = 1.0
+	assert_bool(rays.visible).is_false()
+	assert_float(hand.rays_now()).is_equal(0.0)
+
+	# Closed on yours: they fan out from the palm, at their brightest
+	# when he's strong.
+	hand.grip = 1.0
+	assert_bool(rays.visible).is_true()
+	assert_float(hand.rays_now()).is_equal_approx(2.0, 0.001)
+	assert_vector(rays.position).is_equal_approx(hand.palm_position(), NEAR)
+	var sent: float = fan.get_shader_parameter("brightness")
+	assert_float(sent).is_equal_approx(2.0, 0.001)
+
+	hand.strength = 0.1
+	assert_float(hand.rays_now()).is_between(0.1, 1.0)
+
+
 func test_its_as_strong_as_whoevers_hand_it_is() -> void:
 	var hand: FlameHand = _new_hand()
 	var face: LanternFace = BODY.instantiate() as LanternFace

@@ -7,6 +7,8 @@ extends MeshInstance3D
 ## hand ([member form]), and how far it has closed round yours
 ## ([member grip]). Its colour follows how strong he is, and it carries a
 ## small light of its own in its palm, so your hand glows as it gets close.
+## When it closes round yours, shafts of light fan out from between the two
+## hands ([member rays], drawn by shaders/light_rays.gdshader).
 
 ## How far along the sheet the palm sits at full reach and at none, as a
 ## share of its length. The same numbers as in the shader.
@@ -39,6 +41,11 @@ const PALM_AT_NO_REACH: float = 0.05
 @export var light: OmniLight3D
 ## How bright [member light] is with the hand fully out, formed and strong.
 @export var light_energy: float = 1.2
+## The shafts of light between the joined hands: a sheet beside the hand.
+## Optional.
+@export var rays: MeshInstance3D
+## How bright [member rays] are with the hand closed and him at his strongest.
+@export var rays_brightness: float = 1.4
 
 var _material: ShaderMaterial = null
 
@@ -69,6 +76,13 @@ func glow_now() -> float:
 	return light_energy * reach * lerpf(0.4, 1.0, form) * lerpf(0.25, 1.0, strength)
 
 
+## How bright the shafts between the hands are right now: nothing until
+## the hand closes on yours, faint while he's weak, and strong once he's
+## alight again.
+func rays_now() -> float:
+	return rays_brightness * reach * grip * lerpf(0.1, 1.0, strength)
+
+
 func _apply() -> void:
 	if _material == null:
 		return
@@ -81,3 +95,10 @@ func _apply() -> void:
 		light.position = position + basis * palm_position()
 		light.light_color = LanternFace.colour_for(strength)
 		light.light_energy = glow_now()
+	if is_instance_valid(rays):
+		rays.position = position + basis * palm_position()
+		rays.visible = rays_now() > 0.001
+		var fan: ShaderMaterial = rays.material_override as ShaderMaterial
+		if fan != null:
+			fan.set_shader_parameter("brightness", rays_now())
+			fan.set_shader_parameter("colour", LanternFace.colour_for(strength))
