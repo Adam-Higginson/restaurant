@@ -11,6 +11,9 @@ extends RefCounted
 var window_seconds: float = 0.3
 ## How long after the window before another press counts, in seconds.
 var recovery_seconds: float = 0.4
+## How soon after the pan goes up a hit must land to be parried perfectly,
+## in seconds: raised just in time.
+var perfect_seconds: float = 0.12
 
 ## Seconds of window left.
 var _window_left: float = 0.0
@@ -37,6 +40,12 @@ func tick(delta: float) -> void:
 ## Whether a hit landing right now would be parried.
 func is_active() -> bool:
 	return _window_left > 0.0
+
+
+## Whether a hit landing right now would be parried perfectly: the pan went
+## up no more than [member perfect_seconds] ago.
+func is_perfect() -> bool:
+	return is_active() and window_seconds - _window_left <= perfect_seconds
 
 
 ## Ends the window at once (the parry has been used on a hit). The pan is

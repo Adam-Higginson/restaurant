@@ -103,7 +103,7 @@ func test_lock_on_lets_go_when_the_target_gets_too_far() -> void:
 func test_lock_on_lets_go_when_the_crabs_fog_clears() -> void:
 	var player: Player3D = new_player_3d_on_floor()
 	var crab: FogCrab = _passive_crab(player, AHEAD)
-	crab.strikes_to_clear = 1
+	crab.fog = 1
 	var runner: GdUnitSceneRunner = scene_runner(player.get_parent())
 	await physics_ticks(runner, 5)
 	await hold(runner, "lock_on")

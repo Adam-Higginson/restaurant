@@ -15,10 +15,11 @@ extends Node
 ## It runs even while the game is paused, so a freeze always ends, and it
 ## puts the speed back if it leaves the tree mid-freeze.
 
-## How many ticks a strike that counts freezes the game for.
-const STRIKE_TICKS: int = 4
 ## How many ticks the strike that clears a crab's fog freezes the game for.
+## (Each cut's own freeze is its [member KnifeCut.hitstop_ticks].)
 const CLEARING_TICKS: int = 10
+## How many ticks flipping a crab onto its back freezes the game for.
+const FLIP_TICKS: int = 12
 ## How many ticks a parry freezes the game for.
 const PARRY_TICKS: int = 6
 ## How many ticks a blow landing on the player freezes the game for.

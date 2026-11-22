@@ -73,7 +73,7 @@ func test_a_strike_flashes_the_real_model_white() -> void:
 	# Its first blow lands and freezes the game; then it's open.
 	await physics_ticks(runner, 70 + HitStop.HURT_TICKS)
 
-	assert_bool(duellist_of(player).strike()).is_true()
+	assert_bool(await strike_and_land(runner, player)).is_true()
 	await physics_ticks(runner, 1)
 
 	var shell: MeshInstance3D = crab.find_child("Shell", true, false) as MeshInstance3D
@@ -83,6 +83,41 @@ func test_a_strike_flashes_the_real_model_white() -> void:
 	assert_object(model_shell).is_not_null()
 	assert_object(model_shell.material_overlay).is_not_null()
 	assert_object(shell).is_not_null()
+
+
+func test_flipped_it_rolls_onto_its_back_and_back_up() -> void:
+	var player: Player3D = new_player_3d_on_floor()
+	stand_firm(player)
+	var crab: FogCrab = new_fog_crab(player, CLOSE)
+	var runner: GdUnitSceneRunner = scene_runner(player.get_parent())
+	# Mid-lunge, just after its first blow.
+	await physics_ticks(runner, 49 + HitStop.HURT_TICKS)
+	assert_int(crab.cycle.state).is_equal(CrabCycle.State.ATTACK)
+
+	assert_bool(crab.cycle.flip()).is_true()
+	await physics_ticks(runner, 30)
+
+	assert_float(crab.flipped_amount()).is_equal(1.0)
+	var model: Node3D = crab.get_node("Model") as Node3D
+	assert_float(absf(model.rotation.z)).is_greater(3.0)
+	assert_float(model.position.y).is_greater(0.4)
+	# Rolled back up and rearing again once its time is up.
+	await physics_ticks(runner, int(crab.flip_seconds * 60.0))
+	assert_float(crab.flipped_amount()).is_equal(0.0)
+	assert_float(absf(model.rotation.z)).is_less(0.5)
+
+
+func test_flipped_its_legs_scrabble_at_the_air() -> void:
+	var player: Player3D = new_player_3d_on_floor()
+	stand_firm(player)
+	var crab: FogCrab = _new_rigged_crab(player, CLOSE)
+	var runner: GdUnitSceneRunner = scene_runner(player.get_parent())
+	await physics_ticks(runner, 49 + HitStop.HURT_TICKS)
+
+	crab.cycle.flip()
+	await physics_ticks(runner, 10)
+
+	assert_str(String(crab.playing())).is_equal("walk")
 
 
 # A fog crab at [param pos] wearing the stand-in model.

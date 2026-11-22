@@ -294,6 +294,24 @@ A growing glossary of the Godot concepts this project uses: what each one is, in
 
 **Blender's command line.** `blender -b file.blend --python script.py -- args` runs Blender without a window, opens the file and runs a Python script on it. *Ours:* `tools/blend_to_glb.py` turns the crab's `.blend` into a `.glb` Godot can import.
 
+## The knife combo and dodging (#108)
+
+**Your own Resource type for tuning.** A script that `extends Resource` with a `class_name` and `@export` fields becomes a kind of file: make one in the FileSystem dock (right click → New Resource) and its fields show in the Inspector. A node can then `@export` a slot for it, or `preload` one as a default. *Ours:* `KnifeCut` (`scripts/data/knife_cut.gd`) and `DodgeMove`; the files are in `data/combat/`. Open `cleave.tres` to change how hard the cleave hits without touching code.
+
+**Playing part of an animation, fitted to a time.** `AnimationPlayer.play(name, blend)` starts an animation (blending from the last over `blend` seconds), `seek(seconds, true)` jumps into it, and `speed_scale` plays it faster or slower. Together they play any stretch of a clip in exactly the time you want. *Ours:* `CharacterModel.act`, which plays, say, 0.6 s of `Sword_Heavy_Combo` from 2.2 s in, squeezed into the cleave's 0.38 s.
+
+**Input buffering.** Remembering a press that came too early, and acting on it as soon as it can be. Without it, a tap during a swing is lost and combos feel unresponsive. *Ours:* `KnifeCombo.press()` mid-cut sets `_buffered`, and the next cut starts the moment this one ends.
+
+**Telling a held button from a tap.** Count how long it's been down since `is_action_pressed`, and act on `is_action_released`. Doing the tap's action at the press keeps taps instant; holding on just adds more. *Ours:* the knife cuts at the press, charges if Use tool is still down 0.3 s later, and `Duellist._unhandled_input` lets the fillet go on the release.
+
+**`@export_group`.** Gathers the exports after it under a folding heading in the Inspector, so a node with many settings stays readable. *Ours:* `Duellist` has Knife, Pan, Blows taken and In hand groups.
+
+**A jump with `CharacterBody3D`.** Set `velocity.y` upwards for one tick; gravity (`get_gravity()`) pulls it back down, and `is_on_floor()` says when it's landed. Floor snapping doesn't stick a body that's moving up. *Ours:* `Player3D.dodge()` lifts the player by the move's `hop`; the backflip's 2.4 m/s carries them about 0.3 m up.
+
+**Turning about a point that isn't the origin.** A node turns about its own origin, which for a character is its feet. To turn it about its hips instead, turn it and then move it by the difference: `position = hips - rotated(hips)`. *Ours:* `CharacterModel._turn_for_flip`, so the backflip goes head over heels round the waist instead of swinging the head through the ground.
+
+**Single-precision angles.** Vectors store their numbers as 32-bit floats, so an angle worked out from them can come out a hair off: straight behind is pi, but in 32 bits it rounds just above the 64-bit `PI`. Compare angles with a little room, or special-case the edges. *Ours:* `Duellist.in_reach` treats an arc of 360 degrees as reaching everything, or the fillet missed a crab directly behind.
+
 ## The intro's water half (#102)
 
 **AnimationPlayer and clips.** An `AnimationPlayer` records properties changing over time (a position, a light's brightness) as animations with keyframes, and plays them back. Select one in the editor and the Animation panel at the bottom shows its timeline: pick a clip, drag the playhead to scrub, move keys to retime. A clip can loop. *Ours:* `Clips` in `scenes/prototype/intro/underwater.tscn` (`sinking`, `lantern_descends`, `offered`, `taken`) and in `rescue_set.tscn` (`title_drift`, `dive`), played by `ClipCues` for `@play` and `@start`.

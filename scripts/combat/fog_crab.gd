@@ -15,6 +15,9 @@ extends CharacterBody3D
 
 ## Emitted when its fog clears.
 signal fog_cleared
+## Emitted when it's flipped onto its back (a perfect parry, or a fillet
+## mid-lunge).
+signal flipped
 
 ## Fog-crabs can be locked on to, until their fog clears.
 const GROUP: StringName = LockOn.GROUP
@@ -27,17 +30,29 @@ const WALK_ANIMATION: StringName = &"walk"
 const ARM_BONES: PackedStringArray = ["left arm 1.1", "right arm 1.1"]
 ## How far the claws lift at the height of the rear-up, in radians.
 const CLAW_LIFT: float = 0.9
+## How high its model is lifted on its back, in metres, so the shell rests
+## on the ground.
+const FLIPPED_HEIGHT: float = 0.6
+## How long it takes to roll onto its back, or back up, in seconds.
+const FLIP_TURN_SECONDS: float = 0.18
+## How much faster its legs scrabble on its back than when it walks.
+const FLAIL_SPEED: float = 3.0
 
 ## How long it rears up before attacking, in seconds: the tell.
 @export var windup_seconds: float = 0.8
+## How long, at the end of the tell, it stops turning to follow you, in
+## seconds: it lunges where it was aiming, so a dodge gets out of the way.
+@export var commit_seconds: float = 0.2
 ## How long the lunge lasts, in seconds.
 @export var attack_seconds: float = 0.25
 ## How long it's open after an attack, in seconds.
 @export var opening_seconds: float = 1.2
 ## How long a parry staggers it, in seconds.
 @export var stagger_seconds: float = 1.5
-## How many strikes, while it's open, clear its fog.
-@export var strikes_to_clear: int = 3
+## How long it lies on its back once flipped, in seconds.
+@export var flip_seconds: float = 3.0
+## How much fog it has: the knife damage, while it's open, that clears it.
+@export var fog: int = 8
 ## How many half-hearts its hit costs.
 @export var damage: int = 1
 ## How near the player must come before it fights, in metres.
@@ -45,6 +60,9 @@ const CLAW_LIFT: float = 0.9
 ## How far its lunge reaches, in metres. Further away than this as the
 ## attack lands, and it misses.
 @export var attack_reach: float = 2.0
+## How wide its lunge is, in degrees, centred on the way it faces. Outside
+## it (a sidehop away), the lunge misses.
+@export var lunge_arc_degrees: float = 70.0
 ## How fast it scuttles in while rearing up, in metres per second.
 @export var scuttle_speed: float = 2.5
 ## How fast it wanders once its fog has cleared, in metres per second.
@@ -93,12 +111,17 @@ var _skeleton: Skeleton3D = null
 func _ready() -> void:
 	add_to_group(GROUP)
 	cycle.windup_seconds = windup_seconds
+	cycle.commit_seconds = commit_seconds
 	cycle.attack_seconds = attack_seconds
 	cycle.opening_seconds = opening_seconds
 	cycle.stagger_seconds = stagger_seconds
-	cycle.strikes_to_clear = strikes_to_clear
+	cycle.flip_seconds = flip_seconds
+	cycle.fog = fog
 	cycle.attacked.connect(_on_attacked)
 	cycle.cleared.connect(_on_cleared)
+	cycle.state_changed.connect(func(state: CrabCycle.State) -> void:
+		if state == CrabCycle.State.FLIPPED:
+			flipped.emit())
 	_flash.shading_mode = BaseMaterial3D.SHADING_MODE_UNSHADED
 	_flash.transparency = BaseMaterial3D.TRANSPARENCY_ALPHA
 	_flash.albedo_color = Color(1.0, 1.0, 1.0, 0.85)
@@ -129,12 +152,17 @@ func _process(delta: float) -> void:
 	_animate(delta)
 
 
-## A knife strike, knocking it back along [param push] (a flat velocity in
-## metres per second, dying away) if it counts. Counts only while it's open;
-## returns whether it did. One that counts makes it flash white, and chips of
-## shell and wisps of fog burst off it.
-func take_strike(push: Vector3 = Vector3.ZERO) -> bool:
-	if not cycle.take_strike():
+## A knife strike doing [param damage], knocking it back along [param push]
+## (a flat velocity in metres per second, dying away) if it counts. Counts
+## only while it's open; returns whether it did. One that counts makes it
+## flash white, and chips of shell and wisps of fog burst off it.
+##
+## If [param flips_lunging] (the fillet) and it's mid-lunge, it doesn't
+## count but flips it onto its back instead, which also returns true.
+func take_strike(push: Vector3 = Vector3.ZERO, damage_done: int = 1,
+		flips_lunging: bool = false) -> bool:
+	var flipped_now: bool = flips_lunging and cycle.flip()
+	if not flipped_now and not cycle.take_strike(damage_done):
 		return false
 	_flinch_left = 0.2
 	_flash_left = FLASH_SECONDS
@@ -195,10 +223,13 @@ func _fight(delta: float) -> void:
 		cycle.disengage()
 		return
 	cycle.engage()
-	if distance > 0.01:
+	# Committed to its lunge, or on its back, it doesn't turn to follow.
+	var turns: bool = not cycle.is_committed() and cycle.state != CrabCycle.State.FLIPPED
+	if distance > 0.01 and turns:
 		rotation.y = atan2(-away.x, -away.z)
 		# Close in during the tell, but stop short of standing on them.
-		if cycle.state == CrabCycle.State.WINDUP and distance > attack_reach * 0.85:
+		if cycle.state == CrabCycle.State.WINDUP and distance > attack_reach * 0.85 \
+				and not cycle.is_committed():
 			var step: Vector3 = away / distance * scuttle_speed
 			velocity.x = step.x
 			velocity.z = step.z
@@ -220,16 +251,39 @@ func _wander(delta: float) -> void:
 	rotation.y = atan2(-_wander_direction.x, -_wander_direction.z)
 
 
-# Its attack landing: a hit on the duellist if they're still in reach. A
-# parried hit staggers it.
+## Whether its lunge, landing now, would reach [param point]: within its
+## [member attack_reach] and inside the [member lunge_arc_degrees] in front.
+func lunge_reaches(point: Vector3) -> bool:
+	return Duellist.in_reach(global_position, -global_basis.z, point, attack_reach,
+			lunge_arc_degrees)
+
+
+## Whether it's on its back.
+func is_flipped() -> bool:
+	return cycle.state == CrabCycle.State.FLIPPED
+
+
+## How far over onto its back it is, from 0 (on its feet) to 1 (on its
+## back): it rolls over quickly as it's flipped and back up at the end.
+func flipped_amount() -> float:
+	if not is_flipped():
+		return 0.0
+	var into: float = cycle.time_in_state / FLIP_TURN_SECONDS
+	var left: float = (cycle.flip_seconds - cycle.time_in_state) / FLIP_TURN_SECONDS
+	return smoothstep(0.0, 1.0, clampf(minf(into, left), 0.0, 1.0))
+
+
+# Its attack landing: a hit on the duellist if they're still in front of it
+# and in reach. A parried hit staggers it; a perfectly parried one flips it.
 func _on_attacked() -> void:
 	var duellist: Duellist = _find_duellist()
-	if duellist == null:
+	if duellist == null or not lunge_reaches(duellist.position()):
 		return
-	if LockOn.flat_distance(global_position, duellist.position()) > attack_reach:
-		return
-	if duellist.receive_hit(damage, global_position) == Duellist.Hit.PARRIED:
-		cycle.parry()
+	match duellist.receive_hit(damage, global_position):
+		Duellist.Hit.PARRIED:
+			cycle.parry()
+		Duellist.Hit.PARRIED_PERFECTLY:
+			cycle.parry(true)
 
 
 func _on_cleared() -> void:
@@ -288,11 +342,17 @@ func _act_out() -> void:
 		CrabCycle.State.CLEARED:
 			if _cleared_for < 1.0:
 				roll = sin(_time * 30.0) * 0.25
+		CrabCycle.State.FLIPPED:
+			# Claws waving helplessly in the air.
+			claws = 0.3 + sin(_time * 22.0) * 0.2
+	var on_back: float = flipped_amount()
 	if _flinch_left > 0.0:
 		squash *= 0.8
-	# Forward is -Z, so tilting back is a positive turn about X.
-	_model.rotation = Vector3(tilt, 0.0, roll)
-	_model.position = Vector3(0.0, 0.0, -lunge)
+	# Forward is -Z, so tilting back is a positive turn about X. On its back
+	# it's rolled over about its forward axis and lifted by its own height,
+	# so its shell rests on the ground.
+	_model.rotation = Vector3(tilt, 0.0, roll + PI * on_back)
+	_model.position = Vector3(0.0, FLIPPED_HEIGHT * on_back, -lunge)
 	_model.scale = Vector3(1.0, squash, 1.0)
 	_claw_left.position.y = 0.45 + claws
 	_claw_right.position.y = 0.45 + claws
@@ -335,10 +395,11 @@ func _animate(delta: float) -> void:
 	if _animator == null:
 		return
 	var moving: bool = Vector2(velocity.x, velocity.z).length() > 0.1
-	var wanted: StringName = animation_for(moving)
+	# On its back its legs scrabble at the air: the walk, quickly.
+	var wanted: StringName = animation_for(moving or is_flipped())
 	if _animator.has_animation(wanted) and _animator.current_animation != String(wanted):
 		_animator.play(wanted, 0.15)
-	_animator.advance(delta)
+	_animator.advance(delta * (FLAIL_SPEED if is_flipped() else 1.0))
 	for bone_name: String in ARM_BONES:
 		var bone: int = _skeleton.find_bone(bone_name)
 		if bone < 0:

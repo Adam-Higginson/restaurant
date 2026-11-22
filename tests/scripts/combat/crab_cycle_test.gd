@@ -78,21 +78,21 @@ func test_strikes_only_count_while_it_is_open() -> void:
 	assert_bool(_cycle.is_open()).is_true()
 	assert_bool(_cycle.take_strike()).is_true()
 
-	assert_int(_cycle.strikes).is_equal(1)
+	assert_int(_cycle.damage_taken).is_equal(1)
 
 
 func test_an_idle_crab_cant_be_struck() -> void:
 	assert_bool(_cycle.take_strike()).is_false()
-	assert_int(_cycle.strikes).is_equal(0)
+	assert_int(_cycle.damage_taken).is_equal(0)
 
 
-func test_enough_strikes_clear_its_fog() -> void:
+func test_enough_damage_clears_its_fog() -> void:
 	var cleared: Array[int] = [0]
 	_cycle.cleared.connect(func() -> void: cleared[0] += 1)
 	_cycle.engage()
 	_cycle.tick(_cycle.windup_seconds + _cycle.attack_seconds)
 
-	for i: int in _cycle.strikes_to_clear - 1:
+	for i: int in _cycle.fog - 1:
 		_cycle.take_strike()
 	assert_int(_cycle.state).is_equal(CrabCycle.State.OPENING)
 	_cycle.take_strike()
@@ -102,7 +102,7 @@ func test_enough_strikes_clear_its_fog() -> void:
 
 
 func test_a_cleared_crab_never_fights_again() -> void:
-	_cycle.strikes_to_clear = 1
+	_cycle.fog = 1
 	_cycle.engage()
 	_cycle.tick(_cycle.windup_seconds + _cycle.attack_seconds)
 	_cycle.take_strike()
@@ -145,7 +145,7 @@ func test_a_parry_only_works_on_an_attack() -> void:
 	assert_int(_cycle.state).is_equal(CrabCycle.State.WINDUP)
 
 
-func test_disengaging_keeps_its_strikes() -> void:
+func test_disengaging_keeps_its_damage() -> void:
 	_cycle.engage()
 	_cycle.tick(_cycle.windup_seconds + _cycle.attack_seconds)
 	_cycle.take_strike()
@@ -153,10 +153,10 @@ func test_disengaging_keeps_its_strikes() -> void:
 	_cycle.disengage()
 
 	assert_int(_cycle.state).is_equal(CrabCycle.State.IDLE)
-	assert_int(_cycle.strikes).is_equal(1)
+	assert_int(_cycle.damage_taken).is_equal(1)
 
 
-func test_reset_forgets_its_strikes() -> void:
+func test_reset_forgets_its_damage() -> void:
 	_cycle.engage()
 	_cycle.tick(_cycle.windup_seconds + _cycle.attack_seconds)
 	_cycle.take_strike()
@@ -164,4 +164,86 @@ func test_reset_forgets_its_strikes() -> void:
 	_cycle.reset()
 
 	assert_int(_cycle.state).is_equal(CrabCycle.State.IDLE)
-	assert_int(_cycle.strikes).is_equal(0)
+	assert_int(_cycle.damage_taken).is_equal(0)
+
+
+func test_a_strike_does_its_damage() -> void:
+	_open()
+
+	_cycle.take_strike(2)
+
+	assert_int(_cycle.damage_taken).is_equal(2)
+
+
+func test_its_fog_is_eight() -> void:
+	assert_int(_cycle.fog).is_equal(8)
+
+
+func test_a_big_enough_blow_clears_it_at_once() -> void:
+	_open()
+
+	_cycle.take_strike(_cycle.fog)
+
+	assert_int(_cycle.state).is_equal(CrabCycle.State.CLEARED)
+
+
+func test_it_commits_for_the_end_of_its_windup() -> void:
+	_cycle.engage()
+	_cycle.tick(_cycle.windup_seconds - _cycle.commit_seconds - 0.01)
+	assert_bool(_cycle.is_committed()).is_false()
+
+	_cycle.tick(0.02)
+
+	assert_bool(_cycle.is_committed()).is_true()
+
+
+func test_a_perfect_parry_flips_it() -> void:
+	_cycle.engage()
+	_cycle.tick(_cycle.windup_seconds)
+
+	_cycle.parry(true)
+
+	assert_int(_cycle.state).is_equal(CrabCycle.State.FLIPPED)
+
+
+func test_a_lunging_crab_can_be_flipped() -> void:
+	_cycle.engage()
+	_cycle.tick(_cycle.windup_seconds)
+
+	assert_bool(_cycle.flip()).is_true()
+
+	assert_int(_cycle.state).is_equal(CrabCycle.State.FLIPPED)
+
+
+func test_only_a_lunging_crab_can_be_flipped() -> void:
+	_cycle.engage()
+	assert_bool(_cycle.flip()).is_false()
+
+	_cycle.tick(_cycle.windup_seconds + _cycle.attack_seconds)
+
+	assert_bool(_cycle.flip()).is_false()
+	assert_int(_cycle.state).is_equal(CrabCycle.State.OPENING)
+
+
+func test_flipped_it_stays_open_for_its_full_time() -> void:
+	_cycle.engage()
+	_cycle.tick(_cycle.windup_seconds)
+	_cycle.flip()
+
+	_cycle.tick(_cycle.flip_seconds - 0.01)
+	assert_int(_cycle.state).is_equal(CrabCycle.State.FLIPPED)
+	assert_bool(_cycle.take_strike()).is_true()
+	_cycle.tick(0.02)
+
+	assert_int(_cycle.state).is_equal(CrabCycle.State.WINDUP)
+
+
+func test_flipped_lasts_longer_than_a_stagger_or_an_opening() -> void:
+	assert_float(_cycle.flip_seconds).is_greater(_cycle.stagger_seconds)
+	assert_float(_cycle.flip_seconds).is_greater(_cycle.opening_seconds)
+
+
+# Moves the crab on to its opening after its first attack.
+func _open() -> void:
+	_cycle.engage()
+	_cycle.tick(_cycle.windup_seconds + _cycle.attack_seconds)

@@ -55,3 +55,21 @@ func test_a_used_parry_closes_the_window_and_is_ready_again() -> void:
 
 	assert_bool(parry.is_active()).is_false()
 	assert_bool(parry.press()).is_true()
+
+
+func test_a_hit_just_after_the_pan_goes_up_is_parried_perfectly() -> void:
+	var parry: ParryWindow = ParryWindow.new()
+	parry.press()
+	parry.tick(parry.perfect_seconds - 0.01)
+	assert_bool(parry.is_perfect()).is_true()
+
+	parry.tick(0.02)
+
+	assert_bool(parry.is_perfect()).is_false()
+	assert_bool(parry.is_active()).is_true()
+
+
+func test_with_the_pan_down_nothing_is_perfect() -> void:
+	var parry: ParryWindow = ParryWindow.new()
+
+	assert_bool(parry.is_perfect()).is_false()

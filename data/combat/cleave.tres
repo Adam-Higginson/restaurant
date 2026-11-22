@@ -1,0 +1,19 @@
+[gd_resource type="Resource" script_class="KnifeCut" format=3]
+
+[ext_resource type="Script" path="res://scripts/data/knife_cut.gd" id="1_cut"]
+
+[resource]
+script = ExtResource("1_cut")
+id = &"cleave"
+seconds = 0.38
+hit_at = 0.25
+reach = 2.4
+arc_degrees = 70.0
+damage = 2
+hitstop_ticks = 7
+push = 9.0
+step = 5.5
+animation = &"Sword_Heavy_Combo"
+animation_from = 2.2
+animation_length = 0.6
+sound = &"SwingHeavy"

@@ -9,6 +9,9 @@ signal focus_changed(interactable: Interactable3D)
 ## Emitted when Use tool is pressed with nothing here for a tool to work on.
 ## The [Duellist] swings the knife then.
 signal tool_missed
+## Emitted when Interact is pressed with nothing here to use. The [Dodge]
+## jumps out of the way then.
+signal interact_missed
 
 ## How far in front of the player's centre the detection zone sits, in metres.
 @export var reach: float = 0.7
@@ -55,7 +58,8 @@ func _unhandled_input(event: InputEvent) -> void:
 		return
 	if event.is_action_pressed("interact"):
 		get_viewport().set_input_as_handled()
-		try_interact()
+		if not try_interact():
+			interact_missed.emit()
 	elif event.is_action_pressed("use_tool"):
 		get_viewport().set_input_as_handled()
 		if not try_use_tool():

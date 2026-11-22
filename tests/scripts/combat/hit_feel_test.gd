@@ -24,9 +24,10 @@ func test_a_strike_that_counts_freezes_the_game_briefly() -> void:
 	var runner: GdUnitSceneRunner = scene_runner(player.get_parent())
 	await physics_ticks(runner, FIRST_OPENING)
 
-	duellist_of(player).strike()
+	await strike_and_land(runner, player)
 
-	assert_int(_hit_stop(player).ticks_left).is_equal(HitStop.STRIKE_TICKS)
+	assert_int(_hit_stop(player).ticks_left).is_between(Duellist.CHOP.hitstop_ticks - 1,
+			Duellist.CHOP.hitstop_ticks)
 	assert_float(player.camera_rig.shake_amount()).is_greater(0.0)
 
 
@@ -34,14 +35,42 @@ func test_the_strike_that_clears_the_fog_freezes_longer() -> void:
 	var player: Player3D = new_player_3d_on_floor()
 	stand_firm(player)
 	var crab: FogCrab = new_fog_crab(player, CLOSE)
-	crab.strikes_to_clear = 1
+	crab.fog = 1
 	var runner: GdUnitSceneRunner = scene_runner(player.get_parent())
 	await physics_ticks(runner, FIRST_OPENING)
 
-	duellist_of(player).strike()
+	await strike_and_land(runner, player)
 
 	assert_bool(crab.is_cleared()).is_true()
-	assert_int(_hit_stop(player).ticks_left).is_equal(HitStop.CLEARING_TICKS)
+	assert_int(_hit_stop(player).ticks_left).is_between(HitStop.CLEARING_TICKS - 1,
+			HitStop.CLEARING_TICKS)
+
+
+func test_each_cut_freezes_for_its_own_time_and_longer_to_clear_or_flip() -> void:
+	assert_int(HitFeel.strike_ticks(Duellist.CHOP, false, false)) \
+			.is_equal(Duellist.CHOP.hitstop_ticks)
+	assert_int(HitFeel.strike_ticks(Duellist.CLEAVE, false, false)) \
+			.is_equal(Duellist.CLEAVE.hitstop_ticks)
+	assert_int(HitFeel.strike_ticks(Duellist.CHOP, true, false)) \
+			.is_equal(HitStop.CLEARING_TICKS)
+	assert_int(HitFeel.strike_ticks(Duellist.FILLET, false, true)) \
+			.is_equal(HitStop.FLIP_TICKS)
+
+
+func test_a_perfect_parry_freezes_like_a_flip() -> void:
+	var player: Player3D = new_player_3d_on_floor()
+	new_fog_crab(player, CLOSE)
+	var runner: GdUnitSceneRunner = scene_runner(player.get_parent())
+	player.toolbar.add(ItemInstance.new(preload("res://data/items/frying_pan.tres")))
+	await physics_ticks(runner, 45)
+
+	duellist_of(player).raise_pan()
+	for tick: int in 10:
+		if _hit_stop(player).is_frozen():
+			break
+		await physics_ticks(runner, 1)
+
+	assert_int(_hit_stop(player).ticks_left).is_greater(HitStop.PARRY_TICKS)
 
 
 func test_a_strike_that_doesnt_count_doesnt_freeze() -> void:
@@ -51,7 +80,7 @@ func test_a_strike_that_doesnt_count_doesnt_freeze() -> void:
 	# Still rearing up: not open.
 	await physics_ticks(runner, 10)
 
-	duellist_of(player).strike()
+	await strike_and_land(runner, player)
 
 	assert_bool(_hit_stop(player).is_frozen()).is_false()
 
@@ -73,6 +102,8 @@ func test_a_parry_freezes_the_game() -> void:
 	player.toolbar.add(ItemInstance.new(PAN))
 	await physics_ticks(runner, 2)
 	duellist_of(player).raise_pan()
+	# Past the perfect parry's moment, which freezes longer.
+	await physics_ticks(runner, 10)
 
 	duellist_of(player).receive_hit(1, CLOSE)
 
@@ -121,6 +152,20 @@ func test_the_muffle_falls_evenly_through_the_octaves() -> void:
 	assert_float(HitFeel.muffle_hz(1.0)).is_equal_approx(HitFeel.MUFFLED_HZ, 0.1)
 	# Halfway is the geometric middle: sqrt(20000 * 500).
 	assert_float(HitFeel.muffle_hz(0.5)).is_equal_approx(3162.3, 0.5)
+
+
+func test_the_knife_glints_while_it_charges() -> void:
+	var player: Player3D = new_player_3d_on_floor()
+	var runner: GdUnitSceneRunner = scene_runner(player.get_parent())
+	await physics_ticks(runner, 2)
+	assert_bool(_feel(player).is_glinting()).is_false()
+
+	await hold(runner, "use_tool")
+	await physics_ticks(runner, 30)
+	assert_bool(_feel(player).is_glinting()).is_true()
+	await release(runner, "use_tool")
+
+	assert_bool(_feel(player).is_glinting()).is_false()
 
 
 func _hit_stop(player: Player3D) -> HitStop:

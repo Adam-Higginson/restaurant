@@ -1,0 +1,19 @@
+[gd_resource type="Resource" script_class="KnifeCut" format=3]
+
+[ext_resource type="Script" path="res://scripts/data/knife_cut.gd" id="1_cut"]
+
+[resource]
+script = ExtResource("1_cut")
+id = &"chop"
+seconds = 0.25
+hit_at = 0.13
+reach = 2.0
+arc_degrees = 120.0
+damage = 1
+hitstop_ticks = 4
+push = 6.0
+step = 3.5
+animation = &"Sword_Regular_A"
+animation_length = 0.43
+recovery_animation = &"Sword_Regular_A_Rec"
+sound = &"Swing"
