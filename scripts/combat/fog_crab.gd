@@ -16,6 +16,8 @@ signal fog_cleared
 
 ## Fog-crabs can be locked on to, until their fog clears.
 const GROUP: StringName = LockOn.GROUP
+## How long it flashes white when a strike lands, in seconds.
+const FLASH_SECONDS: float = 0.12
 
 ## How long it rears up before attacking, in seconds: the tell.
 @export var windup_seconds: float = 0.8
@@ -38,6 +40,8 @@ const GROUP: StringName = LockOn.GROUP
 @export var scuttle_speed: float = 2.5
 ## How fast it wanders once its fog has cleared, in metres per second.
 @export var wander_speed: float = 0.8
+## How fast a knock back dies away, in metres per second, per second.
+@export var skid_fade: float = 18.0
 
 ## Its fight: which state it's in and the strikes it has taken.
 var cycle: CrabCycle = CrabCycle.new()
@@ -51,12 +55,25 @@ var _wander_left: float = 0.0
 var _cleared_for: float = 0.0
 ## Seconds left of the flinch after a strike that counted.
 var _flinch_left: float = 0.0
+## The flat velocity a strike knocked it back with, dying away.
+var _skid: Vector3 = Vector3.ZERO
+## Seconds left of the white flash after a strike that counted.
+var _flash_left: float = 0.0
 var _time: float = 0.0
+## Every mesh in its model, which the flash lays white over.
+var _meshes: Array[GeometryInstance3D] = []
+## The white laid over its meshes as a strike lands. Unshaded, so it shows
+## as pure white whatever the light.
+var _flash: StandardMaterial3D = StandardMaterial3D.new()
+## Whether the flash is laid over the meshes right now.
+var _flashing: bool = false
 
 @onready var _model: Node3D = $Model
 @onready var _claw_left: Node3D = $Model/ClawLeft
 @onready var _claw_right: Node3D = $Model/ClawRight
 @onready var _fog: Node3D = $Fog
+@onready var _chips: CPUParticles3D = $Chips
+@onready var _wisps: CPUParticles3D = $Wisps
 
 
 func _ready() -> void:
@@ -68,11 +85,16 @@ func _ready() -> void:
 	cycle.strikes_to_clear = strikes_to_clear
 	cycle.attacked.connect(_on_attacked)
 	cycle.cleared.connect(_on_cleared)
+	_flash.shading_mode = BaseMaterial3D.SHADING_MODE_UNSHADED
+	_flash.transparency = BaseMaterial3D.TRANSPARENCY_ALPHA
+	_flash.albedo_color = Color(1.0, 1.0, 1.0, 0.85)
+	find_meshes()
 
 
 func _physics_process(delta: float) -> void:
 	_time += delta
 	_flinch_left = maxf(_flinch_left - delta, 0.0)
+	_flash_left = maxf(_flash_left - delta, 0.0)
 	velocity.x = 0.0
 	velocity.z = 0.0
 	if not is_on_floor():
@@ -81,6 +103,9 @@ func _physics_process(delta: float) -> void:
 		_wander(delta)
 	else:
 		_fight(delta)
+	velocity.x += _skid.x
+	velocity.z += _skid.z
+	_skid = _skid.move_toward(Vector3.ZERO, skid_fade * delta)
 	move_and_slide()
 
 
@@ -88,12 +113,33 @@ func _process(_delta: float) -> void:
 	_act_out()
 
 
-## A knife strike. Counts only while it's open; returns whether it did.
-func take_strike() -> bool:
+## A knife strike, knocking it back along [param push] (a flat velocity in
+## metres per second, dying away) if it counts. Counts only while it's open;
+## returns whether it did. One that counts makes it flash white, and chips of
+## shell and wisps of fog burst off it.
+func take_strike(push: Vector3 = Vector3.ZERO) -> bool:
 	if not cycle.take_strike():
 		return false
 	_flinch_left = 0.2
+	_flash_left = FLASH_SECONDS
+	_skid = Vector3(push.x, 0.0, push.z)
+	_chips.restart()
+	_wisps.restart()
 	return true
+
+
+## Whether it's being knocked back by a strike.
+func is_skidding() -> bool:
+	return not _skid.is_zero_approx()
+
+
+## Finds every mesh in its model again, for the flash. Call after the model
+## changes.
+func find_meshes() -> void:
+	_meshes.clear()
+	for node: Node in _model.find_children("*", "GeometryInstance3D", true, false):
+		_meshes.append(node as GeometryInstance3D)
+	_flashing = false
 
 
 ## Whether its fog has cleared.
@@ -148,7 +194,7 @@ func _on_attacked() -> void:
 		return
 	if LockOn.flat_distance(global_position, duellist.position()) > attack_reach:
 		return
-	if not duellist.receive_hit(damage):
+	if duellist.receive_hit(damage, global_position) == Duellist.Hit.PARRIED:
 		cycle.parry()
 
 
@@ -216,7 +262,18 @@ func _act_out() -> void:
 	_model.scale = Vector3(1.0, squash, 1.0)
 	_claw_left.position.y = 0.45 + claws
 	_claw_right.position.y = 0.45 + claws
+	_show_flash(_flash_left > 0.0)
 	# The fog thins with each strike and is gone when it's cleared.
 	_fog.visible = not is_cleared()
 	var thin: float = 1.0 - 0.2 * float(cycle.strikes)
 	_fog.scale = Vector3.ONE * maxf(thin, 0.3)
+
+
+# Lays the white flash over every mesh, or takes it off.
+func _show_flash(shown: bool) -> void:
+	if shown == _flashing:
+		return
+	_flashing = shown
+	for mesh: GeometryInstance3D in _meshes:
+		if is_instance_valid(mesh):
+			mesh.material_overlay = _flash if shown else null

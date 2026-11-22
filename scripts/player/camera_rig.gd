@@ -27,6 +27,8 @@ extends Node3D
 const PITCH_MIN_DEGREES: float = -70.0
 ## How far the camera can tilt up, in degrees.
 const PITCH_MAX_DEGREES: float = 15.0
+## How long a shake takes to fade, in seconds per metre of shake.
+const SHAKE_FADE_SECONDS_PER_METRE: float = 1.6
 
 ## Degrees turned per pixel of mouse movement.
 @export var mouse_sensitivity: float = 0.2
@@ -115,6 +117,8 @@ var _held: Marker3D = null
 ## The shot being glided to, or back from after leaving its zone.
 var _last_shot: Marker3D
 var _blend: float = 0.0
+## How far the camera is being shaken, in metres, fading away.
+var _shake: float = 0.0
 
 @onready var _target: Node3D = get_parent() as Node3D
 @onready var _pitch: Node3D = $Pitch
@@ -151,6 +155,7 @@ func _process(delta: float) -> void:
 	_follow_target()
 	_update_blend(delta)
 	_place_camera()
+	_apply_shake(delta)
 
 
 func _unhandled_input(event: InputEvent) -> void:
@@ -173,6 +178,17 @@ func _unhandled_input(event: InputEvent) -> void:
 func orbit(yaw_degrees: float, pitch_degrees: float) -> void:
 	yaw += deg_to_rad(yaw_degrees)
 	pitch += deg_to_rad(pitch_degrees)
+
+
+## Shakes the camera by up to [param metres], fading away: a blow landing.
+## A stronger shake already running isn't weakened.
+func shake(metres: float) -> void:
+	_shake = maxf(_shake, metres)
+
+
+## How far the camera is being shaken right now, in metres.
+func shake_amount() -> float:
+	return _shake
 
 
 ## Whether the camera is following a locked-on target (see [member look_target]).
@@ -325,3 +341,14 @@ func _forget_freed_zones() -> void:
 	for i: int in range(_zones.size() - 1, -1, -1):
 		if not is_instance_valid(_zones[i]):
 			_zones.remove_at(i)
+
+
+# Jolts the camera a random distance, up to the shake, each frame. While the
+# game is frozen by a hit, delta is tiny, so the shake holds at full strength
+# until the freeze ends, then fades.
+func _apply_shake(delta: float) -> void:
+	if _shake <= 0.0:
+		return
+	var jolt: Vector3 = Vector3(randf_range(-1.0, 1.0), randf_range(-1.0, 1.0), 0.0) * _shake
+	_camera.global_position += _camera.global_basis * jolt
+	_shake = maxf(_shake - delta / SHAKE_FADE_SECONDS_PER_METRE, 0.0)

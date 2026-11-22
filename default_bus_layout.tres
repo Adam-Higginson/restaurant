@@ -1,9 +1,21 @@
 [gd_resource type="AudioBusLayout" format=3 uid="uid://b28nsdoidj7ly"]
 
+[sub_resource type="AudioEffectLowPassFilter" id="AudioEffectLowPassFilter_muffle"]
+resource_name = "Muffle"
+cutoff_hz = 20000.0
+
 [sub_resource type="AudioEffectLowPassFilter" id="AudioEffectLowPassFilter_j3pel"]
 cutoff_hz = 20000.0
 
 [resource]
+bus/0/name = &"Master"
+bus/0/solo = false
+bus/0/mute = false
+bus/0/bypass_fx = false
+bus/0/volume_db = 0.0
+bus/0/send = &""
+bus/0/effect/0/effect = SubResource("AudioEffectLowPassFilter_muffle")
+bus/0/effect/0/enabled = false
 bus/1/name = &"Ambience"
 bus/1/solo = false
 bus/1/mute = false

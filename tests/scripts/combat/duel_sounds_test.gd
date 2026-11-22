@@ -12,7 +12,7 @@ const SOUND_SETS: Array[String] = ["swing", "slice", "tink", "pan_up", "clang", 
 		"crab_click", "crab_lunge", "fog_clear"]
 const CLOSE: Vector3 = Vector3(0, 0, -1.3)
 const FIRST_HIT: int = 56
-const FIRST_OPENING: int = 70
+const FIRST_OPENING: int = 70 + HitStop.HURT_TICKS
 
 
 # --- The recordings --------------------------------------------------------------
@@ -73,6 +73,7 @@ func test_a_swing_at_nothing_whooshes_and_no_more() -> void:
 
 func test_a_strike_that_counts_slices() -> void:
 	var player: Player3D = new_player_3d_on_floor()
+	stand_firm(player)
 	new_fog_crab(player, CLOSE)
 	var runner: GdUnitSceneRunner = scene_runner(player.get_parent())
 	await physics_ticks(runner, FIRST_OPENING)
@@ -197,6 +198,7 @@ func test_a_far_off_crab_is_silent() -> void:
 
 func test_clearing_the_fog_chimes_once_and_it_ticks_away() -> void:
 	var player: Player3D = new_player_3d_on_floor()
+	stand_firm(player)
 	var crab: FogCrab = new_fog_crab(player, CLOSE)
 	crab.strikes_to_clear = 1
 	var runner: GdUnitSceneRunner = scene_runner(player.get_parent())
@@ -214,6 +216,7 @@ func test_clearing_the_fog_chimes_once_and_it_ticks_away() -> void:
 
 func test_the_wandering_tick_is_quieter_than_the_rattle() -> void:
 	var player: Player3D = new_player_3d_on_floor()
+	stand_firm(player)
 	var crab: FogCrab = new_fog_crab(player, CLOSE)
 	crab.strikes_to_clear = 1
 	var click: AudioStreamPlayer3D = _crab_sounds(crab).get_node("Click") as AudioStreamPlayer3D
