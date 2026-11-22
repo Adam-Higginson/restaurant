@@ -156,255 +156,262 @@ height = 0.08
 radial_segments = 6
 rings = 1
 
-[node name="Hammock" type="Node3D" unique_id=605526911]
+[node name="Hammock" type="Node3D" unique_id=232733454]
 
-[node name="Sling" type="Node3D" parent="." unique_id=966089606]
+[node name="Sling" type="Node3D" parent="." unique_id=2037566654]
 script = ExtResource("1_aoi3f")
 swing_degrees = 2.5
 period = 5.2
 
-[node name="SpreaderFore" type="MeshInstance3D" parent="Sling" unique_id=274831541]
+[node name="SpreaderFore" type="MeshInstance3D" parent="Sling" unique_id=884690788]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.22, -1.1)
 material_override = ExtResource("2_i7j0x")
 mesh = SubResource("BoxMesh_6eltw")
 
-[node name="ClewFore1" type="MeshInstance3D" parent="Sling" unique_id=1574980]
+[node name="ClewFore1" type="MeshInstance3D" parent="Sling" unique_id=628311053]
 transform = Transform3D(0.89573914, -0.44458002, 0, -0.11645803, -0.23463945, -0.9650813, 0.42905584, 0.86446106, -0.26195064, -0.18, -0.125, -1.45)
 material_override = ExtResource("3_uvsk8")
 cast_shadow = 0
 mesh = SubResource("BoxMesh_2t8lq")
 
-[node name="ClewFore2" type="MeshInstance3D" parent="Sling" unique_id=2017013226]
+[node name="ClewFore2" type="MeshInstance3D" parent="Sling" unique_id=2131122124]
 transform = Transform3D(0.9705604, -0.24085794, 0, -0.063092895, -0.25423893, -0.9650813, 0.23244749, 0.93666965, -0.26195064, -0.09, -0.125, -1.45)
 material_override = ExtResource("3_uvsk8")
 cast_shadow = 0
 mesh = SubResource("BoxMesh_38kqg")
 
-[node name="ClewFore3" type="MeshInstance3D" parent="Sling" unique_id=59391473]
+[node name="ClewFore3" type="MeshInstance3D" parent="Sling" unique_id=980561846]
 transform = Transform3D(1, 0, 0, 0, -0.26195067, -0.9650813, 0, 0.9650813, -0.26195067, 0, -0.125, -1.45)
 material_override = ExtResource("3_uvsk8")
 cast_shadow = 0
 mesh = SubResource("BoxMesh_y6jmm")
 
-[node name="ClewFore4" type="MeshInstance3D" parent="Sling" unique_id=393673492]
+[node name="ClewFore4" type="MeshInstance3D" parent="Sling" unique_id=1249397207]
 transform = Transform3D(0.9705604, 0.24085794, 0, 0.063092895, -0.25423893, -0.9650813, -0.23244749, 0.93666965, -0.26195064, 0.09, -0.125, -1.45)
 material_override = ExtResource("3_uvsk8")
 cast_shadow = 0
 mesh = SubResource("BoxMesh_valtb")
 
-[node name="ClewFore5" type="MeshInstance3D" parent="Sling" unique_id=1187675546]
+[node name="ClewFore5" type="MeshInstance3D" parent="Sling" unique_id=1768363257]
 transform = Transform3D(0.89573914, 0.44458002, 0, 0.11645803, -0.23463945, -0.9650813, -0.42905584, 0.86446106, -0.26195064, 0.18, -0.125, -1.45)
 material_override = ExtResource("3_uvsk8")
 cast_shadow = 0
 mesh = SubResource("BoxMesh_1dk2p")
 
-[node name="RingFore" type="MeshInstance3D" parent="Sling" unique_id=356919072]
+[node name="RingFore" type="MeshInstance3D" parent="Sling" unique_id=433977543]
 transform = Transform3D(1, 0, 0, 0, -4.371139e-08, -1, 0, 1, -4.371139e-08, 0, -0.05, -1.8)
 material_override = ExtResource("4_gei5c")
 mesh = SubResource("CylinderMesh_8majx")
 
-[node name="SpreaderAft" type="MeshInstance3D" parent="Sling" unique_id=220152810]
+[node name="SpreaderAft" type="MeshInstance3D" parent="Sling" unique_id=33432218]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.22, 1.1)
 material_override = ExtResource("2_i7j0x")
 mesh = SubResource("BoxMesh_j3aip")
 
-[node name="ClewAft1" type="MeshInstance3D" parent="Sling" unique_id=345391699]
+[node name="ClewAft1" type="MeshInstance3D" parent="Sling" unique_id=861281624]
 transform = Transform3D(0.89573914, -0.44458002, 0, -0.11645803, -0.23463945, 0.9650813, -0.42905584, -0.86446106, -0.26195064, -0.18, -0.125, 1.45)
 material_override = ExtResource("3_uvsk8")
 cast_shadow = 0
 mesh = SubResource("BoxMesh_d05j0")
 
-[node name="ClewAft2" type="MeshInstance3D" parent="Sling" unique_id=372083445]
+[node name="ClewAft2" type="MeshInstance3D" parent="Sling" unique_id=1555783408]
 transform = Transform3D(0.9705604, -0.24085794, 0, -0.063092895, -0.25423893, 0.9650813, -0.23244749, -0.93666965, -0.26195064, -0.09, -0.125, 1.45)
 material_override = ExtResource("3_uvsk8")
 cast_shadow = 0
 mesh = SubResource("BoxMesh_hibiv")
 
-[node name="ClewAft3" type="MeshInstance3D" parent="Sling" unique_id=1956290960]
+[node name="ClewAft3" type="MeshInstance3D" parent="Sling" unique_id=85210690]
 transform = Transform3D(1, 0, 0, 0, -0.26195067, 0.9650813, 0, -0.9650813, -0.26195067, 0, -0.125, 1.45)
 material_override = ExtResource("3_uvsk8")
 cast_shadow = 0
 mesh = SubResource("BoxMesh_iu6xf")
 
-[node name="ClewAft4" type="MeshInstance3D" parent="Sling" unique_id=2108579135]
+[node name="ClewAft4" type="MeshInstance3D" parent="Sling" unique_id=468621634]
 transform = Transform3D(0.9705604, 0.24085794, 0, 0.063092895, -0.25423893, 0.9650813, 0.23244749, -0.93666965, -0.26195064, 0.09, -0.125, 1.45)
 material_override = ExtResource("3_uvsk8")
 cast_shadow = 0
 mesh = SubResource("BoxMesh_rj6l0")
 
-[node name="ClewAft5" type="MeshInstance3D" parent="Sling" unique_id=1461426754]
+[node name="ClewAft5" type="MeshInstance3D" parent="Sling" unique_id=1098322071]
 transform = Transform3D(0.89573914, 0.44458002, 0, 0.11645803, -0.23463945, 0.9650813, 0.42905584, -0.86446106, -0.26195064, 0.18, -0.125, 1.45)
 material_override = ExtResource("3_uvsk8")
 cast_shadow = 0
 mesh = SubResource("BoxMesh_dvqta")
 
-[node name="RingAft" type="MeshInstance3D" parent="Sling" unique_id=842716123]
+[node name="RingAft" type="MeshInstance3D" parent="Sling" unique_id=2045675954]
 transform = Transform3D(1, 0, 0, 0, -4.371139e-08, -1, 0, 1, -4.371139e-08, 0, -0.05, 1.8)
 material_override = ExtResource("4_gei5c")
 mesh = SubResource("CylinderMesh_hipp1")
 
-[node name="Canvas1" type="Node3D" parent="Sling" unique_id=1145838113]
+[node name="Canvas1" type="Node3D" parent="Sling" unique_id=390380347]
 transform = Transform3D(1, 0, 0, 0, 0.902481, -0.4307296, 0, 0.4307296, 0.902481, 0, -0.285625, -0.9625)
 
-[node name="Middle" type="MeshInstance3D" parent="Sling/Canvas1" unique_id=1010227824]
+[node name="Middle" type="MeshInstance3D" parent="Sling/Canvas1" unique_id=1998364360]
 material_override = ExtResource("5_vhu76")
 mesh = SubResource("BoxMesh_723o2")
 
-[node name="SideL" type="MeshInstance3D" parent="Sling/Canvas1" unique_id=93836626]
+[node name="SideL" type="MeshInstance3D" parent="Sling/Canvas1" unique_id=1979307315]
 transform = Transform3D(0.93638533, 0.35097358, 0, -0.35097358, 0.93638533, 0, 0, 0, 1, -0.2930024, 0.038607094, 0)
 material_override = ExtResource("5_vhu76")
 mesh = SubResource("BoxMesh_xdis6")
 
-[node name="SideR" type="MeshInstance3D" parent="Sling/Canvas1" unique_id=1982248303]
+[node name="SideR" type="MeshInstance3D" parent="Sling/Canvas1" unique_id=1817487199]
 transform = Transform3D(0.93638533, -0.35097358, 0, 0.35097358, 0.93638533, 0, 0, 0, 1, 0.2930024, 0.038607094, 0)
 material_override = ExtResource("5_vhu76")
 mesh = SubResource("BoxMesh_uukpd")
 
-[node name="Canvas2" type="Node3D" parent="Sling" unique_id=997737087]
+[node name="Canvas2" type="Node3D" parent="Sling" unique_id=1447484534]
 transform = Transform3D(1, 0, 0, 0, 0.9465102, -0.32267392, 0, 0.32267392, 0.9465102, 0, -0.398125, -0.6875)
 
-[node name="Middle" type="MeshInstance3D" parent="Sling/Canvas2" unique_id=145758867]
+[node name="Middle" type="MeshInstance3D" parent="Sling/Canvas2" unique_id=1502408399]
 material_override = ExtResource("5_vhu76")
 mesh = SubResource("BoxMesh_kr1le")
 
-[node name="SideL" type="MeshInstance3D" parent="Sling/Canvas2" unique_id=1164585769]
+[node name="SideL" type="MeshInstance3D" parent="Sling/Canvas2" unique_id=100566798]
 transform = Transform3D(0.79418266, 0.6076791, 0, -0.6076791, 0.79418266, 0, 0, 0, 1, -0.27736008, 0.0668447, 0)
 material_override = ExtResource("5_vhu76")
 mesh = SubResource("BoxMesh_i8j28")
 
-[node name="SideR" type="MeshInstance3D" parent="Sling/Canvas2" unique_id=222497558]
+[node name="SideR" type="MeshInstance3D" parent="Sling/Canvas2" unique_id=1189659085]
 transform = Transform3D(0.79418266, -0.6076791, 0, 0.6076791, 0.79418266, 0, 0, 0, 1, 0.27736008, 0.0668447, 0)
 material_override = ExtResource("5_vhu76")
 mesh = SubResource("BoxMesh_akasu")
 
-[node name="Canvas3" type="Node3D" parent="Sling" unique_id=1127997886]
+[node name="Canvas3" type="Node3D" parent="Sling" unique_id=1446619410]
 transform = Transform3D(1, 0, 0, 0, 0.97971493, -0.20039624, 0, 0.20039624, 0.97971493, 0, -0.473125, -0.4125)
 
-[node name="Middle" type="MeshInstance3D" parent="Sling/Canvas3" unique_id=479734600]
+[node name="Middle" type="MeshInstance3D" parent="Sling/Canvas3" unique_id=23614919]
 material_override = ExtResource("5_vhu76")
 mesh = SubResource("BoxMesh_o4s3g")
 
-[node name="SideL" type="MeshInstance3D" parent="Sling/Canvas3" unique_id=2017566214]
+[node name="SideL" type="MeshInstance3D" parent="Sling/Canvas3" unique_id=1283140282]
 transform = Transform3D(0.6603704, 0.75094, 0, -0.75094, 0.6603704, 0, 0, 0, 1, -0.26264074, 0.08260341, 0)
 material_override = ExtResource("5_vhu76")
 mesh = SubResource("BoxMesh_rtj1w")
 
-[node name="SideR" type="MeshInstance3D" parent="Sling/Canvas3" unique_id=2106613727]
+[node name="SideR" type="MeshInstance3D" parent="Sling/Canvas3" unique_id=1704795290]
 transform = Transform3D(0.6603704, -0.75094, 0, 0.75094, 0.6603704, 0, 0, 0, 1, 0.26264074, 0.08260341, 0)
 material_override = ExtResource("5_vhu76")
 mesh = SubResource("BoxMesh_o88bq")
 
-[node name="Canvas4" type="Node3D" parent="Sling" unique_id=1630681816]
+[node name="Canvas4" type="Node3D" parent="Sling" unique_id=973685381]
 transform = Transform3D(1, 0, 0, 0, 0.9976837, -0.06802389, 0, 0.06802389, 0.9976837, 0, -0.510625, -0.1375)
 
-[node name="Middle" type="MeshInstance3D" parent="Sling/Canvas4" unique_id=445214671]
+[node name="Middle" type="MeshInstance3D" parent="Sling/Canvas4" unique_id=1885810710]
 material_override = ExtResource("5_vhu76")
 mesh = SubResource("BoxMesh_3k6be")
 
-[node name="SideL" type="MeshInstance3D" parent="Sling/Canvas4" unique_id=362201261]
+[node name="SideL" type="MeshInstance3D" parent="Sling/Canvas4" unique_id=1556521246]
 transform = Transform3D(0.5835855, 0.8120517, 0, -0.8120517, 0.5835855, 0, 0, 0, 1, -0.2541944, 0.08932569, 0)
 material_override = ExtResource("5_vhu76")
 mesh = SubResource("BoxMesh_ya4b1")
 
-[node name="SideR" type="MeshInstance3D" parent="Sling/Canvas4" unique_id=191675761]
+[node name="SideR" type="MeshInstance3D" parent="Sling/Canvas4" unique_id=402339813]
 transform = Transform3D(0.5835855, -0.8120517, 0, 0.8120517, 0.5835855, 0, 0, 0, 1, 0.2541944, 0.08932569, 0)
 material_override = ExtResource("5_vhu76")
 mesh = SubResource("BoxMesh_vvjyr")
 
-[node name="Canvas5" type="Node3D" parent="Sling" unique_id=1180494401]
+[node name="Canvas5" type="Node3D" parent="Sling" unique_id=2017585903]
 transform = Transform3D(1, 0, 0, 0, 0.9976837, 0.06802389, 0, -0.06802389, 0.9976837, 0, -0.510625, 0.1375)
 
-[node name="Middle" type="MeshInstance3D" parent="Sling/Canvas5" unique_id=1377351181]
+[node name="Middle" type="MeshInstance3D" parent="Sling/Canvas5" unique_id=1537971057]
 material_override = ExtResource("5_vhu76")
 mesh = SubResource("BoxMesh_ay7v2")
 
-[node name="SideL" type="MeshInstance3D" parent="Sling/Canvas5" unique_id=876219177]
+[node name="SideL" type="MeshInstance3D" parent="Sling/Canvas5" unique_id=1845621497]
 transform = Transform3D(0.5835855, 0.8120517, 0, -0.8120517, 0.5835855, 0, 0, 0, 1, -0.2541944, 0.08932569, 0)
 material_override = ExtResource("5_vhu76")
 mesh = SubResource("BoxMesh_rdwnj")
 
-[node name="SideR" type="MeshInstance3D" parent="Sling/Canvas5" unique_id=1309492216]
+[node name="SideR" type="MeshInstance3D" parent="Sling/Canvas5" unique_id=1431934481]
 transform = Transform3D(0.5835855, -0.8120517, 0, 0.8120517, 0.5835855, 0, 0, 0, 1, 0.2541944, 0.08932569, 0)
 material_override = ExtResource("5_vhu76")
 mesh = SubResource("BoxMesh_830w0")
 
-[node name="Canvas6" type="Node3D" parent="Sling" unique_id=930609007]
+[node name="Canvas6" type="Node3D" parent="Sling" unique_id=801432635]
 transform = Transform3D(1, 0, 0, 0, 0.97971493, 0.20039624, 0, -0.20039624, 0.97971493, 0, -0.473125, 0.4125)
 
-[node name="Middle" type="MeshInstance3D" parent="Sling/Canvas6" unique_id=252296508]
+[node name="Middle" type="MeshInstance3D" parent="Sling/Canvas6" unique_id=799567386]
 material_override = ExtResource("5_vhu76")
 mesh = SubResource("BoxMesh_5rarc")
 
-[node name="SideL" type="MeshInstance3D" parent="Sling/Canvas6" unique_id=1691554882]
+[node name="SideL" type="MeshInstance3D" parent="Sling/Canvas6" unique_id=275019620]
 transform = Transform3D(0.6603704, 0.75094, 0, -0.75094, 0.6603704, 0, 0, 0, 1, -0.26264074, 0.08260341, 0)
 material_override = ExtResource("5_vhu76")
 mesh = SubResource("BoxMesh_40xko")
 
-[node name="SideR" type="MeshInstance3D" parent="Sling/Canvas6" unique_id=953621820]
+[node name="SideR" type="MeshInstance3D" parent="Sling/Canvas6" unique_id=120035241]
 transform = Transform3D(0.6603704, -0.75094, 0, 0.75094, 0.6603704, 0, 0, 0, 1, 0.26264074, 0.08260341, 0)
 material_override = ExtResource("5_vhu76")
 mesh = SubResource("BoxMesh_wrjoo")
 
-[node name="Canvas7" type="Node3D" parent="Sling" unique_id=204319354]
+[node name="Canvas7" type="Node3D" parent="Sling" unique_id=2091878752]
 transform = Transform3D(1, 0, 0, 0, 0.9465102, 0.32267392, 0, -0.32267392, 0.9465102, 0, -0.398125, 0.6875)
 
-[node name="Middle" type="MeshInstance3D" parent="Sling/Canvas7" unique_id=476572851]
+[node name="Middle" type="MeshInstance3D" parent="Sling/Canvas7" unique_id=863704513]
 material_override = ExtResource("5_vhu76")
 mesh = SubResource("BoxMesh_kfixn")
 
-[node name="SideL" type="MeshInstance3D" parent="Sling/Canvas7" unique_id=56717948]
+[node name="SideL" type="MeshInstance3D" parent="Sling/Canvas7" unique_id=839460457]
 transform = Transform3D(0.79418266, 0.6076791, 0, -0.6076791, 0.79418266, 0, 0, 0, 1, -0.27736008, 0.0668447, 0)
 material_override = ExtResource("5_vhu76")
 mesh = SubResource("BoxMesh_d2u4p")
 
-[node name="SideR" type="MeshInstance3D" parent="Sling/Canvas7" unique_id=1554759353]
+[node name="SideR" type="MeshInstance3D" parent="Sling/Canvas7" unique_id=989638565]
 transform = Transform3D(0.79418266, -0.6076791, 0, 0.6076791, 0.79418266, 0, 0, 0, 1, 0.27736008, 0.0668447, 0)
 material_override = ExtResource("5_vhu76")
 mesh = SubResource("BoxMesh_ut715")
 
-[node name="Canvas8" type="Node3D" parent="Sling" unique_id=116947978]
+[node name="Canvas8" type="Node3D" parent="Sling" unique_id=454339048]
 transform = Transform3D(1, 0, 0, 0, 0.902481, 0.4307296, 0, -0.4307296, 0.902481, 0, -0.285625, 0.9625)
 
-[node name="Middle" type="MeshInstance3D" parent="Sling/Canvas8" unique_id=1927835570]
+[node name="Middle" type="MeshInstance3D" parent="Sling/Canvas8" unique_id=1792857580]
 material_override = ExtResource("5_vhu76")
 mesh = SubResource("BoxMesh_4l3r5")
 
-[node name="SideL" type="MeshInstance3D" parent="Sling/Canvas8" unique_id=1060147407]
+[node name="SideL" type="MeshInstance3D" parent="Sling/Canvas8" unique_id=415495332]
 transform = Transform3D(0.93638533, 0.35097358, 0, -0.35097358, 0.93638533, 0, 0, 0, 1, -0.2930024, 0.038607094, 0)
 material_override = ExtResource("5_vhu76")
 mesh = SubResource("BoxMesh_k10fv")
 
-[node name="SideR" type="MeshInstance3D" parent="Sling/Canvas8" unique_id=233071428]
+[node name="SideR" type="MeshInstance3D" parent="Sling/Canvas8" unique_id=1381618472]
 transform = Transform3D(0.93638533, -0.35097358, 0, 0.35097358, 0.93638533, 0, 0, 0, 1, 0.2930024, 0.038607094, 0)
 material_override = ExtResource("5_vhu76")
 mesh = SubResource("BoxMesh_cfssp")
 
-[node name="Pillow" type="MeshInstance3D" parent="Sling" unique_id=415797850]
+[node name="Pillow" type="MeshInstance3D" parent="Sling" unique_id=441303066]
 transform = Transform3D(0.9945219, -0.025287725, 0.101423524, 0, 0.9702957, 0.2419219, -0.104528464, -0.24059664, 0.96498036, 0, -0.342, -0.66)
 material_override = ExtResource("6_cfsc6")
 mesh = SubResource("BoxMesh_2lleo")
 
-[node name="Blanket" type="MeshInstance3D" parent="Sling" unique_id=1120266561]
+[node name="Blanket" type="MeshInstance3D" parent="Sling" unique_id=2096357519]
 transform = Transform3D(0.97576493, -0.06823213, -0.2079117, 0.06975647, 0.9975641, 0, 0.20740524, -0.014503187, 0.9781476, -0.03, -0.47, 0.15)
 material_override = ExtResource("7_6u4x5")
 mesh = SubResource("BoxMesh_exyt1")
 
-[node name="BlanketRuck" type="MeshInstance3D" parent="Sling" unique_id=891801511]
+[node name="BlanketRuck" type="MeshInstance3D" parent="Sling" unique_id=1296811037]
 transform = Transform3D(0.9396926, -0.0476, 0.3386916, 0, 0.99026805, 0.1391731, -0.34202012, -0.13077994, 0.9305476, 0.04, -0.42, 0.35)
 material_override = ExtResource("7_6u4x5")
 mesh = SubResource("BoxMesh_srcnu")
 
-[node name="BlanketDrape" type="MeshInstance3D" parent="Sling" unique_id=16864850]
-transform = Transform3D(0.9945219, 0.104528464, 0, -0.104528464, 0.9945219, 0, 0, 0, 1, 0.36, -0.51, 0.3)
+[node name="BlanketFold" type="Node3D" parent="Sling" unique_id=936847640]
+transform = Transform3D(0.9945219, 0.104528464, 0, -0.104528464, 0.9945219, 0, 0, 0, 1, 0.36, -0.35, 0.3)
+script = ExtResource("1_aoi3f")
+swing_degrees = 3.0
+period = 3.4
+phase = 0.1
+
+[node name="BlanketDrape" type="MeshInstance3D" parent="Sling/BlanketFold" unique_id=1006205881]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.16, 0)
 material_override = ExtResource("7_6u4x5")
 mesh = SubResource("BoxMesh_akik1")
 
-[node name="HookFore" type="MeshInstance3D" parent="." unique_id=1072737972]
+[node name="HookFore" type="MeshInstance3D" parent="." unique_id=1684841666]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.02, -1.8)
 material_override = ExtResource("4_gei5c")
 mesh = SubResource("CylinderMesh_v8k72")
 
-[node name="HookAft" type="MeshInstance3D" parent="." unique_id=1618274407]
+[node name="HookAft" type="MeshInstance3D" parent="." unique_id=1273233301]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.02, 1.8)
 material_override = ExtResource("4_gei5c")
 mesh = SubResource("CylinderMesh_4wafl")
