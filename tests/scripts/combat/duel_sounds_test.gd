@@ -200,7 +200,7 @@ func test_clearing_the_fog_chimes_once_and_it_ticks_away() -> void:
 	var player: Player3D = new_player_3d_on_floor()
 	stand_firm(player)
 	var crab: FogCrab = new_fog_crab(player, CLOSE)
-	crab.strikes_to_clear = 1
+	crab.fog = 1
 	var runner: GdUnitSceneRunner = scene_runner(player.get_parent())
 	await physics_ticks(runner, FIRST_OPENING)
 
@@ -218,7 +218,7 @@ func test_the_wandering_tick_is_quieter_than_the_rattle() -> void:
 	var player: Player3D = new_player_3d_on_floor()
 	stand_firm(player)
 	var crab: FogCrab = new_fog_crab(player, CLOSE)
-	crab.strikes_to_clear = 1
+	crab.fog = 1
 	var click: AudioStreamPlayer3D = _crab_sounds(crab).get_node("Click") as AudioStreamPlayer3D
 	var runner: GdUnitSceneRunner = scene_runner(player.get_parent())
 	await physics_ticks(runner, 40)

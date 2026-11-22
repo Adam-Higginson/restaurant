@@ -34,7 +34,7 @@ func test_the_strike_that_clears_the_fog_freezes_longer() -> void:
 	var player: Player3D = new_player_3d_on_floor()
 	stand_firm(player)
 	var crab: FogCrab = new_fog_crab(player, CLOSE)
-	crab.strikes_to_clear = 1
+	crab.fog = 1
 	var runner: GdUnitSceneRunner = scene_runner(player.get_parent())
 	await physics_ticks(runner, FIRST_OPENING)
 

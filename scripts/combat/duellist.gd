@@ -41,6 +41,8 @@ enum Hit {
 	LANDED,
 	## The pan turned it away.
 	PARRIED,
+	## The pan, raised just in time, turned it away: a perfect parry.
+	PARRIED_PERFECTLY,
 	## It came while they were still reeling from the last one, and did nothing.
 	IGNORED,
 }
@@ -210,10 +212,11 @@ func is_invulnerable() -> bool:
 ## the player back away from [param from]; losing the last heart is a defeat.
 func receive_hit(halves: int, from: Vector3) -> Hit:
 	if parry.is_active() and has_pan():
+		var perfect: bool = parry.is_perfect()
 		parry.spend()
 		_spirit.excite()
 		parried.emit()
-		return Hit.PARRIED
+		return Hit.PARRIED_PERFECTLY if perfect else Hit.PARRIED
 	if is_invulnerable():
 		return Hit.IGNORED
 	hearts.hurt(halves)
@@ -298,7 +301,7 @@ static func mood_for(state: CrabCycle.State) -> LanternSpirit.Mood:
 	match state:
 		CrabCycle.State.WINDUP:
 			return LanternSpirit.Mood.WARNING
-		CrabCycle.State.OPENING, CrabCycle.State.STAGGERED:
+		CrabCycle.State.OPENING, CrabCycle.State.STAGGERED, CrabCycle.State.FLIPPED:
 			return LanternSpirit.Mood.OPEN
 	return LanternSpirit.Mood.CALM
 

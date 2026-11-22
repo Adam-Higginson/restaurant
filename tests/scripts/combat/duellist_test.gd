@@ -55,6 +55,66 @@ func test_out_of_its_reach_the_attack_misses() -> void:
 	assert_int(duellist_of(player).hearts.halves).is_equal(6)
 
 
+func test_beside_the_crab_its_lunge_misses() -> void:
+	var player: Player3D = new_player_3d_on_floor()
+	var crab: FogCrab = new_fog_crab(player, Vector3(0, 0, -1.3))
+	crab.scuttle_speed = 0.0
+	var runner: GdUnitSceneRunner = scene_runner(player.get_parent())
+	await physics_ticks(runner, 2)
+
+	# Facing away from the player (it would turn back, but it's committed).
+	await physics_ticks(runner, 40)
+	crab.rotation.y = PI / 2.0
+	await physics_ticks(runner, FIRST_HIT - 42)
+
+	assert_int(duellist_of(player).hearts.halves).is_equal(6)
+
+
+func test_committed_it_stops_turning_to_follow() -> void:
+	var player: Player3D = new_player_3d_on_floor()
+	var crab: FogCrab = new_fog_crab(player, CLOSE)
+	var runner: GdUnitSceneRunner = scene_runner(player.get_parent())
+	# The last 0.2 s of its 0.8 s windup.
+	await physics_ticks(runner, 40)
+	assert_bool(crab.cycle.is_committed()).is_true()
+	var aim: float = crab.rotation.y
+
+	player.global_position = Vector3(3, 0, -1.3)
+	await physics_ticks(runner, 4)
+
+	assert_float(crab.rotation.y).is_equal_approx(aim, 0.001)
+
+
+func test_stepping_aside_as_it_commits_dodges_the_lunge() -> void:
+	var player: Player3D = new_player_3d_on_floor()
+	var crab: FogCrab = new_fog_crab(player, CLOSE)
+	crab.scuttle_speed = 0.0
+	var runner: GdUnitSceneRunner = scene_runner(player.get_parent())
+	await physics_ticks(runner, 40)
+
+	# Still in its reach, but off to its side.
+	player.global_position = Vector3(1.4, 0, -1.0)
+	await physics_ticks(runner, FIRST_HIT - 40)
+
+	assert_int(crab.cycle.state).is_not_equal(CrabCycle.State.WINDUP)
+	assert_int(duellist_of(player).hearts.halves).is_equal(6)
+
+
+func test_its_lunge_reaches_ahead_not_aside() -> void:
+	var player: Player3D = new_player_3d_on_floor()
+	var crab: FogCrab = new_fog_crab(player, Vector3.ZERO)
+	crab.notice_range = 0.0
+	var runner: GdUnitSceneRunner = scene_runner(player.get_parent())
+	await physics_ticks(runner, 2)
+	crab.global_position = Vector3(0, 0, -5)
+	crab.rotation.y = 0.0
+	await physics_ticks(runner, 1)
+
+	assert_bool(crab.lunge_reaches(Vector3(0, 0, -6.5))).is_true()
+	assert_bool(crab.lunge_reaches(Vector3(1.5, 0, -5.5))).is_false()
+	assert_bool(crab.lunge_reaches(Vector3(0, 0, -7.5))).is_false()
+
+
 func test_a_far_off_crab_stays_idle() -> void:
 	var player: Player3D = new_player_3d_on_floor()
 	var crab: FogCrab = new_fog_crab(player, Vector3(0, 0, -15))
@@ -93,6 +153,24 @@ func test_a_parry_inside_the_window_turns_the_hit_and_staggers_the_crab() -> voi
 	assert_int(duellist_of(player).hearts.halves).is_equal(6)
 	assert_int(crab.cycle.state).is_equal(CrabCycle.State.STAGGERED)
 	assert_int(parried[0]).is_equal(1)
+
+
+func test_a_parry_just_in_time_flips_the_crab() -> void:
+	var player: Player3D = new_player_3d_on_floor()
+	var crab: FogCrab = new_fog_crab(player, CLOSE)
+	var runner: GdUnitSceneRunner = scene_runner(player.get_parent())
+	player.toolbar.add(ItemInstance.new(PAN))
+	var flips: Array[int] = [0]
+	crab.flipped.connect(func() -> void: flips[0] += 1)
+	# The hit lands about tick 49: the pan goes up 4 ticks (0.07 s) before.
+	await physics_ticks(runner, 45)
+
+	duellist_of(player).raise_pan()
+	await physics_ticks(runner, FIRST_HIT - 45)
+
+	assert_int(duellist_of(player).hearts.halves).is_equal(6)
+	assert_bool(crab.is_flipped()).is_true()
+	assert_int(flips[0]).is_equal(1)
 
 
 func test_a_parry_too_early_doesnt_stop_the_hit() -> void:
@@ -204,7 +282,7 @@ func test_a_strike_counts_while_the_crab_is_open() -> void:
 	duellist_of(player).strike()
 
 	assert_int(crab.cycle.state).is_equal(CrabCycle.State.OPENING)
-	assert_int(crab.cycle.strikes).is_equal(1)
+	assert_int(crab.cycle.damage_taken).is_equal(1)
 	assert_array(hits).contains_exactly([true])
 
 
@@ -218,7 +296,7 @@ func test_a_strike_during_the_windup_doesnt_count() -> void:
 	await physics_ticks(runner, 20)
 	duellist_of(player).strike()
 
-	assert_int(crab.cycle.strikes).is_equal(0)
+	assert_int(crab.cycle.damage_taken).is_equal(0)
 	assert_array(hits).contains_exactly([false])
 
 
@@ -232,7 +310,7 @@ func test_a_strike_misses_a_crab_behind_you() -> void:
 	duellist_of(player).strike()
 
 	assert_bool(crab.cycle.is_open()).is_true()
-	assert_int(crab.cycle.strikes).is_equal(0)
+	assert_int(crab.cycle.damage_taken).is_equal(0)
 
 
 func test_reach_is_a_distance_and_an_arc() -> void:
@@ -251,10 +329,11 @@ func test_reach_is_a_distance_and_an_arc() -> void:
 
 # --- Clearing the fog ------------------------------------------------------------
 
-func test_three_strikes_in_openings_clear_the_fog_and_it_wanders_off() -> void:
+func test_strikes_in_openings_clear_the_fog_and_it_wanders_off() -> void:
 	var player: Player3D = new_player_3d_on_floor()
 	stand_firm(player)
 	var crab: FogCrab = new_fog_crab(player, CLOSE)
+	crab.fog = 3
 	var runner: GdUnitSceneRunner = scene_runner(player.get_parent())
 	var cleared: Array[int] = [0]
 	crab.fog_cleared.connect(func() -> void: cleared[0] += 1)
@@ -290,7 +369,7 @@ func test_a_parry_then_strikes_in_the_stagger_count() -> void:
 
 	duellist_of(player).strike()
 
-	assert_int(crab.cycle.strikes).is_equal(1)
+	assert_int(crab.cycle.damage_taken).is_equal(1)
 
 
 # --- Defeat ----------------------------------------------------------------------
@@ -347,14 +426,14 @@ func test_the_fog_closes_back_over_a_crab_that_wins() -> void:
 	var runner: GdUnitSceneRunner = scene_runner(player.get_parent())
 	await physics_ticks(runner, FIRST_OPENING)
 	duellist_of(player).strike()
-	assert_int(crab.cycle.strikes).is_equal(1)
+	assert_int(crab.cycle.damage_taken).is_equal(1)
 	# Until the moment after the crab's own blow has passed.
 	await physics_ticks(runner, 45)
 
 	duellist_of(player).receive_hit(6, Vector3.ZERO)
 	await physics_ticks(runner, 3)
 
-	assert_int(crab.cycle.strikes).is_equal(0)
+	assert_int(crab.cycle.damage_taken).is_equal(0)
 	assert_int(crab.cycle.state).is_equal(CrabCycle.State.IDLE)
 
 
@@ -401,6 +480,7 @@ func test_each_state_has_its_mood() -> void:
 	assert_int(Duellist.mood_for(CrabCycle.State.OPENING)).is_equal(LanternSpirit.Mood.OPEN)
 	assert_int(Duellist.mood_for(CrabCycle.State.STAGGERED)).is_equal(LanternSpirit.Mood.OPEN)
 	assert_int(Duellist.mood_for(CrabCycle.State.CLEARED)).is_equal(LanternSpirit.Mood.CALM)
+	assert_int(Duellist.mood_for(CrabCycle.State.FLIPPED)).is_equal(LanternSpirit.Mood.OPEN)
 
 
 # --- Weight: swings, knock back and the moment after a blow ----------------------
