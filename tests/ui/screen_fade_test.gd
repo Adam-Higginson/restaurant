@@ -56,6 +56,32 @@ func test_draws_above_the_question_panel() -> void:
 	assert_int(fade.layer).is_greater(panel.layer)
 
 
+func test_cover_now_blacks_the_screen_at_once_and_uncover_now_clears_it() -> void:
+	var fade: ScreenFade = _new_fade()
+
+	fade.cover_now()
+	assert_bool(fade.is_covering()).is_true()
+
+	fade.uncover_now()
+	assert_bool(fade.is_covering()).is_false()
+	assert_bool(fade.visible).is_false()
+	assert_float(_title(fade).modulate.a).is_equal(0.0)
+
+
+func test_a_fade_can_be_given_its_own_time() -> void:
+	var fade: ScreenFade = _new_fade()
+	# The usual time is far longer than the test waits.
+	fade.fade_seconds = 60.0
+
+	var out: bool = await finishes_within(func() -> void: await fade.fade_out(0.05))
+	assert_bool(out).is_true()
+	assert_bool(fade.is_covering()).is_true()
+
+	var back: bool = await finishes_within(func() -> void: await fade.fade_in(0.05))
+	assert_bool(back).is_true()
+	assert_bool(fade.visible).is_false()
+
+
 func _new_fade() -> ScreenFade:
 	var fade: ScreenFade = (load(SCREEN_FADE_SCENE) as PackedScene).instantiate() as ScreenFade
 	auto_free(fade)

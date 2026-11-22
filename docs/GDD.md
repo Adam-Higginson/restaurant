@@ -22,7 +22,19 @@ A cosy 3D adventure in the spirit of Ocarina of Time. You're pulled from the sea
 - The wider story is still to be written.
 
 ## How it begins (first sketch)
-Black, and a title: "Somewhere at sea". You wake standing by your bunk at night, the storm outside, the bunk room warm and lamplit, the camera looking aft over your shoulder at your bunk, the stove and the stern windows. The lantern is at your shoulder: "There you are." / "You were in the water. I pulled. You held on. Good holding." / "I'll get you home. I know exactly where it is. Roughly." Then the ship is yours. (In `sea.tscn`, the `Opening` node; tick its Skip to start on deck.)
+The intro is one cutscene in nine beats. The second half (6 to 9) is built; the first half, in the water, comes next.
+
+1. **The dark.** Black water, the storm's surface churning far above with lightning flickering through it. Your figure drifts down. Nothing else: no hints of home, no wreckage.
+2. **The light.** A small warm light comes down through the dark, the first warm thing in the game. A hand of flame is offered.
+3. **The reach.** The scene waits, with you still sinking, until you press Interact and take it. It's the only thing you do, and it makes "Good holding." true.
+4. **The surface.** He hauls you up into the storm: rain, waves, the ship towering over you with its heron figurehead and bow lantern.
+5. **The boathook.** A tall thin silhouette at the rail against the lightning, unmistakably a heron, reaches down a long boathook. It catches your collar. Black. No face and no words.
+6. **Title.** "Somewhere at sea".
+7. **Waking.** You wake standing by your bunk at night, the storm outside, the bunk room warm and lamplit, the camera looking aft over your shoulder at your bunk, the stove and the stern windows. The lantern, from his round table: "There you are." / "You were in the water. I pulled. You held on. Good holding." / "I'll get you home. I know exactly where it is. Roughly." (Having seen whose boathook it was, "I pulled" is him taking the credit.)
+8. **The doorway.** The camera cuts to the galley door: the captain stands in it, lit from behind, the rain coming down the hatch beside them and the boathook leaning on the wall. "Nobody drowns on my ship. Nobody goes hungry either." / "You've managed the first."
+9. **The stove.** The camera lingers on the galley stove, where a pot has been left warm, while the captain goes back to the fire. Then the camera is behind you again and the ship is yours. Nothing tells you to go and eat. Talking to the captain by the stove afterwards is your first proper conversation ("So. You're the one the lamp fished out.").
+
+Hold Tab (Start on a controller) for a second to skip it. (In `sea.tscn`, the `Opening` node; tick its Skip to start on deck, or set its Start Section to open on a later beat. The script is `data/dialogue/intro.dlg`: see Cutscenes under Conversations.)
 
 **Keeping the voyage (first sketch):** sleeping in your bunk is where the game saves: the memories you've got back, the day and whether it's morning, and the lantern's warmth. Start again and the opening carries on ("Day 3. Morning", "You're back. I kept the light on.") instead of beginning anew. To start a new voyage, delete `voyage.save` from the user data folder.
 
@@ -130,6 +142,7 @@ One button, **interact**, does everything with the thing in front of you.
 | Camera | Mouse (Esc frees the cursor) | Right stick | Orbit the free camera |
 | Interact | E or Space / right click | X or A | Put down, pick up, put away, open, ring, talk, gather. In a conversation: next line, or pick the reply |
 | Move (in a conversation) | W and S / arrows | Left stick or D-pad | Move between replies |
+| Skip a cutscene | Hold Tab | Hold Start | Held for a second, runs the cutscene to its end |
 | Use tool | F / left click | B | Use the selected tool, or the tool that fits what you're facing (the knife chops) |
 | Select toolbar slot | 1–9, 0, -, = / scroll | Bumpers (cycle) | Choose what you hold |
 | Lock-on, attack, parry | To be set in #66 | To be set in #66 | Duels |
@@ -149,8 +162,15 @@ Talking is how you get to know the crew, so it comes in two kinds (the second is
 **Overheard (#94).** Small pill-shaped speech bubbles float beside the crew's heads as they remark on things and chat to each other, so you overhear them as you pass. Nobody stops you or touches the camera.
 - **The bubbles** have a place in the world beside the speaker's head and always face you, shrinking gently with distance and fading out far away. They draw over a low beam rather than being cut in half, but a wall between you and the speaker hides them. Styles: speech, thought (a trail of dots), shout (amber words) and sound (paler, quieter words, for a hum or a grunt). One bubble at a time in an exchange.
 - **When:** every 25 to 60 seconds, one remark or short exchange, only from people within earshot (9 m) you can see, and everyone in an exchange must be near each other. Never during a proper conversation (one starting cuts the chatter off), never while you're asleep or the title's up.
-- **The lantern** says his reactions (a fish landed, the bell rung, a memory back, his first words) in the same bubbles, and they cut any chatter off so he's heard. If he didn't see it, it's news he asks about later, as before.
+- **The lantern** says his reactions (a fish landed, the bell rung, a memory back) in the same bubbles, and they cut any chatter off so he's heard. If he didn't see it, it's news he asks about later, as before.
 - **Writing them:** chatter is in `data/dialogue/ambient.dlg`, the lantern's reactions in `moments.dlg`, in the same format as conversations. Each section is one remark; a `?` line just before it says when it can be said (`? night and raining`), and tags after its name say how often: `[weight 2]` (twice as likely), `[cooldown 300]` (seconds before it's said again, 120 if not given), `[priority 1]` (said before others that fit), `[on caught]` (a reaction to that moment). A line can end in `[thought]`, `[shout]` or `[sound]`. Nothing is said twice running.
+
+**Cutscenes (#100).** A cutscene is a conversation that nobody in particular starts, written in the same kind of file, whose `@` cues stage the scene. Lines wait for Interact as usual. A cue that takes time holds the script until it's done, so the file reads top to bottom as the scene plays.
+- **The cues so far:** `@shot doorway` (glide the camera to a shot; add `cut` to cut, and `@shot free` gives it back), `@fade out` / `@fade in 2.0`, `@title Somewhere at sea`, `@wait 1.5`, `@wait_for interact` (the scene waits for the player), `@place heron doorway` (stand someone on a mark), `@face heron player`, `@hide heron` / `@show heron`, and `@home heron` (back to their usual spot). Nobody walks yet, so people are moved while the camera looks elsewhere.
+- **Places have names, not numbers.** A shot or a mark is a marker in the ship scene (under `Shots` and `Marks`), named for the cue: drag it in the editor to reframe, without touching the script.
+- **Skipping** (hold Tab or Start for a second) blacks the screen and runs the script to its end at once, so its flags are set and everyone ends up where they should be. It stops at a choice, which is never made for you.
+- **Tuning one:** set Start Section on the `Opening` node to open the game on a later beat. While the game runs from the editor, F8 reads the file again and replays the section you're in, so the loop is edit, save, F8. A mistyped cue is reported with its line number, and the tests check every file.
+- **Still to come:** `@play` for movements shaped on Godot's animation timeline (the lantern's descent), and lines marked to play on their own timing in a speech bubble instead of waiting for the button.
 
 The text is set in Varela Round, a soft rounded face like OoT's.
 
@@ -331,5 +351,5 @@ These cover the pure-logic code that carries over to 3D. The 2D world layer (pla
 - `DayLight` (`scripts/visuals/day_light.gd`) maps the time of day to colours and lamp levels. In 3D it will drive the sun, sky and lanterns.
 - `DebugKeys` (`scripts/debug/`) gives testing shortcuts in debug builds only.
 - The 3D prototype lives in `scenes/prototype/` until it replaces `scenes/main.tscn`.
-- **Conversations** (`scripts/dialogue/`): `DialogueScript` reads a `.dlg` text file into a `DialogueTree` (steps in order, sections by name). `DialogueRunner` walks it with no nodes, so it's unit tested alone; it reads and changes a `DialogueState` (`Game.dialogue`: saved flags, plus facts the game answers on the spot, registered by `DialogueFacts`). `Conversation` is the one node that joins it to the world: it stops the player, shows lines in the `DialogueBox` (display only), reads the buttons and emits `cue` for the scene. `ShotCues` turns a `@shot` cue into `CameraRig.hold_shot`. A `Crewmate` is anyone you can talk to: a `Person` and the name of a script, nothing about any one character.
+- **Conversations** (`scripts/dialogue/`): `DialogueScript` reads a `.dlg` text file into a `DialogueTree` (steps in order, sections by name). `DialogueRunner` walks it with no nodes, so it's unit tested alone; it reads and changes a `DialogueState` (`Game.dialogue`: saved flags, plus facts the game answers on the spot, registered by `DialogueFacts`). `Conversation` is the one node that joins it to the world: it stops the player, shows lines in the `DialogueBox` (display only), reads the buttons and emits `cue` for the scene. `ShotCues` turns a `@shot` cue into `CameraRig.hold_shot`. **Cutscenes** (`scripts/cutscene/`): `Conversation.play` starts a script as a cutscene. `CueList` names every cue and how it's written, which `DialogueScript` checks as it reads. Each family of cues has a small `CueHandler` node in the scene (`ShotCues`, `FadeCues`, `WaitCues`, `ActorCues`); one that takes time calls `hold()` and later `release()`, and the runner reads no further while any hold is open. Adding a cue is one handler and one line in `CueList`. `Opening` plays `intro.dlg`; `CutsceneKeys` is the F8 replay. A `Crewmate` is anyone you can talk to: a `Person` and the name of a script, nothing about any one character.
 - Godot concepts are explained in `docs/godot-notes.md`.

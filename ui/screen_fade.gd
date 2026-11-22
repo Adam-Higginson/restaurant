@@ -25,11 +25,12 @@ func _ready() -> void:
 	_title.modulate.a = 0.0
 
 
-## Shows the overlay and fades the screen to black.
-func fade_out() -> void:
+## Shows the overlay and fades the screen to black, over [param seconds]
+## (or [member fade_seconds] if not given).
+func fade_out(seconds: float = -1.0) -> void:
 	show()
 	_tween = _new_tween()
-	_tween.tween_property(_black, "modulate:a", 1.0, fade_seconds)
+	_tween.tween_property(_black, "modulate:a", 1.0, _seconds_or_usual(seconds))
 	await _tween.finished
 
 
@@ -41,19 +42,43 @@ func show_title(text: String) -> void:
 	await _tween.finished
 
 
-## Fades the black screen and the title away together, then hides the overlay.
-func fade_in() -> void:
+## Fades the black screen and the title away together, over [param seconds]
+## (or [member fade_seconds] if not given), then hides the overlay.
+func fade_in(seconds: float = -1.0) -> void:
+	var time: float = _seconds_or_usual(seconds)
 	_tween = _new_tween()
 	_tween.set_parallel()
-	_tween.tween_property(_black, "modulate:a", 0.0, fade_seconds)
-	_tween.tween_property(_title, "modulate:a", 0.0, fade_seconds)
+	_tween.tween_property(_black, "modulate:a", 0.0, time)
+	_tween.tween_property(_title, "modulate:a", 0.0, time)
 	await _tween.finished
+	hide()
+
+
+## Makes the screen black at once, with no fade: for the very first frame,
+## or when a cutscene is skipped. Any title showing stays.
+func cover_now() -> void:
+	if _tween != null:
+		_tween.kill()
+	_black.modulate.a = 1.0
+	show()
+
+
+## Uncovers the screen at once, with no fade, and puts any title away.
+func uncover_now() -> void:
+	if _tween != null:
+		_tween.kill()
+	_black.modulate.a = 0.0
+	_title.modulate.a = 0.0
 	hide()
 
 
 ## Whether the screen is fully black.
 func is_covering() -> bool:
 	return visible and is_equal_approx(_black.modulate.a, 1.0)
+
+
+func _seconds_or_usual(seconds: float) -> float:
+	return seconds if seconds >= 0.0 else fade_seconds
 
 
 # Stops any fade still running, so two tweens never fight over the same alpha,

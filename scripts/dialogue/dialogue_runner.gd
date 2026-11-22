@@ -4,6 +4,11 @@ extends RefCounted
 ## told to go on, offers choices and waits for one to be picked, and quietly
 ## does the rest (guards, flags, cues, jumps). Pure logic with no nodes; the
 ## [Conversation] shows what it says and passes on the button presses.
+##
+## A cue usually passes straight through, but whoever acts on it can ask the
+## script to wait with [method hold] (a fade that takes two seconds, say) and
+## let it go on with [method release]. That's what makes a cutscene possible:
+## the script reads no further until every hold has been released.
 
 ## Emitted when someone says something. Call [method advance] to go on.
 signal line_shown(said: DialogueStep)
@@ -37,6 +42,13 @@ var _line: DialogueStep = null
 var _choices: Array[DialogueStep] = []
 ## Whether the last guard held, for a "? else" after it.
 var _guard_held: bool = true
+## How many holds are open. The script waits while there are any.
+var _holds: int = 0
+## The line of the script file the step being run was written on.
+var _line_number: int = 0
+## Whether the script stopped at a cue to wait for its holds, and so should
+## carry on by itself when the last one is released.
+var _waiting_on_holds: bool = false
 
 
 ## Starts [param tree] at [param section], reading and changing flags in
@@ -50,6 +62,8 @@ func start(tree: DialogueTree, state: DialogueState,
 	_next = tree.sections[section]
 	_active = true
 	_guard_held = true
+	_holds = 0
+	_waiting_on_holds = false
 	_run()
 	return true
 
@@ -64,11 +78,65 @@ func is_choosing() -> bool:
 	return _active and not _choices.is_empty()
 
 
-## Goes on from the line showing. Does nothing while choosing or when over.
+## Whether a cue is holding the script: it's waiting for [method release].
+func is_held() -> bool:
+	return _active and _holds > 0
+
+
+## The section being read now ([code]&"start"[/code], say), or &"" when
+## nothing's under way.
+func section() -> StringName:
+	if not _active or _tree == null:
+		return &""
+	# The step being waited on is the one before the next to run.
+	var at: int = maxi(_next - 1, 0)
+	var found: StringName = &""
+	var found_at: int = -1
+	for name: StringName in _tree.sections:
+		var starts: int = _tree.sections[name]
+		if starts <= at and starts > found_at:
+			found = name
+			found_at = starts
+	return found
+
+
+## The line of the script file being read now, for pointing at a mistake.
+func line_number() -> int:
+	return _line_number
+
+
+## Goes on from the line showing. Does nothing while choosing, while a cue
+## is holding the script, or when over.
 func advance() -> void:
-	if not _active or is_choosing():
+	if not _active or is_choosing() or is_held():
 		return
 	_run()
+
+
+## Asks the script to wait: it reads no further until [method release] has
+## been called once for every hold. Call it while acting on a cue.
+func hold() -> void:
+	if _active:
+		_holds += 1
+
+
+## Lets go of one hold. When the last is released the script carries on from
+## where it stopped.
+func release() -> void:
+	if not _active or _holds <= 0:
+		return
+	_holds -= 1
+	if _holds == 0 and _waiting_on_holds:
+		_waiting_on_holds = false
+		_run()
+
+
+## Lets go of every hold at once, so the script carries on now.
+func release_all() -> void:
+	if not _active or _holds <= 0:
+		return
+	_holds = 1
+	release()
 
 
 ## Picks choice [param index] of the ones on offer, and goes on from it.
@@ -89,6 +157,8 @@ func stop() -> void:
 	_active = false
 	_line = null
 	_choices = []
+	_holds = 0
+	_waiting_on_holds = false
 	finished.emit()
 
 
@@ -109,6 +179,7 @@ func _run() -> void:
 		_next += 1
 		if not _passes(step):
 			continue
+		_line_number = step.line_number
 		match step.kind:
 			DialogueStep.Kind.LINE:
 				_line = step
@@ -121,6 +192,10 @@ func _run() -> void:
 					_state.set_flag(step.flag, step.amount)
 			DialogueStep.Kind.CUE:
 				cue.emit(step.cue, step.args)
+				# Somebody acting on the cue asked us to wait for them.
+				if _active and _holds > 0:
+					_waiting_on_holds = true
+					return
 			DialogueStep.Kind.JUMP:
 				_jump(step.target)
 	push_error("DialogueRunner: '%s' ran %d steps without a line; is it jumping in a circle?"

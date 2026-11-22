@@ -15,7 +15,7 @@ extends RefCounted
 ## set asked_heading                    flag = 1
 ## set visits + 1    set mood = 3       add to a flag, or set it
 ## clear news_fish                      flag = 0
-## @shot stove_nook                     a cue for the scene
+## @shot stove_nook                     a cue for the scene (see [CueList])
 ## -> weather        -> END             carry on elsewhere, or finish
 ## [/codeblock]
 ##
@@ -192,6 +192,10 @@ static func _read_statement(tree: DialogueTree, line: String, number: int,
 		step.kind = DialogueStep.Kind.CUE
 		step.cue = StringName(words[0])
 		step.args = words.slice(1)
+		var wrong_cue: String = CueList.error_in(step.cue, step.args)
+		if not wrong_cue.is_empty():
+			_error(tree, number, wrong_cue)
+			return null
 		return step
 	if line.begins_with("set ") or line == "set":
 		var setting: RegExMatch = _set_pattern.search(line)
