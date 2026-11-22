@@ -17,6 +17,8 @@ signal sheltered_changed(sheltered: bool)
 ## The shader global every wet surface reads (Project Settings > Shader
 ## Globals).
 const WETNESS: StringName = &"wetness"
+## The group the weather joins, so anything out in it can find it.
+const GROUP: StringName = &"weather"
 
 ## How hard it's raining: 0 dry, 1 a downpour.
 @export_range(0.0, 1.0) var intensity: float = 0.8:
@@ -47,6 +49,7 @@ var _shelters_inside: int = 0
 
 
 func _ready() -> void:
+	add_to_group(GROUP)
 	if is_instance_valid(rain):
 		rain.camera = camera
 		rain.carrier = ship

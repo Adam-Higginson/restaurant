@@ -1,8 +1,9 @@
 extends GameTestSuite
 ## Tests for how the game begins, in the real scene (scenes/prototype/sea.tscn),
 ## so its wiring is tested too. The intro cutscene (data/dialogue/intro.dlg)
-## opens on the title and waits for a button; a new voyage then goes under,
-## through the rescue, to waking by your bunk; a saved voyage carries on.
+## opens on the ship's name at her stern, lit by the lantern on his hook, and
+## waits for a button; on a new voyage he dives and it goes under, through
+## the rescue, to waking by your bunk; a saved voyage carries on.
 ## It can be skipped, and started part-way in. Skipped altogether
 ## (Opening.skip), you start where you stand.
 ##
@@ -30,10 +31,13 @@ func after_test() -> void:
 	Game.set_look(PlayerLook.Body.BOY)
 
 
-func test_it_opens_on_the_title_and_waits_for_any_button() -> void:
+func test_it_opens_on_her_name_and_waits_for_any_button() -> void:
 	_build()
 	var runner: GdUnitSceneRunner = scene_runner(_sea)
-	var title: Stage = _sea.get_node("Stages/Title") as Stage
+	var hook_lantern: Node3D = _hook_lantern()
+	var carved: CarvedName = _ship.get_node("SternWatch/Name") as CarvedName
+	var swing: SternSwing = _ship.get_node("SternWatch/Swing") as SternSwing
+	var face: LanternFace = hook_lantern.get_node("Body") as LanternFace
 	var underwater: Stage = _sea.get_node("Stages/Underwater") as Stage
 	var prompt: CutscenePrompt = _sea.get_node("CutscenePrompt") as CutscenePrompt
 	await physics_ticks(runner, 3)
@@ -46,9 +50,17 @@ func test_it_opens_on_the_title_and_waits_for_any_button() -> void:
 	var at: Vector3 = _ship.to_local(_player.global_position)
 	assert_float(at.distance_to(_opening.wake_spot)).is_less(0.3)
 
-	# The title over the sea, on a fixed shot, asking for a button.
+	# Her name at the stern, on a fixed shot: he's on his hook, swinging,
+	# half asleep, and his light is what shows the letters.
 	await physics_ticks(runner, 240)
-	assert_bool(title.is_open).is_true()
+	assert_bool(hook_lantern.is_visible_in_tree()).is_true()
+	assert_bool(swing.swinging).is_true()
+	assert_int(face.expression).is_equal(LanternFace.Look.TIRED)
+	assert_float(carved.lamp_glow()).is_greater(0.9)
+	# The gallery windows behind her name are off, so his light shows.
+	var dimmer: WindowDimmer = _ship.get_node("SternWatch/WindowDimmer") as WindowDimmer
+	assert_bool(dimmer.dimmed).is_true()
+	assert_float(dimmer.level).is_equal(0.0)
 	assert_bool(_fade().visible).is_false()
 	assert_bool(_player.camera_rig.is_fixed).is_true()
 	assert_str(prompt.shown_text()).is_equal("Press any button")
@@ -58,10 +70,18 @@ func test_it_opens_on_the_title_and_waits_for_any_button() -> void:
 	await physics_ticks(runner, 240)
 	assert_str(String(_conversation.section())).is_equal("start")
 
-	# Any key at all: the title goes, the camera dives, and you're under.
+	# Any key at all: he hears something, and stops.
 	runner.simulate_key_pressed(KEY_ENTER)
+	assert_bool(await _reaches(runner, &"he_hears")).is_true()
+	await physics_ticks(runner, 20)
+	assert_bool(swing.swinging).is_false()
+	assert_int(face.expression).is_equal(LanternFace.Look.SURPRISED)
+
+	# Off the hook and over the side: her name is dark, and you're under.
 	assert_bool(await _reaches(runner, &"dark")).is_true()
-	assert_bool(title.is_open).is_false()
+	assert_bool(hook_lantern.is_visible_in_tree()).is_false()
+	assert_float(carved.lamp_glow()).is_equal(0.0)
+	assert_bool(dimmer.dimmed).is_false()
 	assert_bool(underwater.is_open).is_true()
 	assert_bool(_ambience().submerged).is_true()
 	assert_str(prompt.shown_text()).is_empty()
@@ -161,7 +181,8 @@ func test_skipping_the_intro_ends_it_with_everything_put_away() -> void:
 	assert_bool(_fade().visible).is_false()
 	assert_bool(_player.camera_rig.is_fixed).is_false()
 	assert_bool((_sea.get_node("Stages/Underwater") as Stage).is_open).is_false()
-	assert_bool((_sea.get_node("Stages/Title") as Stage).is_open).is_false()
+	assert_bool(_hook_lantern().is_visible_in_tree()).is_false()
+	assert_bool((_ship.get_node("SternWatch/WindowDimmer") as WindowDimmer).dimmed).is_false()
 	assert_bool(_ambience().submerged).is_false()
 	assert_bool((_ship.get_node("RescueSet/Props/Castaway") as Node3D).visible).is_false()
 	assert_bool((_ship.get_node("RescueSet/Props/ReachingBoathook") as Node3D).visible).is_false()
@@ -180,12 +201,20 @@ func test_a_saved_voyage_carries_on_after_the_title_instead_of_the_rescue() -> v
 	var runner: GdUnitSceneRunner = scene_runner(_sea)
 	var heron: Crewmate = _ship.get_node("Crew/Heron") as Crewmate
 	await physics_ticks(runner, 240)
-	assert_bool((_sea.get_node("Stages/Title") as Stage).is_open).is_true()
+	assert_bool(_hook_lantern().is_visible_in_tree()).is_true()
 
 	runner.simulate_key_pressed(KEY_ENTER)
+	assert_bool(await _reaches(runner, &"carry_on")).is_true()
+	await physics_ticks(runner, 10)
+	# He doesn't dive: he's pleased to see you.
+	var face: LanternFace = _hook_lantern().get_node("Body") as LanternFace
+	assert_bool(_hook_lantern().is_visible_in_tree()).is_true()
+	assert_int(face.expression).is_equal(LanternFace.Look.PLEASED)
 	assert_bool(await wait_for_signal(_opening.finished, 20.0)).is_true()
 
-	# No rescue: straight to the ship, the day it was, everyone aboard.
+	# No rescue: straight to the ship, the day it was, everyone aboard, and
+	# the hook at the stern empty.
+	assert_bool(_hook_lantern().is_visible_in_tree()).is_false()
 	assert_bool((_sea.get_node("Stages/Underwater") as Stage).is_open).is_false()
 	assert_bool(_ambience().submerged).is_false()
 	assert_bool(_player.controls_enabled).is_true()
@@ -208,6 +237,7 @@ func test_everything_the_intro_asks_for_is_in_the_scene() -> void:
 	var stages: StageCues = _sea.get_node("StageCues") as StageCues
 	var clips: ClipCues = _sea.get_node("ClipCues") as ClipCues
 	var sounds: SoundCues = _sea.get_node("SoundCues") as SoundCues
+	var looks: LookCues = _sea.get_node("LookCues") as LookCues
 	var tree: DialogueTree = DialogueLibrary.find(INTRO)
 	assert_array(tree.errors).is_empty()
 
@@ -233,6 +263,8 @@ func test_everything_the_intro_asks_for_is_in_the_scene() -> void:
 					found = stages.find_stage(word)
 			&"play", &"start":
 				found = clips.find_player(StringName(word))
+			&"look":
+				found = looks.find_face(word)
 			&"sound":
 				found = sounds.find_sound(word)
 				if found != null:
@@ -342,6 +374,11 @@ func _reaches(runner: GdUnitSceneRunner, section: StringName) -> bool:
 			return true
 		await physics_ticks(runner, 1)
 	return false
+
+
+# The lantern hanging from the hook at the stern.
+func _hook_lantern() -> Node3D:
+	return _ship.get_node("SternWatch/Swing/HookLantern") as Node3D
 
 
 func _fade() -> ScreenFade:

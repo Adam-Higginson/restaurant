@@ -2,118 +2,16 @@
 
 [ext_resource type="Script" path="res://scripts/companion/lantern_spirit.gd" id="1_spirit"]
 [ext_resource type="Script" path="res://scripts/props/flicker.gd" id="2_flicker"]
-[ext_resource type="Material" path="res://assets/placeholder/materials/iron.tres" id="3_iron"]
-[ext_resource type="Material" path="res://assets/placeholder/materials/window_glow.tres" id="4_glow"]
-[ext_resource type="Material" path="res://assets/placeholder/materials/hold_dark.tres" id="5_dark"]
-[ext_resource type="Material" path="res://assets/placeholder/materials/flame.tres" id="6_flame"]
+[ext_resource type="PackedScene" path="res://scenes/prototype/lantern_body.tscn" id="3_body"]
 [ext_resource type="Script" path="res://scripts/dialogue/speaker.gd" id="7_voice"]
 [ext_resource type="Script" path="res://scripts/companion/hum.gd" id="8_hum"]
-
-[sub_resource type="BoxMesh" id="Glass"]
-size = Vector3(0.17, 0.2, 0.17)
-
-[sub_resource type="CylinderMesh" id="Cap"]
-top_radius = 0.03
-bottom_radius = 0.12
-height = 0.08
-radial_segments = 8
-rings = 1
-
-[sub_resource type="TorusMesh" id="Ring"]
-inner_radius = 0.025
-outer_radius = 0.045
-rings = 10
-ring_segments = 4
-
-[sub_resource type="CylinderMesh" id="Base"]
-top_radius = 0.11
-bottom_radius = 0.09
-height = 0.05
-radial_segments = 8
-rings = 1
-
-[sub_resource type="BoxMesh" id="Post"]
-size = Vector3(0.025, 0.21, 0.025)
-
-[sub_resource type="BoxMesh" id="Flame"]
-size = Vector3(0.04, 0.07, 0.04)
-
-[sub_resource type="BoxMesh" id="Eye"]
-size = Vector3(0.026, 0.048, 0.01)
 
 [node name="LanternSpirit" type="Node3D"]
 script = ExtResource("1_spirit")
 
-[node name="Body" type="Node3D" parent="."]
+[node name="Body" parent="." instance=ExtResource("3_body")]
 transform = Transform3D(1.35, 0, 0, 0, 1.35, 0, 0, 0, 1.35, 0, 0, 0)
-
-[node name="Glass" type="MeshInstance3D" parent="Body"]
-material_override = ExtResource("4_glow")
-cast_shadow = 0
-mesh = SubResource("Glass")
-
-[node name="Flame" type="MeshInstance3D" parent="Body"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.02, 0)
-material_override = ExtResource("6_flame")
-cast_shadow = 0
-mesh = SubResource("Flame")
-
-[node name="Cap" type="MeshInstance3D" parent="Body"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.14, 0)
-material_override = ExtResource("3_iron")
-cast_shadow = 0
-mesh = SubResource("Cap")
-
-[node name="Ring" type="MeshInstance3D" parent="Body"]
-transform = Transform3D(1, 0, 0, 0, -4.371139e-08, -1, 0, 1, -4.371139e-08, 0, 0.21, 0)
-material_override = ExtResource("3_iron")
-cast_shadow = 0
-mesh = SubResource("Ring")
-
-[node name="Base" type="MeshInstance3D" parent="Body"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.12, 0)
-material_override = ExtResource("3_iron")
-cast_shadow = 0
-mesh = SubResource("Base")
-
-[node name="Post1" type="MeshInstance3D" parent="Body"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.085, 0, -0.085)
-material_override = ExtResource("3_iron")
-cast_shadow = 0
-mesh = SubResource("Post")
-
-[node name="Post2" type="MeshInstance3D" parent="Body"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.085, 0, -0.085)
-material_override = ExtResource("3_iron")
-cast_shadow = 0
-mesh = SubResource("Post")
-
-[node name="Post3" type="MeshInstance3D" parent="Body"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.085, 0, 0.085)
-material_override = ExtResource("3_iron")
-cast_shadow = 0
-mesh = SubResource("Post")
-
-[node name="Post4" type="MeshInstance3D" parent="Body"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.085, 0, 0.085)
-material_override = ExtResource("3_iron")
-cast_shadow = 0
-mesh = SubResource("Post")
-
-[node name="Eyes" type="Node3D" parent="Body"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.025, -0.087)
-
-[node name="EyeLeft" type="MeshInstance3D" parent="Body/Eyes"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.033, 0, 0)
-material_override = ExtResource("5_dark")
-cast_shadow = 0
-mesh = SubResource("Eye")
-
-[node name="EyeRight" type="MeshInstance3D" parent="Body/Eyes"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.033, 0, 0)
-material_override = ExtResource("5_dark")
-cast_shadow = 0
-mesh = SubResource("Eye")
+look_name = "lantern"
 
 [node name="Light" type="OmniLight3D" parent="."]
 light_color = Color(1, 0.74, 0.42, 1)

@@ -1,0 +1,112 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://scripts/companion/lantern_face.gd" id="1_face"]
+[ext_resource type="Material" path="res://assets/placeholder/materials/iron.tres" id="2_iron"]
+[ext_resource type="Material" path="res://assets/placeholder/materials/hold_dark.tres" id="3_dark"]
+[ext_resource type="Shader" path="res://shaders/lantern_glass.gdshader" id="4_glass"]
+
+[sub_resource type="ShaderMaterial" id="Material_Glass"]
+shader = ExtResource("4_glass")
+shader_parameter/texels = 7.0
+shader_parameter/glow = 1.9
+shader_parameter/strength = 1.0
+shader_parameter/lean = Vector3(0, 0, 0)
+shader_parameter/backing = 0.55
+shader_parameter/fog = 0.0
+shader_parameter/streaks = 0.0
+shader_parameter/crack = 0.0
+shader_parameter/half_size = Vector2(0.085, 0.1)
+
+[sub_resource type="BoxMesh" id="Glass"]
+size = Vector3(0.17, 0.2, 0.17)
+
+[sub_resource type="CylinderMesh" id="Cap"]
+top_radius = 0.03
+bottom_radius = 0.12
+height = 0.08
+radial_segments = 8
+rings = 1
+
+[sub_resource type="TorusMesh" id="Ring"]
+inner_radius = 0.025
+outer_radius = 0.045
+rings = 10
+ring_segments = 4
+
+[sub_resource type="CylinderMesh" id="Base"]
+top_radius = 0.11
+bottom_radius = 0.09
+height = 0.05
+radial_segments = 8
+rings = 1
+
+[sub_resource type="BoxMesh" id="Post"]
+size = Vector3(0.025, 0.21, 0.025)
+
+[sub_resource type="BoxMesh" id="Eye"]
+size = Vector3(0.026, 0.048, 0.01)
+
+[node name="Body" type="Node3D"]
+script = ExtResource("1_face")
+
+[node name="Glass" type="MeshInstance3D" parent="."]
+material_override = SubResource("Material_Glass")
+cast_shadow = 0
+mesh = SubResource("Glass")
+
+[node name="Cap" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.14, 0)
+material_override = ExtResource("2_iron")
+cast_shadow = 0
+mesh = SubResource("Cap")
+
+[node name="Ring" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, -4.371139e-08, -1, 0, 1, -4.371139e-08, 0, 0.21, 0)
+material_override = ExtResource("2_iron")
+cast_shadow = 0
+mesh = SubResource("Ring")
+
+[node name="Base" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.12, 0)
+material_override = ExtResource("2_iron")
+cast_shadow = 0
+mesh = SubResource("Base")
+
+[node name="Post1" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.085, 0, -0.085)
+material_override = ExtResource("2_iron")
+cast_shadow = 0
+mesh = SubResource("Post")
+
+[node name="Post2" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.085, 0, -0.085)
+material_override = ExtResource("2_iron")
+cast_shadow = 0
+mesh = SubResource("Post")
+
+[node name="Post3" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.085, 0, 0.085)
+material_override = ExtResource("2_iron")
+cast_shadow = 0
+mesh = SubResource("Post")
+
+[node name="Post4" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.085, 0, 0.085)
+material_override = ExtResource("2_iron")
+cast_shadow = 0
+mesh = SubResource("Post")
+
+[node name="Eyes" type="Node3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.025, -0.089)
+
+[node name="EyeLeft" type="MeshInstance3D" parent="Eyes"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.033, 0, 0)
+material_override = ExtResource("3_dark")
+cast_shadow = 0
+mesh = SubResource("Eye")
+
+[node name="EyeRight" type="MeshInstance3D" parent="Eyes"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.033, 0, 0)
+material_override = ExtResource("3_dark")
+cast_shadow = 0
+mesh = SubResource("Eye")
