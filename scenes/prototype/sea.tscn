@@ -3,6 +3,7 @@
 [ext_resource type="Script" path="res://scripts/dialogue/conversation.gd" id="300_talk"]
 [ext_resource type="Script" path="res://scripts/camera/shot_cues.gd" id="301_shots"]
 [ext_resource type="Script" path="res://scripts/dialogue/dialogue_facts.gd" id="302_facts"]
+[ext_resource type="Script" path="res://scripts/dialogue/chatter.gd" id="303_chatter"]
 [ext_resource type="Material" path="res://assets/placeholder/materials/greybox_sand.tres" id="2_dlk4p"]
 [ext_resource type="Material" path="res://assets/placeholder/materials/greybox_grass.tres" id="3_nk5mb"]
 [ext_resource type="Material" path="res://assets/placeholder/materials/greybox_dark_wood.tres" id="4_8v0wy"]
@@ -282,3 +283,7 @@ player = NodePath("../Player")
 script = ExtResource("302_facts")
 ship = NodePath("../Ship")
 weather = NodePath("../Weather")
+
+[node name="Chatter" type="Node" parent="." node_paths=PackedStringArray("player")]
+script = ExtResource("303_chatter")
+player = NodePath("../Player")

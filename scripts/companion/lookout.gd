@@ -28,12 +28,13 @@ func would_speak() -> bool:
 	return _since >= cooldown_seconds
 
 
-## What he'd guess about: the light at night, the island at dawn.
-func lines_now() -> PackedStringArray:
+## What he'd guess about, as a moment in his remarks (see
+## [method LanternSpirit.tell]): the far light at night, the island at dawn.
+func moment_now() -> StringName:
 	var time: TimeOfDay = get_tree().get_first_node_in_group(&"time_of_day") as TimeOfDay
 	if time != null and time.is_morning():
-		return LanternLines.ISLAND
-	return LanternLines.FAR_LIGHT
+		return &"island"
+	return &"far_light"
 
 
 ## What you'd have to tell him about, if he isn't there to see it.
@@ -52,4 +53,4 @@ func _on_body_entered(body: Node3D) -> void:
 	if spirit == null:
 		return
 	_since = 0.0
-	spirit.tell(LanternLines.pick(lines_now()), news_now())
+	spirit.tell(moment_now(), news_now())

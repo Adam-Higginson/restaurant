@@ -1,0 +1,122 @@
+# The lantern's reactions to things you do, said in speech bubbles beside
+# him. Each section is one thing he might say, tagged with the moment it's
+# for: the game says "caught" when you land a fish, and he says one of the
+# caught sections (never the same one twice running, if there's another).
+# See scripts/dialogue/remark.gd for the tags and guards a section can have.
+#
+# Moments: woke, returned, remembered, caught, morning, hove_to, supper, dim,
+# far_light, island, pulled_out, fog_cleared.
+# Placeholder writing: rewrite freely.
+
+# Your first waking, in your bunk, the night he pulled you from the sea.
+~ first_words [on woke]
+lantern: There you are.
+lantern: You were in the water. I pulled. You held on. Good holding.
+lantern: I'll get you home. I know exactly where it is. Roughly.
+
+# You've come back to a saved voyage.
+~ returned_1 [on returned]
+lantern: You're back. I kept the light on.
+
+~ returned_2 [on returned]
+lantern: There you are again. I didn't go anywhere. I can't, really.
+
+# A memory of home has just come back.
+~ remembered_1 [on remembered]
+lantern: Was that home? It sounded like home.
+
+~ remembered_2 [on remembered]
+lantern: Oh! Say it again. Slower.
+
+~ remembered_3 [on remembered]
+lantern: I think I remember that too. I don't. But I'd like to.
+
+~ remembered_4 [on remembered]
+lantern: Hold on to that one.
+
+# You've landed a fish.
+~ caught_1 [on caught]
+lantern: A fish! Is home a fish? ...No. Probably not. [shout]
+
+~ caught_2 [on caught]
+lantern: That one looked like it knew the way.
+
+~ caught_3 [on caught]
+lantern: Supper! I'll watch. I'm very good at watching.
+
+# You've woken at dawn.
+~ morning_1 [on morning]
+lantern: Morning! Did you sleep? I don't. I just glow quieter.
+
+~ morning_2 [on morning]
+lantern: The rain's tired too, I think.
+
+~ morning_3 [on morning]
+lantern: Look, it's grey and pink. That's my favourite colour.
+
+# You've stopped the ship at the bell.
+~ hove_to_1 [on hove_to]
+lantern: Stopping? Good. I like it when the sea holds still.
+
+~ hove_to_2 [on hove_to]
+lantern: The fish will come now. Fish like quiet.
+
+# You've shared a meal with him.
+~ supper_1 [on supper]
+lantern: Oh, that's warm all the way through.
+
+~ supper_2 [on supper]
+lantern: Mm. Tastes like a Tuesday. A good one.
+
+~ supper_3 [on supper]
+lantern: I'm glowing. Am I glowing? I'm glowing.
+
+~ supper_4 [on supper]
+lantern: You cook like someone who's been missed.
+
+# His warmth is running low.
+~ dim_1 [on dim]
+lantern: I'm a bit... dim. Is there soup?
+
+~ dim_2 [on dim]
+lantern: Is it me, or is it darker in here? It's me, isn't it. [thought]
+
+# You're at the bow at night, looking towards the far light.
+~ far_light_1 [on far_light]
+lantern: A light! That's it. That's home. Probably. Almost certainly. Maybe. [shout]
+
+~ far_light_2 [on far_light]
+lantern: If it isn't home, it's very good at pretending.
+
+~ far_light_3 [on far_light]
+lantern: Somebody's keeping that light lit. For somebody.
+
+# You're at the bow at dawn, and the island has come out of the mist.
+~ island_1 [on island]
+lantern: There! An island. With a lighthouse. Lighthouses are for people who are lost. So, us.
+
+~ island_2 [on island]
+lantern: That's where the light lives. I knew it. I didn't, but I knew it.
+
+~ island_3 [on island]
+lantern: Do you think it remembers you? Islands are very good at remembering.
+
+# A fog-touched creature has beaten you, and he's pulled you back to the landing.
+~ pulled_out_1 [on pulled_out]
+lantern: Got you! I've got you. You dropped some things. I didn't count.
+
+~ pulled_out_2 [on pulled_out]
+lantern: Up you come. It didn't mean it. It's the fog that pinches.
+
+~ pulled_out_3 [on pulled_out]
+lantern: That's twice I've pulled you out of somewhere. I'm keeping score. Kindly.
+
+# You've cleared the fog from a creature.
+~ fog_cleared_1 [on fog_cleared]
+lantern: Look at it go! It only wanted its head clear. [shout]
+
+~ fog_cleared_2 [on fog_cleared]
+lantern: There. All shaken off. It'll remember being a crab now.
+
+~ fog_cleared_3 [on fog_cleared]
+lantern: Oh, well done. Gently done.

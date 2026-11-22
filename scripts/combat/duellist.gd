@@ -115,7 +115,7 @@ func strike() -> bool:
 		if crab.take_strike():
 			hit = true
 			if crab.is_cleared():
-				_spirit.say(LanternLines.pick(LanternLines.FOG_CLEARED))
+				_spirit.remark(&"fog_cleared")
 	struck.emit(hit)
 	return true
 
@@ -185,7 +185,7 @@ func _fall() -> void:
 		_player.reset_physics_interpolation()
 	hearts.refill()
 	_spirit.snap_to_player()
-	_spirit.say(LanternLines.pick(LanternLines.PULLED_OUT))
+	_spirit.remark(&"pulled_out")
 	defeated.emit(lost)
 
 

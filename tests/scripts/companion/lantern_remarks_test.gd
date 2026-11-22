@@ -1,8 +1,9 @@
 extends GameTestSuite
-## Tests for the lantern's voice: lines wait their turn and fade away, he
-## never repeats himself twice running, and he speaks up when a memory comes
-## back, when you land a fish, when you stop the ship, and when you look out
-## from the bow (at the light at night, the island at dawn; not every time).
+## Tests for what the lantern says when things happen (his lines are in
+## data/dialogue/moments.dlg): he never repeats himself twice running, says
+## a few lines in turn, and speaks up when a memory comes back, when you land
+## a fish, when you stop the ship, and when you look out from the bow (at the
+## light at night, the island at dawn; not every time).
 
 ## Out on the bow, past the windlass.
 const ON_THE_BOW: Vector3 = Vector3(0, 6.25, -16.2)
@@ -16,31 +17,46 @@ func after_test() -> void:
 	Game.memories.clear()
 
 
-func test_lines_wait_their_turn_then_he_goes_quiet() -> void:
+func test_he_never_says_the_same_thing_twice_running() -> void:
+	var picker: RemarkPicker = RemarkPicker.new()
+	var places: Dictionary[StringName, Vector3] = {&"lantern": Vector3.ZERO}
+	var remarks: Array[Remark] = DialogueLibrary.remarks(LanternSpirit.MOMENTS)
+	var last: Remark = null
+	for i: int in 60:
+		var picked: Remark = picker.pick(remarks, places, DialogueState.new(), i, &"morning")
+		assert_object(picked).is_not_same(last)
+		picker.said(picked, i)
+		last = picked
+
+
+func test_a_moment_with_one_thing_to_say_says_it_every_time() -> void:
+	var picker: RemarkPicker = RemarkPicker.new()
+	var places: Dictionary[StringName, Vector3] = {&"lantern": Vector3.ZERO}
+	var remarks: Array[Remark] = DialogueLibrary.remarks(LanternSpirit.MOMENTS)
+	for i: int in 3:
+		var picked: Remark = picker.pick(remarks, places, DialogueState.new(), i, &"woke")
+		assert_str(String(picked.section)).is_equal("first_words")
+		picker.said(picked, i)
+
+
+func test_his_first_words_come_one_after_another() -> void:
 	var rig: Array[Node3D] = new_moored_ship_with_player(Vector3(0, 1.05, 6))
 	var runner: GdUnitSceneRunner = scene_runner(rig[0].get_parent())
-	var voice: LanternVoice = rig[1].get_node("LanternSpirit/Voice") as LanternVoice
+	var spirit: LanternSpirit = lantern_at_shoulder(rig[1])
+	var voice: Speaker = rig[1].get_node("LanternSpirit/Voice") as Speaker
 	voice.base_seconds = 0.1
 	voice.seconds_per_letter = 0.0
-	voice.fade_seconds = 0.05
+	voice.pause_seconds = 0.0
+	voice.bubble.fade_seconds = 0.02
+	var heard: PackedStringArray = PackedStringArray()
+	voice.said.connect(func(line: String) -> void: heard.append(line))
 	await physics_ticks(runner, 2)
 
-	voice.say("One.")
-	voice.say("Two.")
-	assert_str(voice.saying).is_equal("One.")
-	await physics_ticks(runner, 15)
-	assert_str(voice.saying).is_equal("Two.")
-	await physics_ticks(runner, 15)
+	spirit.remark(&"woke")
+	await physics_ticks(runner, 40)
 
-	assert_str(voice.saying).is_empty()
-
-
-func test_he_never_says_the_same_thing_twice_running() -> void:
-	var last: String = ""
-	for i: int in 60:
-		var line: String = LanternLines.pick(LanternLines.MORNING)
-		assert_str(line).is_not_equal(last)
-		last = line
+	assert_array(Array(heard)).is_equal(Array(_lines_of(&"first_words")))
+	assert_str(spirit.saying()).is_empty()
 
 
 func test_he_speaks_up_when_a_memory_comes_back() -> void:
@@ -51,7 +67,7 @@ func test_he_speaks_up_when_a_memory_comes_back() -> void:
 
 	Game.memories.notice(Catalog.load_default().find_item(&"garden_salad"))
 
-	assert_bool(spirit.saying() in LanternLines.REMEMBERED).is_true()
+	assert_bool(spirit.saying() in moment_lines(&"remembered")).is_true()
 
 
 func test_he_cheers_when_you_land_a_fish() -> void:
@@ -68,7 +84,7 @@ func test_he_cheers_when_you_land_a_fish() -> void:
 	await physics_ticks(runner, 10)
 	await press(runner, "interact")
 
-	assert_bool(spirit.saying() in LanternLines.CAUGHT).is_true()
+	assert_bool(spirit.saying() in moment_lines(&"caught")).is_true()
 
 
 func test_he_notices_the_far_light_from_the_bow_at_night() -> void:
@@ -80,7 +96,7 @@ func test_he_notices_the_far_light_from_the_bow_at_night() -> void:
 	place_player_3d(runner, (rig[0] as Ship).to_global(ON_THE_BOW))
 	await physics_ticks(runner, 5)
 
-	assert_bool(spirit.saying() in LanternLines.FAR_LIGHT).is_true()
+	assert_bool(spirit.saying() in moment_lines(&"far_light")).is_true()
 
 
 func test_at_dawn_he_spots_the_island_instead() -> void:
@@ -95,7 +111,7 @@ func test_at_dawn_he_spots_the_island_instead() -> void:
 	place_player_3d(runner, (rig[0] as Ship).to_global(ON_THE_BOW))
 	await physics_ticks(runner, 5)
 
-	assert_bool(spirit.saying() in LanternLines.ISLAND).is_true()
+	assert_bool(spirit.saying() in moment_lines(&"island")).is_true()
 
 
 func test_he_has_a_think_between_guesses() -> void:
@@ -123,4 +139,13 @@ func test_he_is_glad_when_you_stop_the_ship() -> void:
 	await physics_ticks(runner, 3)
 	await press(runner, "interact")
 
-	assert_bool(spirit.saying() in LanternLines.HOVE_TO).is_true()
+	assert_bool(spirit.saying() in moment_lines(&"hove_to")).is_true()
+
+
+func _lines_of(section: StringName) -> PackedStringArray:
+	var lines: PackedStringArray = PackedStringArray()
+	var tree: DialogueTree = DialogueLibrary.find(LanternSpirit.MOMENTS)
+	for step: DialogueStep in Remark.steps_of(tree, section):
+		if step.kind == DialogueStep.Kind.LINE:
+			lines.append(step.text)
+	return lines

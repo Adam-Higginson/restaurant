@@ -224,6 +224,24 @@ A growing glossary of the Godot concepts this project uses: what each one is, in
 
 **A sound made of several pitches.** A metal clang is a handful of sine waves at pitches that aren't whole multiples of each other, each fading at its own speed (`exp(-decay * t)`), plus a few milliseconds of noise for the knock. Written into an `AudioStreamWAV` like the typing blip. *Ours:* `Clang` (`scripts/combat/clang.gd`), the `Clang` node on the player, rung by `Duellist` when a parry lands.
 
+## Overheard chatter (#94)
+
+**SubViewport and ViewportTexture.** A `SubViewport` is a little off-screen screen: whatever is inside it (here a 2D `Control`) is drawn into a picture, and `get_texture()` hands that picture to anything that shows textures. Drawing a 2D thing once and showing it on a flat panel in the 3D world is how 2D UI gets a place in the world. *Ours:* `SpeechBubble3D` (`ui/speech_bubble_3d.gd`) draws a `SpeechBubble` into one and shows it on a `QuadMesh`.
+
+**Facing the camera by copying its rotation.** Setting a panel's rotation to the camera's own (`camera.global_basis`) turns it to face the camera square-on every frame, wherever you look from. It's a billboard done in a script rather than a shader. *Ours:* `SpeechBubble3D._follow()`, which also scales the panel with distance.
+
+**`no_depth_test` and `render_priority`.** A material with `no_depth_test` draws over whatever is in front of it instead of being hidden, and a higher `render_priority` draws it after other see-through things. *Ours:* the speech bubble's material, so a low beam never cuts a bubble in half.
+
+**Raycasts (`intersect_ray`).** `get_world_3d().direct_space_state.intersect_ray(query)` asks the physics engine what solid thing a straight line from one point to another hits first; an empty answer means nothing's in the way. The query can `exclude` bodies to ignore. *Ours:* `Speaker.in_sight_of()`, line of sight from your eyes to a speaker's face (ignoring you and them), to hide bubbles behind walls and keep the chatter to people you can see.
+
+**RandomNumberGenerator with a seed.** Its own random numbers rather than the global `randi()`. Give it a fixed `seed` and it makes the same "random" numbers every time, so a test can check random picks exactly. *Ours:* `RemarkPicker` takes one; the chatter tests seed it.
+
+**`call_group`.** `get_tree().call_group("name", "method")` calls a method on every node in a group, and does nothing if there are none, so two parts can talk without either holding a reference to the other. *Ours:* `Chatter.hush_all()`, which the lantern uses to cut the chatter off when he has something to say.
+
+**Turning off physics interpolation, and `process_priority`.** A node placed afresh every frame (in `_process`) must set `physics_interpolation_mode` to Off, or Godot also smooths it between physics ticks and it lags and shakes (see Physics interpolation above). `process_priority` sets the order nodes' `_process` runs in each frame, lowest first, so a node that depends on another (a bubble facing the camera) can run after it. *Ours:* `SpeechBubble3D` does both, so bubbles keep still and line up with the camera this frame, not last frame.
+
+**Inner classes.** A `class Name:` block inside a script defines a small type only that script needs, like a struct. *Ours:* `Speaker.Queued`, a line and its bubble style waiting their turn.
+
 ## Testing
 
 **gdUnit4.** The test framework (`addons/gdUnit4`). Suites extend our `GameTestSuite` and have `test_...` functions. `scene_runner` loads a scene and lets a test press inputs and wait physics ticks. *Ours:* `tests/`.

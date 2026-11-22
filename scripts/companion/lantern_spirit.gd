@@ -26,6 +26,9 @@ enum Mood {
 
 ## A marker in this group is his home: he stays there instead of following.
 const HOME_GROUP: StringName = &"lantern_home"
+## The file of his reactions to things you do, in [code]data/dialogue[/code]:
+## each section is tagged with the moment it's for, like [code][on caught][/code].
+const MOMENTS: StringName = &"moments"
 
 ## Where he floats relative to the player, in metres: to the right, up, and
 ## behind (along the way the player faces).
@@ -115,17 +118,19 @@ var _blink_left: float = 0.0
 ## Seconds left of an excited little dance.
 var _excited: float = 0.0
 var _rng: RandomNumberGenerator = RandomNumberGenerator.new()
+var _moments: RemarkPicker = null
 
 @onready var _body: Node3D = $Body
 @onready var _eyes: Node3D = $Body/Eyes
 @onready var _light: Flicker = $Light
-@onready var _voice: LanternVoice = $Voice
+@onready var _voice: Speaker = $Voice
 @onready var _hum: Hum = $Hum
 
 
 func _ready() -> void:
 	top_level = true
 	_rng.randomize()
+	_moments = RemarkPicker.new(_rng)
 	_blink_wait = _rng.randf_range(blink_min, blink_max)
 	_calm_amount = _light.amount
 	_calm_speed = _light.speed
@@ -134,7 +139,7 @@ func _ready() -> void:
 	Game.memories.remembered.connect(func(_memory: Memory) -> void:
 		if is_in_earshot():
 			hum()
-		tell(LanternLines.pick(LanternLines.REMEMBERED), &"news_memory"))
+		tell(&"remembered", &"news_memory"))
 	# He's a child of the player, so he's ready before the player is: wait
 	# until the player has its model before finding its shoulder.
 	_settle.call_deferred()
@@ -236,23 +241,34 @@ func is_in_earshot() -> bool:
 	return global_position.distance_to(player.global_position) <= earshot
 
 
-## Says [param line] if he's near enough to have seen what it's about.
+## Reacts to [param moment] (&"caught": you've landed a fish) if he's near
+## enough to have seen it and you're not busy talking to somebody.
 ## Otherwise he missed it, and [param news] (if given) is flagged so he can
-## bring it up when you next talk to him. Returns whether he said it.
-func tell(line: String, news: StringName = &"") -> bool:
-	if is_in_earshot():
-		say(line)
+## bring it up when you next talk to him. Returns whether he said something.
+func tell(moment: StringName, news: StringName = &"") -> bool:
+	if is_in_earshot() and not _is_in_conversation():
+		remark(moment)
 		return true
 	if news != &"":
 		Game.dialogue.set_flag(news)
 	return false
 
 
-## Says [param line], in a few words floating beside him, with a hop.
-func say(line: String) -> void:
-	if line.is_empty():
+## Says what he says at [param moment], picked from [constant MOMENTS], in
+## speech bubbles beside him, with a hop. Any chatter stops so he's heard.
+func remark(moment: StringName) -> void:
+	var places: Dictionary[StringName, Vector3] = {_voice.who: _voice.global_position}
+	var now: float = Time.get_ticks_msec() / 1000.0
+	var picked: Remark = _moments.pick(DialogueLibrary.remarks(MOMENTS), places, Game.dialogue,
+			now, moment)
+	if picked == null:
+		push_warning("LanternSpirit: nothing to say for the moment '%s'" % moment)
 		return
-	_voice.say(line)
+	_moments.said(picked, now)
+	if is_inside_tree():
+		Chatter.hush_all(get_tree())
+	for line: DialogueStep in RemarkPlayback.lines_of(picked, Game.dialogue):
+		_voice.say(line.text, Speaker.style_for(line.tag))
 	excite()
 
 
@@ -346,7 +362,7 @@ func _cool(delta: float) -> void:
 	_apply_warmth()
 	if warmth < 0.4 and not _said_dim:
 		_said_dim = true
-		tell(LanternLines.pick(LanternLines.DIM))
+		tell(&"dim")
 
 
 # His light follows his warmth: dimmer and closer in when he's cold.
@@ -373,6 +389,14 @@ func _settle() -> void:
 	if is_inside_tree() and not _left_home:
 		home = get_tree().get_first_node_in_group(HOME_GROUP) as Node3D
 	snap_to_player()
+
+
+# Whether you're in a proper conversation with somebody: he won't interrupt.
+func _is_in_conversation() -> bool:
+	if not is_inside_tree():
+		return false
+	var conversation: Conversation = Conversation.find(self)
+	return conversation != null and conversation.talking != &""
 
 
 func _set_attention(target: Node3D) -> void:
