@@ -278,6 +278,18 @@ A growing glossary of the Godot concepts this project uses: what each one is, in
 
 **CPUParticles3D.** Many small copies of a mesh, each born, moved and removed by simple rules (where they start, which way they go, how long they last). The CPU version is easier to set up than `GPUParticles3D` and fine for a few hundred. *Ours:* the bubbles and drifting motes underwater. They rise past a figure that's holding still, which is what makes it look like sinking.
 
+## The lantern's face and the nameboard (#114)
+
+**TextMesh.** A mesh made from text: give it a string, a font, a size and a depth, and it builds solid 3D letters. Change the string and the letters change. *Ours:* the ship's name on her stern (`Name` in `scenes/prototype/intro/stern_watch.tscn`).
+
+**A material of your own (`duplicate()`).** Every instance of a scene shares the same material resource, so changing it on one changes them all. `material.duplicate()` makes a private copy for one instance. *Ours:* `LanternFace` copies its glass material in `_ready`, so fogging one lantern doesn't fog the others.
+
+**Driving a shader from a script.** A shader's `uniform` values are its dials. `material.set_shader_parameter("name", value)` turns one from code, every frame if you like, so game state can change how something is drawn. *Ours:* `LanternFace` sends his strength, lean, fog, streaks and crack to `lantern_glass.gdshader`; `NameGilt` sends the lamp's position to `nameboard_gilt.gdshader`, which lights each letter by how near the lamp is.
+
+**Easing towards a target.** Rather than jumping to a new value, move a fraction of the way there each frame: `value = lerp(value, target, 1.0 - exp(-speed * delta))`. It starts quickly and settles gently, and takes the same time whatever the frame rate. *Ours:* how his eyes change shape between looks.
+
+**Enums as a list of named choices.** `enum Look { CALM, SURPRISED, ... }` gives each choice a name and a number. An exported enum shows as a dropdown in the Inspector, and an animation clip can key it. *Ours:* `LanternFace.Look`. (Don't name one after a built-in class: `Expression` is taken.)
+
 ## Testing
 
 **gdUnit4.** The test framework (`addons/gdUnit4`). Suites extend our `GameTestSuite` and have `test_...` functions. `scene_runner` loads a scene and lets a test press inputs and wait physics ticks. *Ours:* `tests/`.
