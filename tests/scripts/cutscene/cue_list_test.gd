@@ -14,7 +14,7 @@ func test_every_cue_written_properly_is_fine() -> void:
 		"place heron doorway", "face heron player",
 		"hide heron", "show heron", "home heron",
 		"stage underwater", "stage off", "play lantern_descends", "start drifting",
-		"sound splash", "muffle on", "muffle off", "lightning",
+		"sound splash", "muffle on", "muffle off", "hush on", "hush off", "lightning",
 		"look hook_lantern determined", "look lantern asleep", "look lantern fogged",
 		"look lantern mended", "who_are_you",
 	]
@@ -32,7 +32,8 @@ func test_a_cue_written_wrongly_says_how_its_written() -> void:
 		"place heron", "place heron doorway now", "face heron",
 		"hide", "show heron now", "home",
 		"stage", "stage a b", "play", "play a b", "start", "sound", "sound a b",
-		"muffle", "muffle half", "muffle on now", "lightning now",
+		"muffle", "muffle half", "muffle on now", "hush", "hush a little", "hush on now",
+		"lightning now",
 		"look", "look lantern", "look lantern grumpy", "look lantern calm now",
 		"who_are_you now",
 	]

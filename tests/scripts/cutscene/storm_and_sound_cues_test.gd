@@ -53,6 +53,57 @@ func test_the_sound_is_never_left_muffled_when_a_cutscene_ends() -> void:
 	assert_bool(ambience.submerged).is_false()
 
 
+func test_hush_silences_the_weather_and_off_lets_it_back_in() -> void:
+	_build()
+	var runner: GdUnitSceneRunner = scene_runner(_player.get_parent())
+	await physics_ticks(runner, 3)
+	var ambience: Ambience = _weather.get_node("Ambience") as Ambience
+	var bus: int = AudioServer.get_bus_index(Ambience.BUS)
+
+	play_cutscene(_conversation, _player, "@hush on\nheron: Nothing.\n@hush off\nheron: Storm.")
+	assert_bool(ambience.hushed).is_true()
+	await physics_ticks(runner, 30)
+	assert_float(ambience.mix.hush).is_equal(1.0)
+	assert_float(AudioServer.get_bus_volume_db(bus)).is_less(-70.0)
+
+	_conversation.press()
+	assert_bool(ambience.hushed).is_false()
+	await physics_ticks(runner, 30)
+	assert_float(AudioServer.get_bus_volume_db(bus)).is_equal_approx(0.0, 0.001)
+
+
+func test_the_weather_is_never_left_hushed_when_a_cutscene_ends_or_is_skipped() -> void:
+	_build()
+	var runner: GdUnitSceneRunner = scene_runner(_player.get_parent())
+	await physics_ticks(runner, 3)
+	var ambience: Ambience = _weather.get_node("Ambience") as Ambience
+	play_cutscene(_conversation, _player, "@hush on\nheron: Nothing.")
+	assert_bool(ambience.hushed).is_true()
+
+	_conversation.stop()
+	assert_bool(ambience.hushed).is_false()
+
+	play_cutscene(_conversation, _player, "heron: One.\n@hush on\n@wait 5\nset done")
+	_conversation.skip()
+	assert_bool(Game.dialogue.is_set(&"done")).is_true()
+	assert_bool(ambience.hushed).is_false()
+
+
+func test_a_sound_with_no_recording_yet_is_silent_without_complaint() -> void:
+	_build()
+	var runner: GdUnitSceneRunner = scene_runner(_player.get_parent())
+	await physics_ticks(runner, 3)
+	var heartbeat: OptionalSound = OptionalSound.new()
+	heartbeat.name = "Heartbeat"
+	heartbeat.recording = "res://assets/third_party/audio/not_recorded_yet.ogg"
+	_sounds.add_child(heartbeat)
+
+	play_cutscene(_conversation, _player, "@sound heartbeat\nheron: Thump.")
+
+	assert_object(_sounds.find_sound("heartbeat")).is_same(heartbeat)
+	assert_bool(heartbeat.playing).is_false()
+
+
 func test_lightning_strikes_on_cue() -> void:
 	_build()
 	var runner: GdUnitSceneRunner = scene_runner(_player.get_parent())

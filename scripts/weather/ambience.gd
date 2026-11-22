@@ -26,6 +26,10 @@ var mix: AmbienceMix = AmbienceMix.new()
 ## Whether we're hearing the weather from under the water: a dull rumble.
 ## A cutscene sets this (see [StormCues]).
 var submerged: bool = false
+## Whether the weather has been hushed altogether, for a moment of silence.
+## A cutscene sets this too. It quietens the whole bus, so the creaks and
+## drips that play on it (see [SoundSpot]) go with the rain.
+var hushed: bool = false
 
 @onready var _rain: AudioStreamPlayer = $Rain
 @onready var _waves: AudioStreamPlayer = $Waves
@@ -45,7 +49,15 @@ func _process(delta: float) -> void:
 	if is_instance_valid(weather):
 		mix.step(delta, weather.sheltered)
 	mix.sink(delta, submerged)
+	mix.quiet(delta, hushed)
 	_apply()
+
+
+func _exit_tree() -> void:
+	# The bus outlives this scene: never leave it silent.
+	var bus: int = AudioServer.get_bus_index(BUS)
+	if bus >= 0:
+		AudioServer.set_bus_volume_db(bus, 0.0)
 
 
 ## Whether [param path] holds a sound that can be loaded.
@@ -71,7 +83,10 @@ func _apply() -> void:
 	_rain.volume_db = mix.rain_volume_db(intensity)
 	_waves.volume_db = waves_volume_db + mix.submerged_drop_db()
 	var bus: int = AudioServer.get_bus_index(BUS)
-	if bus < 0 or AudioServer.get_bus_effect_count(bus) == 0:
+	if bus < 0:
+		return
+	AudioServer.set_bus_volume_db(bus, mix.hush_db())
+	if AudioServer.get_bus_effect_count(bus) == 0:
 		return
 	var filter: AudioEffectLowPassFilter = AudioServer.get_bus_effect(bus, 0) \
 			as AudioEffectLowPassFilter

@@ -26,6 +26,7 @@ const USAGE: Dictionary[StringName, String] = {
 	&"start": "@start drifting",
 	&"sound": "@sound splash",
 	&"muffle": "@muffle on or @muffle off",
+	&"hush": "@hush on or @hush off",
 	&"lightning": "@lightning",
 	&"look": "@look hook_lantern determined (a look for his eyes: calm, surprised, "
 			+ "determined, worried, pleading, effort, tired, asleep, pleased; or for his "
@@ -66,7 +67,7 @@ static func _fits(cue: StringName, args: PackedStringArray) -> bool:
 			return args.size() == 2
 		&"hide", &"show", &"home", &"stage", &"play", &"start", &"sound":
 			return args.size() == 1
-		&"muffle":
+		&"muffle", &"hush":
 			return args.size() == 1 and ["on", "off"].has(args[0])
 		&"lightning", &"who_are_you":
 			return args.is_empty()
