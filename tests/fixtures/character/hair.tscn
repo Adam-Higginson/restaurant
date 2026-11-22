@@ -1,0 +1,11 @@
+[gd_scene format=3]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_wgn20"]
+
+[sub_resource type="BoxMesh" id="BoxMesh_y2d2t"]
+material = SubResource("StandardMaterial3D_wgn20")
+
+[node name="Hair" type="Node3D" unique_id=119636680]
+
+[node name="Hair" type="MeshInstance3D" parent="." unique_id=263572493]
+mesh = SubResource("BoxMesh_y2d2t")

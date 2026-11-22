@@ -11,8 +11,8 @@ func test_without_their_files_the_knife_and_pan_are_greybox() -> void:
 	var player: Player3D = new_player_3d_on_floor()
 	scene_runner(player.get_parent())
 
-	for holder: String in ["Model/Knife/KnifeModel", "Model/Pan/PanModel"]:
-		var dresser: ThirdPartyModel = player.get_node(holder) as ThirdPartyModel
+	for holder: String in ["KnifeModel", "PanModel"]:
+		var dresser: ThirdPartyModel = player.find_child(holder, true, false) as ThirdPartyModel
 		dresser.path = MISSING
 
 		assert_object(dresser.model).is_null()
@@ -24,8 +24,8 @@ func test_with_their_files_the_models_replace_the_greybox() -> void:
 	var player: Player3D = new_player_3d_on_floor()
 	scene_runner(player.get_parent())
 
-	for holder: String in ["Model/Knife/KnifeModel", "Model/Pan/PanModel"]:
-		var dresser: ThirdPartyModel = player.get_node(holder) as ThirdPartyModel
+	for holder: String in ["KnifeModel", "PanModel"]:
+		var dresser: ThirdPartyModel = player.find_child(holder, true, false) as ThirdPartyModel
 		dresser.path = BOX_MODEL
 
 		assert_object(dresser.model).is_not_null()
@@ -37,7 +37,7 @@ func test_the_knife_and_pan_point_at_the_pack_models() -> void:
 	var player: Player3D = new_player_3d_on_floor()
 	scene_runner(player.get_parent())
 
-	var knife: ThirdPartyModel = player.get_node("Model/Knife/KnifeModel") as ThirdPartyModel
-	var pan: ThirdPartyModel = player.get_node("Model/Pan/PanModel") as ThirdPartyModel
+	var knife: ThirdPartyModel = player.find_child("KnifeModel", true, false) as ThirdPartyModel
+	var pan: ThirdPartyModel = player.find_child("PanModel", true, false) as ThirdPartyModel
 	assert_str(knife.path).ends_with("kaykit_restaurant/Assets/gltf/knife.gltf")
 	assert_str(pan.path).ends_with("kaykit_restaurant/Assets/gltf/pan_A.gltf")

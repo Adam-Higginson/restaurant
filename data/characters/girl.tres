@@ -1,0 +1,11 @@
+[gd_resource type="Resource" script_class="CharacterParts" format=3]
+
+[ext_resource type="Script" path="res://scripts/data/character_parts.gd" id="1"]
+
+[resource]
+script = ExtResource("1")
+outfit = "res://assets/third_party/quaternius_outfits_fantasy/Modular Character Outfits - Fantasy[Standard]/Exports/glTF (Godot-Unreal)/Outfits/Female_Peasant.gltf"
+head_from = "res://assets/third_party/quaternius_base_characters/Universal Base Characters[Standard]/Base Characters/Godot - UE/Superhero_Female_FullBody.gltf"
+hair = "res://assets/third_party/quaternius_base_characters/Universal Base Characters[Standard]/Hairstyles/Rigged to Head Bone/glTF (Godot -Unreal)/Hair_Buns.gltf"
+eyebrows = "res://assets/third_party/quaternius_base_characters/Universal Base Characters[Standard]/Hairstyles/Rigged to Head Bone/glTF (Godot -Unreal)/Eyebrows_Female.gltf"
+hair_colour = Color(0.45, 0.28, 0.16, 1)

@@ -1,0 +1,19 @@
+[gd_scene format=3]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_usxn2"]
+
+[sub_resource type="BoxMesh" id="BoxMesh_atqg7"]
+material = SubResource("StandardMaterial3D_usxn2")
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_uifb3"]
+
+[sub_resource type="BoxMesh" id="BoxMesh_v027c"]
+material = SubResource("StandardMaterial3D_uifb3")
+
+[node name="Head" type="Node3D" unique_id=170310732]
+
+[node name="Head" type="MeshInstance3D" parent="." unique_id=1076374249]
+mesh = SubResource("BoxMesh_atqg7")
+
+[node name="Eyes" type="MeshInstance3D" parent="." unique_id=1568062372]
+mesh = SubResource("BoxMesh_v027c")

@@ -22,6 +22,9 @@
 [ext_resource type="AudioStream" path="res://assets/audio/combat/hurt.tres" id="35_hurt"]
 [ext_resource type="AudioStream" path="res://assets/audio/combat/heartbeat.tres" id="36_heartbeat"]
 [ext_resource type="Script" path="res://scripts/art/third_party_model.gd" id="37_model"]
+[ext_resource type="Script" path="res://scripts/art/character_model.gd" id="38_character"]
+[ext_resource type="Resource" path="res://data/characters/boy.tres" id="39_boy"]
+[ext_resource type="Resource" path="res://data/characters/girl.tres" id="39_girl"]
 [ext_resource type="Script" path="res://scripts/combat/hit_stop.gd" id="40_stop"]
 [ext_resource type="Script" path="res://scripts/combat/hit_feel.gd" id="41_feel"]
 [ext_resource type="Script" path="res://scripts/combat/knife_trail.gd" id="42_trail"]
@@ -127,6 +130,14 @@ mesh = SubResource("BoxMesh_fauql")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.42, 0.7, 0)
 material_override = ExtResource("4_ttec1")
 mesh = SubResource("BoxMesh_7uydm")
+
+[node name="Character" type="Node3D" parent="Model" node_paths=PackedStringArray("stand_ins", "player")]
+script = ExtResource("38_character")
+boy = ExtResource("39_boy")
+girl = ExtResource("39_girl")
+animation_files = PackedStringArray("res://assets/third_party/quaternius_ual2/Universal Animation Library 2[Standard]/Unreal-Godot/UAL2_Standard.glb")
+stand_ins = [NodePath("../Body"), NodePath("../Head"), NodePath("../EyeLeft"), NodePath("../EyeRight"), NodePath("../Satchel")]
+player = NodePath("../..")
 
 [node name="Knife" type="Node3D" parent="Model"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.9, 0)

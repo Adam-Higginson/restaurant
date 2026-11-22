@@ -72,6 +72,18 @@ const PAN_ID: StringName = &"frying_pan"
 @export var stumble_seconds: float = 0.3
 ## How hard a strike that counts knocks a crab back, in metres per second.
 @export var strike_push: float = 6.0
+## Where the knife sits in the character's right hand, when there's a
+## character (not the greybox): scaled to fit a hand, the handle through the
+## curled fingers and the blade out by the thumb. The hand bone starts at the
+## wrist and runs along +Y to the knuckles; the right hand's fingers curl
+## round towards -X, so the hole in the fist is up and to that side.
+@export var knife_grip: Transform3D = Transform3D(
+		Basis(Vector3.UP, PI).scaled(Vector3.ONE * 0.35), Vector3(-0.006, 0.097, -0.16))
+## Where the pan sits in the character's left hand, when there's a character:
+## the handle through the curled fingers, the pan raised like a shield. The
+## left hand mirrors the right: its fingers curl round towards +X.
+@export var pan_grip: Transform3D = Transform3D(
+		Basis(Vector3.RIGHT, PI).scaled(Vector3.ONE * 0.6), Vector3(0.035, 0.115, 0.36))
 
 ## The player's health. Created once and never replaced.
 var hearts: Hearts = null
@@ -84,6 +96,12 @@ var _strike_left: float = 0.0
 var _invulnerable_left: float = 0.0
 ## The crab whose fight the lantern is showing, or null.
 var _shown: FogCrab = null
+## Whether the knife and pan are in the character's hands, rather than
+## posed by code in front of the greybox.
+var _in_hands: bool = false
+## Where the knife and pan sit on the greybox, to put them back.
+var _knife_home: Transform3D
+var _pan_home: Transform3D
 
 @onready var _player: Player3D = get_parent() as Player3D
 @onready var _detector: InteractionDetector3D = $"../InteractionDetector"
@@ -91,6 +109,8 @@ var _shown: FogCrab = null
 @onready var _spirit: LanternSpirit = $"../LanternSpirit"
 @onready var _knife: Node3D = $"../Model/Knife"
 @onready var _pan: Node3D = $"../Model/Pan"
+@onready var _model: Node3D = $"../Model"
+@onready var _character: CharacterModel = get_node_or_null("../Model/Character") as CharacterModel
 
 
 func _ready() -> void:
@@ -102,6 +122,11 @@ func _ready() -> void:
 	_lock_on.target_changed.connect(_on_target_changed)
 	_knife.hide()
 	_pan.hide()
+	_knife_home = _knife.transform
+	_pan_home = _pan.transform
+	if _character != null:
+		_character.dressed.connect(_hold)
+		_hold(_character.character != null)
 
 
 func _physics_process(delta: float) -> void:
@@ -278,11 +303,30 @@ static func mood_for(state: CrabCycle.State) -> LanternSpirit.Mood:
 	return LanternSpirit.Mood.CALM
 
 
-# Shows the knife sweeping across in front during a swing, and the pan held
-# up while a parry would work.
+# Puts the knife and pan in the character's hands when [param in_hands],
+# or back on the greybox.
+func _hold(in_hands: bool) -> void:
+	_in_hands = in_hands and _character.right_hand != null
+	if _in_hands:
+		_knife.reparent(_character.right_hand, false)
+		_knife.transform = knife_grip
+		_pan.reparent(_character.left_hand, false)
+		_pan.transform = pan_grip
+	else:
+		if _knife.get_parent() != _model:
+			_knife.reparent(_model, false)
+		if _pan.get_parent() != _model:
+			_pan.reparent(_model, false)
+		_knife.transform = _knife_home
+		_pan.transform = _pan_home
+
+
+# Shows the knife during a swing and the pan held up while a parry would
+# work. In the character's hands the animation moves them; on the greybox,
+# the knife sweeps across in front.
 func _pose_knife_and_pan() -> void:
 	_knife.visible = _strike_left > 0.0
-	if _knife.visible:
+	if _knife.visible and not _in_hands:
 		var through: float = 1.0 - _strike_left / strike_seconds
 		_knife.rotation.y = lerpf(deg_to_rad(70.0), deg_to_rad(-70.0), through)
 	_pan.visible = parry.is_active()
