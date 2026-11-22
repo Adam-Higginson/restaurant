@@ -1,0 +1,100 @@
+[gd_scene format=3 uid="uid://nfvkjxjkf75xz"]
+
+[ext_resource type="Material" path="res://assets/placeholder/materials/brass.tres" id="1_sann4"]
+[ext_resource type="Material" path="res://assets/placeholder/materials/window_glow.tres" id="2_6aswu"]
+[ext_resource type="Material" path="res://assets/placeholder/materials/iron.tres" id="3_thu3s"]
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_r3jjm"]
+top_radius = 0.31
+bottom_radius = 0.31
+height = 0.1
+radial_segments = 12
+rings = 1
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_xt0ki"]
+top_radius = 0.24
+bottom_radius = 0.24
+height = 0.1
+radial_segments = 12
+rings = 1
+
+[sub_resource type="BoxMesh" id="BoxMesh_8xqdh"]
+size = Vector3(0.48, 0.035, 0.03)
+
+[sub_resource type="BoxMesh" id="BoxMesh_n7irq"]
+size = Vector3(0.035, 0.48, 0.03)
+
+[sub_resource type="SphereMesh" id="SphereMesh_waqyv"]
+radius = 0.018
+height = 0.036
+radial_segments = 8
+rings = 4
+
+[node name="LitPorthole" type="Node3D" unique_id=1957021059]
+
+[node name="Rim" type="MeshInstance3D" parent="." unique_id=1155794551]
+transform = Transform3D(1, 0, 0, 0, -4.371139e-08, -1, 0, 1, -4.371139e-08, 0, 0, -0.03)
+material_override = ExtResource("1_sann4")
+mesh = SubResource("CylinderMesh_r3jjm")
+
+[node name="Glass" type="MeshInstance3D" parent="." unique_id=290644178]
+transform = Transform3D(1, 0, 0, 0, -4.371139e-08, -1, 0, 1, -4.371139e-08, 0, 0, -0.045)
+material_override = ExtResource("2_6aswu")
+cast_shadow = 0
+mesh = SubResource("CylinderMesh_xt0ki")
+
+[node name="MullionAcross" type="MeshInstance3D" parent="." unique_id=833997612]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -0.1)
+material_override = ExtResource("3_thu3s")
+mesh = SubResource("BoxMesh_8xqdh")
+
+[node name="MullionDown" type="MeshInstance3D" parent="." unique_id=1213905594]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -0.1)
+material_override = ExtResource("3_thu3s")
+mesh = SubResource("BoxMesh_n7irq")
+
+[node name="Rivet1" type="MeshInstance3D" parent="." unique_id=557446221]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.25406688, 0.105237946, -0.085)
+material_override = ExtResource("1_sann4")
+mesh = SubResource("SphereMesh_waqyv")
+
+[node name="Rivet2" type="MeshInstance3D" parent="." unique_id=488070408]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.105237946, 0.25406688, -0.085)
+material_override = ExtResource("1_sann4")
+mesh = SubResource("SphereMesh_waqyv")
+
+[node name="Rivet3" type="MeshInstance3D" parent="." unique_id=1700132016]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.105237946, 0.25406688, -0.085)
+material_override = ExtResource("1_sann4")
+mesh = SubResource("SphereMesh_waqyv")
+
+[node name="Rivet4" type="MeshInstance3D" parent="." unique_id=1055340943]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.25406688, 0.105237946, -0.085)
+material_override = ExtResource("1_sann4")
+mesh = SubResource("SphereMesh_waqyv")
+
+[node name="Rivet5" type="MeshInstance3D" parent="." unique_id=964938307]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.25406688, -0.105237946, -0.085)
+material_override = ExtResource("1_sann4")
+mesh = SubResource("SphereMesh_waqyv")
+
+[node name="Rivet6" type="MeshInstance3D" parent="." unique_id=1878042717]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.105237946, -0.25406688, -0.085)
+material_override = ExtResource("1_sann4")
+mesh = SubResource("SphereMesh_waqyv")
+
+[node name="Rivet7" type="MeshInstance3D" parent="." unique_id=1190361261]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.105237946, -0.25406688, -0.085)
+material_override = ExtResource("1_sann4")
+mesh = SubResource("SphereMesh_waqyv")
+
+[node name="Rivet8" type="MeshInstance3D" parent="." unique_id=242860098]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.25406688, -0.105237946, -0.085)
+material_override = ExtResource("1_sann4")
+mesh = SubResource("SphereMesh_waqyv")
+
+[node name="Glow" type="OmniLight3D" parent="." unique_id=531508705]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -0.45)
+light_color = Color(1, 0.66, 0.34, 1)
+light_energy = 0.8
+omni_range = 3.4

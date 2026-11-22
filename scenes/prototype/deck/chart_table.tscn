@@ -1,0 +1,146 @@
+[gd_scene format=3 uid="uid://tfxgvnx8564as"]
+
+[ext_resource type="Material" path="res://assets/placeholder/materials/wet_prop_wood.tres" id="1_ce34w"]
+[ext_resource type="Material" path="res://assets/placeholder/materials/wet_dark_wood.tres" id="2_0ymhx"]
+[ext_resource type="Material" path="res://assets/placeholder/materials/chart.tres" id="3_j321x"]
+[ext_resource type="PackedScene" path="res://scenes/prototype/dressing/navigator_things.tscn" id="4_ugiv1"]
+[ext_resource type="Material" path="res://assets/placeholder/materials/brass.tres" id="5_bcq73"]
+[ext_resource type="Material" path="res://assets/placeholder/materials/iron.tres" id="6_hwwi6"]
+
+[sub_resource type="BoxMesh" id="BoxMesh_nf8g5"]
+size = Vector3(1.2, 0.06, 0.7)
+
+[sub_resource type="BoxMesh" id="BoxMesh_h5v6q"]
+size = Vector3(0.08, 0.87, 0.08)
+
+[sub_resource type="BoxMesh" id="BoxMesh_aw1s5"]
+size = Vector3(1.08, 0.04, 0.58)
+
+[sub_resource type="BoxMesh" id="BoxMesh_2pen8"]
+size = Vector3(1.2, 0.05, 0.03)
+
+[sub_resource type="BoxMesh" id="BoxMesh_gj6fx"]
+size = Vector3(0.03, 0.05, 0.7)
+
+[sub_resource type="BoxMesh" id="BoxMesh_e8i2x"]
+size = Vector3(0.74, 0.006, 0.52)
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_lovpw"]
+top_radius = 0.03
+bottom_radius = 0.035
+height = 0.42
+radial_segments = 6
+rings = 1
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_n7xo1"]
+top_radius = 0.025
+bottom_radius = 0.02
+height = 0.05
+radial_segments = 6
+rings = 1
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_75yd7"]
+top_radius = 0.008
+bottom_radius = 0.008
+height = 0.18
+radial_segments = 4
+rings = 1
+
+[sub_resource type="BoxMesh" id="BoxMesh_h6dgh"]
+size = Vector3(0.04, 0.5, 0.04)
+
+[sub_resource type="BoxMesh" id="BoxMesh_g4yy4"]
+size = Vector3(0.2, 0.03, 0.03)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_77d5g"]
+size = Vector3(1.2, 0.96, 0.7)
+
+[node name="ChartTable" type="StaticBody3D" unique_id=538611041]
+
+[node name="Top" type="MeshInstance3D" parent="." unique_id=1875274609]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.9, 0)
+material_override = ExtResource("1_ce34w")
+mesh = SubResource("BoxMesh_nf8g5")
+
+[node name="Leg1" type="MeshInstance3D" parent="." unique_id=39054255]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.54, 0.435, -0.29)
+material_override = ExtResource("2_0ymhx")
+mesh = SubResource("BoxMesh_h5v6q")
+
+[node name="Leg2" type="MeshInstance3D" parent="." unique_id=1728487956]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.54, 0.435, -0.29)
+material_override = ExtResource("2_0ymhx")
+mesh = SubResource("BoxMesh_h5v6q")
+
+[node name="Leg3" type="MeshInstance3D" parent="." unique_id=1096265869]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.54, 0.435, 0.29)
+material_override = ExtResource("2_0ymhx")
+mesh = SubResource("BoxMesh_h5v6q")
+
+[node name="Leg4" type="MeshInstance3D" parent="." unique_id=337892419]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.54, 0.435, 0.29)
+material_override = ExtResource("2_0ymhx")
+mesh = SubResource("BoxMesh_h5v6q")
+
+[node name="Shelf" type="MeshInstance3D" parent="." unique_id=1859739058]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.25, 0)
+material_override = ExtResource("2_0ymhx")
+mesh = SubResource("BoxMesh_aw1s5")
+
+[node name="FiddleFore" type="MeshInstance3D" parent="." unique_id=1205464881]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.955, -0.335)
+material_override = ExtResource("2_0ymhx")
+mesh = SubResource("BoxMesh_2pen8")
+
+[node name="FiddleAft" type="MeshInstance3D" parent="." unique_id=1733650073]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.955, 0.335)
+material_override = ExtResource("2_0ymhx")
+mesh = SubResource("BoxMesh_2pen8")
+
+[node name="FiddlePort" type="MeshInstance3D" parent="." unique_id=72108184]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.585, 0.955, 0)
+material_override = ExtResource("2_0ymhx")
+mesh = SubResource("BoxMesh_gj6fx")
+
+[node name="FiddleStarboard" type="MeshInstance3D" parent="." unique_id=1975241739]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.585, 0.955, 0)
+material_override = ExtResource("2_0ymhx")
+mesh = SubResource("BoxMesh_gj6fx")
+
+[node name="Chart" type="MeshInstance3D" parent="." unique_id=391429377]
+transform = Transform3D(0.9945219, 0, 0.104528464, 0, 1, 0, -0.104528464, 0, 0.9945219, -0.12, 0.933, 0.02)
+material_override = ExtResource("3_j321x")
+cast_shadow = 0
+mesh = SubResource("BoxMesh_e8i2x")
+
+[node name="NavigatorThings" type="Node3D" parent="." unique_id=1018270928 instance=ExtResource("4_ugiv1")]
+transform = Transform3D(0.9396926, 0, 0.34202012, 0, 1, 0, -0.34202012, 0, 0.9396926, 0.05, 0.936, 0.02)
+
+[node name="Spyglass" type="MeshInstance3D" parent="." unique_id=1859326467]
+transform = Transform3D(-3.7855173e-08, -0.8660254, 0.5, 1, -4.371139e-08, 0, 2.1855694e-08, 0.5, 0.8660254, 0.36, 0.965, 0.18)
+material_override = ExtResource("5_bcq73")
+mesh = SubResource("CylinderMesh_lovpw")
+
+[node name="PipeBowl" type="MeshInstance3D" parent="." unique_id=769983379]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.46, 0.96, -0.22)
+material_override = ExtResource("2_0ymhx")
+mesh = SubResource("CylinderMesh_n7xo1")
+
+[node name="PipeStem" type="MeshInstance3D" parent="." unique_id=145966883]
+transform = Transform3D(-4.222196e-08, -0.9659258, 0.25881904, 1, -4.371139e-08, 0, 1.131334e-08, 0.25881904, 0.9659258, -0.38, 0.948, -0.2)
+material_override = ExtResource("2_0ymhx")
+mesh = SubResource("CylinderMesh_75yd7")
+
+[node name="LampStand" type="MeshInstance3D" parent="." unique_id=1174381133]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.5, 1.18, -0.28)
+material_override = ExtResource("6_hwwi6")
+mesh = SubResource("BoxMesh_h6dgh")
+
+[node name="LampArm" type="MeshInstance3D" parent="." unique_id=137336620]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.42, 1.42, -0.28)
+material_override = ExtResource("6_hwwi6")
+mesh = SubResource("BoxMesh_g4yy4")
+
+[node name="Shape" type="CollisionShape3D" parent="." unique_id=1843269876]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.48, 0)
+shape = SubResource("BoxShape3D_77d5g")

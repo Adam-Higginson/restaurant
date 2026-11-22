@@ -7,7 +7,7 @@ const WEATHER_SCENE: String = "res://scenes/prototype/weather/weather.tscn"
 const SEA_SCENE: String = "res://scenes/prototype/weather/sea_surface.tscn"
 ## Below deck in the galley, and up on the aft deck, in the ship's own space.
 const IN_GALLEY: Vector3 = Vector3(0, 1.05, 6)
-const ON_DECK: Vector3 = Vector3(0, 5.35, 11)
+const ON_DECK: Vector3 = Vector3(0, 5.35, 7.5)
 
 
 func test_intensity_is_clamped_and_announced() -> void:
@@ -49,7 +49,9 @@ func test_wetness_is_a_shader_global_every_material_can_read() -> void:
 func test_the_deck_and_its_trim_are_wet_surfaces() -> void:
 	var ship: Ship = new_moored_ship_with_player(ON_DECK)[0] as Ship
 	var wet_shader: Shader = load("res://shaders/wet_surface.gdshader") as Shader
-	for path: String in ["Visuals/DeckAft", "Visuals/DeckFore", "Visuals/RailPort", "Visuals/Mast"]:
+	for path: String in ["Visuals/DeckAft", "Visuals/DeckFore",
+			"Visuals/UpperDeck/Structure/BulwarkPort/CapRail",
+			"Visuals/UpperDeck/Masts/MainMast/Lower"]:
 		var mesh: MeshInstance3D = ship.get_node(path) as MeshInstance3D
 		var material: ShaderMaterial = mesh.material_override as ShaderMaterial
 		assert_object(material).is_not_null()

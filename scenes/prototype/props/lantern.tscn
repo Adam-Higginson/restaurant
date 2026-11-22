@@ -1,6 +1,7 @@
 [gd_scene format=3]
 
 [ext_resource type="Script" path="res://scripts/props/lantern.gd" id="1_x"]
+[ext_resource type="Script" path="res://scripts/props/flicker.gd" id="4_flicker"]
 [ext_resource type="Material" path="res://assets/placeholder/materials/iron.tres" id="2_x"]
 [ext_resource type="Shader" path="res://shaders/pixel_fire.gdshader" id="3_fire"]
 
@@ -131,6 +132,7 @@ cast_shadow = 0
 
 [node name="Light" type="OmniLight3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.56, 0)
+script = ExtResource("4_flicker")
 light_color = Color(1, 0.76, 0.46, 1)
 light_energy = 1.4
 light_volumetric_fog_energy = 2.0

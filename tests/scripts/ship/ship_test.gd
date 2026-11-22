@@ -192,7 +192,7 @@ func test_the_ship_and_its_visuals_stay_level_while_sailing() -> void:
 func test_the_lanterns_swing() -> void:
 	var ship: Ship = _new_ship([Vector3.ZERO, Vector3(0, 0, -100)])
 	var runner: GdUnitSceneRunner = scene_runner(ship.get_parent())
-	var lantern: Swinging = ship.get_node("Visuals/SternLantern") as Swinging
+	var lantern: Swinging = ship.get_node("Visuals/UpperDeck/Lights/SternLantern") as Swinging
 	var before: Vector3 = lantern.rotation
 
 	await physics_ticks(runner, 20)
