@@ -14,12 +14,19 @@ const USAGE: Dictionary[StringName, String] = {
 	&"fade": "@fade out or @fade in, with seconds after if you like: @fade in 2.0",
 	&"title": "@title Somewhere at sea",
 	&"wait": "@wait 1.5",
-	&"wait_for": "@wait_for interact",
+	&"wait_for": "@wait_for interact or @wait_for any, with a prompt after if you like: "
+			+ "@wait_for interact Take his hand",
 	&"place": "@place heron doorway",
 	&"face": "@face heron player",
 	&"hide": "@hide heron",
 	&"show": "@show heron",
 	&"home": "@home heron",
+	&"stage": "@stage underwater or @stage off",
+	&"play": "@play lantern_descends",
+	&"start": "@start drifting",
+	&"sound": "@sound splash",
+	&"muffle": "@muffle on or @muffle off",
+	&"lightning": "@lightning",
 }
 
 
@@ -50,11 +57,15 @@ static func _fits(cue: StringName, args: PackedStringArray) -> bool:
 		&"wait":
 			return args.size() == 1 and _is_seconds(args[0])
 		&"wait_for":
-			return args.size() == 1 and args[0] == "interact"
+			return not args.is_empty() and ["interact", "any"].has(args[0])
 		&"place", &"face":
 			return args.size() == 2
-		&"hide", &"show", &"home":
+		&"hide", &"show", &"home", &"stage", &"play", &"start", &"sound":
 			return args.size() == 1
+		&"muffle":
+			return args.size() == 1 and ["on", "off"].has(args[0])
+		&"lightning":
+			return args.is_empty()
 	return false
 
 

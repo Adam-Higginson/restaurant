@@ -11,6 +11,10 @@ const OPEN_CUTOFF_HZ: float = 20000.0
 const SHELTERED_CUTOFF_HZ: float = 700.0
 ## How much quieter the rain is under a roof, in decibels.
 const SHELTERED_DROP_DB: float = -8.0
+## The low-pass cutoff underwater: a dull rumble and nothing else.
+const SUBMERGED_CUTOFF_HZ: float = 260.0
+## How much quieter the weather is underwater, in decibels.
+const SUBMERGED_DROP_DB: float = -6.0
 
 ## Seconds to glide between outside and sheltered.
 var fade_seconds: float = 0.8
@@ -20,7 +24,13 @@ var shelter: float:
 	get:
 		return _shelter
 
+## How far under the water the sound is now: 0 in the air, 1 underwater.
+var depth: float:
+	get:
+		return _depth
+
 var _shelter: float = 0.0
+var _depth: float = 0.0
 
 
 ## Moves [member shelter] towards [param sheltered] for [param delta] seconds.
@@ -30,6 +40,16 @@ func step(delta: float, sheltered: bool) -> void:
 		_shelter = target
 		return
 	_shelter = move_toward(_shelter, target, delta / fade_seconds)
+
+
+## Moves [member depth] towards [param submerged] for [param delta] seconds,
+## in [param seconds] from one to the other (0 jumps): going under is quick.
+func sink(delta: float, submerged: bool, seconds: float = 0.25) -> void:
+	var target: float = 1.0 if submerged else 0.0
+	if seconds <= 0.0:
+		_depth = target
+		return
+	_depth = move_toward(_depth, target, delta / seconds)
 
 
 ## Jumps straight to outside or sheltered, with no glide (the scene starting).
@@ -42,7 +62,8 @@ func snap(sheltered: bool) -> void:
 func cutoff_hz() -> float:
 	var open_log: float = log(OPEN_CUTOFF_HZ)
 	var shut_log: float = log(SHELTERED_CUTOFF_HZ)
-	return exp(lerpf(open_log, shut_log, _shelter))
+	var in_air: float = lerpf(open_log, shut_log, _shelter)
+	return exp(lerpf(in_air, log(SUBMERGED_CUTOFF_HZ), _depth))
 
 
 ## The rain's volume for the current [member shelter] and a weather
@@ -50,4 +71,9 @@ func cutoff_hz() -> float:
 func rain_volume_db(intensity: float) -> float:
 	if intensity <= 0.0:
 		return -80.0
-	return linear_to_db(intensity) + SHELTERED_DROP_DB * _shelter
+	return linear_to_db(intensity) + SHELTERED_DROP_DB * _shelter + submerged_drop_db()
+
+
+## How much quieter everything is for the current [member depth], in decibels.
+func submerged_drop_db() -> float:
+	return SUBMERGED_DROP_DB * _depth

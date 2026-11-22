@@ -12,13 +12,18 @@ extends CueHandler
 ## [/codeblock]
 ##
 ## Someone is named by their [member Person.id] ([code]heron[/code]), or
-## [code]player[/code]. A mark is a [Marker3D] in the group
+## [code]player[/code]. A thing can be moved, hidden and shown too: a prop
+## is any [Node3D] in the group [constant PROPS], named for the cue
+## ([code]ReachingBoathook[/code] answers [code]reaching_boathook[/code]).
+## A mark is a [Marker3D] in the group
 ## [constant GROUP], named for the cue: [code]Doorway[/code] answers
 ## [code]doorway[/code]. They stand on the mark facing the way its blue
 ## arrow (its -Z) points.
 
 ## The group marks are in.
 const GROUP: StringName = &"marks"
+## The group props are in: things a cutscene can show, hide and place.
+const PROPS: StringName = &"props"
 ## The name for the player in a script.
 const PLAYER: String = "player"
 
@@ -30,8 +35,8 @@ func cues() -> Array[StringName]:
 	return [&"place", &"face", &"hide", &"show", &"home"]
 
 
-## Whoever is called [param who] in a script, or null: the player, or the
-## crewmate with that [member Person.id].
+## Whoever (or whatever) is called [param who] in a script, or null: the
+## player, the crewmate with that [member Person.id], or the prop of that name.
 func find_actor(who: String) -> Node3D:
 	if who == PLAYER:
 		return player if is_instance_valid(player) else null
@@ -41,6 +46,9 @@ func find_actor(who: String) -> Node3D:
 		var crewmate: Crewmate = node as Crewmate
 		if crewmate != null and crewmate.person != null and String(crewmate.person.id) == who:
 			return crewmate
+	for node: Node in get_tree().get_nodes_in_group(PROPS):
+		if String(node.name).to_snake_case() == who:
+			return node as Node3D
 	return null
 
 
@@ -52,7 +60,8 @@ func find_mark(mark_name: String) -> Marker3D:
 func _perform(cue: StringName, args: PackedStringArray) -> void:
 	var actor: Node3D = find_actor(args[0])
 	if actor == null:
-		warn("nobody is called '%s' (a crewmate's Person id, or 'player')" % args[0])
+		warn("nobody and nothing is called '%s' (a crewmate's Person id, 'player', or a "
+				% args[0] + "prop in group '%s')" % PROPS)
 		return
 	match cue:
 		&"place":
