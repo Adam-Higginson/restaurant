@@ -49,6 +49,12 @@ func refill() -> void:
 	changed.emit(_halves)
 
 
+## Whether the player is down to their last heart (or less of it), but not
+## out: the moment to be afraid.
+func is_last_heart() -> bool:
+	return _halves > 0 and _halves <= HALVES_PER_HEART
+
+
 ## Whether no hearts are left.
 func is_empty() -> bool:
 	return _halves == 0

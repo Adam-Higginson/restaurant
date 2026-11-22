@@ -71,3 +71,17 @@ func test_refill_fills_every_heart() -> void:
 
 	assert_int(hearts.halves).is_equal(6)
 	assert_bool(hearts.is_empty()).is_false()
+
+
+func test_the_last_heart_is_one_heart_or_less_but_not_none() -> void:
+	var hearts: Hearts = Hearts.new(3)
+	assert_bool(hearts.is_last_heart()).is_false()
+
+	hearts.hurt(3)
+	assert_bool(hearts.is_last_heart()).is_false()
+	hearts.hurt(1)
+	assert_bool(hearts.is_last_heart()).is_true()
+	hearts.hurt(1)
+	assert_bool(hearts.is_last_heart()).is_true()
+	hearts.hurt(1)
+	assert_bool(hearts.is_last_heart()).is_false()

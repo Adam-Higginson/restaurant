@@ -22,9 +22,19 @@ const PAN_UP: StringName = &"PanUp"
 const CLANG: StringName = &"Clang"
 ## A blow landing on the player.
 const HURT: StringName = &"Hurt"
+## The player's heart thumping while they're down to their last one: the
+## punch recordings, an octave down.
+const HEARTBEAT: StringName = &"Heartbeat"
+
+## Seconds from one heartbeat to the next.
+@export var heartbeat_seconds: float = 0.9
+## Seconds between the two thumps of a beat ("lub" and "dub").
+@export var heartbeat_gap: float = 0.22
 
 ## How many times each sound has played, by name.
 var _played: Dictionary[StringName, int] = {}
+## Seconds into the current heartbeat, or below 0 while the heart is calm.
+var _beat_time: float = -1.0
 
 @onready var _duellist: Duellist = $"../Duellist"
 
@@ -35,6 +45,10 @@ func _ready() -> void:
 	_duellist.pan_raised.connect(play.bind(PAN_UP))
 	_duellist.parried.connect(play.bind(CLANG))
 	_duellist.hurt.connect(_on_hurt)
+
+
+func _process(delta: float) -> void:
+	_beat(delta)
 
 
 ## Plays the sound called [param sound] (one of the names above), from the start.
@@ -60,3 +74,21 @@ func _on_struck(hit: bool) -> void:
 
 func _on_hurt(_halves: int) -> void:
 	play(HURT)
+
+
+# Thumps "lub-dub" once a beat while the player is on their last heart.
+func _beat(delta: float) -> void:
+	if not _duellist.hearts.is_last_heart():
+		_beat_time = -1.0
+		return
+	if _beat_time < 0.0:
+		_beat_time = 0.0
+		play(HEARTBEAT)
+		return
+	var before: float = _beat_time
+	_beat_time += delta
+	if before < heartbeat_gap and _beat_time >= heartbeat_gap:
+		play(HEARTBEAT)
+	if _beat_time >= heartbeat_seconds:
+		_beat_time -= heartbeat_seconds
+		play(HEARTBEAT)
