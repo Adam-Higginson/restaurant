@@ -92,6 +92,8 @@ A growing glossary of the Godot concepts this project uses: what each one is, in
 
 **Building nodes in code.** `MeshInstance3D.new()`, a `BoxMesh` or `CylinderMesh` with a size, and `add_child()` make scenery from a script, which suits things that change shape often. Free the old ones with `remove_child()` then `queue_free()`, so the old and new never show at once. *Ours:* `ItemModel.build()`, used by `Counter3D` and `CarriedStack3D`.
 
+**One scene, many instances, dressed by exports.** A scene placed many times is the same everywhere, but each instance can set its root's `@export` properties differently, and its script applies them in `_ready()`. That's how one scene can look different in each place without copying it. *Ours:* every bunk bay is `bunk_bay.tscn`; `BunkBay`'s exports pick each bay's quilts, whether its curtains are drawn and whether its lantern is lit.
+
 **Static variables.** `static var` belongs to the class, not to each instance, so every user shares one copy. *Ours:* `ItemModel._materials`, one material per colour for every item model.
 
 **`RefCounted` logic classes.** A script that `extends RefCounted` isn't a node: it lives as long as something refers to it, and can be tested without a scene. Keeping rules in one and having a node wrap it splits "what happens" from "how it looks". *Ours:* `CounterSlot` (wrapped by `Counter3D`), `Arms`, `ToolBelt`.
@@ -151,6 +153,14 @@ A growing glossary of the Godot concepts this project uses: what each one is, in
 **SpotLight3D.** A torch: a cone of light from a point, fading to its range, with `spot_angle` for how wide. *Ours:* each `Porthole`'s cold blue `Moonlight`, aimed down onto the galley floor.
 
 **Instance uniforms.** `instance uniform float flash;` in a shader is a value each mesh using that material has its own of, set with `set_instance_shader_parameter()`, so many meshes can share one material but differ. *Ours:* each porthole's glass lights up on its own when `Lightning` flashes.
+
+**Backlight (on a material).** `backlight_enabled` lets light that falls on the far side of a surface show through on the near side, tinted by the `backlight` colour, like a lamp behind thin cloth. *Ours:* the bunk curtains (`curtain*.tres`) and hammock canvas, so a drawn curtain glows when the lamp in its bunk is lit.
+
+**A ceiling the camera can't pass.** A collision shape well above the player's head is never touched by them, but the camera's `SpringArm3D` hits it, so the camera is pulled in under the ceiling rather than rising through it. *Ours:* `GalleyCeilingShape`, `BunkCeilingShape` and `BunkCeilingForeShape`, and a `…Shape` for each ceiling beam, in both rooms.
+
+**Exported enums.** An `enum` names a small set of choices (`enum Bedding { MADE, SLEPT_IN }`); exporting a variable of that type (`@export var lower_bedding: Bedding`) shows it in the Inspector as a drop-down of those names. *Ours:* `BunkBay.lower_bedding` and `upper_bedding`, made or slept in.
+
+**Alpha scissor.** A material's transparency mode where each pixel is either fully drawn or not drawn at all, cut where the texture's alpha is below a threshold. It's cheap (no sorting, it still casts and takes shadows) and keeps pixel art's hard edges. *Ours:* the braided rug (`braided_rug.tres`): an oval cut from a square plane.
 
 *Still to come with the prototype tickets: ...*
 

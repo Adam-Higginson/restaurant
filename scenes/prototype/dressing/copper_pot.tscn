@@ -1,0 +1,47 @@
+[gd_scene format=3 uid="uid://bto0lfl452f6s"]
+
+[ext_resource type="Material" path="res://assets/placeholder/materials/copper.tres" id="1_islb2"]
+[ext_resource type="Material" path="res://assets/placeholder/materials/iron.tres" id="2_ospcb"]
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_b4aiu"]
+top_radius = 0.14
+bottom_radius = 0.13
+height = 0.15
+radial_segments = 10
+rings = 1
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_0lr1p"]
+top_radius = 0.12
+bottom_radius = 0.14
+height = 0.02
+radial_segments = 10
+rings = 1
+
+[sub_resource type="BoxMesh" id="BoxMesh_wbpcv"]
+size = Vector3(0.14, 0.02, 0.03)
+
+[sub_resource type="BoxMesh" id="BoxMesh_d0vyx"]
+size = Vector3(0.015, 0.254951, 0.015)
+
+[node name="CopperPot" type="Node3D" unique_id=1180255153]
+
+[node name="Pot" type="MeshInstance3D" parent="." unique_id=412037948]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.075, 0)
+material_override = ExtResource("1_islb2")
+mesh = SubResource("CylinderMesh_b4aiu")
+
+[node name="Lid" type="MeshInstance3D" parent="." unique_id=147823976]
+transform = Transform3D(0.9961947, -0.08715574, 0, 0.08715574, 0.9961947, 0, 0, 0, 1, 0, 0.16, 0)
+material_override = ExtResource("1_islb2")
+mesh = SubResource("CylinderMesh_0lr1p")
+
+[node name="Handle" type="MeshInstance3D" parent="." unique_id=245908413]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.2, 0.12, 0)
+material_override = ExtResource("2_ospcb")
+mesh = SubResource("BoxMesh_wbpcv")
+
+[node name="Ladle" type="MeshInstance3D" parent="." unique_id=269950163]
+transform = Transform3D(0.8086076, -0.5883484, 1.4901161e-08, 0.5422427, 0.7452413, -0.388057, 0.22831269, 0.3137858, 0.9216354, -0.125, 0.26500002, 0.060000002)
+material_override = ExtResource("2_ospcb")
+cast_shadow = 0
+mesh = SubResource("BoxMesh_d0vyx")

@@ -1,0 +1,23 @@
+[gd_scene format=3 uid="uid://d31fyi1ghgwwr"]
+
+[ext_resource type="Material" path="res://assets/placeholder/materials/drawing.tres" id="1_uk88g"]
+[ext_resource type="Material" path="res://assets/placeholder/materials/brass.tres" id="2_am16k"]
+
+[sub_resource type="QuadMesh" id="QuadMesh_v31tt"]
+size = Vector2(0.2, 0.17)
+
+[sub_resource type="BoxMesh" id="BoxMesh_661dv"]
+size = Vector3(0.012, 0.012, 0.012)
+
+[node name="PinnedDrawing" type="Node3D" unique_id=94167988]
+
+[node name="Sheet" type="MeshInstance3D" parent="." unique_id=1756189982]
+transform = Transform3D(0.9986295, -0.05233596, 0, 0.05233596, 0.9986295, 0, 0, 0, 1, 0, 0, 0.004)
+material_override = ExtResource("1_uk88g")
+cast_shadow = 0
+mesh = SubResource("QuadMesh_v31tt")
+
+[node name="Pin" type="MeshInstance3D" parent="." unique_id=952372204]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.065, 0.008)
+material_override = ExtResource("2_am16k")
+mesh = SubResource("BoxMesh_661dv")

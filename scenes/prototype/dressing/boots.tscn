@@ -1,0 +1,60 @@
+[gd_scene format=3 uid="uid://kl1uf64gpylj"]
+
+[ext_resource type="Material" path="res://assets/placeholder/materials/leather.tres" id="1_gouon"]
+[ext_resource type="Material" path="res://assets/placeholder/materials/wool.tres" id="2_rxrd2"]
+
+[sub_resource type="BoxMesh" id="BoxMesh_3p2og"]
+size = Vector3(0.12, 0.32, 0.14)
+
+[sub_resource type="BoxMesh" id="BoxMesh_pmf5d"]
+size = Vector3(0.12, 0.08, 0.28)
+
+[sub_resource type="BoxMesh" id="BoxMesh_mryc3"]
+size = Vector3(0.13, 0.05, 0.15)
+
+[sub_resource type="BoxMesh" id="BoxMesh_5aupg"]
+size = Vector3(0.12, 0.32, 0.14)
+
+[sub_resource type="BoxMesh" id="BoxMesh_tukua"]
+size = Vector3(0.12, 0.08, 0.28)
+
+[sub_resource type="BoxMesh" id="BoxMesh_0kd1u"]
+size = Vector3(0.13, 0.05, 0.15)
+
+[node name="Boots" type="Node3D" unique_id=1070198248]
+
+[node name="Boot1" type="Node3D" parent="." unique_id=1034875501]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.08, 0, 0)
+
+[node name="Shaft" type="MeshInstance3D" parent="Boot1" unique_id=627362095]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.16, -0.04)
+material_override = ExtResource("1_gouon")
+mesh = SubResource("BoxMesh_3p2og")
+
+[node name="Foot" type="MeshInstance3D" parent="Boot1" unique_id=1844761740]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.04, 0.05)
+material_override = ExtResource("1_gouon")
+mesh = SubResource("BoxMesh_pmf5d")
+
+[node name="Turnover" type="MeshInstance3D" parent="Boot1" unique_id=1835358300]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.3, -0.04)
+material_override = ExtResource("2_rxrd2")
+mesh = SubResource("BoxMesh_mryc3")
+
+[node name="Boot2" type="Node3D" parent="." unique_id=858899071]
+transform = Transform3D(0.9659258, 0.05381151, 0.25316322, 0, 0.9781476, -0.2079117, -0.25881904, 0.20082727, 0.944818, 0.09, 0, 0)
+
+[node name="Shaft" type="MeshInstance3D" parent="Boot2" unique_id=112277094]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.16, -0.04)
+material_override = ExtResource("1_gouon")
+mesh = SubResource("BoxMesh_5aupg")
+
+[node name="Foot" type="MeshInstance3D" parent="Boot2" unique_id=1267092083]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.04, 0.05)
+material_override = ExtResource("1_gouon")
+mesh = SubResource("BoxMesh_tukua")
+
+[node name="Turnover" type="MeshInstance3D" parent="Boot2" unique_id=652127529]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.3, -0.04)
+material_override = ExtResource("2_rxrd2")
+mesh = SubResource("BoxMesh_0kd1u")

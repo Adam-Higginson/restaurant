@@ -1,0 +1,10 @@
+[gd_resource type="StandardMaterial3D" format=3 uid="uid://b220jlp43wcoy"]
+
+[ext_resource type="Texture2D" path="res://assets/placeholder/textures/ticking.png" id="1_gusu4"]
+
+[resource]
+albedo_texture = ExtResource("1_gusu4")
+metallic_specular = 0.1
+uv1_scale = Vector3(6, 6, 6)
+uv1_triplanar = true
+texture_filter = 0

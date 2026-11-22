@@ -1,0 +1,79 @@
+[gd_scene format=3 uid="uid://dilfb6dupb4x3"]
+
+[ext_resource type="Material" path="res://assets/placeholder/materials/rope.tres" id="1_l8hvh"]
+[ext_resource type="Script" path="res://scripts/props/swinging.gd" id="2_0ylsc"]
+[ext_resource type="Material" path="res://assets/placeholder/materials/wool.tres" id="3_vwse6"]
+[ext_resource type="Material" path="res://assets/placeholder/materials/red_cloth.tres" id="4_oarxu"]
+[ext_resource type="Material" path="res://assets/placeholder/materials/linen.tres" id="5_lt4mh"]
+
+[sub_resource type="BoxMesh" id="BoxMesh_5ns58"]
+size = Vector3(1.5, 0.015, 0.015)
+
+[sub_resource type="BoxMesh" id="BoxMesh_2xc3w"]
+size = Vector3(0.08, 0.24, 0.03)
+
+[sub_resource type="BoxMesh" id="BoxMesh_ar3jd"]
+size = Vector3(0.08, 0.07, 0.15)
+
+[sub_resource type="BoxMesh" id="BoxMesh_5reoc"]
+size = Vector3(0.08, 0.24, 0.03)
+
+[sub_resource type="BoxMesh" id="BoxMesh_rdw61"]
+size = Vector3(0.08, 0.07, 0.15)
+
+[sub_resource type="BoxMesh" id="BoxMesh_21vv7"]
+size = Vector3(0.08, 0.24, 0.03)
+
+[sub_resource type="BoxMesh" id="BoxMesh_pvvk3"]
+size = Vector3(0.08, 0.07, 0.15)
+
+[node name="SockLine" type="Node3D" unique_id=898994027]
+
+[node name="Line" type="MeshInstance3D" parent="." unique_id=118181249]
+material_override = ExtResource("1_l8hvh")
+mesh = SubResource("BoxMesh_5ns58")
+
+[node name="Sock1" type="Node3D" parent="." unique_id=1698223646]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.45, 0, 0)
+script = ExtResource("2_0ylsc")
+
+[node name="Leg" type="MeshInstance3D" parent="Sock1" unique_id=1017988020]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.12, 0)
+material_override = ExtResource("3_vwse6")
+mesh = SubResource("BoxMesh_2xc3w")
+
+[node name="Foot" type="MeshInstance3D" parent="Sock1" unique_id=1848371098]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.27, 0.05)
+material_override = ExtResource("3_vwse6")
+mesh = SubResource("BoxMesh_ar3jd")
+
+[node name="Sock2" type="Node3D" parent="." unique_id=914084029]
+script = ExtResource("2_0ylsc")
+period = 4.0
+phase = 0.3
+
+[node name="Leg" type="MeshInstance3D" parent="Sock2" unique_id=1311805512]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.12, 0)
+material_override = ExtResource("4_oarxu")
+mesh = SubResource("BoxMesh_5reoc")
+
+[node name="Foot" type="MeshInstance3D" parent="Sock2" unique_id=256908153]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.27, 0.05)
+material_override = ExtResource("4_oarxu")
+mesh = SubResource("BoxMesh_rdw61")
+
+[node name="Sock3" type="Node3D" parent="." unique_id=579456471]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.45, 0, 0)
+script = ExtResource("2_0ylsc")
+period = 4.4
+phase = 0.6
+
+[node name="Leg" type="MeshInstance3D" parent="Sock3" unique_id=236542039]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.12, 0)
+material_override = ExtResource("5_lt4mh")
+mesh = SubResource("BoxMesh_21vv7")
+
+[node name="Foot" type="MeshInstance3D" parent="Sock3" unique_id=1486820842]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.27, 0.05)
+material_override = ExtResource("5_lt4mh")
+mesh = SubResource("BoxMesh_pvvk3")

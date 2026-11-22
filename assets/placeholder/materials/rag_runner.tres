@@ -1,0 +1,8 @@
+[gd_resource type="StandardMaterial3D" format=3 uid="uid://blqey1kprp5yd"]
+
+[ext_resource type="Texture2D" path="res://assets/placeholder/textures/rag_runner.png" id="1_d1f0g"]
+
+[resource]
+albedo_texture = ExtResource("1_d1f0g")
+metallic_specular = 0.08
+texture_filter = 0

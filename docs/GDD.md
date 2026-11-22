@@ -41,9 +41,24 @@ The ship's bell marks the day, as on real ships: eight bells calls everyone down
     - **The navigator's corner**, by the riveted brass porthole: a pinned sea chart with dividers, a spyglass, a rolled chart and a compass.
     - **Stores:** barrels, sacks and crates, a fishing net with cork floats, a lifebuoy, a rope coil.
     - **Little lives:** a recipe pinned above the counters, a wool jacket dropped over a bench, a ship in a bottle on the bookshelf, drying herbs, golden motes in the air.
-  - The free camera works everywhere in the galley; the walkways (doorway to counters, round the table, between the table and the hearth) stay open, and tests walk them.
+  - The free camera works everywhere in the galley; the walkways (doorway to counters, round the table, between the table and the hearth) stay open, and tests walk them. Its walls run right up to the deck, so there's no gap above its ceiling.
+  - **The bunk room:** aft of the galley, through its open door (and at the foot of the hatch ramp). The warmest, safest place on the ship: where you wake up, and where the crew sleep through the storm. Low, tight and crammed rather than roomy.
+    - **A low plank ceiling** 3 m up, with heavy beams across the ship resting on headers over the bunk fronts, so the bunks look built into the hull. Over the ramp's foot it stays open up through the hatch. The ceiling stops the camera, so it never rises above it.
+    - **Bunks down both sides**, two tiers to a bay, with ladders, drawers and woollen curtains (madder red, mustard or rust): bunched open, or drawn where someone's asleep. Each bed has a ticking mattress you can see the thickness of, a sheet and chunky pillows, and is either neatly made (quilt turned back, a striped wool blanket folded at the foot) or slept in (the quilt thrown back in a heap). A drawn curtain with a light on behind it glows. Every crew bay has a lamp or a candle lit, and each bunk is somebody's:
+      - **Forward starboard:** the fiddler (slept in, the fiddle by the pillow, a child's drawing pinned up) under the navigator's mate (a compass, a rolled chart and dividers, a hand-drawn map pinned up).
+      - **Middle starboard:** the artist, by the porthole (a sketchbook, drawings pinned round the window) under the angler (the rod along the bunk, lures swaying on a line).
+      - **Aft starboard:** yours (see below), under a spare bunk piled with travel bags.
+      - **Middle port:** the reader (slept in, a stack of books, one left open face down, spectacles, a shirt over the ladder) under the knitter, reading by candlelight behind drawn curtains.
+      - **Aft port:** the old bosun, asleep behind drawn curtains, his navy coat on the bunk post, under the collector (shells, a bottle, a carved whale and framed pictures set out on the quilt).
+      - Boots stand by the ladders, one pair kicked over.
+    - **The stove nook** in the middle is where the crew relax together: a little pot-bellied iron stove on a stone slab, its door ajar on the fire, a kettle on top and a copper pot beside it, socks drying on its brass rail and its pipe up through the ceiling. Round it on an oval braided rug: a small round table with mugs, a card game and a candle, two stools (an accordion set down on one), a sea chest with cushions to sit on, a basket of knitting, boots drying, and a line of socks between the beams above.
+    - **Two canvas hammocks** hang along the stern beam either side of the windows, well above your head and out of the walkways, and roll with the sea. One is slept in and empty; in the other someone's curled up asleep, a woolly hat on the pillow and one socked foot poking out.
+    - **The stern wall** has two round windows onto the night, a shelf between them with candles, and sea chests below (blankets folded on one).
+    - **The port stern corner** is the crew's shared storage: a chest of drawers in faded teal paint (its top drawer left open, a scarf trailing out) with keepsakes and a candle on top and a hand-drawn map pinned above, a coat rack with a wool coat and cap, a net bag of floats and twine hung from a beam, and bags stowed on top of the locker. The space in front of the port bunks stays clear.
+    - **By the galley wall:** stencilled boxes (SAIL, ROPE, TEA), crates and a rope coil, oilskins on pegs and a shelf. A rag-rug runner runs along the front, and a sheepskin lies by your bunk.
+    - Light gathers in pools: the stove's fire (which casts shadows) and one softened lantern over the door side (the other shadow), a softer lantern over your side, the bunks' lamps and candles, candles on the table, the stern shelf and the chest of drawers, and cold blue moonlight from the windows. The room's own ambient light is dim but not black, so the corners stay dark brown.
   - **The pantry:** a tall cupboard at the end of the galley's row (see Storage).
-  - **Your bunk.**
+  - **Your bunk:** the aft starboard lower bunk in the bunk room, under a gold patchwork quilt, its lantern lit. By the pillow: a shell from a beach you can't name, a folded note in your own hand, and a cushion where the lantern likes to sit.
 - The ship **really moves** between islands, but it never tilts or rocks: the deck stays level and still, so nothing slides off the counters and nobody feels seasick. The sea's motion shows in the water moving around the hull and in hanging things that swing, like the lanterns.
 - **Mooring:** at an island, a **gangplank** connects the ship to the shore. **Ring the ship's bell** while aboard to set sail.
 
@@ -84,7 +99,7 @@ When you lose a fight, **the lantern pulls you out**, echoing how you met. You r
 
 ### Camera
 - **Free third-person camera** everywhere you walk: on deck, below deck in the galley, and on islands, orbited with the right stick or mouse. A spring arm pulls it in when a wall or the mast is in the way. It keeps its direction in the world when the ship turns, rather than turning with the deck. With a mouse, the cursor is captured while playing: Esc frees it and a click captures it again.
-- **The galley is roomy enough for the free camera** (a 4 m ceiling and the full width of the hull), so cooking uses the same camera and controls as everywhere else. We tried a fixed shot there first (#63), but it looked at the player's back while they cooked at the counters.
+- **The galley is roomy enough for the free camera** (a plank ceiling 2.65 m up and the full width of the hull), so cooking uses the same camera and controls as everywhere else. Below deck, the ceilings and their beams stop the camera's spring arm, so it's pulled in under them rather than rising into the space below the deck. We tried a fixed shot there first (#63), but it looked at the player's back while they cooked at the counters.
 - **Fixed, framed shots** are kept for spaces too tight for the free camera, like your bunk or an island shop, as in OoT's houses. A *camera zone* blends to its shot as you walk in, and back to the free camera's angle from before as you leave. The camera can't be turned in a fixed shot. Movement always follows the active camera, except that if the camera switches while you hold a direction, you keep walking the same way until you let go or swing the stick, so a switch never turns you round.
 - **Lock-on** frames the player and the target together.
 
@@ -188,7 +203,7 @@ N64 / OoT style with modern rendering. The reference is a ship's galley at night
   - **Warm inside, cold outside:** the only cold colour in the galley is the blue moonlight through the porthole.
   - **A shadow budget:** point-light shadows are costly, so in a room only the lights that matter most cast them (in the galley, the hearth and the two lanterns over the table).
 - **Particles:** steam from pots, drifting embers, chimney smoke, fireflies.
-- **Small motion everywhere:** flickering firelight, swinging lanterns, a swaying net and bell, mugs rocking with the sea. Slow and small, so nothing on screen lurches.
+- **Small motion everywhere:** flickering firelight, swinging lanterns, a swaying net and bell, mugs rocking with the sea, candle flames wavering, hammocks rolling, curtains and blanket ends swaying, socks stirring in a stove's warm air. Slow and small, so nothing on screen lurches.
 - **The N64 recipe:** every surface has a small texture (32 x 32) stretched so its pixels show, about 64 per metre. Big things are simple textured blocks (tables, benches, barrels, the stove). Planks run on floors, ceilings and walls.
 - **Third-party models** (KayKit, Tiny Treats) are only for small detailed props (pots, jars, bread, cheese). They keep their colours under a chunky grain so they don't read as smooth modern toys. They dress our greybox when downloaded; gameplay always lives on our own shapes, so the game works without them.
 - **Sea and sky:** fog, good-looking water, weather.

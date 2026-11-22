@@ -1,0 +1,60 @@
+[gd_scene format=3 uid="uid://263t4afibv8g"]
+
+[ext_resource type="Material" path="res://assets/placeholder/materials/dark_prop_wood.tres" id="1_hrbll"]
+[ext_resource type="Material" path="res://assets/placeholder/materials/rope.tres" id="2_g4ipi"]
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_1ambp"]
+top_radius = 0.02
+bottom_radius = 0.02
+height = 0.14
+radial_segments = 6
+rings = 1
+
+[sub_resource type="TorusMesh" id="TorusMesh_loo8l"]
+inner_radius = 0.15
+outer_radius = 0.19000001
+rings = 12
+ring_segments = 4
+
+[sub_resource type="TorusMesh" id="TorusMesh_d62kc"]
+inner_radius = 0.138
+outer_radius = 0.178
+rings = 12
+ring_segments = 4
+
+[sub_resource type="TorusMesh" id="TorusMesh_dnqt7"]
+inner_radius = 0.126
+outer_radius = 0.16600001
+rings = 12
+ring_segments = 4
+
+[sub_resource type="BoxMesh" id="BoxMesh_nug8c"]
+size = Vector3(0.035, 0.3261901, 0.035)
+
+[node name="RopeCoil" type="Node3D" unique_id=2094268251]
+
+[node name="Peg" type="MeshInstance3D" parent="." unique_id=664877871]
+transform = Transform3D(1, 0, 0, 0, -4.371139e-08, -1, 0, 1, -4.371139e-08, 0, 0, 0.07)
+material_override = ExtResource("1_hrbll")
+mesh = SubResource("CylinderMesh_1ambp")
+
+[node name="Coil1" type="MeshInstance3D" parent="." unique_id=718746025]
+transform = Transform3D(1, 0, 0, 0, -4.371139e-08, -1, 0, 1, -4.371139e-08, 0, -0.17, 0.05)
+material_override = ExtResource("2_g4ipi")
+mesh = SubResource("TorusMesh_loo8l")
+
+[node name="Coil2" type="MeshInstance3D" parent="." unique_id=640741177]
+transform = Transform3D(0.98768836, -0.15643448, 0, -6.837968e-09, -4.317323e-08, -1, 0.15643448, 0.98768836, -4.371139e-08, 0, -0.182, 0.075)
+material_override = ExtResource("2_g4ipi")
+mesh = SubResource("TorusMesh_d62kc")
+
+[node name="Coil3" type="MeshInstance3D" parent="." unique_id=1473671527]
+transform = Transform3D(0.95105654, -0.309017, 0, -1.3507562e-08, -4.1572e-08, -1, 0.309017, 0.95105654, -4.371139e-08, 0, -0.194, 0.1)
+material_override = ExtResource("2_g4ipi")
+mesh = SubResource("TorusMesh_dnqt7")
+
+[node name="Tail" type="MeshInstance3D" parent="." unique_id=742874132]
+transform = Transform3D(0.9829371, 0.18394184, 0, 0.18358363, -0.98102295, 0.062378295, 0.011473979, -0.061313946, -0.9980526, 0.15, -0.46, 0.09)
+material_override = ExtResource("2_g4ipi")
+cast_shadow = 0
+mesh = SubResource("BoxMesh_nug8c")

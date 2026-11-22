@@ -1,0 +1,11 @@
+[gd_resource type="StandardMaterial3D" format=3 uid="uid://cxnaxife8ur8t"]
+
+[ext_resource type="Texture2D" path="res://assets/placeholder/textures/braided_rug.png" id="1_0wnte"]
+
+[resource]
+transparency = 2
+alpha_scissor_threshold = 0.5
+alpha_antialiasing_mode = 0
+albedo_texture = ExtResource("1_0wnte")
+metallic_specular = 0.08
+texture_filter = 0

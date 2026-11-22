@@ -1,0 +1,9 @@
+[gd_resource type="StandardMaterial3D" format=3 uid="uid://dou8isqsob0dk"]
+
+[ext_resource type="Texture2D" path="res://assets/placeholder/textures/label_tea.png" id="1_c1gy0"]
+
+[resource]
+albedo_texture = ExtResource("1_c1gy0")
+metallic_specular = 0.25
+roughness = 0.9
+texture_filter = 0

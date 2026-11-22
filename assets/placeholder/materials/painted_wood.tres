@@ -1,0 +1,11 @@
+[gd_resource type="StandardMaterial3D" format=3 uid="uid://djwdai2tkj1c3"]
+
+[ext_resource type="Texture2D" path="res://assets/placeholder/textures/painted_wood.png" id="1_bkkkf"]
+
+[resource]
+albedo_texture = ExtResource("1_bkkkf")
+metallic_specular = 0.3
+roughness = 0.85
+uv1_scale = Vector3(4, 4, 4)
+uv1_triplanar = true
+texture_filter = 0

@@ -1,0 +1,182 @@
+[gd_scene format=3 uid="uid://cs6ydcxj57nf3"]
+
+[ext_resource type="Material" path="res://assets/placeholder/materials/dark_prop_wood.tres" id="1_6ue0p"]
+[ext_resource type="Material" path="res://assets/placeholder/materials/iron.tres" id="2_8g0ih"]
+[ext_resource type="Material" path="res://assets/placeholder/materials/brown_wool.tres" id="3_d6fsj"]
+[ext_resource type="Material" path="res://assets/placeholder/materials/wool.tres" id="4_fsuak"]
+[ext_resource type="Material" path="res://assets/placeholder/materials/quilt_green.tres" id="5_13rvu"]
+
+[sub_resource type="BoxMesh" id="BoxMesh_85l88"]
+size = Vector3(0.05, 0.05, 0.32)
+
+[sub_resource type="BoxMesh" id="BoxMesh_85kfu"]
+size = Vector3(0.05, 0.05, 0.32)
+
+[sub_resource type="BoxMesh" id="BoxMesh_ga51e"]
+size = Vector3(0.05, 0.05, 0.32)
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_tuvkv"]
+top_radius = 0.03
+bottom_radius = 0.03
+height = 1.82
+radial_segments = 6
+rings = 1
+
+[sub_resource type="SphereMesh" id="SphereMesh_pnjdp"]
+radius = 0.045
+height = 0.09
+radial_segments = 6
+rings = 3
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_uevnj"]
+top_radius = 0.015
+bottom_radius = 0.015
+height = 0.14
+radial_segments = 5
+rings = 1
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_xoaja"]
+top_radius = 0.015
+bottom_radius = 0.015
+height = 0.14
+radial_segments = 5
+rings = 1
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_vix0l"]
+top_radius = 0.015
+bottom_radius = 0.015
+height = 0.14
+radial_segments = 5
+rings = 1
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_lfmds"]
+top_radius = 0.015
+bottom_radius = 0.015
+height = 0.14
+radial_segments = 5
+rings = 1
+
+[sub_resource type="BoxMesh" id="BoxMesh_87e7p"]
+size = Vector3(0.4, 0.1, 0.16)
+
+[sub_resource type="BoxMesh" id="BoxMesh_4dqua"]
+size = Vector3(0.44, 0.42, 0.13)
+
+[sub_resource type="BoxMesh" id="BoxMesh_7jnw3"]
+size = Vector3(0.52, 0.44, 0.14)
+
+[sub_resource type="BoxMesh" id="BoxMesh_21g7e"]
+size = Vector3(0.11, 0.6, 0.11)
+
+[sub_resource type="BoxMesh" id="BoxMesh_lk0f4"]
+size = Vector3(0.11, 0.6, 0.11)
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_f68le"]
+top_radius = 0.08
+bottom_radius = 0.1
+height = 0.1
+radial_segments = 8
+rings = 1
+
+[sub_resource type="BoxMesh" id="BoxMesh_jfd5j"]
+size = Vector3(0.12, 0.015, 0.1)
+
+[sub_resource type="BoxMesh" id="BoxMesh_4avpy"]
+size = Vector3(0.1, 0.5, 0.02)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_2xidf"]
+size = Vector3(0.36, 1.9, 0.36)
+
+[node name="CoatRack" type="StaticBody3D" unique_id=1592373296]
+
+[node name="Foot1" type="MeshInstance3D" parent="." unique_id=1780581147]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.025, 0.14)
+material_override = ExtResource("1_6ue0p")
+mesh = SubResource("BoxMesh_85l88")
+
+[node name="Foot2" type="MeshInstance3D" parent="." unique_id=1226182775]
+transform = Transform3D(-0.50000006, 0, 0.8660254, 0, 1, 0, -0.8660254, 0, -0.50000006, 0.12124356, 0.025, -0.07)
+material_override = ExtResource("1_6ue0p")
+mesh = SubResource("BoxMesh_85kfu")
+
+[node name="Foot3" type="MeshInstance3D" parent="." unique_id=1824894464]
+transform = Transform3D(-0.4999999, 0, -0.86602545, 0, 1, 0, 0.86602545, 0, -0.4999999, -0.12124356, 0.025, -0.07)
+material_override = ExtResource("1_6ue0p")
+mesh = SubResource("BoxMesh_ga51e")
+
+[node name="Pole" type="MeshInstance3D" parent="." unique_id=1855815007]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.93, 0)
+material_override = ExtResource("1_6ue0p")
+mesh = SubResource("CylinderMesh_tuvkv")
+
+[node name="Knob" type="MeshInstance3D" parent="." unique_id=1508899241]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.86, 0)
+material_override = ExtResource("1_6ue0p")
+mesh = SubResource("SphereMesh_pnjdp")
+
+[node name="Peg1" type="MeshInstance3D" parent="." unique_id=1737648633]
+transform = Transform3D(0.921061, 0.37202552, 0.115081005, 0, 0.29552025, -0.95533645, -0.38941833, 0.8799231, 0.27219218, 0.027259285, 1.7, 0.06447427)
+material_override = ExtResource("2_8g0ih")
+mesh = SubResource("CylinderMesh_uevnj")
+
+[node name="Peg2" type="MeshInstance3D" parent="." unique_id=1452399264]
+transform = Transform3D(-0.38941836, 0.8799231, 0.27219218, 0, 0.29552025, -0.95533645, -0.921061, -0.37202555, -0.11508101, 0.06447427, 1.7, -0.027259285)
+material_override = ExtResource("2_8g0ih")
+mesh = SubResource("CylinderMesh_xoaja")
+
+[node name="Peg3" type="MeshInstance3D" parent="." unique_id=1525786715]
+transform = Transform3D(-0.92106104, -0.3720255, -0.11508099, 0, 0.29552025, -0.95533645, 0.3894183, -0.87992316, -0.27219218, -0.027259285, 1.7, -0.06447427)
+material_override = ExtResource("2_8g0ih")
+mesh = SubResource("CylinderMesh_vix0l")
+
+[node name="Peg4" type="MeshInstance3D" parent="." unique_id=1871343582]
+transform = Transform3D(0.389418, -0.8799233, -0.2721922, 0, 0.29552025, -0.95533645, 0.92106116, 0.37202522, 0.11508091, -0.06447427, 1.7, 0.027259285)
+material_override = ExtResource("2_8g0ih")
+mesh = SubResource("CylinderMesh_lfmds")
+
+[node name="WoolCoat" type="Node3D" parent="." unique_id=1147314118]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.72, 0.06)
+
+[node name="Shoulders" type="MeshInstance3D" parent="WoolCoat" unique_id=2091160024]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.07, 0.04)
+material_override = ExtResource("3_d6fsj")
+mesh = SubResource("BoxMesh_87e7p")
+
+[node name="Body" type="MeshInstance3D" parent="WoolCoat" unique_id=1803047143]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.32, 0.05)
+material_override = ExtResource("3_d6fsj")
+mesh = SubResource("BoxMesh_4dqua")
+
+[node name="Skirt" type="MeshInstance3D" parent="WoolCoat" unique_id=470791454]
+transform = Transform3D(1, 0, 0, 0, 0.9986295, 0.05233596, 0, -0.05233596, 0.9986295, 0, -0.74, 0.06)
+material_override = ExtResource("3_d6fsj")
+mesh = SubResource("BoxMesh_7jnw3")
+
+[node name="SleeveL" type="MeshInstance3D" parent="WoolCoat" unique_id=1886441374]
+transform = Transform3D(0.9961947, 0.08715574, 0, -0.08715574, 0.9961947, 0, 0, 0, 1, -0.26, -0.38, 0.06)
+material_override = ExtResource("3_d6fsj")
+mesh = SubResource("BoxMesh_21g7e")
+
+[node name="SleeveR" type="MeshInstance3D" parent="WoolCoat" unique_id=52364213]
+transform = Transform3D(0.9961947, -0.08715574, 0, 0.08715574, 0.9961947, 0, 0, 0, 1, 0.26, -0.38, 0.06)
+material_override = ExtResource("3_d6fsj")
+mesh = SubResource("BoxMesh_lk0f4")
+
+[node name="Cap" type="MeshInstance3D" parent="." unique_id=1972162351]
+transform = Transform3D(0.9848077, -0.17364818, 0, 0.17364818, 0.9848077, 0, 0, 0, 1, -0.02, 1.93, 0)
+material_override = ExtResource("4_fsuak")
+mesh = SubResource("CylinderMesh_f68le")
+
+[node name="Brim" type="MeshInstance3D" parent="Cap" unique_id=672141043]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.08, -0.04, 0)
+material_override = ExtResource("4_fsuak")
+mesh = SubResource("BoxMesh_jfd5j")
+
+[node name="ScarfFront" type="MeshInstance3D" parent="." unique_id=1993613194]
+transform = Transform3D(0.99939084, -0.034899496, 0, 0.034814484, 0.9969564, -0.06975647, 0.0024344656, 0.06971398, 0.9975641, 0, 1.45, -0.1)
+material_override = ExtResource("5_13rvu")
+mesh = SubResource("BoxMesh_4avpy")
+
+[node name="Shape" type="CollisionShape3D" parent="." unique_id=1451843823]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.95, 0)
+shape = SubResource("BoxShape3D_2xidf")

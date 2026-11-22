@@ -1,0 +1,77 @@
+[gd_scene format=3 uid="uid://7y573tcc53og"]
+
+[ext_resource type="Material" path="res://assets/placeholder/materials/leather.tres" id="1_bii3n"]
+[ext_resource type="Material" path="res://assets/placeholder/materials/linen.tres" id="2_7ufl4"]
+[ext_resource type="Material" path="res://assets/placeholder/materials/brass.tres" id="3_lddcl"]
+
+[sub_resource type="BoxMesh" id="BoxMesh_3j834"]
+size = Vector3(0.12, 0.012, 0.19)
+
+[sub_resource type="BoxMesh" id="BoxMesh_b12u0"]
+size = Vector3(0.11, 0.02, 0.18)
+
+[sub_resource type="BoxMesh" id="BoxMesh_7el0j"]
+size = Vector3(0.12, 0.012, 0.19)
+
+[sub_resource type="BoxMesh" id="BoxMesh_lgu8n"]
+size = Vector3(0.11, 0.02, 0.18)
+
+[sub_resource type="BoxMesh" id="BoxMesh_h4ggt"]
+size = Vector3(0.02, 0.02, 0.19)
+
+[sub_resource type="TorusMesh" id="TorusMesh_166t0"]
+inner_radius = 0.022
+outer_radius = 0.028
+rings = 8
+ring_segments = 3
+
+[sub_resource type="TorusMesh" id="TorusMesh_q0gfi"]
+inner_radius = 0.022
+outer_radius = 0.028
+rings = 8
+ring_segments = 3
+
+[sub_resource type="BoxMesh" id="BoxMesh_wborm"]
+size = Vector3(0.012, 0.004, 0.004)
+
+[node name="HalfReadBook" type="Node3D" unique_id=988595313]
+
+[node name="CoverL" type="MeshInstance3D" parent="." unique_id=2112957165]
+transform = Transform3D(0.9702957, -0.2419219, 0, 0.2419219, 0.9702957, 0, 0, 0, 1, -0.058, 0.025, 0)
+material_override = ExtResource("1_bii3n")
+mesh = SubResource("BoxMesh_3j834")
+
+[node name="PagesL" type="MeshInstance3D" parent="." unique_id=1036042078]
+transform = Transform3D(0.9702957, -0.2419219, 0, 0.2419219, 0.9702957, 0, 0, 0, 1, -0.055, 0.012, 0)
+material_override = ExtResource("2_7ufl4")
+mesh = SubResource("BoxMesh_b12u0")
+
+[node name="CoverR" type="MeshInstance3D" parent="." unique_id=1179309385]
+transform = Transform3D(0.9702957, 0.2419219, 0, -0.2419219, 0.9702957, 0, 0, 0, 1, 0.058, 0.025, 0)
+material_override = ExtResource("1_bii3n")
+mesh = SubResource("BoxMesh_7el0j")
+
+[node name="PagesR" type="MeshInstance3D" parent="." unique_id=1871726619]
+transform = Transform3D(0.9702957, 0.2419219, 0, -0.2419219, 0.9702957, 0, 0, 0, 1, 0.055, 0.012, 0)
+material_override = ExtResource("2_7ufl4")
+mesh = SubResource("BoxMesh_lgu8n")
+
+[node name="Spine" type="MeshInstance3D" parent="." unique_id=682392758]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.04, 0)
+material_override = ExtResource("1_bii3n")
+mesh = SubResource("BoxMesh_h4ggt")
+
+[node name="LensL" type="MeshInstance3D" parent="." unique_id=126995654]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.17, 0.006, 0.08)
+material_override = ExtResource("3_lddcl")
+mesh = SubResource("TorusMesh_166t0")
+
+[node name="LensR" type="MeshInstance3D" parent="." unique_id=1493826487]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.23, 0.006, 0.08)
+material_override = ExtResource("3_lddcl")
+mesh = SubResource("TorusMesh_q0gfi")
+
+[node name="Bridge" type="MeshInstance3D" parent="." unique_id=1445533546]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.2, 0.006, 0.08)
+material_override = ExtResource("3_lddcl")
+mesh = SubResource("BoxMesh_wborm")

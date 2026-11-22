@@ -1,0 +1,9 @@
+[gd_resource type="StandardMaterial3D" format=3 uid="uid://cxsxm2yyp2ehe"]
+
+[ext_resource type="Texture2D" path="res://assets/placeholder/textures/label_rope.png" id="1_p0lf7"]
+
+[resource]
+albedo_texture = ExtResource("1_p0lf7")
+metallic_specular = 0.25
+roughness = 0.9
+texture_filter = 0

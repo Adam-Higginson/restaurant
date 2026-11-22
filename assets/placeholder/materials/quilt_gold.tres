@@ -1,0 +1,10 @@
+[gd_resource type="StandardMaterial3D" format=3 uid="uid://lx2btr3nedp3"]
+
+[ext_resource type="Texture2D" path="res://assets/placeholder/textures/quilt_gold.png" id="1_5tu6w"]
+
+[resource]
+albedo_texture = ExtResource("1_5tu6w")
+metallic_specular = 0.1
+uv1_scale = Vector3(1.6, 1.6, 1.6)
+uv1_triplanar = true
+texture_filter = 0

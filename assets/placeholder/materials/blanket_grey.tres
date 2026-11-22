@@ -1,0 +1,10 @@
+[gd_resource type="StandardMaterial3D" format=3 uid="uid://c8g3jar1r225t"]
+
+[ext_resource type="Texture2D" path="res://assets/placeholder/textures/blanket_grey.png" id="1_6tjav"]
+
+[resource]
+albedo_texture = ExtResource("1_6tjav")
+metallic_specular = 0.1
+uv1_scale = Vector3(3, 3, 3)
+uv1_triplanar = true
+texture_filter = 0

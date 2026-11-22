@@ -102,6 +102,20 @@ func test_no_more_than_three_galley_lights_cast_shadows() -> void:
 			"Lights casting shadows in the galley: %s" % [shadowed]).has_size(3)
 
 
+func test_the_galley_walls_reach_the_deck() -> void:
+	# No gap between the galley's walls and the deck above (5 m up the ship)
+	# to see into from the bunk room or the ramp.
+	var ship: Ship = new_moored_ship_with_player(Vector3(0, 1.05, 6))[0] as Ship
+	for name: String in ["CorridorWall", "PartitionStarboard", "PartitionLintel"]:
+		var wall: MeshInstance3D = ship.get_node("Visuals/" + name) as MeshInstance3D
+		var top: float = wall.position.y + (wall.mesh as BoxMesh).size.y / 2.0
+		assert_float(top).override_failure_message("%s stops at %.2f" % [name, top]) \
+				.is_greater_equal(4.99)
+		var shape: CollisionShape3D = ship.get_node(name + "Shape") as CollisionShape3D
+		var shape_top: float = shape.position.y + (shape.shape as BoxShape3D).size.y / 2.0
+		assert_float(shape_top).is_greater_equal(4.99)
+
+
 func test_the_galley_has_its_own_dim_ambient_light() -> void:
 	# Inside, the dark warm ambient of the galley's probe replaces the night
 	# sky's, so the corners stay dark.

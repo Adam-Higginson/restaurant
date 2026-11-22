@@ -1,0 +1,54 @@
+[gd_scene format=3 uid="uid://colyks0ydwmw8"]
+
+[ext_resource type="Material" path="res://assets/placeholder/materials/prop_wood.tres" id="1_qnra3"]
+[ext_resource type="Material" path="res://assets/placeholder/materials/dark_prop_wood.tres" id="2_681r7"]
+
+[sub_resource type="BoxMesh" id="BoxMesh_fkt63"]
+size = Vector3(0.21, 0.05, 0.17)
+
+[sub_resource type="BoxMesh" id="BoxMesh_ix0x7"]
+size = Vector3(0.17, 0.05, 0.14)
+
+[sub_resource type="BoxMesh" id="BoxMesh_76nlr"]
+size = Vector3(0.13, 0.05, 0.06)
+
+[sub_resource type="BoxMesh" id="BoxMesh_jtkex"]
+size = Vector3(0.04, 0.03, 0.26)
+
+[sub_resource type="BoxMesh" id="BoxMesh_w3yh1"]
+size = Vector3(0.05, 0.05, 0.05)
+
+[sub_resource type="BoxMesh" id="BoxMesh_tmtl0"]
+size = Vector3(0.015, 0.015, 0.6)
+
+[node name="Fiddle" type="Node3D" unique_id=1671450306]
+
+[node name="LowerBout" type="MeshInstance3D" parent="." unique_id=1052825515]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.025, 0.1)
+material_override = ExtResource("1_qnra3")
+mesh = SubResource("BoxMesh_fkt63")
+
+[node name="UpperBout" type="MeshInstance3D" parent="." unique_id=607627228]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.025, -0.08)
+material_override = ExtResource("1_qnra3")
+mesh = SubResource("BoxMesh_ix0x7")
+
+[node name="Waist" type="MeshInstance3D" parent="." unique_id=1657280171]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.025, 0.01)
+material_override = ExtResource("1_qnra3")
+mesh = SubResource("BoxMesh_76nlr")
+
+[node name="Neck" type="MeshInstance3D" parent="." unique_id=1976762594]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.04, -0.27)
+material_override = ExtResource("2_681r7")
+mesh = SubResource("BoxMesh_jtkex")
+
+[node name="Scroll" type="MeshInstance3D" parent="." unique_id=1614348249]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.05, -0.42)
+material_override = ExtResource("2_681r7")
+mesh = SubResource("BoxMesh_w3yh1")
+
+[node name="Bow" type="MeshInstance3D" parent="." unique_id=1624449352]
+transform = Transform3D(0.9781476, 0, 0.2079117, 0, 1, 0, -0.2079117, 0, 0.9781476, 0.16, 0.01, -0.02)
+material_override = ExtResource("2_681r7")
+mesh = SubResource("BoxMesh_tmtl0")

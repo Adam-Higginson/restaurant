@@ -1,0 +1,55 @@
+[gd_scene format=3 uid="uid://gwhm4t5nlqpg"]
+
+[ext_resource type="Material" path="res://assets/placeholder/materials/red_cloth.tres" id="1_csgwy"]
+[ext_resource type="Material" path="res://assets/placeholder/materials/linen.tres" id="2_j07b5"]
+[ext_resource type="Material" path="res://assets/placeholder/materials/recipe.tres" id="3_lny7o"]
+
+[sub_resource type="BoxMesh" id="BoxMesh_nwut0"]
+size = Vector3(0.06, 0.03, 0.09)
+
+[sub_resource type="BoxMesh" id="BoxMesh_vntj3"]
+size = Vector3(0.06, 0.004, 0.09)
+
+[sub_resource type="BoxMesh" id="BoxMesh_25jje"]
+size = Vector3(0.06, 0.004, 0.09)
+
+[sub_resource type="BoxMesh" id="BoxMesh_j2rm2"]
+size = Vector3(0.06, 0.004, 0.09)
+
+[sub_resource type="BoxMesh" id="BoxMesh_rum16"]
+size = Vector3(0.06, 0.004, 0.09)
+
+[sub_resource type="BoxMesh" id="BoxMesh_2s4cc"]
+size = Vector3(0.06, 0.004, 0.09)
+
+[node name="PlayingCards" type="Node3D" unique_id=1616050962]
+
+[node name="Deck" type="MeshInstance3D" parent="." unique_id=1988639237]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.015, 0)
+material_override = ExtResource("1_csgwy")
+mesh = SubResource("BoxMesh_nwut0")
+
+[node name="Card1" type="MeshInstance3D" parent="." unique_id=264793832]
+transform = Transform3D(0.76604444, 0, -0.6427876, 0, 1, 0, 0.6427876, 0, 0.76604444, 0.12, 0.002, 0.04)
+material_override = ExtResource("2_j07b5")
+mesh = SubResource("BoxMesh_vntj3")
+
+[node name="Card2" type="MeshInstance3D" parent="." unique_id=1410516651]
+transform = Transform3D(0.9986295, 0, -0.05233596, 0, 1, 0, 0.05233596, 0, 0.9986295, 0.15, 0.002, -0.06)
+material_override = ExtResource("3_lny7o")
+mesh = SubResource("BoxMesh_25jje")
+
+[node name="Card3" type="MeshInstance3D" parent="." unique_id=412140211]
+transform = Transform3D(0.8290376, 0, 0.5591929, 0, 1, 0, -0.5591929, 0, 0.8290376, -0.12, 0.002, 0.08)
+material_override = ExtResource("2_j07b5")
+mesh = SubResource("BoxMesh_j2rm2")
+
+[node name="Card4" type="MeshInstance3D" parent="." unique_id=450605366]
+transform = Transform3D(0.32556814, 0, 0.94551855, 0, 1, 0, -0.94551855, 0, 0.32556814, -0.08, 0.002, -0.1)
+material_override = ExtResource("3_lny7o")
+mesh = SubResource("BoxMesh_rum16")
+
+[node name="Card5" type="MeshInstance3D" parent="." unique_id=2132997740]
+transform = Transform3D(-0.30901694, 0, 0.95105654, 0, 1, 0, -0.95105654, 0, -0.30901694, 0.02, 0.002, 0.14)
+material_override = ExtResource("2_j07b5")
+mesh = SubResource("BoxMesh_2s4cc")

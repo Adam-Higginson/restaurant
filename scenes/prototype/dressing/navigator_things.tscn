@@ -1,0 +1,66 @@
+[gd_scene format=3 uid="uid://dnnvij51lolcu"]
+
+[ext_resource type="Material" path="res://assets/placeholder/materials/brass.tres" id="1_msyl8"]
+[ext_resource type="Material" path="res://assets/placeholder/materials/linen.tres" id="2_73uxr"]
+[ext_resource type="Material" path="res://assets/placeholder/materials/red_cloth.tres" id="3_er0ve"]
+[ext_resource type="Material" path="res://assets/placeholder/materials/iron.tres" id="4_rxe3a"]
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_qgl1e"]
+top_radius = 0.07
+bottom_radius = 0.07
+height = 0.035
+radial_segments = 10
+rings = 1
+
+[sub_resource type="QuadMesh" id="QuadMesh_cr24b"]
+size = Vector2(0.1, 0.1)
+
+[sub_resource type="BoxMesh" id="BoxMesh_xs1fc"]
+size = Vector3(0.008, 0.004, 0.08)
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_ixrys"]
+top_radius = 0.035
+bottom_radius = 0.035
+height = 0.46
+radial_segments = 7
+rings = 1
+
+[sub_resource type="BoxMesh" id="BoxMesh_kmfsc"]
+size = Vector3(0.01, 0.14766176, 0.01)
+
+[sub_resource type="BoxMesh" id="BoxMesh_ietgv"]
+size = Vector3(0.01, 0.14867415, 0.01)
+
+[node name="NavigatorThings" type="Node3D" unique_id=1018270928]
+
+[node name="Compass" type="MeshInstance3D" parent="." unique_id=1195364820]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.018, 0)
+material_override = ExtResource("1_msyl8")
+mesh = SubResource("CylinderMesh_qgl1e")
+
+[node name="Face" type="MeshInstance3D" parent="Compass" unique_id=428996107]
+transform = Transform3D(1, 0, 0, 0, -4.371139e-08, 1, 0, -1, -4.371139e-08, 0, 0.019, 0)
+material_override = ExtResource("2_73uxr")
+mesh = SubResource("QuadMesh_cr24b")
+
+[node name="Needle" type="MeshInstance3D" parent="Compass" unique_id=348974697]
+transform = Transform3D(0.81915206, 0, 0.57357645, 0, 1, 0, -0.57357645, 0, 0.81915206, 0, 0.022, 0)
+material_override = ExtResource("3_er0ve")
+mesh = SubResource("BoxMesh_xs1fc")
+
+[node name="RolledChart" type="MeshInstance3D" parent="." unique_id=144395035]
+transform = Transform3D(-1.4950176e-08, -0.34202015, 0.9396926, 1, -4.371139e-08, 0, 4.1075268e-08, 0.9396926, 0.34202015, 0.05, 0.035, 0.2)
+material_override = ExtResource("2_73uxr")
+mesh = SubResource("CylinderMesh_ixrys")
+
+[node name="DividerA" type="MeshInstance3D" parent="." unique_id=522396365]
+transform = Transform3D(0.8804945, -0.47405633, 0, 0.007292313, 0.01354447, 0.99988174, -0.47400028, -0.8803904, 0.015382798, -0.185, 0.011, -0.065)
+material_override = ExtResource("4_rxe3a")
+cast_shadow = 0
+mesh = SubResource("BoxMesh_kmfsc")
+
+[node name="DividerB" type="MeshInstance3D" parent="." unique_id=1937500922]
+transform = Transform3D(0.9417528, 0.33630598, 4.656613e-10, -0.004803882, 0.01345224, 0.99989796, 0.33627164, -0.94165665, 0.01428426, -0.125, 0.011, -0.07)
+material_override = ExtResource("4_rxe3a")
+cast_shadow = 0
+mesh = SubResource("BoxMesh_ietgv")
