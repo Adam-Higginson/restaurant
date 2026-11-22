@@ -292,3 +292,24 @@ func test_game_autoload_is_a_game_state() -> void:
 	var game: Node = get_tree().root.get_node_or_null(^"Game")
 	assert_object(game).is_not_null()
 	assert_bool(game is GameState).is_true()
+
+
+func test_you_start_a_boy_and_can_be_made_a_girl() -> void:
+	var state: GameState = _state
+	var changes: Array[PlayerLook.Body] = []
+	state.look_changed.connect(func(body: PlayerLook.Body) -> void: changes.append(body))
+	assert_int(state.look).is_equal(PlayerLook.Body.BOY)
+
+	state.set_look(PlayerLook.Body.GIRL)
+	state.set_look(PlayerLook.Body.GIRL)
+
+	assert_int(state.look).is_equal(PlayerLook.Body.GIRL)
+	assert_array(changes).is_equal([PlayerLook.Body.GIRL])
+
+
+func test_a_look_is_saved_as_a_word_and_read_back() -> void:
+	assert_str(PlayerLook.to_text(PlayerLook.Body.GIRL)).is_equal("girl")
+	assert_str(PlayerLook.to_text(PlayerLook.Body.BOY)).is_equal("boy")
+	assert_int(PlayerLook.from_text("girl")).is_equal(PlayerLook.Body.GIRL)
+	assert_int(PlayerLook.from_text("boy")).is_equal(PlayerLook.Body.BOY)
+	assert_int(PlayerLook.from_text("")).is_equal(PlayerLook.Body.BOY)

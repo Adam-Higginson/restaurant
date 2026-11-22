@@ -14,6 +14,8 @@ signal open_changed(is_open: bool)
 ## Emitted once when [param day] ends, by bed or by the clock, after the
 ## restaurant has closed.
 signal day_ended(day: int)
+## Emitted when the player's look changes (see [method set_look]).
+signal look_changed(look: PlayerLook.Body)
 
 const STARTING_MONEY: int = 50
 
@@ -56,6 +58,13 @@ var stats: DayStats:
 		return _stats
 	set(_value):
 		push_error("GameState: stats can't be replaced, use stats.reset()")
+## Who the player is: a boy or a girl. Chosen when a new voyage begins, and
+## kept in the save.
+var look: PlayerLook.Body:
+	get:
+		return _look
+	set(_value):
+		push_error("GameState: look is read-only, use set_look()")
 var is_open: bool:
 	get:
 		return _is_open
@@ -74,6 +83,7 @@ var _stats: DayStats = DayStats.new()
 var _memories: MemoryBook = MemoryBook.new(Catalog.load_default().memories)
 var _dialogue: DialogueState = DialogueState.new()
 var _is_open: bool = false
+var _look: PlayerLook.Body = PlayerLook.Body.BOY
 var _is_day_over: bool = false
 
 
@@ -94,6 +104,15 @@ func new_game() -> void:
 	_clock.resume(self)
 	_set_day(1)
 	set_open(false)
+
+
+## Makes the player [param body]. Emits [signal look_changed] only when it
+## actually changes.
+func set_look(body: PlayerLook.Body) -> void:
+	if _look == body:
+		return
+	_look = body
+	look_changed.emit(_look)
 
 
 func can_afford(amount: int) -> bool:

@@ -22,6 +22,7 @@
 [ext_resource type="PackedScene" uid="uid://l1ghth0use1sl" path="res://scenes/prototype/islands/lighthouse_island.tscn" id="14_island"]
 [ext_resource type="Script" path="res://scripts/story/opening.gd" id="15_opening"]
 [ext_resource type="PackedScene" path="res://ui/screen_fade.tscn" id="16_fade"]
+[ext_resource type="PackedScene" path="res://ui/look_choice.tscn" id="90_look"]
 
 [sub_resource type="FastNoiseLite" id="Noise_Cloud"]
 frequency = 0.008
@@ -272,6 +273,8 @@ weather = NodePath("../Weather")
 script = ExtResource("15_opening")
 player = NodePath("../Player")
 ship = NodePath("../Ship")
+
+[node name="LookChoice" parent="Opening" instance=ExtResource("90_look")]
 
 [node name="ScreenFade" parent="Opening" unique_id=1418227363 instance=ExtResource("16_fade")]
 layer = 20

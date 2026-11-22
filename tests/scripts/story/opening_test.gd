@@ -18,6 +18,7 @@ func before_test() -> void:
 
 func after_test() -> void:
 	Game.dialogue.reset()
+	Game.set_look(PlayerLook.Body.BOY)
 
 
 func test_the_intro_plays_from_black_to_the_ship_being_yours() -> void:
@@ -169,6 +170,42 @@ func test_skipped_you_start_where_you_stand() -> void:
 	assert_bool(opening.is_playing).is_false()
 	assert_bool(_conversation.is_active()).is_false()
 	assert_float(_ship.to_local(_player.global_position).y).is_greater(5.0)
+
+
+func test_a_new_voyage_asks_who_you_are_before_the_intro() -> void:
+	var opening: Opening = _stage(false)
+	var choice: LookChoice = _add_choice(opening)
+	var runner: GdUnitSceneRunner = scene_runner(_ship.get_parent())
+	await physics_ticks(runner, 10)
+
+	assert_bool(choice.is_open()).is_true()
+	assert_bool(_conversation.is_active()).is_false()
+	assert_bool(_player.controls_enabled).is_false()
+
+	choice.choose(PlayerLook.Body.GIRL)
+	await physics_ticks(runner, 5)
+
+	assert_bool(choice.is_open()).is_false()
+	assert_int(Game.look).is_equal(PlayerLook.Body.GIRL)
+	assert_bool(_conversation.is_active()).is_true()
+
+
+func test_without_choosing_the_intro_starts_at_once() -> void:
+	var opening: Opening = _stage(false)
+	var choice: LookChoice = _add_choice(opening)
+	opening.choose_look = false
+	var runner: GdUnitSceneRunner = scene_runner(_ship.get_parent())
+	await physics_ticks(runner, 10)
+
+	assert_bool(choice.is_open()).is_false()
+	assert_bool(_conversation.is_active()).is_true()
+
+
+# Gives [param opening] its "Who are you?" screen, as sea.tscn has it.
+func _add_choice(opening: Opening) -> LookChoice:
+	var choice: LookChoice = (load("res://ui/look_choice.tscn") as PackedScene).instantiate() 			as LookChoice
+	opening.add_child(choice)
+	return choice
 
 
 # Waits until the cutscene is reading [param section], and returns whether

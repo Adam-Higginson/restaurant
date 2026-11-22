@@ -5,8 +5,10 @@ extends Node
 ## and you wake by your bunk at night with the storm outside, the lantern at
 ## your shoulder and the captain in the doorway. Then the ship is yours.
 ##
-## A saved voyage carries on instead: its day as the title ("Day 3.
-## Morning"), and the lantern welcomes you back.
+## Before a new voyage's cutscene, over the black, you're asked who you are
+## (a boy or a girl: its [LookChoice] child). A saved voyage carries on
+## instead, as whoever you were: its day as the title ("Day 3. Morning"), and
+## the lantern welcomes you back.
 ##
 ## Set [member skip] to start straight on deck instead (tests and tools do).
 
@@ -28,6 +30,9 @@ signal finished
 @export var start_section: StringName = DialogueTree.START
 ## Whether to carry on a saved voyage, if there is one.
 @export var load_save: bool = true
+## Whether a new voyage asks who you are first. Off, you're whoever the game
+## already says ([member GameState.look]).
+@export var choose_look: bool = true
 ## How long a saved voyage's title holds before the fade, in seconds.
 @export var title_seconds: float = 2.5
 
@@ -39,6 +44,7 @@ var is_playing: bool:
 var _playing: bool = false
 
 @onready var _fade: ScreenFade = $ScreenFade
+@onready var _look_choice: LookChoice = get_node_or_null("LookChoice") as LookChoice
 
 
 func _ready() -> void:
@@ -62,6 +68,7 @@ func _play() -> void:
 		spirit.snap_to_player()
 	var saved: Dictionary = SaveGame.read() if load_save else {}
 	if saved.is_empty():
+		await _choose_look()
 		await _begin_voyage()
 	else:
 		await _carry_on(saved, spirit)
@@ -71,6 +78,15 @@ func _play() -> void:
 		# A welcome back: see data/dialogue/moments.dlg.
 		spirit.remark(&"returned")
 	finished.emit()
+
+
+# A new voyage: who are you? Skipped without a choice screen to ask with.
+func _choose_look() -> void:
+	if not choose_look or _look_choice == null:
+		return
+	_look_choice.ask()
+	var body: PlayerLook.Body = await _look_choice.chosen
+	Game.set_look(body)
 
 
 # A new voyage: the opening cutscene, from the section asked for.
@@ -91,6 +107,7 @@ func _begin_voyage() -> void:
 func _carry_on(saved: Dictionary, spirit: LanternSpirit) -> void:
 	var time: TimeOfDay = get_tree().get_first_node_in_group(&"time_of_day") as TimeOfDay
 	SaveGame.restore(saved, Game.memories, time, spirit, Game.dialogue)
+	Game.set_look(SaveGame.look_of(saved))
 	var morning: bool = time != null and time.is_morning()
 	var day: int = saved.get("day", 1)
 	await _fade.show_title("Day %d. %s" % [day, "Morning" if morning else "Night"])
