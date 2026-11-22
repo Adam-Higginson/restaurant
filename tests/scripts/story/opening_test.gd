@@ -119,8 +119,7 @@ func test_the_rescue_waits_for_you_to_take_his_hand_then_goes_to_the_surface() -
 	assert_bool(_ambience().hushed).is_true()
 
 	# Your hand catches him alight again, and the storm's rumble comes back.
-	# His light has been all the way down: the dead lanterns on the seabed
-	# have each been lit, and by now only the keeper still glows much.
+	# Nothing has stirred on the seabed yet: its dead lanterns stay dark.
 	var field: LanternField = _underwater_set().get_node("Lanterns") as LanternField
 	var lightning: Lightning = _sea.get_node("Weather/Lightning") as Lightning
 	var strikes: Array[int] = []
@@ -130,13 +129,7 @@ func test_the_rescue_waits_for_you_to_take_his_hand_then_goes_to_the_surface() -
 	assert_bool(_fade().is_covering()).is_false()
 	assert_bool(_ambience().hushed).is_false()
 	assert_bool(_ambience().submerged).is_true()
-	var lit: int = 0
-	for index: int in field.count():
-		if field.is_lit(index):
-			lit += 1
-	assert_int(lit).is_greater(30)
-	var keeper: int = field.keeper.get_index()
-	assert_float(field.glow_of(keeper)).is_greater(field.glow_of(keeper + 5) * 2.0)
+	assert_int(field.count()).is_greater(30)
 	assert_float(field.gap).is_equal(0.0)
 	var gap_at_first: Vector3 = field.gap_centre
 

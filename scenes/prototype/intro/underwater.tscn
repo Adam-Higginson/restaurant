@@ -4228,7 +4228,7 @@ transform = Transform3D(1, 0, 0, 0, 0.99820054, -0.059964005, 0, 0.059964005, 0.
 current = true
 fov = 65.0
 
-[node name="Lens" type="MeshInstance3D" parent="Camera" unique_id=1902893187 node_paths=PackedStringArray("heat_source")]
+[node name="Lens" type="MeshInstance3D" parent="Camera" unique_id=1448739681 node_paths=PackedStringArray("heat_source")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -1)
 material_override = SubResource("ShaderMaterial_4sb6r")
 cast_shadow = 0
@@ -4237,7 +4237,7 @@ mesh = SubResource("QuadMesh_4pjtv")
 script = ExtResource("2_rahqi")
 heat_source = NodePath("../../Lantern")
 
-[node name="Deep" type="MeshInstance3D" parent="." unique_id=615473047]
+[node name="Deep" type="MeshInstance3D" parent="." unique_id=1297004959]
 cast_shadow = 0
 mesh = SubResource("SphereMesh_ohrgi")
 
@@ -4249,9 +4249,11 @@ mesh = SubResource("PlaneMesh_2akkt")
 script = ExtResource("4_n12d8")
 
 [node name="StormLight" type="DirectionalLight3D" parent="." unique_id=1653939318]
-transform = Transform3D(1, 0, 0, 0, -4.371139e-08, 1, 0, -1, -4.371139e-08, 0, 0, 0)
+transform = Transform3D(0.8253356, -0.49552044, 0.270704, 0, 0.4794255, 0.8775826, -0.5646425, -0.7243002, 0.39568692, 0, 0, 0)
 light_color = Color(0.75, 0.85, 1, 1)
 light_volumetric_fog_energy = 0.6
+shadow_enabled = true
+directional_shadow_max_distance = 60.0
 script = ExtResource("5_hgusb")
 peak_energy = 1.4
 
@@ -4284,14 +4286,14 @@ shadow_enabled = true
 omni_range = 6.5
 omni_attenuation = 1.3
 
-[node name="Far" type="OmniLight3D" parent="Lantern" unique_id=87846940]
+[node name="Far" type="OmniLight3D" parent="Lantern" unique_id=353332734]
 light_color = Color(0.2, 0.62, 0.72, 1)
 light_energy = 0.0
 light_volumetric_fog_energy = 0.0
 light_specular = 0.0
 omni_range = 15.0
 
-[node name="Hand" type="MeshInstance3D" parent="Lantern" unique_id=1730178422 node_paths=PackedStringArray("face", "light", "rays")]
+[node name="Hand" type="MeshInstance3D" parent="Lantern" unique_id=1372852612 node_paths=PackedStringArray("face", "light", "rays")]
 transform = Transform3D(-0.99280864, 0.119712204, -8.742278e-08, 0.119712204, 0.99280864, 0, 8.679409e-08, -1.0465573e-08, -1, 0.14, -0.02, 0.22)
 material_override = SubResource("ShaderMaterial_p7sjk")
 cast_shadow = 0
@@ -4301,19 +4303,19 @@ face = NodePath("../Body")
 light = NodePath("../PalmLight")
 rays = NodePath("../Rays")
 
-[node name="PalmLight" type="OmniLight3D" parent="Lantern" unique_id=2111968429]
+[node name="PalmLight" type="OmniLight3D" parent="Lantern" unique_id=1705963973]
 light_energy = 0.0
 light_volumetric_fog_energy = 1.5
 omni_range = 2.6
 omni_attenuation = 1.6
 
-[node name="Rays" type="MeshInstance3D" parent="Lantern" unique_id=1206224237]
+[node name="Rays" type="MeshInstance3D" parent="Lantern" unique_id=1990148892]
 visible = false
 material_override = SubResource("ShaderMaterial_16usi")
 cast_shadow = 0
 mesh = SubResource("QuadMesh_chxrw")
 
-[node name="Trail" type="CPUParticles3D" parent="Lantern" unique_id=653056140]
+[node name="Trail" type="CPUParticles3D" parent="Lantern" unique_id=611105544]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.25, 0)
 cast_shadow = 0
 emitting = false
@@ -4330,7 +4332,7 @@ initial_velocity_max = 1.7
 scale_amount_min = 0.5
 scale_amount_max = 1.8
 
-[node name="Wisp" type="CPUParticles3D" parent="Lantern" unique_id=891543421]
+[node name="Wisp" type="CPUParticles3D" parent="Lantern" unique_id=353475364]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.2, 0)
 cast_shadow = 0
 emitting = false
@@ -4347,7 +4349,7 @@ initial_velocity_max = 0.9
 scale_amount_min = 0.5
 scale_amount_max = 1.8
 
-[node name="Gasp" type="CPUParticles3D" parent="Lantern" unique_id=1435328932]
+[node name="Gasp" type="CPUParticles3D" parent="Lantern" unique_id=28666654]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.1, 0, 0.2)
 cast_shadow = 0
 emitting = false
@@ -4366,7 +4368,7 @@ initial_velocity_max = 1.8
 scale_amount_min = 0.5
 scale_amount_max = 1.8
 
-[node name="Hiss" type="AudioStreamPlayer" parent="Lantern" unique_id=566520910]
+[node name="Hiss" type="AudioStreamPlayer" parent="Lantern" unique_id=1265984698]
 volume_db = -80.0
 script = ExtResource("12_lv5el")
 recording = "res://assets/third_party/audio/lantern_hiss.ogg"
@@ -4425,7 +4427,7 @@ initial_velocity_max = 4.0
 scale_amount_min = 0.5
 scale_amount_max = 1.6
 
-[node name="DiveSplash" type="CPUParticles3D" parent="." unique_id=2068406423]
+[node name="DiveSplash" type="CPUParticles3D" parent="." unique_id=1126485054]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.7, 9.8, -0.4)
 cast_shadow = 0
 emitting = false
@@ -4444,168 +4446,167 @@ initial_velocity_max = 4.5
 scale_amount_min = 0.5
 scale_amount_max = 1.8
 
-[node name="Flare" type="MeshInstance3D" parent="." unique_id=592668422]
+[node name="Flare" type="MeshInstance3D" parent="." unique_id=838886403]
 material_override = SubResource("ShaderMaterial_hjlbx")
 cast_shadow = 0
 extra_cull_margin = 100.0
 mesh = SubResource("SphereMesh_qslim")
 script = ExtResource("14_2bi5t")
 
-[node name="Seabed" type="MeshInstance3D" parent="." unique_id=828114156]
+[node name="Seabed" type="MeshInstance3D" parent="." unique_id=183269336]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -7, 0)
 material_override = SubResource("ShaderMaterial_dkx21")
 cast_shadow = 0
 extra_cull_margin = 2.0
 mesh = SubResource("PlaneMesh_d2tav")
 
-[node name="Lanterns" type="Node3D" parent="." unique_id=1704122058 node_paths=PackedStringArray("burst", "keeper", "floor_mesh")]
+[node name="Lanterns" type="Node3D" parent="." unique_id=939564682 node_paths=PackedStringArray("floor_mesh")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -7, 0)
 script = ExtResource("16_67quv")
-burst = NodePath("../Flare")
-keeper = NodePath("Keeper")
 floor_mesh = NodePath("../Seabed")
 gap_heading = 0.45
 gap_length = 44.0
 gap_width = 4.6
 
-[node name="Keeper" parent="Lanterns" unique_id=187351882 instance=ExtResource("17_pmwu1")]
+[node name="Dead00" parent="Lanterns" unique_id=147526639 instance=ExtResource("17_pmwu1")]
 transform = Transform3D(1.1793168, -0.006911833, -2.0902548, 0.012345406, 2.3999681, -0.00097071216, 2.0902297, -0.010275111, 1.1793365, -3, 0.1870054, 1.2)
 
-[node name="Dead01" parent="Lanterns" unique_id=861103705 instance=ExtResource("17_pmwu1")]
+[node name="Dead01" parent="Lanterns" unique_id=1613011459 instance=ExtResource("17_pmwu1")]
 transform = Transform3D(-1.880855, -1.7812091, -0.37196866, -1.78078, 1.9117848, -0.15027945, 0.3740174, 0.14510533, -2.5860658, -5.399181, 0.3515254, 11.167641)
 
-[node name="Dead02" parent="Lanterns" unique_id=942488049 instance=ExtResource("17_pmwu1")]
+[node name="Dead02" parent="Lanterns" unique_id=1080755427 instance=ExtResource("17_pmwu1")]
 transform = Transform3D(-0.19335733, 0.06377531, -1.7614503, 0.31470144, 1.7447937, 0.028626937, 1.734283, -0.30949834, -0.20158085, 14.336324, 0.28021556, -10.053593)
 
-[node name="Dead03" parent="Lanterns" unique_id=507160757 instance=ExtResource("17_pmwu1")]
+[node name="Dead03" parent="Lanterns" unique_id=1974154610 instance=ExtResource("17_pmwu1")]
 transform = Transform3D(-1.1738224, -1.2728949, 1.1058618, 1.3305081, 0.12852964, 1.5602176, -1.0358281, 1.6075662, 0.7508939, 3.4739897, 0.19580358, 6.2078633)
 
-[node name="Dead04" parent="Lanterns" unique_id=1081935119 instance=ExtResource("17_pmwu1")]
+[node name="Dead04" parent="Lanterns" unique_id=1714781416 instance=ExtResource("17_pmwu1")]
 transform = Transform3D(-0.654682, 0.71224916, 2.3275332, 1.2845048, 2.1484113, -0.29613402, -2.0675488, 1.1092111, -0.92098427, 10.246794, 0.021209495, 4.26843)
 
-[node name="Dead05" parent="Lanterns" unique_id=902287471 instance=ExtResource("17_pmwu1")]
+[node name="Dead05" parent="Lanterns" unique_id=214089534 instance=ExtResource("17_pmwu1")]
 transform = Transform3D(1.5596465, 0.34315875, -0.7043112, -0.24228898, 1.703385, 0.29340202, 0.74505585, -0.16441038, 1.5697676, 12.412142, 0.23181708, -7.6126285)
 
-[node name="Dead06" parent="Lanterns" unique_id=461631871 instance=ExtResource("17_pmwu1")]
+[node name="Dead06" parent="Lanterns" unique_id=516072529 instance=ExtResource("17_pmwu1")]
 transform = Transform3D(-0.5463788, 0.1496461, -2.5983355, 0.00359805, 2.6550155, 0.15215386, 2.602639, 0.027745139, -0.5456857, 11.214408, 0.15474053, -3.3533769)
 
-[node name="Dead07" parent="Lanterns" unique_id=403649336 instance=ExtResource("17_pmwu1")]
+[node name="Dead07" parent="Lanterns" unique_id=336725247 instance=ExtResource("17_pmwu1")]
 transform = Transform3D(-0.21478982, 2.1474235, -1.1831936, 2.44889, 0.24585661, 0.0016577721, 0.1196392, -1.1771307, -2.158138, -5.8540335, 0.13677295, -13.558826)
 
-[node name="Dead08" parent="Lanterns" unique_id=1766899197 instance=ExtResource("17_pmwu1")]
+[node name="Dead08" parent="Lanterns" unique_id=2072979093 instance=ExtResource("17_pmwu1")]
 transform = Transform3D(-0.69588333, 0.22013548, 1.4511611, -0.47212288, 1.4870753, -0.45198324, -1.3897582, -0.6154098, -0.5730833, 7.2685313, 0.2641722, 12.916239)
 
-[node name="Dead09" parent="Lanterns" unique_id=568887781 instance=ExtResource("17_pmwu1")]
+[node name="Dead09" parent="Lanterns" unique_id=1832188852 instance=ExtResource("17_pmwu1")]
 transform = Transform3D(1.9981548, -0.0893334, -0.07601082, 0.09038777, 1.99938, 0.026277054, 0.07475397, -0.029664386, 1.999978, -12.3568, 0.21962868, -12.581541)
 
-[node name="Dead10" parent="Lanterns" unique_id=1367450147 instance=ExtResource("17_pmwu1")]
+[node name="Dead10" parent="Lanterns" unique_id=578783861 instance=ExtResource("17_pmwu1")]
 transform = Transform3D(-0.26048386, -2.3300278, 0.38942018, -2.1673698, 0.39157203, 0.8931455, -0.93977946, -0.25723773, -2.1677573, 8.701201, 0.2790783, 12.062861)
 
-[node name="Dead11" parent="Lanterns" unique_id=1692817636 instance=ExtResource("17_pmwu1")]
+[node name="Dead11" parent="Lanterns" unique_id=2023038099 instance=ExtResource("17_pmwu1")]
 transform = Transform3D(-1.6601057, 1.4287161, -0.71843773, 1.2728844, 1.8073995, 0.6529976, 0.96806395, 0.07355837, -2.0906396, -14.595097, 0.19000377, -7.676904)
 
-[node name="Dead12" parent="Lanterns" unique_id=14495584 instance=ExtResource("17_pmwu1")]
+[node name="Dead12" parent="Lanterns" unique_id=848352808 instance=ExtResource("17_pmwu1")]
 transform = Transform3D(-1.7470264, 0.16971825, 0.7277122, 0.06606886, 1.8783009, -0.2794483, -0.7443146, -0.23162934, -1.7328632, -9.252334, 0.28758577, 8.471261)
 
-[node name="Dead13" parent="Lanterns" unique_id=555591218 instance=ExtResource("17_pmwu1")]
+[node name="Dead13" parent="Lanterns" unique_id=2111379211 instance=ExtResource("17_pmwu1")]
 transform = Transform3D(1.0030847, -0.95305693, 1.7236437, 1.314518, 1.7644069, 0.21060473, -1.4667335, 0.9295129, 1.3675314, 3.8504627, -0.06777071, -16.172684)
 
-[node name="Dead14" parent="Lanterns" unique_id=5071911 instance=ExtResource("17_pmwu1")]
+[node name="Dead14" parent="Lanterns" unique_id=1859594488 instance=ExtResource("17_pmwu1")]
 transform = Transform3D(2.0091417, 0.22271815, 0.9084897, -0.118595496, 2.1957586, -0.27601874, -0.92784256, 0.20161313, 2.0025153, 3.2570686, -0.050344564, -7.3807173)
 
-[node name="Dead15" parent="Lanterns" unique_id=165408315 instance=ExtResource("17_pmwu1")]
+[node name="Dead15" parent="Lanterns" unique_id=1340305200 instance=ExtResource("17_pmwu1")]
 transform = Transform3D(2.431308, -0.3202624, -1.1790569, 0.07488268, 2.6600082, -0.5681131, 1.2194818, 0.47517565, 2.3855972, 6.9488225, -0.028911158, -1.4345864)
 
-[node name="Dead16" parent="Lanterns" unique_id=1190096698 instance=ExtResource("17_pmwu1")]
+[node name="Dead16" parent="Lanterns" unique_id=30301660 instance=ExtResource("17_pmwu1")]
 transform = Transform3D(-1.7400447, 1.3285276, -0.85532635, 1.574443, 1.5649787, -0.7722012, 0.13303208, -1.1446311, -2.0485227, -10.373225, 0.19792874, 5.2070317)
 
-[node name="Dead17" parent="Lanterns" unique_id=823498120 instance=ExtResource("17_pmwu1")]
+[node name="Dead17" parent="Lanterns" unique_id=1356273439 instance=ExtResource("17_pmwu1")]
 transform = Transform3D(-0.3223583, -0.3967508, 1.9898249, 1.1769319, 1.6046292, 0.5106136, -1.6527692, 1.2200342, -0.024491753, 4.6123276, 0.27661592, -4.50291)
 
-[node name="Dead18" parent="Lanterns" unique_id=469903923 instance=ExtResource("17_pmwu1")]
+[node name="Dead18" parent="Lanterns" unique_id=755122051 instance=ExtResource("17_pmwu1")]
 transform = Transform3D(-0.2679271, 1.5246531, -1.479417, -1.9875236, 0.34676057, 0.7173103, 0.750328, 1.462948, 1.3717936, -4.65218, -0.011990372, 12.490407)
 
-[node name="Dead19" parent="Lanterns" unique_id=1093846393 instance=ExtResource("17_pmwu1")]
+[node name="Dead19" parent="Lanterns" unique_id=1286960613 instance=ExtResource("17_pmwu1")]
 transform = Transform3D(-1.629813, -0.14102142, -0.3275932, -0.33672896, 1.1134853, 1.1959343, 0.11754984, 1.234406, -1.1162072, 3.4220192, -0.15399694, -15.537326)
 
-[node name="Dead20" parent="Lanterns" unique_id=253045785 instance=ExtResource("17_pmwu1")]
+[node name="Dead20" parent="Lanterns" unique_id=1137555584 instance=ExtResource("17_pmwu1")]
 transform = Transform3D(0.67440736, -1.9676116, -1.208753, -1.635575, 0.48194832, -1.6970636, 1.6301761, 1.2975497, -1.2026203, 4.539695, 0.07912717, 13.39891)
 
-[node name="Dead21" parent="Lanterns" unique_id=460015974 instance=ExtResource("17_pmwu1")]
+[node name="Dead21" parent="Lanterns" unique_id=1807612571 instance=ExtResource("17_pmwu1")]
 transform = Transform3D(-1.7018679, -0.10555906, -0.16792238, -0.08444428, 1.6981642, -0.21166685, 0.1794709, -0.20196778, -1.69195, 8.624166, 0.17650138, -6.731711)
 
-[node name="Dead22" parent="Lanterns" unique_id=284848883 instance=ExtResource("17_pmwu1")]
+[node name="Dead22" parent="Lanterns" unique_id=2119770130 instance=ExtResource("17_pmwu1")]
 transform = Transform3D(0.45258993, 1.1055156, -1.2806885, 1.687809, -0.20355383, 0.42075294, 0.116745256, -1.3429695, -1.1180203, 14.512757, -0.080582, 5.830954)
 
-[node name="Dead23" parent="Lanterns" unique_id=1793717049 instance=ExtResource("17_pmwu1")]
+[node name="Dead23" parent="Lanterns" unique_id=1304586022 instance=ExtResource("17_pmwu1")]
 transform = Transform3D(-0.26939273, 0.9905133, -1.3780372, 0.10612037, 1.4023923, 0.98727393, 1.6937654, 0.06967593, -0.28103244, 7.1629734, -0.12308318, -2.6356447)
 
-[node name="Dead24" parent="Lanterns" unique_id=1885133583 instance=ExtResource("17_pmwu1")]
+[node name="Dead24" parent="Lanterns" unique_id=238447226 instance=ExtResource("17_pmwu1")]
 transform = Transform3D(1.5478574, -1.4516153, -0.5165509, 1.4072474, 1.6300542, -0.36393997, 0.6274287, -0.07490265, 2.0905974, -0.050931457, -0.16026053, 14.636478)
 
-[node name="Dead25" parent="Lanterns" unique_id=927689424 instance=ExtResource("17_pmwu1")]
+[node name="Dead25" parent="Lanterns" unique_id=1892318607 instance=ExtResource("17_pmwu1")]
 transform = Transform3D(-1.571068, 0.02566847, -1.1512588, 0.025175063, 1.9477152, 0.009071058, 1.1512699, -0.0075628995, -1.5712515, -14.064263, 0.29287064, -8.165402)
 
-[node name="Dead26" parent="Lanterns" unique_id=430895236 instance=ExtResource("17_pmwu1")]
+[node name="Dead26" parent="Lanterns" unique_id=2003957286 instance=ExtResource("17_pmwu1")]
 transform = Transform3D(2.2400582, -0.33065996, -0.7919572, -0.41048282, 1.5312018, -1.8003659, 0.7536816, 1.8167216, 1.373273, 11.474971, 0.10672628, -5.231331)
 
-[node name="Dead27" parent="Lanterns" unique_id=409285771 instance=ExtResource("17_pmwu1")]
+[node name="Dead27" parent="Lanterns" unique_id=1412369127 instance=ExtResource("17_pmwu1")]
 transform = Transform3D(1.9031503, -0.42859906, -1.0863472, -0.017463371, 2.0664089, -0.84585893, 1.1677082, 0.7294417, 1.7578969, 10.062332, -0.016311195, -5.0581813)
 
-[node name="Dead28" parent="Lanterns" unique_id=1584016355 instance=ExtResource("17_pmwu1")]
+[node name="Dead28" parent="Lanterns" unique_id=1649659262 instance=ExtResource("17_pmwu1")]
 transform = Transform3D(1.3673197, -0.1127097, 1.4234684, -0.3430113, 1.8871984, 0.47890887, -1.3861129, -0.57819283, 1.2856563, 13.141515, 0.13191381, 7.8083096)
 
-[node name="Dead29" parent="Lanterns" unique_id=1356424928 instance=ExtResource("17_pmwu1")]
+[node name="Dead29" parent="Lanterns" unique_id=448662848 instance=ExtResource("17_pmwu1")]
 transform = Transform3D(-1.4345134, -0.71234286, -0.6243666, -0.5477984, 1.5482643, -0.5078281, 0.77277607, -0.22481126, -1.5190036, 13.343066, -0.076989934, 1.0042781)
 
-[node name="Dead30" parent="Lanterns" unique_id=880752576 instance=ExtResource("17_pmwu1")]
+[node name="Dead30" parent="Lanterns" unique_id=1547453669 instance=ExtResource("17_pmwu1")]
 transform = Transform3D(-2.1588607, -0.070230916, 1.2814974, 0.52801216, 2.2371137, 1.0121124, -1.1697737, 1.1394014, -1.9082031, -6.49012, 0.16307977, 2.6754766)
 
-[node name="Dead31" parent="Lanterns" unique_id=1139197160 instance=ExtResource("17_pmwu1")]
+[node name="Dead31" parent="Lanterns" unique_id=1125023505 instance=ExtResource("17_pmwu1")]
 transform = Transform3D(-0.76172775, 0.36587986, -2.3052154, 1.3948166, 2.0156202, -0.14098276, 1.8714623, -1.3533373, -0.8331992, 7.237278, 0.15721327, -12.310473)
 
-[node name="Dead32" parent="Lanterns" unique_id=1640283317 instance=ExtResource("17_pmwu1")]
+[node name="Dead32" parent="Lanterns" unique_id=2133718567 instance=ExtResource("17_pmwu1")]
 transform = Transform3D(0.13444743, 2.2225895, -1.5561128, 2.7019281, 0.032119267, 0.2793211, 0.24693282, -1.5615797, -2.2090633, -0.6975732, -0.20654276, 10.052361)
 
-[node name="Dead33" parent="Lanterns" unique_id=1012350817 instance=ExtResource("17_pmwu1")]
+[node name="Dead33" parent="Lanterns" unique_id=1803112033 instance=ExtResource("17_pmwu1")]
 transform = Transform3D(0.8645405, 0.071398, 1.455721, -0.2905392, 1.6670322, 0.09078672, -1.4282186, -0.29590133, 0.8627199, 2.8704343, -0.23769975, 10.80437)
 
-[node name="Dead34" parent="Lanterns" unique_id=188021071 instance=ExtResource("17_pmwu1")]
+[node name="Dead34" parent="Lanterns" unique_id=364167057 instance=ExtResource("17_pmwu1")]
 transform = Transform3D(-0.5664937, 0.4302894, 2.351314, -1.3671938, 1.9238353, -0.6814542, -1.9607668, -1.4657593, -0.20416734, 10.883465, 0.5640227, -13.457771)
 
-[node name="Dead35" parent="Lanterns" unique_id=444685678 instance=ExtResource("17_pmwu1")]
+[node name="Dead35" parent="Lanterns" unique_id=658461705 instance=ExtResource("17_pmwu1")]
 transform = Transform3D(1.8841217, 1.0890754, 1.5338624, -0.95248663, 2.424357, -0.5513579, -1.622217, -0.158559, 2.1052325, -0.41810694, 0.39056194, -5.5029006)
 
-[node name="Dead36" parent="Lanterns" unique_id=944311529 instance=ExtResource("17_pmwu1")]
+[node name="Dead36" parent="Lanterns" unique_id=284371035 instance=ExtResource("17_pmwu1")]
 transform = Transform3D(-0.13452138, 1.8102504, 0.08072164, 1.7352189, 0.10536994, 0.52870685, 0.52205145, 0.11622894, -1.7365401, 4.5733266, -0.17017984, 11.023327)
 
-[node name="Dead37" parent="Lanterns" unique_id=46414676 instance=ExtResource("17_pmwu1")]
+[node name="Dead37" parent="Lanterns" unique_id=520484349 instance=ExtResource("17_pmwu1")]
 transform = Transform3D(1.1847333, 1.1915338, -1.6280897, -0.23967418, 1.9577922, 1.258423, 2.0032437, -0.47044578, 1.113426, 8.894764, 0.25080144, -6.8436303)
 
-[node name="Dead38" parent="Lanterns" unique_id=2041410693 instance=ExtResource("17_pmwu1")]
+[node name="Dead38" parent="Lanterns" unique_id=1944992753 instance=ExtResource("17_pmwu1")]
 transform = Transform3D(-0.34364152, -1.6586341, -1.6257515, -0.03368283, 1.6468371, -1.6730263, 2.3222833, -0.2215515, -0.26483756, 12.31782, 0.06944803, -3.4492428)
 
-[node name="Dead39" parent="Lanterns" unique_id=212389308 instance=ExtResource("17_pmwu1")]
+[node name="Dead39" parent="Lanterns" unique_id=480672268 instance=ExtResource("17_pmwu1")]
 transform = Transform3D(-2.223463, 0.6924506, -0.69096255, 0.33636513, 2.1523829, 1.0746217, 0.91857255, 0.8879558, -2.0660262, -11.317239, 0.14952058, -6.80925)
 
-[node name="Dead40" parent="Lanterns" unique_id=1816207233 instance=ExtResource("17_pmwu1")]
+[node name="Dead40" parent="Lanterns" unique_id=1864457063 instance=ExtResource("17_pmwu1")]
 transform = Transform3D(-1.3717531, -0.62576765, -1.5873171, -0.06175793, 2.0535812, -0.75621206, 1.7050943, -0.4290518, -1.3043907, -0.7385685, -0.19421256, 8.740039)
 
-[node name="Dead41" parent="Lanterns" unique_id=1712008912 instance=ExtResource("17_pmwu1")]
+[node name="Dead41" parent="Lanterns" unique_id=1677293479 instance=ExtResource("17_pmwu1")]
 transform = Transform3D(0.92731494, -1.3642467, 0.85686237, 1.3948553, 1.1745902, 0.36057216, -0.8060778, 0.46310273, 1.6096802, -5.9323997, -0.012640436, -0.86768657)
 
-[node name="Dead42" parent="Lanterns" unique_id=555629204 instance=ExtResource("17_pmwu1")]
+[node name="Dead42" parent="Lanterns" unique_id=779253440 instance=ExtResource("17_pmwu1")]
 transform = Transform3D(1.7948827, 0.21769617, 1.2947383, -0.07746406, 2.2067685, -0.26365653, -1.310625, 0.16770156, 1.7887092, 1.0152215, 0.19675529, -4.2453136)
 
-[node name="Dead43" parent="Lanterns" unique_id=2074820451 instance=ExtResource("17_pmwu1")]
+[node name="Dead43" parent="Lanterns" unique_id=1491887945 instance=ExtResource("17_pmwu1")]
 transform = Transform3D(-0.052138727, 0.037948895, 2.1602004, 0.9200789, 1.9554877, -0.0121455705, -1.9548304, 0.91937613, -0.063332856, -9.769121, 0.2585933, 5.5795403)
 
-[node name="FlareLight" type="OmniLight3D" parent="." unique_id=23978901]
+[node name="FlareLight" type="OmniLight3D" parent="." unique_id=1167909356]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.5, 1.5, 0.45)
 light_color = Color(1, 0.7, 0.36, 1)
 light_energy = 0.0
 light_volumetric_fog_energy = 0.0
 light_specular = 0.2
+shadow_enabled = true
 omni_range = 40.0
 omni_attenuation = 0.5
 

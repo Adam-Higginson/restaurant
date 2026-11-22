@@ -2,16 +2,9 @@
 
 [ext_resource type="Material" path="res://assets/placeholder/materials/iron.tres" id="1_iron"]
 [ext_resource type="Shader" path="res://shaders/dead_glass.gdshader" id="2_glass"]
-[ext_resource type="Shader" path="res://shaders/glint.gdshader" id="3_glint"]
 
 [sub_resource type="ShaderMaterial" id="Material_Glass"]
 shader = ExtResource("2_glass")
-
-[sub_resource type="ShaderMaterial" id="Material_Glint"]
-shader = ExtResource("3_glint")
-
-[sub_resource type="QuadMesh" id="Glint"]
-size = Vector2(0.9, 0.9)
 
 [sub_resource type="BoxMesh" id="Glass"]
 size = Vector3(0.17, 0.2, 0.17)
@@ -40,28 +33,19 @@ rings = 1
 
 [node name="Glass" type="MeshInstance3D" parent="."]
 material_override = SubResource("Material_Glass")
-cast_shadow = 0
 mesh = SubResource("Glass")
 
 [node name="Cap" type="MeshInstance3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.14, 0)
 material_override = ExtResource("1_iron")
-cast_shadow = 0
 mesh = SubResource("Cap")
 
 [node name="Ring" type="MeshInstance3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, -4.371139e-08, -1, 0, 1, -4.371139e-08, 0, 0.21, 0)
 material_override = ExtResource("1_iron")
-cast_shadow = 0
 mesh = SubResource("Ring")
 
 [node name="Base" type="MeshInstance3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.12, 0)
 material_override = ExtResource("1_iron")
-cast_shadow = 0
 mesh = SubResource("Base")
-
-[node name="Glint" type="MeshInstance3D" parent="."]
-material_override = SubResource("Material_Glint")
-cast_shadow = 0
-mesh = SubResource("Glint")

@@ -352,10 +352,6 @@ recording = "res://assets/third_party/audio/heartbeat.ogg"
 script = ExtResource("318_optional")
 recording = "res://assets/third_party/audio/lantern_flare.ogg"
 
-[node name="Glints" type="AudioStreamPlayer" parent="SoundCues"]
-script = ExtResource("318_optional")
-recording = "res://assets/third_party/audio/lantern_glints.ogg"
-
 [node name="DeepNote" type="AudioStreamPlayer" parent="SoundCues"]
 script = ExtResource("318_optional")
 recording = "res://assets/third_party/audio/deep_note.ogg"

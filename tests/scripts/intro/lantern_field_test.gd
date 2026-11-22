@@ -1,81 +1,11 @@
 extends GameTestSuite
-## Tests for the dead lanterns on the seabed: the flare's light reaches the
-## nearer ones first, each glints once and its glow fades, one keeps its
-## glow, the thing passing is a gap in which they go dark and come back,
-## they rock in its wake and settle, and lightning reaches the ones outside
-## the gap.
+## Tests for the dead lanterns on the seabed: they give no light of their
+## own, the thing passing is a gap in which they're lost and come back, they
+## rock in its wake and settle, and lightning shows on the glass of the ones
+## outside the gap.
 
 const LANTERN: PackedScene = preload("res://scenes/prototype/intro/dead_lantern.tscn")
 const SEABED: Shader = preload("res://shaders/seabed.gdshader")
-
-
-func test_a_glint_then_a_glow_that_fades_away() -> void:
-	var at_first: float = LanternField.glow_after(0.0, 5.0)
-	var just_after: float = LanternField.glow_after(LanternField.GLINT_SECONDS, 5.0)
-	var later: float = LanternField.glow_after(3.0, 5.0)
-
-	assert_float(at_first).is_greater(LanternField.GLINT_BRIGHTNESS)
-	assert_float(just_after).is_less(LanternField.AFTERGLOW + 0.001)
-	assert_float(later).is_between(0.001, just_after)
-	assert_float(LanternField.glow_after(5.0, 5.0)).is_equal(0.0)
-	assert_float(LanternField.glow_after(-1.0, 5.0)).is_equal(0.0)
-
-
-func test_the_light_reaches_the_nearer_lanterns_first() -> void:
-	var field: LanternField = _new_field([Vector3(2, 0, 0), Vector3(9, 0, 0)])
-	field.light_origin = field.to_global(Vector3.ZERO)
-
-	field.front = 5.0
-	field.advance(0.1)
-	assert_bool(field.is_lit(0)).is_true()
-	assert_bool(field.is_lit(1)).is_false()
-	assert_float(field.glow_of(0)).is_greater(1.0)
-	assert_float(field.glow_of(1)).is_equal(0.0)
-
-	field.front = 12.0
-	field.advance(0.1)
-	assert_bool(field.is_lit(1)).is_true()
-
-
-func test_a_lantern_glints_once_and_then_only_fades() -> void:
-	var field: LanternField = _new_field([Vector3(2, 0, 0)])
-	field.glow_seconds = 4.0
-	field.front = 5.0
-	field.advance(0.1)
-
-	field.advance(1.0)
-	var after_a_second: float = field.glow_of(0)
-	field.advance(1.0)
-	var after_two: float = field.glow_of(0)
-	field.advance(5.0)
-
-	assert_float(after_a_second).is_less(LanternField.AFTERGLOW)
-	assert_float(after_two).is_less(after_a_second)
-	assert_float(field.glow_of(0)).is_equal(0.0)
-	assert_bool(field.is_lit(0)).is_true()
-
-
-func test_one_lantern_keeps_its_glow_long_after_the_rest() -> void:
-	var field: LanternField = _new_field([Vector3(2, 0, 0), Vector3(3, 0, 0)])
-	field.keeper = field.get_child(1) as Node3D
-	field.glow_seconds = 4.0
-	field.keeper_seconds = 60.0
-	field.front = 5.0
-	field.advance(0.1)
-
-	field.advance(10.0)
-
-	assert_float(field.glow_of(0)).is_equal(0.0)
-	assert_float(field.glow_of(1)).is_greater(0.2)
-
-
-func test_each_lanterns_glow_reaches_its_own_glass() -> void:
-	var field: LanternField = _new_field([Vector3(2, 0, 0), Vector3(9, 0, 0)])
-	field.front = 5.0
-	field.advance(0.1)
-
-	assert_float(_sent(field, 0, &"glow")).is_equal_approx(field.glow_of(0), 0.001)
-	assert_float(_sent(field, 1, &"glow")).is_equal(0.0)
 
 
 func test_inside_the_thing_is_dark_and_outside_is_not() -> void:
@@ -91,14 +21,10 @@ func test_inside_the_thing_is_dark_and_outside_is_not() -> void:
 	assert_float(LanternField.in_gap(Vector3(7, 0, 0), centre, PI * 0.5, 20.0, 4.0)).is_equal(0.0)
 
 
-func test_lanterns_wink_out_as_it_passes_and_come_back() -> void:
+func test_lanterns_are_lost_in_the_dark_as_it_passes_and_come_back() -> void:
 	var field: LanternField = _new_field([Vector3(0, 0, 0), Vector3(0, 0, 8)])
-	field.keeper = field.get_child(0) as Node3D
-	field.front = 20.0
-	field.advance(0.1)
-	field.advance(1.0)
-	var lit: float = field.glow_of(0)
-	assert_float(lit).is_greater(0.0)
+	field.set_lightning(1.0)
+	assert_float(field.sheen_of(0)).is_equal(1.0)
 
 	# It arrives over the first lantern.
 	field.gap = 1.0
@@ -107,14 +33,24 @@ func test_lanterns_wink_out_as_it_passes_and_come_back() -> void:
 	field.gap_centre = Vector3(0, 0, 0)
 	field.advance(0.1)
 	assert_float(field.darkness_of(0)).is_equal(1.0)
-	assert_float(field.glow_of(0)).is_equal(0.0)
+	assert_float(field.sheen_of(0)).is_equal(0.0)
 	assert_float(field.darkness_of(1)).is_equal(0.0)
+	assert_float(field.sheen_of(1)).is_equal(1.0)
 
 	# And moves on.
 	field.gap_centre = Vector3(40, 0, 0)
 	field.advance(0.1)
 	assert_float(field.darkness_of(0)).is_equal(0.0)
-	assert_float(field.glow_of(0)).is_greater(0.0)
+	assert_float(field.sheen_of(0)).is_equal(1.0)
+
+
+func test_between_flashes_they_show_nothing_of_their_own() -> void:
+	var field: LanternField = _new_field([Vector3(0, 0, 0)])
+
+	field.advance(1.0)
+
+	assert_float(field.sheen_of(0)).is_equal(0.0)
+	assert_float(_sent(field, 0, &"cold")).is_equal(0.0)
 
 
 func test_while_its_not_there_nothing_goes_dark() -> void:
@@ -196,16 +132,18 @@ func test_the_seabed_is_told_where_its_two_ends_are() -> void:
 	assert_vector(ends[1]).is_equal_approx(Vector2(19, 2), Vector2(0.001, 0.001))
 
 
-func test_starting_again_puts_every_lantern_out() -> void:
-	var field: LanternField = _new_field([Vector3(2, 0, 0)])
-	field.front = 5.0
-	field.advance(0.1)
-	assert_bool(field.is_lit(0)).is_true()
+func test_starting_again_stands_every_lantern_back_up() -> void:
+	var field: LanternField = _new_field([Vector3(0, 0, 0)])
+	field.gap = 1.0
+	field.gap_centre = Vector3(0, 0, 0)
+	field.advance(0.01)
+	field.advance(0.25)
+	assert_float(absf(field.tilt_of(0))).is_greater(0.05)
 
 	field.reset()
 
-	assert_bool(field.is_lit(0)).is_false()
-	assert_float(field.glow_of(0)).is_equal(0.0)
+	assert_float(field.tilt_of(0)).is_equal(0.0)
+	assert_float(field.darkness_of(0)).is_equal(0.0)
 
 
 func test_the_dunes_are_low_and_rolling() -> void:

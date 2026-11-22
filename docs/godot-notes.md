@@ -350,13 +350,13 @@ A growing glossary of the Godot concepts this project uses: what each one is, in
 
 ## The seabed and the thing in the lightning (#120)
 
-**Instance uniforms.** Normally every object sharing a material shares its shader values too. Mark a uniform `instance uniform` and each object can have its own value, set with `set_instance_shader_parameter("name", value)`, while they all still share one material. *Ours:* the 44 dead lanterns share one glass material, and `LanternField` gives each its own `glow` and `cold`.
+**Instance uniforms.** Normally every object sharing a material shares its shader values too. Mark a uniform `instance uniform` and each object can have its own value, set with `set_instance_shader_parameter("name", value)`, while they all still share one material. *Ours:* the 44 dead lanterns share one glass material, and `LanternField` gives each its own `cold` (how much of the lightning shows on its glass).
 
-**Billboards.** A flat sheet that always turns to face the camera, so it looks the same from every side. In a shader it's done in `vertex()` by replacing the sheet's rotation with the camera's. *Ours:* `shaders/glint.gdshader`, the star of light on each dead lantern.
+**Shadows from a light.** A light only throws shadows if its `Shadow > Enabled` is ticked, and a mesh only throws one if its `Cast Shadow` is on. Shadows cost time to draw, so most small lights leave them off. *Ours:* `FlareLight` and `StormLight` have them on, so the dead lanterns throw shadows across the sand.
 
 **Moving a mesh in its vertex shader.** `vertex()` can move each corner of a mesh before it's drawn, so a flat sheet with enough corners (its Subdivide settings) can be raised into hills without modelling them. The script side has to know the same sums if anything must sit on the result. *Ours:* the dunes in `shaders/seabed.gdshader`, and `LanternField.dune_height`, which the lanterns were set down with.
 
-**Emission.** A lit material can also give off light of its own: its `EMISSION` is added whatever the lighting. *Ours:* the net of lightning on the seabed and the dead lanterns' glow.
+**Emission.** A lit material can also give off light of its own: its `EMISSION` is added whatever the lighting. *Ours:* the net of lightning on the seabed.
 
 **Caustics.** The net of bright lines on the bottom of a pool: waves bend the light and gather it into lines. Ours is a well-known few lines of shader maths that fold a pattern back on itself until it gathers the same way. *Ours:* `net()` in `shaders/seabed.gdshader`, shown only while lightning flashes.
 

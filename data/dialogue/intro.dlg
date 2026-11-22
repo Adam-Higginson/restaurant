@@ -16,7 +16,7 @@
 #   timeline at the bottom of the editor shows them. Each moves the set's
 #   camera too, so a clip is also a shot.
 # - Sounds (@sound) are the players under SoundCues in sea.tscn. Some have
-#   no recording yet (heartbeat, flare, glints, deep_note): they're silent
+#   no recording yet (heartbeat, flare, deep_note): they're silent
 #   until one is put where the player's Recording points.
 # - The title is her nameboard at the stern: the letters, the hook, the
 #   lantern on it and his clips (takes_watch, hears, dives, welcome) are in
@@ -117,7 +117,8 @@
 # Out. He's spent. Black, and no sound at all, for one held second. One
 # heartbeat. Then your hand catches him alight again: everything draws in,
 # and blooms, and for a moment his light reaches all the way down. Below you
-# is a seabed of dead lanterns, and each one glints as it passes.
+# is a seabed of dead lanterns: empty, dark shapes, and the long shadows
+# they throw away from him.
 ~ out
 @stage underwater
 @muffle on
@@ -133,9 +134,7 @@
 @hush off
 @sound flare
 @look sinking_lantern surprised
-@wait 0.6
-@sound glints
-@wait 4.3
+@wait 4.9
 -> thing
 
 # The thing. His light pulls in close as you rise. Lightning strikes far
