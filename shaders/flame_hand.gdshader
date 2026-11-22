@@ -13,7 +13,7 @@ shader_type spatial;
 render_mode unshaded, cull_disabled;
 
 // How many texels along the arm and across it.
-uniform vec2 texels = vec2(44.0, 28.0);
+uniform vec2 texels = vec2(48.0, 30.0);
 // The fire's colours when he's strong...
 uniform vec4 hot : source_color = vec4(1.0, 0.92, 0.55, 1.0);
 uniform vec4 warm : source_color = vec4(1.0, 0.55, 0.15, 1.0);
@@ -82,25 +82,25 @@ void fragment() {
 
 	float shaped = smoothstep(0.3, 1.0, form);
 	float open = 1.0 - grip;
-	float shape = limb(q, vec2(0.0, 0.5), palm, 0.045, mix(0.06, 0.085, shaped));
-	float palm_size = mix(0.1, 0.165, shaped) * mix(0.3, 1.0, smoothstep(0.0, 0.2, out_now));
+	float shape = limb(q, vec2(0.0, 0.5), palm, 0.035, mix(0.05, 0.075, shaped));
+	float palm_size = mix(0.1, 0.19, shaped) * mix(0.3, 1.0, smoothstep(0.0, 0.2, out_now));
 	shape = melt(shape, length(q - palm) - palm_size, 0.07);
 	// Four fingers fanned out ahead of the palm, and a thumb above it.
 	// Closing, they shorten and draw together.
-	float finger_length = 0.34 * shaped * mix(0.35, 1.0, open);
+	float finger_length = 0.36 * shaped * mix(0.35, 1.0, open);
 	for (int i = 0; i < 4; i++) {
-		float fan = (float(i) - 1.5) * mix(0.1, 0.27, open) - 0.05;
+		float fan = (float(i) - 1.5) * mix(0.12, 0.34, open) - 0.05;
 		vec2 way = vec2(cos(fan), sin(fan));
 		vec2 root = palm + way * palm_size * 0.75;
 		// Each finger sags a little by its own amount when it can't hold.
 		float sag = (1.0 - form) * 0.12 * (0.4 + hash(vec2(float(i), seed)));
 		vec2 tip = root + way * finger_length - vec2(0.0, sag);
-		shape = melt(shape, limb(q, root, tip, 0.05, 0.036) + (1.0 - shaped) * 0.05, 0.03);
+		shape = melt(shape, limb(q, root, tip, 0.062, 0.048) + (1.0 - shaped) * 0.05, 0.03);
 	}
 	float thumb_way = mix(1.25, 0.7, grip);
 	vec2 thumb_root = palm + vec2(-0.03, palm_size * 0.6);
-	vec2 thumb_tip = thumb_root + vec2(cos(thumb_way), sin(thumb_way)) * 0.2 * shaped;
-	shape = melt(shape, limb(q, thumb_root, thumb_tip, 0.05, 0.038) + (1.0 - shaped) * 0.05, 0.03);
+	vec2 thumb_tip = thumb_root + vec2(cos(thumb_way), sin(thumb_way)) * 0.24 * shaped;
+	shape = melt(shape, limb(q, thumb_root, thumb_tip, 0.062, 0.05) + (1.0 - shaped) * 0.05, 0.03);
 
 	// Fire eats at the edge: a little when it holds, a lot when it doesn't.
 	float lick = noise(vec2(p.x * 6.0 - t * 2.0, p.y * 8.0 + t * 0.5)) * 0.6

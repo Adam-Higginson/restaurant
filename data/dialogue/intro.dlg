@@ -13,7 +13,11 @@
 #   Shots and Marks; the rescue's are in scenes/prototype/intro/rescue_set.tscn.
 # - Clips (@play, @start) are animations. The underwater ones are in
 #   scenes/prototype/intro/underwater.tscn: open it, select Clips, and the
-#   timeline at the bottom of the editor shows them.
+#   timeline at the bottom of the editor shows them. Each moves the set's
+#   camera too, so a clip is also a shot.
+# - Sounds (@sound) are the players under SoundCues in sea.tscn. Some have
+#   no recording yet (heartbeat, flare): they're silent until one is put
+#   where the player's Recording points.
 # - The title is her nameboard at the stern: the letters, the hook, the
 #   lantern on it and his clips (takes_watch, hears, dives, welcome) are in
 #   scenes/prototype/intro/stern_watch.tscn.
@@ -56,14 +60,14 @@
 @who_are_you
 -> he_hears
 
-# He's heard something. The swinging stops, and he's off the hook and over
-# the side, and her name goes dark.
+# He's heard something. The swinging stops. For a moment nothing happens at
+# all. Then he's off the hook and over the side, and her name goes dark.
 ~ he_hears
 @play takes_watch
 @shot the_board cut
 @look hook_lantern surprised
 @play hears
-@wait 0.4
+@wait 1.0
 @look hook_lantern determined
 @play dives
 @wait 1.2
@@ -78,29 +82,71 @@
 @wait 1.0
 -> light
 
-# The light. A small warm thing comes down through the dark, and offers a hand.
+# The light. A small warm thing comes through the surface and drives down
+# through the dark, and every push costs him: he's smaller and colder with
+# each, and reaches you nearly out.
 ~ light
 @stage underwater
 @muffle on
 @look sinking_lantern determined
-@play lantern_descends
-@look sinking_lantern pleading
+@look sinking_lantern clear
+@look sinking_lantern mended
+@play lantern_appears
+@play lantern_drives
+@look sinking_lantern worried
+@play lantern_arrives
 -> reach
 
-# The reach. It waits, however long, until you take it.
+# The reach. A flame can't reach through glass, so he opens his own door,
+# and the sea comes in. The hand forms, fails, and forms again. It waits,
+# however long, until you take it.
 ~ reach
 @stage underwater
 @muffle on
+@look sinking_lantern effort
+@play opens_door
+@look sinking_lantern cracked
 @look sinking_lantern pleading
 @start offered
 @wait_for interact Take his hand
 @sound grasp
 @look sinking_lantern effort
 @play taken
+-> out
+
+# Out. He's spent. Black, and no sound at all, for one held second. One
+# heartbeat. Then your hand catches him alight again: everything draws in,
+# and blooms.
+~ out
+@stage underwater
+@muffle on
+@fade out 0
+@hush on
+@wait 1.0
+@sound heartbeat
+@wait 0.7
+@look sinking_lantern effort
+@start flares
+@fade in 0
+@wait 0.5
+@hush off
+@sound flare
+@look sinking_lantern surprised
+@wait 4.3
+-> rising
+
+# Rest. Nothing happens: only rising, him held close and panting.
+~ rising
+@stage underwater
+@muffle on
+@look sinking_lantern tired
+@play rising
 @fade out 0.4
 -> surface
 
-# The surface. He hauls you up into the storm, the ship towering over you.
+# The surface. The roles flip: he's a small ember with his door hanging open,
+# the waves want him, and you hold him up out of the water, the ship
+# towering over you both.
 ~ surface
 @stage off
 @muffle off
@@ -111,7 +157,9 @@
 @wait 3.0
 -> boathook
 
-# The boathook. A tall thin shape at the rail against the lightning.
+# The boathook. A tall thin shape at the rail against the lightning, and
+# what it finds is one point of warm light on a black sea. The hook takes
+# his ring, and you come up with him because you won't let go.
 ~ boathook
 @show castaway
 @look rescued_lantern worried
