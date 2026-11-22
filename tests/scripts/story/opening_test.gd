@@ -133,9 +133,7 @@ func test_the_rescue_waits_for_you_to_take_his_hand_then_goes_to_the_surface() -
 	var thing: Node3D = _underwater_set().get_node("Thing") as Node3D
 	var shafts: LightningShafts = _underwater_set().get_node("Shafts") as LightningShafts
 	assert_int(field.count()).is_greater(60)
-	var eye: ThingEye = thing.get_node("Eye") as ThingEye
 	assert_bool(shafts.visible).is_false()
-	assert_float(eye.open).is_equal(0.0)
 	var thing_at_first: Vector3 = thing.global_position
 
 	# The thing: lightning comes down through the water, twice, and by the
@@ -144,9 +142,9 @@ func test_the_rescue_waits_for_you_to_take_his_hand_then_goes_to_the_surface() -
 	assert_int(strikes.size()).is_greater_equal(2)
 	assert_float(thing.global_position.distance_to(thing_at_first)).is_greater(10.0)
 	assert_float(thing.global_position.y).is_less(-10.0)
-	# Right beneath you by now, and its eye is open.
-	assert_float(field.distance_to_thing(Vector3(0, thing.global_position.y, 0))).is_less(8.0)
-	assert_float(eye.open).is_equal_approx(1.0, 0.01)
+	# Its head is somewhere beneath you by now, a long way down.
+	assert_float(field.distance_to_thing(Vector3(0, thing.global_position.y, 0))).is_less(15.0)
+	assert_float(thing.global_position.y).is_less(-30.0)
 	assert_bool(_ambience().hushed).is_false()
 	assert_float(face.strength).is_less(0.9)
 
@@ -157,7 +155,6 @@ func test_the_rescue_waits_for_you_to_take_his_hand_then_goes_to_the_surface() -
 	assert_float(ember.strength).is_less(0.6)
 	assert_float(ember.door).is_equal(1.0)
 	assert_bool(ember.cracked).is_true()
-	assert_float(eye.open).is_equal(0.0)
 	await physics_ticks(runner, 5)
 	assert_bool(underwater.is_open).is_false()
 	assert_bool(_ambience().submerged).is_false()

@@ -1,28 +1,26 @@
 [gd_scene format=3]
 
-[ext_resource type="Shader" path="res://shaders/underwater_lens.gdshader" id="1_hgusb"]
-[ext_resource type="Script" path="res://scripts/intro/underwater_lens.gd" id="2_13tl2"]
-[ext_resource type="Shader" path="res://shaders/sea_underside.gdshader" id="3_a6idw"]
-[ext_resource type="Script" path="res://scripts/intro/surface_glow.gd" id="4_5sp6a"]
-[ext_resource type="Script" path="res://scripts/weather/lightning_light.gd" id="5_w1y1v"]
-[ext_resource type="PackedScene" path="res://scenes/prototype/intro/castaway.tscn" id="6_8cx30"]
-[ext_resource type="PackedScene" path="res://scenes/prototype/lantern_body.tscn" id="7_jsgrj"]
-[ext_resource type="Shader" path="res://shaders/flame_hand.gdshader" id="8_lv5el"]
-[ext_resource type="Script" path="res://scripts/intro/flame_hand.gd" id="9_ae1ut"]
-[ext_resource type="Shader" path="res://shaders/light_rays.gdshader" id="10_2bi5t"]
-[ext_resource type="Shader" path="res://shaders/bubble.gdshader" id="11_4cqk1"]
-[ext_resource type="Script" path="res://scripts/audio/optional_sound.gd" id="12_67quv"]
-[ext_resource type="Shader" path="res://shaders/light_burst.gdshader" id="13_pmwu1"]
-[ext_resource type="Script" path="res://scripts/intro/light_burst.gd" id="14_nh030"]
-[ext_resource type="Shader" path="res://shaders/the_thing.gdshader" id="15_4sb6r"]
-[ext_resource type="Shader" path="res://shaders/thing_eye.gdshader" id="16_4pjtv"]
-[ext_resource type="Script" path="res://scripts/intro/thing_eye.gd" id="17_42bj5"]
-[ext_resource type="Script" path="res://scripts/intro/lantern_field.gd" id="18_ohrgi"]
-[ext_resource type="PackedScene" path="res://scenes/prototype/intro/dead_lantern.tscn" id="19_xedh0"]
-[ext_resource type="Script" path="res://scripts/intro/lightning_shafts.gd" id="20_p7sjk"]
-[ext_resource type="Shader" path="res://shaders/light_shaft.gdshader" id="21_vecc8"]
+[ext_resource type="Shader" path="res://shaders/underwater_lens.gdshader" id="1_5q42c"]
+[ext_resource type="Script" path="res://scripts/intro/underwater_lens.gd" id="2_n12d8"]
+[ext_resource type="Shader" path="res://shaders/sea_underside.gdshader" id="3_hgusb"]
+[ext_resource type="Script" path="res://scripts/intro/surface_glow.gd" id="4_13tl2"]
+[ext_resource type="Script" path="res://scripts/weather/lightning_light.gd" id="5_a6idw"]
+[ext_resource type="PackedScene" path="res://scenes/prototype/intro/castaway.tscn" id="6_5sp6a"]
+[ext_resource type="PackedScene" path="res://scenes/prototype/lantern_body.tscn" id="7_w1y1v"]
+[ext_resource type="Shader" path="res://shaders/flame_hand.gdshader" id="8_8cx30"]
+[ext_resource type="Script" path="res://scripts/intro/flame_hand.gd" id="9_jsgrj"]
+[ext_resource type="Shader" path="res://shaders/light_rays.gdshader" id="10_lv5el"]
+[ext_resource type="Shader" path="res://shaders/bubble.gdshader" id="11_ae1ut"]
+[ext_resource type="Script" path="res://scripts/audio/optional_sound.gd" id="12_2bi5t"]
+[ext_resource type="Shader" path="res://shaders/light_burst.gdshader" id="13_4cqk1"]
+[ext_resource type="Script" path="res://scripts/intro/light_burst.gd" id="14_67quv"]
+[ext_resource type="Shader" path="res://shaders/the_thing.gdshader" id="15_pmwu1"]
+[ext_resource type="Script" path="res://scripts/intro/lantern_field.gd" id="16_nh030"]
+[ext_resource type="PackedScene" path="res://scenes/prototype/intro/dead_lantern.tscn" id="17_4sb6r"]
+[ext_resource type="Script" path="res://scripts/intro/lightning_shafts.gd" id="18_4pjtv"]
+[ext_resource type="Shader" path="res://shaders/light_shaft.gdshader" id="19_42bj5"]
 
-[sub_resource type="Environment" id="Environment_16usi"]
+[sub_resource type="Environment" id="Environment_ohrgi"]
 background_mode = 1
 background_color = Color(0.004, 0.018, 0.03, 1)
 ambient_light_source = 2
@@ -41,9 +39,9 @@ volumetric_fog_length = 90.0
 volumetric_fog_detail_spread = 1.6
 volumetric_fog_ambient_inject = 0.15
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_chxrw"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_xedh0"]
 render_priority = -100
-shader = ExtResource("1_hgusb")
+shader = ExtResource("1_5q42c")
 shader_parameter/soak = null
 shader_parameter/deep = null
 shader_parameter/furthest = null
@@ -53,14 +51,14 @@ shader_parameter/heat = null
 shader_parameter/exposure = null
 shader_parameter/vignette = null
 
-[sub_resource type="QuadMesh" id="QuadMesh_gjmhq"]
+[sub_resource type="QuadMesh" id="QuadMesh_p7sjk"]
 
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_h4uql"]
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_vecc8"]
 shading_mode = 0
 albedo_color = Color(0.004, 0.018, 0.03, 1)
 
-[sub_resource type="SphereMesh" id="SphereMesh_5eg2c"]
-material = SubResource("StandardMaterial3D_h4uql")
+[sub_resource type="SphereMesh" id="SphereMesh_16usi"]
+material = SubResource("StandardMaterial3D_vecc8")
 flip_faces = true
 radius = 70.0
 height = 140.0
@@ -76,9 +74,9 @@ height = 256
 noise = SubResource("FastNoiseLite_l0ui7")
 seamless = true
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_1k3hu"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_chxrw"]
 render_priority = 0
-shader = ExtResource("3_a6idw")
+shader = ExtResource("3_hgusb")
 shader_parameter/ripples = SubResource("NoiseTexture2D_853cl")
 shader_parameter/tint = null
 shader_parameter/mirror_tint = null
@@ -94,9 +92,9 @@ shader_parameter/rain = null
 [sub_resource type="PlaneMesh" id="PlaneMesh_2akkt"]
 size = Vector2(120, 120)
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_l5j6m"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_gjmhq"]
 render_priority = 0
-shader = ExtResource("8_lv5el")
+shader = ExtResource("8_8cx30")
 shader_parameter/texels = null
 shader_parameter/hot = null
 shader_parameter/warm = null
@@ -113,127 +111,116 @@ shader_parameter/form = null
 shader_parameter/grip = null
 shader_parameter/aspect = null
 
-[sub_resource type="QuadMesh" id="QuadMesh_ppwqo"]
+[sub_resource type="QuadMesh" id="QuadMesh_h4uql"]
 size = Vector2(1, 0.625)
 center_offset = Vector3(-0.5, 0, 0)
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_hjlbx"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_5eg2c"]
 render_priority = 0
-shader = ExtResource("10_2bi5t")
+shader = ExtResource("10_lv5el")
 shader_parameter/colour = null
 shader_parameter/brightness = null
 shader_parameter/seed = null
 
-[sub_resource type="QuadMesh" id="QuadMesh_qslim"]
+[sub_resource type="QuadMesh" id="QuadMesh_1k3hu"]
 size = Vector2(2.4, 2.4)
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_dkx21"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_l5j6m"]
 render_priority = 0
-shader = ExtResource("11_4cqk1")
+shader = ExtResource("11_ae1ut")
 shader_parameter/tint = null
 shader_parameter/middle = null
 shader_parameter/rim = null
 
-[sub_resource type="SphereMesh" id="SphereMesh_d2tav"]
-material = SubResource("ShaderMaterial_dkx21")
+[sub_resource type="SphereMesh" id="SphereMesh_ppwqo"]
+material = SubResource("ShaderMaterial_l5j6m")
 radius = 0.03
 height = 0.06
 radial_segments = 8
 rings = 4
 
-[sub_resource type="SphereMesh" id="SphereMesh_den2n"]
-material = SubResource("ShaderMaterial_dkx21")
+[sub_resource type="SphereMesh" id="SphereMesh_hjlbx"]
+material = SubResource("ShaderMaterial_l5j6m")
 radius = 0.022
 height = 0.044
 radial_segments = 8
 rings = 4
 
-[sub_resource type="SphereMesh" id="SphereMesh_11f68"]
-material = SubResource("ShaderMaterial_dkx21")
+[sub_resource type="SphereMesh" id="SphereMesh_qslim"]
+material = SubResource("ShaderMaterial_l5j6m")
 radius = 0.028
 height = 0.056
 radial_segments = 8
 rings = 4
 
 [sub_resource type="SphereMesh" id="SphereMesh_13tl2"]
-material = SubResource("ShaderMaterial_dkx21")
+material = SubResource("ShaderMaterial_l5j6m")
 radius = 0.022
 height = 0.044
 radial_segments = 8
 rings = 4
 
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_7wubr"]
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_dkx21"]
 albedo_color = Color(0.8, 0.86, 0.9, 1)
 
 [sub_resource type="SphereMesh" id="SphereMesh_5sp6a"]
-material = SubResource("StandardMaterial3D_7wubr")
+material = SubResource("StandardMaterial3D_dkx21")
 radius = 0.012
 height = 0.024
 radial_segments = 8
 rings = 4
 
 [sub_resource type="SphereMesh" id="SphereMesh_w1y1v"]
-material = SubResource("ShaderMaterial_dkx21")
+material = SubResource("ShaderMaterial_l5j6m")
 radius = 0.026
 height = 0.052
 radial_segments = 8
 rings = 4
 
-[sub_resource type="SphereMesh" id="SphereMesh_xodi2"]
-material = SubResource("ShaderMaterial_dkx21")
+[sub_resource type="SphereMesh" id="SphereMesh_d2tav"]
+material = SubResource("ShaderMaterial_l5j6m")
 radius = 0.03
 height = 0.06
 radial_segments = 8
 rings = 4
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_e60fl"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_den2n"]
 render_priority = 0
-shader = ExtResource("13_pmwu1")
+shader = ExtResource("13_4cqk1")
 shader_parameter/colour = null
 shader_parameter/brightness = null
 shader_parameter/front = null
 
-[sub_resource type="SphereMesh" id="SphereMesh_xc8r4"]
+[sub_resource type="SphereMesh" id="SphereMesh_11f68"]
 radial_segments = 32
 rings = 16
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_n4j2n"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_7wubr"]
 render_priority = 0
-shader = ExtResource("15_4sb6r")
+shader = ExtResource("15_pmwu1")
 shader_parameter/colour = null
-shader_parameter/length_metres = 70.0
+shader_parameter/length_metres = 110.0
 shader_parameter/flatness = null
 shader_parameter/sway = null
 shader_parameter/bends = null
 shader_parameter/sway_speed = null
 
-[sub_resource type="CylinderMesh" id="CylinderMesh_ae3nf"]
-top_radius = 8.0
-bottom_radius = 8.0
-height = 70.0
+[sub_resource type="CylinderMesh" id="CylinderMesh_xodi2"]
+top_radius = 13.0
+bottom_radius = 13.0
+height = 110.0
 radial_segments = 28
 rings = 64
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_1cn7s"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_e60fl"]
 render_priority = 0
-shader = ExtResource("16_4pjtv")
-shader_parameter/colour = null
-shader_parameter/energy = null
-shader_parameter/open = null
-shader_parameter/shine = null
-
-[sub_resource type="QuadMesh" id="QuadMesh_s68qq"]
-size = Vector2(5.5, 3.2)
-
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_rbr6h"]
-render_priority = 0
-shader = ExtResource("21_vecc8")
+shader = ExtResource("19_42bj5")
 shader_parameter/colour = null
 shader_parameter/energy = null
 shader_parameter/fade = null
 shader_parameter/flash = null
 
-[sub_resource type="CylinderMesh" id="CylinderMesh_1pbd7"]
+[sub_resource type="CylinderMesh" id="CylinderMesh_xc8r4"]
 top_radius = 0.2
 bottom_radius = 1.5
 height = 56.0
@@ -242,7 +229,7 @@ rings = 1
 cap_top = false
 cap_bottom = false
 
-[sub_resource type="Animation" id="Animation_f5pkt"]
+[sub_resource type="Animation" id="Animation_n4j2n"]
 length = 5.4
 tracks/0/type = "value"
 tracks/0/imported = false
@@ -614,34 +601,22 @@ tracks/30/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
 "update": 0,
-"values": [Vector3(-200, -15, 0)]
+"values": [Vector3(-200, -40, 0)]
 }
 tracks/31/type = "value"
 tracks/31/imported = false
 tracks/31/enabled = true
-tracks/31/path = NodePath("Thing/Eye:open")
+tracks/31/path = NodePath("Lantern/Trail:direction")
 tracks/31/interp = 1
 tracks/31/loop_wrap = true
 tracks/31/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
 "update": 0,
-"values": [0.0]
-}
-tracks/32/type = "value"
-tracks/32/imported = false
-tracks/32/enabled = true
-tracks/32/path = NodePath("Lantern/Trail:direction")
-tracks/32/interp = 1
-tracks/32/loop_wrap = true
-tracks/32/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 0,
 "values": [Vector3(0, 1, 0)]
 }
 
-[sub_resource type="Animation" id="Animation_d4u3s"]
+[sub_resource type="Animation" id="Animation_ae3nf"]
 length = 3.7
 tracks/0/type = "value"
 tracks/0/imported = false
@@ -1013,34 +988,22 @@ tracks/30/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
 "update": 0,
-"values": [Vector3(-200, -15, 0)]
+"values": [Vector3(-200, -40, 0)]
 }
 tracks/31/type = "value"
 tracks/31/imported = false
 tracks/31/enabled = true
-tracks/31/path = NodePath("Thing/Eye:open")
+tracks/31/path = NodePath("Lantern/Trail:direction")
 tracks/31/interp = 1
 tracks/31/loop_wrap = true
 tracks/31/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
 "update": 0,
-"values": [0.0]
-}
-tracks/32/type = "value"
-tracks/32/imported = false
-tracks/32/enabled = true
-tracks/32/path = NodePath("Lantern/Trail:direction")
-tracks/32/interp = 1
-tracks/32/loop_wrap = true
-tracks/32/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 0,
 "values": [Vector3(0, 1, 0)]
 }
 
-[sub_resource type="Animation" id="Animation_5xf57"]
+[sub_resource type="Animation" id="Animation_1cn7s"]
 length = 3.2
 tracks/0/type = "value"
 tracks/0/imported = false
@@ -1412,34 +1375,22 @@ tracks/30/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
 "update": 0,
-"values": [Vector3(-200, -15, 0)]
+"values": [Vector3(-200, -40, 0)]
 }
 tracks/31/type = "value"
 tracks/31/imported = false
 tracks/31/enabled = true
-tracks/31/path = NodePath("Thing/Eye:open")
+tracks/31/path = NodePath("Lantern/Trail:direction")
 tracks/31/interp = 1
 tracks/31/loop_wrap = true
 tracks/31/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
 "update": 0,
-"values": [0.0]
-}
-tracks/32/type = "value"
-tracks/32/imported = false
-tracks/32/enabled = true
-tracks/32/path = NodePath("Lantern/Trail:direction")
-tracks/32/interp = 1
-tracks/32/loop_wrap = true
-tracks/32/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 0,
 "values": [Vector3(0, 1, 0)]
 }
 
-[sub_resource type="Animation" id="Animation_e5ttd"]
+[sub_resource type="Animation" id="Animation_s68qq"]
 length = 3.5
 tracks/0/type = "value"
 tracks/0/imported = false
@@ -1811,34 +1762,22 @@ tracks/30/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
 "update": 0,
-"values": [Vector3(-200, -15, 0)]
+"values": [Vector3(-200, -40, 0)]
 }
 tracks/31/type = "value"
 tracks/31/imported = false
 tracks/31/enabled = true
-tracks/31/path = NodePath("Thing/Eye:open")
+tracks/31/path = NodePath("Lantern/Trail:direction")
 tracks/31/interp = 1
 tracks/31/loop_wrap = true
 tracks/31/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
 "update": 0,
-"values": [0.0]
-}
-tracks/32/type = "value"
-tracks/32/imported = false
-tracks/32/enabled = true
-tracks/32/path = NodePath("Lantern/Trail:direction")
-tracks/32/interp = 1
-tracks/32/loop_wrap = true
-tracks/32/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 0,
 "values": [Vector3(0, 1, 0)]
 }
 
-[sub_resource type="Animation" id="Animation_rh7oi"]
+[sub_resource type="Animation" id="Animation_rbr6h"]
 length = 6.0
 loop_mode = 1
 tracks/0/type = "value"
@@ -2211,34 +2150,22 @@ tracks/30/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
 "update": 0,
-"values": [Vector3(-200, -15, 0)]
+"values": [Vector3(-200, -40, 0)]
 }
 tracks/31/type = "value"
 tracks/31/imported = false
 tracks/31/enabled = true
-tracks/31/path = NodePath("Thing/Eye:open")
+tracks/31/path = NodePath("Lantern/Trail:direction")
 tracks/31/interp = 1
 tracks/31/loop_wrap = true
 tracks/31/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
 "update": 0,
-"values": [0.0]
-}
-tracks/32/type = "value"
-tracks/32/imported = false
-tracks/32/enabled = true
-tracks/32/path = NodePath("Lantern/Trail:direction")
-tracks/32/interp = 1
-tracks/32/loop_wrap = true
-tracks/32/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 0,
 "values": [Vector3(0, 1, 0)]
 }
 
-[sub_resource type="Animation" id="Animation_wi7yg"]
+[sub_resource type="Animation" id="Animation_1pbd7"]
 length = 3.4
 tracks/0/type = "value"
 tracks/0/imported = false
@@ -2610,34 +2537,22 @@ tracks/30/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
 "update": 0,
-"values": [Vector3(-200, -15, 0)]
+"values": [Vector3(-200, -40, 0)]
 }
 tracks/31/type = "value"
 tracks/31/imported = false
 tracks/31/enabled = true
-tracks/31/path = NodePath("Thing/Eye:open")
+tracks/31/path = NodePath("Lantern/Trail:direction")
 tracks/31/interp = 1
 tracks/31/loop_wrap = true
 tracks/31/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
 "update": 0,
-"values": [0.0]
-}
-tracks/32/type = "value"
-tracks/32/imported = false
-tracks/32/enabled = true
-tracks/32/path = NodePath("Lantern/Trail:direction")
-tracks/32/interp = 1
-tracks/32/loop_wrap = true
-tracks/32/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 0,
 "values": [Vector3(0, 1, 0)]
 }
 
-[sub_resource type="Animation" id="Animation_xnjm0"]
+[sub_resource type="Animation" id="Animation_f5pkt"]
 length = 3.8
 tracks/0/type = "value"
 tracks/0/imported = false
@@ -3009,34 +2924,22 @@ tracks/30/keys = {
 "times": PackedFloat32Array(0, 3.8),
 "transitions": PackedFloat32Array(1, 1),
 "update": 0,
-"values": [Vector3(-18.809837, -15, -11.569242), Vector3(-2.6017885, -15, -3.739862)]
+"values": [Vector3(-38.619675, -40, -21.138483), Vector3(-22.411625, -40, -13.309104)]
 }
 tracks/31/type = "value"
 tracks/31/imported = false
 tracks/31/enabled = true
-tracks/31/path = NodePath("Thing/Eye:open")
+tracks/31/path = NodePath("Lantern/Trail:direction")
 tracks/31/interp = 1
 tracks/31/loop_wrap = true
 tracks/31/keys = {
-"times": PackedFloat32Array(0, 0.8),
-"transitions": PackedFloat32Array(1, 1),
-"update": 0,
-"values": [1.0, 0.0]
-}
-tracks/32/type = "value"
-tracks/32/imported = false
-tracks/32/enabled = true
-tracks/32/path = NodePath("Lantern/Trail:direction")
-tracks/32/interp = 1
-tracks/32/loop_wrap = true
-tracks/32/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
 "update": 0,
 "values": [Vector3(0, 1, 0)]
 }
 
-[sub_resource type="Animation" id="Animation_qc47u"]
+[sub_resource type="Animation" id="Animation_d4u3s"]
 length = 8.0
 tracks/0/type = "value"
 tracks/0/imported = false
@@ -3408,34 +3311,22 @@ tracks/30/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
 "update": 0,
-"values": [Vector3(-200, -15, 0)]
+"values": [Vector3(-200, -40, 0)]
 }
 tracks/31/type = "value"
 tracks/31/imported = false
 tracks/31/enabled = true
-tracks/31/path = NodePath("Thing/Eye:open")
+tracks/31/path = NodePath("Lantern/Trail:direction")
 tracks/31/interp = 1
 tracks/31/loop_wrap = true
 tracks/31/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
 "update": 0,
-"values": [0.0]
-}
-tracks/32/type = "value"
-tracks/32/imported = false
-tracks/32/enabled = true
-tracks/32/path = NodePath("Lantern/Trail:direction")
-tracks/32/interp = 1
-tracks/32/loop_wrap = true
-tracks/32/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 0,
 "values": [Vector3(0, 1, 0)]
 }
 
-[sub_resource type="Animation" id="Animation_kmfuo"]
+[sub_resource type="Animation" id="Animation_5xf57"]
 length = 4.5
 tracks/0/type = "value"
 tracks/0/imported = false
@@ -3459,7 +3350,7 @@ tracks/1/keys = {
 "times": PackedFloat32Array(0, 1.399, 1.4),
 "transitions": PackedFloat32Array(1, 1, 1),
 "update": 0,
-"values": [Vector3(0.31766322, 0.16514868, 0), Vector3(0.31766322, 0.16514868, 0), Vector3(-1.1655486, -0.5743048, 0)]
+"values": [Vector3(0.31766322, 0.16514868, 0), Vector3(0.31766322, 0.16514868, 0), Vector3(-1.2512758, -0.5743049, 0)]
 }
 tracks/2/type = "value"
 tracks/2/imported = false
@@ -3807,34 +3698,22 @@ tracks/30/keys = {
 "times": PackedFloat32Array(0, 4.5),
 "transitions": PackedFloat32Array(1, 1),
 "update": 0,
-"values": [Vector3(-38.619675, -15, -21.138483), Vector3(-18.809837, -15, -11.569242)]
+"values": [Vector3(-58.429512, -40, -30.707724), Vector3(-38.619675, -40, -21.138483)]
 }
 tracks/31/type = "value"
 tracks/31/imported = false
 tracks/31/enabled = true
-tracks/31/path = NodePath("Thing/Eye:open")
+tracks/31/path = NodePath("Lantern/Trail:direction")
 tracks/31/interp = 1
 tracks/31/loop_wrap = true
 tracks/31/keys = {
-"times": PackedFloat32Array(0, 2.5, 2.85),
-"transitions": PackedFloat32Array(1, 1, 0.5),
-"update": 0,
-"values": [0.0, 0.0, 1.0]
-}
-tracks/32/type = "value"
-tracks/32/imported = false
-tracks/32/enabled = true
-tracks/32/path = NodePath("Lantern/Trail:direction")
-tracks/32/interp = 1
-tracks/32/loop_wrap = true
-tracks/32/keys = {
 "times": PackedFloat32Array(0, 2.9, 3.2, 3.9, 4.5),
 "transitions": PackedFloat32Array(1, 1, 1, 1, 1),
 "update": 0,
 "values": [Vector3(0, 1, 0), Vector3(0, 1, 0), Vector3(0.9, 0.45, 0.2), Vector3(0.4, 0.9, 0), Vector3(0, 1, 0)]
 }
 
-[sub_resource type="Animation" id="Animation_affyl"]
+[sub_resource type="Animation" id="Animation_e5ttd"]
 length = 1.9
 tracks/0/type = "value"
 tracks/0/imported = false
@@ -4206,82 +4085,70 @@ tracks/30/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
 "update": 0,
-"values": [Vector3(-200, -15, 0)]
+"values": [Vector3(-200, -40, 0)]
 }
 tracks/31/type = "value"
 tracks/31/imported = false
 tracks/31/enabled = true
-tracks/31/path = NodePath("Thing/Eye:open")
+tracks/31/path = NodePath("Lantern/Trail:direction")
 tracks/31/interp = 1
 tracks/31/loop_wrap = true
 tracks/31/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
 "update": 0,
-"values": [0.0]
-}
-tracks/32/type = "value"
-tracks/32/imported = false
-tracks/32/enabled = true
-tracks/32/path = NodePath("Lantern/Trail:direction")
-tracks/32/interp = 1
-tracks/32/loop_wrap = true
-tracks/32/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 0,
 "values": [Vector3(0, 1, 0)]
 }
 
-[sub_resource type="AnimationLibrary" id="AnimationLibrary_xqxt6"]
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_rh7oi"]
 _data = {
-&"flares": SubResource("Animation_f5pkt"),
-&"lantern_appears": SubResource("Animation_d4u3s"),
-&"lantern_arrives": SubResource("Animation_5xf57"),
-&"lantern_drives": SubResource("Animation_e5ttd"),
-&"offered": SubResource("Animation_rh7oi"),
-&"opens_door": SubResource("Animation_wi7yg"),
-&"rising": SubResource("Animation_xnjm0"),
-&"sinking": SubResource("Animation_qc47u"),
-&"something_passes": SubResource("Animation_kmfuo"),
-&"taken": SubResource("Animation_affyl")
+&"flares": SubResource("Animation_n4j2n"),
+&"lantern_appears": SubResource("Animation_ae3nf"),
+&"lantern_arrives": SubResource("Animation_1cn7s"),
+&"lantern_drives": SubResource("Animation_s68qq"),
+&"offered": SubResource("Animation_rbr6h"),
+&"opens_door": SubResource("Animation_1pbd7"),
+&"rising": SubResource("Animation_f5pkt"),
+&"sinking": SubResource("Animation_d4u3s"),
+&"something_passes": SubResource("Animation_5xf57"),
+&"taken": SubResource("Animation_e5ttd")
 }
 
 [node name="Underwater" type="Node3D" unique_id=700571466]
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="." unique_id=486641737]
-environment = SubResource("Environment_16usi")
+environment = SubResource("Environment_ohrgi")
 
 [node name="Camera" type="Camera3D" parent="." unique_id=1006802645]
 transform = Transform3D(1, 0, 0, 0, 0.99820054, -0.059964005, 0, 0.059964005, 0.99820054, 0, 1.2, 6.5)
 current = true
 fov = 65.0
 
-[node name="Lens" type="MeshInstance3D" parent="Camera" unique_id=1433153070 node_paths=PackedStringArray("heat_source")]
+[node name="Lens" type="MeshInstance3D" parent="Camera" unique_id=1213468695 node_paths=PackedStringArray("heat_source")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -1)
-material_override = SubResource("ShaderMaterial_chxrw")
+material_override = SubResource("ShaderMaterial_xedh0")
 cast_shadow = 0
 extra_cull_margin = 16384.0
-mesh = SubResource("QuadMesh_gjmhq")
-script = ExtResource("2_13tl2")
+mesh = SubResource("QuadMesh_p7sjk")
+script = ExtResource("2_n12d8")
 heat_source = NodePath("../../Lantern")
 
-[node name="Deep" type="MeshInstance3D" parent="." unique_id=457158376]
+[node name="Deep" type="MeshInstance3D" parent="." unique_id=846276424]
 cast_shadow = 0
-mesh = SubResource("SphereMesh_5eg2c")
+mesh = SubResource("SphereMesh_16usi")
 
 [node name="Surface" type="MeshInstance3D" parent="." unique_id=1657524249]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 10, 0)
-material_override = SubResource("ShaderMaterial_1k3hu")
+material_override = SubResource("ShaderMaterial_chxrw")
 cast_shadow = 0
 mesh = SubResource("PlaneMesh_2akkt")
-script = ExtResource("4_5sp6a")
+script = ExtResource("4_13tl2")
 
 [node name="StormLight" type="DirectionalLight3D" parent="." unique_id=1653939318]
 transform = Transform3D(1, 0, 0, 0, -4.371139e-08, 1, 0, -1, -4.371139e-08, 0, 0, 0)
 light_color = Color(0.75, 0.85, 1, 1)
 light_volumetric_fog_energy = 0.35
-script = ExtResource("5_w1y1v")
+script = ExtResource("5_a6idw")
 peak_energy = 1.4
 
 [node name="Moonglow" type="DirectionalLight3D" parent="." unique_id=1431573173]
@@ -4290,7 +4157,7 @@ light_color = Color(0.5, 0.7, 1, 1)
 light_energy = 0.12
 light_volumetric_fog_energy = 0.3
 
-[node name="Castaway" parent="." unique_id=2019297073 instance=ExtResource("6_8cx30")]
+[node name="Castaway" parent="." unique_id=2019297073 instance=ExtResource("6_5sp6a")]
 transform = Transform3D(0.83711946, -0.31049567, 0.45035928, 0.15892528, 0.9258315, 0.3428978, -0.5234251, -0.21547297, 0.8243771, 0, 7.5, 0)
 
 [node name="Character" parent="Castaway" index="5"]
@@ -4299,7 +4166,7 @@ blend_seconds = 0.8
 [node name="Lantern" type="Node3D" parent="." unique_id=1395549539]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.8, 11, -0.6)
 
-[node name="Body" parent="Lantern" unique_id=1061385630 node_paths=PackedStringArray("light") instance=ExtResource("7_jsgrj")]
+[node name="Body" parent="Lantern" unique_id=1061385630 node_paths=PackedStringArray("light") instance=ExtResource("7_w1y1v")]
 transform = Transform3D(-1.6311296, -0.076256774, -0.7573645, 0, 1.7909446, -0.18032488, 0.7611938, -0.16340736, -1.6229239, 0, 0, 0)
 look_name = "sinking_lantern"
 light = NodePath("../Light")
@@ -4313,42 +4180,42 @@ shadow_enabled = true
 omni_range = 6.5
 omni_attenuation = 1.3
 
-[node name="Far" type="OmniLight3D" parent="Lantern" unique_id=1132103098]
+[node name="Far" type="OmniLight3D" parent="Lantern" unique_id=960336531]
 light_color = Color(0.2, 0.62, 0.72, 1)
 light_energy = 0.0
 light_volumetric_fog_energy = 0.0
 light_specular = 0.0
 omni_range = 15.0
 
-[node name="Hand" type="MeshInstance3D" parent="Lantern" unique_id=1546073013 node_paths=PackedStringArray("face", "light", "rays")]
+[node name="Hand" type="MeshInstance3D" parent="Lantern" unique_id=1883631544 node_paths=PackedStringArray("face", "light", "rays")]
 transform = Transform3D(-0.99280864, 0.119712204, -8.742278e-08, 0.119712204, 0.99280864, 0, 8.679409e-08, -1.0465573e-08, -1, 0.14, -0.02, 0.22)
-material_override = SubResource("ShaderMaterial_l5j6m")
+material_override = SubResource("ShaderMaterial_gjmhq")
 cast_shadow = 0
-mesh = SubResource("QuadMesh_ppwqo")
-script = ExtResource("9_ae1ut")
+mesh = SubResource("QuadMesh_h4uql")
+script = ExtResource("9_jsgrj")
 face = NodePath("../Body")
 light = NodePath("../PalmLight")
 rays = NodePath("../Rays")
 
-[node name="PalmLight" type="OmniLight3D" parent="Lantern" unique_id=74657413]
+[node name="PalmLight" type="OmniLight3D" parent="Lantern" unique_id=927772458]
 light_energy = 0.0
 light_volumetric_fog_energy = 1.5
 omni_range = 2.6
 omni_attenuation = 1.6
 
-[node name="Rays" type="MeshInstance3D" parent="Lantern" unique_id=803100735]
+[node name="Rays" type="MeshInstance3D" parent="Lantern" unique_id=1987312449]
 visible = false
-material_override = SubResource("ShaderMaterial_hjlbx")
+material_override = SubResource("ShaderMaterial_5eg2c")
 cast_shadow = 0
-mesh = SubResource("QuadMesh_qslim")
+mesh = SubResource("QuadMesh_1k3hu")
 
-[node name="Trail" type="CPUParticles3D" parent="Lantern" unique_id=2096779032]
+[node name="Trail" type="CPUParticles3D" parent="Lantern" unique_id=70075366]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.25, 0)
 cast_shadow = 0
 emitting = false
 amount = 110
 lifetime = 4.5
-mesh = SubResource("SphereMesh_d2tav")
+mesh = SubResource("SphereMesh_ppwqo")
 emission_shape = 1
 emission_sphere_radius = 0.16
 direction = Vector3(0, 1, 0)
@@ -4359,13 +4226,13 @@ initial_velocity_max = 1.7
 scale_amount_min = 0.5
 scale_amount_max = 1.8
 
-[node name="Wisp" type="CPUParticles3D" parent="Lantern" unique_id=965180897]
+[node name="Wisp" type="CPUParticles3D" parent="Lantern" unique_id=318425297]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.2, 0)
 cast_shadow = 0
 emitting = false
 amount = 14
 lifetime = 3.5
-mesh = SubResource("SphereMesh_den2n")
+mesh = SubResource("SphereMesh_hjlbx")
 emission_shape = 1
 emission_sphere_radius = 0.1
 direction = Vector3(0, 1, 0)
@@ -4376,7 +4243,7 @@ initial_velocity_max = 0.9
 scale_amount_min = 0.5
 scale_amount_max = 1.8
 
-[node name="Gasp" type="CPUParticles3D" parent="Lantern" unique_id=884037913]
+[node name="Gasp" type="CPUParticles3D" parent="Lantern" unique_id=1937052384]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.1, 0, 0.2)
 cast_shadow = 0
 emitting = false
@@ -4384,7 +4251,7 @@ amount = 60
 lifetime = 2.6
 one_shot = true
 explosiveness = 0.85
-mesh = SubResource("SphereMesh_11f68")
+mesh = SubResource("SphereMesh_qslim")
 emission_shape = 1
 emission_sphere_radius = 0.14
 direction = Vector3(0, 1, 0)
@@ -4395,9 +4262,9 @@ initial_velocity_max = 1.8
 scale_amount_min = 0.5
 scale_amount_max = 1.8
 
-[node name="Hiss" type="AudioStreamPlayer" parent="Lantern" unique_id=885739847]
+[node name="Hiss" type="AudioStreamPlayer" parent="Lantern" unique_id=835449845]
 volume_db = -80.0
-script = ExtResource("12_67quv")
+script = ExtResource("12_2bi5t")
 recording = "res://assets/third_party/audio/lantern_hiss.ogg"
 loop = true
 
@@ -4454,7 +4321,7 @@ initial_velocity_max = 4.0
 scale_amount_min = 0.5
 scale_amount_max = 1.6
 
-[node name="DiveSplash" type="CPUParticles3D" parent="." unique_id=1382141619]
+[node name="DiveSplash" type="CPUParticles3D" parent="." unique_id=876555352]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.7, 9.8, -0.4)
 cast_shadow = 0
 emitting = false
@@ -4462,7 +4329,7 @@ amount = 120
 lifetime = 2.4
 one_shot = true
 explosiveness = 0.9
-mesh = SubResource("SphereMesh_xodi2")
+mesh = SubResource("SphereMesh_d2tav")
 emission_shape = 1
 emission_sphere_radius = 0.35
 direction = Vector3(0, -1, 0)
@@ -4473,406 +4340,399 @@ initial_velocity_max = 4.5
 scale_amount_min = 0.5
 scale_amount_max = 1.8
 
-[node name="Flare" type="MeshInstance3D" parent="." unique_id=448189130]
-material_override = SubResource("ShaderMaterial_e60fl")
+[node name="Flare" type="MeshInstance3D" parent="." unique_id=1505546452]
+material_override = SubResource("ShaderMaterial_den2n")
 cast_shadow = 0
 extra_cull_margin = 100.0
-mesh = SubResource("SphereMesh_xc8r4")
-script = ExtResource("14_nh030")
+mesh = SubResource("SphereMesh_11f68")
+script = ExtResource("14_67quv")
 
-[node name="Thing" type="Node3D" parent="." unique_id=1888278423]
-transform = Transform3D(0.90044713, 0, -0.43496552, 0, 1, 0, 0.43496552, 0, 0.90044713, -200, -15, 0)
+[node name="Thing" type="Node3D" parent="." unique_id=699759890]
+transform = Transform3D(0.90044713, 0, -0.43496552, 0, 1, 0, 0.43496552, 0, 0.90044713, -200, -40, 0)
 
-[node name="Body" type="MeshInstance3D" parent="Thing" unique_id=1439117474]
+[node name="Body" type="MeshInstance3D" parent="Thing" unique_id=1198328977]
 transform = Transform3D(-4.371139e-08, 1, 0, -1, -4.371139e-08, 0, 0, 0, 1, 0, 0, 0)
-material_override = SubResource("ShaderMaterial_n4j2n")
+material_override = SubResource("ShaderMaterial_7wubr")
 cast_shadow = 0
 extra_cull_margin = 20.0
-mesh = SubResource("CylinderMesh_ae3nf")
+mesh = SubResource("CylinderMesh_xodi2")
 
-[node name="Eye" type="MeshInstance3D" parent="Thing" unique_id=831945487]
-transform = Transform3D(1, 0, 0, 0, -4.371139e-08, 1, 0, -1, -4.371139e-08, 25.2, 2.6, 1.5)
-material_override = SubResource("ShaderMaterial_1cn7s")
-cast_shadow = 0
-mesh = SubResource("QuadMesh_s68qq")
-script = ExtResource("17_42bj5")
-
-[node name="Lanterns" type="Node3D" parent="." unique_id=583618592 node_paths=PackedStringArray("thing")]
-script = ExtResource("18_ohrgi")
+[node name="Lanterns" type="Node3D" parent="." unique_id=2050642671 node_paths=PackedStringArray("thing")]
+script = ExtResource("16_nh030")
 thing = NodePath("../Thing")
-thing_length = 70.0
+thing_length = 110.0
 wake_reach = 11.0
 
-[node name="Dead00" parent="Lanterns" unique_id=897666259 instance=ExtResource("19_xedh0")]
+[node name="Dead00" parent="Lanterns" unique_id=1624569835 instance=ExtResource("17_4sb6r")]
 transform = Transform3D(1.1462193, 0.9600145, -2.5514674, -1.7147073, 2.4056256, 0.13482642, 2.1192908, 1.4271549, 1.4890493, 6.8753357, -25.979908, -0.53816587)
 
-[node name="Dead01" parent="Lanterns" unique_id=1278546298 instance=ExtResource("19_xedh0")]
+[node name="Dead01" parent="Lanterns" unique_id=487964109 instance=ExtResource("17_4sb6r")]
 transform = Transform3D(0.4759569, 2.344354, -1.2995942, 0.7082764, 1.1630158, 2.3573742, 2.5852048, -0.75024927, -0.4065913, -6.1248026, -42.459354, 13.043855)
 
-[node name="Dead02" parent="Lanterns" unique_id=521295536 instance=ExtResource("19_xedh0")]
+[node name="Dead02" parent="Lanterns" unique_id=223647898 instance=ExtResource("17_4sb6r")]
 transform = Transform3D(1.0865016, 2.0116413, -1.7317266, -2.6487947, 0.9427048, -0.56679624, 0.1716518, 1.8140205, 2.2149332, 3.228231, -14.568139, 3.4626372)
 
-[node name="Dead03" parent="Lanterns" unique_id=1519602417 instance=ExtResource("19_xedh0")]
+[node name="Dead03" parent="Lanterns" unique_id=174966412 instance=ExtResource("17_4sb6r")]
 transform = Transform3D(-1.2406194, -0.16185074, 1.7171191, -0.10964741, 2.118325, 0.120446935, -1.7212412, -0.018285446, -1.2453214, -8.337305, -39.66303, 16.382742)
 
-[node name="Dead04" parent="Lanterns" unique_id=279471992 instance=ExtResource("19_xedh0")]
+[node name="Dead04" parent="Lanterns" unique_id=992601803 instance=ExtResource("17_4sb6r")]
 transform = Transform3D(-0.42393067, -0.12799788, 1.9883108, -0.99222547, 1.7763788, -0.097199135, -1.7277883, -0.98872423, -0.43203357, 1.5716159, -14.369545, 5.578416)
 
-[node name="Dead05" parent="Lanterns" unique_id=586364620 instance=ExtResource("19_xedh0")]
+[node name="Dead05" parent="Lanterns" unique_id=499302483 instance=ExtResource("17_4sb6r")]
 transform = Transform3D(-2.0510771, 0.3486699, -0.6947642, 0.10394419, 2.0658305, 0.7298811, 0.7703659, 0.6495846, -1.9482715, -8.116833, -18.67666, 2.8176713)
 
-[node name="Dead06" parent="Lanterns" unique_id=932111611 instance=ExtResource("19_xedh0")]
+[node name="Dead06" parent="Lanterns" unique_id=217279097 instance=ExtResource("17_4sb6r")]
 transform = Transform3D(-1.7638433, 0.24413487, -1.585334, 0.016456196, 2.358974, 0.34496307, 1.6039371, 0.24427131, -1.7469243, -4.638082, -34.18993, 10.042551)
 
-[node name="Dead07" parent="Lanterns" unique_id=876692469 instance=ExtResource("19_xedh0")]
+[node name="Dead07" parent="Lanterns" unique_id=1882154065 instance=ExtResource("17_4sb6r")]
 transform = Transform3D(-1.1543614, 1.1826761, 2.624485, 2.8058627, 1.0941273, 0.7410906, -0.6432571, 2.650162, -1.4771788, -3.933175, -14.387733, 5.6657543)
 
-[node name="Dead08" parent="Lanterns" unique_id=536205409 instance=ExtResource("19_xedh0")]
+[node name="Dead08" parent="Lanterns" unique_id=858311623 instance=ExtResource("17_4sb6r")]
 transform = Transform3D(-0.84606886, 2.3493173, -1.5535641, 0.6518925, 1.7414376, 2.278402, 2.7400525, 0.31110865, -1.0217669, 10.87849, -25.030998, 4.9860373)
 
-[node name="Dead09" parent="Lanterns" unique_id=634213050 instance=ExtResource("19_xedh0")]
+[node name="Dead09" parent="Lanterns" unique_id=1006432939 instance=ExtResource("17_4sb6r")]
 transform = Transform3D(-1.6473148, -2.2202518, 0.4675525, -2.1871934, 1.4001775, -1.0570985, 0.6035799, -0.9857758, -2.5545459, -18.157913, -43.83176, -2.4185348)
 
-[node name="Dead10" parent="Lanterns" unique_id=318459911 instance=ExtResource("19_xedh0")]
+[node name="Dead10" parent="Lanterns" unique_id=1615562541 instance=ExtResource("17_4sb6r")]
 transform = Transform3D(1.4780463, 0.056716602, -1.8869398, -0.04602087, 2.396866, 0.03599538, 1.8872311, 0.014029068, 1.4786961, -11.032144, -44.461025, -7.282571)
 
-[node name="Dead11" parent="Lanterns" unique_id=336809610 instance=ExtResource("19_xedh0")]
+[node name="Dead11" parent="Lanterns" unique_id=637443423 instance=ExtResource("17_4sb6r")]
 transform = Transform3D(-1.0194049, -0.5378259, 1.6830411, 1.153471, 1.2693187, 1.1042668, -1.3384278, 1.5035437, -0.33020872, 0.9706152, -34.424294, 2.2261143)
 
-[node name="Dead12" parent="Lanterns" unique_id=16954916 instance=ExtResource("19_xedh0")]
+[node name="Dead12" parent="Lanterns" unique_id=1479443092 instance=ExtResource("17_4sb6r")]
 transform = Transform3D(0.7868632, 0.53225875, 2.2754495, 0.089322485, 2.3923748, -0.59049743, -2.3351638, 0.2708622, 0.74415445, -8.212202, -21.185162, -8.707939)
 
-[node name="Dead13" parent="Lanterns" unique_id=52823310 instance=ExtResource("19_xedh0")]
+[node name="Dead13" parent="Lanterns" unique_id=969650993 instance=ExtResource("17_4sb6r")]
 transform = Transform3D(1.7556355, -0.3700981, -1.5429087, 0.07782859, 2.3184307, -0.46756387, 1.5847656, 0.29614294, 1.7322276, -18.094187, -51.255142, -13.854394)
 
-[node name="Dead14" parent="Lanterns" unique_id=1251738955 instance=ExtResource("19_xedh0")]
+[node name="Dead14" parent="Lanterns" unique_id=180080232 instance=ExtResource("17_4sb6r")]
 transform = Transform3D(-2.819092, 0.70075274, -0.9308348, 1.0127876, 2.6786017, -1.0507814, 0.5759939, -1.2801663, -2.7081714, -3.2209768, -18.934784, -5.781395)
 
-[node name="Dead15" parent="Lanterns" unique_id=2068577715 instance=ExtResource("19_xedh0")]
+[node name="Dead15" parent="Lanterns" unique_id=166377411 instance=ExtResource("17_4sb6r")]
 transform = Transform3D(-0.86237746, -1.549908, -2.2099636, 1.5499892, 1.6150535, -1.7375221, 2.2099063, -1.7375947, 0.35626772, 5.160289, -33.07755, -12.443864)
 
-[node name="Dead16" parent="Lanterns" unique_id=212930534 instance=ExtResource("19_xedh0")]
+[node name="Dead16" parent="Lanterns" unique_id=1947962548 instance=ExtResource("17_4sb6r")]
 transform = Transform3D(-2.0266578, 0.13743433, -1.6135055, 0.18264638, 2.5877, -0.009000851, 1.6090147, -0.12063382, -2.0312927, -7.6865535, -28.94722, -2.1927671)
 
-[node name="Dead17" parent="Lanterns" unique_id=1204921442 instance=ExtResource("19_xedh0")]
+[node name="Dead17" parent="Lanterns" unique_id=1056815484 instance=ExtResource("17_4sb6r")]
 transform = Transform3D(0.8366244, 0.36518487, -2.1753306, 1.6986139, 1.3775578, 0.8845391, 1.4071726, -1.8799838, 0.22559018, -16.738573, -50.78904, 0.91850495)
 
-[node name="Dead18" parent="Lanterns" unique_id=1178400169 instance=ExtResource("19_xedh0")]
+[node name="Dead18" parent="Lanterns" unique_id=901201678 instance=ExtResource("17_4sb6r")]
 transform = Transform3D(-2.1325448, -0.37113273, 1.4786935, -0.107600555, 2.5728917, 0.4905826, -1.5207552, 0.33839273, -2.108273, 8.434974, -32.982937, -10.661289)
 
-[node name="Dead19" parent="Lanterns" unique_id=1849210881 instance=ExtResource("19_xedh0")]
+[node name="Dead19" parent="Lanterns" unique_id=231445926 instance=ExtResource("17_4sb6r")]
 transform = Transform3D(0.04645349, -0.11533695, -2.460476, 0.4100699, 2.426933, -0.10602254, 2.4288037, -0.40754813, 0.06495966, 0.19605546, -9.648921, 4.272406)
 
-[node name="Dead20" parent="Lanterns" unique_id=1194695516 instance=ExtResource("19_xedh0")]
+[node name="Dead20" parent="Lanterns" unique_id=796869614 instance=ExtResource("17_4sb6r")]
 transform = Transform3D(1.1015353, 0.0037365318, -1.5427563, -0.34839737, 1.8472781, -0.24428324, 1.5029074, 0.4254892, 1.0741135, 13.902208, -40.023457, 10.241925)
 
-[node name="Dead21" parent="Lanterns" unique_id=1118311660 instance=ExtResource("19_xedh0")]
+[node name="Dead21" parent="Lanterns" unique_id=1514375674 instance=ExtResource("17_4sb6r")]
 transform = Transform3D(-2.3742127, -0.7040033, 1.8108685, -1.3326665, 2.670799, -0.7089319, -1.4138125, -1.3352767, -2.3727455, 6.6969953, -12.772931, -3.4539902)
 
-[node name="Dead22" parent="Lanterns" unique_id=1361423790 instance=ExtResource("19_xedh0")]
+[node name="Dead22" parent="Lanterns" unique_id=1219723257 instance=ExtResource("17_4sb6r")]
 transform = Transform3D(1.815216, -0.43820783, 1.9164147, -0.99820566, 2.041699, 1.4123495, -1.6935928, -1.673057, 1.2215987, 8.483555, -27.729826, -11.926858)
 
-[node name="Dead23" parent="Lanterns" unique_id=172870566 instance=ExtResource("19_xedh0")]
+[node name="Dead23" parent="Lanterns" unique_id=1264189631 instance=ExtResource("17_4sb6r")]
 transform = Transform3D(2.1770453, 0.51432645, -0.48712152, -0.0009386658, 1.5763844, 1.6602279, 0.70839125, -1.5785518, 1.4992335, -1.2264302, -7.4055, -6.550155)
 
-[node name="Dead24" parent="Lanterns" unique_id=725361251 instance=ExtResource("19_xedh0")]
+[node name="Dead24" parent="Lanterns" unique_id=685510854 instance=ExtResource("17_4sb6r")]
 transform = Transform3D(1.945739, -0.6262103, -0.274806, 0.6699785, 1.9116817, 0.38750526, 0.13706343, -0.4548541, 2.0069578, -8.973106, -19.02932, 3.4137757)
 
-[node name="Dead25" parent="Lanterns" unique_id=507869883 instance=ExtResource("19_xedh0")]
+[node name="Dead25" parent="Lanterns" unique_id=508690856 instance=ExtResource("17_4sb6r")]
 transform = Transform3D(2.732188, -1.2082976, 1.0638477, 1.3370252, 2.8703306, -0.17370008, -0.89672655, 0.5981847, 2.982392, -5.575558, -19.289656, 5.2754865)
 
-[node name="Dead26" parent="Lanterns" unique_id=2136995988 instance=ExtResource("19_xedh0")]
+[node name="Dead26" parent="Lanterns" unique_id=147997630 instance=ExtResource("17_4sb6r")]
 transform = Transform3D(-1.7935027, -0.93188596, 1.8011124, 0.40234512, 2.193137, 1.5353625, -1.9875954, 1.2848377, -1.3144294, 10.594496, -42.926838, -7.244693)
 
-[node name="Dead27" parent="Lanterns" unique_id=1552530971 instance=ExtResource("19_xedh0")]
+[node name="Dead27" parent="Lanterns" unique_id=1170257302 instance=ExtResource("17_4sb6r")]
 transform = Transform3D(-1.2791855, 2.0775547, -0.69121116, 1.0174663, 1.2728819, 1.9428991, 1.9387546, 0.7027521, -1.4757009, 0.48544955, -11.612564, -7.102426)
 
-[node name="Dead28" parent="Lanterns" unique_id=1320686736 instance=ExtResource("19_xedh0")]
+[node name="Dead28" parent="Lanterns" unique_id=1862003874 instance=ExtResource("17_4sb6r")]
 transform = Transform3D(-0.45395866, -0.0042354837, 1.9907268, -0.22613809, 2.0287232, -0.04725144, -1.9778454, -0.2309831, -0.45151263, -2.0981193, -22.820173, -10.089239)
 
-[node name="Dead29" parent="Lanterns" unique_id=1833070245 instance=ExtResource("19_xedh0")]
+[node name="Dead29" parent="Lanterns" unique_id=1814747784 instance=ExtResource("17_4sb6r")]
 transform = Transform3D(2.4810536, 1.8248286, 0.15939675, -1.8159906, 2.4151855, 0.61651486, 0.23996831, -0.5898416, 3.017538, 3.601971, -9.635911, 0.6439073)
 
-[node name="Dead30" parent="Lanterns" unique_id=286412551 instance=ExtResource("19_xedh0")]
+[node name="Dead30" parent="Lanterns" unique_id=548298790 instance=ExtResource("17_4sb6r")]
 transform = Transform3D(0.3175795, -1.7078056, -0.9142257, 1.7997595, 0.60276854, -0.50080043, 0.7164315, -0.75718915, 1.6633269, 0.55964726, -47.266636, -7.666478)
 
-[node name="Dead31" parent="Lanterns" unique_id=1169464157 instance=ExtResource("19_xedh0")]
+[node name="Dead31" parent="Lanterns" unique_id=2070164976 instance=ExtResource("17_4sb6r")]
 transform = Transform3D(-1.3055676, 1.8205787, -1.581387, -1.4812361, 0.8136241, 2.1595726, 1.9029534, 1.8823676, 0.59603614, 7.561331, -38.052322, 3.6891406)
 
-[node name="Dead32" parent="Lanterns" unique_id=1816392199 instance=ExtResource("19_xedh0")]
+[node name="Dead32" parent="Lanterns" unique_id=1068786619 instance=ExtResource("17_4sb6r")]
 transform = Transform3D(-2.1119616, -0.84460527, 0.72663385, -0.8494614, 2.2283342, 0.12115225, -0.720951, -0.15134177, -2.2713566, 2.8979385, -31.34015, -8.598091)
 
-[node name="Dead33" parent="Lanterns" unique_id=836985592 instance=ExtResource("19_xedh0")]
+[node name="Dead33" parent="Lanterns" unique_id=570101023 instance=ExtResource("17_4sb6r")]
 transform = Transform3D(-1.9958183, -0.89090836, 1.9933324, -0.78191656, 2.8131654, 0.47443625, -2.038553, -0.20679836, -2.1335227, 3.931437, -18.051012, 4.1810374)
 
-[node name="Dead34" parent="Lanterns" unique_id=1945433677 instance=ExtResource("19_xedh0")]
+[node name="Dead34" parent="Lanterns" unique_id=843193842 instance=ExtResource("17_4sb6r")]
 transform = Transform3D(2.9420183, -0.35820907, 1.0131218, 0.09034707, 3.0249789, 0.80718046, -1.0707787, -0.7289644, 2.851709, -1.0332319, -4.158971, -3.4305139)
 
-[node name="Dead35" parent="Lanterns" unique_id=1974820413 instance=ExtResource("19_xedh0")]
+[node name="Dead35" parent="Lanterns" unique_id=1968892030 instance=ExtResource("17_4sb6r")]
 transform = Transform3D(2.5116923, -1.0565363, -1.0322882, 1.3675442, 2.4329393, 0.8373253, 0.5583107, -1.2062428, 2.5930197, 9.53267, -27.79586, 3.5766943)
 
-[node name="Dead36" parent="Lanterns" unique_id=177536907 instance=ExtResource("19_xedh0")]
+[node name="Dead36" parent="Lanterns" unique_id=1510668298 instance=ExtResource("17_4sb6r")]
 transform = Transform3D(2.4807897, -0.12463571, -1.3097966, 1.267721, 0.97455966, 2.308362, 0.3521139, -2.6306117, 0.91723305, -23.153942, -47.667175, 2.6232271)
 
-[node name="Dead37" parent="Lanterns" unique_id=2103376238 instance=ExtResource("19_xedh0")]
+[node name="Dead37" parent="Lanterns" unique_id=1260333990 instance=ExtResource("17_4sb6r")]
 transform = Transform3D(2.1406388, -0.02376138, -1.255128, -0.21907641, 2.435992, -0.4197548, 1.2360891, 0.47288892, 2.0992153, -11.671698, -22.311975, 2.0590713)
 
-[node name="Dead38" parent="Lanterns" unique_id=1246297916 instance=ExtResource("19_xedh0")]
+[node name="Dead38" parent="Lanterns" unique_id=917257037 instance=ExtResource("17_4sb6r")]
 transform = Transform3D(-2.5110471, -0.275468, 1.8185068, -0.064199, 3.0887322, 0.3792343, -1.8381317, 0.2684354, -2.4974828, -5.347391, -47.891956, 17.379406)
 
-[node name="Dead39" parent="Lanterns" unique_id=1462761934 instance=ExtResource("19_xedh0")]
+[node name="Dead39" parent="Lanterns" unique_id=2063915435 instance=ExtResource("17_4sb6r")]
 transform = Transform3D(1.4424282, 1.021833, 0.5510661, -0.3323158, 1.2055234, -1.3655384, -1.112377, 0.96487623, 1.1225181, -1.1281717, -3.9642653, -1.2899696)
 
-[node name="Dead40" parent="Lanterns" unique_id=1488211569 instance=ExtResource("19_xedh0")]
+[node name="Dead40" parent="Lanterns" unique_id=1487332011 instance=ExtResource("17_4sb6r")]
 transform = Transform3D(0.2387406, 2.081257, 1.5943754, -0.29121494, 1.6121165, -2.0608096, -2.6055439, 0.010519162, 0.3764207, 1.753159, -5.8315783, 1.2927219)
 
-[node name="Dead41" parent="Lanterns" unique_id=624646051 instance=ExtResource("19_xedh0")]
+[node name="Dead41" parent="Lanterns" unique_id=1440620889 instance=ExtResource("17_4sb6r")]
 transform = Transform3D(2.456107, 0.8441144, -0.08343783, -0.69062454, 2.1384556, 1.3046064, 0.49247208, -1.2109628, 2.245661, 3.0926688, -7.4767776, 1.196619)
 
-[node name="Dead42" parent="Lanterns" unique_id=365632130 instance=ExtResource("19_xedh0")]
+[node name="Dead42" parent="Lanterns" unique_id=525024614 instance=ExtResource("17_4sb6r")]
 transform = Transform3D(-2.1213036, 0.5866312, 0.01306248, 0.40922564, 1.4439439, 1.6099056, 0.42052484, 1.5540675, -1.5007561, -11.41519, -29.685467, 5.078725)
 
-[node name="Dead43" parent="Lanterns" unique_id=614776694 instance=ExtResource("19_xedh0")]
+[node name="Dead43" parent="Lanterns" unique_id=2114835324 instance=ExtResource("17_4sb6r")]
 transform = Transform3D(-0.50059587, 0.7506879, -2.848945, 2.8617916, 0.81061393, -0.2892589, 0.70012105, -2.7766867, -0.85466814, -15.765404, -36.49181, -2.7367153)
 
-[node name="Dead44" parent="Lanterns" unique_id=553441175 instance=ExtResource("19_xedh0")]
+[node name="Dead44" parent="Lanterns" unique_id=1321670351 instance=ExtResource("17_4sb6r")]
 transform = Transform3D(-1.1372924, -1.5820827, -2.047318, -1.7516863, 2.1167052, -0.66263455, 1.9042299, 1.0022492, -1.8323033, -0.73279893, -45.67694, 12.112055)
 
-[node name="Dead45" parent="Lanterns" unique_id=1315558665 instance=ExtResource("19_xedh0")]
+[node name="Dead45" parent="Lanterns" unique_id=1265016449 instance=ExtResource("17_4sb6r")]
 transform = Transform3D(0.7394727, 0.5764996, 2.0853689, 0.9778949, 1.8768022, -0.8656034, -1.9299834, 1.1718343, 0.3604197, 18.074545, -48.25327, -1.9456433)
 
-[node name="Dead46" parent="Lanterns" unique_id=1475707217 instance=ExtResource("19_xedh0")]
+[node name="Dead46" parent="Lanterns" unique_id=1344283103 instance=ExtResource("17_4sb6r")]
 transform = Transform3D(-1.0632513, 0.9111944, -1.3985115, 0.034794834, 1.6698831, 1.0615519, 1.6688017, 0.5457361, -0.91317356, -7.1720514, -39.909534, -19.907755)
 
-[node name="Dead47" parent="Lanterns" unique_id=1187010836 instance=ExtResource("19_xedh0")]
+[node name="Dead47" parent="Lanterns" unique_id=1452079599 instance=ExtResource("17_4sb6r")]
 transform = Transform3D(2.7407417, -1.1406219, -0.5615041, 1.2703799, 2.508932, 1.1042492, 0.049398307, -1.237826, 2.7555976, 4.6934824, -46.186703, 9.886637)
 
-[node name="Dead48" parent="Lanterns" unique_id=456566513 instance=ExtResource("19_xedh0")]
+[node name="Dead48" parent="Lanterns" unique_id=1249720394 instance=ExtResource("17_4sb6r")]
 transform = Transform3D(0.4741832, -1.0708178, 1.8498645, 0.2902025, 1.9095467, 1.0309769, -2.1176476, 0.021907035, 0.55550635, 4.0585337, -6.7833114, -1.2117662)
 
-[node name="Dead49" parent="Lanterns" unique_id=1368585161 instance=ExtResource("19_xedh0")]
+[node name="Dead49" parent="Lanterns" unique_id=1590891008 instance=ExtResource("17_4sb6r")]
 transform = Transform3D(-1.9894159, 0.43902138, -0.48548645, 0.40094534, 2.0451958, 0.20646848, 0.51737773, 0.10318253, -2.026792, 1.1349362, -19.42182, -0.20656042)
 
-[node name="Dead50" parent="Lanterns" unique_id=463156697 instance=ExtResource("19_xedh0")]
+[node name="Dead50" parent="Lanterns" unique_id=808764676 instance=ExtResource("17_4sb6r")]
 transform = Transform3D(-0.77030253, 1.9126964, -0.096437484, 1.8334186, 0.76654077, 0.5586275, 0.55342877, 0.12280658, -1.98487, -21.95479, -48.141052, -5.8636303)
 
-[node name="Dead51" parent="Lanterns" unique_id=2062554095 instance=ExtResource("19_xedh0")]
+[node name="Dead51" parent="Lanterns" unique_id=1633354847 instance=ExtResource("17_4sb6r")]
 transform = Transform3D(-1.9517881, 0.8258698, 0.15303591, 0.5514914, 1.5520838, -1.3423303, -0.63351256, -1.1932864, -1.6400266, 7.660311, -33.221317, -6.1414886)
 
-[node name="Dead52" parent="Lanterns" unique_id=668876959 instance=ExtResource("19_xedh0")]
+[node name="Dead52" parent="Lanterns" unique_id=1803317831 instance=ExtResource("17_4sb6r")]
 transform = Transform3D(2.093387, -0.6015185, -0.495694, 0.77150875, 1.8012922, 1.0723462, 0.11095665, -1.1761495, 1.8958286, 4.124246, -48.34065, 19.770826)
 
-[node name="Dead53" parent="Lanterns" unique_id=1156534076 instance=ExtResource("19_xedh0")]
+[node name="Dead53" parent="Lanterns" unique_id=1457830109 instance=ExtResource("17_4sb6r")]
 transform = Transform3D(-0.3842813, 1.7722355, 1.2679911, 0.9206167, 1.2990444, -1.5366329, -1.9751164, 0.2606859, -0.9629383, -1.5118847, -14.284623, -9.075427)
 
-[node name="Dead54" parent="Lanterns" unique_id=984685078 instance=ExtResource("19_xedh0")]
+[node name="Dead54" parent="Lanterns" unique_id=52832991 instance=ExtResource("17_4sb6r")]
 transform = Transform3D(2.100344, 0.15934314, 1.6777855, -0.7542888, 2.4862401, 0.70813614, -1.5071175, -1.0222613, 1.9837787, -4.090702, -25.77852, -11.144867)
 
-[node name="Dead55" parent="Lanterns" unique_id=352761515 instance=ExtResource("19_xedh0")]
+[node name="Dead55" parent="Lanterns" unique_id=1603695767 instance=ExtResource("17_4sb6r")]
 transform = Transform3D(-2.5665426, 0.9527418, -1.1189177, 0.91452754, 2.7980976, 0.28482082, 1.1503621, -0.09882527, -2.7228174, -12.138882, -32.6948, 2.0183868)
 
-[node name="Dead56" parent="Lanterns" unique_id=1753302774 instance=ExtResource("19_xedh0")]
+[node name="Dead56" parent="Lanterns" unique_id=1803757135 instance=ExtResource("17_4sb6r")]
 transform = Transform3D(1.500585, -2.207233, 1.4212314, -1.0093439, 1.0261118, 2.6592953, -2.4234276, -1.7940872, -0.2275558, -2.8127449, -9.690643, -2.4465299)
 
-[node name="Dead57" parent="Lanterns" unique_id=1961028005 instance=ExtResource("19_xedh0")]
+[node name="Dead57" parent="Lanterns" unique_id=200500859 instance=ExtResource("17_4sb6r")]
 transform = Transform3D(1.4143617, -0.22071883, 1.1795498, 1.1096653, 0.9346269, -1.1556771, -0.456834, 1.586893, 0.84471697, 1.0053749, -29.292442, 10.373259)
 
-[node name="Dead58" parent="Lanterns" unique_id=1528964058 instance=ExtResource("19_xedh0")]
+[node name="Dead58" parent="Lanterns" unique_id=74566004 instance=ExtResource("17_4sb6r")]
 transform = Transform3D(-1.9284006, -0.022435676, 0.053808525, -0.022081075, 1.9291115, 0.013004719, -0.053955004, 0.012382929, -1.9284873, 7.726467, -21.947609, -1.407159)
 
-[node name="Dead59" parent="Lanterns" unique_id=1104229014 instance=ExtResource("19_xedh0")]
+[node name="Dead59" parent="Lanterns" unique_id=271158438 instance=ExtResource("17_4sb6r")]
 transform = Transform3D(-2.1774144, 0.52490133, 1.5144558, -0.2787166, 2.391739, -1.2296882, -1.5784217, -1.1464268, -1.8720368, -4.5562453, -31.47249, -4.61176)
 
-[node name="Dead60" parent="Lanterns" unique_id=474362882 instance=ExtResource("19_xedh0")]
+[node name="Dead60" parent="Lanterns" unique_id=1178698257 instance=ExtResource("17_4sb6r")]
 transform = Transform3D(1.0901213, -0.6982613, -1.8339996, 0.16513658, 2.123166, -0.7101996, 1.9554677, 0.20996363, 1.0823815, 8.55655, -37.282986, -1.1261747)
 
-[node name="Dead61" parent="Lanterns" unique_id=935640789 instance=ExtResource("19_xedh0")]
+[node name="Dead61" parent="Lanterns" unique_id=228515055 instance=ExtResource("17_4sb6r")]
 transform = Transform3D(2.8987925, 0.36591336, 0.2463628, -0.16775608, 2.4290025, -1.6338273, -0.40797687, 1.6011375, 2.4222925, -2.9843848, -19.532187, -2.1841395)
 
-[node name="Dead62" parent="Lanterns" unique_id=1302403296 instance=ExtResource("19_xedh0")]
+[node name="Dead62" parent="Lanterns" unique_id=711262617 instance=ExtResource("17_4sb6r")]
 transform = Transform3D(2.1133559, -1.6011146, -0.6839037, 0.50224453, 1.59049, -2.1715565, 1.6670461, 1.5505931, 1.5212442, -4.30394, -24.585512, -5.181893)
 
-[node name="Dead63" parent="Lanterns" unique_id=2073776746 instance=ExtResource("19_xedh0")]
+[node name="Dead63" parent="Lanterns" unique_id=482970722 instance=ExtResource("17_4sb6r")]
 transform = Transform3D(0.42706865, -2.3346546, -1.9192598, 0.43463713, 1.9656216, -2.2943366, 2.9908628, 0.047720578, 0.60747, 7.2291145, -20.781445, -7.3992043)
 
-[node name="Dead64" parent="Lanterns" unique_id=1833831508 instance=ExtResource("19_xedh0")]
+[node name="Dead64" parent="Lanterns" unique_id=1255691291 instance=ExtResource("17_4sb6r")]
 transform = Transform3D(1.7892531, -0.4535164, -1.3838077, -1.1602514, 0.88080287, -1.788863, 0.8800098, 2.0833955, 0.45505342, -6.49097, -10.381014, 0.052465703)
 
-[node name="Dead65" parent="Lanterns" unique_id=812681585 instance=ExtResource("19_xedh0")]
+[node name="Dead65" parent="Lanterns" unique_id=354015126 instance=ExtResource("17_4sb6r")]
 transform = Transform3D(-2.4108791, -0.042493183, 0.26188767, -0.047577906, 2.424557, -0.044589475, -0.26101184, -0.049459156, -2.410841, 4.6395125, -14.2555, 4.2116604)
 
-[node name="Dead66" parent="Lanterns" unique_id=1906256502 instance=ExtResource("19_xedh0")]
+[node name="Dead66" parent="Lanterns" unique_id=2107210957 instance=ExtResource("17_4sb6r")]
 transform = Transform3D(0.41516325, 0.8463723, -2.3371572, -2.0817204, 1.4132537, 0.1420037, 1.358341, 1.9071913, 0.93195575, 0.74513894, -6.8962655, -5.3938756)
 
-[node name="Dead67" parent="Lanterns" unique_id=702154039 instance=ExtResource("19_xedh0")]
+[node name="Dead67" parent="Lanterns" unique_id=977901764 instance=ExtResource("17_4sb6r")]
 transform = Transform3D(0.28668904, -0.9664583, -1.9622234, 1.3102679, 1.6605244, -0.6264262, 1.7514453, -1.0840528, 0.7898243, 0.05125676, -14.170131, -6.6376543)
 
-[node name="Dead68" parent="Lanterns" unique_id=10763778 instance=ExtResource("19_xedh0")]
+[node name="Dead68" parent="Lanterns" unique_id=1027902805 instance=ExtResource("17_4sb6r")]
 transform = Transform3D(-1.2309827, 0.20012906, -1.3925529, -0.5121834, 1.6596347, 0.69127005, 1.3103143, 0.8367404, -1.0380347, -8.794852, -33.921726, -3.861616)
 
-[node name="Dead69" parent="Lanterns" unique_id=1121055274 instance=ExtResource("19_xedh0")]
+[node name="Dead69" parent="Lanterns" unique_id=1081634595 instance=ExtResource("17_4sb6r")]
 transform = Transform3D(0.6466626, 1.2177938, -2.398826, -0.93608016, 2.4148407, 0.9735804, 2.5221305, 0.5840232, 0.976389, 19.241978, -50.35751, -0.57861954)
 
-[node name="Dead70" parent="Lanterns" unique_id=368156591 instance=ExtResource("19_xedh0")]
+[node name="Dead70" parent="Lanterns" unique_id=525400412 instance=ExtResource("17_4sb6r")]
 transform = Transform3D(-2.8180635, -0.08935192, 0.7886081, -0.059041735, 2.924618, 0.12038536, -0.7914547, 0.09997398, -2.8169084, -6.548181, -10.030646, -0.6906687)
 
-[node name="Dead71" parent="Lanterns" unique_id=1244803255 instance=ExtResource("19_xedh0")]
+[node name="Dead71" parent="Lanterns" unique_id=1856378951 instance=ExtResource("17_4sb6r")]
 transform = Transform3D(0.4494655, -1.3337249, 1.662158, 1.6171271, 1.3198264, 0.6217475, -1.3879813, 1.1058242, 1.2626446, -0.044363886, -30.011444, 12.784736)
 
-[node name="Dead72" parent="Lanterns" unique_id=2034297960 instance=ExtResource("19_xedh0")]
+[node name="Dead72" parent="Lanterns" unique_id=550151801 instance=ExtResource("17_4sb6r")]
 transform = Transform3D(-1.8347332, -0.82535356, 1.8056787, -1.0758283, 2.4796975, 0.040300105, -1.6686152, -0.69124687, -2.0114248, 10.347192, -36.81822, -15.677273)
 
-[node name="Dead73" parent="Lanterns" unique_id=2078285376 instance=ExtResource("19_xedh0")]
+[node name="Dead73" parent="Lanterns" unique_id=509243754 instance=ExtResource("17_4sb6r")]
 transform = Transform3D(-0.6383237, -0.22885513, 1.6901027, -1.4274452, 1.0592985, -0.3956838, -0.9333926, -1.4634858, -0.5506961, -18.240257, -49.58218, 10.857853)
 
-[node name="Dead74" parent="Lanterns" unique_id=1448068100 instance=ExtResource("19_xedh0")]
+[node name="Dead74" parent="Lanterns" unique_id=171352796 instance=ExtResource("17_4sb6r")]
 transform = Transform3D(-0.17851739, 1.0274001, 2.1155362, 0.2940754, 2.114722, -1.0021894, -2.333359, 0.18791747, -0.28815937, -12.094506, -29.630169, -5.1637883)
 
-[node name="Dead75" parent="Lanterns" unique_id=79171070 instance=ExtResource("19_xedh0")]
+[node name="Dead75" parent="Lanterns" unique_id=1445473189 instance=ExtResource("17_4sb6r")]
 transform = Transform3D(1.4978287, -1.0802209, 0.07913073, 1.045307, 1.4063126, -0.5884283, 0.28367582, 0.5215722, 1.7504629, 1.4956188, -4.20513, -1.9760007)
 
-[node name="Dead76" parent="Lanterns" unique_id=2066269815 instance=ExtResource("19_xedh0")]
+[node name="Dead76" parent="Lanterns" unique_id=1245166254 instance=ExtResource("17_4sb6r")]
 transform = Transform3D(-2.4301047, -0.16677377, -0.8370107, 0.20031264, 2.3439536, -1.0486016, 0.82962346, -1.0544558, -2.1985579, -9.853472, -34.919003, -14.39586)
 
-[node name="Dead77" parent="Lanterns" unique_id=32432144 instance=ExtResource("19_xedh0")]
+[node name="Dead77" parent="Lanterns" unique_id=1237769481 instance=ExtResource("17_4sb6r")]
 transform = Transform3D(2.6583776, -1.275668, 0.530024, 0.7648697, 2.3164623, 1.7390234, -1.1503167, -1.4077997, 2.3811967, 2.6717145, -39.513657, 5.2353883)
 
-[node name="Dead78" parent="Lanterns" unique_id=756797783 instance=ExtResource("19_xedh0")]
+[node name="Dead78" parent="Lanterns" unique_id=2047277936 instance=ExtResource("17_4sb6r")]
 transform = Transform3D(-1.7843448, -0.6964879, 1.2099937, -1.3528742, 1.3475653, -1.219371, -0.34483534, -1.6828662, -1.4771988, 8.860646, -24.40163, -6.9386907)
 
-[node name="Dead79" parent="Lanterns" unique_id=1227695512 instance=ExtResource("19_xedh0")]
+[node name="Dead79" parent="Lanterns" unique_id=1372808771 instance=ExtResource("17_4sb6r")]
 transform = Transform3D(1.6729742, 1.221119, -1.5834641, -1.556465, 2.0913506, -0.031663254, 1.2553514, 0.9656366, 2.0709832, -17.269014, -46.445526, -6.092008)
 
-[node name="Dead80" parent="Lanterns" unique_id=1160399643 instance=ExtResource("19_xedh0")]
+[node name="Dead80" parent="Lanterns" unique_id=1229202705 instance=ExtResource("17_4sb6r")]
 transform = Transform3D(-0.83629006, -0.24181685, 2.7242289, 0.080763064, 2.8453171, 0.2773581, -2.7337475, 0.15803419, -0.8251843, -14.705163, -41.55432, 8.670982)
 
-[node name="Dead81" parent="Lanterns" unique_id=726538248 instance=ExtResource("19_xedh0")]
+[node name="Dead81" parent="Lanterns" unique_id=1328725711 instance=ExtResource("17_4sb6r")]
 transform = Transform3D(-1.2683463, -2.8475072, -0.5514255, -2.8923976, 1.1970744, 0.47129533, -0.21541503, 0.6926657, -3.0813766, 3.9649518, -23.81592, -3.151728)
 
-[node name="Dead82" parent="Lanterns" unique_id=688225692 instance=ExtResource("19_xedh0")]
+[node name="Dead82" parent="Lanterns" unique_id=388824516 instance=ExtResource("17_4sb6r")]
 transform = Transform3D(1.3147014, -1.4606663, 1.7946928, 0.6917428, 2.2178316, 1.2983152, -2.2081575, -0.17488384, 1.4752502, 0.39939436, -45.913048, 14.6702175)
 
-[node name="Dead83" parent="Lanterns" unique_id=509246910 instance=ExtResource("19_xedh0")]
+[node name="Dead83" parent="Lanterns" unique_id=153122310 instance=ExtResource("17_4sb6r")]
 transform = Transform3D(0.54547083, -0.49771905, -2.2887409, 0.21127698, 2.3508623, -0.46087503, 2.3326852, -0.09653761, 0.57693744, -10.241008, -42.985092, -4.439062)
 
-[node name="Dead84" parent="Lanterns" unique_id=957885295 instance=ExtResource("19_xedh0")]
+[node name="Dead84" parent="Lanterns" unique_id=1348186713 instance=ExtResource("17_4sb6r")]
 transform = Transform3D(-1.5651395, 1.0875225, -1.1521953, 1.4461044, 1.6422745, -0.41429126, 0.647334, -1.0393027, -1.8603035, -15.993552, -43.106293, 12.704976)
 
-[node name="Dead85" parent="Lanterns" unique_id=1463855135 instance=ExtResource("19_xedh0")]
+[node name="Dead85" parent="Lanterns" unique_id=1679843065 instance=ExtResource("17_4sb6r")]
 transform = Transform3D(1.4377502, -1.2066003, -0.7216331, 0.7872239, 1.5460868, -1.0166901, 1.1648679, 0.44440532, 1.5777678, 0.6898004, -6.5241804, 2.4491715)
 
-[node name="Dead86" parent="Lanterns" unique_id=238035966 instance=ExtResource("19_xedh0")]
+[node name="Dead86" parent="Lanterns" unique_id=2017459320 instance=ExtResource("17_4sb6r")]
 transform = Transform3D(-0.64379686, 0.34200707, 1.8770353, 0.4267657, 1.9566345, -0.21013586, -1.8595972, 0.33063155, -0.6980588, 0.91030425, -25.59759, -9.625958)
 
-[node name="Dead87" parent="Lanterns" unique_id=107444313 instance=ExtResource("19_xedh0")]
+[node name="Dead87" parent="Lanterns" unique_id=69708108 instance=ExtResource("17_4sb6r")]
 transform = Transform3D(-0.6623921, -0.6854134, -2.7544467, 0.7358231, 2.6902974, -0.84640205, 2.7414105, -0.8877165, -0.43835884, -1.4587001, -4.6325016, -0.08520273)
 
-[node name="Dead88" parent="Lanterns" unique_id=1168407146 instance=ExtResource("19_xedh0")]
+[node name="Dead88" parent="Lanterns" unique_id=1468831043 instance=ExtResource("17_4sb6r")]
 transform = Transform3D(1.1615771, -1.6154568, -0.37041774, 0.69844985, 0.8873333, -1.679577, 1.5030229, 0.8361282, 1.066763, 8.886968, -22.716417, 4.8062124)
 
-[node name="Dead89" parent="Lanterns" unique_id=540923582 instance=ExtResource("19_xedh0")]
+[node name="Dead89" parent="Lanterns" unique_id=1016501399 instance=ExtResource("17_4sb6r")]
 transform = Transform3D(1.7460612, 0.49218485, -0.88929325, -0.7864353, 1.7740365, -0.5622558, 0.64390045, 0.83208543, 1.7247735, -7.3907185, -13.49228, -3.3298552)
 
-[node name="Shafts" type="Node3D" parent="." unique_id=607485240]
-script = ExtResource("20_p7sjk")
+[node name="Shafts" type="Node3D" parent="." unique_id=889606118]
+script = ExtResource("18_4pjtv")
 
-[node name="Shaft00" type="MeshInstance3D" parent="Shafts" unique_id=2093200269]
+[node name="Shaft00" type="MeshInstance3D" parent="Shafts" unique_id=2126686922]
 transform = Transform3D(0.99847406, -0.05522277, 0, 0.054961603, 0.993752, -0.09714005, 0.0053643426, 0.09699182, 0.9952707, 16.755938, -18, -2.2064838)
-material_override = SubResource("ShaderMaterial_rbr6h")
+material_override = SubResource("ShaderMaterial_e60fl")
 cast_shadow = 0
-mesh = SubResource("CylinderMesh_1pbd7")
+mesh = SubResource("CylinderMesh_xc8r4")
 
-[node name="Shaft01" type="MeshInstance3D" parent="Shafts" unique_id=123964711]
+[node name="Shaft01" type="MeshInstance3D" parent="Shafts" unique_id=797612386]
 transform = Transform3D(0.9967859, -0.080112115, 0, 0.0798762, 0.9938506, -0.07668671, 0.0061435346, 0.07644023, 0.99705523, -6.4348063, -18, 4.8018875)
-material_override = SubResource("ShaderMaterial_rbr6h")
+material_override = SubResource("ShaderMaterial_e60fl")
 cast_shadow = 0
-mesh = SubResource("CylinderMesh_1pbd7")
+mesh = SubResource("CylinderMesh_xc8r4")
 
-[node name="Shaft02" type="MeshInstance3D" parent="Shafts" unique_id=1396257781]
+[node name="Shaft02" type="MeshInstance3D" parent="Shafts" unique_id=133781465]
 transform = Transform3D(0.99752116, 0.070367336, 0, -0.070343696, 0.997186, -0.025920728, -0.0018239726, 0.025856474, 0.999664, -1.2997683, -18, 5.881946)
-material_override = SubResource("ShaderMaterial_rbr6h")
+material_override = SubResource("ShaderMaterial_e60fl")
 cast_shadow = 0
-mesh = SubResource("CylinderMesh_1pbd7")
+mesh = SubResource("CylinderMesh_xc8r4")
 
-[node name="Shaft03" type="MeshInstance3D" parent="Shafts" unique_id=1612235805]
+[node name="Shaft03" type="MeshInstance3D" parent="Shafts" unique_id=2076110092]
 transform = Transform3D(0.998805, 0.048873477, 0, -0.048862282, 0.9985762, -0.021402491, -0.0010460141, 0.021376915, 0.99977094, -0.52433383, -18, -6.6740065)
-material_override = SubResource("ShaderMaterial_rbr6h")
+material_override = SubResource("ShaderMaterial_e60fl")
 cast_shadow = 0
-mesh = SubResource("CylinderMesh_1pbd7")
+mesh = SubResource("CylinderMesh_xc8r4")
 
-[node name="Shaft04" type="MeshInstance3D" parent="Shafts" unique_id=1008492032]
+[node name="Shaft04" type="MeshInstance3D" parent="Shafts" unique_id=1799587345]
 transform = Transform3D(0.99795026, 0.063994326, 0, -0.0638858, 0.99625784, 0.058214314, 0.0037253858, -0.05809499, 0.9983041, 0.6098687, -18, -4.3414607)
-material_override = SubResource("ShaderMaterial_rbr6h")
+material_override = SubResource("ShaderMaterial_e60fl")
 cast_shadow = 0
-mesh = SubResource("CylinderMesh_1pbd7")
+mesh = SubResource("CylinderMesh_xc8r4")
 
-[node name="Shaft05" type="MeshInstance3D" parent="Shafts" unique_id=767172034]
+[node name="Shaft05" type="MeshInstance3D" parent="Shafts" unique_id=454520190]
 transform = Transform3D(0.9999485, 0.010146846, 0, -0.0101338895, 0.99867165, -0.050519418, -0.00051261275, 0.050516818, 0.9987231, -4.5875096, -18, -8.843426)
-material_override = SubResource("ShaderMaterial_rbr6h")
+material_override = SubResource("ShaderMaterial_e60fl")
 cast_shadow = 0
-mesh = SubResource("CylinderMesh_1pbd7")
+mesh = SubResource("CylinderMesh_xc8r4")
 
-[node name="Shaft06" type="MeshInstance3D" parent="Shafts" unique_id=2067173003]
+[node name="Shaft06" type="MeshInstance3D" parent="Shafts" unique_id=854954784]
 transform = Transform3D(0.9999797, 0.006379792, 0, -0.0063797897, 0.9999793, 0.0008588432, 5.479241e-06, -0.00085882575, 0.99999964, -5.958159, -18, -19.357962)
-material_override = SubResource("ShaderMaterial_rbr6h")
+material_override = SubResource("ShaderMaterial_e60fl")
 cast_shadow = 0
-mesh = SubResource("CylinderMesh_1pbd7")
+mesh = SubResource("CylinderMesh_xc8r4")
 
-[node name="Shaft07" type="MeshInstance3D" parent="Shafts" unique_id=1407130262]
+[node name="Shaft07" type="MeshInstance3D" parent="Shafts" unique_id=925890195]
 transform = Transform3D(0.99975663, -0.02206107, 0, 0.022057276, 0.99958473, 0.018543283, -0.00040908466, -0.01853877, 0.99982804, 3.5153472, -18, -5.1484656)
-material_override = SubResource("ShaderMaterial_rbr6h")
+material_override = SubResource("ShaderMaterial_e60fl")
 cast_shadow = 0
-mesh = SubResource("CylinderMesh_1pbd7")
+mesh = SubResource("CylinderMesh_xc8r4")
 
-[node name="Shaft08" type="MeshInstance3D" parent="Shafts" unique_id=622190092]
+[node name="Shaft08" type="MeshInstance3D" parent="Shafts" unique_id=1329744761]
 transform = Transform3D(0.995329, 0.096541055, 0, -0.09650765, 0.9949846, 0.026303729, 0.0025393898, -0.026180865, 0.999654, 12.5871, -18, -0.14617705)
-material_override = SubResource("ShaderMaterial_rbr6h")
+material_override = SubResource("ShaderMaterial_e60fl")
 cast_shadow = 0
-mesh = SubResource("CylinderMesh_1pbd7")
+mesh = SubResource("CylinderMesh_xc8r4")
 
-[node name="Shaft09" type="MeshInstance3D" parent="Shafts" unique_id=1981591837]
+[node name="Shaft09" type="MeshInstance3D" parent="Shafts" unique_id=2023764214]
 transform = Transform3D(0.99657303, -0.08271756, 0, 0.082539655, 0.99442965, -0.06555061, 0.0054221866, 0.06532597, 0.9978492, -3.403326, -18, -19.223537)
-material_override = SubResource("ShaderMaterial_rbr6h")
+material_override = SubResource("ShaderMaterial_e60fl")
 cast_shadow = 0
-mesh = SubResource("CylinderMesh_1pbd7")
+mesh = SubResource("CylinderMesh_xc8r4")
 
-[node name="Shaft10" type="MeshInstance3D" parent="Shafts" unique_id=1525955291]
+[node name="Shaft10" type="MeshInstance3D" parent="Shafts" unique_id=1345485979]
 transform = Transform3D(0.99654824, 0.083015814, 0, -0.08295638, 0.9958347, -0.037834026, -0.0031408225, 0.037703432, 0.999284, -9.363753, -18, -9.038299)
-material_override = SubResource("ShaderMaterial_rbr6h")
+material_override = SubResource("ShaderMaterial_e60fl")
 cast_shadow = 0
-mesh = SubResource("CylinderMesh_1pbd7")
+mesh = SubResource("CylinderMesh_xc8r4")
 
-[node name="Shaft11" type="MeshInstance3D" parent="Shafts" unique_id=1101384155]
+[node name="Shaft11" type="MeshInstance3D" parent="Shafts" unique_id=642573695]
 transform = Transform3D(0.99861544, 0.052603923, 0, -0.052500032, 0.9966432, 0.0628181, 0.0033044787, -0.062731124, 0.998025, -3.7729762, -18, -1.0021713)
-material_override = SubResource("ShaderMaterial_rbr6h")
+material_override = SubResource("ShaderMaterial_e60fl")
 cast_shadow = 0
-mesh = SubResource("CylinderMesh_1pbd7")
+mesh = SubResource("CylinderMesh_xc8r4")
 
-[node name="Shaft12" type="MeshInstance3D" parent="Shafts" unique_id=1055696030]
+[node name="Shaft12" type="MeshInstance3D" parent="Shafts" unique_id=2135399708]
 transform = Transform3D(0.9996999, -0.024497487, 0, 0.02442068, 0.9965656, 0.07912491, -0.0019383614, -0.07910117, 0.99686474, -2.8648982, -18, -6.907168)
-material_override = SubResource("ShaderMaterial_rbr6h")
+material_override = SubResource("ShaderMaterial_e60fl")
 cast_shadow = 0
-mesh = SubResource("CylinderMesh_1pbd7")
+mesh = SubResource("CylinderMesh_xc8r4")
 
-[node name="Shaft13" type="MeshInstance3D" parent="Shafts" unique_id=228466635]
+[node name="Shaft13" type="MeshInstance3D" parent="Shafts" unique_id=545822051]
 transform = Transform3D(0.99990004, -0.01413787, 0, 0.014130086, 0.99934953, -0.033179175, 0.00046908285, 0.03317586, 0.99944943, 13.135564, -18, 2.95085)
-material_override = SubResource("ShaderMaterial_rbr6h")
+material_override = SubResource("ShaderMaterial_e60fl")
 cast_shadow = 0
-mesh = SubResource("CylinderMesh_1pbd7")
+mesh = SubResource("CylinderMesh_xc8r4")
 
-[node name="Shaft14" type="MeshInstance3D" parent="Shafts" unique_id=618980613]
+[node name="Shaft14" type="MeshInstance3D" parent="Shafts" unique_id=247793380]
 transform = Transform3D(0.9996041, 0.028135974, 0, -0.028134527, 0.99955267, 0.010142398, 0.00028536626, -0.010138383, 0.99994856, -11.579099, -18, 7.348763)
-material_override = SubResource("ShaderMaterial_rbr6h")
+material_override = SubResource("ShaderMaterial_e60fl")
 cast_shadow = 0
-mesh = SubResource("CylinderMesh_1pbd7")
+mesh = SubResource("CylinderMesh_xc8r4")
 
-[node name="Shaft15" type="MeshInstance3D" parent="Shafts" unique_id=1767659414]
+[node name="Shaft15" type="MeshInstance3D" parent="Shafts" unique_id=1704011743]
 transform = Transform3D(0.9999733, 0.00730625, 0, -0.00727402, 0.99556214, 0.09382505, 0.00068550924, -0.09382255, 0.9955887, -6.2508473, -18, 1.7740816)
-material_override = SubResource("ShaderMaterial_rbr6h")
+material_override = SubResource("ShaderMaterial_e60fl")
 cast_shadow = 0
-mesh = SubResource("CylinderMesh_1pbd7")
+mesh = SubResource("CylinderMesh_xc8r4")
 
-[node name="FlareLight" type="OmniLight3D" parent="." unique_id=36152453]
+[node name="FlareLight" type="OmniLight3D" parent="." unique_id=1325569276]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.5, 1.5, 0.45)
 light_color = Color(1, 0.7, 0.36, 1)
 light_energy = 0.0
@@ -4882,6 +4742,6 @@ omni_range = 40.0
 omni_attenuation = 0.5
 
 [node name="Clips" type="AnimationPlayer" parent="." unique_id=400324578 groups=["clips"]]
-libraries/ = SubResource("AnimationLibrary_xqxt6")
+libraries/ = SubResource("AnimationLibrary_rh7oi")
 
 [editable path="Castaway"]

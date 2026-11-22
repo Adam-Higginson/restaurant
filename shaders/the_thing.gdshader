@@ -12,12 +12,12 @@ render_mode unshaded, cull_back, shadows_disabled;
 // The one colour it's drawn in.
 uniform vec4 colour : source_color = vec4(0.0015, 0.006, 0.011, 1.0);
 // How long the tube is, in metres, so we know how far along each ring is.
-uniform float length_metres = 70.0;
+uniform float length_metres = 110.0;
 // How thick it is top to bottom against side to side.
 uniform float flatness = 0.5;
 // How far the tail swings from side to side, in metres, how many bends
 // there are along it, and how fast they travel.
-uniform float sway = 5.0;
+uniform float sway = 8.0;
 uniform float bends = 1.3;
 uniform float sway_speed = 0.45;
 
