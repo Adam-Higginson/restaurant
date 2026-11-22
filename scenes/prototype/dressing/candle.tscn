@@ -1,0 +1,67 @@
+[gd_scene format=3 uid="uid://ck4xu2mcu1558"]
+
+[ext_resource type="Material" path="res://assets/placeholder/materials/iron.tres" id="1_e47nj"]
+[ext_resource type="Material" path="res://assets/placeholder/materials/wax.tres" id="2_voih7"]
+[ext_resource type="Material" path="res://assets/placeholder/materials/flame.tres" id="3_1p7v4"]
+[ext_resource type="Script" path="res://scripts/props/flicker.gd" id="4_nmna8"]
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_pl0s2"]
+top_radius = 0.065
+bottom_radius = 0.06
+height = 0.015
+radial_segments = 8
+rings = 1
+
+[sub_resource type="BoxMesh" id="BoxMesh_34yf3"]
+size = Vector3(0.05, 0.012, 0.015)
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_exr41"]
+top_radius = 0.022
+bottom_radius = 0.024
+height = 0.1
+radial_segments = 6
+rings = 1
+
+[sub_resource type="BoxMesh" id="BoxMesh_0mnsv"]
+size = Vector3(0.012, 0.04, 0.012)
+
+[sub_resource type="BoxMesh" id="BoxMesh_yn10w"]
+size = Vector3(0.016, 0.035, 0.016)
+
+[node name="Candle" type="Node3D" unique_id=1599568112]
+
+[node name="Dish" type="MeshInstance3D" parent="." unique_id=2049898423]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.008, 0)
+material_override = ExtResource("1_e47nj")
+mesh = SubResource("CylinderMesh_pl0s2")
+
+[node name="Handle" type="MeshInstance3D" parent="." unique_id=1791237074]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.08, 0.012, 0)
+material_override = ExtResource("1_e47nj")
+mesh = SubResource("BoxMesh_34yf3")
+
+[node name="Wax" type="MeshInstance3D" parent="." unique_id=1876898704]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.065, 0)
+material_override = ExtResource("2_voih7")
+mesh = SubResource("CylinderMesh_exr41")
+
+[node name="Drip" type="MeshInstance3D" parent="." unique_id=1563528847]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.022, 0.07, 0.01)
+material_override = ExtResource("2_voih7")
+mesh = SubResource("BoxMesh_0mnsv")
+
+[node name="Flame" type="MeshInstance3D" parent="." unique_id=2094181505]
+transform = Transform3D(0.70710677, 0, 0.70710677, 0, 1, 0, -0.70710677, 0, 0.70710677, 0, 0.135, 0)
+material_override = ExtResource("3_1p7v4")
+cast_shadow = 0
+mesh = SubResource("BoxMesh_yn10w")
+
+[node name="Light" type="OmniLight3D" parent="." unique_id=2144193943]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.17, 0)
+light_color = Color(1, 0.62, 0.3, 1)
+light_energy = 0.45
+omni_range = 1.5
+script = ExtResource("4_nmna8")
+base_energy = 0.45
+amount = 0.18
+speed = 7.0

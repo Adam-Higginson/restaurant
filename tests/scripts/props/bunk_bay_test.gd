@@ -51,11 +51,40 @@ func test_a_bay_is_dressed_for_whoever_sleeps_there() -> void:
 	assert_bool((bay.get_node("Lamp") as Node3D).visible).is_true()
 
 
-func test_an_unlit_bay_keeps_its_lantern_dark() -> void:
+func test_an_unlit_bay_keeps_its_lantern_and_candle_dark() -> void:
 	var bay: BunkBay = (load(SCENE) as PackedScene).instantiate() as BunkBay
 	add_child(bay)
 	auto_free(bay)
 	assert_bool((bay.get_node("Lamp") as Node3D).visible).is_false()
+	assert_bool((bay.get_node("UpperCandle") as Node3D).visible).is_false()
+
+
+func test_a_reader_up_top_lights_the_candle() -> void:
+	var bay: BunkBay = (load(SCENE) as PackedScene).instantiate() as BunkBay
+	bay.upper_lamp_lit = true
+	add_child(bay)
+	auto_free(bay)
+	assert_bool((bay.get_node("UpperCandle") as Node3D).visible).is_true()
+	assert_bool((bay.get_node("Lamp") as Node3D).visible).is_false()
+
+
+func test_all_four_curtains_are_cut_from_the_bay_s_cloth() -> void:
+	var cloth: Material = load("res://assets/placeholder/materials/curtain_mustard.tres") 			as Material
+	var bay: BunkBay = (load(SCENE) as PackedScene).instantiate() as BunkBay
+	bay.curtain_cloth = cloth
+	add_child(bay)
+	auto_free(bay)
+	for tier: String in ["Lower", "Upper"]:
+		for side: String in ["Left", "Right"]:
+			var mesh: MeshInstance3D = bay.get_node("%sCurtain%s/Cloth" % [tier, side]) 					as MeshInstance3D
+			assert_object(mesh.material_override).is_same(cloth)
+
+
+func test_curtain_cloth_lets_a_lamp_glow_through() -> void:
+	for name: String in ["curtain", "curtain_mustard", "curtain_rust"]:
+		var cloth: StandardMaterial3D = load("res://assets/placeholder/materials/%s.tres" % name) 				as StandardMaterial3D
+		assert_bool(cloth.backlight_enabled).override_failure_message(
+				"%s isn't backlit" % name).is_true()
 
 
 func test_you_cannot_climb_into_a_bunk_by_walking() -> void:
