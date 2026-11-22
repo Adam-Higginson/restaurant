@@ -174,13 +174,9 @@ func test_starting_again_you_are_who_you_were() -> void:
 	fade.name = "ScreenFade"
 	fade.fade_seconds = 0.1
 	opening.add_child(fade)
-	var choice: LookChoice = (load("res://ui/look_choice.tscn") as PackedScene).instantiate() 			as LookChoice
-	opening.add_child(choice)
 	ship.get_parent().add_child(opening)
 	var runner: GdUnitSceneRunner = scene_runner(ship.get_parent())
 
 	await physics_ticks(runner, 10)
 
-	# Not asked again: a saved voyage already knows.
-	assert_bool(choice.is_open()).is_false()
 	assert_int(Game.look).is_equal(PlayerLook.Body.GIRL)

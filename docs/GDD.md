@@ -143,7 +143,7 @@ OoT-style duels: lock on, read the enemy, strike at the opening.
 When you lose a fight, **the lantern pulls you out**, echoing how you met. You reappear at the island's landing with half of what you were carrying. (Later: each rescue dims him a little, and a warm meal by the stove rekindles him.)
 
 ## Player
-- A young castaway, rescued at sea, in a plain linen shirt, trousers and boots. When a new voyage begins you're asked who you are, a boy or a girl, and the save remembers. Their name is to be decided.
+- A young castaway, rescued at sea, in a plain linen shirt, trousers and boots. On a new voyage, after you press a button on the title (her nameboard), you're asked who you are, a boy or a girl, in the title's lettering under her name; the save remembers. Their name is to be decided.
 - **Their body** is a Quaternius character (CC0): the Peasant outfit with a base character's head, made younger (a bigger head on a shorter body). It animates from the Universal Animation Library: a lantern-holding idle, a walk, a sword swing for the knife and a shield stance for the pan, which they hold in their hands.
 - 3D movement relative to the camera, turning to face the way they walk.
 - Acts on the thing in front of them: counters, the pantry, the stove, pans, the bell, the gangplank, plants, people.

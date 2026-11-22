@@ -4,10 +4,10 @@ extends Node
 ## [code]data/dialogue/intro.dlg[/code]). It opens on the title over the
 ## dark sea, and waits for a button.
 ##
-## A new voyage first asks who you are, a boy or a girl, over the black (its
-## [LookChoice] child). Then it goes under: the rescue, and you wake by your
-## bunk at night with the storm outside, the lantern across the room and the
-## captain in the doorway. Then the ship is yours.
+## A new voyage then asks who you are, a boy or a girl (the script's
+## [code]@who_are_you[/code], see [ChoiceCues]), and goes under: the rescue,
+## and you wake by your bunk at night with the storm outside, the lantern
+## across the room and the captain in the doorway. Then the ship is yours.
 ##
 ## A saved voyage carries on instead, as whoever you were: after the title,
 ## its day ("Day 3. Morning"), and the lantern welcomes you back. The script
@@ -37,9 +37,6 @@ const SAVED_FACT: StringName = &"saved_voyage"
 @export var start_section: StringName = DialogueTree.START
 ## Whether to carry on a saved voyage, if there is one.
 @export var load_save: bool = true
-## Whether a new voyage asks who you are first. Off, you're whoever the game
-## already says ([member GameState.look]).
-@export var choose_look: bool = true
 ## How long a saved voyage's title holds before the fade, in seconds.
 @export var title_seconds: float = 2.5
 
@@ -51,7 +48,6 @@ var is_playing: bool:
 var _playing: bool = false
 
 @onready var _fade: ScreenFade = $ScreenFade
-@onready var _look_choice: LookChoice = get_node_or_null("LookChoice") as LookChoice
 
 
 func _ready() -> void:
@@ -80,8 +76,6 @@ func _play() -> void:
 		# Before the title, so the sea behind it is as the voyage left it.
 		SaveGame.restore(saved, Game.memories, time, spirit, Game.dialogue)
 		Game.set_look(SaveGame.look_of(saved))
-	else:
-		await _choose_look()
 	Game.dialogue.set_fact(SAVED_FACT, func() -> int: return 1 if carrying_on else 0)
 	var played: bool = await _play_cutscene()
 	if carrying_on:
@@ -95,15 +89,6 @@ func _play() -> void:
 		# A welcome back: see data/dialogue/moments.dlg.
 		spirit.remark(&"returned")
 	finished.emit()
-
-
-# A new voyage: who are you? Skipped without a choice screen to ask with.
-func _choose_look() -> void:
-	if not choose_look or _look_choice == null:
-		return
-	_look_choice.ask()
-	var body: PlayerLook.Body = await _look_choice.chosen
-	Game.set_look(body)
 
 
 # Plays the opening cutscene from the section asked for, and waits for it

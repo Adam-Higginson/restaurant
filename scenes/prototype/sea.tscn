@@ -33,6 +33,7 @@
 [ext_resource type="Script" path="res://scripts/story/opening.gd" id="15_opening"]
 [ext_resource type="PackedScene" path="res://ui/screen_fade.tscn" id="16_fade"]
 [ext_resource type="PackedScene" path="res://ui/look_choice.tscn" id="90_look"]
+[ext_resource type="Script" path="res://scripts/cutscene/choice_cues.gd" id="91_choice"]
 
 [sub_resource type="FastNoiseLite" id="Noise_Cloud"]
 frequency = 0.008
@@ -284,7 +285,6 @@ script = ExtResource("15_opening")
 player = NodePath("../Player")
 ship = NodePath("../Ship")
 
-[node name="LookChoice" parent="Opening" instance=ExtResource("90_look")]
 
 [node name="ScreenFade" parent="Opening" unique_id=1418227363 instance=ExtResource("16_fade")]
 layer = 20
@@ -317,6 +317,12 @@ script = ExtResource("309_clips")
 [node name="StormCues" type="Node" parent="." node_paths=PackedStringArray("weather")]
 script = ExtResource("310_storm")
 weather = NodePath("../Weather")
+
+[node name="ChoiceCues" type="Node" parent="." node_paths=PackedStringArray("choice")]
+script = ExtResource("91_choice")
+choice = NodePath("../LookChoice")
+
+[node name="LookChoice" parent="." instance=ExtResource("90_look")]
 
 [node name="LookCues" type="Node" parent="."]
 script = ExtResource("312_looks")

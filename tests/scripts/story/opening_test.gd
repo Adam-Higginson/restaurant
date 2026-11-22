@@ -339,23 +339,49 @@ func test_skipped_you_start_where_you_stand() -> void:
 	assert_float(_player.global_position.distance_to(before)).is_less(1.0)
 
 
-func test_a_new_voyage_asks_who_you_are_before_the_intro() -> void:
+func test_after_the_title_a_new_voyage_asks_who_you_are() -> void:
 	_build()
-	_opening.choose_look = true
-	var choice: LookChoice = _opening.get_node("LookChoice") as LookChoice
+	_choice_cues().ask = true
+	var choice: LookChoice = _sea.get_node("LookChoice") as LookChoice
 	var runner: GdUnitSceneRunner = scene_runner(_sea)
-	await physics_ticks(runner, 10)
+	# Her name, waiting for a button; nothing asked yet.
+	await physics_ticks(runner, 240)
+	assert_bool(choice.is_open()).is_false()
 
+	runner.simulate_key_pressed(KEY_ENTER)
+
+	# Asked over her name, and the intro waits for the answer.
+	assert_bool(await _reaches(runner, &"who_are_you")).is_true()
+	await physics_ticks(runner, 60)
 	assert_bool(choice.is_open()).is_true()
-	assert_bool(_conversation.is_active()).is_false()
-	assert_bool(_player.controls_enabled).is_false()
+	assert_str(String(_conversation.section())).is_equal("who_are_you")
 
 	choice.choose(PlayerLook.Body.GIRL)
-	await physics_ticks(runner, 5)
 
+	assert_int(Game.look).is_equal(PlayerLook.Body.GIRL)
+	assert_bool(await _reaches(runner, &"he_hears")).is_true()
+	assert_bool(choice.is_open()).is_false()
+
+
+func test_a_saved_voyage_isnt_asked_who_you_are() -> void:
+	SaveGame.write({"version": SaveGame.VERSION, "memories": [], "day": 2,
+			"morning": true, "warmth": 1.0, "look": "girl"})
+	_build(DialogueTree.START, true)
+	_choice_cues().ask = true
+	var choice: LookChoice = _sea.get_node("LookChoice") as LookChoice
+	var runner: GdUnitSceneRunner = scene_runner(_sea)
+	await physics_ticks(runner, 240)
+
+	runner.simulate_key_pressed(KEY_ENTER)
+
+	assert_bool(await _reaches(runner, &"carry_on")).is_true()
+	await physics_ticks(runner, 30)
 	assert_bool(choice.is_open()).is_false()
 	assert_int(Game.look).is_equal(PlayerLook.Body.GIRL)
-	assert_bool(_conversation.is_active()).is_true()
+
+
+func _choice_cues() -> ChoiceCues:
+	return _sea.get_node("ChoiceCues") as ChoiceCues
 
 
 # Presses Interact past any typing: on to the next line.
@@ -391,7 +417,7 @@ func _ambience() -> Ambience:
 
 # The real sea scene, not yet running, with its opening set to begin at
 # [param section] and to ignore any saved voyage unless [param load_save].
-# It doesn't ask who you are (that has a test of its own).
+# It doesn't ask who you are (that has tests of its own).
 # Called at the start of each test, so it's made (and freed) inside it.
 func _build(section: StringName = DialogueTree.START, load_save: bool = false) -> void:
 	_sea = (load(SEA) as PackedScene).instantiate()
@@ -399,7 +425,7 @@ func _build(section: StringName = DialogueTree.START, load_save: bool = false) -
 	_opening = _sea.get_node("Opening") as Opening
 	_opening.start_section = section
 	_opening.load_save = load_save
-	_opening.choose_look = false
+	_choice_cues().ask = false
 	_ship = _sea.get_node("Ship") as Ship
 	_player = _sea.get_node("Player") as Player3D
 	_conversation = _sea.get_node("Conversation") as Conversation
