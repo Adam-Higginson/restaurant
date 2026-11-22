@@ -107,6 +107,27 @@ func test_face_turns_the_player_towards_a_mark() -> void:
 	assert_float(angle_difference(model.global_rotation.y, -PI / 2.0)).is_equal_approx(0.0, 0.01)
 
 
+func test_a_prop_can_be_shown_hidden_and_placed_like_anyone_else() -> void:
+	_build()
+	var prop: Node3D = Node3D.new()
+	prop.name = "ReachingBoathook"
+	prop.visible = false
+	prop.add_to_group(ActorCues.PROPS)
+	_player.get_parent().add_child(prop)
+	var runner: GdUnitSceneRunner = scene_runner(_player.get_parent())
+	await physics_ticks(runner, 3)
+	assert_object(_actors.find_actor("reaching_boathook")).is_same(prop)
+
+	play_cutscene(_conversation, _player,
+			"@show reaching_boathook\n@place reaching_boathook doorway\nheron: There.\n"
+			+ "@hide reaching_boathook\nheron: Gone.")
+	assert_bool(prop.visible).is_true()
+	assert_vector(prop.global_position).is_equal_approx(MARK.origin, NEAR)
+
+	_conversation.press()
+	assert_bool(prop.visible).is_false()
+
+
 func test_someone_who_isnt_aboard_is_warned_about_and_nothing_happens() -> void:
 	_build()
 	var runner: GdUnitSceneRunner = scene_runner(_player.get_parent())

@@ -8,6 +8,16 @@
 [ext_resource type="Script" path="res://scripts/cutscene/wait_cues.gd" id="305_waits"]
 [ext_resource type="Script" path="res://scripts/cutscene/actor_cues.gd" id="306_actors"]
 [ext_resource type="Script" path="res://scripts/debug/cutscene_keys.gd" id="307_keys"]
+[ext_resource type="Script" path="res://scripts/cutscene/stage_cues.gd" id="308_stages"]
+[ext_resource type="Script" path="res://scripts/cutscene/clip_cues.gd" id="309_clips"]
+[ext_resource type="Script" path="res://scripts/cutscene/storm_cues.gd" id="310_storm"]
+[ext_resource type="Script" path="res://scripts/cutscene/sound_cues.gd" id="311_sounds"]
+[ext_resource type="PackedScene" path="res://scenes/prototype/intro/title_stage.tscn" id="312_title"]
+[ext_resource type="PackedScene" path="res://scenes/prototype/intro/underwater_stage.tscn" id="313_underwater"]
+[ext_resource type="PackedScene" path="res://ui/cutscene_prompt.tscn" id="314_prompt"]
+[ext_resource type="AudioStream" path="res://assets/audio/ui/confirmation_001.wav" id="315_confirm"]
+[ext_resource type="AudioStream" path="res://assets/audio/intro/grasp.tres" id="316_grasp"]
+[ext_resource type="AudioStream" path="res://assets/audio/intro/hook.tres" id="317_hook"]
 [ext_resource type="Material" path="res://assets/placeholder/materials/greybox_sand.tres" id="2_dlk4p"]
 [ext_resource type="Material" path="res://assets/placeholder/materials/greybox_grass.tres" id="3_nk5mb"]
 [ext_resource type="Material" path="res://assets/placeholder/materials/greybox_dark_wood.tres" id="4_8v0wy"]
@@ -287,12 +297,46 @@ player = NodePath("../Player")
 script = ExtResource("304_fades")
 fade = NodePath("../Opening/ScreenFade")
 
-[node name="WaitCues" type="Node" parent="."]
+[node name="WaitCues" type="Node" parent="." node_paths=PackedStringArray("prompt")]
 script = ExtResource("305_waits")
+prompt = NodePath("../CutscenePrompt")
 
 [node name="ActorCues" type="Node" parent="." node_paths=PackedStringArray("player")]
 script = ExtResource("306_actors")
 player = NodePath("../Player")
+
+[node name="StageCues" type="Node" parent="."]
+script = ExtResource("308_stages")
+
+[node name="ClipCues" type="Node" parent="."]
+script = ExtResource("309_clips")
+
+[node name="StormCues" type="Node" parent="." node_paths=PackedStringArray("weather")]
+script = ExtResource("310_storm")
+weather = NodePath("../Weather")
+
+[node name="SoundCues" type="Node" parent="."]
+script = ExtResource("311_sounds")
+
+[node name="Confirm" type="AudioStreamPlayer" parent="SoundCues"]
+stream = ExtResource("315_confirm")
+volume_db = -8.0
+
+[node name="Grasp" type="AudioStreamPlayer" parent="SoundCues"]
+stream = ExtResource("316_grasp")
+volume_db = 0.0
+
+[node name="Hook" type="AudioStreamPlayer" parent="SoundCues"]
+stream = ExtResource("317_hook")
+volume_db = 6.0
+
+[node name="Stages" type="Node" parent="."]
+
+[node name="Title" parent="Stages" instance=ExtResource("312_title")]
+
+[node name="Underwater" parent="Stages" instance=ExtResource("313_underwater")]
+
+[node name="CutscenePrompt" parent="." instance=ExtResource("314_prompt")]
 
 [node name="CutsceneKeys" type="Node" parent="."]
 script = ExtResource("307_keys")
