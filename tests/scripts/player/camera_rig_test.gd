@@ -324,7 +324,7 @@ func test_a_locked_camera_ignores_the_mouse() -> void:
 	await physics_ticks(runner, 2)
 
 	assert_bool(rig.is_locked()).is_true()
-	assert_float(rig.yaw).is_equal_approx(0.0, 0.02)
+	assert_float(rig.yaw).is_equal_approx(deg_to_rad(rig.lock_side_degrees), 0.02)
 
 
 func test_a_fixed_shot_wins_over_lock_on() -> void:

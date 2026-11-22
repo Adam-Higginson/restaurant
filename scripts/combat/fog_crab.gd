@@ -118,7 +118,7 @@ func _fight(delta: float) -> void:
 	if distance > 0.01:
 		rotation.y = atan2(-away.x, -away.z)
 		# Close in during the tell, but stop short of standing on them.
-		if cycle.state == CrabCycle.State.WINDUP and distance > attack_reach * 0.7:
+		if cycle.state == CrabCycle.State.WINDUP and distance > attack_reach * 0.85:
 			var step: Vector3 = away / distance * scuttle_speed
 			velocity.x = step.x
 			velocity.z = step.z

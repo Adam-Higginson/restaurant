@@ -188,8 +188,10 @@ func test_the_camera_swings_round_to_look_at_the_target() -> void:
 	await hold(runner, "lock_on")
 	await physics_ticks(runner, 90)
 
-	# Looking along +X is a yaw of minus a quarter turn.
-	assert_float(angle_difference(player.camera_rig.yaw, -PI / 2.0)).is_equal_approx(0.0, 0.05)
+	# Looking along +X is a yaw of minus a quarter turn; the camera sits a
+	# little to one side of that, so the player doesn't hide the target.
+	var behind: float = -PI / 2.0 + deg_to_rad(player.camera_rig.lock_side_degrees)
+	assert_float(angle_difference(player.camera_rig.yaw, behind)).is_equal_approx(0.0, 0.05)
 	assert_float(rad_to_deg(player.camera_rig.pitch)).is_equal_approx(
 			player.camera_rig.lock_pitch_degrees, 2.0)
 	await release(runner, "lock_on")

@@ -12,8 +12,8 @@ extends Node3D
 ## shot instead, and glides back when the player leaves. A cutscene can ask
 ## for a shot of its own with [method hold_shot], which wins over any zone
 ## until [method release_shot]. While the player is locked on to something
-## ([member look_target]) the free camera swings round behind the player to
-## look at it, so both stay in view, and can't be turned. The spring arm only
+## ([member look_target]) the free camera swings round behind the player,
+## a little to one side, so both stay in view, and can't be turned. The spring arm only
 ## moves a [code]FreeSpot[/code] marker, where the free camera would be; the
 ## rig places the real [Camera3D] somewhere between that spot and the shot.
 ##
@@ -47,7 +47,11 @@ const PITCH_MAX_DEGREES: float = 15.0
 ## How quickly the camera swings round to a locked-on target: higher is snappier.
 @export var lock_ease: float = 8.0
 ## The tilt the camera settles at while locked on, in degrees (negative looks down).
-@export var lock_pitch_degrees: float = -18.0
+@export var lock_pitch_degrees: float = -22.0
+## How far round to one side of "straight behind the player" the camera sits
+## while locked on, in degrees. Straight behind, the player would stand
+## exactly between the camera and the target and hide it.
+@export var lock_side_degrees: float = 32.0
 
 ## Left/right turn in radians. 0 looks along -Z (Godot's forward).
 var yaw: float:
@@ -268,7 +272,7 @@ func _swing_to_target(delta: float) -> void:
 		return
 	# The same each frame however fast the game runs (see the zoom).
 	var step: float = 1.0 - exp(-lock_ease * delta)
-	yaw = lerp_angle(yaw, yaw_along(away), step)
+	yaw = lerp_angle(yaw, yaw_along(away) + deg_to_rad(lock_side_degrees), step)
 	pitch = lerp_angle(pitch, deg_to_rad(lock_pitch_degrees), step)
 
 
