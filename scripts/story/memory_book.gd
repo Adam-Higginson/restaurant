@@ -48,6 +48,21 @@ func remembered_memories() -> Array[Memory]:
 	return found
 
 
+## The ids of the memories you've got back, in the order they came.
+func remembered_ids() -> Array[StringName]:
+	return _remembered.duplicate()
+
+
+## Puts back memories got back before (from a saved voyage), quietly: no
+## [signal remembered], so no cards. Unknown ids are skipped.
+func restore(ids: Array[StringName]) -> void:
+	_remembered.clear()
+	for id: StringName in ids:
+		for memory: Memory in all:
+			if memory.id == id and not _remembered.has(id):
+				_remembered.append(id)
+
+
 ## Forgets everything, for a new game.
 func clear() -> void:
 	_remembered.clear()

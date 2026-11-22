@@ -6,6 +6,14 @@ extends GdUnitTestSuite
 ## exact number of ticks. Waiting on rendered frames would depend on machine
 ## speed and can pass locally but fail in CI.
 
+## Where tests keep a voyage when something saves (sleeping), so they never
+## touch the real save.
+const TEST_SAVE: String = "user://test_voyage.save"
+
+
+func _init() -> void:
+	SaveGame.path = TEST_SAVE
+
 
 ## Waits for exactly [param ticks] physics ticks.
 func physics_ticks(runner: GdUnitSceneRunner, ticks: int) -> void:

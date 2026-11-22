@@ -22,7 +22,9 @@ A cosy 3D adventure in the spirit of Ocarina of Time. You're pulled from the sea
 - The wider story is still to be written.
 
 ## How it begins (first sketch)
-Black, and a title: "Somewhere at sea". You wake standing by your bunk at night, the storm outside, the bunk room warm and lamplit, the camera looking aft over your shoulder at your bunk, the stove and the stern windows. The lantern is at your shoulder: "There you are." / "You were in the water. I pulled. You held on. Good holding." / "I'll get you home. I know exactly where it is. Roughly." Then the ship is yours. (In `sea.tscn`, the `Opening` node; untick its Skip to start on deck.)
+Black, and a title: "Somewhere at sea". You wake standing by your bunk at night, the storm outside, the bunk room warm and lamplit, the camera looking aft over your shoulder at your bunk, the stove and the stern windows. The lantern is at your shoulder: "There you are." / "You were in the water. I pulled. You held on. Good holding." / "I'll get you home. I know exactly where it is. Roughly." Then the ship is yours. (In `sea.tscn`, the `Opening` node; tick its Skip to start on deck.)
+
+**Keeping the voyage (first sketch):** sleeping in your bunk is where the game saves: the memories you've got back, the day and whether it's morning, and the lantern's warmth. Start again and the opening carries on ("Day 3. Morning", "You're back. I kept the light on.") instead of beginning anew. To start a new voyage, delete `voyage.save` from the user data folder.
 
 ## A day is a song
 A day has four parts, like a song:

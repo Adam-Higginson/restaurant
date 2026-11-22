@@ -48,6 +48,11 @@ const FAR_LIGHT: PackedStringArray = [
 	"Somebody's keeping that light lit. For somebody.",
 ]
 
+## You've come back to a saved voyage.
+const WELCOME_BACK: PackedStringArray = [
+	"You're back. I kept the light on.",
+	"There you are again. I didn't go anywhere. I can't, really.",
+]
 ## You're at the bow at dawn, and the island has come out of the mist.
 const ISLAND: PackedStringArray = [
 	"There! An island. With a lighthouse. Lighthouses are for people who are lost. So, us.",

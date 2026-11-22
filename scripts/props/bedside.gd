@@ -61,7 +61,15 @@ func sleep(player: Player3D) -> void:
 		if spirit != null:
 			spirit.snap_to_player()
 			spirit.say(LanternLines.pick(LanternLines.MORNING))
+	_save(player)
 	woke.emit(morning)
+
+
+# Sleeping is where the voyage is kept: save it on waking.
+func _save(player: Player3D) -> void:
+	var spirit: LanternSpirit = player.get_node_or_null("LanternSpirit") as LanternSpirit
+	var warmth: float = spirit.warmth if spirit != null else 1.0
+	SaveGame.write(SaveGame.capture(Game.memories, _time_of_day(), warmth))
 
 
 func _time_of_day() -> TimeOfDay:

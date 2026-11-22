@@ -19,14 +19,15 @@ The night's theme: **the ship became a place you live, and the lantern became so
 9. Take a dish down to the little **round table by the bunk room's stove** and **share it with the lantern**. He drifts down, eats, glows warm again ("I'm glowing. Am I glowing?"). Left alone for half an hour he dims and asks for soup.
 10. **Sleep** at the foot of your bunk: "Day 2. Morning". Go up on deck: a misty grey-rose dawn, the rain a drizzle, and out in the mist, the **lighthouse island** the light came from. Stand at the bow.
 
-To see every memory you've got back, read your note again. Ring the bell once more to set sail.
+To see every memory you've got back, read your note again. Ring the bell once more to set sail. Quit and start again: the voyage carries on from your last sleep (delete `voyage.save` from the user data folder for a fresh start).
 
 ## What's new in the code (the shape of it)
 - **The lantern** (`scripts/companion/`): `LanternSpirit` (follow, hover, blink, excite, warmth, visit), `LanternVoice` (his floating lines), `LanternLines` (everything he says: rewrite it in your own voice), `Hum` (the synthesised melody), `Lookout` (the bow).
 - **Story** (`scripts/story/`): `MemoryBook` on `Game.memories`, `Opening`. Data in `data/memories/` and `data/recipes/` (new `Memory` and `Recipe` resources, listed in the catalog).
 - **Cooking**: fire (a timed element) and two `Hob`s on the hearth; saucepan, frying pan, bowls, rainwater, onions, herring. All the GDD's designed steps and shortcuts for Tomato Soup, plus Pan-fried Herring.
+- **Saving**: `SaveGame` (`scripts/story/save_game.gd`), written when you wake, read by the opening.
 - **The ship and the world**: `Ship.heave_to()` / `get_under_way()` and `way`; `ShipsBell`; `FishingLine` + `FishingSpot`; `WaterButt`; `TimeOfDay` (night to dawn, one number) and `Bedside`; `DistantIsland` + a silhouette shader.
-- **Tests**: every feature has a suite; about 75 new tests. The full suite passes: 933 tests, 0 failures, 0 orphans (run after feature 14).
+- **Tests**: every feature has a suite; about 85 new tests. The full suite passes: 941 tests, 0 failures, 0 orphans (run after feature 17).
 
 ## What I built, in order
 
@@ -136,6 +137,12 @@ What bites depends on the time: herring at night, **mackerel** at dawn. Mackerel
 - `FishingSpot.dawn_catch` and `catch_now()`; data `mackerel`, `mackerel_fillet`, `pan_fried_mackerel`, reactions `fillet_mackerel`, `fry_mackerel`, `fry_whole_mackerel`, memory `first_light`.
 - Tests: `fishing_spot_test` (at dawn the mackerel bite instead), `catalog_test` (the mackerel's reactions).
 
+### 17. The voyage is kept: sleeping saves, starting again carries on
+Sleeping in your bunk is the save point. When you wake, the game keeps the memories you've got back, the day, whether it's morning, and the lantern's warmth (a small JSON file, `voyage.save`, in the user data folder). Start `sea.tscn` again and the opening carries on: "Day 3. Morning" over black, you wake by your bunk with your memories still in your note, and the lantern says "You're back. I kept the light on." Delete the file (Project > Open User Data Folder) to start a new voyage.
+- `scripts/story/save_game.gd` (`SaveGame`: capture, write, read, restore, erase; tolerant of a missing or garbled file), `MemoryBook.remembered_ids()` / `restore()` (quietly, no cards), the bedside saves on waking, the `Opening` loads (its `load_save` can be turned off).
+- Tests never touch your real save: `GameTestSuite` points `SaveGame.path` at a test file.
+- Tests: `tests/scripts/story/save_game_test.gd` (saves and reads back, nothing for a missing or garbled file, restoring is quiet and skips unknown memories, sleeping saves, starting again carries on).
+
 ## Notes, loose ends and decisions for you
 
 **Bugs on `main` I found (fixed here, but `main` needs them too):**
@@ -153,4 +160,4 @@ What bites depends on the time: herring at night, **mackerel** at dawn. Mackerel
 - The lighthouse island can't be reached; the ship circles it. Mooring there is the natural next step (#67).
 - Fish only bite while hove to, and there are only two kinds (herring at night, mackerel at dawn).
 - Days count, but nothing changes from day to day yet.
-- The lantern's warmth isn't saved, and nothing is: there's no save game yet.
+- Only sleeping saves; quitting mid-day loses that day's progress since you last slept.

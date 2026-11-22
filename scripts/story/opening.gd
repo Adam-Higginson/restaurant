@@ -24,8 +24,10 @@ const FIRST_WORDS: PackedStringArray = [
 @export var ship: Ship
 ## Where they wake, in the ship's space: by their bunk.
 @export var wake_spot: Vector3 = Vector3(3.3, 1.05, 12.0)
-## The title over black.
+## The title over black, for a new voyage.
 @export var title: String = "Somewhere at sea"
+## Whether to carry on a saved voyage, if there is one.
+@export var load_save: bool = true
 ## How long the title holds before the fade, in seconds.
 @export var title_seconds: float = 2.5
 
@@ -59,12 +61,23 @@ func _play() -> void:
 	var spirit: LanternSpirit = player.get_node_or_null("LanternSpirit") as LanternSpirit
 	if spirit != null:
 		spirit.snap_to_player()
-	await _fade.show_title(title)
+	var saved: Dictionary = SaveGame.read() if load_save else {}
+	var time: TimeOfDay = get_tree().get_first_node_in_group(&"time_of_day") as TimeOfDay
+	var heading: String = title
+	if not saved.is_empty():
+		SaveGame.restore(saved, Game.memories, time, spirit)
+		var morning: bool = time != null and time.is_morning()
+		var day: int = saved.get("day", 1)
+		heading = "Day %d. %s" % [day, "Morning" if morning else "Night"]
+	await _fade.show_title(heading)
 	await get_tree().create_timer(title_seconds).timeout
 	await _fade.fade_in()
 	player.controls_enabled = true
 	_playing = false
 	if spirit != null:
-		for line: String in FIRST_WORDS:
-			spirit.say(line)
+		if saved.is_empty():
+			for line: String in FIRST_WORDS:
+				spirit.say(line)
+		else:
+			spirit.say(LanternLines.pick(LanternLines.WELCOME_BACK))
 	finished.emit()

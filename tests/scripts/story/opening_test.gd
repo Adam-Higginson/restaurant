@@ -61,6 +61,7 @@ func _opening(ship: Ship, player: Player3D, skip: bool) -> Opening:
 	opening.player = player
 	opening.ship = ship
 	opening.title_seconds = 0.1
+	opening.load_save = false
 	var fade: ScreenFade = (load("res://ui/screen_fade.tscn") as PackedScene).instantiate() \
 			as ScreenFade
 	fade.name = "ScreenFade"
