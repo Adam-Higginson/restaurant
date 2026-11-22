@@ -109,7 +109,7 @@ func test_starting_again_carries_on_the_voyage() -> void:
 	assert_bool(time.is_morning()).is_true()
 	var spirit: LanternSpirit = player.get_node("LanternSpirit") as LanternSpirit
 	assert_float(spirit.warmth).is_less(0.6)
-	assert_bool(spirit.saying() in LanternLines.WELCOME_BACK).is_true()
+	assert_bool(spirit.saying() in moment_lines(&"returned")).is_true()
 
 
 func test_what_conversations_remember_is_saved_and_comes_back() -> void:

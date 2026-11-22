@@ -46,7 +46,7 @@ func _on_rope_pulled(player: Player3D) -> void:
 	if heaving_to:
 		var spirit: LanternSpirit = player.get_node_or_null("LanternSpirit") as LanternSpirit
 		if spirit != null:
-			spirit.tell(LanternLines.pick(LanternLines.HOVE_TO), &"news_bell")
+			spirit.tell(&"hove_to", &"news_bell")
 
 
 ## What ringing would do now, for the HUD.

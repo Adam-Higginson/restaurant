@@ -9,13 +9,6 @@ extends Node
 ## Emitted when the opening's over and you can move.
 signal finished
 
-## The lantern's first words, in order.
-const FIRST_WORDS: PackedStringArray = [
-	"There you are.",
-	"You were in the water. I pulled. You held on. Good holding.",
-	"I'll get you home. I know exactly where it is. Roughly.",
-]
-
 ## Start straight away, with no opening.
 @export var skip: bool = false
 ## The player who wakes.
@@ -75,9 +68,6 @@ func _play() -> void:
 	player.controls_enabled = true
 	_playing = false
 	if spirit != null:
-		if saved.is_empty():
-			for line: String in FIRST_WORDS:
-				spirit.say(line)
-		else:
-			spirit.say(LanternLines.pick(LanternLines.WELCOME_BACK))
+		# His first words, or a welcome back: see data/dialogue/moments.dlg.
+		spirit.remark(&"woke" if saved.is_empty() else &"returned")
 	finished.emit()

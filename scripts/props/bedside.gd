@@ -60,7 +60,7 @@ func sleep(player: Player3D) -> void:
 		var spirit: LanternSpirit = player.get_node_or_null("LanternSpirit") as LanternSpirit
 		if spirit != null:
 			spirit.snap_to_player()
-			spirit.tell(LanternLines.pick(LanternLines.MORNING))
+			spirit.tell(&"morning")
 	_save(player)
 	woke.emit(morning)
 
