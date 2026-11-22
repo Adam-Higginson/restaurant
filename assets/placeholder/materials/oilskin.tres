@@ -3,6 +3,7 @@
 [ext_resource type="Texture2D" path="res://assets/placeholder/textures/oilskin.png" id="1_ccdxd"]
 
 [resource]
+albedo_color = Color(0.82, 0.76, 0.62, 1)
 albedo_texture = ExtResource("1_ccdxd")
 roughness = 0.45
 uv1_scale = Vector3(3, 3, 3)

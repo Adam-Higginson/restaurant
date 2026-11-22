@@ -1,0 +1,11 @@
+[gd_resource type="StandardMaterial3D" format=3 uid="uid://cax06hfp8ur1c"]
+
+[ext_resource type="Texture2D" path="res://assets/placeholder/materials/n64_grain.tres" id="1_4w2qr"]
+
+[resource]
+albedo_color = Color(0.62, 0.45, 0.26, 1)
+albedo_texture = ExtResource("1_4w2qr")
+roughness = 0.9
+uv1_scale = Vector3(4, 4, 4)
+uv1_triplanar = true
+texture_filter = 0

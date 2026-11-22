@@ -1,0 +1,86 @@
+[gd_scene format=3 uid="uid://bqjmcucrb4el3"]
+
+[ext_resource type="Material" path="res://assets/placeholder/materials/dark_prop_wood.tres" id="1_kyoff"]
+[ext_resource type="Material" path="res://assets/placeholder/materials/prop_wood.tres" id="2_3kwqo"]
+[ext_resource type="Material" path="res://assets/placeholder/materials/crockery.tres" id="3_rmpx7"]
+[ext_resource type="Material" path="res://assets/placeholder/materials/bottle_glass.tres" id="4_x8s0a"]
+[ext_resource type="Material" path="res://assets/placeholder/materials/cork.tres" id="5_ta0l0"]
+
+[sub_resource type="BoxMesh" id="BoxMesh_tc748"]
+size = Vector3(0.03, 0.03, 0.1)
+
+[sub_resource type="BoxMesh" id="BoxMesh_ebpd5"]
+size = Vector3(0.03, 0.03, 0.1)
+
+[sub_resource type="BoxMesh" id="BoxMesh_ae1me"]
+size = Vector3(0.12, 0.03, 0.035)
+
+[sub_resource type="BoxMesh" id="BoxMesh_rj0hk"]
+size = Vector3(0.006, 0.08, 0.006)
+
+[sub_resource type="BoxMesh" id="BoxMesh_88are"]
+size = Vector3(0.05, 0.05, 0.004)
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_ppatd"]
+top_radius = 0.06
+bottom_radius = 0.06
+height = 0.26
+radial_segments = 10
+rings = 1
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_e01j3"]
+top_radius = 0.025
+bottom_radius = 0.025
+height = 0.07
+radial_segments = 8
+rings = 1
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_b2hhb"]
+top_radius = 0.022
+bottom_radius = 0.022
+height = 0.03
+radial_segments = 8
+rings = 1
+
+[node name="ShipInBottle" type="Node3D" unique_id=788005585]
+
+[node name="Cradle1" type="MeshInstance3D" parent="." unique_id=1822148195]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.08, 0.015, 0)
+material_override = ExtResource("1_kyoff")
+mesh = SubResource("BoxMesh_tc748")
+
+[node name="Cradle2" type="MeshInstance3D" parent="." unique_id=625758588]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.08, 0.015, 0)
+material_override = ExtResource("1_kyoff")
+mesh = SubResource("BoxMesh_ebpd5")
+
+[node name="Hull" type="MeshInstance3D" parent="." unique_id=1788691118]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.01, 0.055, 0)
+material_override = ExtResource("2_3kwqo")
+mesh = SubResource("BoxMesh_ae1me")
+
+[node name="Mast" type="MeshInstance3D" parent="." unique_id=2093313561]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.01, 0.1, 0)
+material_override = ExtResource("1_kyoff")
+mesh = SubResource("BoxMesh_rj0hk")
+
+[node name="Sail" type="MeshInstance3D" parent="." unique_id=701298015]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.005, 0.105, 0)
+material_override = ExtResource("3_rmpx7")
+mesh = SubResource("BoxMesh_88are")
+
+[node name="Bottle" type="MeshInstance3D" parent="." unique_id=1373554088]
+transform = Transform3D(-4.371139e-08, -1, 0, 1, -4.371139e-08, 0, 0, 0, 1, 0, 0.09, 0)
+material_override = ExtResource("4_x8s0a")
+cast_shadow = 0
+mesh = SubResource("CylinderMesh_ppatd")
+
+[node name="Neck" type="MeshInstance3D" parent="." unique_id=81006556]
+transform = Transform3D(-4.371139e-08, -1, 0, 1, -4.371139e-08, 0, 0, 0, 1, 0.16, 0.09, 0)
+material_override = ExtResource("4_x8s0a")
+mesh = SubResource("CylinderMesh_e01j3")
+
+[node name="Cork" type="MeshInstance3D" parent="." unique_id=834151675]
+transform = Transform3D(-4.371139e-08, -1, 0, 1, -4.371139e-08, 0, 0, 0, 1, 0.205, 0.09, 0)
+material_override = ExtResource("5_ta0l0")
+mesh = SubResource("CylinderMesh_b2hhb")

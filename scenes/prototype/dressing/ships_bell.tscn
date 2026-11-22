@@ -1,0 +1,84 @@
+[gd_scene format=3 uid="uid://sntgjaikjoq0"]
+
+[ext_resource type="Material" path="res://assets/placeholder/materials/dark_prop_wood.tres" id="1_4d3p6"]
+[ext_resource type="Material" path="res://assets/placeholder/materials/iron.tres" id="2_cxc7e"]
+[ext_resource type="Script" path="res://scripts/props/swinging.gd" id="3_awont"]
+[ext_resource type="Material" path="res://assets/placeholder/materials/brass.tres" id="4_dj0a4"]
+[ext_resource type="Material" path="res://assets/placeholder/materials/rope.tres" id="5_ja3jx"]
+
+[sub_resource type="BoxMesh" id="BoxMesh_v7dxf"]
+size = Vector3(0.16, 0.22, 0.03)
+
+[sub_resource type="BoxMesh" id="BoxMesh_ffpr5"]
+size = Vector3(0.04, 0.04, 0.22)
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_wvjw1"]
+top_radius = 0.03
+bottom_radius = 0.03
+height = 0.04
+radial_segments = 8
+rings = 1
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_tkjr6"]
+top_radius = 0.065
+bottom_radius = 0.11
+height = 0.16
+radial_segments = 10
+rings = 1
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_04emj"]
+top_radius = 0.12
+bottom_radius = 0.12
+height = 0.02
+radial_segments = 10
+rings = 1
+
+[sub_resource type="BoxMesh" id="BoxMesh_aw3d6"]
+size = Vector3(0.02, 0.3, 0.02)
+
+[sub_resource type="BoxMesh" id="BoxMesh_gibnj"]
+size = Vector3(0.05, 0.05, 0.05)
+
+[node name="ShipsBell" type="Node3D" unique_id=1617109830]
+
+[node name="Plate" type="MeshInstance3D" parent="." unique_id=384378575]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0.015)
+material_override = ExtResource("1_4d3p6")
+mesh = SubResource("BoxMesh_v7dxf")
+
+[node name="Arm" type="MeshInstance3D" parent="." unique_id=1959507899]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.08, 0.11)
+material_override = ExtResource("2_cxc7e")
+mesh = SubResource("BoxMesh_ffpr5")
+
+[node name="Swing" type="Node3D" parent="." unique_id=2060228730]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.06, 0.2)
+script = ExtResource("3_awont")
+swing_degrees = 2.5
+period = 4.4
+phase = 0.3
+
+[node name="Crown" type="MeshInstance3D" parent="Swing" unique_id=863684080]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.01, 0)
+material_override = ExtResource("4_dj0a4")
+mesh = SubResource("CylinderMesh_wvjw1")
+
+[node name="Bell" type="MeshInstance3D" parent="Swing" unique_id=1318852695]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.11, 0)
+material_override = ExtResource("4_dj0a4")
+mesh = SubResource("CylinderMesh_tkjr6")
+
+[node name="Lip" type="MeshInstance3D" parent="Swing" unique_id=29547285]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.19, 0)
+material_override = ExtResource("4_dj0a4")
+mesh = SubResource("CylinderMesh_04emj")
+
+[node name="Rope" type="MeshInstance3D" parent="Swing" unique_id=1351973763]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.34, 0)
+material_override = ExtResource("5_ja3jx")
+mesh = SubResource("BoxMesh_aw3d6")
+
+[node name="Knot" type="MeshInstance3D" parent="Swing" unique_id=1813597250]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.5, 0)
+material_override = ExtResource("5_ja3jx")
+mesh = SubResource("BoxMesh_gibnj")
