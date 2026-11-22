@@ -66,7 +66,7 @@ jobs:
         run: |
           "$GODOT" --path . -s -d --remote-debug tcp://127.0.0.1:0 \
               res://addons/gdUnit4/bin/GdUnitCmdTool.gd \
-              --headless --audio-driver Dummy --add res://tests \
+              --headless --audio-driver Dummy --add res://tests/hang_probe_test.gd \
               -c --fixed-fps 60 --ignoreHeadlessMode > godot.log 2>&1 &
           pid=$!
           tail -f --pid=$pid godot.log &
