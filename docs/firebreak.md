@@ -52,3 +52,13 @@ Go down to the bunk room and Interact at your bunk ("Sleep until morning"). The 
 The GDD already put "a folded note in your own hand" by your pillow; now it's your memory book. At the head of your bunk, Interact ("Read your note") and every memory you've got back comes back again, one after another, on the memory card. Before you've remembered anything it says only: "Don't forget. Cook something. Catch something. It comes back." Sleeping moved to the foot of the bunk so the two don't fight over Interact.
 - `scripts/props/memory_note.gd` + `scenes/prototype/props/memory_note.tscn` (in `ship.tscn`'s bunk room); the memory card joined a `memory_card` group so the note can find it.
 - Tests: `tests/scripts/props/memory_note_test.gd` (the blank note, replaying memories, reading at the head of the bunk, sleeping at its foot).
+
+### 8. The lantern talks, and the far light means something
+He has a voice now: a few warm words float beside him, always facing you, one line at a time. He speaks at the moments that matter, cheerfully (and, per the story, wrongly) sure about home:
+- a memory comes back: "Was that home? It sounded like home." / "Oh! Say it again. Slower."
+- you land a fish: "A fish! Is home a fish? ...No. Probably not."
+- you stop the ship at the bell: "Stopping? Good. I like it when the sea holds still."
+- you wake at dawn: "Morning! Did you sleep? I don't. I just glow quieter."
+- you walk out onto the bow at night, towards the far light in the fog: "A light! That's it. That's home. Probably. Almost certainly. Maybe." (not at dawn, when the fog's thinned, and not every time: he has a think between guesses).
+- `scripts/companion/lantern_voice.gd` (a billboard `Label3D` with a queue and fades), `scripts/companion/lantern_lines.gd` (all his lines, picked at random, never the same twice running; **easy to rewrite in your own voice**), `scripts/companion/lookout.gd` + `scenes/prototype/props/lookout.tscn` (an area at the bow).
+- Tests: `tests/scripts/companion/lantern_voice_test.gd` (8: queueing and quiet, no repeats, each moment he speaks at, not at dawn, the think between guesses).

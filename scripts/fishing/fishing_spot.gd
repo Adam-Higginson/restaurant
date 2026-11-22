@@ -77,7 +77,14 @@ func _on_interacted(player: Player3D) -> void:
 				var fish: ItemInstance = ItemInstance.new(catch)
 				if player.toolbar.add(fish):
 					caught.emit(fish)
+					_say(player, LanternLines.CAUGHT)
 					Game.memories.notice(catch)
+
+
+func _say(player: Player3D, lines: PackedStringArray) -> void:
+	var spirit: LanternSpirit = player.get_node_or_null("LanternSpirit") as LanternSpirit
+	if spirit != null:
+		spirit.say(LanternLines.pick(lines))
 
 
 func _on_bitten() -> void:

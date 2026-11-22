@@ -64,6 +64,7 @@ var _rng: RandomNumberGenerator = RandomNumberGenerator.new()
 @onready var _body: Node3D = $Body
 @onready var _eyes: Node3D = $Body/Eyes
 @onready var _light: Flicker = $Light
+@onready var _voice: LanternVoice = $Voice
 
 
 func _ready() -> void:
@@ -72,6 +73,8 @@ func _ready() -> void:
 	_blink_wait = _rng.randf_range(blink_min, blink_max)
 	if is_instance_valid(detector):
 		detector.focus_changed.connect(_on_focus_changed)
+	Game.memories.remembered.connect(
+			func(_memory: Memory) -> void: say(LanternLines.pick(LanternLines.REMEMBERED)))
 	# He's a child of the player, so he's ready before the player is: wait
 	# until the player has its model before finding its shoulder.
 	snap_to_player.call_deferred()
@@ -112,6 +115,19 @@ func snap_to_player() -> void:
 	_spot = goal_spot()
 	global_position = _spot
 	reset_physics_interpolation()
+
+
+## Says [param line], in a few words floating beside him, with a hop.
+func say(line: String) -> void:
+	if line.is_empty():
+		return
+	_voice.say(line)
+	excite()
+
+
+## What he's saying now, or "" when he's quiet.
+func saying() -> String:
+	return _voice.saying
 
 
 ## Hops about excitedly for a moment, a little brighter: something's

@@ -54,6 +54,11 @@ func sleep(player: Player3D) -> void:
 	await _fade.fade_in()
 	player.set_physics_process(true)
 	_sleeping = false
+	if morning:
+		var spirit: LanternSpirit = player.get_node_or_null("LanternSpirit") as LanternSpirit
+		if spirit != null:
+			spirit.snap_to_player()
+			spirit.say(LanternLines.pick(LanternLines.MORNING))
 	woke.emit(morning)
 
 

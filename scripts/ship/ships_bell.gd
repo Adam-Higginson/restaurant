@@ -23,7 +23,7 @@ var _ship: Ship = null
 
 func _ready() -> void:
 	_ship = _find_ship()
-	_rope.interacted.connect(func(_player: Player3D) -> void: ring())
+	_rope.interacted.connect(_on_rope_pulled)
 	_rope.describe_interact = func(_player: Player3D) -> String: return prompt()
 
 
@@ -37,6 +37,16 @@ func ring() -> void:
 		else:
 			_ship.get_under_way()
 	rung.emit()
+
+
+func _on_rope_pulled(player: Player3D) -> void:
+	var heaving_to: bool = is_instance_valid(_ship) and _ship.is_sailing \
+			and not _ship.is_heaving_to
+	ring()
+	if heaving_to:
+		var spirit: LanternSpirit = player.get_node_or_null("LanternSpirit") as LanternSpirit
+		if spirit != null:
+			spirit.say(LanternLines.pick(LanternLines.HOVE_TO))
 
 
 ## What ringing would do now, for the HUD.
