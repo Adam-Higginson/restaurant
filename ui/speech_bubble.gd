@@ -14,7 +14,8 @@ enum Style {
 	THOUGHT,
 	## Shouted or startled: amber words.
 	EXCLAIM,
-	## A noise rather than words (a snore, a hum): just the letters.
+	## A noise rather than words (a snore, a hum): a panel with a tail, the
+	## words paler and quieter.
 	SOUND,
 }
 
@@ -22,8 +23,9 @@ const PANEL: Color = Color(0.07, 0.08, 0.1, 0.56)
 const SHADOW: Color = Color(0.0, 0.0, 0.0, 0.55)
 const WORDS: Color = Color(0.96, 0.93, 0.85)
 const THOUGHT_WORDS: Color = Color(0.8, 0.86, 0.88)
+## Paler and a little see-through, so a hum reads as a noise, not speech.
+const SOUND_WORDS: Color = Color(0.86, 0.82, 0.74, 0.72)
 const AMBER: Color = Color(1.0, 0.74, 0.34)
-const INK: Color = Color(0.05, 0.04, 0.04)
 
 const FONT: Font = preload("res://assets/fonts/dialogue_font.tres")
 const FONT_SIZE: int = 10
@@ -57,9 +59,6 @@ func _init() -> void:
 func _draw() -> void:
 	var wide: float = size.x
 	var tall: float = size.y - TAIL
-	if _style == Style.SOUND:
-		_draw_words(WORDS, true)
-		return
 	# A smooth, round-cornered panel.
 	var panel: StyleBoxFlat = StyleBoxFlat.new()
 	panel.bg_color = PANEL
@@ -73,12 +72,17 @@ func _draw() -> void:
 		# A trail of dots shrinking towards the thinker.
 		draw_circle(Vector2(TAIL_X + 4.0, tall + 2.2), 1.6, PANEL, true, -1.0, true)
 		draw_circle(Vector2(TAIL_X + 1.0, tall + 5.0), 0.9, PANEL, true, -1.0, true)
-		_draw_words(THOUGHT_WORDS, false)
+		_draw_words(THOUGHT_WORDS)
 		return
 	# A small tail leaning towards the speaker.
 	draw_colored_polygon(PackedVector2Array([Vector2(TAIL_X + 2.0, tall),
 			Vector2(TAIL_X + 8.0, tall), Vector2(TAIL_X, tall + TAIL - 1.0)]), PANEL)
-	_draw_words(AMBER if _style == Style.EXCLAIM else WORDS, false)
+	var color: Color = WORDS
+	if _style == Style.EXCLAIM:
+		color = AMBER
+	elif _style == Style.SOUND:
+		color = SOUND_WORDS
+	_draw_words(color)
 
 
 ## Shows [param words] in [param style], and sizes itself to fit them.
@@ -123,15 +127,11 @@ static func words_font() -> Font:
 
 # Writes the words in the middle of the panel, with a soft shadow so they
 # read over a see-through panel.
-func _draw_words(color: Color, edged: bool) -> void:
+func _draw_words(color: Color) -> void:
 	var font: Font = words_font()
 	var wide: float = size.x - PADDING.x * 2.0
 	var at: Vector2 = PADDING + Vector2(0, font.get_ascent(FONT_SIZE))
-	if edged:
-		draw_multiline_string_outline(font, at, _words, HORIZONTAL_ALIGNMENT_CENTER, wide,
-				FONT_SIZE, -1, 2, INK)
-	else:
-		draw_multiline_string(font, at + Vector2(0.4, 0.5), _words, HORIZONTAL_ALIGNMENT_CENTER,
-				wide, FONT_SIZE, -1, SHADOW)
+	draw_multiline_string(font, at + Vector2(0.4, 0.5), _words, HORIZONTAL_ALIGNMENT_CENTER,
+			wide, FONT_SIZE, -1, SHADOW)
 	draw_multiline_string(font, at, _words, HORIZONTAL_ALIGNMENT_CENTER, wide, FONT_SIZE, -1,
 			color)
