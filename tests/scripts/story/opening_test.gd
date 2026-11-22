@@ -56,10 +56,10 @@ func test_it_opens_on_her_name_and_waits_for_any_button() -> void:
 	assert_bool(swing.swinging).is_true()
 	assert_int(face.expression).is_equal(LanternFace.Look.TIRED)
 	assert_float(gilt.lamp_glow()).is_greater(0.9)
-	# The lit windows behind her name are turned down, so his light shows.
+	# The gallery windows behind her name are off, so his light shows.
 	var dimmer: WindowDimmer = _ship.get_node("SternWatch/WindowDimmer") as WindowDimmer
 	assert_bool(dimmer.dimmed).is_true()
-	assert_float(dimmer.level).is_less(0.2)
+	assert_float(dimmer.level).is_equal(0.0)
 	assert_bool(_fade().visible).is_false()
 	assert_bool(_player.camera_rig.is_fixed).is_true()
 	assert_str(prompt.shown_text()).is_equal("Press any button")

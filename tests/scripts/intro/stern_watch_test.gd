@@ -114,6 +114,25 @@ func test_the_windows_turn_down_gently_and_back_up() -> void:
 	assert_float(glow.emission_energy_multiplier).is_equal_approx(2.4, 0.001)
 
 
+func test_switched_right_off_a_window_is_a_dark_pane_and_lit_again_after() -> void:
+	var glow: StandardMaterial3D = _new_glow(2.4)
+	glow.albedo_color = Color(1.0, 0.7, 0.36)
+	var dimmer: WindowDimmer = _new_dimmer(glow)
+	dimmer.dim_to = 0.0
+	dimmer.seconds = 0.0
+	dimmer.unlit = Color(0.1, 0.1, 0.1)
+
+	dimmer.dimmed = true
+	await _frames(3)
+	assert_float(glow.emission_energy_multiplier).is_equal(0.0)
+	assert_bool(glow.albedo_color.is_equal_approx(Color(0.1, 0.1, 0.1))).is_true()
+
+	dimmer.dimmed = false
+	await _frames(3)
+	assert_float(glow.emission_energy_multiplier).is_equal_approx(2.4, 0.001)
+	assert_bool(glow.albedo_color.is_equal_approx(Color(1.0, 0.7, 0.36))).is_true()
+
+
 func test_the_windows_glow_is_put_back_when_the_scene_closes() -> void:
 	var glow: StandardMaterial3D = _new_glow(2.4)
 	var dimmer: WindowDimmer = WindowDimmer.new()

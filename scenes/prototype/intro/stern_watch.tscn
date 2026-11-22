@@ -1,7 +1,7 @@
 [gd_scene format=3]
 
 [ext_resource type="Shader" path="res://shaders/nameboard_gilt.gdshader" id="1_ah4m5"]
-[ext_resource type="FontVariation" path="res://assets/fonts/title_font.tres" id="2_m38hy"]
+[ext_resource type="FontVariation" path="res://assets/fonts/name_font.tres" id="2_m38hy"]
 [ext_resource type="Script" path="res://scripts/intro/name_gilt.gd" id="3_jk4ff"]
 [ext_resource type="Material" path="res://assets/placeholder/materials/iron.tres" id="4_cf5ua"]
 [ext_resource type="Script" path="res://scripts/intro/stern_swing.gd" id="5_100y2"]
@@ -25,8 +25,14 @@ shader_parameter/shine = null
 text = "SALT AND EMBER"
 font = ExtResource("2_m38hy")
 font_size = 64
-pixel_size = 0.0043
-depth = 0.03
+pixel_size = 0.0046
+depth = 0.035
+
+[sub_resource type="BoxMesh" id="Mesh_FrameRail"]
+size = Vector3(3.3, 0.024, 0.03)
+
+[sub_resource type="BoxMesh" id="Mesh_FrameEnd"]
+size = Vector3(0.024, 0.3, 0.03)
 
 [sub_resource type="BoxMesh" id="BoxMesh_pe1s4"]
 size = Vector3(0.06, 0.06, 0.7)
@@ -269,13 +275,40 @@ _data = {
 [node name="SternWatch" type="Node3D" unique_id=873895150]
 
 [node name="Name" type="MeshInstance3D" parent="." unique_id=1283651078 node_paths=PackedStringArray("lamp", "lamp_face")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 5.035, 16.085)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 5.03, 16.09)
 material_override = SubResource("ShaderMaterial_xelty")
 cast_shadow = 0
 mesh = SubResource("TextMesh_5aj8q")
 script = ExtResource("3_jk4ff")
 lamp = NodePath("../Swing/HookLantern")
 lamp_face = NodePath("../Swing/HookLantern/Body")
+
+[node name="Frame" type="Node3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 5.05, 16.088)
+
+[node name="Top" type="MeshInstance3D" parent="Frame"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.138, 0)
+material_override = SubResource("ShaderMaterial_xelty")
+cast_shadow = 0
+mesh = SubResource("Mesh_FrameRail")
+
+[node name="Bottom" type="MeshInstance3D" parent="Frame"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.138, 0)
+material_override = SubResource("ShaderMaterial_xelty")
+cast_shadow = 0
+mesh = SubResource("Mesh_FrameRail")
+
+[node name="Left" type="MeshInstance3D" parent="Frame"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.638, 0, 0)
+material_override = SubResource("ShaderMaterial_xelty")
+cast_shadow = 0
+mesh = SubResource("Mesh_FrameEnd")
+
+[node name="Right" type="MeshInstance3D" parent="Frame"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.638, 0, 0)
+material_override = SubResource("ShaderMaterial_xelty")
+cast_shadow = 0
+mesh = SubResource("Mesh_FrameEnd")
 
 [node name="HookArm" type="MeshInstance3D" parent="." unique_id=1664955679]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 7.32, 16.2)
@@ -313,11 +346,12 @@ light_energy = 1.8
 [node name="WindowDimmer" type="Node" parent="."]
 script = ExtResource("8_dimmer")
 glow = ExtResource("9_glow")
+dim_to = 0.0
 
 [node name="Shots" type="Node3D" parent="." unique_id=1160865289]
 
 [node name="TheBoard" type="Marker3D" parent="Shots" unique_id=1628404058 groups=["shots"]]
-transform = Transform3D(1, 0, 0, 0, 0.97544104, 0.22026065, 0, -0.22026065, 0.97544104, 0, 5.5, 17.6)
+transform = Transform3D(1, 0, 0, 0, 0.9923, 0.1232, 0, -0.1232, 0.9923, 0, 5.45, 17.5)
 
 [node name="Clips" type="AnimationPlayer" parent="." unique_id=1119508766 groups=["clips"]]
 libraries/ = SubResource("AnimationLibrary_yxevo")
