@@ -1,7 +1,8 @@
 class_name Hud3D
 extends CanvasLayer
 ## The 3D player's on-screen HUD: the toolbar and what they're holding at the
-## bottom, and what Interact and Use tool would do in the top-right corner.
+## bottom, their hearts in the top-left corner, and what Interact and Use
+## tool would do in the top-right.
 ## While you're in a conversation those step aside for the dialogue box.
 ##
 ## Set [member player] in the scene; this hands it to each part when ready.
@@ -12,6 +13,7 @@ extends CanvasLayer
 @onready var _toolbar: ToolbarBar = %Toolbar
 @onready var _held_item: HeldItemLabel3D = %HeldItem
 @onready var _action_prompt: ActionPrompt = %ActionPrompt
+@onready var _hearts: HeartsBar = %HeartsBar
 @onready var _memory_card: MemoryCard = %MemoryCard
 @onready var _dialogue_box: DialogueBox = %DialogueBox
 @onready var _dialogue_sounds: DialogueSounds = %DialogueSounds
@@ -24,6 +26,7 @@ func _ready() -> void:
 	_toolbar.setup(player)
 	_held_item.setup(player)
 	_action_prompt.setup(player)
+	_hearts.setup(player)
 	# The lantern lights up when a memory comes back.
 	Game.memories.remembered.connect(_on_remembered)
 	# The world's conversation may be ready after us.

@@ -170,6 +170,34 @@ func lantern_at_shoulder(player: Node3D) -> LanternSpirit:
 	return spirit
 
 
+## A [FogCrab] at [param pos] in [param player]'s world, so it's freed with
+## it. Add it before the scene runs.
+func new_fog_crab(player: Player3D, pos: Vector3) -> FogCrab:
+	var scene: PackedScene = load("res://scenes/prototype/creatures/fog_crab.tscn") as PackedScene
+	var crab: FogCrab = scene.instantiate() as FogCrab
+	crab.position = pos
+	player.get_parent().add_child(crab)
+	return crab
+
+
+## [param player]'s [Duellist]: their hearts, knife strike and pan parry.
+func duellist_of(player: Player3D) -> Duellist:
+	return player.get_node("Duellist") as Duellist
+
+
+## Holds [param action] down and waits two physics ticks, without letting go
+## (for buttons that are held, like lock-on). Let go with [method release].
+func hold(runner: GdUnitSceneRunner, action: String) -> void:
+	runner.simulate_action_press(action)
+	await physics_ticks(runner, 2)
+
+
+## Lets go of [param action] and waits two physics ticks.
+func release(runner: GdUnitSceneRunner, action: String) -> void:
+	runner.simulate_action_release(action)
+	await physics_ticks(runner, 2)
+
+
 ## A [Hud3D] for [param player], added to the player's world, so it's freed
 ## with it. Add it before the scene runs.
 func new_hud_3d(player: Player3D) -> Hud3D:

@@ -59,6 +59,18 @@ const ISLAND: PackedStringArray = [
 	"That's where the light lives. I knew it. I didn't, but I knew it.",
 	"Do you think it remembers you? Islands are very good at remembering.",
 ]
+## A fog-crab has beaten you, and he's pulled you back to the landing.
+const PULLED_OUT: PackedStringArray = [
+	"Got you! I've got you. You dropped some things. I didn't count.",
+	"Up you come. It didn't mean it. It's the fog that pinches.",
+	"That's twice I've pulled you out of somewhere. I'm keeping score. Kindly.",
+]
+## You've cleared the fog from a creature.
+const FOG_CLEARED: PackedStringArray = [
+	"Look at it go! It only wanted its head clear.",
+	"There. All shaken off. It'll remember being a crab now.",
+	"Oh, well done. Gently done.",
+]
 
 static var _last: String = ""
 

@@ -86,6 +86,26 @@ func take_top() -> ItemInstance:
 	return item
 
 
+## Removes and returns the item in slot [param index], whichever slot is
+## selected, or null if there's none there.
+func take_item(index: int) -> ItemInstance:
+	var item: ItemInstance = get_item(index)
+	if item == null:
+		return null
+	_slot_items[index] = null
+	changed.emit()
+	return item
+
+
+## Whether any slot holds an item of the kind with this [param id]
+## (e.g. &"frying_pan"), selected or not.
+func has_item(id: StringName) -> bool:
+	for item: ItemInstance in _slot_items:
+		if item != null and item.item.id == id:
+			return true
+	return false
+
+
 ## The toolbar has no stack to rotate; select a slot instead.
 func rotate() -> void:
 	pass

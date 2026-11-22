@@ -49,6 +49,10 @@ var arms: Arms:
 	get:
 		return toolbar
 
+## What the player is locked on to, or null. While it's set the model keeps
+## facing it, so walking sideways circles it. Set by [LockOn].
+var lock_target: Node3D = null
+
 ## The player's camera. Camera zones tell it when to use their fixed shot.
 var camera_rig: CameraRig:
 	get:
@@ -87,7 +91,9 @@ func _physics_process(delta: float) -> void:
 	# it also adds that body's velocity, which is how the deck carries us.
 	move_and_slide()
 	_walking = not direction.is_zero_approx()
-	if _walking:
+	if is_instance_valid(lock_target):
+		face_towards(lock_target.global_position)
+	elif _walking:
 		_face(direction, delta)
 
 

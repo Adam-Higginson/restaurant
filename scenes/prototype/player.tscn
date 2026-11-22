@@ -10,6 +10,9 @@
 [ext_resource type="Script" path="res://scripts/interaction/interaction_detector_3d.gd" id="7_detect"]
 [ext_resource type="Script" path="res://scripts/player/carried_stack_3d.gd" id="8_stack"]
 [ext_resource type="PackedScene" uid="uid://cl4ntrnspr1t0" path="res://scenes/prototype/lantern_spirit.tscn" id="20_spirit"]
+[ext_resource type="Script" path="res://scripts/combat/lock_on.gd" id="21_lock"]
+[ext_resource type="Script" path="res://scripts/combat/duellist.gd" id="22_duel"]
+[ext_resource type="Material" path="res://assets/placeholder/materials/iron.tres" id="23_iron"]
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_raosb"]
 radius = 0.4
@@ -32,6 +35,16 @@ size = Vector3(0.08, 0.12, 0.06)
 
 [sub_resource type="BoxMesh" id="BoxMesh_7uydm"]
 size = Vector3(0.14, 0.3, 0.36)
+
+[sub_resource type="BoxMesh" id="BoxMesh_blade"]
+size = Vector3(0.05, 0.1, 0.7)
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_pan"]
+top_radius = 0.34
+bottom_radius = 0.3
+height = 0.06
+radial_segments = 8
+rings = 1
 
 [sub_resource type="SphereShape3D" id="SphereShape3D_jaqp2"]
 radius = 0.25
@@ -87,6 +100,21 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.42, 0.7, 0)
 material_override = ExtResource("4_ttec1")
 mesh = SubResource("BoxMesh_7uydm")
 
+[node name="Knife" type="Node3D" parent="Model"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.9, 0)
+visible = false
+
+[node name="Blade" type="MeshInstance3D" parent="Model/Knife"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -0.85)
+material_override = ExtResource("23_iron")
+mesh = SubResource("BoxMesh_blade")
+
+[node name="Pan" type="MeshInstance3D" parent="Model"]
+transform = Transform3D(1, 0, 0, 0, 0, -1, 0, 1, 0, 0, 1.0, -0.55)
+visible = false
+material_override = ExtResource("23_iron")
+mesh = SubResource("CylinderMesh_pan")
+
 [node name="CameraRig" type="Node3D" parent="." unique_id=21507693]
 physics_interpolation_mode = 2
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.5, 0)
@@ -124,6 +152,12 @@ material_override = SubResource("StandardMaterial3D_arrow")
 [node name="CarriedStack" type="Node3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.95, 0)
 script = ExtResource("8_stack")
+
+[node name="LockOn" type="Node" parent="."]
+script = ExtResource("21_lock")
+
+[node name="Duellist" type="Node" parent="."]
+script = ExtResource("22_duel")
 
 [node name="LanternSpirit" parent="." unique_id=1650650065 node_paths=PackedStringArray("player", "detector") instance=ExtResource("20_spirit")]
 player = NodePath("..")

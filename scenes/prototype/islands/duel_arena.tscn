@@ -1,0 +1,137 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://scripts/combat/duel_arena.gd" id="1_arena"]
+[ext_resource type="PackedScene" path="res://scenes/prototype/player.tscn" id="2_player"]
+[ext_resource type="PackedScene" path="res://ui/hud_3d.tscn" id="3_hud"]
+[ext_resource type="PackedScene" path="res://scenes/prototype/creatures/fog_crab.tscn" id="4_crab"]
+[ext_resource type="Material" path="res://assets/placeholder/materials/greybox_sand.tres" id="5_sand"]
+[ext_resource type="Material" path="res://assets/placeholder/materials/greybox_grass.tres" id="6_grass"]
+[ext_resource type="Material" path="res://assets/placeholder/materials/greybox_wood.tres" id="7_wood"]
+[ext_resource type="Material" path="res://assets/placeholder/materials/greybox.tres" id="8_grey"]
+[ext_resource type="Script" path="res://scripts/data/item.gd" id="9_item"]
+[ext_resource type="Resource" path="res://data/items/frying_pan.tres" id="10_pan"]
+[ext_resource type="Resource" path="res://data/items/tomato.tres" id="11_tomato"]
+[ext_resource type="Resource" path="res://data/items/lettuce.tres" id="12_lettuce"]
+
+[sub_resource type="ProceduralSkyMaterial" id="Sky_material"]
+sky_top_color = Color(0.42, 0.5, 0.6, 1)
+sky_horizon_color = Color(0.72, 0.74, 0.76, 1)
+ground_bottom_color = Color(0.3, 0.33, 0.36, 1)
+ground_horizon_color = Color(0.72, 0.74, 0.76, 1)
+
+[sub_resource type="Sky" id="Sky_arena"]
+sky_material = SubResource("Sky_material")
+
+[sub_resource type="Environment" id="Environment_arena"]
+background_mode = 2
+sky = SubResource("Sky_arena")
+ambient_light_source = 3
+ambient_light_energy = 0.8
+tonemap_mode = 2
+fog_enabled = true
+fog_light_color = Color(0.72, 0.74, 0.76, 1)
+fog_density = 0.012
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_ground"]
+size = Vector3(60, 1, 60)
+
+[sub_resource type="BoxMesh" id="BoxMesh_ground"]
+size = Vector3(60, 1, 60)
+
+[sub_resource type="BoxMesh" id="BoxMesh_grass"]
+size = Vector3(14, 0.1, 14)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_rock"]
+size = Vector3(2, 1.6, 1.6)
+
+[sub_resource type="BoxMesh" id="BoxMesh_rock"]
+size = Vector3(2, 1.6, 1.6)
+
+[sub_resource type="BoxMesh" id="BoxMesh_plank"]
+size = Vector3(3, 0.12, 4)
+
+[sub_resource type="BoxMesh" id="BoxMesh_post"]
+size = Vector3(0.2, 1.4, 0.2)
+
+[node name="DuelArena" type="Node3D" node_paths=PackedStringArray("player")]
+script = ExtResource("1_arena")
+player = NodePath("Player")
+start_items = Array[ExtResource("9_item")]([ExtResource("10_pan"), ExtResource("11_tomato"), ExtResource("12_lettuce"), ExtResource("11_tomato")])
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+environment = SubResource("Environment_arena")
+
+[node name="Sun" type="DirectionalLight3D" parent="."]
+transform = Transform3D(0.81915206, 0.4055798, -0.4055798, 0, 0.70710677, 0.70710677, 0.57357645, -0.579228, 0.579228, 0, 0, 0)
+light_color = Color(1, 0.95, 0.88, 1)
+shadow_enabled = true
+directional_shadow_max_distance = 60.0
+
+[node name="Ground" type="StaticBody3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.5, 0)
+
+[node name="Mesh" type="MeshInstance3D" parent="Ground"]
+material_override = ExtResource("5_sand")
+mesh = SubResource("BoxMesh_ground")
+
+[node name="Shape" type="CollisionShape3D" parent="Ground"]
+shape = SubResource("BoxShape3D_ground")
+
+[node name="Clearing" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.02, 0)
+material_override = ExtResource("6_grass")
+mesh = SubResource("BoxMesh_grass")
+
+[node name="FarClearing" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 18, 0.02, -8)
+material_override = ExtResource("6_grass")
+mesh = SubResource("BoxMesh_grass")
+
+[node name="RockWest" type="StaticBody3D" parent="."]
+transform = Transform3D(0.8660254, 0, 0.5, 0, 1, 0, -0.5, 0, 0.8660254, -9, 0.8, -3)
+
+[node name="Mesh" type="MeshInstance3D" parent="RockWest"]
+material_override = ExtResource("8_grey")
+mesh = SubResource("BoxMesh_rock")
+
+[node name="Shape" type="CollisionShape3D" parent="RockWest"]
+shape = SubResource("BoxShape3D_rock")
+
+[node name="RockNorth" type="StaticBody3D" parent="."]
+transform = Transform3D(0.70710677, 0, -0.70710677, 0, 1, 0, 0.70710677, 0, 0.70710677, 6, 0.8, -10)
+
+[node name="Mesh" type="MeshInstance3D" parent="RockNorth"]
+material_override = ExtResource("8_grey")
+mesh = SubResource("BoxMesh_rock")
+
+[node name="Shape" type="CollisionShape3D" parent="RockNorth"]
+shape = SubResource("BoxShape3D_rock")
+
+[node name="Landing" type="Marker3D" parent="." groups=["landing"]]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.2, 14)
+
+[node name="Planks" type="MeshInstance3D" parent="Landing"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.14, 0)
+material_override = ExtResource("7_wood")
+mesh = SubResource("BoxMesh_plank")
+
+[node name="PostLeft" type="MeshInstance3D" parent="Landing"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.5, 0.5, 2)
+material_override = ExtResource("7_wood")
+mesh = SubResource("BoxMesh_post")
+
+[node name="PostRight" type="MeshInstance3D" parent="Landing"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.5, 0.5, 2)
+material_override = ExtResource("7_wood")
+mesh = SubResource("BoxMesh_post")
+
+[node name="FogCrab" parent="." instance=ExtResource("4_crab")]
+
+[node name="FarCrab" parent="." instance=ExtResource("4_crab")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 18, 0, -8)
+
+[node name="Player" parent="." instance=ExtResource("2_player")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.2, 14)
+
+[node name="Hud3D" parent="." node_paths=PackedStringArray("player") instance=ExtResource("3_hud")]
+player = NodePath("../Player")

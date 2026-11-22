@@ -6,6 +6,9 @@ extends Area3D
 
 ## Emitted when the focused interactable changes (null when nothing is in reach).
 signal focus_changed(interactable: Interactable3D)
+## Emitted when Use tool is pressed with nothing here for a tool to work on.
+## The [Duellist] swings the knife then.
+signal tool_missed
 
 ## How far in front of the player's centre the detection zone sits, in metres.
 @export var reach: float = 0.7
@@ -55,7 +58,8 @@ func _unhandled_input(event: InputEvent) -> void:
 		try_interact()
 	elif event.is_action_pressed("use_tool"):
 		get_viewport().set_input_as_handled()
-		try_use_tool()
+		if not try_use_tool():
+			tool_missed.emit()
 
 
 ## Uses the focused interactable, if any. Returns whether something was used.
