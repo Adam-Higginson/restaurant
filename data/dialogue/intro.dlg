@@ -116,9 +116,9 @@
 
 # Out. He's spent. Black, and no sound at all, for one held second. One
 # heartbeat. Then your hand catches him alight again: everything draws in,
-# and blooms, and for a moment his light reaches all the way down. Below you
-# is a seabed of dead lanterns: empty, dark shapes, and the long shadows
-# they throw away from him.
+# and blooms, and for a moment his light reaches a long way down. There's
+# no bottom to see. Hanging below you at every depth are dead lanterns:
+# empty, dark shapes, fainter and fainter until the murk takes them.
 ~ out
 @stage underwater
 @muffle on
@@ -138,9 +138,10 @@
 -> thing
 
 # The thing. His light pulls in close as you rise. Lightning strikes far
-# above, and its cold light comes down through the water in a net of bright
-# lines across the seabed. A length of the net is missing, and moving. The
-# storm's rumble drops out under one low note. He doesn't look down.
+# above, and its cold light comes down through the water in shafts that
+# fade out before they find anything. Far below the lanterns, something
+# enormous is passing: the shafts and the lowest lanterns are lost in it.
+# The storm's rumble drops out under one low note. He doesn't look down.
 ~ thing
 @stage underwater
 @muffle on

@@ -119,7 +119,8 @@ func test_the_rescue_waits_for_you_to_take_his_hand_then_goes_to_the_surface() -
 	assert_bool(_ambience().hushed).is_true()
 
 	# Your hand catches him alight again, and the storm's rumble comes back.
-	# Nothing has stirred on the seabed yet: its dead lanterns stay dark.
+	# Below you the dead lanterns hang in the deep, and nothing is among
+	# them yet.
 	var field: LanternField = _underwater_set().get_node("Lanterns") as LanternField
 	var lightning: Lightning = _sea.get_node("Weather/Lightning") as Lightning
 	var strikes: Array[int] = []
@@ -129,16 +130,20 @@ func test_the_rescue_waits_for_you_to_take_his_hand_then_goes_to_the_surface() -
 	assert_bool(_fade().is_covering()).is_false()
 	assert_bool(_ambience().hushed).is_false()
 	assert_bool(_ambience().submerged).is_true()
-	assert_int(field.count()).is_greater(30)
-	assert_float(field.gap).is_equal(0.0)
-	var gap_at_first: Vector3 = field.gap_centre
+	var thing: Node3D = _underwater_set().get_node("Thing") as Node3D
+	var shafts: LightningShafts = _underwater_set().get_node("Shafts") as LightningShafts
+	assert_int(field.count()).is_greater(60)
+	assert_bool(shafts.visible).is_false()
+	var thing_at_first: Vector3 = thing.global_position
 
-	# The thing: lightning comes down through the water, twice, and under
-	# the lanterns something has slid a long way along the seabed.
+	# The thing: lightning comes down through the water, twice, and by the
+	# end something enormous has slid in beneath the lanterns, deep down.
 	assert_bool(await _reaches(runner, &"rising")).is_true()
 	assert_int(strikes.size()).is_greater_equal(2)
-	assert_float(field.gap).is_equal_approx(1.0, 0.01)
-	assert_float(field.gap_centre.distance_to(gap_at_first)).is_greater(10.0)
+	assert_float(thing.global_position.distance_to(thing_at_first)).is_greater(10.0)
+	assert_float(thing.global_position.y).is_less(-20.0)
+	# Right beneath you by now.
+	assert_float(field.distance_to_thing(Vector3(0, thing.global_position.y, 0))).is_less(8.0)
 	assert_bool(_ambience().hushed).is_false()
 	assert_float(face.strength).is_less(0.9)
 
@@ -149,7 +154,6 @@ func test_the_rescue_waits_for_you_to_take_his_hand_then_goes_to_the_surface() -
 	assert_float(ember.strength).is_less(0.6)
 	assert_float(ember.door).is_equal(1.0)
 	assert_bool(ember.cracked).is_true()
-	assert_float(field.gap).is_equal(0.0)
 	await physics_ticks(runner, 5)
 	assert_bool(underwater.is_open).is_false()
 	assert_bool(_ambience().submerged).is_false()

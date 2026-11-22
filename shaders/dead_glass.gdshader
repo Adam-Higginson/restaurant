@@ -1,4 +1,4 @@
-// The glass of a dead lantern on the seabed: dark, dull and empty. It
+// The glass of a dead lantern hanging in the deep: dark, dull and empty. It
 // gives no light of its own. All it does is catch a faint cold sheen when
 // lightning comes down through the water (cold), which is an "instance
 // uniform": every dead lantern shares this one material, but each has its

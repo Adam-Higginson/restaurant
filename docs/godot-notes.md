@@ -348,21 +348,19 @@ A growing glossary of the Godot concepts this project uses: what each one is, in
 
 **A node told it's been switched off.** When a node can no longer run (its `process_mode` or a parent's became Disabled) it gets `NOTIFICATION_DISABLED`, and `NOTIFICATION_ENABLED` when it can again. Catch them in `_notification(what)`. *Ours:* `OptionalSound` pauses a looping sound while its stage is put away.
 
-## The seabed and the thing in the lightning (#120)
+## The deep and the thing in the lightning (#120)
 
-**Instance uniforms.** Normally every object sharing a material shares its shader values too. Mark a uniform `instance uniform` and each object can have its own value, set with `set_instance_shader_parameter("name", value)`, while they all still share one material. *Ours:* the 44 dead lanterns share one glass material, and `LanternField` gives each its own `cold` (how much of the lightning shows on its glass).
+**Instance uniforms.** Normally every object sharing a material shares its shader values too. Mark a uniform `instance uniform` and each object can have its own value, set with `set_instance_shader_parameter("name", value)`, while they all still share one material. *Ours:* the 90 dead lanterns share one glass material, and `LanternField` gives each its `cold` (how much of the lightning shows on its glass).
 
-**Shadows from a light.** A light only throws shadows if its `Shadow > Enabled` is ticked, and a mesh only throws one if its `Cast Shadow` is on. Shadows cost time to draw, so most small lights leave them off. *Ours:* `FlareLight` and `StormLight` have them on, so the dead lanterns throw shadows across the sand.
+**Saying "deep" without a floor.** Depth is shown by things getting smaller, dimmer and bluer with distance and never ending. Three things already in the set do the dimming: the haze (volumetric fog), the lens that takes colour out of far things, and a light's own falloff with distance. *Ours:* the lanterns hang from a few metres below you to about fifty, and the furthest are barely there.
 
-**Moving a mesh in its vertex shader.** `vertex()` can move each corner of a mesh before it's drawn, so a flat sheet with enough corners (its Subdivide settings) can be raised into hills without modelling them. The script side has to know the same sums if anything must sit on the result. *Ours:* the dunes in `shaders/seabed.gdshader`, and `LanternField.dune_height`, which the lanterns were set down with.
+**Faking shafts of light.** Real light shafts need something in the way to break the light up. A cheap stand-in is a tall see-through tube, added on top of the picture (`blend_add`), bright at the top and fading to nothing, with its sides faded out by how squarely each bit faces the camera so it never looks solid. *Ours:* `shaders/light_shaft.gdshader` on the tubes under `Shafts`, shown only while lightning flashes.
 
-**Emission.** A lit material can also give off light of its own: its `EMISSION` is added whatever the lighting. *Ours:* the net of lightning on the seabed.
+**Showing something by what it hides.** The thing is an ordinary mesh with an unshaded material the colour of the deep. It never catches light, so in the dark it can't be seen at all. In a flash, the lit haze behind it and the shafts and lanterns it covers are what give away its shape. *Ours:* `Thing` in `underwater.tscn`.
 
-**Caustics.** The net of bright lines on the bottom of a pool: waves bend the light and gather it into lines. Ours is a well-known few lines of shader maths that fold a pattern back on itself until it gathers the same way. *Ours:* `net()` in `shaders/seabed.gdshader`, shown only while lightning flashes.
+**Groups as a broadcast.** `get_tree().call_group("name", "method", value)` calls that method on every node in the group, wherever it is in the tree. *Ours:* `Lightning` tells the group `lightning_lit` how bright each flash is, which now includes `Lanterns` and `Shafts` inside the underwater set.
 
-**Showing something by what it hides.** The thing on the seabed has no node and no mesh. The seabed's shader is given a line and a width, and inside that shape it draws black instead of light; the lantern field does the same sum to decide which lanterns go dark. *Ours:* `in_gap` in both `shaders/seabed.gdshader` and `scripts/intro/lantern_field.gd`.
-
-**Groups as a broadcast.** `get_tree().call_group("name", "method", value)` calls that method on every node in the group, wherever it is in the tree. *Ours:* `Lightning` tells the group `lightning_lit` how bright each flash is, which now includes the `LanternField` inside the underwater set.
+**Giving each of many things its own pace.** A small sum that turns an index into a number between 0 and 1, always the same for that index, is enough to make a crowd look unplanned without storing anything. *Ours:* `LanternField.share_of`, which sets how fast each lantern sinks and turns.
 
 ## Testing
 

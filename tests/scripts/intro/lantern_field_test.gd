@@ -1,82 +1,112 @@
 extends GameTestSuite
-## Tests for the dead lanterns on the seabed: they give no light of their
-## own, the thing passing is a gap in which they're lost and come back, they
-## rock in its wake and settle, and lightning shows on the glass of the ones
-## outside the gap.
+## Tests for the dead lanterns hanging in the deep: each sinks slowly at its
+## own pace, they give no light of their own, lightning shows on their
+## glass, and they rock in the wake of the thing passing beneath them and
+## settle again.
 
 const LANTERN: PackedScene = preload("res://scenes/prototype/intro/dead_lantern.tscn")
-const SEABED: Shader = preload("res://shaders/seabed.gdshader")
 
 
-func test_inside_the_thing_is_dark_and_outside_is_not() -> void:
-	var centre: Vector3 = Vector3(0, 0, 0)
+func test_each_lantern_sinks_slowly_at_its_own_pace() -> void:
+	var field: LanternField = _new_field([Vector3(0, -5, 0), Vector3(3, -9, 0), Vector3(-4, -20, 2)])
+	field.sink_slowest = 0.05
+	field.sink_fastest = 0.15
+	var first: Node3D = field.get_child(0) as Node3D
+	var began_at: float = first.position.y
 
-	# Twenty long, four wide, lying along X.
-	assert_float(LanternField.in_gap(Vector3(0, 0, 0), centre, 0.0, 20.0, 4.0)).is_equal(1.0)
-	assert_float(LanternField.in_gap(Vector3(7, 5, 0.5), centre, 0.0, 20.0, 4.0)).is_equal(1.0)
-	assert_float(LanternField.in_gap(Vector3(0, 0, 3), centre, 0.0, 20.0, 4.0)).is_equal(0.0)
-	assert_float(LanternField.in_gap(Vector3(13, 0, 0), centre, 0.0, 20.0, 4.0)).is_equal(0.0)
-	# Turned a quarter, it lies along Z instead.
-	assert_float(LanternField.in_gap(Vector3(0, 0, 7), centre, PI * 0.5, 20.0, 4.0)).is_equal(1.0)
-	assert_float(LanternField.in_gap(Vector3(7, 0, 0), centre, PI * 0.5, 20.0, 4.0)).is_equal(0.0)
+	field.advance(10.0)
+
+	for index: int in field.count():
+		assert_float(field.sunk_of(index)).is_between(0.5, 1.5)
+	assert_float(first.position.y).is_equal_approx(began_at - field.sunk_of(0), 0.001)
+	assert_bool(is_equal_approx(field.sunk_of(0), field.sunk_of(1))).is_false()
 
 
-func test_lanterns_are_lost_in_the_dark_as_it_passes_and_come_back() -> void:
-	var field: LanternField = _new_field([Vector3(0, 0, 0), Vector3(0, 0, 8)])
-	field.set_lightning(1.0)
-	assert_float(field.sheen_of(0)).is_equal(1.0)
+func test_every_lantern_has_a_share_of_its_own_between_nothing_and_all() -> void:
+	var seen: Array[float] = []
+	for index: int in 40:
+		var share: float = LanternField.share_of(index)
+		assert_float(share).is_between(0.0, 1.0)
+		assert_float(LanternField.share_of(index)).is_equal(share)
+		seen.append(share)
+	seen.sort()
 
-	# It arrives over the first lantern.
-	field.gap = 1.0
-	field.gap_length = 20.0
-	field.gap_width = 4.0
-	field.gap_centre = Vector3(0, 0, 0)
-	field.advance(0.1)
-	assert_float(field.darkness_of(0)).is_equal(1.0)
-	assert_float(field.sheen_of(0)).is_equal(0.0)
-	assert_float(field.darkness_of(1)).is_equal(0.0)
-	assert_float(field.sheen_of(1)).is_equal(1.0)
-
-	# And moves on.
-	field.gap_centre = Vector3(40, 0, 0)
-	field.advance(0.1)
-	assert_float(field.darkness_of(0)).is_equal(0.0)
-	assert_float(field.sheen_of(0)).is_equal(1.0)
+	# Spread out, not bunched at one pace.
+	assert_float(seen[0]).is_less(0.2)
+	assert_float(seen[39]).is_greater(0.8)
 
 
 func test_between_flashes_they_show_nothing_of_their_own() -> void:
-	var field: LanternField = _new_field([Vector3(0, 0, 0)])
+	var field: LanternField = _new_field([Vector3(0, -5, 0)])
 
 	field.advance(1.0)
 
-	assert_float(field.sheen_of(0)).is_equal(0.0)
+	assert_float(field.sheen()).is_equal(0.0)
 	assert_float(_sent(field, 0, &"cold")).is_equal(0.0)
 
 
-func test_while_its_not_there_nothing_goes_dark() -> void:
-	var field: LanternField = _new_field([Vector3(0, 0, 0)])
-	field.gap = 0.0
-	field.gap_centre = Vector3(0, 0, 0)
+func test_lightning_shows_on_every_lanterns_glass() -> void:
+	var field: LanternField = _new_field([Vector3(0, -5, 0), Vector3(0, -30, 9)])
 
-	field.advance(0.1)
+	field.set_lightning(0.8)
 
-	assert_float(field.darkness_of(0)).is_equal(0.0)
+	assert_bool(field.is_in_group(Lightning.LIT_GROUP)).is_true()
+	assert_float(field.sheen()).is_equal_approx(0.8, 0.001)
+	assert_float(_sent(field, 0, &"cold")).is_equal_approx(0.8, 0.001)
+	assert_float(_sent(field, 1, &"cold")).is_equal_approx(0.8, 0.001)
+
+	field.set_lightning(0.0)
+	assert_float(_sent(field, 0, &"cold")).is_equal(0.0)
 
 
-func test_a_lantern_rocks_in_its_wake_and_settles_where_it_was() -> void:
-	var field: LanternField = _new_field([Vector3(0, 0, 0)])
-	var lantern: Node3D = field.get_child(0) as Node3D
-	var at_rest: Basis = lantern.transform.basis
+func test_how_far_the_thing_is_is_measured_from_along_its_whole_length() -> void:
+	var field: LanternField = _new_field([])
+	var thing: Node3D = _new_thing(field, Vector3(0, -30, 0))
+	field.thing_length = 40.0
+
+	# Beside its middle, beside its far end, and off beyond that end.
+	assert_float(field.distance_to_thing(Vector3(0, -30, 6))).is_equal_approx(6.0, 0.001)
+	assert_float(field.distance_to_thing(Vector3(18, -30, 6))).is_equal_approx(6.0, 0.001)
+	assert_float(field.distance_to_thing(Vector3(26, -30, 0))).is_equal_approx(6.0, 0.001)
+	# Turned a quarter, it lies along Z instead.
+	thing.rotation.y = PI * 0.5
+	assert_float(field.distance_to_thing(Vector3(0, -30, 18))).is_less(0.01)
+
+
+func test_with_no_thing_nothing_is_near_it() -> void:
+	var field: LanternField = _new_field([Vector3(0, -5, 0)])
+
+	field.advance(1.0)
+
+	assert_float(field.distance_to_thing(Vector3.ZERO)).is_equal(INF)
+	assert_float(field.tilt_of(0)).is_equal(0.0)
+
+
+func test_a_lantern_rocks_as_the_thing_comes_near_and_settles() -> void:
+	var field: LanternField = _new_field([Vector3(0, -20, 0), Vector3(0, -20, 60)])
+	var thing: Node3D = _new_thing(field, Vector3(-200, -28, 0))
+	field.thing_length = 40.0
+	field.wake_reach = 10.0
 	field.rock_seconds = 2.0
 	field.rock_angle = 0.5
-	field.gap = 1.0
-	field.gap_centre = Vector3(0, 0, 0)
+	field.sink_slowest = 0.0
+	field.sink_fastest = 0.0
+	field.turn_speed = 0.0
+	var lantern: Node3D = field.get_child(0) as Node3D
+	var at_rest: Basis = lantern.transform.basis
+	field.advance(0.1)
+	assert_float(field.tilt_of(0)).is_equal(0.0)
 
+	# It arrives beneath the first lantern.
+	thing.position = Vector3(0, -28, 0)
 	field.advance(0.01)
 	field.advance(0.25)
 	assert_float(absf(field.tilt_of(0))).is_greater(0.05)
 	assert_bool(lantern.transform.basis.is_equal_approx(at_rest)).is_false()
+	# The far one isn't touched.
+	assert_float(field.tilt_of(1)).is_equal(0.0)
 
+	# Still there, it doesn't keep rocking: once, and it settles.
 	field.advance(3.0)
 	assert_float(field.tilt_of(0)).is_equal(0.0)
 	assert_bool(lantern.transform.basis.is_equal_approx(at_rest)).is_true()
@@ -93,65 +123,17 @@ func test_the_rocking_swings_both_ways_and_dies_down() -> void:
 	assert_float(LanternField.rock_after(1.0, 1.0)).is_equal(0.0)
 
 
-func test_lightning_reaches_the_lanterns_outside_it_and_the_seabed() -> void:
-	var field: LanternField = _new_field([Vector3(0, 0, 0), Vector3(0, 0, 9)])
-	var floor_mesh: MeshInstance3D = MeshInstance3D.new()
-	var sand: ShaderMaterial = ShaderMaterial.new()
-	sand.shader = SEABED
-	floor_mesh.material_override = sand
-	field.get_parent().add_child(floor_mesh)
-	field.floor_mesh = floor_mesh
-	field.gap = 1.0
-	field.gap_width = 4.0
-	field.gap_length = 20.0
-	field.gap_centre = Vector3(0, 0, 0)
-	field.advance(0.1)
-
-	field.set_lightning(0.8)
-
-	assert_bool(field.is_in_group(Lightning.LIT_GROUP)).is_true()
-	assert_float(_sent(field, 0, &"cold")).is_equal(0.0)
-	assert_float(_sent(field, 1, &"cold")).is_equal_approx(0.8, 0.001)
-	var flash: float = sand.get_shader_parameter("flash")
-	var there: float = sand.get_shader_parameter("gap")
-	assert_float(flash).is_equal_approx(0.8, 0.001)
-	assert_float(there).is_equal(1.0)
-
-
-func test_the_seabed_is_told_where_its_two_ends_are() -> void:
-	var field: LanternField = _new_field([])
-	field.position = Vector3(10, -7, 0)
-	field.gap_length = 20.0
-	field.gap_width = 4.0
-	field.gap_centre = Vector3(1, 0, 2)
-
-	var ends: Array[Vector2] = field.gap_ends()
-
-	# Eight either side of the middle (its rounded ends take up the rest).
-	assert_vector(ends[0]).is_equal_approx(Vector2(3, 2), Vector2(0.001, 0.001))
-	assert_vector(ends[1]).is_equal_approx(Vector2(19, 2), Vector2(0.001, 0.001))
-
-
-func test_starting_again_stands_every_lantern_back_up() -> void:
-	var field: LanternField = _new_field([Vector3(0, 0, 0)])
-	field.gap = 1.0
-	field.gap_centre = Vector3(0, 0, 0)
-	field.advance(0.01)
-	field.advance(0.25)
-	assert_float(absf(field.tilt_of(0))).is_greater(0.05)
+func test_starting_again_puts_every_lantern_back_where_it_began() -> void:
+	var field: LanternField = _new_field([Vector3(0, -5, 0)])
+	var lantern: Node3D = field.get_child(0) as Node3D
+	var began: Transform3D = lantern.transform
+	field.advance(20.0)
+	assert_float(field.sunk_of(0)).is_greater(0.0)
 
 	field.reset()
 
-	assert_float(field.tilt_of(0)).is_equal(0.0)
-	assert_float(field.darkness_of(0)).is_equal(0.0)
-
-
-func test_the_dunes_are_low_and_rolling() -> void:
-	var highest: float = 0.0
-	for step: int in 200:
-		highest = maxf(highest, absf(LanternField.dune_height(step * 0.37, step * 0.53)))
-
-	assert_float(highest).is_between(0.2, 0.5)
+	assert_float(field.sunk_of(0)).is_equal(0.0)
+	assert_bool(lantern.transform.is_equal_approx(began)).is_true()
 
 
 # A number lantern [param index]'s glass has been given.
@@ -159,6 +141,15 @@ func _sent(field: LanternField, index: int, parameter: StringName) -> float:
 	var glass: GeometryInstance3D = field.get_child(index).get_node("Glass") as GeometryInstance3D
 	var value: float = glass.get_instance_shader_parameter(parameter)
 	return value
+
+
+# Something long for the lanterns to rock in the wake of, lying along X.
+func _new_thing(field: LanternField, at: Vector3) -> Node3D:
+	var thing: Node3D = Node3D.new()
+	thing.position = at
+	field.get_parent().add_child(thing)
+	field.thing = thing
+	return thing
 
 
 # A field with a dead lantern at each of [param places], in its own space.
