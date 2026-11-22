@@ -56,6 +56,23 @@
 [ext_resource type="PackedScene" path="res://scenes/prototype/dressing/green_bottle.tscn" id="55_bottle"]
 [ext_resource type="PackedScene" path="res://scenes/prototype/dressing/ship_in_bottle.tscn" id="55_s5wn3"]
 [ext_resource type="Script" path="res://scripts/props/rocking.gd" id="56_rock"]
+[ext_resource type="PackedScene" path="res://scenes/prototype/props/bunk_bay.tscn" id="57_1yecb"]
+[ext_resource type="Material" path="res://assets/placeholder/materials/quilt_red.tres" id="58_alpw3"]
+[ext_resource type="Material" path="res://assets/placeholder/materials/quilt_blue.tres" id="59_dlopa"]
+[ext_resource type="Material" path="res://assets/placeholder/materials/quilt_green.tres" id="60_f3yei"]
+[ext_resource type="Material" path="res://assets/placeholder/materials/quilt_gold.tres" id="61_kupa5"]
+[ext_resource type="PackedScene" path="res://scenes/prototype/dressing/hammock.tscn" id="62_f40ia"]
+[ext_resource type="PackedScene" path="res://scenes/prototype/dressing/hammock_blanket.tscn" id="63_eqhox"]
+[ext_resource type="PackedScene" path="res://scenes/prototype/props/crate.tscn" id="64_578ro"]
+[ext_resource type="PackedScene" path="res://scenes/prototype/props/sea_chest.tscn" id="65_53i4f"]
+[ext_resource type="PackedScene" path="res://scenes/prototype/dressing/book_stack.tscn" id="66_s26w3"]
+[ext_resource type="PackedScene" path="res://scenes/prototype/dressing/fiddle.tscn" id="67_dwq2y"]
+[ext_resource type="PackedScene" path="res://scenes/prototype/dressing/sketchbook.tscn" id="68_dcd13"]
+[ext_resource type="PackedScene" path="res://scenes/prototype/dressing/fishing_tackle.tscn" id="69_q7k3o"]
+[ext_resource type="PackedScene" path="res://scenes/prototype/dressing/kit_bag.tscn" id="70_wb018"]
+[ext_resource type="PackedScene" path="res://scenes/prototype/dressing/your_things.tscn" id="71_lpcyg"]
+[ext_resource type="PackedScene" path="res://scenes/prototype/dressing/sock_line.tscn" id="72_wwen8"]
+[ext_resource type="PackedScene" path="res://scenes/prototype/dressing/boots.tscn" id="73_m4wtu"]
 
 [sub_resource type="BoxMesh" id="Mesh_Hull"]
 size = Vector3(12, 2.5, 30)
@@ -67,9 +84,6 @@ size = Vector3(11.4, 0.02, 13.7)
 size = Vector3(0.3, 4, 30)
 
 [sub_resource type="BoxMesh" id="Mesh_WallBow"]
-size = Vector3(11.4, 4, 0.3)
-
-[sub_resource type="BoxMesh" id="Mesh_WallStern"]
 size = Vector3(11.4, 4, 0.3)
 
 [sub_resource type="BoxMesh" id="Mesh_Bulkhead"]
@@ -124,12 +138,6 @@ bottom_radius = 0.6
 height = 0.12
 radial_segments = 8
 rings = 1
-
-[sub_resource type="BoxMesh" id="Mesh_BunkFrame"]
-size = Vector3(0.9, 0.5, 2)
-
-[sub_resource type="BoxMesh" id="Mesh_BunkMattress"]
-size = Vector3(0.8, 0.15, 1.9)
 
 [sub_resource type="BoxMesh" id="Mesh_MastArm"]
 size = Vector3(0.4, 0.06, 0.06)
@@ -355,6 +363,30 @@ size = Vector3(0.36, 0.04, 0.04)
 [sub_resource type="BoxMesh" id="BoxMesh_oaj8g"]
 size = Vector3(0.04, 0.3, 0.04)
 
+[sub_resource type="BoxMesh" id="BoxMesh_0hebc"]
+size = Vector3(11.4, 0.34, 0.3)
+
+[sub_resource type="BoxMesh" id="BoxMesh_e2kx3"]
+size = Vector3(11.4, 0.34, 0.3)
+
+[sub_resource type="BoxMesh" id="BoxMesh_j4fk0"]
+size = Vector3(11.4, 0.34, 0.3)
+
+[sub_resource type="PlaneMesh" id="PlaneMesh_2b58a"]
+size = Vector2(2.6, 4)
+
+[sub_resource type="BoxMesh" id="BoxMesh_xvtya"]
+size = Vector3(1.6, 0.05, 0.3)
+
+[sub_resource type="BoxMesh" id="BoxMesh_03mpn"]
+size = Vector3(1, 2.4, 0.7)
+
+[sub_resource type="BoxMesh" id="BoxMesh_kgj3w"]
+size = Vector3(0.42, 2.1, 0.03)
+
+[sub_resource type="BoxMesh" id="BoxMesh_absnv"]
+size = Vector3(0.42, 2.1, 0.03)
+
 [sub_resource type="BoxShape3D" id="Shape_BracketPost"]
 size = Vector3(0.14, 2.7, 0.14)
 
@@ -410,9 +442,6 @@ radius = 0.3
 [sub_resource type="BoxShape3D" id="Shape_WheelPost"]
 size = Vector3(0.3, 1.1, 0.3)
 
-[sub_resource type="BoxShape3D" id="Shape_BunkShape"]
-size = Vector3(0.9, 0.65, 2)
-
 [sub_resource type="BoxShape3D" id="Cosy_38"]
 size = Vector3(0.16, 4, 6.65)
 
@@ -445,6 +474,9 @@ size = Vector3(0.1, 2.6, 0.2)
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_bbi6x"]
 size = Vector3(0.1, 2.6, 0.2)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_5tfg4"]
+size = Vector3(1, 2.4, 0.7)
 
 [node name="Ship" type="AnimatableBody3D" unique_id=200548129]
 script = ExtResource("1_7ykrf")
@@ -490,10 +522,24 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3, -14.85)
 material_override = ExtResource("2_nifss")
 mesh = SubResource("Mesh_WallBow")
 
-[node name="WallStern" type="MeshInstance3D" parent="Visuals" unique_id=424138298]
+[node name="WallStern" type="CSGBox3D" parent="Visuals" unique_id=2118978419]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3, 14.85)
-material_override = ExtResource("2_nifss")
-mesh = SubResource("Mesh_WallStern")
+size = Vector3(11.4, 4, 0.3)
+material = ExtResource("2_nifss")
+
+[node name="WindowPort" type="CSGCylinder3D" parent="Visuals/WallStern" unique_id=1979860751]
+transform = Transform3D(1, 0, 0, 0, -4.371139e-08, -1, 0, 1, -4.371139e-08, -1.6, -0.4, 0)
+operation = 2
+radius = 0.34
+height = 0.6
+sides = 16
+
+[node name="WindowStarboard" type="CSGCylinder3D" parent="Visuals/WallStern" unique_id=739138047]
+transform = Transform3D(1, 0, 0, 0, -4.371139e-08, -1, 0, 1, -4.371139e-08, 1.6, -0.4, 0)
+operation = 2
+radius = 0.34
+height = 0.6
+sides = 16
 
 [node name="Bulkhead" type="MeshInstance3D" parent="Visuals" unique_id=1690833931]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3, 1)
@@ -569,16 +615,6 @@ mesh = SubResource("Mesh_WheelPost")
 transform = Transform3D(1, 0, 0, 0, 0, -1, 0, 1, 0, 0, 6.5, 12.22)
 material_override = ExtResource("13_wetdark")
 mesh = SubResource("Mesh_Wheel")
-
-[node name="BunkFrame" type="MeshInstance3D" parent="Visuals" unique_id=1670215112]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5.2, 1.25, 13)
-material_override = ExtResource("3_t630l")
-mesh = SubResource("Mesh_BunkFrame")
-
-[node name="BunkMattress" type="MeshInstance3D" parent="Visuals" unique_id=660311677]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5.2, 1.575, 13)
-material_override = ExtResource("4_dp3rt")
-mesh = SubResource("Mesh_BunkMattress")
 
 [node name="MastLanternArm" type="MeshInstance3D" parent="Visuals" unique_id=1593008206]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.45, 8.23, -4)
@@ -668,12 +704,12 @@ period = 4.2
 phase = 0.35
 
 [node name="BunkLantern" parent="Visuals" unique_id=563678933 instance=ExtResource("23_lantern")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2, 4.8, 11.5)
-light_energy = 0.9
-light_range = 6.0
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.3, 4.66, 9)
+light_energy = 1.5
+light_range = 5.0
 swing_degrees = 3.0
 period = 4.2
-phase = 0.45
+phase = 0.1
 
 [node name="PortholeGalley" parent="Visuals" unique_id=2050128585 instance=ExtResource("24_porthole")]
 transform = Transform3D(0, 0, -1.35, 0, 1.35, 0, 1.35, 0, 0, 5.7, 2.35, 5.2)
@@ -999,6 +1035,69 @@ ambient_mode = 2
 ambient_color = Color(0.32, 0.2, 0.13, 1)
 ambient_color_energy = 0.35
 
+[node name="BunkBeam1" type="MeshInstance3D" parent="Visuals" unique_id=259794004]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 4.83, 9)
+material_override = ExtResource("28_darkwood")
+mesh = SubResource("BoxMesh_0hebc")
+
+[node name="BunkBeam2" type="MeshInstance3D" parent="Visuals" unique_id=1594600351]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 4.83, 11.3)
+material_override = ExtResource("28_darkwood")
+mesh = SubResource("BoxMesh_e2kx3")
+
+[node name="BunkBeam3" type="MeshInstance3D" parent="Visuals" unique_id=778536714]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 4.83, 13.6)
+material_override = ExtResource("28_darkwood")
+mesh = SubResource("BoxMesh_j4fk0")
+
+[node name="BunkRug" type="MeshInstance3D" parent="Visuals" unique_id=2131719522]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.024, 11.4)
+material_override = ExtResource("11_jqluk")
+mesh = SubResource("PlaneMesh_2b58a")
+
+[node name="PortholeSternPort" parent="Visuals" unique_id=724771063 instance=ExtResource("24_porthole")]
+transform = Transform3D(1.2, 0, 0, 0, 1.2, 0, 0, 0, 1.2, -1.6, 2.6, 14.7)
+
+[node name="PortholeSternStarboard" parent="Visuals" unique_id=34770125 instance=ExtResource("24_porthole")]
+transform = Transform3D(1.2, 0, 0, 0, 1.2, 0, 0, 0, 1.2, 1.6, 2.6, 14.7)
+
+[node name="SternShelf" type="MeshInstance3D" parent="Visuals" unique_id=462394048]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.2, 14.55)
+material_override = ExtResource("28_darkwood")
+mesh = SubResource("BoxMesh_xvtya")
+
+[node name="Locker" type="MeshInstance3D" parent="Visuals" unique_id=1621268958]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -5.2, 2.2, 14.35)
+material_override = ExtResource("28_darkwood")
+mesh = SubResource("BoxMesh_03mpn")
+
+[node name="LockerDoor" type="MeshInstance3D" parent="Visuals" unique_id=1165697933]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4.95, 2.2, 13.99)
+material_override = ExtResource("27_propwood")
+mesh = SubResource("BoxMesh_kgj3w")
+
+[node name="LockerDoor2" type="MeshInstance3D" parent="Visuals" unique_id=1747282659]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -5.45, 2.2, 13.99)
+material_override = ExtResource("27_propwood")
+mesh = SubResource("BoxMesh_absnv")
+
+[node name="BunkLanternAft" parent="Visuals" unique_id=1702864721 instance=ExtResource("23_lantern")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.3, 4.66, 13.6)
+light_energy = 1.5
+light_range = 5.0
+phase = 0.55
+
+[node name="BunkProbe" type="ReflectionProbe" parent="Visuals" unique_id=1527300800]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3, 11.3)
+intensity = 0.5
+blend_distance = 0.3
+size = Vector3(11.5, 4.1, 6.9)
+box_projection = true
+interior = true
+ambient_mode = 2
+ambient_color = Color(0.3, 0.2, 0.14, 1)
+ambient_color_energy = 0.3
+
 [node name="RainCatcher" type="GPUParticlesCollisionHeightField3D" parent="." unique_id=16950638]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8, 0)
 size = Vector3(14, 20, 32)
@@ -1120,10 +1219,6 @@ shape = SubResource("Shape_Mast")
 [node name="WheelPostShape" type="CollisionShape3D" parent="." unique_id=721423774]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 5.85, 12)
 shape = SubResource("Shape_WheelPost")
-
-[node name="BunkShape" type="CollisionShape3D" parent="." unique_id=1803565352]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5.2, 1.325, 13)
-shape = SubResource("Shape_BunkShape")
 
 [node name="Galley" type="Node3D" parent="." unique_id=1147062125]
 
@@ -1339,3 +1434,104 @@ shape = SubResource("BoxShape3D_p2e1w")
 [node name="CorridorPost2Shape" type="CollisionShape3D" parent="." unique_id=1327834301]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3.27, 2.3, 7.35)
 shape = SubResource("BoxShape3D_bbi6x")
+
+[node name="BunkRoom" type="Node3D" parent="." unique_id=76019696]
+
+[node name="StarboardBay1" parent="BunkRoom" unique_id=1493438848 instance=ExtResource("57_1yecb")]
+transform = Transform3D(-4.371139e-08, 0, -1, 0, 1, 0, 1, 0, -4.371139e-08, 5.7, 1, 9.05)
+lower_quilt = ExtResource("58_alpw3")
+upper_quilt = ExtResource("59_dlopa")
+upper_curtains_closed = true
+
+[node name="StarboardBay2" parent="BunkRoom" unique_id=1621438252 instance=ExtResource("57_1yecb")]
+transform = Transform3D(-4.371139e-08, 0, -1, 0, 1, 0, 1, 0, -4.371139e-08, 5.7, 1, 11.25)
+lower_quilt = ExtResource("60_f3yei")
+upper_quilt = ExtResource("58_alpw3")
+lamp_lit = true
+
+[node name="YourBunk" parent="BunkRoom" unique_id=637154212 instance=ExtResource("57_1yecb")]
+transform = Transform3D(-4.371139e-08, 0, -1, 0, 1, 0, 1, 0, -4.371139e-08, 5.7, 1, 13.45)
+lower_quilt = ExtResource("61_kupa5")
+upper_quilt = ExtResource("60_f3yei")
+lamp_lit = true
+
+[node name="PortBay1" parent="BunkRoom" unique_id=752909106 instance=ExtResource("57_1yecb")]
+transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, -5.7, 1, 10.6)
+lower_quilt = ExtResource("59_dlopa")
+upper_quilt = ExtResource("60_f3yei")
+lamp_lit = true
+
+[node name="PortBay2" parent="BunkRoom" unique_id=1714420396 instance=ExtResource("57_1yecb")]
+transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, -5.7, 1, 12.8)
+lower_quilt = ExtResource("58_alpw3")
+upper_quilt = ExtResource("59_dlopa")
+lower_curtains_closed = true
+
+[node name="HammockPort" parent="BunkRoom" unique_id=1923203812 instance=ExtResource("62_f40ia")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.6, 4.66, 11.3)
+
+[node name="HammockStarboard" parent="BunkRoom" unique_id=423136997 instance=ExtResource("63_eqhox")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.6, 4.66, 11.3)
+
+[node name="Crate1" parent="BunkRoom" unique_id=228142780 instance=ExtResource("64_578ro")]
+transform = Transform3D(0.98480767, 0, 0.17364816, 0, 1, 0, -0.17364816, 0, 0.98480767, 0.75, 1, 10.55)
+
+[node name="Crate2" parent="BunkRoom" unique_id=1770081867 instance=ExtResource("64_578ro")]
+transform = Transform3D(0.990268, 0, -0.13917309, 0, 1, 0, 0.13917309, 0, 0.990268, 1.4, 1, 10.95)
+
+[node name="Crate3" parent="BunkRoom" unique_id=2094557015 instance=ExtResource("64_578ro")]
+transform = Transform3D(0.8829475, 0, 0.46947154, 0, 1, 0, -0.46947154, 0, 0.8829475, 0.85, 1.6, 10.6)
+
+[node name="SeaChest1" parent="BunkRoom" unique_id=1150501973 instance=ExtResource("65_53i4f")]
+transform = Transform3D(0.17364821, 0, 0.98480767, 0, 1, 0, -0.98480767, 0, 0.17364821, -0.85, 1, 12.3)
+
+[node name="Barrel" parent="BunkRoom" unique_id=2088194177 instance=ExtResource("25_barrel")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.5, 1, 10.5)
+
+[node name="SternBooks" parent="BunkRoom" unique_id=350227956 instance=ExtResource("66_s26w3")]
+transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, -0.4, 2.225, 14.55)
+
+[node name="SternBottle" parent="BunkRoom" unique_id=380193948 instance=ExtResource("55_s5wn3")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.35, 2.225, 14.55)
+
+[node name="SeaChest2" parent="BunkRoom" unique_id=559302274 instance=ExtResource("65_53i4f")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3, 1, 14.3)
+
+[node name="SeaChest3" parent="BunkRoom" unique_id=924273532 instance=ExtResource("65_53i4f")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3, 1, 14.3)
+
+[node name="Fiddle" parent="BunkRoom" unique_id=1055618255 instance=ExtResource("67_dwq2y")]
+transform = Transform3D(0.34202015, 0, -0.9396926, 0, 1, 0, 0.9396926, 0, 0.34202015, 5.1, 1.63, 9.3)
+
+[node name="Sketchbook" parent="BunkRoom" unique_id=1682722775 instance=ExtResource("68_dcd13")]
+transform = Transform3D(-0.17364818, 0, -0.98480767, 0, 1, 0, 0.98480767, 0, -0.17364818, 5.05, 1.63, 11.6)
+
+[node name="FishingTackle" parent="BunkRoom" unique_id=1056964099 instance=ExtResource("69_q7k3o")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5.15, 2.92, 11.3)
+
+[node name="KitBag" parent="BunkRoom" unique_id=2012068729 instance=ExtResource("70_wb018")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5.2, 2.92, 13.9)
+
+[node name="BunkBooks" parent="BunkRoom" unique_id=52628745 instance=ExtResource("66_s26w3")]
+transform = Transform3D(0.7660444, 0, 0.6427875, 0, 1, 0, -0.6427875, 0, 0.7660444, -5.1, 2.92, 10)
+
+[node name="YourThings" parent="BunkRoom" unique_id=1530363745 instance=ExtResource("71_lpcyg")]
+transform = Transform3D(-4.371139e-08, 0, -1, 0, 1, 0, 1, 0, -4.371139e-08, 4.95, 1.63, 13.05)
+
+[node name="SockLine" parent="BunkRoom" unique_id=281545127 instance=ExtResource("72_wwen8")]
+transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, -4.55, 2.6, 11.7)
+
+[node name="Boots1" parent="BunkRoom" unique_id=1741344763 instance=ExtResource("73_m4wtu")]
+transform = Transform3D(-4.371139e-08, 0, -1, 0, 1, 0, 1, 0, -4.371139e-08, 4.35, 1, 9.95)
+
+[node name="Boots2" parent="BunkRoom" unique_id=1327476476 instance=ExtResource("73_m4wtu")]
+transform = Transform3D(0.34202015, 0, 0.9396926, 0, 1, 0, -0.9396926, 0, 0.34202015, -4.35, 1, 13.55)
+
+[node name="Motes" type="GPUParticles3D" parent="BunkRoom" unique_id=609505840]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.6, 11.3)
+script = ExtResource("26_motes")
+extents = Vector3(3, 1, 2.6)
+
+[node name="LockerShape" type="CollisionShape3D" parent="." unique_id=326152585]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -5.2, 2.2, 14.35)
+shape = SubResource("BoxShape3D_5tfg4")

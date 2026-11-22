@@ -1,0 +1,52 @@
+[gd_scene format=3 uid="uid://d4kq0b2iypqcb"]
+
+[ext_resource type="Material" path="res://assets/placeholder/materials/dark_prop_wood.tres" id="1_jsddb"]
+[ext_resource type="Material" path="res://assets/placeholder/materials/iron.tres" id="2_pp2r6"]
+[ext_resource type="Material" path="res://assets/placeholder/materials/red_cloth.tres" id="3_6v7ck"]
+[ext_resource type="Material" path="res://assets/placeholder/materials/linen.tres" id="4_3lkyb"]
+
+[sub_resource type="BoxMesh" id="BoxMesh_5lllw"]
+size = Vector3(0.025, 0.025, 1.6)
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_3w4bh"]
+top_radius = 0.05
+bottom_radius = 0.05
+height = 0.04
+radial_segments = 8
+rings = 1
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_vchk2"]
+top_radius = 0.025
+bottom_radius = 0.025
+height = 0.08
+radial_segments = 6
+rings = 1
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_mf8te"]
+top_radius = 0.08
+bottom_radius = 0.08
+height = 0.02
+radial_segments = 8
+rings = 1
+
+[node name="FishingTackle" type="Node3D" unique_id=2025942879]
+
+[node name="Rod" type="MeshInstance3D" parent="." unique_id=2024592992]
+transform = Transform3D(0.9975641, 0, 0.06975647, 0, 1, 0, -0.06975647, 0, 0.9975641, 0, 0.02, 0)
+material_override = ExtResource("1_jsddb")
+mesh = SubResource("BoxMesh_5lllw")
+
+[node name="Reel" type="MeshInstance3D" parent="." unique_id=213095712]
+transform = Transform3D(-4.371139e-08, -1, 0, 1, -4.371139e-08, 0, 0, 0, 1, 0.04, 0.05, 0.5)
+material_override = ExtResource("2_pp2r6")
+mesh = SubResource("CylinderMesh_3w4bh")
+
+[node name="Float" type="MeshInstance3D" parent="." unique_id=1735571918]
+transform = Transform3D(1, 0, 0, 0, -4.371139e-08, -1, 0, 1, -4.371139e-08, 0.18, 0.03, -0.3)
+material_override = ExtResource("3_6v7ck")
+mesh = SubResource("CylinderMesh_vchk2")
+
+[node name="LineCoil" type="MeshInstance3D" parent="." unique_id=1450709200]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.2, 0.01, 0.1)
+material_override = ExtResource("4_3lkyb")
+mesh = SubResource("CylinderMesh_mf8te")
