@@ -154,6 +154,20 @@ func test_the_muffle_falls_evenly_through_the_octaves() -> void:
 	assert_float(HitFeel.muffle_hz(0.5)).is_equal_approx(3162.3, 0.5)
 
 
+func test_the_knife_glints_while_it_charges() -> void:
+	var player: Player3D = new_player_3d_on_floor()
+	var runner: GdUnitSceneRunner = scene_runner(player.get_parent())
+	await physics_ticks(runner, 2)
+	assert_bool(_feel(player).is_glinting()).is_false()
+
+	await hold(runner, "use_tool")
+	await physics_ticks(runner, 30)
+	assert_bool(_feel(player).is_glinting()).is_true()
+	await release(runner, "use_tool")
+
+	assert_bool(_feel(player).is_glinting()).is_false()
+
+
 func _hit_stop(player: Player3D) -> HitStop:
 	return player.get_node("HitStop") as HitStop
 

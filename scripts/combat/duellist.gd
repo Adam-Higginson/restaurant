@@ -120,6 +120,12 @@ var parry: ParryWindow = ParryWindow.new()
 ## Which cut the knife makes. Created once and never replaced.
 var combo: KnifeCombo = KnifeCombo.new()
 
+## The knife on the player's model, wherever it's held (in the character's
+## hand, or in front of the greybox).
+var knife: Node3D:
+	get:
+		return _knife
+
 ## The cut waiting to land, or null.
 var _landing: KnifeCut = null
 ## Seconds until it lands.

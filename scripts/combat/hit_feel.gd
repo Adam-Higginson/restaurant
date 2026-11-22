@@ -28,6 +28,10 @@ const CLEAR_HZ: float = 20000.0
 @export var muffle_seconds: float = 0.8
 ## How many times a second the player flickers while they can't be hit.
 @export var flicker_rate: float = 15.0
+## How big the knife's glints are as a charge starts, and when it's full,
+## against their size in the scene.
+@export var glint_scale_start: float = 0.4
+@export var glint_scale_full: float = 1.6
 
 ## How muffled the sound is, from 0 (clear) to 1 (deepest).
 var muffle: float:
@@ -41,6 +45,10 @@ var _flicker_time: float = 0.0
 ## the bus layout doesn't have one.
 var _muffle_effect: AudioEffectLowPassFilter = null
 var _muffle_index: int = -1
+## The glints along the knife while it charges, and their burst when it's
+## full, or null if the knife hasn't got them.
+var _glint: CPUParticles3D = null
+var _glint_burst: CPUParticles3D = null
 
 @onready var _duellist: Duellist = $"../Duellist"
 @onready var _hit_stop: HitStop = $"../HitStop"
@@ -54,11 +62,15 @@ func _ready() -> void:
 	_duellist.parried.connect(_on_parried)
 	_duellist.parried_perfectly.connect(_on_parried_perfectly)
 	_duellist.hurt.connect(_on_hurt)
+	_duellist.combo.charge_filled.connect(_on_charge_filled)
+	_glint = _duellist.knife.get_node_or_null("Glint") as CPUParticles3D
+	_glint_burst = _duellist.knife.get_node_or_null("GlintBurst") as CPUParticles3D
 	_find_muffle()
 
 
 func _process(delta: float) -> void:
 	_flicker(delta)
+	_shine()
 	if _muffle > 0.0:
 		_muffle = maxf(_muffle - delta / muffle_seconds, 0.0)
 		_apply_muffle()
@@ -113,6 +125,29 @@ func _on_hurt(_halves: int) -> void:
 	_camera_rig.shake(hurt_shake)
 	_muffle = 1.0
 	_apply_muffle()
+
+
+## Whether the knife is glinting (charging).
+func is_glinting() -> bool:
+	return _glint != null and _glint.emitting
+
+
+# The knife glints while it charges, the glints growing as the charge fills.
+func _shine() -> void:
+	if _glint == null:
+		return
+	var charging: bool = _duellist.is_charging()
+	if _glint.emitting != charging:
+		_glint.emitting = charging
+	if charging:
+		var size: float = lerpf(glint_scale_start, glint_scale_full, _duellist.combo.charge())
+		_glint.scale_amount_min = size * 0.5
+		_glint.scale_amount_max = size
+
+
+func _on_charge_filled() -> void:
+	if _glint_burst != null:
+		_glint_burst.restart()
 
 
 # Blinks the model while the player can't be hit, and shows it steadily after.

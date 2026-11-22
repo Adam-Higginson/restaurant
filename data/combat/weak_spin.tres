@@ -14,4 +14,4 @@ hitstop_ticks = 3
 push = 3.0
 animation = &"Sword_Regular_C"
 animation_length = 0.75
-sound = &"Swing"
+sound = &"Spin"

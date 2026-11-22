@@ -15,4 +15,4 @@ push = 12.0
 flips_lunging = true
 animation = &"Sword_Regular_C"
 animation_length = 0.75
-sound = &"Swing"
+sound = &"Spin"

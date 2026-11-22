@@ -9,7 +9,8 @@ extends GameTestSuite
 const PAN: Item = preload("res://data/items/frying_pan.tres")
 const SOUND_DIR: String = "res://assets/audio/combat/"
 const SOUND_SETS: Array[String] = ["swing", "slice", "tink", "pan_up", "clang", "hurt",
-		"crab_click", "crab_lunge", "fog_clear", "heartbeat"]
+		"crab_click", "crab_lunge", "fog_clear", "heartbeat", "spin", "charge", "charged", "dodge",
+		"land"]
 const CLOSE: Vector3 = Vector3(0, 0, -1.3)
 const FIRST_HIT: int = 56
 const FIRST_OPENING: int = 70 + HitStop.HURT_TICKS
@@ -33,7 +34,8 @@ func test_every_sound_has_recordings_to_pick_from() -> void:
 
 
 func test_the_recordings_come_with_their_licences() -> void:
-	for licence: String in ["LICENSE-Kenney-Impact-Sounds.txt", "LICENSE-Kenney-RPG-Audio.txt"]:
+	for licence: String in ["LICENSE-Kenney-Impact-Sounds.txt", "LICENSE-Kenney-RPG-Audio.txt",
+			"LICENSE-Kenney-Interface-Sounds.txt"]:
 		assert_str(FileAccess.get_file_as_string(SOUND_DIR + licence)) \
 				.contains("Creative Commons Zero")
 
@@ -44,13 +46,15 @@ func test_every_sound_node_has_its_stream() -> void:
 	scene_runner(player.get_parent())
 
 	for sound: StringName in [DuelSounds.SWING, DuelSounds.SLICE, DuelSounds.TINK,
-			DuelSounds.PAN_UP, DuelSounds.CLANG, DuelSounds.HURT, DuelSounds.HEARTBEAT] 			as Array[StringName]:
+			DuelSounds.PAN_UP, DuelSounds.CLANG, DuelSounds.HURT, DuelSounds.HEARTBEAT,
+			DuelSounds.SWING_HEAVY, DuelSounds.SPIN, DuelSounds.CHARGE, DuelSounds.CHARGED,
+			DuelSounds.DODGE, DuelSounds.LAND] as Array[StringName]:
 		var node: AudioStreamPlayer = _sounds(player).get_node(NodePath(sound)) \
 				as AudioStreamPlayer
 		assert_object(node.stream).override_failure_message("%s has no stream" % sound) \
 				.is_not_null()
-	for sound: StringName in [CrabSounds.CLICK, CrabSounds.LUNGE, CrabSounds.CLEAR] \
-			as Array[StringName]:
+	for sound: StringName in [CrabSounds.CLICK, CrabSounds.LUNGE, CrabSounds.CLEAR,
+			CrabSounds.FLIP] as Array[StringName]:
 		var node: AudioStreamPlayer3D = _crab_sounds(crab).get_node(NodePath(sound)) \
 				as AudioStreamPlayer3D
 		assert_object(node.stream).override_failure_message("%s has no stream" % sound) \
@@ -267,6 +271,71 @@ func test_the_heartbeat_stops_when_the_hearts_refill() -> void:
 	await physics_ticks(runner, 110)
 
 	assert_int(_sounds(player).times_played(DuelSounds.HEARTBEAT)).is_equal(beats)
+
+
+# --- The combo, the charge and dodging ---------------------------------------------
+
+func test_each_cut_plays_its_own_swing() -> void:
+	var player: Player3D = new_player_3d_on_floor()
+	var runner: GdUnitSceneRunner = scene_runner(player.get_parent())
+	await physics_ticks(runner, 2)
+
+	for i: int in 3:
+		duellist_of(player).strike()
+		await physics_ticks(runner, 20)
+
+	# The chop and the slice whoosh; the cleave swings heavy.
+	assert_int(_sounds(player).times_played(DuelSounds.SWING)).is_equal(2)
+	assert_int(_sounds(player).times_played(DuelSounds.SWING_HEAVY)).is_equal(1)
+
+
+func test_a_charge_rises_glints_when_full_and_spins() -> void:
+	var player: Player3D = new_player_3d_on_floor()
+	var runner: GdUnitSceneRunner = scene_runner(player.get_parent())
+	await physics_ticks(runner, 2)
+
+	await hold(runner, "use_tool")
+	await physics_ticks(runner, 30)
+	assert_int(_sounds(player).times_played(DuelSounds.CHARGE)).is_equal(1)
+	assert_int(_sounds(player).times_played(DuelSounds.CHARGED)).is_equal(0)
+	var rising: float = (_sounds(player).get_node("Charge") as AudioStreamPlayer).pitch_scale
+	await physics_ticks(runner, 32)
+	assert_int(_sounds(player).times_played(DuelSounds.CHARGED)).is_equal(1)
+	assert_float((_sounds(player).get_node("Charge") as AudioStreamPlayer).pitch_scale) \
+			.is_greater(rising)
+	await release(runner, "use_tool")
+
+	assert_int(_sounds(player).times_played(DuelSounds.SPIN)).is_equal(1)
+
+
+func test_a_dodge_takes_off_and_lands() -> void:
+	var player: Player3D = new_player_3d_on_floor()
+	var runner: GdUnitSceneRunner = scene_runner(player.get_parent())
+	await physics_ticks(runner, 2)
+
+	player.dodge(Dodge.SIDEHOP, Vector3.RIGHT)
+	await physics_ticks(runner, 2)
+	assert_int(_sounds(player).times_played(DuelSounds.DODGE)).is_equal(1)
+	assert_int(_sounds(player).times_played(DuelSounds.LAND)).is_equal(0)
+	await physics_ticks(runner, 30)
+
+	assert_int(_sounds(player).times_played(DuelSounds.LAND)).is_equal(1)
+
+
+func test_a_flipped_crab_thuds_and_its_legs_clatter() -> void:
+	var player: Player3D = new_player_3d_on_floor()
+	stand_firm(player)
+	var crab: FogCrab = new_fog_crab(player, CLOSE)
+	var runner: GdUnitSceneRunner = scene_runner(player.get_parent())
+	await physics_ticks(runner, 49 + HitStop.HURT_TICKS)
+
+	crab.cycle.flip()
+	var clicks: int = _crab_sounds(crab).times_played(CrabSounds.CLICK)
+	await physics_ticks(runner, 60)
+
+	assert_int(_crab_sounds(crab).times_played(CrabSounds.FLIP)).is_equal(1)
+	# About ten a second.
+	assert_int(_crab_sounds(crab).times_played(CrabSounds.CLICK) - clicks).is_greater(7)
 
 
 func _sounds(player: Player3D) -> DuelSounds:
