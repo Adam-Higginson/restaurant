@@ -1,0 +1,45 @@
+class_name DialogueLibrary
+extends RefCounted
+## Finds conversations by name. Each is a [code].dlg[/code] text file in
+## [constant FOLDER] (see [DialogueScript] for how they're written), read
+## once and kept.
+##
+## These are plain text, not Godot resources, so when the game is first
+## exported [code]*.dlg[/code] must be added to the export's "non-resource
+## files" filter.
+
+const FOLDER: String = "res://data/dialogue"
+const ENDING: String = ".dlg"
+
+static var _trees: Dictionary[StringName, DialogueTree] = {}
+
+
+## The conversation called [param id] ([code]heron[/code] is
+## [code]data/dialogue/heron.dlg[/code]), or null if there's no such file.
+## Its mistakes, if any, are reported once as errors.
+static func find(id: StringName) -> DialogueTree:
+	if _trees.has(id):
+		return _trees[id]
+	var path: String = "%s/%s%s" % [FOLDER, id, ENDING]
+	if not FileAccess.file_exists(path):
+		push_error("DialogueLibrary: no conversation at %s" % path)
+		return null
+	var tree: DialogueTree = DialogueScript.parse(FileAccess.get_file_as_string(path), id)
+	for error: String in tree.errors:
+		push_error("%s, %s" % [path, error])
+	_trees[id] = tree
+	return tree
+
+
+## The name of every conversation in [constant FOLDER].
+static func all_ids() -> Array[StringName]:
+	var ids: Array[StringName] = []
+	for file: String in DirAccess.get_files_at(FOLDER):
+		if file.ends_with(ENDING):
+			ids.append(StringName(file.trim_suffix(ENDING)))
+	return ids
+
+
+## Forgets what's been read, so files are read afresh. For tests and tools.
+static func forget() -> void:
+	_trees.clear()
