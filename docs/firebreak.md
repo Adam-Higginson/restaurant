@@ -131,6 +131,11 @@ The frying pan, saucepan and bowls drew as slabs and plates; now a vessel's `ves
 - `Item.vessel_shape` (new enum `VesselShape`), drawn by `ItemModel`; set on `frying_pan`, `saucepan` and `bowl`.
 - Test: `item_model_test` (pans, pots and bowls look like themselves).
 
+### 16. Mackerel at dawn
+What bites depends on the time: herring at night, **mackerel** at dawn. Mackerel fillet and fry just like herring (**Pan-fried Mackerel**, ★★★ done properly, ★ thrown in whole), the recipe book says so, and your first mackerel brings back its own memory ("First light": the kitchen still blue, a bucket of mackerel on the step, a kettle left warm for you).
+- `FishingSpot.dawn_catch` and `catch_now()`; data `mackerel`, `mackerel_fillet`, `pan_fried_mackerel`, reactions `fillet_mackerel`, `fry_mackerel`, `fry_whole_mackerel`, memory `first_light`.
+- Tests: `fishing_spot_test` (at dawn the mackerel bite instead), `catalog_test` (the mackerel's reactions).
+
 ## Notes, loose ends and decisions for you
 
 **Bugs on `main` I found (fixed here, but `main` needs them too):**
@@ -146,6 +151,6 @@ The frying pan, saucepan and bowls drew as slabs and plates; now a vessel's `ves
 **Known gaps (deliberately small):**
 - The hum is synthesised and tested as maths; it needs a listen.
 - The lighthouse island can't be reached; the ship circles it. Mooring there is the natural next step (#67).
-- Fish only bite while hove to, and there's one kind of fish.
+- Fish only bite while hove to, and there are only two kinds (herring at night, mackerel at dawn).
 - Days count, but nothing changes from day to day yet.
 - The lantern's warmth isn't saved, and nothing is: there's no save game yet.

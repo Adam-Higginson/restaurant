@@ -83,6 +83,24 @@ func test_a_herring_fillets_on_the_chopping_board() -> void:
 	assert_object(catalog.find_item(&"herring")).is_not_null()
 
 
+func test_at_dawn_the_mackerel_bite_instead() -> void:
+	var rig: Array[Node3D] = new_moored_ship_with_player(AT_THE_ROD)
+	var player: Player3D = rig[1] as Player3D
+	var time: TimeOfDay = TimeOfDay.new()
+	rig[0].get_parent().add_child(time)
+	time.dawn = 1.0
+	var runner: GdUnitSceneRunner = scene_runner(rig[0].get_parent())
+	_quick(_spot(rig[0] as Ship))
+	await physics_ticks(runner, 5)
+	await walk(runner, "move_right", 2)
+
+	await press(runner, "interact")
+	await physics_ticks(runner, 10)
+	await press(runner, "interact")
+
+	assert_str(String(player.toolbar.top().item.id)).is_equal("mackerel")
+
+
 func _spot(ship: Ship) -> FishingSpot:
 	return ship.get_node("Visuals/UpperDeck/Dressing/FishingSpot") as FishingSpot
 

@@ -11,8 +11,10 @@ extends Node3D
 ## Emitted when you land a fish.
 signal caught(item: ItemInstance)
 
-## What you catch.
+## What you catch at night.
 @export var catch: Item
+## What you catch at dawn, when different fish come up. Unset: the same.
+@export var dawn_catch: Item
 ## How far out from the rod tip the bobber lands, in metres (along local +x).
 @export var cast_reach: float = 2.2
 
@@ -48,6 +50,14 @@ func _physics_process(delta: float) -> void:
 		_place_bobber()
 
 
+## What would bite now: herring at night, mackerel at dawn.
+func catch_now() -> Item:
+	var time: TimeOfDay = get_tree().get_first_node_in_group(&"time_of_day") as TimeOfDay
+	if dawn_catch != null and time != null and time.is_morning():
+		return dawn_catch
+	return catch
+
+
 ## Whether fish will bite: the ship is stopped (or there's no ship).
 func still_water() -> bool:
 	return not is_instance_valid(_ship) or not _ship.is_sailing
@@ -73,12 +83,13 @@ func _on_interacted(player: Player3D) -> void:
 		_:
 			var landed: bool = line.reel()
 			_show_line(false)
-			if landed and catch != null:
-				var fish: ItemInstance = ItemInstance.new(catch)
+			var fish_now: Item = catch_now()
+			if landed and fish_now != null:
+				var fish: ItemInstance = ItemInstance.new(fish_now)
 				if player.toolbar.add(fish):
 					caught.emit(fish)
 					_say(player, LanternLines.CAUGHT)
-					Game.memories.notice(catch)
+					Game.memories.notice(fish_now)
 
 
 func _say(player: Player3D, lines: PackedStringArray) -> void:

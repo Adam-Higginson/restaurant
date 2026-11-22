@@ -6,7 +6,7 @@ extends GameTestSuite
 ## Items with no reaction producing them: what the shop and the kitchen provide.
 const RAW: Array[String] = [
 	"lettuce", "tomato", "onion", "bread", "cheese", "chopping_board", "plate", "herring",
-	"frying_pan", "saucepan", "bowl", "rainwater",
+	"frying_pan", "saucepan", "bowl", "rainwater", "mackerel",
 ]
 
 var _catalog: Catalog
@@ -28,7 +28,7 @@ func test_catalog_has_the_mvp_items() -> void:
 		&"garden_salad", &"tomato_soup", &"grilled_cheese",
 		&"chopping_board", &"plate", &"herring", &"herring_fillet", &"frying_pan",
 		&"pan_fried_herring", &"saucepan", &"bowl", &"rainwater", &"boiling_water",
-		&"chopped_onion",
+		&"chopped_onion", &"mackerel", &"mackerel_fillet", &"pan_fried_mackerel",
 	])
 
 
@@ -73,6 +73,15 @@ func test_herring_reactions_match_design_doc() -> void:
 		&"pan_fried_herring", 1)
 
 
+func test_mackerel_reactions_match_the_herrings() -> void:
+	_assert_reaction(&"fillet_mackerel", [&"mackerel"], [&"chopping_board"], &"cut", 3,
+		&"mackerel_fillet", 3)
+	_assert_reaction(&"fry_mackerel", [&"mackerel_fillet"], [&"frying_pan"], &"fire", 6,
+		&"pan_fried_mackerel", 3)
+	_assert_reaction(&"fry_whole_mackerel", [&"mackerel"], [&"frying_pan"], &"fire", 9,
+		&"pan_fried_mackerel", 1)
+
+
 func test_tomato_soup_reactions_match_design_doc() -> void:
 	_assert_reaction(&"chop_onion", [&"onion"], [&"chopping_board"], &"cut", 3, &"chopped_onion",
 		3)
@@ -88,7 +97,8 @@ func test_storage_kinds_match_design_doc() -> void:
 	var fridge: Array[StringName] = [
 		&"lettuce", &"tomato", &"cheese", &"chopped_lettuce", &"sliced_tomato",
 		&"diced_tomato", &"garden_salad", &"grilled_cheese", &"herring", &"herring_fillet",
-		&"pan_fried_herring", &"chopped_onion",
+		&"pan_fried_herring", &"chopped_onion", &"mackerel", &"mackerel_fillet",
+		&"pan_fried_mackerel",
 	]
 	var cupboard: Array[StringName] = [&"onion", &"bread"]
 	for item: Item in _catalog.items:

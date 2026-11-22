@@ -8,4 +8,4 @@ script = ExtResource("1_recipe")
 id = &"pan_fried_herring"
 dish = ExtResource("2_dish")
 title = "Pan-fried Herring"
-steps = PackedStringArray("Ring the bell to stop the ship; fish from the rod at the rail.", "Fillet the herring on the board (3 cuts).", "Fry the fillet in the pan on the hearth (6s).", "A whole fish in the pan will do. Just.")
+steps = PackedStringArray("Ring the bell to stop the ship; fish from the rod at the rail.", "Fillet the herring on the board (3 cuts).", "Fry the fillet in the pan on the hearth (6s).", "A whole fish in the pan will do. Just.", "At dawn the mackerel bite instead. Same pan, same way.")

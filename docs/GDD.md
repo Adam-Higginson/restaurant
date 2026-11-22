@@ -193,7 +193,7 @@ Worked example: a tomato (★) sliced properly gives (1 + 3) / 2 = ★★ sliced
 
 Garden Salad, Tomato Soup and Pan-fried Herring work today, and the galley's **recipe book** (open on the cook's stool at the head of the table) shows how to make each, a page at a time (`data/recipes/`). The hearth has two hobs (a saucepan where the stew pot was, and a frying pan); bowls are stacked on the crew table. Grilled Cheese still needs butter and the sandwich step.
 
-**Caught, not bought:** a **herring** from the rod at the starboard rail (fish only bite while the ship is hove to: ring the bell). Fillet it on the chopping board (3 cuts) for a **herring fillet**, fried in the pan on the galley **hob** (the hearth's hot iron top, which gives fire to whatever vessel sits on it; lift the pan off and cooking pauses). The fish keep in the fridge.
+**Caught, not bought:** a **herring** (at night; at dawn, a **mackerel**, which fillets and fries the same way) from the rod at the starboard rail (fish only bite while the ship is hove to: ring the bell). Fillet it on the chopping board (3 cuts) for a **herring fillet**, fried in the pan on the galley **hob** (the hearth's hot iron top, which gives fire to whatever vessel sits on it; lift the pan off and cooking pauses). The fish keep in the fridge.
 
 ## Storage
 - The galley **pantry** (and later the hold) stores ingredients. Containers have a fixed number of slots, and each item uses one.
