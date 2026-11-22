@@ -16,17 +16,25 @@ extends Node3D
 @export_range(0.0, 1.0) var phase: float = 0.0
 
 var _time: float = 0.0
+var _rest: Basis = Basis.IDENTITY
 
 
 func _ready() -> void:
-	rotation = angle_at(0.0)
+	# How it hangs at rest (turned to face along a wall, say). The swing is
+	# added to this rather than replacing it, so it keeps facing the same way.
+	_rest = basis
+	_swing_to(0.0)
 
 
 # On physics ticks, so it moves smoothly with physics interpolation like the
 # rest of the ship.
 func _physics_process(delta: float) -> void:
 	_time += delta
-	rotation = angle_at(_time)
+	_swing_to(_time)
+
+
+func _swing_to(time: float) -> void:
+	basis = _rest * Basis.from_euler(angle_at(time))
 
 
 ## The swing's rotation at [param time] seconds, in radians: a side-to-side
