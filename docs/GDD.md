@@ -109,10 +109,21 @@ OoT-style duels: lock on, read the enemy, strike at the opening.
 
 **The first duel (greybox, #66).** Open `scenes/prototype/islands/duel_arena.tscn` and press F6: a patch of island with a landing and two fog-crabs, until an island can be sailed to (#67).
 - **Lock-on is held** (Shift, middle click or the left trigger). It takes the nearest fog-touched creature within 9 m and lets go when you release it, when the creature is more than 12 m away, or when its fog clears. While it's held you face the creature, so walking sideways circles it; the camera swings round behind you, a little to one side so you don't hide what you're fighting, and can't be turned; and the lantern hovers over it. With nothing in reach, the button turns the camera to look the way you face. (Hold or toggle is one setting on the player's `LockOn` node, for a settings menu later.)
-- **The knife is Use tool.** With nothing in front of you for a tool to work on, Use tool swings the knife (half a second a swing) at any fog-touched creature within 2 m in front of you. At a chopping board it still chops.
+- **The knife is Use tool.** With nothing in front of you for a tool to work on, Use tool swings the knife (a quarter of a second a swing) at any fog-touched creature within 2 m in front of you. At a chopping board it still chops.
 - **The pan is Parry** (R or the right trigger), and you must be carrying a frying pan, in any toolbar slot. It goes up for 0.3 s; a hit that lands in that time is turned away with a clang and staggers the creature. Then it's down for 0.4 s, so mashing the button doesn't work, unless it parried, when it's ready again at once.
 - **Three hearts,** in the top-left corner of the HUD. A fog-crab's hit costs half a heart.
-- **The fog-crab** notices you within 7 m. It rears up, shaking, for 0.8 s (the tell), creeping closer; lunges (the hit lands as the lunge starts, if you're within 2 m: back away and it misses); then sags for 1.2 s (the opening). A parried lunge staggers it for 1.5 s instead. Strikes only count while it's open or staggered. The third clears its fog: it shakes itself off and wanders away, and can't be locked on to or hurt any more. Its fog thins with each strike.
+- **The fog-crab** is a low-poly crab (CC0, OpenGameArt). It plays its own idle and walk, and its claws rise through its arm bones as it rears up. It notices you within 7 m. It rears up, shaking, for 0.8 s (the tell), creeping closer; lunges (the hit lands as the lunge starts, if you're within 2 m: back away and it misses); then sags for 1.2 s (the opening). A parried lunge staggers it for 1.5 s instead. Strikes only count while it's open or staggered. The third clears its fog: it shakes itself off and wanders away, and can't be locked on to or hurt any more.
+- **Blows land with weight (#107),** in the spirit of Hollow Knight:
+  - **Hitstop.** Every blow that counts freezes the whole game for a beat: 4 frames for a strike, 10 for the strike that clears a crab's fog, 6 for a parry, 8 for a blow taken.
+  - **Strikes.** A strike that counts knocks the crab back about a metre and flashes it white, and chips of shell and grey wisps of fog burst off it.
+  - **Parries.** A parry throws sparks off the pan.
+  - **The knife and camera.** The knife leaves a pale trail through its arc, and the camera gives a small shake, biggest when you're hurt.
+- **Getting hurt is unmistakable:**
+  - **The moment it lands.** The game freezes, the screen flashes white, and grey fog closes in at its edges. The sound muffles for a moment.
+  - **The knock.** You're thrown back away from the blow and stumble for a moment, deaf to the stick. That puts you out of knife reach, so you step back in to punish the opening.
+  - **The moment after.** For a second after, you flicker and nothing can hurt you; a crab's blow in that second doesn't stagger it either.
+  - **The hearts.** The heart you lost shivers with a crack across it.
+  - **The last heart.** On your last heart the colour drains from the world and your heart thumps.
 - **The lantern's light is the fight's state:** it flickers hard while the creature you're locked on to rears up, and burns bright and steady while it's open.
 - **Defeat:** with no hearts left, the lantern pulls you back to the island's landing with your hearts full. You keep your tools (the knife), and lose half the items you carry, rounded down, from the last toolbar slots first; a utensil counts as an item, so the pan can go. The creature that beat you forgets the strikes it took. (The arena hands the pan back if you lose it, so there's always a way to parry there.)
 - **A duel can be read by ear.** The crab's claws rattle faster and faster as it rears up, and there's a rush as it lunges, so you can time a parry with your eyes shut. The knife whooshes on every swing, slices when a strike counts and tinks off a crab that isn't open. The pan rustles as it goes up and clangs when it turns a blow away; a blow that lands thumps. Clearing the fog chimes, and the cleared crab ticks quietly away. Each sound is a few recordings picked at random, at a slightly varied pitch, from Kenney's CC0 Impact Sounds and RPG Audio packs (`assets/audio/combat/`). The crab's sounds come from where it stands.
@@ -128,7 +139,8 @@ OoT-style duels: lock on, read the enemy, strike at the opening.
 When you lose a fight, **the lantern pulls you out**, echoing how you met. You reappear at the island's landing with half of what you were carrying. (Later: each rescue dims him a little, and a warm meal by the stove rekindles him.)
 
 ## Player
-- A young adult, rescued at sea. Their name and look are to be decided.
+- A young castaway, rescued at sea, in a plain linen shirt, trousers and boots. When a new voyage begins you're asked who you are, a boy or a girl, and the save remembers. Their name is to be decided.
+- **Their body** is a Quaternius character (CC0): the Peasant outfit with a base character's head, made younger (a bigger head on a shorter body). It animates from the Universal Animation Library: a lantern-holding idle, a walk, a sword swing for the knife and a shield stance for the pan, which they hold in their hands.
 - 3D movement relative to the camera, turning to face the way they walk.
 - Acts on the thing in front of them: counters, the pantry, the stove, pans, the bell, the gangplank, plants, people.
 - **Toolbar (like Stardew Valley):** 12 slots that hold hand tools and items together: ingredients, prepared food and utensils (chopping board, frying pan, saucepan, plate, bowl). A plate or bowl carries whatever is on it. One slot is selected at a time, and **the selected slot is what you hold**: an item there shows above your head, and Interact uses it. Picking anything up puts it in the first free slot and selects it. The knife starts in slot 1. (Before this, the 2D prototype had a stack of 3 with a rotate button, then the 3D prototype briefly had one item in hand; both were confusing in playtests, #76.)
@@ -275,6 +287,7 @@ N64 / OoT style with modern rendering. The reference is a ship's galley at night
 - **Small motion everywhere:** flickering firelight, swinging lanterns, a swaying net and bell, mugs rocking with the sea, candle flames wavering, hammocks rolling, curtains and blanket ends swaying, socks stirring in a stove's warm air. Slow and small, so nothing on screen lurches.
 - **The N64 recipe:** every surface has a small texture (32 x 32) stretched so its pixels show, about 64 per metre. Big things are simple textured blocks (tables, benches, barrels, the stove). Planks run on floors, ceilings and walls.
 - **Third-party models** (KayKit, Tiny Treats) are only for small detailed props (pots, jars, bread, cheese). They keep their colours under a chunky grain so they don't read as smooth modern toys. They dress our greybox when downloaded; gameplay always lives on our own shapes, so the game works without them.
+- **Third-party characters (#107):** the player (Quaternius), the fog-crab (OpenGameArt) and the knife and pan in hand (KayKit) are animated models, dressing the same greybox in the same way. The player's are drawn with chunky, unsmoothed texture pixels; the props' grain would slide about on a moving body.
 - **Sea and sky:** fog, good-looking water, weather.
 
 ### The rainy night (the opening's atmosphere)
