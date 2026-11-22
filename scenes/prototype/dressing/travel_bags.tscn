@@ -1,0 +1,68 @@
+[gd_scene format=3 uid="uid://cn1xadjmxs72b"]
+
+[ext_resource type="Material" path="res://assets/placeholder/materials/sackcloth.tres" id="1_ofhbs"]
+[ext_resource type="Material" path="res://assets/placeholder/materials/leather.tres" id="2_aaop6"]
+[ext_resource type="Material" path="res://assets/placeholder/materials/dark_prop_wood.tres" id="3_p78ia"]
+[ext_resource type="Material" path="res://assets/placeholder/materials/blanket_grey.tres" id="4_odelc"]
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_dck6l"]
+top_radius = 0.15
+bottom_radius = 0.15
+height = 0.6
+radial_segments = 8
+rings = 1
+
+[sub_resource type="BoxMesh" id="BoxMesh_eggpu"]
+size = Vector3(0.31, 0.04, 0.01)
+
+[sub_resource type="BoxMesh" id="BoxMesh_sdo0b"]
+size = Vector3(0.3, 0.22, 0.12)
+
+[sub_resource type="BoxMesh" id="BoxMesh_ymt4m"]
+size = Vector3(0.3, 0.1, 0.13)
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_qasem"]
+top_radius = 0.09
+bottom_radius = 0.09
+height = 0.46
+radial_segments = 8
+rings = 1
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_as87q"]
+top_radius = 0.095
+bottom_radius = 0.095
+height = 0.03
+radial_segments = 8
+rings = 1
+
+[node name="TravelBags" type="Node3D" unique_id=1808698203]
+
+[node name="Duffel" type="MeshInstance3D" parent="." unique_id=636636013]
+transform = Transform3D(-4.304731e-08, -0.9848077, 0.14760095, 1, -4.371139e-08, 0, 7.590403e-09, 0.17364818, 0.8370866, 0, 0.14, 0)
+material_override = ExtResource("1_ofhbs")
+mesh = SubResource("CylinderMesh_dck6l")
+
+[node name="Strap" type="MeshInstance3D" parent="Duffel" unique_id=112937823]
+transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, 0, 0.1, 0)
+material_override = ExtResource("2_aaop6")
+mesh = SubResource("BoxMesh_eggpu")
+
+[node name="Satchel" type="MeshInstance3D" parent="." unique_id=77461925]
+transform = Transform3D(0.9659258, 0, -0.25881904, 0, 1, 0, 0.25881904, 0, 0.9659258, -0.08, 0.11, 0.24)
+material_override = ExtResource("2_aaop6")
+mesh = SubResource("BoxMesh_sdo0b")
+
+[node name="SatchelFlap" type="MeshInstance3D" parent="." unique_id=2105449265]
+transform = Transform3D(0.9659258, 0, -0.25881904, 0, 1, 0, 0.25881904, 0, 0.9659258, -0.08, 0.19, 0.245)
+material_override = ExtResource("3_p78ia")
+mesh = SubResource("BoxMesh_ymt4m")
+
+[node name="Bedroll" type="MeshInstance3D" parent="." unique_id=1645186418]
+transform = Transform3D(-7.590405e-09, -0.17364822, 0.9848077, 1, -4.371139e-08, 0, 4.304731e-08, 0.9848077, 0.17364822, 0.05, 0.09, -0.22)
+material_override = ExtResource("4_odelc")
+mesh = SubResource("CylinderMesh_qasem")
+
+[node name="Tie" type="MeshInstance3D" parent="Bedroll" unique_id=595199631]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.12, 0)
+material_override = ExtResource("2_aaop6")
+mesh = SubResource("CylinderMesh_as87q")

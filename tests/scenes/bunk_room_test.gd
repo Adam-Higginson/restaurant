@@ -13,7 +13,11 @@ const PIECES: Array[String] = [
 	"dressing/fishing_tackle", "dressing/your_things", "props/bunk_stove", "dressing/candle",
 	"dressing/folded_blankets", "dressing/yarn_basket", "dressing/sheepskin",
 	"dressing/playing_cards", "dressing/pinned_drawing", "dressing/pinned_letter",
-	"dressing/pressed_flower",
+	"dressing/pressed_flower", "props/round_table", "props/chest_of_drawers", "props/coat_rack",
+	"props/box_stack", "dressing/hanging_net", "dressing/rope_coil", "dressing/pinned_map",
+	"dressing/keepsakes", "dressing/navigator_things", "dressing/lure_line",
+	"dressing/half_read_book", "dressing/travel_bags", "dressing/hung_coat",
+	"dressing/draped_shirt", "dressing/accordion", "dressing/cushions", "dressing/copper_pot",
 ]
 ## Ship space: the bunk room's floor, and the underside of its ceiling.
 const FLOOR_Y: float = 1.0
@@ -152,6 +156,28 @@ func test_you_can_walk_round_the_stove() -> void:
 	var at: Vector3 = _player_on(ship, runner)
 	assert_float(at.x).is_less(-1.5)
 	assert_float(at.z).is_greater(13.0)
+
+
+func test_you_can_walk_the_length_of_the_port_bunks() -> void:
+	var ship: Ship = new_moored_ship_with_player(Vector3(-4.0, 1.05, 9.8))[0] as Ship
+	var runner: GdUnitSceneRunner = scene_runner(ship.get_parent())
+	await physics_ticks(runner, 5)
+
+	await walk(runner, "move_down", 50)
+
+	# Past both port bays, nothing in front of them, to the chest of drawers.
+	assert_float(_player_on(ship, runner).z).is_greater(13.0)
+
+
+func test_every_crew_bay_has_a_light_on() -> void:
+	var ship: Ship = new_moored_ship_with_player(Vector3(0, 1.05, 9.3))[0] as Ship
+	for node: Node in ship.get_node("BunkRoom").get_children():
+		var bay: BunkBay = node as BunkBay
+		if bay == null or bay.name == "YourBunk":
+			continue
+		# Somebody in every crew bay is up: a lamp below or a candle above.
+		assert_bool(bay.lamp_lit or bay.upper_lamp_lit).override_failure_message(
+				"%s is dark" % bay.name).is_true()
 
 
 func test_you_can_walk_from_the_ramp_foot_to_your_bunk() -> void:

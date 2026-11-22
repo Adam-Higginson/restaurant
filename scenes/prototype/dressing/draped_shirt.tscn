@@ -1,0 +1,37 @@
+[gd_scene format=3 uid="uid://bqbhcdop67pfp"]
+
+[ext_resource type="Material" path="res://assets/placeholder/materials/bedlinen.tres" id="1_7yqig"]
+
+[sub_resource type="BoxMesh" id="BoxMesh_nk1yh"]
+size = Vector3(0.34, 0.03, 0.08)
+
+[sub_resource type="BoxMesh" id="BoxMesh_5n4p4"]
+size = Vector3(0.34, 0.42, 0.02)
+
+[sub_resource type="BoxMesh" id="BoxMesh_gjgjp"]
+size = Vector3(0.32, 0.26, 0.02)
+
+[sub_resource type="BoxMesh" id="BoxMesh_lntgd"]
+size = Vector3(0.08, 0.34, 0.02)
+
+[node name="DrapedShirt" type="Node3D" unique_id=986584006]
+
+[node name="Fold" type="MeshInstance3D" parent="." unique_id=2145336361]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.03, 0)
+material_override = ExtResource("1_7yqig")
+mesh = SubResource("BoxMesh_nk1yh")
+
+[node name="Front" type="MeshInstance3D" parent="." unique_id=1957233553]
+transform = Transform3D(0.99939084, -0.034899496, 0, 0.034851667, 0.9980212, -0.05233596, 0.0018264985, 0.052304078, 0.9986295, 0, -0.19, 0.045)
+material_override = ExtResource("1_7yqig")
+mesh = SubResource("BoxMesh_5n4p4")
+
+[node name="Back" type="MeshInstance3D" parent="." unique_id=771092396]
+transform = Transform3D(0.99939084, 0.034899496, 0, -0.034851667, 0.9980212, 0.05233596, 0.0018264985, -0.052304078, 0.9986295, 0.01, -0.11, -0.045)
+material_override = ExtResource("1_7yqig")
+mesh = SubResource("BoxMesh_gjgjp")
+
+[node name="Sleeve" type="MeshInstance3D" parent="." unique_id=2051331388]
+transform = Transform3D(0.9781476, -0.2079117, 0, 0.2079117, 0.9781476, 0, 0, 0, 1, 0.2, -0.2, 0.05)
+material_override = ExtResource("1_7yqig")
+mesh = SubResource("BoxMesh_lntgd")

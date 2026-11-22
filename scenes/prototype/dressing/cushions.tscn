@@ -1,0 +1,22 @@
+[gd_scene format=3 uid="uid://c4fu3w3gl7ld4"]
+
+[ext_resource type="Material" path="res://assets/placeholder/materials/quilt_red.tres" id="1_xbqv2"]
+[ext_resource type="Material" path="res://assets/placeholder/materials/quilt_gold.tres" id="2_wblge"]
+
+[sub_resource type="BoxMesh" id="BoxMesh_76yy7"]
+size = Vector3(0.4, 0.1, 0.36)
+
+[sub_resource type="BoxMesh" id="BoxMesh_h75lw"]
+size = Vector3(0.32, 0.3, 0.1)
+
+[node name="Cushions" type="Node3D" unique_id=996974128]
+
+[node name="Flat" type="MeshInstance3D" parent="." unique_id=1193589384]
+transform = Transform3D(0.9945219, 0, 0.104528464, 0, 1, 0, -0.104528464, 0, 0.9945219, 0, 0.05, 0)
+material_override = ExtResource("1_xbqv2")
+mesh = SubResource("BoxMesh_76yy7")
+
+[node name="Leaning" type="MeshInstance3D" parent="." unique_id=1755948175]
+transform = Transform3D(0.9848077, 0.05366024, -0.16514924, 0, 0.95105654, 0.309017, 0.17364818, -0.30432233, 0.93660784, 0.04, 0.2, -0.13)
+material_override = ExtResource("2_wblge")
+mesh = SubResource("BoxMesh_h75lw")

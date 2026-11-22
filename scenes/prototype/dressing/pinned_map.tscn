@@ -1,0 +1,39 @@
+[gd_scene format=3 uid="uid://cbtnj7lwvr7bp"]
+
+[ext_resource type="Material" path="res://assets/placeholder/materials/chart.tres" id="1_88ona"]
+[ext_resource type="Material" path="res://assets/placeholder/materials/brass.tres" id="2_que6b"]
+
+[sub_resource type="QuadMesh" id="QuadMesh_h02s8"]
+size = Vector2(0.38, 0.28)
+
+[sub_resource type="BoxMesh" id="BoxMesh_i4f2f"]
+size = Vector3(0.012, 0.012, 0.012)
+
+[sub_resource type="BoxMesh" id="BoxMesh_sf4du"]
+size = Vector3(0.012, 0.012, 0.012)
+
+[sub_resource type="BoxMesh" id="BoxMesh_hiu3e"]
+size = Vector3(0.012, 0.012, 0.012)
+
+[node name="PinnedMap" type="Node3D" unique_id=1991500143]
+
+[node name="Sheet" type="MeshInstance3D" parent="." unique_id=1766641228]
+transform = Transform3D(0.9986295, -0.05233596, 0, 0.05233596, 0.9986295, 0, 0, 0, 1, 0, 0, 0.004)
+material_override = ExtResource("1_88ona")
+cast_shadow = 0
+mesh = SubResource("QuadMesh_h02s8")
+
+[node name="Pin" type="MeshInstance3D" parent="." unique_id=1961538306]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.12, 0.008)
+material_override = ExtResource("2_que6b")
+mesh = SubResource("BoxMesh_i4f2f")
+
+[node name="CornerPin1" type="MeshInstance3D" parent="." unique_id=730889457]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.17, -0.12, 0.008)
+material_override = ExtResource("2_que6b")
+mesh = SubResource("BoxMesh_sf4du")
+
+[node name="CornerPin2" type="MeshInstance3D" parent="." unique_id=315813835]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.17, -0.12, 0.008)
+material_override = ExtResource("2_que6b")
+mesh = SubResource("BoxMesh_hiu3e")

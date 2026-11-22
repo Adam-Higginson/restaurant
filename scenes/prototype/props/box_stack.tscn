@@ -1,0 +1,99 @@
+[gd_scene format=3 uid="uid://7tiq3wr4kuxo"]
+
+[ext_resource type="Material" path="res://assets/placeholder/materials/weathered_wood.tres" id="1_fkdax"]
+[ext_resource type="Material" path="res://assets/placeholder/materials/dark_prop_wood.tres" id="2_01ywq"]
+[ext_resource type="Material" path="res://assets/placeholder/materials/label_sail.tres" id="3_2mpxt"]
+[ext_resource type="Material" path="res://assets/placeholder/materials/label_rope.tres" id="4_5qcgm"]
+[ext_resource type="Material" path="res://assets/placeholder/materials/label_tea.tres" id="5_e6640"]
+
+[sub_resource type="BoxMesh" id="BoxMesh_bh7ya"]
+size = Vector3(0.6, 0.36, 0.42)
+
+[sub_resource type="BoxMesh" id="BoxMesh_d5tpa"]
+size = Vector3(0.62, 0.03, 0.44)
+
+[sub_resource type="QuadMesh" id="QuadMesh_rrcr8"]
+size = Vector2(0.48000002, 0.3)
+
+[sub_resource type="BoxMesh" id="BoxMesh_fqn36"]
+size = Vector3(0.5, 0.3, 0.38)
+
+[sub_resource type="BoxMesh" id="BoxMesh_j2m0h"]
+size = Vector3(0.52, 0.03, 0.4)
+
+[sub_resource type="QuadMesh" id="QuadMesh_mrirg"]
+size = Vector2(0.4, 0.25)
+
+[sub_resource type="BoxMesh" id="BoxMesh_2bdbv"]
+size = Vector3(0.36, 0.24, 0.3)
+
+[sub_resource type="BoxMesh" id="BoxMesh_wudmj"]
+size = Vector3(0.38000003, 0.03, 0.32000002)
+
+[sub_resource type="QuadMesh" id="QuadMesh_0uc3i"]
+size = Vector2(0.28800002, 0.18)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_23qks"]
+size = Vector3(0.6, 0.90000004, 0.42)
+
+[node name="BoxStack" type="StaticBody3D" unique_id=439759239]
+
+[node name="BoxSail" type="Node3D" parent="." unique_id=906910034]
+
+[node name="Body" type="MeshInstance3D" parent="BoxSail" unique_id=1282308685]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.18, 0)
+material_override = ExtResource("1_fkdax")
+mesh = SubResource("BoxMesh_bh7ya")
+
+[node name="Lid" type="MeshInstance3D" parent="BoxSail" unique_id=1198776023]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.34500003, 0)
+material_override = ExtResource("2_01ywq")
+mesh = SubResource("BoxMesh_d5tpa")
+
+[node name="Label" type="MeshInstance3D" parent="BoxSail" unique_id=2064402239]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.162, 0.213)
+material_override = ExtResource("3_2mpxt")
+cast_shadow = 0
+mesh = SubResource("QuadMesh_rrcr8")
+
+[node name="BoxRope" type="Node3D" parent="." unique_id=1807343988]
+transform = Transform3D(0.99254614, 0, 0.12186935, 0, 1, 0, -0.12186935, 0, 0.99254614, -0.03, 0.36, 0)
+
+[node name="Body" type="MeshInstance3D" parent="BoxRope" unique_id=877632709]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.15, 0)
+material_override = ExtResource("1_fkdax")
+mesh = SubResource("BoxMesh_fqn36")
+
+[node name="Lid" type="MeshInstance3D" parent="BoxRope" unique_id=45760075]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.28500003, 0)
+material_override = ExtResource("2_01ywq")
+mesh = SubResource("BoxMesh_j2m0h")
+
+[node name="Label" type="MeshInstance3D" parent="BoxRope" unique_id=663618597]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.135, 0.193)
+material_override = ExtResource("4_5qcgm")
+cast_shadow = 0
+mesh = SubResource("QuadMesh_mrirg")
+
+[node name="BoxTea" type="Node3D" parent="." unique_id=722309213]
+transform = Transform3D(0.9781476, 0, -0.2079117, 0, 1, 0, 0.2079117, 0, 0.9781476, 0.05, 0.66, 0)
+
+[node name="Body" type="MeshInstance3D" parent="BoxTea" unique_id=627149242]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.12, 0)
+material_override = ExtResource("1_fkdax")
+mesh = SubResource("BoxMesh_2bdbv")
+
+[node name="Lid" type="MeshInstance3D" parent="BoxTea" unique_id=514391317]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.225, 0)
+material_override = ExtResource("2_01ywq")
+mesh = SubResource("BoxMesh_wudmj")
+
+[node name="Label" type="MeshInstance3D" parent="BoxTea" unique_id=578461035]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.107999995, 0.15300001)
+material_override = ExtResource("5_e6640")
+cast_shadow = 0
+mesh = SubResource("QuadMesh_0uc3i")
+
+[node name="Shape" type="CollisionShape3D" parent="." unique_id=881374259]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.45000002, 0)
+shape = SubResource("BoxShape3D_23qks")

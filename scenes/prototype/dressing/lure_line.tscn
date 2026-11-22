@@ -1,0 +1,172 @@
+[gd_scene format=3 uid="uid://c6g8ya8kihpjy"]
+
+[ext_resource type="Material" path="res://assets/placeholder/materials/rope.tres" id="1_hk6kx"]
+[ext_resource type="Script" path="res://scripts/props/swinging.gd" id="2_trycb"]
+[ext_resource type="Material" path="res://assets/placeholder/materials/linen.tres" id="3_8xsc4"]
+[ext_resource type="Material" path="res://assets/placeholder/materials/red_cloth.tres" id="4_twdyy"]
+[ext_resource type="Material" path="res://assets/placeholder/materials/iron.tres" id="5_nok18"]
+[ext_resource type="Material" path="res://assets/placeholder/materials/oilskin.tres" id="6_7axig"]
+[ext_resource type="Material" path="res://assets/placeholder/materials/quilt_green.tres" id="7_0fckf"]
+[ext_resource type="Material" path="res://assets/placeholder/materials/brass.tres" id="8_7olmd"]
+
+[sub_resource type="BoxMesh" id="BoxMesh_pyue0"]
+size = Vector3(1.5, 0.008, 0.008)
+
+[sub_resource type="BoxMesh" id="BoxMesh_lu6r8"]
+size = Vector3(0.004, 0.08, 0.004)
+
+[sub_resource type="BoxMesh" id="BoxMesh_hu3qc"]
+size = Vector3(0.02, 0.06, 0.02)
+
+[sub_resource type="BoxMesh" id="BoxMesh_p152b"]
+size = Vector3(0.004, 0.025, 0.012)
+
+[sub_resource type="BoxMesh" id="BoxMesh_n58p1"]
+size = Vector3(0.004, 0.12, 0.004)
+
+[sub_resource type="BoxMesh" id="BoxMesh_xwhqm"]
+size = Vector3(0.02, 0.06, 0.02)
+
+[sub_resource type="BoxMesh" id="BoxMesh_l5x2x"]
+size = Vector3(0.004, 0.025, 0.012)
+
+[sub_resource type="BoxMesh" id="BoxMesh_lyxe8"]
+size = Vector3(0.004, 0.08, 0.004)
+
+[sub_resource type="BoxMesh" id="BoxMesh_tkuid"]
+size = Vector3(0.02, 0.06, 0.02)
+
+[sub_resource type="BoxMesh" id="BoxMesh_jwejx"]
+size = Vector3(0.004, 0.025, 0.012)
+
+[sub_resource type="BoxMesh" id="BoxMesh_xxb3x"]
+size = Vector3(0.004, 0.12, 0.004)
+
+[sub_resource type="BoxMesh" id="BoxMesh_6bnx8"]
+size = Vector3(0.02, 0.06, 0.02)
+
+[sub_resource type="BoxMesh" id="BoxMesh_27mx8"]
+size = Vector3(0.004, 0.025, 0.012)
+
+[sub_resource type="BoxMesh" id="BoxMesh_1trqn"]
+size = Vector3(0.004, 0.08, 0.004)
+
+[sub_resource type="BoxMesh" id="BoxMesh_8sqon"]
+size = Vector3(0.02, 0.06, 0.02)
+
+[sub_resource type="BoxMesh" id="BoxMesh_yslux"]
+size = Vector3(0.004, 0.025, 0.012)
+
+[node name="LureLine" type="Node3D" unique_id=808337757]
+
+[node name="Line" type="MeshInstance3D" parent="." unique_id=787744115]
+material_override = ExtResource("1_hk6kx")
+mesh = SubResource("BoxMesh_pyue0")
+
+[node name="Lure1" type="Node3D" parent="." unique_id=175936603]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.6, 0, 0)
+script = ExtResource("2_trycb")
+swing_degrees = 5.0
+period = 3.0
+
+[node name="String" type="MeshInstance3D" parent="Lure1" unique_id=869262028]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.04, 0)
+material_override = ExtResource("3_8xsc4")
+mesh = SubResource("BoxMesh_lu6r8")
+
+[node name="Body" type="MeshInstance3D" parent="Lure1" unique_id=842055139]
+transform = Transform3D(0.70710677, 0, 0.70710677, 0, 1, 0, -0.70710677, 0, 0.70710677, 0, -0.13, 0)
+material_override = ExtResource("4_twdyy")
+mesh = SubResource("BoxMesh_hu3qc")
+
+[node name="Hook" type="MeshInstance3D" parent="Lure1" unique_id=635917129]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.17, 0.005)
+material_override = ExtResource("5_nok18")
+mesh = SubResource("BoxMesh_p152b")
+
+[node name="Lure2" type="Node3D" parent="." unique_id=1725679682]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.3, 0, 0)
+script = ExtResource("2_trycb")
+swing_degrees = 5.0
+period = 3.37
+phase = 0.23
+
+[node name="String" type="MeshInstance3D" parent="Lure2" unique_id=2092698652]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.06, 0)
+material_override = ExtResource("3_8xsc4")
+mesh = SubResource("BoxMesh_n58p1")
+
+[node name="Body" type="MeshInstance3D" parent="Lure2" unique_id=111554279]
+transform = Transform3D(0.70710677, 0, 0.70710677, 0, 1, 0, -0.70710677, 0, 0.70710677, 0, -0.17, 0)
+material_override = ExtResource("6_7axig")
+mesh = SubResource("BoxMesh_xwhqm")
+
+[node name="Hook" type="MeshInstance3D" parent="Lure2" unique_id=2094961490]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.21, 0.005)
+material_override = ExtResource("5_nok18")
+mesh = SubResource("BoxMesh_l5x2x")
+
+[node name="Lure3" type="Node3D" parent="." unique_id=1090974370]
+script = ExtResource("2_trycb")
+swing_degrees = 5.0
+period = 3.74
+phase = 0.46
+
+[node name="String" type="MeshInstance3D" parent="Lure3" unique_id=1208892108]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.04, 0)
+material_override = ExtResource("3_8xsc4")
+mesh = SubResource("BoxMesh_lyxe8")
+
+[node name="Body" type="MeshInstance3D" parent="Lure3" unique_id=1477503024]
+transform = Transform3D(0.70710677, 0, 0.70710677, 0, 1, 0, -0.70710677, 0, 0.70710677, 0, -0.13, 0)
+material_override = ExtResource("7_0fckf")
+mesh = SubResource("BoxMesh_tkuid")
+
+[node name="Hook" type="MeshInstance3D" parent="Lure3" unique_id=1924702833]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.17, 0.005)
+material_override = ExtResource("5_nok18")
+mesh = SubResource("BoxMesh_jwejx")
+
+[node name="Lure4" type="Node3D" parent="." unique_id=1366971768]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.3, 0, 0)
+script = ExtResource("2_trycb")
+swing_degrees = 5.0
+period = 4.109999999999999
+phase = 0.6900000000000001
+
+[node name="String" type="MeshInstance3D" parent="Lure4" unique_id=1776730828]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.06, 0)
+material_override = ExtResource("3_8xsc4")
+mesh = SubResource("BoxMesh_xxb3x")
+
+[node name="Body" type="MeshInstance3D" parent="Lure4" unique_id=1929214358]
+transform = Transform3D(0.70710677, 0, 0.70710677, 0, 1, 0, -0.70710677, 0, 0.70710677, 0, -0.17, 0)
+material_override = ExtResource("8_7olmd")
+mesh = SubResource("BoxMesh_6bnx8")
+
+[node name="Hook" type="MeshInstance3D" parent="Lure4" unique_id=1379126645]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.21, 0.005)
+material_override = ExtResource("5_nok18")
+mesh = SubResource("BoxMesh_27mx8")
+
+[node name="Lure5" type="Node3D" parent="." unique_id=1992029156]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.6, 0, 0)
+script = ExtResource("2_trycb")
+swing_degrees = 5.0
+period = 4.48
+phase = 0.92
+
+[node name="String" type="MeshInstance3D" parent="Lure5" unique_id=306174545]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.04, 0)
+material_override = ExtResource("3_8xsc4")
+mesh = SubResource("BoxMesh_1trqn")
+
+[node name="Body" type="MeshInstance3D" parent="Lure5" unique_id=1832604406]
+transform = Transform3D(0.70710677, 0, 0.70710677, 0, 1, 0, -0.70710677, 0, 0.70710677, 0, -0.13, 0)
+material_override = ExtResource("3_8xsc4")
+mesh = SubResource("BoxMesh_8sqon")
+
+[node name="Hook" type="MeshInstance3D" parent="Lure5" unique_id=412449657]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.17, 0.005)
+material_override = ExtResource("5_nok18")
+mesh = SubResource("BoxMesh_yslux")

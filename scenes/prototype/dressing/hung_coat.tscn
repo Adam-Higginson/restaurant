@@ -1,0 +1,95 @@
+[gd_scene format=3 uid="uid://2ilwmdqiebwf"]
+
+[ext_resource type="Material" path="res://assets/placeholder/materials/iron.tres" id="1_o3l1n"]
+[ext_resource type="Material" path="res://assets/placeholder/materials/navy_wool.tres" id="2_6ytw7"]
+[ext_resource type="Material" path="res://assets/placeholder/materials/brass.tres" id="3_ym86r"]
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_27s7e"]
+top_radius = 0.018
+bottom_radius = 0.018
+height = 0.1
+radial_segments = 6
+rings = 1
+
+[sub_resource type="BoxMesh" id="BoxMesh_8evro"]
+size = Vector3(0.24, 0.08, 0.1)
+
+[sub_resource type="BoxMesh" id="BoxMesh_8jyl7"]
+size = Vector3(0.38, 0.5, 0.1)
+
+[sub_resource type="BoxMesh" id="BoxMesh_qmwie"]
+size = Vector3(0.44, 0.38, 0.1)
+
+[sub_resource type="BoxMesh" id="BoxMesh_h4iyv"]
+size = Vector3(0.09, 0.56, 0.09)
+
+[sub_resource type="BoxMesh" id="BoxMesh_y25su"]
+size = Vector3(0.09, 0.56, 0.09)
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_sassg"]
+top_radius = 0.016
+bottom_radius = 0.016
+height = 0.01
+radial_segments = 6
+rings = 1
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_8hjce"]
+top_radius = 0.016
+bottom_radius = 0.016
+height = 0.01
+radial_segments = 6
+rings = 1
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_7yjvq"]
+top_radius = 0.016
+bottom_radius = 0.016
+height = 0.01
+radial_segments = 6
+rings = 1
+
+[node name="HungCoat" type="Node3D" unique_id=3795553]
+
+[node name="Peg" type="MeshInstance3D" parent="." unique_id=101868241]
+transform = Transform3D(1, 0, 0, 0, -4.371139e-08, -1, 0, 1, -4.371139e-08, 0, 0, 0.05)
+material_override = ExtResource("1_o3l1n")
+mesh = SubResource("CylinderMesh_27s7e")
+
+[node name="Collar" type="MeshInstance3D" parent="." unique_id=1323951779]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.04, 0.08)
+material_override = ExtResource("2_6ytw7")
+mesh = SubResource("BoxMesh_8evro")
+
+[node name="Body" type="MeshInstance3D" parent="." unique_id=418467090]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.32, 0.08)
+material_override = ExtResource("2_6ytw7")
+mesh = SubResource("BoxMesh_8jyl7")
+
+[node name="Skirt" type="MeshInstance3D" parent="." unique_id=1101325586]
+transform = Transform3D(1, 0, 0, 0, 0.9986295, 0.05233596, 0, -0.05233596, 0.9986295, 0, -0.74, 0.085)
+material_override = ExtResource("2_6ytw7")
+mesh = SubResource("BoxMesh_qmwie")
+
+[node name="SleeveL" type="MeshInstance3D" parent="." unique_id=1653621029]
+transform = Transform3D(0.9975641, 0.06975647, 0, -0.06975647, 0.9975641, 0, 0, 0, 1, -0.22, -0.36, 0.09)
+material_override = ExtResource("2_6ytw7")
+mesh = SubResource("BoxMesh_h4iyv")
+
+[node name="SleeveR" type="MeshInstance3D" parent="." unique_id=901878713]
+transform = Transform3D(0.9975641, -0.06975647, 0, 0.06975647, 0.9975641, 0, 0, 0, 1, 0.22, -0.36, 0.09)
+material_override = ExtResource("2_6ytw7")
+mesh = SubResource("BoxMesh_y25su")
+
+[node name="Button1" type="MeshInstance3D" parent="." unique_id=35103997]
+transform = Transform3D(1, 0, 0, 0, -4.371139e-08, -1, 0, 1, -4.371139e-08, 0.03, -0.2, 0.135)
+material_override = ExtResource("3_ym86r")
+mesh = SubResource("CylinderMesh_sassg")
+
+[node name="Button2" type="MeshInstance3D" parent="." unique_id=307747499]
+transform = Transform3D(1, 0, 0, 0, -4.371139e-08, -1, 0, 1, -4.371139e-08, 0.03, -0.36, 0.135)
+material_override = ExtResource("3_ym86r")
+mesh = SubResource("CylinderMesh_8hjce")
+
+[node name="Button3" type="MeshInstance3D" parent="." unique_id=1734575032]
+transform = Transform3D(1, 0, 0, 0, -4.371139e-08, -1, 0, 1, -4.371139e-08, 0.03, -0.52, 0.135)
+material_override = ExtResource("3_ym86r")
+mesh = SubResource("CylinderMesh_7yjvq")

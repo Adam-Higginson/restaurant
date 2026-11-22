@@ -20,7 +20,8 @@
 [ext_resource type="PackedScene" path="res://scenes/prototype/props/galley_stove.tscn" id="18_stove"]
 [ext_resource type="PackedScene" path="res://scenes/prototype/props/crew_table.tscn" id="19_table"]
 [ext_resource type="PackedScene" path="res://scenes/prototype/dressing/open_door.tscn" id="20_42wly"]
-[ext_resource type="Material" path="res://assets/placeholder/materials/red_cloth.tres" id="21_wb018"]
+[ext_resource type="Material" path="res://assets/placeholder/materials/braided_rug.tres" id="21_hn0g1"]
+[ext_resource type="Material" path="res://assets/placeholder/materials/rag_runner.tres" id="22_hn0g1"]
 [ext_resource type="PackedScene" path="res://scenes/prototype/props/lantern.tscn" id="23_lantern"]
 [ext_resource type="PackedScene" path="res://scenes/prototype/props/porthole.tscn" id="24_porthole"]
 [ext_resource type="PackedScene" path="res://scenes/prototype/props/barrel.tscn" id="25_barrel"]
@@ -86,6 +87,23 @@
 [ext_resource type="PackedScene" path="res://scenes/prototype/dressing/pressed_flower.tscn" id="83_xvtya"]
 [ext_resource type="PackedScene" path="res://scenes/prototype/dressing/sheepskin.tscn" id="84_03mpn"]
 [ext_resource type="PackedScene" path="res://scenes/prototype/dressing/folded_blankets.tscn" id="85_kgj3w"]
+[ext_resource type="PackedScene" path="res://scenes/prototype/dressing/navigator_things.tscn" id="88_1bt7x"]
+[ext_resource type="PackedScene" path="res://scenes/prototype/dressing/pinned_map.tscn" id="89_g41xf"]
+[ext_resource type="PackedScene" path="res://scenes/prototype/dressing/lure_line.tscn" id="90_03byx"]
+[ext_resource type="PackedScene" path="res://scenes/prototype/dressing/travel_bags.tscn" id="91_xpcgn"]
+[ext_resource type="PackedScene" path="res://scenes/prototype/dressing/half_read_book.tscn" id="92_ppwwk"]
+[ext_resource type="PackedScene" path="res://scenes/prototype/dressing/keepsakes.tscn" id="93_a6oxs"]
+[ext_resource type="PackedScene" path="res://scenes/prototype/dressing/draped_shirt.tscn" id="94_t8n68"]
+[ext_resource type="PackedScene" path="res://scenes/prototype/dressing/hung_coat.tscn" id="95_5640u"]
+[ext_resource type="PackedScene" path="res://scenes/prototype/props/chest_of_drawers.tscn" id="96_3t2l2"]
+[ext_resource type="PackedScene" path="res://scenes/prototype/props/coat_rack.tscn" id="97_mg3c3"]
+[ext_resource type="PackedScene" path="res://scenes/prototype/dressing/hanging_net.tscn" id="98_kqcv6"]
+[ext_resource type="PackedScene" path="res://scenes/prototype/props/box_stack.tscn" id="99_yrujx"]
+[ext_resource type="PackedScene" path="res://scenes/prototype/dressing/rope_coil.tscn" id="100_crers"]
+[ext_resource type="PackedScene" path="res://scenes/prototype/props/round_table.tscn" id="101_wor5e"]
+[ext_resource type="PackedScene" path="res://scenes/prototype/dressing/cushions.tscn" id="102_gpim1"]
+[ext_resource type="PackedScene" path="res://scenes/prototype/dressing/accordion.tscn" id="103_s5b5q"]
+[ext_resource type="PackedScene" path="res://scenes/prototype/dressing/copper_pot.tscn" id="104_m27ys"]
 
 [sub_resource type="BoxMesh" id="Mesh_Hull"]
 size = Vector3(12, 2.5, 30)
@@ -386,7 +404,7 @@ size = Vector3(9.06, 0.3, 0.28)
 size = Vector3(9.06, 0.3, 0.28)
 
 [sub_resource type="PlaneMesh" id="PlaneMesh_2b58a"]
-size = Vector2(3.4, 3)
+size = Vector2(3.3, 2.7)
 
 [sub_resource type="BoxMesh" id="BoxMesh_xvtya"]
 size = Vector3(1.6, 0.05, 0.3)
@@ -787,7 +805,7 @@ phase = 0.35
 
 [node name="BunkLantern" parent="Visuals" unique_id=563678933 instance=ExtResource("23_lantern")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2, 3.7, 10.7)
-light_energy = 0.95
+light_energy = 0.75
 light_range = 4.2
 swing_degrees = 3.0
 period = 4.2
@@ -1133,15 +1151,21 @@ material_override = ExtResource("28_darkwood")
 mesh = SubResource("BoxMesh_j4fk0")
 
 [node name="BunkRug" type="MeshInstance3D" parent="Visuals" unique_id=2131719522]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.5, 1.024, 11.75)
-material_override = ExtResource("11_jqluk")
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.55, 1.024, 11.8)
+material_override = ExtResource("21_hn0g1")
 mesh = SubResource("PlaneMesh_2b58a")
 
 [node name="PortholeSternPort" parent="Visuals" unique_id=724771063 instance=ExtResource("24_porthole")]
 transform = Transform3D(1.2, 0, 0, 0, 1.2, 0, 0, 0, 1.2, -1.6, 2.6, 14.7)
 
+[node name="Moonlight" parent="Visuals/PortholeSternPort" index="14"]
+light_energy = 4.3
+
 [node name="PortholeSternStarboard" parent="Visuals" unique_id=34770125 instance=ExtResource("24_porthole")]
 transform = Transform3D(1.2, 0, 0, 0, 1.2, 0, 0, 0, 1.2, 1.6, 2.6, 14.7)
+
+[node name="Moonlight" parent="Visuals/PortholeSternStarboard" index="14"]
+light_energy = 4.3
 
 [node name="SternShelf" type="MeshInstance3D" parent="Visuals" unique_id=462394048]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.2, 14.55)
@@ -1179,7 +1203,7 @@ box_projection = true
 interior = true
 ambient_mode = 2
 ambient_color = Color(0.3, 0.19, 0.12, 1)
-ambient_color_energy = 0.22
+ambient_color_energy = 0.3
 
 [node name="BunkCeiling" type="MeshInstance3D" parent="Visuals" unique_id=1588990463]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 4.05, 11.85)
@@ -1218,7 +1242,7 @@ mesh = SubResource("BoxMesh_hn0g1")
 
 [node name="BunkRunner" type="MeshInstance3D" parent="Visuals" unique_id=1018821072]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.7, 1.022, 9.35)
-material_override = ExtResource("21_wb018")
+material_override = ExtResource("22_hn0g1")
 mesh = SubResource("PlaneMesh_1bt7x")
 
 [node name="PartitionShelf" type="MeshInstance3D" parent="Visuals" unique_id=1606085955]
@@ -1569,8 +1593,8 @@ shape = SubResource("BoxShape3D_bbi6x")
 transform = Transform3D(-4.371139e-08, 0, -1, 0, 1, 0, 1, 0, -4.371139e-08, 5.7, 1, 9.05)
 lower_quilt = ExtResource("58_alpw3")
 upper_quilt = ExtResource("59_dlopa")
+lower_bedding = 1
 curtain_cloth = ExtResource("60_q7k3o")
-upper_curtains_closed = true
 lamp_lit = true
 upper_lamp_lit = true
 
@@ -1578,7 +1602,9 @@ upper_lamp_lit = true
 transform = Transform3D(-4.371139e-08, 0, -1, 0, 1, 0, 1, 0, -4.371139e-08, 5.7, 1, 11.25)
 lower_quilt = ExtResource("60_f3yei")
 upper_quilt = ExtResource("58_alpw3")
+lower_bedding = 1
 curtain_cloth = ExtResource("62_wb018")
+lamp_lit = true
 upper_lamp_lit = true
 
 [node name="YourBunk" parent="BunkRoom" unique_id=637154212 instance=ExtResource("57_1yecb")]
@@ -1592,8 +1618,10 @@ lamp_lit = true
 transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, -5.7, 1, 10.6)
 lower_quilt = ExtResource("59_dlopa")
 upper_quilt = ExtResource("60_f3yei")
+lower_bedding = 1
+upper_bedding = 1
 curtain_cloth = ExtResource("64_lpcyg")
-lower_curtains_closed = true
+upper_curtains_closed = true
 lamp_lit = true
 upper_lamp_lit = true
 
@@ -1601,8 +1629,10 @@ upper_lamp_lit = true
 transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, -5.7, 1, 12.8)
 lower_quilt = ExtResource("58_alpw3")
 upper_quilt = ExtResource("59_dlopa")
+lower_bedding = 1
 curtain_cloth = ExtResource("62_wb018")
 lower_curtains_closed = true
+upper_lamp_lit = true
 
 [node name="HammockPort" parent="BunkRoom" unique_id=1923203812 instance=ExtResource("62_f40ia")]
 transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, -2.6, 3.7, 14)
@@ -1611,7 +1641,7 @@ transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, -2.6
 transform = Transform3D(-4.371139e-08, 0, -1, 0, 1, 0, 1, 0, -4.371139e-08, 2.6, 3.7, 14)
 
 [node name="Crate1" parent="BunkRoom" unique_id=228142780 instance=ExtResource("64_578ro")]
-transform = Transform3D(0.9781475, 0, 0.20791167, 0, 1, 0, -0.20791167, 0, 0.9781475, -1.05, 1, 11.2)
+transform = Transform3D(0.9945218, 0, 0.10452845, 0, 1, 0, -0.10452845, 0, 0.9945218, 3.45, 1, 8.2)
 
 [node name="Crate2" parent="BunkRoom" unique_id=1770081867 instance=ExtResource("64_578ro")]
 transform = Transform3D(0.9902679, 0, -0.13917308, 0, 1, 0, 0.13917308, 0, 0.9902679, 4.1, 1, 8.3)
@@ -1632,28 +1662,28 @@ transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, -0.4
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.35, 2.225, 14.55)
 
 [node name="SeaChest2" parent="BunkRoom" unique_id=559302274 instance=ExtResource("65_53i4f")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3, 1, 14.3)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3.05, 1, 14.3)
 
 [node name="SeaChest3" parent="BunkRoom" unique_id=924273532 instance=ExtResource("65_53i4f")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3, 1, 14.3)
 
 [node name="Fiddle" parent="BunkRoom" unique_id=1055618255 instance=ExtResource("67_dwq2y")]
-transform = Transform3D(0.34202015, 0, -0.9396926, 0, 1, 0, 0.9396926, 0, 0.34202015, 5.1, 1.63, 9.3)
+transform = Transform3D(0.34202015, 0, -0.9396926, 0, 1, 0, 0.9396926, 0, 0.34202015, 5.15, 1.64, 8.85)
 
 [node name="Sketchbook" parent="BunkRoom" unique_id=1682722775 instance=ExtResource("68_dcd13")]
-transform = Transform3D(-0.17364818, 0, -0.98480767, 0, 1, 0, 0.98480767, 0, -0.17364818, 5.05, 1.63, 11.6)
+transform = Transform3D(-0.17364815, 0, -0.9848075, 0, 1, 0, 0.9848075, 0, -0.17364815, 5.1, 1.64, 10.95)
 
 [node name="FishingTackle" parent="BunkRoom" unique_id=1056964099 instance=ExtResource("69_q7k3o")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5.15, 2.92, 11.3)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4.92, 2.975, 11.35)
 
 [node name="KitBag" parent="BunkRoom" unique_id=2012068729 instance=ExtResource("70_wb018")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5.2, 2.92, 13.9)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5.2, 2.975, 13.9)
 
 [node name="BunkBooks" parent="BunkRoom" unique_id=52628745 instance=ExtResource("66_s26w3")]
-transform = Transform3D(0.7660444, 0, 0.6427875, 0, 1, 0, -0.6427875, 0, 0.7660444, -5.1, 2.92, 10)
+transform = Transform3D(0.76604426, 0, 0.6427874, 0, 1, 0, -0.6427874, 0, 0.76604426, -5.2, 1.64, 11)
 
 [node name="YourThings" parent="BunkRoom" unique_id=1530363745 instance=ExtResource("71_lpcyg")]
-transform = Transform3D(-4.371139e-08, 0, -1, 0, 1, 0, 1, 0, -4.371139e-08, 4.95, 1.63, 13.05)
+transform = Transform3D(-4.371139e-08, 0, -1, 0, 1, 0, 1, 0, -4.371139e-08, 4.95, 1.68, 13.05)
 
 [node name="SockLine" parent="BunkRoom" unique_id=281545127 instance=ExtResource("72_wwen8")]
 transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, 1.6, 3.69, 11.55)
@@ -1679,13 +1709,13 @@ transform = Transform3D(0.93969256, 0, 0.3420201, 0, 1, 0, -0.3420201, 0, 0.9396
 transform = Transform3D(0.98480767, 0, -0.17364816, 0, 1, 0, 0.17364816, 0, 0.98480767, 1.55, 1, 12.6)
 
 [node name="NookCandle" parent="BunkRoom" unique_id=1599568112 instance=ExtResource("78_m4wtu")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.2, 1.6, 11.05)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.15, 1.575, 11.05)
 
 [node name="PlayingCards" parent="BunkRoom" unique_id=1616050962 instance=ExtResource("79_0hebc")]
-transform = Transform3D(0.93969256, 0, 0.3420201, 0, 1, 0, -0.3420201, 0, 0.93969256, -1, 1.6, 11.25)
+transform = Transform3D(0.93969256, 0, 0.3420201, 0, 1, 0, -0.3420201, 0, 0.93969256, -0.95, 1.575, 11.3)
 
 [node name="NookMug" parent="BunkRoom" unique_id=1608033833 instance=ExtResource("50_mug")]
-transform = Transform3D(0.49999997, 0, 0.86602545, 0, 1, 0, -0.86602545, 0, 0.49999997, -0.85, 1.6, 11)
+transform = Transform3D(0.49999997, 0, 0.86602545, 0, 1, 0, -0.86602545, 0, 0.49999997, -0.75, 1.575, 11.05)
 
 [node name="YarnBasket" parent="BunkRoom" unique_id=846965033 instance=ExtResource("80_e2kx3")]
 transform = Transform3D(0.8660254, 0, 0.5, 0, 1, 0, -0.5, 0, 0.8660254, -0.75, 1, 12.95)
@@ -1715,7 +1745,7 @@ transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, -5.6
 transform = Transform3D(0.990268, 0, 0.13917309, 0, 1, 0, -0.13917309, 0, 0.990268, 4.15, 1.004, 13.45)
 
 [node name="FoldedBlankets" parent="BunkRoom" unique_id=339562853 instance=ExtResource("85_kgj3w")]
-transform = Transform3D(0.9975641, 0, 0.06975647, 0, 1, 0, -0.06975647, 0, 0.9975641, -3, 1.56, 14.3)
+transform = Transform3D(0.9975641, 0, 0.06975647, 0, 1, 0, -0.06975647, 0, 0.9975641, -3.05, 1.56, 14.3)
 
 [node name="BunkCoatHooks" parent="BunkRoom" unique_id=986047007 instance=ExtResource("48_p2e1w")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.3, 3, 7.9)
@@ -1731,6 +1761,84 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.68, 2.225, 14.6)
 
 [node name="SternCandle2" parent="BunkRoom" unique_id=1834902539 instance=ExtResource("78_m4wtu")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.7, 2.225, 14.6)
+
+[node name="NavigatorThings" parent="BunkRoom" unique_id=476225832 instance=ExtResource("88_1bt7x")]
+transform = Transform3D(0.17364821, 0, -0.9848076, 0, 1, 0, 0.9848076, 0, 0.17364821, 5.2, 2.975, 9.25)
+
+[node name="NavigatorMap" parent="BunkRoom" unique_id=851025564 instance=ExtResource("89_g41xf")]
+transform = Transform3D(-4.371139e-08, 0, -1, 0, 1, 0, 1, 0, -4.371139e-08, 5.69, 3.42, 9.6)
+
+[node name="ArtistPin1" parent="BunkRoom" unique_id=49687037 instance=ExtResource("81_j4fk0")]
+transform = Transform3D(-4.371139e-08, 0, -1, 0, 1, 0, 1, 0, -4.371139e-08, 5.69, 2.12, 11.75)
+
+[node name="ArtistPin2" parent="BunkRoom" unique_id=1383869948 instance=ExtResource("81_j4fk0")]
+transform = Transform3D(-4.371139e-08, 0, -1, 0, 1, 0, 1, 0, -4.371139e-08, 5.69, 2.24, 12.05)
+
+[node name="LureLine" parent="BunkRoom" unique_id=1275565973 instance=ExtResource("90_03byx")]
+transform = Transform3D(-4.371139e-08, 0, -1, 0, 1, 0, 1, 0, -4.371139e-08, 5.62, 3.62, 11.25)
+
+[node name="SpareBags" parent="BunkRoom" unique_id=1061909044 instance=ExtResource("91_xpcgn")]
+transform = Transform3D(0.17364821, 0, -0.9848076, 0, 1, 0, 0.9848076, 0, 0.17364821, 5.2, 2.975, 13.2)
+
+[node name="HalfReadBook" parent="BunkRoom" unique_id=230768967 instance=ExtResource("92_ppwwk")]
+transform = Transform3D(0.8660254, 0, 0.5, 0, 1, 0, -0.5, 0, 0.8660254, -4.98, 1.64, 10.78)
+
+[node name="CollectorKeepsakes" parent="BunkRoom" unique_id=1416618971 instance=ExtResource("93_a6oxs")]
+transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, -5.2, 2.975, 12.45)
+
+[node name="DrapedShirt" parent="BunkRoom" unique_id=880653101 instance=ExtResource("94_t8n68")]
+transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, -4.63, 2.2, 9.9)
+
+[node name="BosunCoat" parent="BunkRoom" unique_id=982154316 instance=ExtResource("95_5640u")]
+transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, -4.68, 3.15, 13.79)
+
+[node name="Boots3" parent="BunkRoom" unique_id=1070198248 instance=ExtResource("73_m4wtu")]
+transform = Transform3D(0.0435779, -0.49809733, -0.86602545, 0.9961947, 0.087155804, 0, 0.07547914, -0.86272997, 0.49999997, 4.5, 1.06, 11.95)
+
+[node name="Boots4" parent="BunkRoom" unique_id=2142317016 instance=ExtResource("73_m4wtu")]
+transform = Transform3D(0.17364821, 0, 0.9848076, 0, 1, 0, -0.9848076, 0, 0.17364821, -4.45, 1, 10.25)
+
+[node name="ChestOfDrawers" parent="BunkRoom" unique_id=581257953 instance=ExtResource("96_3t2l2")]
+transform = Transform3D(-1, 0, -8.742278e-08, 0, 1, 0, 8.742278e-08, 0, -1, -4.05, 1, 14.47)
+
+[node name="DrawerKeepsakes" parent="BunkRoom" unique_id=1205282703 instance=ExtResource("93_a6oxs")]
+transform = Transform3D(-1, 0, -8.742278e-08, 0, 1, 0, 8.742278e-08, 0, -1, -4, 2.025, 14.5)
+
+[node name="SternMap" parent="BunkRoom" unique_id=1630253388 instance=ExtResource("89_g41xf")]
+transform = Transform3D(-1, 0, -8.742278e-08, 0, 1, 0, 8.742278e-08, 0, -1, -4.05, 2.62, 14.69)
+
+[node name="CoatRack" parent="BunkRoom" unique_id=519279124 instance=ExtResource("97_mg3c3")]
+transform = Transform3D(-0.9396926, 0, -0.34202015, 0, 1, 0, 0.34202015, 0, -0.9396926, -2.25, 1, 14.38)
+
+[node name="HangingNet" parent="BunkRoom" unique_id=1486193487 instance=ExtResource("98_kqcv6")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3.6, 3.7, 12.4)
+
+[node name="LockerBags" parent="BunkRoom" unique_id=866319073 instance=ExtResource("91_xpcgn")]
+transform = Transform3D(-0.17364818, 0, 0.9848076, 0, 1, 0, -0.9848076, 0, -0.17364818, -5.2, 3.4, 14.35)
+
+[node name="BoxStack" parent="BunkRoom" unique_id=1946040101 instance=ExtResource("99_yrujx")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.75, 1, 8.12)
+
+[node name="RopeCoil" parent="BunkRoom" unique_id=580482803 instance=ExtResource("100_crers")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.95, 2.75, 7.9)
+
+[node name="RoundTable" parent="BunkRoom" unique_id=944516352 instance=ExtResource("101_wor5e")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1, 1, 11.2)
+
+[node name="NookMug2" parent="BunkRoom" unique_id=1777232281 instance=ExtResource("50_mug")]
+transform = Transform3D(0.8660254, 0, -0.5, 0, 1, 0, 0.5, 0, 0.8660254, -1.25, 1.575, 11.4)
+
+[node name="Cushions" parent="BunkRoom" unique_id=59444267 instance=ExtResource("102_gpim1")]
+transform = Transform3D(0.6156615, 0, -0.7880107, 0, 1, 0, 0.7880107, 0, 0.6156615, -0.25, 1.565, 12.4)
+
+[node name="Accordion" parent="BunkRoom" unique_id=1699840431 instance=ExtResource("103_s5b5q")]
+transform = Transform3D(0.8660254, 0, -0.5, 0, 1, 0, 0.5, 0, 0.8660254, 1.55, 1.5, 12.6)
+
+[node name="CopperPot" parent="BunkRoom" unique_id=446833367 instance=ExtResource("104_m27ys")]
+transform = Transform3D(0.93969256, 0, 0.3420201, 0, 1, 0, -0.3420201, 0, 0.93969256, 1.1, 1.06, 11.45)
+
+[node name="DrawerCandle" parent="BunkRoom" unique_id=1383662254 instance=ExtResource("78_m4wtu")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4.45, 2.025, 14.5)
 
 [node name="LockerShape" type="CollisionShape3D" parent="." unique_id=326152585]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -5.2, 2.2, 14.35)
@@ -1791,3 +1899,6 @@ shape = SubResource("BoxShape3D_kgj3w")
 [node name="BunkHeaderStarboardShape" type="CollisionShape3D" parent="." unique_id=827518501]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4.6, 3.85, 11.29)
 shape = SubResource("BoxShape3D_absnv")
+
+[editable path="Visuals/PortholeSternPort"]
+[editable path="Visuals/PortholeSternStarboard"]
