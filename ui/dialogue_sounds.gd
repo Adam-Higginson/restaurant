@@ -32,11 +32,13 @@ const BLIP_SECONDS: float = 0.045
 var voice_pitch: float = 1.0
 
 var _letters: int = 0
-var _blip: AudioStreamPlayer = AudioStreamPlayer.new()
-var _click: AudioStreamPlayer = AudioStreamPlayer.new()
+var _blip: AudioStreamPlayer = null
+var _click: AudioStreamPlayer = null
 
 
 func _ready() -> void:
+	_blip = AudioStreamPlayer.new()
+	_click = AudioStreamPlayer.new()
 	_blip.stream = make_blip()
 	_blip.volume_db = blip_db
 	add_child(_blip)
@@ -64,6 +66,8 @@ func on_letter(letter: String) -> bool:
 	_letters += 1
 	if (_letters - 1) % maxi(letters_per_blip, 1) != 0:
 		return false
+	if _blip == null:
+		return true
 	_blip.pitch_scale = maxf(voice_pitch * randf_range(1.0 - pitch_wander, 1.0 + pitch_wander),
 			0.05)
 	_blip.play()
@@ -88,5 +92,7 @@ static func make_blip() -> AudioStreamWAV:
 
 
 func _play(sound: AudioStream) -> void:
+	if _click == null:
+		return
 	_click.stream = sound
 	_click.play()

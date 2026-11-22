@@ -155,6 +155,30 @@ static func first_shown_for(chosen: int, first: int, count: int) -> int:
 	return first
 
 
+## The whole of the line showing, without its markup.
+func line_text() -> String:
+	return _text.get_parsed_text()
+
+
+## As much of the line as has typed out so far.
+func shown_text() -> String:
+	var words: String = _text.get_parsed_text()
+	return words if _text.visible_characters < 0 else words.left(_text.visible_characters)
+
+
+## The name on the plate, or "" for a narrator.
+func speaker_name() -> String:
+	return _name.text if _name.visible else ""
+
+
+## The choices in view, top to bottom.
+func shown_choices() -> PackedStringArray:
+	var texts: PackedStringArray = PackedStringArray()
+	for child: Node in _choices.get_children():
+		texts.append((child as Label).text)
+	return texts
+
+
 ## Whether a line is still typing out.
 func is_typing() -> bool:
 	return _typing

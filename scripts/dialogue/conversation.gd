@@ -90,11 +90,15 @@ static func find(from: Node) -> Conversation:
 func begin(tree_id: StringName, player: Player3D, speaker: Crewmate = null) -> bool:
 	if _active:
 		return false
-	var tree: DialogueTree = DialogueLibrary.find(tree_id)
-	if tree == null or not tree.has_section(DialogueTree.START):
+	return begin_tree(DialogueLibrary.find(tree_id), player, speaker)
+
+
+## Starts [param tree], a conversation already read (see [method begin]).
+func begin_tree(tree: DialogueTree, player: Player3D, speaker: Crewmate = null) -> bool:
+	if _active or tree == null or not tree.has_section(DialogueTree.START):
 		return false
 	_active = true
-	_tree_id = tree_id
+	_tree_id = tree.id
 	_player = player
 	_speaker = speaker
 	if is_instance_valid(player):
@@ -102,7 +106,7 @@ func begin(tree_id: StringName, player: Player3D, speaker: Crewmate = null) -> b
 		if is_instance_valid(speaker):
 			player.face_towards(speaker.global_position)
 			speaker.face_towards(player.global_position)
-	started.emit(tree_id)
+	started.emit(_tree_id)
 	_runner.start(tree, Game.dialogue)
 	return true
 

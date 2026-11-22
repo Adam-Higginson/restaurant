@@ -110,3 +110,33 @@ func test_starting_again_carries_on_the_voyage() -> void:
 	var spirit: LanternSpirit = player.get_node("LanternSpirit") as LanternSpirit
 	assert_float(spirit.warmth).is_less(0.6)
 	assert_bool(spirit.saying() in LanternLines.WELCOME_BACK).is_true()
+
+
+func test_what_conversations_remember_is_saved_and_comes_back() -> void:
+	var state: DialogueState = DialogueState.new()
+	state.set_flag(&"met_heron")
+	state.add(&"talked.heron", 3)
+	var book: MemoryBook = MemoryBook.new(Catalog.load_default().memories)
+
+	assert_bool(SaveGame.write(SaveGame.capture(book, null, 1.0, state))).is_true()
+	var other: DialogueState = DialogueState.new()
+	other.set_flag(&"stale")
+	SaveGame.restore(SaveGame.read(), book, null, null, other)
+
+	assert_bool(other.is_set(&"met_heron")).is_true()
+	assert_int(other.value(&"talked.heron")).is_equal(3)
+	assert_bool(other.is_set(&"stale")).is_false()
+
+
+func test_a_save_from_before_conversations_still_loads() -> void:
+	var book: MemoryBook = MemoryBook.new(Catalog.load_default().memories)
+	var old: Dictionary = SaveGame.capture(book, null, 0.7)
+	old.erase("flags")
+	assert_bool(SaveGame.write(old)).is_true()
+	var state: DialogueState = DialogueState.new()
+
+	var data: Dictionary = SaveGame.read()
+	SaveGame.restore(data, book, null, null, state)
+
+	assert_bool(data.is_empty()).is_false()
+	assert_dict(state.to_dict()).is_empty()
