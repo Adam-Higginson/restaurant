@@ -312,6 +312,22 @@ A growing glossary of the Godot concepts this project uses: what each one is, in
 
 **Single-precision angles.** Vectors store their numbers as 32-bit floats, so an angle worked out from them can come out a hair off: straight behind is pi, but in 32 bits it rounds just above the 64-bit `PI`. Compare angles with a little room, or special-case the edges. *Ours:* `Duellist.in_reach` treats an arc of 360 degrees as reaching everything, or the fillet missed a crab directly behind.
 
+## Hunting crabs (#109)
+
+**`Label3D`.** Text placed in the 3D world, like a sign, rather than on the screen. It has its own font, size (`font_size` × `pixel_size` metres per pixel), colour (`modulate`) and outline. *Ours:* the "Lv 1" over each crab (`LevelLabel` in `crab.tscn`) and every `DamageNumber`.
+
+**Billboarding and `no_depth_test`.** A billboard turns to face the camera every frame, so text and sprites never show edge-on. Turning off the depth test draws it over whatever is in front of it, so a wall or the crab itself can't hide it; `render_priority` then says what's drawn on top of what. *Ours:* `DamageNumber` and the level label have both.
+
+**Nodes that free themselves.** Something short-lived (a number, a puff) can count its own time in `_process` and call `queue_free()` when it's done, so whoever made it never has to tidy up. Add it to the world, not to the thing it's about, so it stays put if that moves or is freed first. *Ours:* `DamageNumber.spawn` adds the number to the crab's parent; a dead `Crab` frees itself once it has sunk.
+
+**Static functions for formulas.** A `static func` belongs to the class, not to one node, so it can be called and tested without making a scene. Good for rules like "health from level". *Ours:* `Crab.health_for(level)` and `Crab.meat_quality_for(level)`.
+
+**Turning a body's collision off.** A `CollisionShape3D` with `disabled` on stops blocking anything, so the player walks over a dead crab. Change it with `set_deferred("disabled", true)` when it happens during physics (as a strike landing does), or Godot complains about changing shapes mid-step. A body with no shape mustn't keep moving under gravity, or it falls through the floor. *Ours:* `Crab._on_died`.
+
+**`set_deferred` and `call_deferred`.** Set a property, or call a function, at the end of the current frame instead of now: the safe way to change physics or the scene tree from inside a physics callback. *Ours:* turning off a dead crab's shape.
+
+**A scene a script loads, not preloads.** `preload` reads a file when the script is compiled; if that file is a scene using the same script, it's a loop. `load()` at the moment it's needed avoids it. *Ours:* `Pickup3D.spawn` loads `scenes/props/pickup.tscn`, whose root uses `pickup_3d.gd`.
+
 ## The intro's water half (#102)
 
 **AnimationPlayer and clips.** An `AnimationPlayer` records properties changing over time (a position, a light's brightness) as animations with keyframes, and plays them back. Select one in the editor and the Animation panel at the bottom shows its timeline: pick a clip, drag the playhead to scrub, move keys to retime. A clip can loop. *Ours:* `Clips` in `scenes/prototype/intro/underwater.tscn` (`sinking`, `lantern_descends`, `offered`, `taken`) and in `rescue_set.tscn` (`title_drift`, `dive`), played by `ClipCues` for `@play` and `@start`.

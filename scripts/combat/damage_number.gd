@@ -44,7 +44,7 @@ static func spawn(parent: Node, at: Vector3, damage: int, is_critical: bool) -> 
 func _ready() -> void:
 	text = str(amount)
 	font = FONT
-	font_size = 96 if critical else 64
+	font_size = 128 if critical else 84
 	pixel_size = 0.004
 	outline_size = 18
 	outline_modulate = Color(0.12, 0.08, 0.06, 1.0)
