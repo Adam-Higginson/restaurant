@@ -19,6 +19,9 @@ const GROUP: StringName = &"player"
 
 ## Walking speed in metres per second.
 @export var speed: float = 5.0
+## How many times faster you go while holding sprint (Shift, or clicking the
+## left stick in).
+@export var sprint_factor: float = 2.0
 ## How fast the model turns to face the way you walk, in degrees per second.
 ## Not used yet: the model turns at once.
 @export var turn_speed: float = 720.0
@@ -38,6 +41,12 @@ var controls_enabled: bool = true
 var facing: Vector3:
 	get:
 		return -_model.global_basis.z
+
+## How fast the player moves when they walk, in metres per second: their
+## [member speed], or faster while sprinting.
+var move_speed: float:
+	get:
+		return speed * sprint_factor if is_sprinting() else speed
 
 ## Whether the player walked on the last physics tick, from your input
 ## (riding the sailing ship doesn't count).
@@ -94,8 +103,8 @@ func _physics_process(delta: float) -> void:
 	if controls_enabled and not is_stumbling():
 		input = Input.get_vector("move_left", "move_right", "move_up", "move_down")
 	var direction: Vector3 = camera_relative(input, _movement_yaw(input))
-	velocity.x = direction.x * speed + _push.x
-	velocity.z = direction.z * speed + _push.z
+	velocity.x = direction.x * move_speed + _push.x
+	velocity.z = direction.z * move_speed + _push.z
 	_push = _push.move_toward(Vector3.ZERO, knockback_fade * delta)
 	if not is_on_floor():
 		velocity += get_gravity() * delta
@@ -130,6 +139,11 @@ func _unhandled_input(event: InputEvent) -> void:
 func knock_back(push: Vector3, stumble_seconds: float) -> void:
 	_push = Vector3(push.x, 0.0, push.z)
 	_stumble_left = stumble_seconds
+
+
+## Whether the player is sprinting: holding sprint while they can move.
+func is_sprinting() -> bool:
+	return controls_enabled and not is_stumbling() and Input.is_action_pressed("sprint")
 
 
 ## Whether the player is stumbling after a blow, so the stick does nothing.

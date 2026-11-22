@@ -112,7 +112,7 @@ OoT-style duels: lock on, read the enemy, strike at the opening.
 - **Enemies have rhythms:** a readable windup, an attack, then an opening. Learning a fight is like learning a recipe.
 
 **The first duel (greybox, #66).** Open `scenes/prototype/islands/duel_arena.tscn` and press F6: a patch of island with a landing and two fog-crabs, until an island can be sailed to (#67).
-- **Lock-on is held** (Shift, middle click or the left trigger). It takes the nearest fog-touched creature within 9 m and lets go when you release it, when the creature is more than 12 m away, or when its fog clears. While it's held you face the creature, so walking sideways circles it; the camera swings round behind you, a little to one side so you don't hide what you're fighting, and can't be turned; and the lantern hovers over it. With nothing in reach, the button turns the camera to look the way you face. (Hold or toggle is one setting on the player's `LockOn` node, for a settings menu later.)
+- **Lock-on is held** (Q, middle click or the left trigger). It takes the nearest fog-touched creature within 9 m and lets go when you release it, when the creature is more than 12 m away, or when its fog clears. While it's held you face the creature, so walking sideways circles it; the camera swings round behind you, a little to one side so you don't hide what you're fighting, and can't be turned; and the lantern hovers over it. With nothing in reach, the button turns the camera to look the way you face. (Hold or toggle is one setting on the player's `LockOn` node, for a settings menu later.)
 - **The knife is Use tool.** With nothing in front of you for a tool to work on, Use tool swings the knife (a quarter of a second a swing) at any fog-touched creature within 2 m in front of you. At a chopping board it still chops.
 - **The pan is Parry** (R or the right trigger), and you must be carrying a frying pan, in any toolbar slot. It goes up for 0.3 s; a hit that lands in that time is turned away with a clang and staggers the creature. Then it's down for 0.4 s, so mashing the button doesn't work, unless it parried, when it's ready again at once.
 - **Three hearts,** in the top-left corner of the HUD. A fog-crab's hit costs half a heart.
@@ -173,7 +173,8 @@ One button, **interact**, does everything with the thing in front of you.
 | Use tool | F / left click | B | Use the selected tool, or the tool that fits what you're facing (the knife chops) |
 | Select toolbar slot | 1–9, 0, -, = / scroll | Bumpers (cycle) | Choose what you hold |
 | Use tool (nothing to work on) | F / left click | B | Swing the knife |
-| Lock-on (hold) | Shift / middle click | Left trigger | Face and circle the nearest fog-touched creature; with none near, look the way you face |
+| Lock-on (hold) | Q / middle click | Left trigger | Face and circle the nearest fog-touched creature; with none near, look the way you face |
+| Sprint (hold) | Shift | Click the left stick | Go twice as fast: a jog instead of a walk |
 | Parry | R | Right trigger | Raise the frying pan for a moment, if you carry one |
 
 Each action is a named action in Godot's Input Map with keyboard and controller bound, so gameplay code never checks a specific key. Panels must be usable with the D-pad. While a panel is open the mouse cursor is freed so it can be clicked, and it's captured again when the panel closes.

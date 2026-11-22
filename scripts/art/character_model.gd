@@ -121,7 +121,7 @@ func _process(_delta: float) -> void:
 	var parrying: bool = _duellist != null and _duellist.parry.is_active()
 	play(pose_for(walking, striking, parrying))
 	# Walk in step: the walk plays as fast as the feet must go to keep up.
-	var speed: float = player.speed if player != null else 0.0
+	var speed: float = player.move_speed if player != null else 0.0
 	var stride: float = _run_stride_speed if is_running() else _stride_speed
 	_animator.speed_scale = walk_playback(speed, stride) if pose == Pose.WALK else 1.0
 
@@ -190,7 +190,7 @@ func play(next: Pose) -> void:
 ## Whether walking is quick enough to be a run (see [member run_from]), and
 ## there's a run to play.
 func is_running() -> bool:
-	return player != null and player.speed >= run_from and _run_stride_speed > 0.0
+	return player != null and player.move_speed >= run_from and _run_stride_speed > 0.0
 
 
 ## The animation played for [param of].
