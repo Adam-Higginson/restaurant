@@ -198,6 +198,8 @@ A growing glossary of the Godot concepts this project uses: what each one is, in
 
 **AudioStreamWAV made in code.** A sound is just numbers: fill a `PackedByteArray` with a wave's samples, give it to an `AudioStreamWAV`, and an `AudioStreamPlayer` plays it. `pitch_scale` then plays it higher or lower. *Ours:* the typing blip in `ui/dialogue_sounds.gd`, pitched per speaker.
 
+**Pre-render generated sounds rather than streaming them.** An `AudioStreamGenerator` lets code push samples while a sound plays, but in Godot 4.7 its playback keeps only a raw pointer to the generator. If the player (and with it the generator) is freed while the sound is still playing or fading out, the audio thread mixes with freed memory, and a garbage sample rate can trap it in a loop that hangs the whole game. When a sound can be worked out in advance, render it once into an `AudioStreamWAV` (whose playback holds a proper reference) and play that. *Ours:* `Hum.recording()` in `scripts/companion/hum.gd`, the lantern's three-note hum; this was the CI hang tracked down in Nov 2026.
+
 ## Duels (#66)
 
 **State machine.** A thing that is always in exactly one of a few named states, with rules for when it moves to the next. In GDScript it's an `enum` for the states, a variable holding the current one, and a `match` that says what each state does. It keeps "what is it doing now?" in one place instead of a tangle of flags. *Ours:* `CrabCycle` (`scripts/combat/crab_cycle.gd`): idle, windup, attack, opening, staggered, cleared.
