@@ -299,6 +299,59 @@ The game opens at night in steady rain, and Studio Ghibli's rain is the referenc
 - High resolution: no pixelated low-resolution viewport. This needs the Forward+ renderer.
 - Placeholder art is simple coloured shapes (greybox) until real models are made.
 
+## The opening as intended (not yet built)
+This is where the opening is headed. What's built so far is described under "How it begins": a plain title over the sea, the lantern arriving at full strength, and his lines on waking. The version here replaces those, piece by piece.
+
+**The ship is the Salt and Ember.** That's her name in the story as well as the game's, so the crew can say it. Salt is the sea, and you, soaked through. Ember is the lantern.
+
+### The beats
+1. **Her name.** Rain. A lantern swinging on a hook at the stern, its glow sliding along wet, weathered timber: carved letters, the gilt worn off their edges, water running in the grooves. You read the name a few letters at a time as the light passes, and lightning shows the whole board once: SALT AND EMBER. It waits for a button.
+2. **He hears something.** The lantern on the hook is the lantern spirit, keeping watch. On your press the swinging stops. He drops from the hook and over the side, and her name goes dark.
+3. **The dark.** You, sinking, with nothing warm anywhere. The player knows a light is on its way and you don't.
+4. **He's going out.** Water is bad for flames. He comes down smaller and smaller, and what reaches you is a guttering spark that can barely hold a shape.
+5. **The reach.** The scene waits until you take his hand, and that's what catches him alight again. The flare is what lifts you both.
+6. **You hold him up.** At the surface the roles flip. He's a small ember and the waves want him, so you keep him out of the water. The captain finds one point of warm light on a black sea, and the boathook comes down to it.
+7. **Waking.** The bunk room. He's a dim glow under a glass on the round table, and he doesn't speak.
+8. **The rule.** The captain in the doorway: "Nobody drowns on my ship. Nobody goes hungry either." / "You've managed the first."
+9. **The pot.** The camera finds it on the galley stove, and the ship is yours. There's one quiet thing to do: make something warm and bring it back to him.
+10. **His first words.** Only then: "There you are." / "You were in the water. I pulled. You held on. Good holding." / "I'll get you home. I know exactly where it is. Roughly."
+
+**What it changes.**
+- The rescue is mutual: two things that each kept the other from going out. That's the title, acted out before anyone says it.
+- "Good holding" becomes thanks, and "I pulled" a joke between two people who both know better.
+- The rule that a warm meal rekindles him has its origin in the first minute: you've done it once already, with your hand.
+- The first ten minutes of play have a reason. Nobody tells you to cook. You've held someone's light and watched it nearly fail, and there's a stove through that door.
+- After the rescue he lives on the round table, so there's an empty hook at the stern where a lantern used to keep watch. Nobody aboard says why he came inside.
+
+### The title screen keeps your voyage
+It's the same nameboard on every launch, but it carries where you are.
+- **The hour:** storm and night on a new voyage; grey dawn and quieter rain if you last slept till morning.
+- **His warmth:** the glow on the letters is him, so it's as warm or as dim as you've kept him. A dim title screen means he hasn't been fed.
+- **The crew:** each crew member who decides to stay cuts a small mark into the wood beside the name (a heron, a mossy stone). Nobody explains them. By the end the board is a record of the trip.
+- **A saved voyage:** on your press he doesn't dive. He turns from the board toward the cabin lights, as if to say "there you are again", and the day's card follows.
+
+### The lantern's face
+He carries most of the opening without a word, so he needs to be readable. He has three voices.
+- **His eyes** say what he feels right now. The two eyes he has change shape: round for surprise, slanted in for determined, slanted out for sad or worried, flat lines for tired, curves for asleep. No mouth and no brows.
+- **His flame** says what he wants and how strong he is: it leans toward what he wants, shrinks back from what scares him, stands tall when he's pleased with himself, gutters when he's weak, and cools from amber toward blue as he fades.
+- **His glass** says what he's been through: it fogs when he's flustered, rain runs down it like tears, and a crack appears when he's badly hurt and mends when he's fed. The crack is rare: the rescue, and perhaps one or two moments later in the story, never routine damage.
+
+They work at different distances. Up close you read his eyes; across the deck, his flame; and when he's a spark too small to have a face, the flame is all there is and it still acts.
+
+Through the opening:
+
+| Moment | Eyes | Flame and glass |
+|---|---|---|
+| On watch | Half-lidded; one drifts shut and jerks open | Swaying with the hook |
+| He hears something | Snap wide and round | Stands still |
+| The dive | Narrowed, slanted in | Streaming back behind him |
+| Going out | Slanted out, pinched; one flickering | Guttering, cooling to blue |
+| Reaching you | Huge, looking up at you | Struggling to hold the shape of a hand |
+| You take it | Squeezed shut, then wide | Catches, flares tall |
+| At the surface | Two tired slits, on you | A small ember |
+| Asleep | Two curved lines | Low and bluish; a hairline crack in the glass |
+| After the meal | One opens | Warms to amber; the crack closes |
+
 ## MVP: the Prologue
 A tiny complete story arc that proves the "day is a song" loop and ends on the game's hook.
 1. **The rescue:** black water, a warm light, a hand of flame. You wake in your bunk. The heron captain is gruff, and the lantern is certain: "The nearest island, that'll be your home!"
