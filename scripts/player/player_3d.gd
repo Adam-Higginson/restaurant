@@ -17,7 +17,7 @@ extends CharacterBody3D
 ## Walking speed in metres per second.
 @export var speed: float = 5.0
 ## How fast the model turns to face the way you walk, in degrees per second.
-## Not used yet: see the TODO in [method _face].
+## Not used yet: the model turns at once.
 @export var turn_speed: float = 720.0
 ## How far, in degrees, you must swing the stick while walking through a
 ## camera switch before "up" follows the new camera.
@@ -142,17 +142,8 @@ func _movement_yaw(input: Vector2) -> float:
 	return _move_yaw
 
 
-# Turns the model to face [param direction], a flat world direction.
+# Turns the model to face [param direction], a flat world direction, at
+# once. (Turning smoothly at turn_speed is still to do.)
 func _face(direction: Vector3, _delta: float) -> void:
 	# The yaw that turns the model's forward (-Z) to point along direction.
-	var target: float = atan2(-direction.x, -direction.z)
-	# TODO(your turn): the model snaps to face the new way instantly. Make it
-	# turn smoothly at turn_speed (degrees per second) instead.
-	# Hints:
-	# - rotate_toward(from, to, step) moves an angle towards another by at most
-	#   step radians, going the short way round (it handles wrapping past 180°).
-	# - One tick's step is deg_to_rad(turn_speed) * delta. Rename _delta to
-	#   delta once you use it (the underscore marks an unused parameter).
-	# - Check: walk in circles on deck. Try turn_speed 180 and 1440 to feel it.
-	# - Test: test_faces_the_way_it_walks in tests/scripts/player/player_3d_test.gd.
-	_model.rotation.y = target
+	_model.rotation.y = atan2(-direction.x, -direction.z)

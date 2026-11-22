@@ -13,15 +13,6 @@ signal struck
 ## [code]set_lightning(brightness: float)[/code] method.
 const LIT_GROUP: StringName = &"lightning_lit"
 
-# TODO(your turn): tune the storm by watching the porthole in game. These are
-# first guesses. Hints:
-# - min_gap and max_gap are the quietest and busiest stretches between flashes,
-#   in seconds. Too often and it stops being special; too rare and nobody
-#   notices it. Try somewhere between 6 and 40.
-# - flash_seconds is how long one flash takes to fade. Real lightning is
-#   quick: under a second.
-# - Run ./run_tests.sh -a res://tests/scripts/weather/lightning_test.gd after
-#   changing them; the tests read these values, so they should still pass.
 ## The shortest wait between flashes, in seconds.
 @export var min_gap: float = 8.0
 ## The longest wait between flashes, in seconds.

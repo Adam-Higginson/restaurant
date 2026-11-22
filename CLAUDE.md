@@ -59,10 +59,9 @@ The full design lives in `docs/GDD.md`. Read it before starting a gameplay task,
   Put the same testing steps in the PR body.
 
 ## Keeping the user in the loop
-Claude writes most of the code. The user is learning Godot and wants to understand everything that goes in, so every code PR includes:
+Claude writes the code, all of it: nothing is left as an exercise. The user is learning Godot and wants to understand everything that goes in, so every code PR includes:
 - **How it works** (in the PR body): the scene tree, which script does what, how signals and data flow, and any new Godot concept in plain terms.
 - **An editor tour** (in the test steps): click-by-click where to look. Open this scene, select this node, see this Inspector setting, watch the Remote tree while it runs.
-- **One "your turn" piece:** a small, well-scoped part (a tuning value, a short function or a test) left as a `# TODO(your turn):` with hints. When the user says "check", read their change, run the relevant tests, and list issues (bugs first, then style).
 - **Glossary updates:** add each new Godot concept to `docs/godot-notes.md` (what it is in two lines, and where it's used in our code).
 
 ## Testing

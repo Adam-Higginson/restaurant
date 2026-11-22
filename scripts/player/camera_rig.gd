@@ -209,18 +209,9 @@ static func yaw_of(rotation_basis: Basis) -> float:
 ## [member blend_seconds], and this says how far along the camera is at each
 ## point. It must give 0 at the start and 1 at the end.
 static func blend_curve(t: float) -> float:
-	# TODO(your turn): the glide moves at one steady speed, so it starts and
-	# stops with a jolt. Make it start gently and settle gently instead.
-	# Hints:
-	# - smoothstep(0.0, 1.0, t) is slow at both ends and quicker in between.
-	# - ease(t, -2.0) does much the same; try other curves (-3.0, 0.5, 2.0)
-	#   and see "ease" in the @GlobalScope docs (F1 in the editor, search ease).
-	# - Whatever you pick must still give 0 at t = 0 and 1 at t = 1.
-	# - Then tune blend_seconds on the CameraRig node in player.tscn by feel.
-	# - Test: test_blend_curve_runs_from_free_to_the_shot in
-	#   tests/scripts/player/camera_rig_test.gd. Add a case that checks your
-	#   curve starts gently, e.g. blend_curve(0.1) is less than 0.1.
-	return t
+	# Slow at both ends and quicker between, so it neither lurches off nor
+	# stops dead.
+	return smoothstep(0.0, 1.0, t)
 
 
 # Moves the rig above where the player is drawn this frame. With physics

@@ -72,9 +72,32 @@ func test_starred_words_are_highlighted_and_brackets_survive() -> void:
 	assert_str(marked).not_contains("*")
 
 
-func test_pause_after_is_never_negative() -> void:
-	for letter: String in ["a", " ", ",", ".", "!", "?", "…", ""]:
-		assert_float(DialogueBox.pause_after(letter)).is_greater_equal(0.0)
+func test_it_lingers_at_a_comma_and_longer_at_the_end_of_a_sentence() -> void:
+	var letter: float = DialogueBox.pause_after("a")
+	var comma: float = DialogueBox.pause_after(",")
+	var stop: float = DialogueBox.pause_after(".")
+
+	assert_float(letter).is_equal(0.0)
+	assert_float(DialogueBox.pause_after(" ")).is_equal(0.0)
+	assert_float(comma).is_greater(letter)
+	assert_float(stop).is_greater(comma)
+	for mark: String in ["!", "?", "…"]:
+		assert_float(DialogueBox.pause_after(mark)).is_equal(stop)
+
+
+func test_typing_waits_at_a_full_stop_but_not_after_the_last_letter() -> void:
+	var box: DialogueBox = _new_box()
+	box.letters_per_second = 600.0
+
+	box.show_line(_captain(), "Hm. Go.")
+	await _ticks(4)
+	# It has stopped after "Hm." for its breath, though it types fast.
+	assert_str(box.shown_text()).is_equal("Hm.")
+	assert_bool(box.is_typing()).is_true()
+
+	await _ticks(int(DialogueBox.SENTENCE_PAUSE * 60.0) + 6)
+	assert_str(box.shown_text()).is_equal("Hm. Go.")
+	assert_bool(box.is_typing()).is_false()
 
 
 func test_up_to_four_choices_all_show_and_the_box_grows_for_the_fourth() -> void:

@@ -31,6 +31,10 @@ const SELECTED_COLOR: Color = Color(1.0, 0.96, 0.85)
 const FONT: Font = preload("res://assets/fonts/dialogue_font.tres")
 const FONT_SIZE: int = 10
 
+## Seconds the typing waits after a comma, and at the end of a sentence.
+const COMMA_PAUSE: float = 0.12
+const SENTENCE_PAUSE: float = 0.3
+
 ## How tall the box is, and how many choices it then has room for.
 const HEIGHT: float = 58.0
 const CHOICES_THAT_FIT: int = 3
@@ -201,22 +205,14 @@ func close() -> void:
 
 
 ## How long the typing waits after [param letter] before going on, in
-## seconds: a breath at the end of a sentence, so lines read like speech.
+## seconds: a beat at a comma and a breath at the end of a sentence, so lines
+## read like speech rather than a ticker.
 static func pause_after(letter: String) -> float:
-	# TODO(your turn): every letter comes at the same pace, so a line reads
-	# like a ticker. Make it linger after punctuation.
-	# Hints:
-	# - Return a number of seconds: 0.0 for ordinary letters, a little for a
-	#   comma, more for the end of a sentence. Try 0.12 for "," and 0.3 for
-	#   ".", "!" and "?" and tune by feel.
-	# - A match statement reads well here:  match letter:  ",":  return 0.12
-	# - "…" (one character) and ":" and ";" are worth a pause too.
-	# - Test: test_pause_after_is_never_negative in
-	#   tests/ui/dialogue_box_test.gd passes already. Add a case that checks
-	#   a full stop waits longer than a comma, and a comma longer than "a".
-	# - See it: F5, talk to the Captain by the stove.
-	if letter.is_empty():
-		return 0.0
+	match letter:
+		".", "!", "?", "…":
+			return SENTENCE_PAUSE
+		",", ";", ":":
+			return COMMA_PAUSE
 	return 0.0
 
 
@@ -242,7 +238,7 @@ func _type(delta: float) -> void:
 		var letter: String = words[showing] if showing < words.length() else ""
 		showing += 1
 		letter_typed.emit(letter)
-		_pause = pause_after(letter)
+		_pause = pause_after(letter) if showing < total else 0.0
 		if _pause > 0.0:
 			_letters = float(showing)
 			break
