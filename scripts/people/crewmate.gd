@@ -14,8 +14,9 @@ extends StaticBody3D
 ## How fast they turn to face you, in degrees a second.
 @export var turn_speed: float = 240.0
 
-## Where their head is, for things that float over it.
-var head: Node3D:
+## Their head, where their words come from: what they say in passing floats
+## up beside it in a speech bubble (see [Speaker] and [Chatter]).
+var head: Speaker:
 	get:
 		return _head
 
@@ -25,7 +26,7 @@ var _facing: float = 0.0
 
 @onready var _model: Node3D = $Model
 @onready var _reach: Interactable3D = $Reach
-@onready var _head: Marker3D = $Head
+@onready var _head: Speaker = $Head
 
 
 func _ready() -> void:

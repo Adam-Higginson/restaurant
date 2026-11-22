@@ -170,6 +170,21 @@ func lantern_at_shoulder(player: Node3D) -> LanternSpirit:
 	return spirit
 
 
+## The first line of each of the lantern's remarks for [param moment] (in
+## data/dialogue/moments.dlg): one of these is what he's saying just after
+## that moment.
+func moment_lines(moment: StringName) -> PackedStringArray:
+	var lines: PackedStringArray = PackedStringArray()
+	for remark: Remark in DialogueLibrary.remarks(LanternSpirit.MOMENTS):
+		if remark.moment != moment:
+			continue
+		for step: DialogueStep in Remark.steps_of(remark.tree, remark.section):
+			if step.kind == DialogueStep.Kind.LINE:
+				lines.append(step.text)
+				break
+	return lines
+
+
 ## A [Hud3D] for [param player], added to the player's world, so it's freed
 ## with it. Add it before the scene runs.
 func new_hud_3d(player: Player3D) -> Hud3D:

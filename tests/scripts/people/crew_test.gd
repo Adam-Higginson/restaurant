@@ -115,15 +115,16 @@ func test_near_him_he_says_it_and_far_from_him_its_news_for_later() -> void:
 	await physics_ticks(runner, 5)
 
 	assert_bool(spirit.is_in_earshot()).is_true()
-	assert_bool(spirit.tell("A fish!", &"news_fish")).is_true()
-	assert_str(spirit.saying()).is_equal("A fish!")
+	assert_bool(spirit.tell(&"caught", &"news_fish")).is_true()
+	var said: String = spirit.saying()
+	assert_bool(said in moment_lines(&"caught")).is_true()
 	assert_bool(Game.dialogue.is_set(&"news_fish")).is_false()
 
 	place_player_3d(runner, ON_DECK)
 	await physics_ticks(runner, 5)
 	assert_bool(spirit.is_in_earshot()).is_false()
-	assert_bool(spirit.tell("The bell!", &"news_bell")).is_false()
-	assert_str(spirit.saying()).is_equal("A fish!")
+	assert_bool(spirit.tell(&"hove_to", &"news_bell")).is_false()
+	assert_str(spirit.saying()).is_equal(said)
 	assert_bool(Game.dialogue.is_set(&"news_bell")).is_true()
 
 
@@ -214,3 +215,25 @@ func _flat_distance(a: Node3D, b: Node3D) -> float:
 	var apart: Vector3 = a.global_position - b.global_position
 	apart.y = 0.0
 	return apart.length()
+
+
+func test_by_the_stove_at_night_you_can_overhear_the_heron_and_the_lantern() -> void:
+	var rig: Array[Node3D] = new_moored_ship_with_player(BY_THE_STOVE)
+	var chatter: Chatter = Chatter.new()
+	chatter.player = rig[1]
+	rig[0].get_parent().add_child(chatter)
+	var runner: GdUnitSceneRunner = scene_runner(rig[0].get_parent())
+	await physics_ticks(runner, 5)
+
+	assert_array(chatter.audible().keys()).contains_exactly_in_any_order([&"heron", &"lantern"])
+
+
+func test_up_on_deck_you_cant_overhear_them_through_the_deck() -> void:
+	var rig: Array[Node3D] = new_moored_ship_with_player(BY_THE_STOVE + Vector3(0, 5.2, 0))
+	var chatter: Chatter = Chatter.new()
+	chatter.player = rig[1]
+	rig[0].get_parent().add_child(chatter)
+	var runner: GdUnitSceneRunner = scene_runner(rig[0].get_parent())
+	await physics_ticks(runner, 5)
+
+	assert_array(chatter.audible().keys()).is_empty()

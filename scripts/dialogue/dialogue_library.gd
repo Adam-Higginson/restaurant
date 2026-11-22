@@ -10,8 +10,12 @@ extends RefCounted
 
 const FOLDER: String = "res://data/dialogue"
 const ENDING: String = ".dlg"
+## The files that hold remarks (things said in passing, see [Remark]) rather
+## than conversations.
+const REMARK_FILES: Array[StringName] = [&"ambient", &"moments"]
 
 static var _trees: Dictionary[StringName, DialogueTree] = {}
+static var _remarks: Dictionary[StringName, Array] = {}
 
 
 ## The conversation called [param id] ([code]heron[/code] is
@@ -24,14 +28,33 @@ static func find(id: StringName) -> DialogueTree:
 	if not FileAccess.file_exists(path):
 		push_error("DialogueLibrary: no conversation at %s" % path)
 		return null
-	var tree: DialogueTree = DialogueScript.parse(FileAccess.get_file_as_string(path), id)
+	var tree: DialogueTree = DialogueScript.parse(FileAccess.get_file_as_string(path), id,
+			is_remarks(id))
 	for error: String in tree.errors:
 		push_error("%s, %s" % [path, error])
 	_trees[id] = tree
 	return tree
 
 
-## The name of every conversation in [constant FOLDER].
+## Every remark in the file called [param id] (see [constant REMARK_FILES]),
+## read once and kept.
+static func remarks(id: StringName) -> Array[Remark]:
+	var found: Array[Remark] = []
+	if _remarks.has(id):
+		found.assign(_remarks[id])
+		return found
+	found = Remark.all_in(find(id))
+	_remarks[id] = found
+	return found
+
+
+## Whether the file called [param id] holds remarks rather than a conversation.
+static func is_remarks(id: StringName) -> bool:
+	return REMARK_FILES.has(id)
+
+
+## The name of every file in [constant FOLDER]: the conversations and the
+## files of remarks.
 static func all_ids() -> Array[StringName]:
 	var ids: Array[StringName] = []
 	for file: String in DirAccess.get_files_at(FOLDER):
@@ -43,3 +66,4 @@ static func all_ids() -> Array[StringName]:
 ## Forgets what's been read, so files are read afresh. For tests and tools.
 static func forget() -> void:
 	_trees.clear()
+	_remarks.clear()

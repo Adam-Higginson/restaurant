@@ -1,0 +1,105 @@
+# What the crew say in passing, overheard in speech bubbles as you walk by.
+# Each section is one remark or one little exchange. The Chatter picks one
+# every 25 to 60 seconds from the ones that fit: everybody in it must be
+# within earshot of you and near each other, its guard must hold, and it
+# mustn't have been said lately.
+#
+# A section's header can have tags:
+#   [weight 2]      twice as likely to be picked as one with no weight
+#   [cooldown 300]  not said again for 300 seconds (120 if not given)
+#   [priority 1]    picked before any with a lower priority that also fit
+# A ? line just before a section guards the whole thing. A line can end in
+# [thought], [shout] or [sound] for its bubble's style.
+#
+# The heron is by the bunk room stove at night and at the wheel in the
+# morning. The lantern stays at the round table by the stove.
+# Placeholder writing: rewrite freely.
+
+# --- The heron, by the stove at night ---
+
+? night
+~ stove_drawing [weight 2]
+heron: Hm. Stove's drawing well tonight.
+
+? night
+~ heron_pipe
+heron: Hrrm. [sound]
+
+? night and raining
+~ rain_on_the_deck [weight 2]
+heron: Listen to it. Like gravel on a drum.
+
+? night and sailing
+~ sailing_blind
+heron: Steady as she goes. Not that I can see where she goes.
+
+? night
+~ eight_bells [cooldown 300]
+heron: Eight bells soon. Somebody had better be cooking. [thought]
+
+# --- The heron, at the wheel in the morning ---
+
+? morning
+~ wheel_hum [weight 2]
+heron: Mm-hm-hmm. [sound]
+
+? morning and raining
+~ still_spitting
+heron: Still spitting. It'll clear. It always clears.
+
+? morning and not raining
+~ fog_lifting
+heron: Fog's thinning. Good. I like to see what I'm about to hit.
+
+? morning
+~ wind_backing
+heron: Wind's backing. Hm. [thought]
+
+# --- The lantern, at home on the round table ---
+
+~ lantern_counting
+lantern: One plank, two plank, three plank... I've lost count again.
+
+~ lantern_humming [weight 2]
+lantern: La la... la? [sound]
+
+? not met_heron
+~ lantern_waiting
+lantern: Go on, say hello to him. He only looks cross. [thought]
+
+? raining
+~ lantern_rain
+lantern: I like the rain. It can't get me in here.
+
+# --- The two of them, by the stove at night ---
+
+? night
+~ the_soup_question [weight 2] [cooldown 240]
+lantern: Captain. Is home a soup?
+heron: No.
+lantern: Is it a stew?
+heron: ...Go to sleep, lamp.
+
+? night
+~ the_kindling [cooldown 240]
+heron: Mind you don't set the table alight.
+lantern: I would never. I'm very careful. Mostly.
+
+? night and raining
+~ leaky_roof [cooldown 300]
+lantern: There's a drip. Just there. Plink.
+heron: There's always a drip.
+lantern: Plink! [shout]
+
+# Said once, soon after you've met him: it comes before the others.
+? night and met_heron and not overheard_new_cook
+~ about_the_new_cook [priority 1]
+heron: Your friend there. Did they say where they're from?
+lantern: Home. Same as me. We're going together.
+heron: Hm. [thought]
+set overheard_new_cook
+
+? night
+~ who_pulled_who [cooldown 300]
+heron: You pulled them out yourself, did you? All of them?
+lantern: Most of them. They did some holding.

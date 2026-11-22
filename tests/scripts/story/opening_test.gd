@@ -22,7 +22,7 @@ func test_you_wake_by_your_bunk_and_the_lantern_speaks() -> void:
 	assert_bool(opening.is_playing).is_false()
 	assert_bool(player.controls_enabled).is_true()
 	var spirit: LanternSpirit = player.get_node("LanternSpirit") as LanternSpirit
-	assert_str(spirit.saying()).is_equal(Opening.FIRST_WORDS[0])
+	assert_str(spirit.saying()).is_equal(moment_lines(&"woke")[0])
 
 
 func test_you_stay_aboard_while_the_ship_sails_on() -> void:

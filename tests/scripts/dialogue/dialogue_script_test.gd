@@ -157,3 +157,64 @@ func test_speakers_lists_everyone_who_talks_once() -> void:
 	var tree: DialogueTree = DialogueScript.parse("heron: A.\nlantern: B.\nheron: C.\n: D.")
 
 	assert_array(tree.speakers()).contains_exactly([&"heron", &"lantern"])
+
+
+func test_a_remark_section_has_its_tags() -> void:
+	var tree: DialogueTree = DialogueScript.parse(
+			"~ stove [weight 2] [cooldown 90] [priority 1] [on caught]\nheron: Hm.", &"t", true)
+
+	assert_array(tree.errors).is_empty()
+	assert_array(Array(tree.section_tags[&"stove"])) \
+			.is_equal(["weight 2", "cooldown 90", "priority 1", "on caught"])
+
+
+func test_a_guard_before_a_remark_section_guards_all_of_it() -> void:
+	var tree: DialogueTree = DialogueScript.parse(
+			"? night and not raining\n~ stove\nheron: Hm.\nheron: Warm.", &"t", true)
+
+	assert_array(tree.errors).is_empty()
+	assert_str(tree.section_guards[&"stove"]).is_equal("night and not raining")
+	# The guard is the section's, not its first line's.
+	assert_str(tree.steps[0].guard).is_empty()
+
+
+func test_a_file_of_remarks_needs_no_start() -> void:
+	var tree: DialogueTree = DialogueScript.parse("~ one\nheron: Hm.", &"t", true)
+
+	assert_array(tree.errors).is_empty()
+
+
+func test_a_remark_line_tag_is_its_bubble_style() -> void:
+	var tree: DialogueTree = DialogueScript.parse(
+			"~ one\nheron: Zzz. [sound]\nheron: Hm. [thought]\nheron: Oi! [shout]", &"t", true)
+
+	assert_array(tree.errors).is_empty()
+	assert_str(String(tree.steps[0].tag)).is_equal("sound")
+
+
+func test_mistakes_in_remarks_are_reported() -> void:
+	var cases: Dictionary[String, String] = {
+		"~ one [weight 0]\nheron: Hm.": "[weight]",
+		"~ one [cooldown soon]\nheron: Hm.": "[cooldown]",
+		"~ one [priority high]\nheron: Hm.": "[priority]",
+		"~ one [on]\nheron: Hm.": "[on]",
+		"~ one [loud]\nheron: Hm.": "[loud]",
+		"~ one [weight 2] extra\nheron: Hm.": "can't read the tags",
+		"~ one\n- Hello? -> END": "choices",
+		"~ one\n@shot stove_nook": "cue",
+		"~ one\nheron: Hm. [gruff]": "[gruff]",
+		"? else\n~ one\nheron: Hm.": "? else",
+	}
+	for text: String in cases:
+		var tree: DialogueTree = DialogueScript.parse(text, &"t", true)
+		assert_int(tree.errors.size()).override_failure_message(text).is_equal(1)
+		if tree.errors.size() == 1:
+			assert_str(tree.errors[0]).contains(cases[text])
+
+
+func test_a_conversation_cant_have_remark_tags_or_section_guards() -> void:
+	var tagged: DialogueTree = DialogueScript.parse("~ start [weight 2]\nheron: Hm.")
+	var guarded: DialogueTree = DialogueScript.parse("? night\n~ start\nheron: Hm.")
+
+	assert_str(", ".join(tagged.errors)).contains("only a file of remarks")
+	assert_str(", ".join(guarded.errors)).contains("nothing after it to guard")

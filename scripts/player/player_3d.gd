@@ -14,6 +14,9 @@ extends CharacterBody3D
 ## way you walk. The camera rig is a child of the body, so a turning body
 ## would swing the camera round with every step.
 
+## The group the player is in, so others can find them.
+const GROUP: StringName = &"player"
+
 ## Walking speed in metres per second.
 @export var speed: float = 5.0
 ## How fast the model turns to face the way you walk, in degrees per second.
@@ -70,6 +73,7 @@ var _zone_seen: CameraZone
 
 
 func _ready() -> void:
+	add_to_group(GROUP)
 	for i: int in mini(start_tools.size(), Toolbar.SLOT_COUNT):
 		toolbar.set_tool(i, start_tools[i])
 

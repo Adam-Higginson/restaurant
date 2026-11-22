@@ -31,7 +31,7 @@ func test_he_says_so_when_he_is_getting_low() -> void:
 	spirit.warmth = 0.39
 	await physics_ticks(runner, 2)
 
-	assert_bool(spirit.saying() in LanternLines.DIM).is_true()
+	assert_bool(spirit.saying() in moment_lines(&"dim")).is_true()
 
 
 func test_sharing_a_bowl_of_soup_at_the_table_warms_him() -> void:
@@ -51,7 +51,7 @@ func test_sharing_a_bowl_of_soup_at_the_table_warms_him() -> void:
 
 	assert_bool(bowl.contents.get_contents().is_empty()).is_true()
 	assert_float(spirit.warmth).is_equal_approx(expected, 0.01)
-	assert_bool(spirit.saying() in LanternLines.SUPPER).is_true()
+	assert_bool(spirit.saying() in moment_lines(&"supper")).is_true()
 	assert_bool(spirit.is_visiting()).is_true()
 
 
