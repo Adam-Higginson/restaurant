@@ -84,6 +84,34 @@ func test_curtain_cloth_lets_a_lamp_glow_through() -> void:
 				"%s isn't backlit" % name).is_true()
 
 
+func test_a_made_bed_is_neat_with_a_blanket_at_the_foot() -> void:
+	var bay: BunkBay = (load(SCENE) as PackedScene).instantiate() as BunkBay
+	add_child(bay)
+	auto_free(bay)
+	for piece: String in ["Quilt", "QuiltFold", "PillowSmall", "FootBlanket"]:
+		assert_bool((bay.get_node("Lower" + piece) as Node3D).visible).is_true()
+	assert_bool((bay.get_node("LowerQuiltHeap") as Node3D).visible).is_false()
+
+
+func test_a_slept_in_bed_has_its_quilt_thrown_back() -> void:
+	var quilt: Material = load("res://assets/placeholder/materials/quilt_green.tres") as Material
+	var bay: BunkBay = (load(SCENE) as PackedScene).instantiate() as BunkBay
+	bay.upper_bedding = BunkBay.Bedding.SLEPT_IN
+	bay.upper_quilt = quilt
+	add_child(bay)
+	auto_free(bay)
+	var heap: Node3D = bay.get_node("UpperQuiltHeap") as Node3D
+	assert_bool(heap.visible).is_true()
+	for piece: String in ["Quilt", "FootBlanket", "PillowSmall"]:
+		assert_bool((bay.get_node("Upper" + piece) as Node3D).visible).is_false()
+	# The heap is the same quilt, thrown back; the mattress and pillow stay.
+	for child: Node in heap.get_children():
+		assert_object((child as MeshInstance3D).material_override).is_same(quilt)
+	assert_bool((bay.get_node("UpperMattress") as Node3D).visible).is_true()
+	# The lower bed is left as it was.
+	assert_bool((bay.get_node("LowerQuilt") as Node3D).visible).is_true()
+
+
 func test_you_cannot_climb_into_a_bunk_by_walking() -> void:
 	var bay: BunkBay = (load(SCENE) as PackedScene).instantiate() as BunkBay
 	auto_free(bay)
