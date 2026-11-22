@@ -158,6 +158,10 @@ A growing glossary of the Godot concepts this project uses: what each one is, in
 
 **A ceiling the camera can't pass.** A collision shape well above the player's head is never touched by them, but the camera's `SpringArm3D` hits it, so the camera is pulled in under the ceiling rather than rising through it. *Ours:* `GalleyCeilingShape`, `BunkCeilingShape` and `BunkCeilingForeShape`, and a `…Shape` for each ceiling beam, in both rooms.
 
+**Exported enums.** An `enum` names a small set of choices (`enum Bedding { MADE, SLEPT_IN }`); exporting a variable of that type (`@export var lower_bedding: Bedding`) shows it in the Inspector as a drop-down of those names. *Ours:* `BunkBay.lower_bedding` and `upper_bedding`, made or slept in.
+
+**Alpha scissor.** A material's transparency mode where each pixel is either fully drawn or not drawn at all, cut where the texture's alpha is below a threshold. It's cheap (no sorting, it still casts and takes shadows) and keeps pixel art's hard edges. *Ours:* the braided rug (`braided_rug.tres`): an oval cut from a square plane.
+
 *Still to come with the prototype tickets: ...*
 
 ## Testing
