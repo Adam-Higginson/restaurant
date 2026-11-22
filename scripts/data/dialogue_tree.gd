@@ -16,6 +16,12 @@ const START: StringName = &"start"
 @export var sections: Dictionary[StringName, int] = {}
 ## What's wrong with the script, each with its line number. Empty when it's fine.
 @export var errors: PackedStringArray = PackedStringArray()
+## In a file of remarks (see [Remark]), the condition guarding each section
+## that has one, as written: the [code]?[/code] line just before its [code]~[/code].
+@export var section_guards: Dictionary[StringName, String] = {}
+## In a file of remarks, the tags written after each section's name, each as
+## its name then its value: [code]"weight 2"[/code], [code]"on caught"[/code].
+@export var section_tags: Dictionary[StringName, PackedStringArray] = {}
 
 
 ## Whether there's a section called [param section].
