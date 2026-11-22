@@ -19,6 +19,18 @@ func test_the_stove_flickers_steams_and_sparks() -> void:
 	assert_bool(stove.embers().local_coords).is_true()
 
 
+func test_the_chimney_smokes_up_on_deck_and_it_trails_behind() -> void:
+	var stove: GalleyStove = (load(STOVE_SCENE) as PackedScene).instantiate() as GalleyStove
+	add_child(stove)
+	auto_free(stove)
+	assert_bool(stove.smoke().emitting).is_true()
+	# It comes out of the chimney top, above the deck (5.3 m up the ship, so
+	# 4.3 m above the galley floor the stove stands on).
+	assert_float(stove.to_local(stove.smoke().global_position).y).is_greater(4.3)
+	# Out in the open, it's left behind as the ship sails on.
+	assert_bool(stove.smoke().local_coords).is_false()
+
+
 func test_the_galley_has_its_hearth_table_and_lanterns() -> void:
 	var ship: Ship = new_moored_ship_with_player(Vector3(0, 1.05, 6))[0] as Ship
 	assert_object(ship.get_node("Galley/Stove") as GalleyStove).is_not_null()
