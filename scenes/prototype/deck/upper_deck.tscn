@@ -1670,7 +1670,7 @@ mesh = SubResource("BoxMesh_44")
 
 [node name="NameInset" type="MeshInstance3D" parent="Structure/SternGallery" unique_id=407332635]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 5.05, 16.06)
-material_override = ExtResource("4_7vmg7")
+material_override = ExtResource("2_3xgj1")
 cast_shadow = 0
 mesh = SubResource("BoxMesh_45")
 

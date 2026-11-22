@@ -1,7 +1,7 @@
 [gd_scene format=3]
 
 [ext_resource type="Script" path="res://ui/cutscene_prompt.gd" id="1_prompt"]
-[ext_resource type="FontVariation" path="res://assets/fonts/dialogue_font.tres" id="2_font"]
+[ext_resource type="FontVariation" path="res://assets/fonts/title_font.tres" id="2_font"]
 
 [node name="CutscenePrompt" type="CanvasLayer"]
 layer = 16

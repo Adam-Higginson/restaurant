@@ -38,6 +38,23 @@ func test_a_cutscene_stops_you_walking_and_an_ordinary_talk_isnt_one() -> void:
 	assert_bool(_conversation.is_cutscene()).is_false()
 
 
+func test_the_hearts_step_aside_for_a_cutscene_but_not_for_a_talk() -> void:
+	_build()
+	var runner: GdUnitSceneRunner = scene_runner(_player.get_parent())
+	await physics_ticks(runner, 3)
+	var hearts: Control = _hud.get_node("%HeartsBar") as Control
+	assert_float(hearts.modulate.a).is_equal(1.0)
+
+	play_cutscene(_conversation, _player, "heron: One.")
+	assert_float(hearts.modulate.a).is_equal(0.0)
+	_conversation.stop()
+	assert_float(hearts.modulate.a).is_equal(1.0)
+
+	# In an ordinary talk (mid-duel, say) you still see how you're doing.
+	_conversation.begin_tree(DialogueScript.parse("heron: One.", &"test"), _player)
+	assert_float(hearts.modulate.a).is_equal(1.0)
+
+
 func test_it_can_start_at_a_later_section() -> void:
 	_build()
 	var runner: GdUnitSceneRunner = scene_runner(_player.get_parent())

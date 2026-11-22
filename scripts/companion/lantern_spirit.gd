@@ -5,6 +5,11 @@ extends Node3D
 ## lazy bob, lighting the way; when you stop at something for a moment he
 ## drifts over to hover above it, curious; he blinks now and then.
 ##
+## His body is a [LanternFace], which shows what he feels: pleased when
+## something good happens, tired when he's dim, worried or set when a fight
+## calls for it, his flame as strong as his [member warmth], rain on his
+## glass when he's out in it. A cutscene can take his look over.
+##
 ## He lives in the world, not on the player (he's top-level), so he lags a
 ## little behind when you walk off and catches up. Whatever you stand on
 ## (the sailing ship) carries him along too, so he never trails behind the
@@ -48,11 +53,10 @@ const MOMENTS: StringName = &"moments"
 ## If he's ever further than this from you (say, after you're moved), he
 ## simply reappears by your side.
 @export var leash: float = 6.0
-## The shortest and longest wait between blinks, in seconds.
-@export var blink_min: float = 2.5
-@export var blink_max: float = 6.0
-## How long a blink takes, in seconds.
-@export var blink_seconds: float = 0.14
+## How hard it must be raining for it to run down his glass, 0 to 1.
+@export var streak_rain: float = 0.3
+## How long his glass stays fogged after he comes in from the rain, in seconds.
+@export var fog_seconds: float = 4.0
 
 ## How much warmth he loses a minute, 0 to 1. A warm meal shared with him
 ## brings it back (see [SupperSpot]).
@@ -113,15 +117,16 @@ var _velocity: Vector3 = Vector3.ZERO
 ## Where he is, before his bob is added.
 var _spot: Vector3 = Vector3.ZERO
 var _time: float = 0.0
-var _blink_wait: float = 0.0
-var _blink_left: float = 0.0
 ## Seconds left of an excited little dance.
 var _excited: float = 0.0
+## Seconds left of fogged glass, after coming in from the rain.
+var _fogged_left: float = 0.0
+## The weather, found when first needed. Null in a scene with none.
+var _weather: Weather = null
 var _rng: RandomNumberGenerator = RandomNumberGenerator.new()
 var _moments: RemarkPicker = null
 
-@onready var _body: Node3D = $Body
-@onready var _eyes: Node3D = $Body/Eyes
+@onready var _body: LanternFace = $Body
 @onready var _light: Flicker = $Light
 @onready var _voice: Speaker = $Voice
 @onready var _hum: Hum = $Hum
@@ -131,7 +136,6 @@ func _ready() -> void:
 	top_level = true
 	_rng.randomize()
 	_moments = RemarkPicker.new(_rng)
-	_blink_wait = _rng.randf_range(blink_min, blink_max)
 	_calm_amount = _light.amount
 	_calm_speed = _light.speed
 	if is_instance_valid(detector):
@@ -173,7 +177,7 @@ func _physics_process(delta: float) -> void:
 
 
 func _process(delta: float) -> void:
-	_blink(delta)
+	_express(delta)
 
 
 ## Puts him straight back where he belongs, at rest: at home if he has one,
@@ -303,7 +307,34 @@ func is_excited() -> bool:
 
 ## Blinks once, now.
 func blink() -> void:
-	_blink_left = blink_seconds
+	_body.blink()
+
+
+## His face: his eyes, his flame and his glass.
+func face() -> LanternFace:
+	return _body
+
+
+## The look his eyes should have now, from what's going on: a fight's
+## signal first, then how tired he is, then a moment's delight. (Tired
+## wins over delight: he hops when he tells you he's dim, and shouldn't
+## look pleased about it.)
+func everyday_expression() -> LanternFace.Look:
+	match _mood:
+		Mood.WARNING:
+			return LanternFace.Look.WORRIED
+		Mood.OPEN:
+			return LanternFace.Look.DETERMINED
+	if warmth < 0.4:
+		return LanternFace.Look.TIRED
+	if _excited > 0.0:
+		return LanternFace.Look.PLEASED
+	return LanternFace.Look.CALM
+
+
+## How strong his flame is for how warm he is, 0 to 1: never quite out.
+func flame_strength() -> float:
+	return remap(warmth, min_warmth, 1.0, 0.35, 1.0)
 
 
 ## Where he wants to be now: at home if he has one; otherwise hovering over
@@ -433,15 +464,28 @@ func _face(delta: float) -> void:
 	_body.rotation.y = rotate_toward(_body.rotation.y, yaw, delta * 4.0)
 
 
-func _blink(delta: float) -> void:
-	if _blink_left > 0.0:
-		_blink_left -= delta
-		var t: float = clampf(_blink_left / blink_seconds, 0.0, 1.0)
-		# Shut in the middle of the blink, open at either end.
-		_eyes.scale.y = maxf(absf(t * 2.0 - 1.0), 0.1)
+# Shows what he feels on his face, unless a cutscene is directing it.
+func _express(delta: float) -> void:
+	_body.strength = flame_strength()
+	_light.light_color = _body.flame_colour()
+	var in_rain: bool = _is_in_rain()
+	if _body.streaked and not in_rain:
+		_fogged_left = fog_seconds
+	_fogged_left = maxf(_fogged_left - delta, 0.0)
+	if _body.directed:
 		return
-	_eyes.scale.y = 1.0
-	_blink_wait -= delta
-	if _blink_wait <= 0.0:
-		blink()
-		_blink_wait = _rng.randf_range(blink_min, blink_max)
+	_body.expression = everyday_expression()
+	_body.streaked = in_rain
+	_body.fogged = _fogged_left > 0.0
+
+
+# Whether he's out in rain hard enough to run down his glass: at your
+# shoulder, with no roof over you. At home he's indoors.
+func _is_in_rain() -> bool:
+	if is_instance_valid(home) or not is_inside_tree():
+		return false
+	if not is_instance_valid(_weather):
+		_weather = get_tree().get_first_node_in_group(Weather.GROUP) as Weather
+		if _weather == null:
+			return false
+	return _weather.intensity >= streak_rain and not _weather.sheltered

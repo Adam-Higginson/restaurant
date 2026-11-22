@@ -1,138 +1,62 @@
 [gd_scene format=3]
 
-[ext_resource type="Script" path="res://scripts/sea/float_on_sea.gd" id="1_tqwam"]
-[ext_resource type="PackedScene" path="res://scenes/prototype/intro/castaway.tscn" id="2_hthm4"]
-[ext_resource type="PackedScene" path="res://scenes/prototype/props/boathook.tscn" id="3_ejl8o"]
+[ext_resource type="Script" path="res://scripts/sea/float_on_sea.gd" id="1_ejl8o"]
+[ext_resource type="PackedScene" path="res://scenes/prototype/intro/castaway.tscn" id="2_qsrks"]
+[ext_resource type="PackedScene" path="res://scenes/prototype/lantern_body.tscn" id="3_rqkdy"]
+[ext_resource type="Script" path="res://scripts/companion/lantern_face.gd" id="4_nx0ag"]
+[ext_resource type="PackedScene" path="res://scenes/prototype/props/boathook.tscn" id="5_vvpxu"]
 
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_qsrks"]
-shading_mode = 0
-albedo_color = Color(1, 0.78, 0.4, 1)
+[node name="RescueSet" type="Node3D" unique_id=1722548210]
 
-[sub_resource type="SphereMesh" id="SphereMesh_rqkdy"]
-radius = 0.11
-height = 0.22
-radial_segments = 8
-rings = 4
+[node name="Shots" type="Node3D" parent="." unique_id=1187081554]
 
-[sub_resource type="Animation" id="Animation_nx0ag"]
-length = 2.8
-tracks/0/type = "value"
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/path = NodePath("Shots/TitleSea/Float:height_above")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/keys = {
-"times": PackedFloat32Array(0, 2.8),
-"transitions": PackedFloat32Array(2.4, 1),
-"update": 0,
-"values": [9.0, 0.25]
-}
-tracks/1/type = "value"
-tracks/1/imported = false
-tracks/1/enabled = true
-tracks/1/path = NodePath("Shots/TitleSea:rotation")
-tracks/1/interp = 1
-tracks/1/loop_wrap = true
-tracks/1/keys = {
-"times": PackedFloat32Array(0, 2.8),
-"transitions": PackedFloat32Array(1.6, 1),
-"update": 0,
-"values": [Vector3(-0.25, 0.785, 0), Vector3(-1.35, 0.785, 0)]
-}
-
-[sub_resource type="Animation" id="Animation_vvpxu"]
-length = 12.0
-loop_mode = 1
-tracks/0/type = "value"
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/path = NodePath("Shots/TitleSea/Float:height_above")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 0,
-"values": [9.0]
-}
-tracks/1/type = "value"
-tracks/1/imported = false
-tracks/1/enabled = true
-tracks/1/path = NodePath("Shots/TitleSea:rotation")
-tracks/1/interp = 1
-tracks/1/loop_wrap = true
-tracks/1/keys = {
-"times": PackedFloat32Array(0, 6, 12),
-"transitions": PackedFloat32Array(1, 1, 1),
-"update": 0,
-"values": [Vector3(-0.25, 0.785, 0), Vector3(-0.23, 0.83500004, 0), Vector3(-0.25, 0.785, 0)]
-}
-
-[sub_resource type="AnimationLibrary" id="AnimationLibrary_pfri7"]
-_data = {
-&"dive": SubResource("Animation_nx0ag"),
-&"title_drift": SubResource("Animation_vvpxu")
-}
-
-[node name="RescueSet" type="Node3D" unique_id=829684386]
-
-[node name="Shots" type="Node3D" parent="." unique_id=709825559]
-
-[node name="TitleSea" type="Marker3D" parent="Shots" unique_id=328441131 groups=["shots"]]
-transform = Transform3D(0.7073882, -0.17487136, 0.6848517, 0, 0.9689124, 0.24740396, -0.7068252, -0.17501065, 0.6853972, -70, 9, -50)
-
-[node name="Float" type="Node" parent="Shots/TitleSea" unique_id=1084280846]
-script = ExtResource("1_tqwam")
-height_above = 9.0
-
-[node name="FromTheWater" type="Marker3D" parent="Shots" unique_id=1028533480 groups=["shots"]]
+[node name="FromTheWater" type="Marker3D" parent="Shots" unique_id=293350616 groups=["shots"]]
 transform = Transform3D(0.7539095, -0.35657337, -0.55179334, 0, 0.8398959, -0.54274756, 0.6569783, 0.40918255, 0.6332055, -12, 0.5, 4)
 
-[node name="Float" type="Node" parent="Shots/FromTheWater" unique_id=757600078]
-script = ExtResource("1_tqwam")
+[node name="Float" type="Node" parent="Shots/FromTheWater" unique_id=333015174]
+script = ExtResource("1_ejl8o")
 height_above = 0.5
 
-[node name="TheRail" type="Marker3D" parent="Shots" unique_id=1633816161 groups=["shots"]]
+[node name="TheRail" type="Marker3D" parent="Shots" unique_id=1132034457 groups=["shots"]]
 transform = Transform3D(0.40135863, -0.44491565, -0.80060065, 0, 0.87409353, -0.48575768, 0.915921, 0.19496304, 0.350825, -14.5, 0.8, 4.5)
 
-[node name="Float" type="Node" parent="Shots/TheRail" unique_id=1075001855]
-script = ExtResource("1_tqwam")
+[node name="Float" type="Node" parent="Shots/TheRail" unique_id=1092106892]
+script = ExtResource("1_ejl8o")
 height_above = 0.8
 
-[node name="Marks" type="Node3D" parent="." unique_id=941691312]
+[node name="Marks" type="Node3D" parent="." unique_id=583183069]
 
-[node name="Rail" type="Marker3D" parent="Marks" unique_id=2055944093 groups=["marks"]]
+[node name="Rail" type="Marker3D" parent="Marks" unique_id=459454856 groups=["marks"]]
 transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, -5.5, 5.3, 0)
 
-[node name="Props" type="Node3D" parent="." unique_id=1862766106]
+[node name="Props" type="Node3D" parent="." unique_id=1883263416]
 
-[node name="Castaway" type="Node3D" parent="Props" unique_id=518318341 groups=["props"]]
+[node name="Castaway" type="Node3D" parent="Props" unique_id=1502860220 groups=["props"]]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -9.5, 0, 2.5)
 visible = false
 
-[node name="Float" type="Node" parent="Props/Castaway" unique_id=347251244]
-script = ExtResource("1_tqwam")
+[node name="Float" type="Node" parent="Props/Castaway" unique_id=1931545759]
+script = ExtResource("1_ejl8o")
 height_above = -1.15
 
-[node name="Figure" type="Node3D" parent="Props/Castaway" unique_id=1698790175 instance=ExtResource("2_hthm4")]
+[node name="Figure" type="Node3D" parent="Props/Castaway" unique_id=2013599010 instance=ExtResource("2_qsrks")]
 transform = Transform3D(0.3623577, 0.18516758, -0.9134604, 0, 0.9800666, 0.19866933, 0.9320391, -0.071989365, 0.3551347, 0, 0, 0)
 
-[node name="LanternGlow" type="OmniLight3D" parent="Props/Castaway" unique_id=1943307845]
+[node name="LanternGlow" type="OmniLight3D" parent="Props/Castaway" unique_id=46930765]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.35, 2, 0.2)
 light_color = Color(1, 0.72, 0.4, 1)
 light_energy = 2.4
 
-[node name="LanternFlame" type="MeshInstance3D" parent="Props/Castaway" unique_id=757393153]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.35, 2, 0.2)
-material_override = SubResource("StandardMaterial3D_qsrks")
-mesh = SubResource("SphereMesh_rqkdy")
+[node name="Body" type="Node3D" parent="Props/Castaway" unique_id=1411871022 node_paths=PackedStringArray("light") instance=ExtResource("3_rqkdy")]
+transform = Transform3D(-6.9938224e-08, 0, 1.6, 0, 1.6, 0, -1.6, 0, -6.9938224e-08, 0.35, 2, 0.2)
+script = ExtResource("4_nx0ag")
+look_name = "rescued_lantern"
+streaked = true
+light = NodePath("../LanternGlow")
+light_energy = 2.4
 
-[node name="ReachingBoathook" type="Node3D" parent="Props" unique_id=942655819 groups=["props"]]
+[node name="ReachingBoathook" type="Node3D" parent="Props" unique_id=778325693 groups=["props"]]
 visible = false
 
-[node name="Boathook" type="Node3D" parent="Props/ReachingBoathook" unique_id=1621854288 instance=ExtResource("3_ejl8o")]
+[node name="Boathook" type="Node3D" parent="Props/ReachingBoathook" unique_id=1296053555 instance=ExtResource("5_vvpxu")]
 transform = Transform3D(-2.573397, -1.3958333, 0.43203658, 1.4611659, -2.4583333, 0.7609004, 0, 0.875, 2.826969, -5.85, 6.9, 0.3)
-
-[node name="Clips" type="AnimationPlayer" parent="." unique_id=1036255392 groups=["clips"]]
-libraries/ = SubResource("AnimationLibrary_pfri7")

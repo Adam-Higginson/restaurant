@@ -1,11 +1,13 @@
 [gd_scene format=3]
 
-[ext_resource type="Shader" path="res://shaders/sea_underside.gdshader" id="1_epcgt"]
-[ext_resource type="Script" path="res://scripts/intro/surface_glow.gd" id="2_4fduc"]
-[ext_resource type="Script" path="res://scripts/weather/lightning_light.gd" id="3_11yvj"]
-[ext_resource type="PackedScene" path="res://scenes/prototype/intro/castaway.tscn" id="4_nfwwl"]
+[ext_resource type="Shader" path="res://shaders/sea_underside.gdshader" id="1_11yvj"]
+[ext_resource type="Script" path="res://scripts/intro/surface_glow.gd" id="2_nfwwl"]
+[ext_resource type="Script" path="res://scripts/weather/lightning_light.gd" id="3_cl0er"]
+[ext_resource type="PackedScene" path="res://scenes/prototype/intro/castaway.tscn" id="4_5r4gv"]
+[ext_resource type="PackedScene" path="res://scenes/prototype/lantern_body.tscn" id="5_yns8w"]
+[ext_resource type="Script" path="res://scripts/companion/lantern_face.gd" id="6_5b0uq"]
 
-[sub_resource type="Environment" id="Environment_cl0er"]
+[sub_resource type="Environment" id="Environment_12ru5"]
 background_mode = 1
 background_color = Color(0.01, 0.04, 0.07, 1)
 ambient_light_source = 2
@@ -16,19 +18,19 @@ fog_enabled = true
 fog_light_color = Color(0.01, 0.04, 0.07, 1)
 fog_density = 0.05
 
-[sub_resource type="FastNoiseLite" id="FastNoiseLite_5r4gv"]
+[sub_resource type="FastNoiseLite" id="FastNoiseLite_l0ui7"]
 frequency = 0.012
 
-[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_yns8w"]
+[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_853cl"]
 width = 256
 height = 256
-noise = SubResource("FastNoiseLite_5r4gv")
+noise = SubResource("FastNoiseLite_l0ui7")
 seamless = true
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_5b0uq"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_s1pck"]
 render_priority = 0
-shader = ExtResource("1_epcgt")
-shader_parameter/ripples = SubResource("NoiseTexture2D_yns8w")
+shader = ExtResource("1_11yvj")
+shader_parameter/ripples = SubResource("NoiseTexture2D_853cl")
 shader_parameter/tint = null
 shader_parameter/glow = null
 shader_parameter/flash = null
@@ -36,69 +38,63 @@ shader_parameter/patch_size = null
 shader_parameter/drift = null
 shader_parameter/reach = null
 
-[sub_resource type="PlaneMesh" id="PlaneMesh_12ru5"]
+[sub_resource type="PlaneMesh" id="PlaneMesh_2akkt"]
 size = Vector2(60, 60)
 
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_l0ui7"]
-shading_mode = 0
-albedo_color = Color(1, 0.78, 0.4, 1)
-
-[sub_resource type="SphereMesh" id="SphereMesh_853cl"]
-radius = 0.15
-height = 0.3
-radial_segments = 10
-rings = 5
-
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_s1pck"]
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_ncdnq"]
 transparency = 1
 blend_mode = 1
 shading_mode = 0
 albedo_color = Color(1, 0.6, 0.25, 0.07)
 
-[sub_resource type="SphereMesh" id="SphereMesh_2akkt"]
+[sub_resource type="SphereMesh" id="SphereMesh_rahqi"]
 radius = 0.6
 height = 1.2
 radial_segments = 12
 rings = 6
 
-[sub_resource type="CylinderMesh" id="CylinderMesh_ncdnq"]
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_5q42c"]
+shading_mode = 0
+albedo_color = Color(1, 0.78, 0.4, 1)
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_n12d8"]
 top_radius = 0.012
 bottom_radius = 0.065
 height = 0.5
 radial_segments = 6
 rings = 1
 
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_rahqi"]
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_hgusb"]
 transparency = 1
 shading_mode = 0
 albedo_color = Color(0.55, 0.72, 0.82, 0.5)
 
-[sub_resource type="SphereMesh" id="SphereMesh_5q42c"]
-material = SubResource("StandardMaterial3D_rahqi")
+[sub_resource type="SphereMesh" id="SphereMesh_13tl2"]
+material = SubResource("StandardMaterial3D_hgusb")
 radius = 0.022
 height = 0.044
 radial_segments = 8
 rings = 4
 
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_n12d8"]
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_a6idw"]
 shading_mode = 0
 albedo_color = Color(0.22, 0.34, 0.42, 1)
 
-[sub_resource type="SphereMesh" id="SphereMesh_hgusb"]
-material = SubResource("StandardMaterial3D_n12d8")
+[sub_resource type="SphereMesh" id="SphereMesh_5sp6a"]
+material = SubResource("StandardMaterial3D_a6idw")
 radius = 0.012
 height = 0.024
 radial_segments = 8
 rings = 4
 
-[sub_resource type="SphereMesh" id="SphereMesh_13tl2"]
-material = SubResource("StandardMaterial3D_rahqi")
+[sub_resource type="SphereMesh" id="SphereMesh_w1y1v"]
+material = SubResource("StandardMaterial3D_hgusb")
 radius = 0.026
 height = 0.052
 radial_segments = 8
 rings = 4
 
-[sub_resource type="Animation" id="Animation_a6idw"]
+[sub_resource type="Animation" id="Animation_8cx30"]
 length = 7.0
 tracks/0/type = "value"
 tracks/0/imported = false
@@ -139,41 +135,53 @@ tracks/2/keys = {
 tracks/3/type = "value"
 tracks/3/imported = false
 tracks/3/enabled = true
-tracks/3/path = NodePath("Castaway:position")
+tracks/3/path = NodePath("Lantern/Body:lean")
 tracks/3/interp = 1
 tracks/3/loop_wrap = true
 tracks/3/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
+"times": PackedFloat32Array(0, 3, 6),
+"transitions": PackedFloat32Array(1, 1, 1),
 "update": 0,
-"values": [Vector3(0, 1, 0)]
+"values": [Vector3(0, 0, 0), Vector3(0.3, 0, 0), Vector3(0.9, 0, 0)]
 }
 tracks/4/type = "value"
 tracks/4/imported = false
 tracks/4/enabled = true
-tracks/4/path = NodePath("Castaway:rotation")
+tracks/4/path = NodePath("Castaway:position")
 tracks/4/interp = 1
 tracks/4/loop_wrap = true
 tracks/4/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
 "update": 0,
-"values": [Vector3(-1.25, 1.1, -0.1)]
+"values": [Vector3(0, 1, 0)]
 }
 tracks/5/type = "value"
 tracks/5/imported = false
 tracks/5/enabled = true
-tracks/5/path = NodePath("Surface:glow")
+tracks/5/path = NodePath("Castaway:rotation")
 tracks/5/interp = 1
 tracks/5/loop_wrap = true
 tracks/5/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
 "update": 0,
+"values": [Vector3(-1.25, 1.1, -0.1)]
+}
+tracks/6/type = "value"
+tracks/6/imported = false
+tracks/6/enabled = true
+tracks/6/path = NodePath("Surface:glow")
+tracks/6/interp = 1
+tracks/6/loop_wrap = true
+tracks/6/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
 "values": [0.3]
 }
 
-[sub_resource type="Animation" id="Animation_5sp6a"]
+[sub_resource type="Animation" id="Animation_jsgrj"]
 length = 4.0
 loop_mode = 1
 tracks/0/type = "value"
@@ -215,41 +223,53 @@ tracks/2/keys = {
 tracks/3/type = "value"
 tracks/3/imported = false
 tracks/3/enabled = true
-tracks/3/path = NodePath("Castaway:position")
+tracks/3/path = NodePath("Lantern/Body:lean")
 tracks/3/interp = 1
 tracks/3/loop_wrap = true
 tracks/3/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector3(0.9, 0, 0)]
+}
+tracks/4/type = "value"
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/path = NodePath("Castaway:position")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/keys = {
 "times": PackedFloat32Array(0, 2, 4),
 "transitions": PackedFloat32Array(1, 1, 1),
 "update": 0,
 "values": [Vector3(0, 1, 0), Vector3(0, 0.93, 0), Vector3(0, 1, 0)]
 }
-tracks/4/type = "value"
-tracks/4/imported = false
-tracks/4/enabled = true
-tracks/4/path = NodePath("Castaway:rotation")
-tracks/4/interp = 1
-tracks/4/loop_wrap = true
-tracks/4/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 0,
-"values": [Vector3(-1.25, 1.1, -0.1)]
-}
 tracks/5/type = "value"
 tracks/5/imported = false
 tracks/5/enabled = true
-tracks/5/path = NodePath("Surface:glow")
+tracks/5/path = NodePath("Castaway:rotation")
 tracks/5/interp = 1
 tracks/5/loop_wrap = true
 tracks/5/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
 "update": 0,
+"values": [Vector3(-1.25, 1.1, -0.1)]
+}
+tracks/6/type = "value"
+tracks/6/imported = false
+tracks/6/enabled = true
+tracks/6/path = NodePath("Surface:glow")
+tracks/6/interp = 1
+tracks/6/loop_wrap = true
+tracks/6/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
 "values": [0.3]
 }
 
-[sub_resource type="Animation" id="Animation_w1y1v"]
+[sub_resource type="Animation" id="Animation_lv5el"]
 length = 8.0
 tracks/0/type = "value"
 tracks/0/imported = false
@@ -336,7 +356,7 @@ tracks/6/keys = {
 "values": [Vector3(0.01, 0.01, 0.01)]
 }
 
-[sub_resource type="Animation" id="Animation_8cx30"]
+[sub_resource type="Animation" id="Animation_ae1ut"]
 length = 2.4
 tracks/0/type = "value"
 tracks/0/imported = false
@@ -377,107 +397,120 @@ tracks/2/keys = {
 tracks/3/type = "value"
 tracks/3/imported = false
 tracks/3/enabled = true
-tracks/3/path = NodePath("Castaway:position")
+tracks/3/path = NodePath("Lantern/Body:lean")
 tracks/3/interp = 1
 tracks/3/loop_wrap = true
 tracks/3/keys = {
+"times": PackedFloat32Array(0, 0.5),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Vector3(0.9, 0, 0), Vector3(0, 0, 0)]
+}
+tracks/4/type = "value"
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/path = NodePath("Castaway:position")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/keys = {
 "times": PackedFloat32Array(0, 0.5, 2.4),
 "transitions": PackedFloat32Array(1, 2.2, 1),
 "update": 0,
 "values": [Vector3(0, 1, 0), Vector3(0, 1.05, 0), Vector3(0, 11.1, 0)]
 }
-tracks/4/type = "value"
-tracks/4/imported = false
-tracks/4/enabled = true
-tracks/4/path = NodePath("Castaway:rotation")
-tracks/4/interp = 1
-tracks/4/loop_wrap = true
-tracks/4/keys = {
-"times": PackedFloat32Array(0, 2.4),
-"transitions": PackedFloat32Array(1, 1),
-"update": 0,
-"values": [Vector3(-1.25, 1.1, -0.1), Vector3(-0.2, 1.1, 0)]
-}
 tracks/5/type = "value"
 tracks/5/imported = false
 tracks/5/enabled = true
-tracks/5/path = NodePath("Surface:glow")
+tracks/5/path = NodePath("Castaway:rotation")
 tracks/5/interp = 1
 tracks/5/loop_wrap = true
 tracks/5/keys = {
 "times": PackedFloat32Array(0, 2.4),
 "transitions": PackedFloat32Array(1, 1),
 "update": 0,
+"values": [Vector3(-1.25, 1.1, -0.1), Vector3(-0.2, 1.1, 0)]
+}
+tracks/6/type = "value"
+tracks/6/imported = false
+tracks/6/enabled = true
+tracks/6/path = NodePath("Surface:glow")
+tracks/6/interp = 1
+tracks/6/loop_wrap = true
+tracks/6/keys = {
+"times": PackedFloat32Array(0, 2.4),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
 "values": [0.3, 1.3]
 }
 
-[sub_resource type="AnimationLibrary" id="AnimationLibrary_jsgrj"]
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_2bi5t"]
 _data = {
-&"lantern_descends": SubResource("Animation_a6idw"),
-&"offered": SubResource("Animation_5sp6a"),
-&"sinking": SubResource("Animation_w1y1v"),
-&"taken": SubResource("Animation_8cx30")
+&"lantern_descends": SubResource("Animation_8cx30"),
+&"offered": SubResource("Animation_jsgrj"),
+&"sinking": SubResource("Animation_lv5el"),
+&"taken": SubResource("Animation_ae1ut")
 }
 
-[node name="Underwater" type="Node3D" unique_id=1658417921]
+[node name="Underwater" type="Node3D" unique_id=700571466]
 
-[node name="WorldEnvironment" type="WorldEnvironment" parent="." unique_id=1517162444]
-environment = SubResource("Environment_cl0er")
+[node name="WorldEnvironment" type="WorldEnvironment" parent="." unique_id=486641737]
+environment = SubResource("Environment_12ru5")
 
-[node name="Camera" type="Camera3D" parent="." unique_id=925504433]
+[node name="Camera" type="Camera3D" parent="." unique_id=1006802645]
 transform = Transform3D(1, 0, 0, 0, 0.99820054, -0.059964005, 0, 0.059964005, 0.99820054, 0, 1.2, 6.5)
 current = true
 fov = 65.0
 
-[node name="Surface" type="MeshInstance3D" parent="." unique_id=2053636813]
+[node name="Surface" type="MeshInstance3D" parent="." unique_id=1657524249]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 10, 0)
-material_override = SubResource("ShaderMaterial_5b0uq")
+material_override = SubResource("ShaderMaterial_s1pck")
 cast_shadow = 0
-mesh = SubResource("PlaneMesh_12ru5")
-script = ExtResource("2_4fduc")
+mesh = SubResource("PlaneMesh_2akkt")
+script = ExtResource("2_nfwwl")
 
-[node name="StormLight" type="DirectionalLight3D" parent="." unique_id=891853785]
+[node name="StormLight" type="DirectionalLight3D" parent="." unique_id=1653939318]
 transform = Transform3D(1, 0, 0, 0, -4.371139e-08, 1, 0, -1, -4.371139e-08, 0, 0, 0)
 light_color = Color(0.75, 0.85, 1, 1)
-script = ExtResource("3_11yvj")
+script = ExtResource("3_cl0er")
 peak_energy = 1.4
 
-[node name="Moonglow" type="DirectionalLight3D" parent="." unique_id=1227624711]
+[node name="Moonglow" type="DirectionalLight3D" parent="." unique_id=1431573173]
 transform = Transform3D(0.9396926, -0.3213938, 0.11697777, 0, 0.34202015, 0.9396926, -0.34202012, -0.8830222, 0.32139382, 0, 0, 0)
 light_color = Color(0.5, 0.7, 1, 1)
 light_energy = 0.12
 
-[node name="Castaway" type="Node3D" parent="." unique_id=1836598663 instance=ExtResource("4_nfwwl")]
+[node name="Castaway" type="Node3D" parent="." unique_id=2019297073 instance=ExtResource("4_5r4gv")]
 transform = Transform3D(0.83711946, -0.31049567, 0.45035928, 0.15892528, 0.9258315, 0.3428978, -0.5234251, -0.21547297, 0.8243771, 0, 7.5, 0)
 
-[node name="Lantern" type="Node3D" parent="." unique_id=886966253]
+[node name="Lantern" type="Node3D" parent="." unique_id=1395549539]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.8, 11, -0.6)
 
-[node name="Flame" type="MeshInstance3D" parent="Lantern" unique_id=1574584354]
-material_override = SubResource("StandardMaterial3D_l0ui7")
-mesh = SubResource("SphereMesh_853cl")
+[node name="Body" type="Node3D" parent="Lantern" unique_id=1061385630 instance=ExtResource("5_yns8w")]
+transform = Transform3D(-1.6637443, 0.10266248, 0.67927563, 0, 1.7797879, -0.26898864, -0.6869898, -0.24862684, -1.6450622, 0, 0, 0)
+script = ExtResource("6_5b0uq")
+look_name = "sinking_lantern"
 
-[node name="Halo" type="MeshInstance3D" parent="Lantern" unique_id=732592028]
-material_override = SubResource("StandardMaterial3D_s1pck")
+[node name="Halo" type="MeshInstance3D" parent="Lantern" unique_id=1314988854]
+material_override = SubResource("StandardMaterial3D_ncdnq")
 cast_shadow = 0
-mesh = SubResource("SphereMesh_2akkt")
+mesh = SubResource("SphereMesh_rahqi")
 
-[node name="Light" type="OmniLight3D" parent="Lantern" unique_id=1230943642]
+[node name="Light" type="OmniLight3D" parent="Lantern" unique_id=907959300]
 light_color = Color(1, 0.72, 0.4, 1)
 light_energy = 0.0
 omni_range = 7.0
 
-[node name="Hand" type="MeshInstance3D" parent="Lantern" unique_id=321824386]
-transform = Transform3D(-0.004024611, -0.009154371, 0, 0.009154371, -0.004024611, 0, 0, 0, 0.01, -0.29, -0.13, 0)
-material_override = SubResource("StandardMaterial3D_l0ui7")
-mesh = SubResource("CylinderMesh_ncdnq")
+[node name="Hand" type="MeshInstance3D" parent="Lantern" unique_id=1634952246]
+transform = Transform3D(-0.004024611, -0.009154371, 0, 0.009154371, -0.004024611, 0, 0, 0, 0.01, -0.36, -0.2, 0)
+material_override = SubResource("StandardMaterial3D_5q42c")
+mesh = SubResource("CylinderMesh_n12d8")
 
-[node name="Bubbles" type="CPUParticles3D" parent="." unique_id=1032397254]
+[node name="Bubbles" type="CPUParticles3D" parent="." unique_id=2019544290]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -5, 0)
 amount = 44
 lifetime = 10.0
 preprocess = 10.0
-mesh = SubResource("SphereMesh_5q42c")
+mesh = SubResource("SphereMesh_13tl2")
 emission_shape = 3
 emission_box_extents = Vector3(5, 0.5, 3)
 direction = Vector3(0, 1, 0)
@@ -488,12 +521,12 @@ initial_velocity_max = 1.6
 scale_amount_min = 0.5
 scale_amount_max = 1.6
 
-[node name="Motes" type="CPUParticles3D" parent="." unique_id=1199187228]
+[node name="Motes" type="CPUParticles3D" parent="." unique_id=1592901865]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2, 0)
 amount = 70
 lifetime = 14.0
 preprocess = 14.0
-mesh = SubResource("SphereMesh_hgusb")
+mesh = SubResource("SphereMesh_5sp6a")
 emission_shape = 3
 emission_box_extents = Vector3(7, 6, 4)
 direction = Vector3(0, 1, 0)
@@ -504,14 +537,14 @@ initial_velocity_max = 0.5
 scale_amount_min = 0.5
 scale_amount_max = 1.6
 
-[node name="Splash" type="CPUParticles3D" parent="." unique_id=932415849]
+[node name="Splash" type="CPUParticles3D" parent="." unique_id=1997817899]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.2, 4.4)
 emitting = false
 amount = 240
 lifetime = 2.6
 one_shot = true
 explosiveness = 0.9
-mesh = SubResource("SphereMesh_13tl2")
+mesh = SubResource("SphereMesh_w1y1v")
 emission_shape = 3
 emission_box_extents = Vector3(3, 1.5, 1)
 direction = Vector3(0, 1, 0)
@@ -522,5 +555,5 @@ initial_velocity_max = 4.0
 scale_amount_min = 0.5
 scale_amount_max = 1.6
 
-[node name="Clips" type="AnimationPlayer" parent="." unique_id=1437499362 groups=["clips"]]
-libraries/ = SubResource("AnimationLibrary_jsgrj")
+[node name="Clips" type="AnimationPlayer" parent="." unique_id=400324578 groups=["clips"]]
+libraries/ = SubResource("AnimationLibrary_2bi5t")
