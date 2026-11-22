@@ -1,12 +1,14 @@
 [gd_scene format=3]
 
 [ext_resource type="Shader" path="res://shaders/nameboard_gilt.gdshader" id="1_ah4m5"]
-[ext_resource type="FontFile" path="res://assets/fonts/VarelaRound-Regular.ttf" id="2_m38hy"]
+[ext_resource type="FontVariation" path="res://assets/fonts/title_font.tres" id="2_m38hy"]
 [ext_resource type="Script" path="res://scripts/intro/name_gilt.gd" id="3_jk4ff"]
 [ext_resource type="Material" path="res://assets/placeholder/materials/iron.tres" id="4_cf5ua"]
 [ext_resource type="Script" path="res://scripts/intro/stern_swing.gd" id="5_100y2"]
 [ext_resource type="PackedScene" path="res://scenes/prototype/lantern_body.tscn" id="6_bif2u"]
 [ext_resource type="Script" path="res://scripts/companion/lantern_face.gd" id="7_38f7w"]
+[ext_resource type="Script" path="res://scripts/intro/window_dimmer.gd" id="8_dimmer"]
+[ext_resource type="Material" path="res://assets/placeholder/materials/window_glow.tres" id="9_glow"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_xelty"]
 render_priority = 0
@@ -23,7 +25,7 @@ shader_parameter/shine = null
 text = "SALT AND EMBER"
 font = ExtResource("2_m38hy")
 font_size = 64
-pixel_size = 0.0034
+pixel_size = 0.0043
 depth = 0.03
 
 [sub_resource type="BoxMesh" id="BoxMesh_pe1s4"]
@@ -152,6 +154,18 @@ tracks/1/keys = {
 "update": 1,
 "values": [true]
 }
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("WindowDimmer:dimmed")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
 
 [sub_resource type="Animation" id="Animation_t0bpr"]
 length = 0.1
@@ -202,6 +216,18 @@ tracks/3/keys = {
 "transitions": PackedFloat32Array(1),
 "update": 0,
 "values": [Vector3(0, 3.1415927, 0)]
+}
+tracks/4/type = "value"
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/path = NodePath("WindowDimmer:dimmed")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
 }
 
 [sub_resource type="Animation" id="Animation_aduj4"]
@@ -283,6 +309,10 @@ look_name = "hook_lantern"
 streaked = true
 light = NodePath("../Glow")
 light_energy = 1.8
+
+[node name="WindowDimmer" type="Node" parent="."]
+script = ExtResource("8_dimmer")
+glow = ExtResource("9_glow")
 
 [node name="Shots" type="Node3D" parent="." unique_id=1160865289]
 

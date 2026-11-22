@@ -1,7 +1,7 @@
 extends GameTestSuite
 ## Tests for the watch at the stern: the swing that dies away when it's
-## switched off, and the gilt of the ship's name, which only shows by the
-## lamp's light and by lightning.
+## switched off, the gilt of the ship's name, which only shows by the
+## lamp's light and by lightning, and the lit windows turned down behind it.
 
 
 func test_it_swings_from_side_to_side_within_its_reach() -> void:
@@ -91,6 +91,65 @@ func test_the_letters_are_told_where_the_lamp_is_and_about_lightning() -> void:
 	var glow: float = material.get_shader_parameter("lamp_glow")
 	assert_float(flash).is_equal_approx(0.7, 0.001)
 	assert_float(glow).is_equal(1.0)
+
+
+func test_the_windows_turn_down_gently_and_back_up() -> void:
+	var glow: StandardMaterial3D = _new_glow(2.4)
+	var dimmer: WindowDimmer = _new_dimmer(glow)
+	dimmer.dim_to = 0.25
+	dimmer.seconds = 0.4
+	await _frames(2)
+	assert_float(glow.emission_energy_multiplier).is_equal_approx(2.4, 0.001)
+
+	dimmer.dimmed = true
+	await _frames(6)
+	assert_float(dimmer.level).is_between(0.3, 0.98)
+
+	await get_tree().create_timer(0.6).timeout
+	assert_float(dimmer.level).is_equal_approx(0.25, 0.001)
+	assert_float(glow.emission_energy_multiplier).is_equal_approx(0.6, 0.001)
+
+	dimmer.dimmed = false
+	await get_tree().create_timer(0.6).timeout
+	assert_float(glow.emission_energy_multiplier).is_equal_approx(2.4, 0.001)
+
+
+func test_the_windows_glow_is_put_back_when_the_scene_closes() -> void:
+	var glow: StandardMaterial3D = _new_glow(2.4)
+	var dimmer: WindowDimmer = WindowDimmer.new()
+	dimmer.glow = glow
+	dimmer.seconds = 0.0
+	dimmer.dimmed = true
+	add_child(dimmer)
+	await _frames(3)
+	assert_float(glow.emission_energy_multiplier).is_less(1.0)
+
+	dimmer.free()
+
+	assert_float(glow.emission_energy_multiplier).is_equal_approx(2.4, 0.001)
+
+
+func test_a_dimmer_with_no_windows_does_nothing() -> void:
+	var dimmer: WindowDimmer = _new_dimmer(null)
+	dimmer.dimmed = true
+	await _frames(3)
+
+	assert_float(dimmer.level).is_equal(1.0)
+
+
+func _new_glow(energy: float) -> StandardMaterial3D:
+	var glow: StandardMaterial3D = StandardMaterial3D.new()
+	glow.emission_enabled = true
+	glow.emission_energy_multiplier = energy
+	return glow
+
+
+func _new_dimmer(glow: StandardMaterial3D) -> WindowDimmer:
+	var dimmer: WindowDimmer = WindowDimmer.new()
+	auto_free(dimmer)
+	dimmer.glow = glow
+	add_child(dimmer)
+	return dimmer
 
 
 func _frames(count: int) -> void:

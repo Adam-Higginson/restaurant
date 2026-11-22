@@ -56,6 +56,10 @@ func test_it_opens_on_her_name_and_waits_for_any_button() -> void:
 	assert_bool(swing.swinging).is_true()
 	assert_int(face.expression).is_equal(LanternFace.Look.TIRED)
 	assert_float(gilt.lamp_glow()).is_greater(0.9)
+	# The lit windows behind her name are turned down, so his light shows.
+	var dimmer: WindowDimmer = _ship.get_node("SternWatch/WindowDimmer") as WindowDimmer
+	assert_bool(dimmer.dimmed).is_true()
+	assert_float(dimmer.level).is_less(0.2)
 	assert_bool(_fade().visible).is_false()
 	assert_bool(_player.camera_rig.is_fixed).is_true()
 	assert_str(prompt.shown_text()).is_equal("Press any button")
@@ -76,6 +80,7 @@ func test_it_opens_on_her_name_and_waits_for_any_button() -> void:
 	assert_bool(await _reaches(runner, &"dark")).is_true()
 	assert_bool(hook_lantern.is_visible_in_tree()).is_false()
 	assert_float(gilt.lamp_glow()).is_equal(0.0)
+	assert_bool(dimmer.dimmed).is_false()
 	assert_bool(underwater.is_open).is_true()
 	assert_bool(_ambience().submerged).is_true()
 	assert_str(prompt.shown_text()).is_empty()
@@ -176,6 +181,7 @@ func test_skipping_the_intro_ends_it_with_everything_put_away() -> void:
 	assert_bool(_player.camera_rig.is_fixed).is_false()
 	assert_bool((_sea.get_node("Stages/Underwater") as Stage).is_open).is_false()
 	assert_bool(_hook_lantern().is_visible_in_tree()).is_false()
+	assert_bool((_ship.get_node("SternWatch/WindowDimmer") as WindowDimmer).dimmed).is_false()
 	assert_bool(_ambience().submerged).is_false()
 	assert_bool((_ship.get_node("RescueSet/Props/Castaway") as Node3D).visible).is_false()
 	assert_bool((_ship.get_node("RescueSet/Props/ReachingBoathook") as Node3D).visible).is_false()

@@ -60,6 +60,7 @@
 @look hook_lantern determined
 @play dives
 @wait 1.2
+@play off_watch
 -> dark
 
 # The dark. You sink, and the light of the surface goes with it.
