@@ -1,0 +1,89 @@
+name: Probe shutdown hang
+
+# Throwaway: finds out why Godot hangs on exit in CI since the ship became the
+# main scene (#99). Not to be merged.
+
+on:
+  pull_request:
+
+permissions:
+  contents: read
+  checks: write
+  pull-requests: write
+
+jobs:
+  suite:
+    name: suite ${{ matrix.scene }} run ${{ matrix.run }}
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        scene: [ship, restaurant2d]
+        run: [1, 2, 3]
+    steps:
+      - uses: actions/checkout@v4
+      - name: Use the old 2D main scene
+        if: matrix.scene == 'restaurant2d'
+        run: |
+          sed -i 's|^run/main_scene=.*|run/main_scene="res://scenes/main.tscn"|' project.godot
+          rm tests/project_settings_test.gd tests/project_settings_test.gd.uid
+          grep -n main_scene project.godot
+      - uses: godot-gdunit-labs/gdUnit4-action@v1
+        with:
+          godot-version: '4.7.2'
+          version: 'installed'
+          paths: 'res://tests'
+          timeout: 5
+          headless: true
+          arguments: '-c --fixed-fps 60 --ignoreHeadlessMode'
+          report-name: probe-${{ matrix.scene }}-${{ matrix.run }}.xml
+
+  diagnose:
+    name: diagnose (backtrace on hang)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      # Installs Godot at /home/runner/godot-linux/godot and imports the project.
+      - uses: godot-gdunit-labs/gdUnit4-action@v1
+        continue-on-error: true
+        with:
+          godot-version: '4.7.2'
+          version: 'installed'
+          paths: 'res://tests/project_settings_test.gd'
+          timeout: 3
+          headless: true
+          arguments: '-c --fixed-fps 60 --ignoreHeadlessMode'
+          report-name: probe-diagnose.xml
+      - name: Small suites, five times each, killed with SIGSEGV if they hang
+        if: always()
+        run: |
+          godot=/home/runner/godot-linux/godot
+          for suite in res://tests/project_settings_test.gd \
+              res://tests/scripts/dialogue/speaker_test.gd \
+              res://tests/scripts/people/crew_test.gd; do
+            for i in 1 2 3 4 5; do
+              start=$(date +%s)
+              timeout -s SEGV 90 $godot --path . -s -d --remote-debug tcp://127.0.0.1:0 \
+                  res://addons/gdUnit4/bin/GdUnitCmdTool.gd --headless --audio-driver Dummy \
+                  -a $suite -c --fixed-fps 60 --ignoreHeadlessMode > run.log 2>&1
+              code=$?
+              echo "$suite run $i: exit $code after $(( $(date +%s) - start ))s"
+              if [ $code -ne 0 ] && [ $code -ne 100 ]; then
+                echo "----- last lines -----"
+                tail -80 run.log
+              fi
+            done
+          done
+      - name: The whole suite with verbose output, killed with SIGSEGV if it hangs
+        if: always()
+        run: |
+          godot=/home/runner/godot-linux/godot
+          start=$(date +%s)
+          timeout -s SEGV 200 $godot --path . -s -d --remote-debug tcp://127.0.0.1:0 \
+              res://addons/gdUnit4/bin/GdUnitCmdTool.gd --headless --audio-driver Dummy \
+              -a res://tests -c --fixed-fps 60 --ignoreHeadlessMode --verbose > full.log 2>&1
+          code=$?
+          echo "full suite: exit $code after $(( $(date +%s) - start ))s"
+          grep -n "Overall Summary\|dispose" full.log | tail -3
+          echo "----- last 150 lines -----"
+          tail -150 full.log
