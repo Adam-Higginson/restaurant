@@ -1,6 +1,6 @@
 class_name CrabCycle
 extends RefCounted
-## A fog-crab's fight, as a state machine: it is always in exactly one
+## A crab's fight, as a state machine: it is always in exactly one
 ## [enum State], and moves to the next when that state's time runs out.
 ##
 ## Engaged, it loops: windup (the tell you read), attack (the hit lands as
@@ -9,18 +9,18 @@ extends RefCounted
 ## where it was aiming and a dodge gets out of the way. A parried hit
 ## staggers it instead, which is a longer opening; a perfect parry, or a
 ## fillet as it lunges, flips it onto its back, the longest opening of all.
-## Strikes while it's open wear its fog away, and when the fog is gone it's
-## done fighting for good.
+## Strikes while it's open wear its health away, and when it's gone the crab
+## dies.
 ##
 ## Plain data with no node: [method tick] moves time on, so tests can step it
-## exactly. [FogCrab] owns one and acts it out.
+## exactly. [Crab] owns one and acts it out.
 
 ## Emitted when the crab moves to a new state.
 signal state_changed(state: State)
 ## Emitted at the moment its attack lands (as ATTACK starts).
 signal attacked
-## Emitted once, when the last strike clears its fog.
-signal cleared
+## Emitted once, when the last strike kills it.
+signal died
 
 enum State {
 	## Not fighting: nobody is near.
@@ -33,8 +33,8 @@ enum State {
 	OPENING,
 	## Knocked back by a parry: strikes count, for longer.
 	STAGGERED,
-	## Its fog is gone. It never fights again.
-	CLEARED,
+	## Dead. It never fights again.
+	DEAD,
 	## On its back, legs flailing: strikes count, for longest.
 	FLIPPED,
 }
@@ -52,8 +52,8 @@ var opening_seconds: float = 1.2
 var stagger_seconds: float = 1.5
 ## How long it lies on its back once flipped, in seconds.
 var flip_seconds: float = 3.0
-## How much fog it has: the damage that clears it, from strikes while it's open.
-var fog: int = 8
+## How much health it has: the damage, from strikes while it's open, that kills it.
+var health: int = 80
 
 ## The state it's in now.
 var state: State:
@@ -91,14 +91,14 @@ func engage() -> void:
 
 ## Stops fighting (the player has gone), keeping the damage it has taken.
 func disengage() -> void:
-	if _state != State.CLEARED and _state != State.IDLE:
+	if _state != State.DEAD and _state != State.IDLE:
 		_enter(State.IDLE)
 
 
-## Forgets the damage it has taken and stops fighting: the fog closes back
-## over it. Does nothing once cleared.
+## Forgets the damage it has taken and stops fighting: it's whole again.
+## Does nothing once dead.
 func reset() -> void:
-	if _state == State.CLEARED:
+	if _state == State.DEAD:
 		return
 	_damage = 0
 	_enter(State.IDLE)
@@ -130,15 +130,15 @@ func is_committed() -> bool:
 
 
 ## A knife strike doing [param damage]. Counts only while the crab is open,
-## and returns whether it did. Once the damage reaches its [member fog], the
-## fog clears.
+## and returns whether it did. Once the damage reaches its [member health], it
+## dies.
 func take_strike(damage: int = 1) -> bool:
 	if not is_open():
 		return false
 	_damage += maxi(damage, 0)
-	if _damage >= fog:
-		_enter(State.CLEARED)
-		cleared.emit()
+	if _damage >= health:
+		_enter(State.DEAD)
+		died.emit()
 	return true
 
 

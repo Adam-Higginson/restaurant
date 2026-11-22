@@ -30,6 +30,21 @@ func test_a_fillet_fries_into_pan_fried_herring() -> void:
 	assert_int(food[0].quality).is_equal(3)
 
 
+func test_crab_meat_sears_into_pan_seared_crab() -> void:
+	var hob: Hob = _new_hob()
+	var runner: GdUnitSceneRunner = scene_runner(hob)
+	await physics_ticks(runner, 2)
+
+	hob.heated.contents.add_item(_food(&"crab_meat", 1))
+	await physics_ticks(runner, 5 * 60 + 5)
+
+	var food: Array[ItemInstance] = hob.heated.contents.get_contents()
+	assert_int(food.size()).is_equal(1)
+	assert_str(String(food[0].item.id)).is_equal("pan_seared_crab")
+	# A level-1 crab's ★ meat, seared properly (★★★): (1 + 3) / 2 = ★★.
+	assert_int(food[0].quality).is_equal(2)
+
+
 func test_a_whole_herring_takes_the_rough_shortcut() -> void:
 	var hob: Hob = _new_hob()
 	var runner: GdUnitSceneRunner = scene_runner(hob)

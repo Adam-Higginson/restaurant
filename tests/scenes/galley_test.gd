@@ -38,6 +38,10 @@ func test_the_stations_stand_in_a_row_along_the_bulkhead() -> void:
 	var pantry: StorageProp3D = _station(ship, "Pantry") as StorageProp3D
 	assert_int(pantry.contents.count(LETTUCE, ItemInstance.MIN_QUALITY)).is_equal(3)
 	assert_int(pantry.contents.count(TOMATO, ItemInstance.MIN_QUALITY)).is_equal(3)
+	# A crab's meat, as if brought back from the shore, until islands join the
+	# ship (#67).
+	var crab_meat: Item = load("res://data/items/crab_meat.tres") as Item
+	assert_int(pantry.contents.count(crab_meat, ItemInstance.MIN_QUALITY)).is_equal(1)
 
 
 func test_each_station_is_focused_from_in_front_of_it() -> void:

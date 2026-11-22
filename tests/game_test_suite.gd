@@ -183,11 +183,11 @@ func lantern_at_shoulder(player: Node3D) -> LanternSpirit:
 	return spirit
 
 
-## A [FogCrab] at [param pos] in [param player]'s world, so it's freed with
+## A [Crab] at [param pos] in [param player]'s world, so it's freed with
 ## it. Add it before the scene runs.
-func new_fog_crab(player: Player3D, pos: Vector3) -> FogCrab:
-	var scene: PackedScene = load("res://scenes/prototype/creatures/fog_crab.tscn") as PackedScene
-	var crab: FogCrab = scene.instantiate() as FogCrab
+func new_crab(player: Player3D, pos: Vector3) -> Crab:
+	var scene: PackedScene = load("res://scenes/prototype/creatures/crab.tscn") as PackedScene
+	var crab: Crab = scene.instantiate() as Crab
 	crab.position = pos
 	player.get_parent().add_child(crab)
 	return crab

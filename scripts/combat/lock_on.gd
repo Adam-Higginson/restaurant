@@ -7,7 +7,7 @@ extends Node
 ## camera round behind the player instead.
 ##
 ## A child of the [Player3D]. Anything in the [constant GROUP] group can be
-## locked on to; a fog-crab leaves the group when its fog clears.
+## locked on to; a crab leaves the group when it dies.
 
 ## Emitted when the target changes (null when lock-on lets go).
 signal target_changed(target: Node3D)
