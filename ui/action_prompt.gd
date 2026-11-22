@@ -10,7 +10,8 @@ extends VBoxContainer
 ## is used again.
 ##
 ## Display only: the words come from the player's [InteractionDetector3D],
-## which asks the focused prop. [Hud3D] hands it the player.
+## which asks the focused prop, or with nothing in front, from their [Dodge]
+## (locked on, Interact dodges). [Hud3D] hands it the player.
 
 ## Whose button names to show.
 enum Device { KEYBOARD_MOUSE, PAD }
@@ -26,6 +27,7 @@ var device: Device:
 
 var _device: Device = Device.KEYBOARD_MOUSE
 var _detector: InteractionDetector3D = null
+var _dodge: Dodge = null
 
 @onready var _interact_line: Label = $InteractLine
 @onready var _tool_line: Label = $ToolLine
@@ -56,6 +58,7 @@ func _input(event: InputEvent) -> void:
 ## Starts prompting for [param player].
 func setup(player: Player3D) -> void:
 	_detector = player.get_node("InteractionDetector") as InteractionDetector3D
+	_dodge = player.get_node_or_null("Dodge") as Dodge
 
 
 ## Re-reads what the buttons would do and updates the lines. Runs every
@@ -63,7 +66,11 @@ func setup(player: Player3D) -> void:
 func refresh() -> void:
 	if _detector == null:
 		return
-	_show_lines(_detector.interact_prompt(), _detector.tool_prompt())
+	var interact: String = _detector.interact_prompt()
+	# Only with nothing in front at all: a prop there takes the press.
+	if not is_instance_valid(_detector.focused) and _dodge != null:
+		interact = _dodge.prompt()
+	_show_lines(interact, _detector.tool_prompt())
 
 
 ## The text of a prompt line: [param action]'s button, then [param text].

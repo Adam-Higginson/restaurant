@@ -50,6 +50,8 @@ const HEAD_BONES: PackedStringArray = ["Head", "neck_01"]
 const MOVING_BONES: PackedStringArray = ["root", "pelvis"]
 ## The animation library's name on the [AnimationPlayer].
 const LIBRARY: StringName = &"moves"
+## How high the hips are that a backflip turns about, in metres.
+const FLIP_PIVOT_HEIGHT: float = 0.55
 
 ## Whether characters are built from the packs at all. Tests turn it off,
 ## so they run the same with or without the pack files (as in CI), and
@@ -134,6 +136,8 @@ func _ready() -> void:
 		_duellist = player.get_node_or_null("Duellist") as Duellist
 	if _duellist != null:
 		_duellist.cut_started.connect(_on_cut_started)
+	if player != null:
+		player.dodged.connect(_on_dodged)
 	if not Engine.is_editor_hint():
 		Game.look_changed.connect(func(_body: PlayerLook.Body) -> void: dress())
 	dress()
@@ -143,6 +147,7 @@ func _process(delta: float) -> void:
 	if _animator == null:
 		return
 	plant_feet()
+	_turn_for_flip()
 	var walking: bool = player != null and player.is_walking
 	var charging: bool = _duellist != null and _duellist.is_charging()
 	var parrying: bool = _duellist != null and _duellist.parry.is_active()
@@ -559,6 +564,35 @@ func _measure_stride(anim_name: StringName) -> float:
 			swept += alongs[sample + 1] - alongs[sample]
 			time_down += step
 	return swept / time_down if time_down > 0.0 and swept > 0.0 else 0.0
+
+
+# A dodge: plays its stretch of its animation.
+func _on_dodged(move: DodgeMove) -> void:
+	_recovery = &""
+	act(move.animation, move.animation_from, move.animation_length, move.seconds, Pose.DODGE)
+
+
+# Through a backflip, turns the character head over heels backwards, once
+# round, about its hips; otherwise leaves it upright.
+func _turn_for_flip() -> void:
+	var angle: float = flip_angle()
+	if angle == 0.0 and character.rotation.x == 0.0:
+		return
+	character.rotation.x = angle
+	# Turned about the hips, not the feet: move it so the hips stay put. Its
+	# forward is -Z, so backwards (head first towards +Z) is a negative turn.
+	var hips: Vector3 = Vector3.UP * FLIP_PIVOT_HEIGHT
+	var turned: Vector3 = Vector3(0.0, hips.y * cos(angle), -hips.y * sin(angle))
+	var lift: float = character.position.y if angle == 0.0 else 0.0
+	character.position = Vector3(0.0, lift, 0.0) + hips - turned
+
+
+## How far round the backflip has turned the character, in radians: 0
+## upright, down to minus a full turn as it lands. 0 when not flipping.
+func flip_angle() -> float:
+	if player == null or player.dodge_move == null or not player.dodge_move.flips:
+		return 0.0
+	return -TAU * smoothstep(0.0, 1.0, player.dodge_progress())
 
 
 # A cut of the knife: plays its stretch of its animation (or the plain

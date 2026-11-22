@@ -28,6 +28,7 @@
 [ext_resource type="Script" path="res://scripts/combat/hit_stop.gd" id="40_stop"]
 [ext_resource type="Script" path="res://scripts/combat/hit_feel.gd" id="41_feel"]
 [ext_resource type="Script" path="res://scripts/combat/knife_trail.gd" id="42_trail"]
+[ext_resource type="Script" path="res://scripts/player/dodge.gd" id="43_dodge"]
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_raosb"]
 radius = 0.4
@@ -242,6 +243,9 @@ script = ExtResource("21_lock")
 
 [node name="Duellist" type="Node" parent="."]
 script = ExtResource("22_duel")
+
+[node name="Dodge" type="Node" parent="."]
+script = ExtResource("43_dodge")
 
 [node name="HitStop" type="Node" parent="."]
 script = ExtResource("40_stop")

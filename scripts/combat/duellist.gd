@@ -335,7 +335,8 @@ func _fall() -> void:
 # Whether the player can use the knife now: they're free to act and carry a
 # tool.
 func _can_cut() -> bool:
-	return _player.controls_enabled and not _player.toolbar.get_tools().is_empty()
+	return _player.controls_enabled and not _player.is_dodging() \
+			and not _player.toolbar.get_tools().is_empty()
 
 
 # A cut starting: the step forward with it, and its landing a moment later.

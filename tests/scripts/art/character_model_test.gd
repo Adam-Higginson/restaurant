@@ -158,6 +158,21 @@ func test_the_pose_is_a_strike_or_parry_first_then_walking() -> void:
 			.is_equal(CharacterModel.Pose.STRIKE)
 
 
+func test_a_backflip_turns_the_body_head_over_heels_and_back_upright() -> void:
+	var player: Player3D = _new_dressed_player()
+	var model: CharacterModel = _model(player)
+	var runner: GdUnitSceneRunner = scene_runner(player.get_parent())
+	await physics_ticks(runner, 2)
+
+	assert_bool(player.dodge(Dodge.BACKFLIP, Vector3.BACK)).is_true()
+	await physics_ticks(runner, 14)
+	assert_float(model.character.rotation.x).is_less(-2.0)
+	await physics_ticks(runner, 30)
+
+	assert_float(model.character.rotation.x).is_equal(0.0)
+	assert_float(model.character.position.z).is_equal_approx(0.0, 0.001)
+
+
 func test_a_cut_plays_for_its_own_time_then_gives_way() -> void:
 	var player: Player3D = _new_dressed_player()
 	var model: CharacterModel = _model(player)
