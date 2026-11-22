@@ -9,6 +9,9 @@ extends Swinging
 @export var light_energy: float = 1.4
 ## How far its light reaches, in metres.
 @export var light_range: float = 7.0
+## Whether its light casts shadows. Shadows from point lights are costly, so
+## only the lanterns that light the important things cast them.
+@export var casts_shadows: bool = true
 
 @onready var _light: OmniLight3D = $Light
 
@@ -17,3 +20,4 @@ func _ready() -> void:
 	super()
 	_light.light_energy = light_energy
 	_light.omni_range = light_range
+	_light.shadow_enabled = casts_shadows
