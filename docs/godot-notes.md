@@ -264,6 +264,20 @@ A growing glossary of the Godot concepts this project uses: what each one is, in
 
 **Default arguments.** A parameter with `= value` can be left out by callers: `func hold_shot(shot: Marker3D, cut: bool = false)`. It lets a function grow a new option without changing the code that already calls it. *Ours:* `CameraRig.hold_shot` and `release_shot` gained `cut`; `ScreenFade.fade_in` and `fade_out` gained `seconds`.
 
+## The intro's water half (#102)
+
+**AnimationPlayer and clips.** An `AnimationPlayer` records properties changing over time (a position, a light's brightness) as animations with keyframes, and plays them back. Select one in the editor and the Animation panel at the bottom shows its timeline: pick a clip, drag the playhead to scrub, move keys to retime. A clip can loop. *Ours:* `Clips` in `scenes/prototype/intro/underwater.tscn` (`sinking`, `lantern_descends`, `offered`, `taken`) and in `rescue_set.tscn` (`title_drift`, `dive`), played by `ClipCues` for `@play` and `@start`.
+
+**A SubViewport with its own world.** A `SubViewport` is an off-screen screen. With `own_world_3d` on, the 3D things inside it live in a separate world from the rest of the game, with their own camera, lights and `WorldEnvironment`, so nothing leaks either way. Its picture is a texture you can show anywhere. *Ours:* the underwater set in `underwater_stage.tscn`: the storm, the ship and the rain don't exist in there, and its darkness doesn't touch the game. `StageView` shows its picture full-screen.
+
+**`disable_3d` on a viewport.** Stops a viewport drawing its 3D world while leaving its 2D and UI alone. *Ours:* `Stage` sets it on the game's main viewport while the underwater set covers the screen, so the sea and ship aren't drawn behind a picture that hides them.
+
+**A camera's `current`.** Each viewport shows the view of one `Camera3D`: the one marked current. A SubViewport has its own current camera, separate from the game's. *Ours:* the `Camera` in `underwater.tscn`.
+
+**NoiseTexture2D.** A texture Godot fills with smooth random noise (from a `FastNoiseLite`), tiling if asked. Handy for anything cloudy or rippling without drawing a picture. *Ours:* the light of the surface seen from below (`shaders/sea_underside.gdshader`) slides two copies of one over each other.
+
+**CPUParticles3D.** Many small copies of a mesh, each born, moved and removed by simple rules (where they start, which way they go, how long they last). The CPU version is easier to set up than `GPUParticles3D` and fine for a few hundred. *Ours:* the bubbles and drifting motes underwater. They rise past a figure that's holding still, which is what makes it look like sinking.
+
 ## Testing
 
 **gdUnit4.** The test framework (`addons/gdUnit4`). Suites extend our `GameTestSuite` and have `test_...` functions. `scene_runner` loads a scene and lets a test press inputs and wait physics ticks. *Ours:* `tests/`.

@@ -47,6 +47,33 @@ func test_no_fade_jumps_straight_there() -> void:
 	assert_float(_mix.shelter).is_equal(1.0)
 
 
+func test_underwater_is_duller_than_under_any_roof_and_quieter() -> void:
+	_mix.snap(true)
+	var under_a_roof: float = _mix.cutoff_hz()
+	var rain_in_air: float = _mix.rain_volume_db(1.0)
+
+	_mix.sink(1.0, true, 0.0)
+
+	assert_float(_mix.depth).is_equal(1.0)
+	assert_float(_mix.cutoff_hz()).is_equal_approx(AmbienceMix.SUBMERGED_CUTOFF_HZ, 0.5)
+	assert_float(_mix.cutoff_hz()).is_less(under_a_roof)
+	assert_float(_mix.rain_volume_db(1.0)).is_equal_approx(
+			rain_in_air + AmbienceMix.SUBMERGED_DROP_DB, 0.001)
+
+
+func test_going_under_takes_a_moment_and_coming_up_puts_it_all_back() -> void:
+	_mix.sink(0.1, true, 0.2)
+	assert_float(_mix.depth).is_equal_approx(0.5, 0.0001)
+	assert_float(_mix.cutoff_hz()).is_between(AmbienceMix.SUBMERGED_CUTOFF_HZ,
+			AmbienceMix.OPEN_CUTOFF_HZ)
+
+	_mix.sink(1.0, false, 0.2)
+
+	assert_float(_mix.depth).is_equal(0.0)
+	assert_float(_mix.cutoff_hz()).is_equal_approx(AmbienceMix.OPEN_CUTOFF_HZ, 0.5)
+	assert_float(_mix.submerged_drop_db()).is_equal(0.0)
+
+
 func test_rain_is_quieter_under_a_roof_and_silent_when_dry() -> void:
 	var outside: float = _mix.rain_volume_db(1.0)
 	_mix.snap(true)

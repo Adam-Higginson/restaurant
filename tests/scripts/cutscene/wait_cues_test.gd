@@ -6,6 +6,7 @@ extends GameTestSuite
 var _player: Player3D
 var _conversation: Conversation
 var _waits: WaitCues
+var _prompt: CutscenePrompt
 ## How many lines have been said.
 var _lines: int
 
@@ -126,12 +127,94 @@ func test_a_wait_left_over_from_a_stopped_cutscene_doesnt_release_the_next() -> 
 	assert_bool(_conversation.is_active()).is_true()
 
 
-# The player, a conversation and the wait cues. Called at the start of each
-# test, so everything is made (and freed) inside it.
+func test_wait_for_any_holds_until_any_key_at_all() -> void:
+	_build()
+	var runner: GdUnitSceneRunner = scene_runner(_player.get_parent())
+	await physics_ticks(runner, 3)
+	play_cutscene(_conversation, _player, "@wait_for any\nheron: After.")
+
+	await physics_ticks(runner, 90)
+	assert_int(_lines).is_equal(0)
+
+	runner.simulate_key_pressed(KEY_K)
+	await physics_ticks(runner, 3)
+	assert_int(_lines).is_equal(1)
+
+
+func test_any_button_doesnt_end_a_wait_for_interact() -> void:
+	_build()
+	var runner: GdUnitSceneRunner = scene_runner(_player.get_parent())
+	await physics_ticks(runner, 3)
+	play_cutscene(_conversation, _player, "@wait_for interact\nheron: After.")
+
+	runner.simulate_key_pressed(KEY_K)
+	await physics_ticks(runner, 3)
+
+	assert_int(_lines).is_equal(0)
+
+
+func test_words_after_a_wait_are_shown_as_a_prompt_until_the_press() -> void:
+	_build()
+	var runner: GdUnitSceneRunner = scene_runner(_player.get_parent())
+	await physics_ticks(runner, 3)
+
+	play_cutscene(_conversation, _player, "@wait_for any Press any button\nheron: After.")
+	await physics_ticks(runner, 3)
+	assert_bool(_prompt.is_prompting).is_true()
+	assert_str(_prompt.shown_text()).is_equal("Press any button")
+
+	runner.simulate_key_pressed(KEY_K)
+	await physics_ticks(runner, 3)
+	assert_bool(_prompt.is_prompting).is_false()
+	assert_str(_prompt.shown_text()).is_empty()
+
+
+func test_a_prompt_for_interact_names_its_button() -> void:
+	_build()
+	var runner: GdUnitSceneRunner = scene_runner(_player.get_parent())
+	await physics_ticks(runner, 3)
+
+	play_cutscene(_conversation, _player, "@wait_for interact Take his hand\nheron: After.")
+	await physics_ticks(runner, 3)
+
+	assert_str(_prompt.shown_text()).ends_with("] Take his hand").starts_with("[")
+
+
+func test_a_wait_with_no_words_shows_no_prompt() -> void:
+	_build()
+	var runner: GdUnitSceneRunner = scene_runner(_player.get_parent())
+	await physics_ticks(runner, 3)
+
+	play_cutscene(_conversation, _player, "@wait_for interact\nheron: After.")
+	await physics_ticks(runner, 3)
+
+	assert_bool(_prompt.is_prompting).is_false()
+
+
+func test_skipping_takes_the_prompt_away() -> void:
+	_build()
+	var runner: GdUnitSceneRunner = scene_runner(_player.get_parent())
+	await physics_ticks(runner, 3)
+	play_cutscene(_conversation, _player, "@wait_for any Press any button\nset done")
+	await physics_ticks(runner, 3)
+
+	_conversation.skip()
+	await physics_ticks(runner, 3)
+
+	assert_bool(_prompt.is_prompting).is_false()
+	assert_bool(Game.dialogue.is_set(&"done")).is_true()
+
+
+# The player, a conversation, the wait cues and their prompt. Called at the
+# start of each test, so everything is made (and freed) inside it.
 func _build() -> void:
 	_lines = 0
 	_player = new_player_3d_on_floor()
 	_conversation = new_conversation(_player)
 	_conversation.line_said.connect(func(_speaker: Person) -> void: _lines += 1)
+	_prompt = (load("res://ui/cutscene_prompt.tscn") as PackedScene).instantiate() \
+			as CutscenePrompt
+	_player.get_parent().add_child(_prompt)
 	_waits = WaitCues.new()
+	_waits.prompt = _prompt
 	_player.get_parent().add_child(_waits)
