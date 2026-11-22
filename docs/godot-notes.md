@@ -348,7 +348,7 @@ A growing glossary of the Godot concepts this project uses: what each one is, in
 
 **A node told it's been switched off.** When a node can no longer run (its `process_mode` or a parent's became Disabled) it gets `NOTIFICATION_DISABLED`, and `NOTIFICATION_ENABLED` when it can again. Catch them in `_notification(what)`. *Ours:* `OptionalSound` pauses a looping sound while its stage is put away.
 
-## The deep and the thing in the lightning (#120)
+## The deep, the thing in the lightning, and the storyboard (#120)
 
 **Instance uniforms.** Normally every object sharing a material shares its shader values too. Mark a uniform `instance uniform` and each object can have its own value, set with `set_instance_shader_parameter("name", value)`, while they all still share one material. *Ours:* the 90 dead lanterns share one glass material, and `LanternField` gives each its `cold` (how much of the lightning shows on its glass).
 
@@ -361,6 +361,16 @@ A growing glossary of the Godot concepts this project uses: what each one is, in
 **Shaping a mesh in its vertex shader.** `vertex()` can move each corner of a mesh before it's drawn. A plain tube with plenty of rings along it can be squeezed here and swollen there into a body, and bent a little differently every frame so it moves, without modelling or rigging anything. *Ours:* `shaders/the_thing.gdshader` turns a cylinder into a head, a body and a swaying tail.
 
 **Groups as a broadcast.** `get_tree().call_group("name", "method", value)` calls that method on every node in the group, wherever it is in the tree. *Ours:* `Lightning` tells the group `lightning_lit` how bright each flash is, which now includes `Lanterns` and `Shafts` inside the underwater set.
+
+**A ragdoll (`PhysicalBoneSimulator3D`, `PhysicalBone3D`).** A skeleton's bones are normally posed by an animation. A `PhysicalBoneSimulator3D` under the skeleton can take some of them over: each gets a `PhysicalBone3D`, a small physics body with a shape, jointed to the one above. Call `physical_bones_start_simulation(names)` and physics decides where those bones hang; the rest still follow the animation. *Ours:* `scripts/art/ragdoll.gd` builds one for the character, and `CharacterModel.limp` switches it on. Only the arms, legs and neck are simulated, so the body still goes where the clip takes it and the limbs trail behind. They're nearly weightless and heavily damped, for water.
+
+**A joint's limits (`joint_constraints/...`).** Each physical bone's joint says how far it may swing and twist from its rest direction. Too loose and limbs fold impossibly; too tight and they look stiff. These are set by name with `set("joint_constraints/swing_span", degrees)`, because Godot adds those properties as it runs. *Ours:* `Ragdoll.SWING_DEGREES` and `TWIST_DEGREES`.
+
+**Hiding part of a model.** A character built from several meshes can show or hide each with `visible`. *Ours:* `CharacterModel.eyes_shut` hides the eyeballs, which leaves the lids' own hollow: closed eyes, with no extra art.
+
+**Queueing an animation (`AnimationPlayer.queue`).** `play()` switches to a clip at once; `queue()` lines one up to start when the current one ends. *Ours:* the `@queue` cue: `pleads` plays once, then the `offered` loop takes over for as long as the player waits.
+
+**Lines that don't wait.** A line in the dialogue box normally waits for a button. `Conversation.say_aside()` shows one that doesn't: the box has no arrow, the script carries on, and whoever asked puts it away. *Ours:* the `@say` and `@say_in` cues (`scripts/cutscene/speech_cues.gd`), for a shout or a plea that should pass with the moment.
 
 **Giving each of many things its own pace.** A small sum that turns an index into a number between 0 and 1, always the same for that index, is enough to make a crowd look unplanned without storing anything. *Ours:* `LanternField.share_of`, which sets how fast each lantern sinks and turns.
 
