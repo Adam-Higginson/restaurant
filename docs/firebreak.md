@@ -2,7 +2,31 @@
 
 A night of building towards a game, on one branch, while you slept. Nothing here is merged; nothing on the board changed. Each feature is its own commit with tests, so you can keep, change or drop them one by one. Pick what you like and we'll turn it into proper issues and PRs.
 
-Ground rules I kept: no merges, no new issues, nothing on `main`, tests for every feature, the headless check and the full suite passing at every commit.
+Ground rules I kept: no merges, no new issues, nothing on `main`, tests for every feature, the full suite passing at checkpoints.
+
+## Start here: a ten-minute tour
+
+The night's theme: **the ship became a place you live, and the lantern became someone you live with.** There's now a little loop to play: wake, explore, stop the ship, fish, cook, eat with the lantern, remember, sleep, wake to dawn.
+
+1. `git checkout firebreak/overnight`, open `scenes/prototype/sea.tscn`, press **F6** (F5 still runs the old 2D restaurant, see the notes at the end).
+2. **Black, "Somewhere at sea".** You wake in the bunk room at night; the lantern at your shoulder says his first words. He follows you everywhere, lights the way, blinks, and drifts over to anything you stop at.
+3. At the head of your bunk, **read your note** ("Don't forget..."). At its foot you can **sleep**.
+4. Go up the hatch ramp into the storm. Walk to the **bow** at night: the lantern spots the far light in the fog and has a guess about it.
+5. Climb to the forecastle and **ring the bell** (Interact at the rope): the ship eases to a stop. The lantern approves.
+6. At the starboard rail, by the chimney, **cast a line**. When the bobber dips and the lantern hops, **strike**. A herring! And your first memory of home ("A cold jetty"), hummed by the lantern.
+7. Below in the galley, read the **recipe book** on the cook's stool. Fillet the herring on the board (3 cuts), fry it in the **pan on the hearth** (6 s).
+8. Or carry the **saucepan** up to the **water butt** on deck (port waist), fill it with rain, boil it, add diced tomato and chopped onion: **Tomato Soup**. Ladle it into a **bowl** from the stack on the table.
+9. Take a dish down to the little **round table by the bunk room's stove** and **share it with the lantern**. He drifts down, eats, glows warm again ("I'm glowing. Am I glowing?"). Left alone for half an hour he dims and asks for soup.
+10. **Sleep** at the foot of your bunk: "Day 2. Morning". Go up on deck: a misty grey-rose dawn, the rain a drizzle, and out in the mist, the **lighthouse island** the light came from. Stand at the bow.
+
+To see every memory you've got back, read your note again. Ring the bell once more to set sail.
+
+## What's new in the code (the shape of it)
+- **The lantern** (`scripts/companion/`): `LanternSpirit` (follow, hover, blink, excite, warmth, visit), `LanternVoice` (his floating lines), `LanternLines` (everything he says: rewrite it in your own voice), `Hum` (the synthesised melody), `Lookout` (the bow).
+- **Story** (`scripts/story/`): `MemoryBook` on `Game.memories`, `Opening`. Data in `data/memories/` and `data/recipes/` (new `Memory` and `Recipe` resources, listed in the catalog).
+- **Cooking**: fire (a timed element) and two `Hob`s on the hearth; saucepan, frying pan, bowls, rainwater, onions, herring. All the GDD's designed steps and shortcuts for Tomato Soup, plus Pan-fried Herring.
+- **The ship and the world**: `Ship.heave_to()` / `get_under_way()` and `way`; `ShipsBell`; `FishingLine` + `FishingSpot`; `WaterButt`; `TimeOfDay` (night to dawn, one number) and `Bedside`; `DistantIsland` + a silhouette shader.
+- **Tests**: every feature has a suite; about 75 new tests. The full suite passes: 933 tests, 0 failures, 0 orphans (run after feature 14).
 
 ## What I built, in order
 
@@ -101,3 +125,23 @@ The GDD's "fragment of a song from home, a few notes at first" now exists: the l
 - `scripts/companion/hum.gd` (an `AudioStreamPlayer3D` with an `AudioStreamGenerator`, filled with samples each frame), in the lantern's scene; `LanternSpirit.hum()`.
 - Tests: `tests/scripts/companion/hum_test.gd` (notes in tune, in order, swelling in and silent after, he hums when a memory comes back).
 - **Listen to it** before keeping it: I could test the maths, not the sound. `loudness` and the notes are easy to change.
+
+## Notes, loose ends and decisions for you
+
+**Bugs on `main` I found (fixed here, but `main` needs them too):**
+- The player's start spot in `sea.tscn` is inside the new cabin under the quarterdeck (from #90). Fixed here by the opening, and by moving the start to open deck.
+- My #91 PR said "Press F5" to test; F5 runs the old 2D restaurant. The 3D game is `sea.tscn` with F6.
+
+**Decisions for you:**
+- **Make `sea.tscn` the main scene?** Then F5 plays the 3D game with its opening. It's a project setting, so I didn't change it.
+- **The lantern's voice:** all his lines are in `scripts/companion/lantern_lines.gd` and the opening's in `scripts/story/opening.gd`. They're a first draft of a character; rewrite freely.
+- **Ship sounds:** the deck's sound spots (creaks, rope groans, sail cracks, rain on canvas, the bell) and the bell's ring are silent until recordings are in `assets/third_party/audio/ship/`: `creak_1-3.ogg`, `rope_1-2.ogg`, `sail_flap_1-2.ogg`, `rain_canvas.ogg`, `bell_knock.ogg`, `bell_ring.ogg`.
+- **How these become real work:** I'd suggest issues roughly by feature (the lantern companion could close #65; the bell is half of #67), each a PR from this branch's commits.
+
+**Known gaps (deliberately small):**
+- The frying pan and saucepan draw as slabs like the chopping board (`ItemModel` has no pan shape yet).
+- The hum is synthesised and tested as maths; it needs a listen.
+- The lighthouse island can't be reached; the ship circles it. Mooring there is the natural next step (#67).
+- Fish only bite while hove to, and there's one kind of fish.
+- Days count, but nothing changes from day to day yet.
+- The lantern's warmth isn't saved, and nothing is: there's no save game yet.
