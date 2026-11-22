@@ -3,7 +3,8 @@ extends Node3D
 ## What a fog-crab sounds like, so a fight can be read by ear as well as by
 ## eye: its claws rattle faster and faster as it rears up (the tell), there's
 ## a rush as it lunges, and a soft chime when its fog clears. After that its
-## legs tick quietly as it wanders off.
+## legs tick quietly as it wanders off. Flipped, it lands on its back with a
+## thud, and its legs clatter frantically until it's up again.
 ##
 ## A child of the [FogCrab]. Each sound is a child [AudioStreamPlayer3D]
 ## (heard from where the crab is, quieter with distance) whose stream is an
@@ -15,6 +16,8 @@ const CLICK: StringName = &"Click"
 const LUNGE: StringName = &"Lunge"
 ## The chime of its fog clearing.
 const CLEAR: StringName = &"Clear"
+## The thud of landing on its back.
+const FLIP: StringName = &"Flip"
 
 ## Seconds between claw clacks as the windup starts, and as it ends: the
 ## rattle speeds up, so you can hear the attack coming.
@@ -22,6 +25,8 @@ const CLEAR: StringName = &"Clear"
 @export var rattle_gap_end: float = 0.06
 ## Seconds between leg ticks as it wanders, once cleared.
 @export var scuttle_gap: float = 0.28
+## Seconds between clatters of its legs while it's on its back.
+@export var flail_gap: float = 0.09
 ## How much quieter its wandering is than its rattle, in decibels.
 @export var scuttle_quieter_db: float = 12.0
 
@@ -40,6 +45,7 @@ func _ready() -> void:
 	_click_db = _click.volume_db
 	_crab.cycle.attacked.connect(play.bind(LUNGE))
 	_crab.fog_cleared.connect(play.bind(CLEAR))
+	_crab.flipped.connect(play.bind(FLIP))
 
 
 func _physics_process(delta: float) -> void:
@@ -56,6 +62,8 @@ func _physics_process(delta: float) -> void:
 func click_gap() -> float:
 	if _crab.cycle.state == CrabCycle.State.WINDUP:
 		return lerpf(rattle_gap_start, rattle_gap_end, _crab.cycle.progress)
+	if _crab.is_flipped():
+		return flail_gap
 	if _crab.is_cleared() and Vector2(_crab.velocity.x, _crab.velocity.z).length() > 0.1:
 		return scuttle_gap
 	return 0.0

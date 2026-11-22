@@ -14,6 +14,9 @@ extends CharacterBody3D
 ## way you walk. The camera rig is a child of the body, so a turning body
 ## would swing the camera round with every step.
 
+## Emitted as a dodge (a sidehop, backflip or roll) starts.
+signal dodged(move: DodgeMove)
+
 ## The group the player is in, so others can find them.
 const GROUP: StringName = &"player"
 
@@ -42,11 +45,15 @@ var facing: Vector3:
 	get:
 		return -_model.global_basis.z
 
+## How much of their speed the player walks at: 1 normally, less while
+## something slows them (charging the knife). Set by whatever slows them.
+var stride_factor: float = 1.0
+
 ## How fast the player moves when they walk, in metres per second: their
-## [member speed], or faster while sprinting.
+## [member speed], or faster while sprinting, times the [member stride_factor].
 var move_speed: float:
 	get:
-		return speed * sprint_factor if is_sprinting() else speed
+		return (speed * sprint_factor if is_sprinting() else speed) * stride_factor
 
 ## Whether the player walked on the last physics tick, from your input
 ## (riding the sailing ship doesn't count).
@@ -72,11 +79,20 @@ var camera_rig: CameraRig:
 	get:
 		return _camera_rig
 
+## The dodge being made, or null.
+var dodge_move: DodgeMove:
+	get:
+		return _dodge if is_dodging() else null
+
 var _walking: bool = false
 ## The flat velocity a blow threw the player back with, dying away.
 var _push: Vector3 = Vector3.ZERO
 ## Seconds left of stumbling after a blow, while the stick is ignored.
 var _stumble_left: float = 0.0
+## The dodge being made, the flat direction it goes in, and its seconds left.
+var _dodge: DodgeMove = null
+var _dodge_direction: Vector3 = Vector3.ZERO
+var _dodge_left: float = 0.0
 ## The camera yaw movement used last tick.
 var _move_yaw: float = 0.0
 ## Whether movement is held to [member _held_yaw] after a camera switch.
@@ -100,11 +116,16 @@ func _ready() -> void:
 func _physics_process(delta: float) -> void:
 	var input: Vector2 = Vector2.ZERO
 	_stumble_left = maxf(_stumble_left - delta, 0.0)
-	if controls_enabled and not is_stumbling():
+	_dodge_left = maxf(_dodge_left - delta, 0.0)
+	if controls_enabled and not is_stumbling() and not is_dodging():
 		input = Input.get_vector("move_left", "move_right", "move_up", "move_down")
 	var direction: Vector3 = camera_relative(input, _movement_yaw(input))
 	velocity.x = direction.x * move_speed + _push.x
 	velocity.z = direction.z * move_speed + _push.z
+	if is_dodging():
+		# Mid-dodge the stick does nothing: the dodge carries them.
+		velocity.x = _dodge_direction.x * _dodge.speed
+		velocity.z = _dodge_direction.z * _dodge.speed
 	_push = _push.move_toward(Vector3.ZERO, knockback_fade * delta)
 	if not is_on_floor():
 		velocity += get_gravity() * delta
@@ -114,6 +135,8 @@ func _physics_process(delta: float) -> void:
 	_walking = not direction.is_zero_approx()
 	if is_instance_valid(lock_target):
 		face_towards(lock_target.global_position)
+	elif is_dodging():
+		_face(_dodge_direction, delta)
 	elif _walking:
 		_face(direction, delta)
 
@@ -139,6 +162,58 @@ func _unhandled_input(event: InputEvent) -> void:
 func knock_back(push: Vector3, stumble_seconds: float) -> void:
 	_push = Vector3(push.x, 0.0, push.z)
 	_stumble_left = stumble_seconds
+	# Knocked out of any dodge.
+	_dodge_left = 0.0
+
+
+## Sends the player along [param push], a flat velocity in metres per second
+## that dies away like a knock back, without taking the stick from them: a
+## step into a cut.
+func lunge(push: Vector3) -> void:
+	_push = Vector3(push.x, 0.0, push.z)
+
+
+## Makes [param move] (a sidehop, backflip or roll) along [param direction],
+## a flat world direction. Returns whether it started: not mid-air, mid-dodge,
+## stumbling, or while they can't act.
+func dodge(move: DodgeMove, direction: Vector3) -> bool:
+	if not can_dodge() or move == null:
+		return false
+	var flat: Vector3 = Vector3(direction.x, 0.0, direction.z)
+	if flat.length() < 0.01:
+		return false
+	_dodge = move
+	_dodge_direction = flat.normalized()
+	_dodge_left = move.seconds
+	_push = Vector3.ZERO
+	velocity.y = move.hop
+	dodged.emit(move)
+	return true
+
+
+## Whether the player could dodge right now: free to act, on the ground,
+## and not already dodging or stumbling.
+func can_dodge() -> bool:
+	return controls_enabled and is_on_floor() and not is_dodging() and not is_stumbling()
+
+
+## Whether the player is mid-dodge.
+func is_dodging() -> bool:
+	return _dodge_left > 0.0
+
+
+## How far through the dodge being made they are, from 0 to 1 (0 with none).
+func dodge_progress() -> float:
+	if not is_dodging():
+		return 0.0
+	return clampf(1.0 - _dodge_left / maxf(_dodge.seconds, 0.001), 0.0, 1.0)
+
+
+## Where the stick (or WASD) points right now, as a flat world direction
+## relative to the camera, as long as the stick is pushed; zero otherwise.
+func stick_direction() -> Vector3:
+	var input: Vector2 = Input.get_vector("move_left", "move_right", "move_up", "move_down")
+	return camera_relative(input, _camera_rig.view_yaw)
 
 
 ## Whether the player is sprinting: holding sprint while they can move.

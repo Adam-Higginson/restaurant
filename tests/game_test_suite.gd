@@ -205,6 +205,22 @@ func duellist_of(player: Player3D) -> Duellist:
 	return player.get_node("Duellist") as Duellist
 
 
+## Taps the knife and waits until the cut lands (a moment into its swing),
+## for up to 30 physics ticks. Returns whether a cut started.
+func strike_and_land(runner: GdUnitSceneRunner, player: Player3D) -> bool:
+	var duellist: Duellist = duellist_of(player)
+	var landed: Array[bool] = [false]
+	var on_struck: Callable = func(_hit: bool) -> void: landed[0] = true
+	duellist.struck.connect(on_struck)
+	var started: bool = duellist.strike()
+	for tick: int in 30:
+		if landed[0] or not started:
+			break
+		await physics_ticks(runner, 1)
+	duellist.struck.disconnect(on_struck)
+	return started
+
+
 ## Holds [param action] down and waits two physics ticks, without letting go
 ## (for buttons that are held, like lock-on). Let go with [method release].
 func hold(runner: GdUnitSceneRunner, action: String) -> void:

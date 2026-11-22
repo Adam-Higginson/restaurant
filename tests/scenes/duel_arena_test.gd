@@ -68,6 +68,7 @@ func test_a_duel_won_parry_then_strike_until_the_fog_clears() -> void:
 	# Every hit was parried.
 	assert_int(duellist_of(player).hearts.halves).is_equal(6)
 	# Lock-on let go by itself, and the lantern came back.
+	await physics_ticks(runner, 2)
 	assert_object(player.lock_target).is_null()
 	await release(runner, "lock_on")
 

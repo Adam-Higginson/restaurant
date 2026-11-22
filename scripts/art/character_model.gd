@@ -14,7 +14,9 @@ extends Node3D
 ##   proportions), and
 ## - makes them younger: a bigger head on a shorter body.
 ## Then each frame it picks what to play from what the player is doing: idle,
-## walk, strike or parry ([method pose_for]).
+## walk, charge or parry ([method pose_for]). A cut of the knife plays as a
+## one-off action ([method act]): its stretch of its animation, sped up to fit
+## the cut, then its recovery if nothing else follows.
 ##
 ## The files live in the gitignored assets/third_party/. If any are missing
 ## (a fresh clone, CI), the [member stand_ins] stay and nothing else changes:
@@ -25,7 +27,19 @@ extends Node3D
 signal dressed(shown: bool)
 
 ## What the player can be doing, each with its own animation.
-enum Pose { IDLE, WALK, STRIKE, PARRY }
+enum Pose {
+	IDLE,
+	WALK,
+	## A cut of the knife (each cut names its own animation).
+	STRIKE,
+	PARRY,
+	## Holding the knife ready while a fillet charges.
+	CHARGE,
+	## Coming back to rest after the last cut of a chain.
+	RECOVER,
+	## A sidehop, backflip or roll.
+	DODGE,
+}
 
 ## The toe joints, which the feet are planted by.
 const TOE_BONES: PackedStringArray = ["ball_l", "ball_r"]
@@ -36,6 +50,9 @@ const HEAD_BONES: PackedStringArray = ["Head", "neck_01"]
 const MOVING_BONES: PackedStringArray = ["root", "pelvis"]
 ## The animation library's name on the [AnimationPlayer].
 const LIBRARY: StringName = &"moves"
+## How high the hips are that a backflip turns about, in metres, when the
+## skeleton doesn't say.
+const FLIP_PIVOT_HEIGHT: float = 0.7
 
 ## Whether characters are built from the packs at all. Tests turn it off,
 ## so they run the same with or without the pack files (as in CI), and
@@ -62,8 +79,13 @@ static var _heads: Dictionary[String, ArrayMesh] = {}
 @export var run_animation: StringName = &"Jog_Fwd"
 ## The walking speed, in metres per second, from which the walk is a run.
 @export var run_from: float = 3.0
+## The animation for a cut whose own animation isn't in the library.
 @export var strike_animation: StringName = &"Sword_Regular_A"
 @export var parry_animation: StringName = &"Idle_Shield"
+## The animation held while the fillet charges: knife ready.
+@export var charge_animation: StringName = &"Sword_Idle"
+## How fast a recovery after a cut plays, against normal speed.
+@export var recovery_speed: float = 1.4
 ## Greybox meshes to hide while the character shows.
 @export var stand_ins: Array[VisualInstance3D] = []
 ## The player whose doings pick the pose. Without one it idles.
@@ -102,24 +124,50 @@ var _toe_height: float = 0.0
 ## built; 0 if there's no such animation.
 var _stride_speed: float = 0.0
 var _run_stride_speed: float = 0.0
+## Seconds left of the action playing (see [method act]), or 0.
+var _act_left: float = 0.0
+## How fast the action plays, against normal speed.
+var _act_speed: float = 1.0
+## The recovery to play when the cut playing ends, if nothing follows it.
+var _recovery: StringName = &""
 
 
 func _ready() -> void:
 	if player != null:
 		_duellist = player.get_node_or_null("Duellist") as Duellist
+	if _duellist != null:
+		_duellist.cut_started.connect(_on_cut_started)
+	if player != null:
+		player.dodged.connect(_on_dodged)
 	if not Engine.is_editor_hint():
 		Game.look_changed.connect(func(_body: PlayerLook.Body) -> void: dress())
 	dress()
 
 
-func _process(_delta: float) -> void:
+func _process(delta: float) -> void:
 	if _animator == null:
 		return
 	plant_feet()
+	_turn_for_flip()
 	var walking: bool = player != null and player.is_walking
-	var striking: bool = _duellist != null and _duellist.is_striking()
+	var charging: bool = _duellist != null and _duellist.is_charging()
 	var parrying: bool = _duellist != null and _duellist.parry.is_active()
-	play(pose_for(walking, striking, parrying))
+	var wanted: Pose = pose_for(walking, false, parrying, charging)
+	if _act_left > 0.0:
+		_act_left -= delta
+		# A recovery gives way to anything else the player does.
+		var interrupted: bool = pose == Pose.RECOVER and wanted != Pose.IDLE
+		if _act_left > 0.0 and not interrupted:
+			_animator.speed_scale = _act_speed
+			return
+		_act_left = 0.0
+		var recovery: StringName = _recovery
+		_recovery = &""
+		if pose == Pose.STRIKE and wanted == Pose.IDLE and not recovery.is_empty() \
+				and act(recovery, 0.0, 0.0, clip_length(recovery) / recovery_speed,
+						Pose.RECOVER):
+			return
+	play(wanted)
 	# Walk in step: the walk plays as fast as the feet must go to keep up.
 	var speed: float = player.move_speed if player != null else 0.0
 	var stride: float = _run_stride_speed if is_running() else _stride_speed
@@ -187,6 +235,42 @@ func play(next: Pose) -> void:
 	_animator.play(full, blend_seconds)
 
 
+## Plays a one-off action as [param as_pose]: [param length] seconds of the
+## animation [param anim_name] from [param from] seconds in (all of the rest
+## of it if [param length] is 0), sped up or slowed down to take
+## [param seconds]. Nothing else plays until it's done. Returns whether it
+## played (not without a character or that animation).
+func act(anim_name: StringName, from: float, length: float, seconds: float,
+		as_pose: Pose) -> bool:
+	if _animator == null or seconds <= 0.0:
+		return false
+	var full: StringName = StringName("%s/%s" % [LIBRARY, anim_name])
+	if not _animator.has_animation(full):
+		return false
+	var span: float = length if length > 0.0 else _animator.get_animation(full).length - from
+	_animator.play(full, blend_seconds)
+	_animator.seek(from, true)
+	_act_speed = maxf(span, 0.01) / seconds
+	_animator.speed_scale = _act_speed
+	_act_left = seconds
+	pose = as_pose
+	return true
+
+
+## How long the animation [param anim_name] is, in seconds, or 0 if there's
+## no such animation.
+func clip_length(anim_name: StringName) -> float:
+	var full: StringName = StringName("%s/%s" % [LIBRARY, anim_name])
+	if _animator == null or not _animator.has_animation(full):
+		return 0.0
+	return _animator.get_animation(full).length
+
+
+## Whether an action is playing (see [method act]).
+func is_acting() -> bool:
+	return _act_left > 0.0
+
+
 ## Whether walking is quick enough to be a run (see [member run_from]), and
 ## there's a run to play.
 func is_running() -> bool:
@@ -205,6 +289,8 @@ func animation_for(of: Pose) -> StringName:
 			return strike_animation
 		Pose.PARRY:
 			return parry_animation
+		Pose.CHARGE:
+			return charge_animation
 	return idle_animation
 
 
@@ -224,11 +310,14 @@ func stride_speed() -> float:
 	return _run_stride_speed if is_running() else _stride_speed
 
 
-## What to play: a strike or a parry wins over walking, and walking over
-## standing still.
-static func pose_for(walking: bool, striking: bool, parrying: bool) -> Pose:
+## What to play: a strike, a charge or a parry wins over walking, and
+## walking over standing still.
+static func pose_for(walking: bool, striking: bool, parrying: bool,
+		charging: bool = false) -> Pose:
 	if striking:
 		return Pose.STRIKE
+	if charging:
+		return Pose.CHARGE
 	if parrying:
 		return Pose.PARRY
 	if walking:
@@ -333,6 +422,10 @@ func _build(parts: CharacterParts) -> void:
 	_animator = AnimationPlayer.new()
 	character.add_child(_animator)
 	_animator.add_animation_library(LIBRARY, _library(_animator.get_node(_animator.root_node)))
+	# The charge's stance is held as long as the button is: round and round.
+	var stance: StringName = StringName("%s/%s" % [LIBRARY, charge_animation])
+	if _animator.has_animation(stance):
+		_animator.get_animation(stance).loop_mode = Animation.LOOP_LINEAR
 	right_hand = _hand("hand_r")
 	left_hand = _hand("hand_l")
 	_stride_speed = _measure_stride(walk_animation)
@@ -474,6 +567,45 @@ func _measure_stride(anim_name: StringName) -> float:
 	return swept / time_down if time_down > 0.0 and swept > 0.0 else 0.0
 
 
+# A dodge: plays its stretch of its animation.
+func _on_dodged(move: DodgeMove) -> void:
+	_recovery = &""
+	act(move.animation, move.animation_from, move.animation_length, move.seconds, Pose.DODGE)
+
+
+# Through a backflip, turns the character head over heels backwards, once
+# round, about its hips; otherwise leaves it upright.
+func _turn_for_flip() -> void:
+	var angle: float = flip_angle()
+	if angle == 0.0 and character.rotation.x == 0.0:
+		return
+	character.rotation.x = angle
+	# Turned about the hips, not the feet: move it so the hips stay put. Its
+	# forward is -Z, so backwards (head first towards +Z) is a negative turn.
+	var pivot: float = hip_height(skeleton) * body_scale
+	var hips: Vector3 = Vector3.UP * (pivot if pivot > 0.0 else FLIP_PIVOT_HEIGHT)
+	var turned: Vector3 = Vector3(0.0, hips.y * cos(angle), -hips.y * sin(angle))
+	var lift: float = character.position.y if angle == 0.0 else 0.0
+	character.position = Vector3(0.0, lift, 0.0) + hips - turned
+
+
+## How far round the backflip has turned the character, in radians: 0
+## upright, down to minus a full turn as it lands. 0 when not flipping.
+func flip_angle() -> float:
+	if player == null or player.dodge_move == null or not player.dodge_move.flips:
+		return 0.0
+	return -TAU * smoothstep(0.0, 1.0, player.dodge_progress())
+
+
+# A cut of the knife: plays its stretch of its animation (or the plain
+# strike, if the library hasn't got it), then its recovery.
+func _on_cut_started(cut: KnifeCut) -> void:
+	if not act(cut.animation, cut.animation_from, cut.animation_length, cut.seconds,
+			Pose.STRIKE):
+		act(strike_animation, 0.0, 0.0, cut.seconds, Pose.STRIKE)
+	_recovery = cut.recovery_animation
+
+
 func _hand(bone: String) -> BoneAttachment3D:
 	var hand: BoneAttachment3D = BoneAttachment3D.new()
 	hand.name = bone.capitalize().replace(" ", "")
@@ -490,6 +622,8 @@ func _undress() -> void:
 	right_hand = null
 	left_hand = null
 	_animator = null
+	_act_left = 0.0
+	_recovery = &""
 
 
 func _show_stand_ins(shown: bool) -> void:

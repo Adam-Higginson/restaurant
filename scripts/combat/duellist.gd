@@ -4,12 +4,15 @@ extends Node
 ## frying-pan parry, and what happens when the hearts run out.
 ##
 ## A child of the [Player3D]. It holds no rules of its own: [Hearts],
-## [ParryWindow] and [DefeatLoss] do the deciding, and this connects them to
-## the buttons, the toolbar, the lantern and the little knife and pan on the
-## player's model. See Combat in docs/GDD.md.
+## [ParryWindow], [KnifeCombo] and [DefeatLoss] do the deciding, and this
+## connects them to the buttons, the toolbar, the lantern and the little
+## knife and pan on the player's model. See Combat in docs/GDD.md.
 ##
-## - Use tool, with nothing here for a tool to work on, swings the knife at
-##   whatever is in front (the [InteractionDetector3D] says when).
+## - Use tool, with nothing here for a tool to work on, cuts with the knife
+##   at whatever is in front (the [InteractionDetector3D] says when): taps
+##   chain the chop, slice and cleave, and holding on charges a spinning
+##   fillet, let go on release. Each cut is a [KnifeCut] in data/combat/.
+##   It lands a moment into its swing ([member KnifeCut.hit_at]).
 ## - Parry raises the pan for a moment, if there's a frying pan anywhere on
 ##   the toolbar. A hit landing in that moment is turned away.
 ## - What all of this sounds like is [DuelSounds]' job, which listens to the
@@ -18,18 +21,23 @@ extends Node
 ##   (a node in the [constant LANDING_GROUP] group) and half of what they
 ##   carry is lost.
 
-## Emitted when the knife is swung. [param hit] says whether it counted on
-## anything.
+## Emitted as a cut of the knife starts.
+signal cut_started(cut: KnifeCut)
+## Emitted when a cut reaches the moment it lands. [param hit] says whether
+## it counted on anything.
 signal struck(hit: bool)
-## Emitted for each crab a strike counts on. [param cleared] says whether it
-## was the strike that cleared its fog.
-signal strike_landed(crab: FogCrab, cleared: bool)
+## Emitted for each crab a cut counts on (or flips). [param cleared] says
+## whether it was the cut that cleared its fog.
+signal strike_landed(crab: FogCrab, cleared: bool, cut: KnifeCut)
 ## Emitted when a swing reaches a creature that isn't open, so it doesn't count.
 signal glanced
 ## Emitted when the pan goes up.
 signal pan_raised
 ## Emitted when a hit is turned away by the pan.
 signal parried
+## Emitted, after [signal parried], when the pan went up just in time: a
+## perfect parry.
+signal parried_perfectly
 ## Emitted when a hit lands, with the half-hearts it cost.
 signal hurt(halves: int)
 ## Emitted after a defeat, with the items that were lost.
@@ -41,6 +49,8 @@ enum Hit {
 	LANDED,
 	## The pan turned it away.
 	PARRIED,
+	## The pan, raised just in time, turned it away: a perfect parry.
+	PARRIED_PERFECTLY,
 	## It came while they were still reeling from the last one, and did nothing.
 	IGNORED,
 }
@@ -51,27 +61,45 @@ const GROUP: StringName = &"duellist"
 const LANDING_GROUP: StringName = &"landing"
 ## The item that parries.
 const PAN_ID: StringName = &"frying_pan"
+const CHOP: KnifeCut = preload("res://data/combat/chop.tres")
+const SLICE: KnifeCut = preload("res://data/combat/slice.tres")
+const CLEAVE: KnifeCut = preload("res://data/combat/cleave.tres")
+const FILLET: KnifeCut = preload("res://data/combat/fillet.tres")
+const WEAK_SPIN: KnifeCut = preload("res://data/combat/weak_spin.tres")
 
 ## How many hearts the player has.
 @export var max_hearts: int = 3
-## How far the knife reaches, in metres from the player's centre.
-@export var strike_reach: float = 2.0
-## How wide the swing is, in degrees, centred on the way the player faces.
-@export var strike_arc_degrees: float = 120.0
-## How long a swing takes, in seconds. Another can't start until it's done.
-@export var strike_seconds: float = 0.25
+@export_group("Knife")
+## The cuts that taps of Use tool chain, in order.
+@export var chain: Array[KnifeCut] = [CHOP, SLICE, CLEAVE]
+## The spin a full charge lets go.
+@export var fillet: KnifeCut = FILLET
+## The spin a charge let go too early gives.
+@export var weak_spin: KnifeCut = WEAK_SPIN
+## How long after a cut a tap still carries on the chain, in seconds.
+@export var chain_window_seconds: float = 0.4
+## How long Use tool must be held before it starts to charge, in seconds.
+@export var charge_delay_seconds: float = 0.3
+## How long Use tool must be held for a full charge, in seconds.
+@export var charge_full_seconds: float = 1.0
+## How much of their speed the player walks at while charging.
+@export_range(0.0, 1.0) var charge_walk_factor: float = 0.5
+@export_group("Pan")
 ## How long the pan stays up after a press, in seconds: the parry window.
 @export var parry_window_seconds: float = 0.3
 ## How long after the window before the pan can go up again, in seconds.
 @export var parry_recovery_seconds: float = 0.4
+## How soon after the pan goes up a blow must land to be parried perfectly,
+## flipping a crab, in seconds.
+@export var parry_perfect_seconds: float = 0.12
+@export_group("Blows taken")
 ## How long after a blow lands before another can, in seconds.
 @export var invulnerable_seconds: float = 1.0
 ## How hard a blow throws the player back, in metres per second.
 @export var knockback_speed: float = 7.0
 ## How long a blow leaves the player stumbling, deaf to the stick, in seconds.
 @export var stumble_seconds: float = 0.3
-## How hard a strike that counts knocks a crab back, in metres per second.
-@export var strike_push: float = 6.0
+@export_group("In hand")
 ## Where the knife sits in the character's right hand, when there's a
 ## character (not the greybox): scaled to fit a hand, the handle through the
 ## curled fingers and the blade out by the thumb. The hand bone starts at the
@@ -89,9 +117,19 @@ const PAN_ID: StringName = &"frying_pan"
 var hearts: Hearts = null
 ## The timing of the pan. Created once and never replaced.
 var parry: ParryWindow = ParryWindow.new()
+## Which cut the knife makes. Created once and never replaced.
+var combo: KnifeCombo = KnifeCombo.new()
 
-## Seconds left of the current swing.
-var _strike_left: float = 0.0
+## The knife on the player's model, wherever it's held (in the character's
+## hand, or in front of the greybox).
+var knife: Node3D:
+	get:
+		return _knife
+
+## The cut waiting to land, or null.
+var _landing: KnifeCut = null
+## Seconds until it lands.
+var _land_left: float = 0.0
 ## Seconds left before another blow can land.
 var _invulnerable_left: float = 0.0
 ## The crab whose fight the lantern is showing, or null.
@@ -118,7 +156,15 @@ func _ready() -> void:
 	hearts = Hearts.new(max_hearts)
 	parry.window_seconds = parry_window_seconds
 	parry.recovery_seconds = parry_recovery_seconds
-	_detector.tool_missed.connect(strike)
+	parry.perfect_seconds = parry_perfect_seconds
+	combo.chain = chain
+	combo.fillet = fillet
+	combo.weak_spin = weak_spin
+	combo.chain_window_seconds = chain_window_seconds
+	combo.charge_delay_seconds = charge_delay_seconds
+	combo.charge_full_seconds = charge_full_seconds
+	combo.cut_started.connect(_on_cut_started)
+	_detector.tool_missed.connect(press_knife)
 	_lock_on.target_changed.connect(_on_target_changed)
 	_knife.hide()
 	_pan.hide()
@@ -131,8 +177,15 @@ func _ready() -> void:
 
 func _physics_process(delta: float) -> void:
 	parry.tick(delta)
-	_strike_left = maxf(_strike_left - delta, 0.0)
+	combo.tick(delta)
 	_invulnerable_left = maxf(_invulnerable_left - delta, 0.0)
+	if _landing != null:
+		_land_left -= delta
+		if _land_left <= 0.0:
+			var cut: KnifeCut = _landing
+			_landing = null
+			_land(cut)
+	_player.stride_factor = charge_walk_factor if combo.is_charging() else 1.0
 
 
 func _process(_delta: float) -> void:
@@ -143,6 +196,9 @@ func _unhandled_input(event: InputEvent) -> void:
 	if event.is_action_pressed("parry"):
 		get_viewport().set_input_as_handled()
 		raise_pan()
+	elif event.is_action_released("use_tool"):
+		# The press went to the detector, which says when it's the knife's.
+		release_knife()
 
 
 ## Where the player is, for whatever is fighting them.
@@ -150,37 +206,43 @@ func position() -> Vector3:
 	return _player.global_position
 
 
-## Swings the knife at every fog-crab in reach in front of the player.
-## Returns whether it swung: not mid-swing, without a tool, or while the
-## player can't act.
-func strike() -> bool:
-	if not _player.controls_enabled or _strike_left > 0.0:
+## Use tool going down with nothing here for a tool to work on: the next cut
+## of the chain, or if one is being made, the next once it ends. Held on, it
+## charges. Returns whether the knife took the press: not without a tool,
+## or while the player can't act.
+func press_knife() -> bool:
+	if not _can_cut():
 		return false
-	if _player.toolbar.get_tools().is_empty():
-		return false
-	_strike_left = strike_seconds
-	var hit: bool = false
-	var reached: bool = false
-	for crab: FogCrab in _crabs():
-		if not in_reach(_player.global_position, _player.facing, crab.global_position,
-				strike_reach, strike_arc_degrees):
-			continue
-		reached = true
-		if crab.take_strike(flat_direction(_player.global_position, crab.global_position)
-				* strike_push):
-			hit = true
-			strike_landed.emit(crab, crab.is_cleared())
-			if crab.is_cleared():
-				_spirit.remark(&"fog_cleared")
-	struck.emit(hit)
-	if reached and not hit:
-		glanced.emit()
+	combo.press()
 	return true
 
 
-## Whether the knife is mid-swing.
+## Use tool coming up: lets go a charged spin, if it was charging.
+func release_knife() -> void:
+	if not _can_cut():
+		combo.cancel_charge()
+		return
+	combo.release()
+
+
+## A tap of the knife: pressed and let go at once. Returns whether a cut
+## started now (a tap mid-cut waits for it, and returns false).
+func strike() -> bool:
+	if not _can_cut():
+		return false
+	var started: bool = combo.press()
+	combo.release()
+	return started
+
+
+## Whether the knife is mid-cut.
 func is_striking() -> bool:
-	return _strike_left > 0.0
+	return combo.is_cutting()
+
+
+## Whether the knife is charging.
+func is_charging() -> bool:
+	return combo.is_charging()
 
 
 ## Whether a frying pan is anywhere on the toolbar, so a parry can work.
@@ -195,6 +257,7 @@ func raise_pan() -> bool:
 		return false
 	if not parry.press():
 		return false
+	combo.cancel_charge()
 	pan_raised.emit()
 	return true
 
@@ -210,14 +273,21 @@ func is_invulnerable() -> bool:
 ## the player back away from [param from]; losing the last heart is a defeat.
 func receive_hit(halves: int, from: Vector3) -> Hit:
 	if parry.is_active() and has_pan():
+		var perfect: bool = parry.is_perfect()
 		parry.spend()
 		_spirit.excite()
 		parried.emit()
+		if perfect:
+			parried_perfectly.emit()
+			return Hit.PARRIED_PERFECTLY
 		return Hit.PARRIED
 	if is_invulnerable():
 		return Hit.IGNORED
 	hearts.hurt(halves)
 	_invulnerable_left = invulnerable_seconds
+	# A blow breaks a cut, its chain and a charge.
+	combo.reset()
+	_landing = null
 	_player.knock_back(flat_direction(from, _player.global_position) * knockback_speed,
 			stumble_seconds)
 	hurt.emit(halves)
@@ -242,8 +312,10 @@ static func in_reach(from: Vector3, facing: Vector3, point: Vector3, reach: floa
 	if away.length() > reach:
 		return false
 	var ahead: Vector2 = Vector2(facing.x, facing.z)
-	# Standing on top of it, or facing nowhere, there's no angle to miss by.
-	if away.length() < 0.01 or ahead.length() < 0.01:
+	# Standing on top of it, or facing nowhere, there's no angle to miss by;
+	# and a swing all round misses nothing. (Straight behind is an angle of pi,
+	# which in the vectors' single precision comes out a hair over half of 360.)
+	if away.length() < 0.01 or ahead.length() < 0.01 or arc_degrees >= 360.0:
 		return true
 	return absf(ahead.angle_to(away)) <= deg_to_rad(arc_degrees) / 2.0
 
@@ -264,6 +336,44 @@ func _fall() -> void:
 	_spirit.snap_to_player()
 	_spirit.remark(&"pulled_out")
 	defeated.emit(lost)
+
+
+# Whether the player can use the knife now: they're free to act and carry a
+# tool.
+func _can_cut() -> bool:
+	return _player.controls_enabled and not _player.is_dodging() \
+			and not _player.toolbar.get_tools().is_empty()
+
+
+# A cut starting: the step forward with it, and its landing a moment later.
+func _on_cut_started(cut: KnifeCut) -> void:
+	if cut.step > 0.0:
+		_player.lunge(_player.facing * cut.step)
+	_landing = cut
+	_land_left = cut.hit_at
+	cut_started.emit(cut)
+
+
+# [param cut] meeting every fog-crab in its reach: each that's open takes
+# its damage and is knocked back; a fillet flips one that's mid-lunge.
+func _land(cut: KnifeCut) -> void:
+	var hit: bool = false
+	var reached: bool = false
+	for crab: FogCrab in _crabs():
+		if not in_reach(_player.global_position, _player.facing, crab.global_position,
+				cut.reach, cut.arc_degrees):
+			continue
+		reached = true
+		var push: Vector3 = flat_direction(_player.global_position, crab.global_position) \
+				* cut.push
+		if crab.take_strike(push, cut.damage, cut.flips_lunging):
+			hit = true
+			strike_landed.emit(crab, crab.is_cleared(), cut)
+			if crab.is_cleared():
+				_spirit.remark(&"fog_cleared")
+	struck.emit(hit)
+	if reached and not hit:
+		glanced.emit()
 
 
 func _crabs() -> Array[FogCrab]:
@@ -298,7 +408,7 @@ static func mood_for(state: CrabCycle.State) -> LanternSpirit.Mood:
 	match state:
 		CrabCycle.State.WINDUP:
 			return LanternSpirit.Mood.WARNING
-		CrabCycle.State.OPENING, CrabCycle.State.STAGGERED:
+		CrabCycle.State.OPENING, CrabCycle.State.STAGGERED, CrabCycle.State.FLIPPED:
 			return LanternSpirit.Mood.OPEN
 	return LanternSpirit.Mood.CALM
 
@@ -325,8 +435,8 @@ func _hold(in_hands: bool) -> void:
 # work. In the character's hands the animation moves them; on the greybox,
 # the knife sweeps across in front.
 func _pose_knife_and_pan() -> void:
-	_knife.visible = _strike_left > 0.0
-	if _knife.visible and not _in_hands:
-		var through: float = 1.0 - _strike_left / strike_seconds
+	_knife.visible = combo.is_cutting() or combo.is_charging()
+	if combo.is_cutting() and not _in_hands:
+		var through: float = combo.cut_progress()
 		_knife.rotation.y = lerpf(deg_to_rad(70.0), deg_to_rad(-70.0), through)
 	_pan.visible = parry.is_active()

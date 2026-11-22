@@ -1,0 +1,13 @@
+[gd_resource type="Resource" script_class="DodgeMove" format=3]
+
+[ext_resource type="Script" path="res://scripts/data/dodge_move.gd" id="1_move"]
+
+[resource]
+script = ExtResource("1_move")
+id = &"roll"
+display_name = "Roll"
+seconds = 0.5
+speed = 6.5
+animation = &"Roll"
+animation_from = 0.05
+animation_length = 1.05

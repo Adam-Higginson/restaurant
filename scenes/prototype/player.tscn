@@ -28,6 +28,12 @@
 [ext_resource type="Script" path="res://scripts/combat/hit_stop.gd" id="40_stop"]
 [ext_resource type="Script" path="res://scripts/combat/hit_feel.gd" id="41_feel"]
 [ext_resource type="Script" path="res://scripts/combat/knife_trail.gd" id="42_trail"]
+[ext_resource type="Script" path="res://scripts/player/dodge.gd" id="43_dodge"]
+[ext_resource type="AudioStream" path="res://assets/audio/combat/spin.tres" id="44_spin"]
+[ext_resource type="AudioStream" path="res://assets/audio/combat/charge.tres" id="45_charge"]
+[ext_resource type="AudioStream" path="res://assets/audio/combat/charged.tres" id="46_charged"]
+[ext_resource type="AudioStream" path="res://assets/audio/combat/dodge.tres" id="47_dodge"]
+[ext_resource type="AudioStream" path="res://assets/audio/combat/land.tres" id="48_land"]
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_raosb"]
 radius = 0.4
@@ -93,6 +99,18 @@ albedo_color = Color(1, 0.86, 0.45, 1)
 [sub_resource type="BoxMesh" id="BoxMesh_spark"]
 material = SubResource("StandardMaterial3D_spark")
 size = Vector3(0.04, 0.04, 0.04)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_glint"]
+shading_mode = 0
+albedo_color = Color(0.92, 0.97, 1, 1)
+
+[sub_resource type="BoxMesh" id="BoxMesh_glint"]
+material = SubResource("StandardMaterial3D_glint")
+size = Vector3(0.035, 0.035, 0.035)
+
+[sub_resource type="Curve" id="Curve_glint"]
+_data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(1, 0), 0.0, 0.0, 0, 0]
+point_count = 2
 
 [node name="Player" type="CharacterBody3D" unique_id=1530964768]
 floor_constant_speed = true
@@ -161,6 +179,41 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -0.5)
 
 [node name="Tip" type="Marker3D" parent="Model/Knife"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -1.4)
+
+[node name="Glint" type="CPUParticles3D" parent="Model/Knife"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -1.1)
+emitting = false
+amount = 10
+lifetime = 0.3
+local_coords = true
+mesh = SubResource("BoxMesh_glint")
+emission_shape = 3
+emission_box_extents = Vector3(0.04, 0.04, 0.35)
+direction = Vector3(0, 1, 0)
+spread = 180.0
+gravity = Vector3(0, 0, 0)
+initial_velocity_min = 0.2
+initial_velocity_max = 0.6
+scale_amount_min = 0.5
+scale_amount_max = 1.0
+scale_amount_curve = SubResource("Curve_glint")
+
+[node name="GlintBurst" type="CPUParticles3D" parent="Model/Knife"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -1.4)
+emitting = false
+amount = 14
+lifetime = 0.35
+one_shot = true
+explosiveness = 1.0
+mesh = SubResource("BoxMesh_glint")
+direction = Vector3(0, 1, 0)
+spread = 180.0
+gravity = Vector3(0, 0, 0)
+initial_velocity_min = 1.5
+initial_velocity_max = 3.0
+scale_amount_min = 0.8
+scale_amount_max = 1.6
+scale_amount_curve = SubResource("Curve_glint")
 
 [node name="Pan" type="Node3D" parent="Model"]
 transform = Transform3D(1, 0, 0, 0, 0, -1, 0, 1, 0, 0, 1.0, -0.55)
@@ -243,6 +296,9 @@ script = ExtResource("21_lock")
 [node name="Duellist" type="Node" parent="."]
 script = ExtResource("22_duel")
 
+[node name="Dodge" type="Node" parent="."]
+script = ExtResource("43_dodge")
+
 [node name="HitStop" type="Node" parent="."]
 script = ExtResource("40_stop")
 
@@ -281,6 +337,32 @@ stream = ExtResource("36_heartbeat")
 volume_db = -4.0
 pitch_scale = 0.5
 max_polyphony = 2
+
+[node name="SwingHeavy" type="AudioStreamPlayer" parent="DuelSounds"]
+stream = ExtResource("30_swing")
+volume_db = 9.0
+pitch_scale = 0.72
+
+[node name="Spin" type="AudioStreamPlayer" parent="DuelSounds"]
+stream = ExtResource("44_spin")
+volume_db = 2.0
+pitch_scale = 0.8
+
+[node name="Charge" type="AudioStreamPlayer" parent="DuelSounds"]
+stream = ExtResource("45_charge")
+volume_db = -5.0
+
+[node name="Charged" type="AudioStreamPlayer" parent="DuelSounds"]
+stream = ExtResource("46_charged")
+volume_db = -3.0
+
+[node name="Dodge" type="AudioStreamPlayer" parent="DuelSounds"]
+stream = ExtResource("47_dodge")
+volume_db = -2.0
+
+[node name="Land" type="AudioStreamPlayer" parent="DuelSounds"]
+stream = ExtResource("48_land")
+volume_db = -8.0
 
 [node name="LanternSpirit" parent="." unique_id=1650650065 node_paths=PackedStringArray("player", "detector") instance=ExtResource("20_spirit")]
 player = NodePath("..")
