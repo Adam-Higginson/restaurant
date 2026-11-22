@@ -58,6 +58,7 @@ func share(player: Player3D) -> bool:
 		spirit.visit(_plate_spot, eat_seconds)
 		spirit.rekindle(amount)
 		spirit.say(LanternLines.pick(LanternLines.SUPPER))
+		spirit.hum()
 	shared.emit(dish, amount)
 	return true
 

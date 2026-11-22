@@ -95,3 +95,9 @@ Learning the dishes is now part of the game: the galley's **recipe book** lies o
 - `scripts/data/recipe.gd` (a `Recipe`: dish, title, steps), `data/recipes/*.tres` in the catalog's new `recipes`; `scripts/props/recipe_book.gd` + `scenes/prototype/props/recipe_book.tscn`; `MemoryCard.show_card()` shows any page.
 - `TimeOfDay.day` and `day_began`; the bedside's morning title uses it.
 - Tests: `tests/scripts/props/recipe_book_test.gd` (a page per recipe, every recipe's dish is something a reaction makes, each morning is a new day).
+
+### 14. The lantern hums the memory melody
+The GDD's "fragment of a song from home, a few notes at first" now exists: the lantern hums three notes (A, C, B, the last one lingering) when a memory comes back and after you share supper with him. There's no recording: the hum is made on the fly (a soft sine with a little overtone, each note swelling in and out, a slight waver), so it works without any third-party audio. It's the seed for learning more of the song on the voyage: add notes to `MELODY`.
+- `scripts/companion/hum.gd` (an `AudioStreamPlayer3D` with an `AudioStreamGenerator`, filled with samples each frame), in the lantern's scene; `LanternSpirit.hum()`.
+- Tests: `tests/scripts/companion/hum_test.gd` (notes in tune, in order, swelling in and silent after, he hums when a memory comes back).
+- **Listen to it** before keeping it: I could test the maths, not the sound. `loudness` and the notes are easy to change.

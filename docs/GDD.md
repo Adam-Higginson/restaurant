@@ -206,7 +206,7 @@ Garden Salad, Tomato Soup and Pan-fried Herring work today, and the galley's **r
 ## Music
 - The user composes the score.
 - **A mix:** a score underneath (themes for the galley, the deck, the open sea and each island, shifting with time and weather), with music from inside the world woven in. The crew play at dinner, islanders sing, and the player hums.
-- **The memory melody:** a fragment of a song from home, a few notes at first. The player can hum it (the lantern accompanies them), and they learn more of it on the voyage. The full theme is only heard when it's complete.
+- **The memory melody:** a fragment of a song from home, a few notes at first. (First sketch: the lantern hums three notes, A, C, B, when a memory comes back and after supper, synthesised in `scripts/companion/hum.gd`; more notes can join `MELODY` as the voyage goes on.) The player can hum it (the lantern accompanies them), and they learn more of it on the voyage. The full theme is only heard when it's complete.
 - Islands can be heard before they're seen, and their melody merges into the score as you arrive.
 
 ## Look and feel

@@ -7,6 +7,7 @@
 [ext_resource type="Material" path="res://assets/placeholder/materials/hold_dark.tres" id="5_dark"]
 [ext_resource type="Material" path="res://assets/placeholder/materials/flame.tres" id="6_flame"]
 [ext_resource type="Script" path="res://scripts/companion/lantern_voice.gd" id="7_voice"]
+[ext_resource type="Script" path="res://scripts/companion/hum.gd" id="8_hum"]
 
 [sub_resource type="BoxMesh" id="Glass"]
 size = Vector3(0.17, 0.2, 0.17)
@@ -127,3 +128,6 @@ speed = 3.0
 [node name="Voice" type="Label3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.42, 0)
 script = ExtResource("7_voice")
+
+[node name="Hum" type="AudioStreamPlayer3D" parent="."]
+script = ExtResource("8_hum")

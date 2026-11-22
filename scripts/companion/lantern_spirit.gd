@@ -83,6 +83,7 @@ var _rng: RandomNumberGenerator = RandomNumberGenerator.new()
 @onready var _eyes: Node3D = $Body/Eyes
 @onready var _light: Flicker = $Light
 @onready var _voice: LanternVoice = $Voice
+@onready var _hum: Hum = $Hum
 
 
 func _ready() -> void:
@@ -91,8 +92,9 @@ func _ready() -> void:
 	_blink_wait = _rng.randf_range(blink_min, blink_max)
 	if is_instance_valid(detector):
 		detector.focus_changed.connect(_on_focus_changed)
-	Game.memories.remembered.connect(
-			func(_memory: Memory) -> void: say(LanternLines.pick(LanternLines.REMEMBERED)))
+	Game.memories.remembered.connect(func(_memory: Memory) -> void:
+		hum()
+		say(LanternLines.pick(LanternLines.REMEMBERED)))
 	# He's a child of the player, so he's ready before the player is: wait
 	# until the player has its model before finding its shoulder.
 	snap_to_player.call_deferred()
@@ -159,6 +161,16 @@ func say(line: String) -> void:
 		return
 	_voice.say(line)
 	excite()
+
+
+## Hums the memory melody, the few notes of it you have so far.
+func hum() -> void:
+	_hum.hum()
+
+
+## Whether he's humming right now.
+func is_humming() -> bool:
+	return _hum.is_humming
 
 
 ## What he's saying now, or "" when he's quiet.
