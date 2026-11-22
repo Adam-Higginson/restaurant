@@ -1,21 +1,110 @@
-# The opening cutscene of a new voyage: the night the lantern pulled you
-# from the sea. Played by the Opening node in scenes/prototype/sea.tscn.
-# Placeholder writing: rewrite freely.
+# The opening of the game: the title over the dark sea, then (on a new
+# voyage) the night the lantern pulled you from it. Played by the Opening
+# node in scenes/prototype/sea.tscn. Placeholder writing: rewrite freely.
 #
 # A cutscene is a conversation whose @ cues stage the scene. Lines wait for
-# the Interact button; cues that take time (a fade, a wait) hold the script
-# until they're done. Every cue is listed in scripts/cutscene/cue_list.gd.
+# the Interact button; cues that take time (a fade, a wait, a clip) hold the
+# script until they're done. Every cue is listed in
+# scripts/cutscene/cue_list.gd.
 #
-# Shots (where the camera goes) and marks (where people stand) are Marker3D
-# nodes in scenes/prototype/ship.tscn, under Shots and Marks: drag them in
-# the editor to reframe a shot, without touching this file.
+# Where things are, so you can change them without touching this file:
+# - Shots (where the camera goes) and marks (where people stand) are
+#   Marker3D nodes. The bunk room's are in scenes/prototype/ship.tscn under
+#   Shots and Marks; the rescue's are in scenes/prototype/intro/rescue_set.tscn.
+# - Clips (@play, @start) are animations. The underwater ones are in
+#   scenes/prototype/intro/underwater.tscn: open it, select Clips, and the
+#   timeline at the bottom of the editor shows them. title_drift and dive
+#   are in rescue_set.tscn.
+# - The title's words are the Name label in scenes/prototype/intro/title_stage.tscn.
 #
-# To tune one beat: set Start Section on the Opening node to its name
-# (waking, doorway, stove) and the game opens there. While it runs, F8
-# reads this file again and replays the section you're in.
+# To tune one beat: set Start Section on the Opening node to its name and
+# the game opens there. While it runs, F8 reads this file again and replays
+# the section you're in.
 
-# Black, and where we are. The captain isn't in the room yet.
+# The title, over the open sea at night. It waits for any button. A saved
+# voyage carries on from here; a new one goes under.
 ~ start
+@hide heron
+@shot title_sea cut
+@start title_drift
+@stage title
+@fade in 3.0
+@wait_for any Press any button
+@sound confirm
+@stage off
+? saved_voyage
+-> carry_on
+-> under
+
+# A saved voyage: to black, and the Opening shows which day it is.
+~ carry_on
+@show heron
+@fade out 0.8
+@shot free cut
+
+# The camera tips down and goes through the surface.
+~ under
+@play dive
+@stage underwater
+@muffle on
+-> dark
+
+# The dark. You sink, and the light of the surface goes with it.
+~ dark
+@stage underwater
+@muffle on
+@play sinking
+@wait 1.0
+-> light
+
+# The light. A small warm thing comes down through the dark, and offers a hand.
+~ light
+@stage underwater
+@muffle on
+@play lantern_descends
+-> reach
+
+# The reach. It waits, however long, until you take it.
+~ reach
+@stage underwater
+@muffle on
+@start offered
+@wait_for interact Take his hand
+@sound grasp
+@play taken
+@fade out 0.4
+-> surface
+
+# The surface. He hauls you up into the storm, the ship towering over you.
+~ surface
+@stage off
+@muffle off
+@show castaway
+@shot from_the_water cut
+@fade in 0.4
+@wait 3.0
+-> boathook
+
+# The boathook. A tall thin shape at the rail against the lightning.
+~ boathook
+@show castaway
+@place heron rail
+@show heron
+@show reaching_boathook
+@shot the_rail cut
+@wait 0.7
+@lightning
+@wait 1.6
+@sound hook
+@fade out 0.2
+@hide castaway
+@hide reaching_boathook
+@hide heron
+@shot free cut
+-> title
+
+# Black, and where we are. The captain isn't in the bunk room yet.
+~ title
 @hide heron
 @title Somewhere at sea
 @wait 2.5

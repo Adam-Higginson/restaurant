@@ -221,6 +221,7 @@
 [ext_resource type="PackedScene" uid="uid://cp7jmlvmrpdhw" path="res://scenes/prototype/props/supper_spot.tscn" id="96_supper"]
 [ext_resource type="PackedScene" uid="uid://bwpkc5mofrie7" path="res://scenes/prototype/props/recipe_book.tscn" id="97_recipes"]
 [ext_resource type="PackedScene" path="res://scenes/prototype/props/boathook.tscn" id="310_boathook"]
+[ext_resource type="PackedScene" path="res://scenes/prototype/intro/rescue_set.tscn" id="311_rescue"]
 
 [sub_resource type="BoxMesh" id="Mesh_Hull"]
 size = Vector3(12, 2.5, 30)
@@ -2166,6 +2167,8 @@ transform = Transform3D(0.9975, -0.0148, -0.069, 0, 0.9777, -0.2101, 0.0706, 0.2
 
 [node name="PotOnStove" type="Marker3D" parent="Shots" groups=["shots"]]
 transform = Transform3D(0.5233, 0.1413, -0.8404, 0, 0.9861, 0.1659, 0.8522, -0.0868, 0.516, 0.8, 2.5, 3.3)
+
+[node name="RescueSet" parent="." instance=ExtResource("311_rescue")]
 
 [node name="Marks" type="Node3D" parent="."]
 

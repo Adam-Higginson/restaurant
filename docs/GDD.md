@@ -1,6 +1,6 @@
 # Game Design Document
 
-Working title: **TBD** (the repo is still called `restaurant`)
+Working title: **Salt and Ember** (the sea and the flame: you and the lantern). The repo is still called `restaurant`.
 
 ## Pitch
 A cosy 3D adventure in the spirit of Ocarina of Time. You're pulled from the sea by a lantern spirit who promises to take you home, and you join the crew of a ship sailing between fog-wrapped islands. You remember home only as tastes and sounds, so you search for it by cooking and humming. Ashore, you explore, gather, solve puzzles and duel fog-touched creatures. Aboard, the ship's galley is the warm heart of it all, where the crew you gather eat together every evening.
@@ -22,11 +22,11 @@ A cosy 3D adventure in the spirit of Ocarina of Time. You're pulled from the sea
 - The wider story is still to be written.
 
 ## How it begins (first sketch)
-The intro is one cutscene in nine beats. The second half (6 to 9) is built; the first half, in the water, comes next.
+The game opens on a **title screen**: the open sea at night in the rain, "Salt and Ember" large across it, and "Press any button". It's there on every launch. On a saved voyage the button takes you on to "Day 3. Morning" and your bunk. On a new one the camera tips down and goes through the surface, and the intro begins. It's one cutscene in nine beats, all built in greybox (#100, #102).
 
 1. **The dark.** Black water, the storm's surface churning far above with lightning flickering through it. Your figure drifts down. Nothing else: no hints of home, no wreckage.
 2. **The light.** A small warm light comes down through the dark, the first warm thing in the game. A hand of flame is offered.
-3. **The reach.** The scene waits, with you still sinking, until you press Interact and take it. It's the only thing you do, and it makes "Good holding." true.
+3. **The reach.** The scene waits, with you still sinking, until you press Interact and take it ("Take his hand" appears after a moment, with the button). It's the only thing you do, and it makes "Good holding." true.
 4. **The surface.** He hauls you up into the storm: rain, waves, the ship towering over you with its heron figurehead and bow lantern.
 5. **The boathook.** A tall thin silhouette at the rail against the lightning, unmistakably a heron, reaches down a long boathook. It catches your collar. Black. No face and no words.
 6. **Title.** "Somewhere at sea".
@@ -34,7 +34,9 @@ The intro is one cutscene in nine beats. The second half (6 to 9) is built; the 
 8. **The doorway.** The camera cuts to the galley door: the captain stands in it, lit from behind, the rain coming down the hatch beside them and the boathook leaning on the wall. "Nobody drowns on my ship. Nobody goes hungry either." / "You've managed the first."
 9. **The stove.** The camera lingers on the galley stove, where a pot has been left warm, while the captain goes back to the fire. Then the camera is behind you again and the ship is yours. Nothing tells you to go and eat. Talking to the captain by the stove afterwards is your first proper conversation ("So. You're the one the lamp fished out.").
 
-Hold Tab (Start on a controller) for a second to skip it. (In `sea.tscn`, the `Opening` node; tick its Skip to start on deck, or set its Start Section to open on a later beat. The script is `data/dialogue/intro.dlg`: see Cutscenes under Conversations.)
+Underwater the storm is a dull rumble, and the lightning above still flickers down through the surface. Nobody has hands yet and nobody swims: the figures are greybox, and light, sound and timing do the work until there's real art.
+
+Hold Tab (Start on a controller) for a second to skip it. (In `sea.tscn`, the `Opening` node; tick its Skip to start on deck, or set its Start Section to open on a later beat. The script is `data/dialogue/intro.dlg`: see Cutscenes under Conversations. The underwater set is `scenes/prototype/intro/underwater.tscn`, the pieces beside the ship are in `rescue_set.tscn` next to it, and the title's words are in `title_stage.tscn`.)
 
 **Keeping the voyage (first sketch):** sleeping in your bunk is where the game saves: the memories you've got back, the day and whether it's morning, and the lantern's warmth. Start again and the opening carries on ("Day 3. Morning", "You're back. I kept the light on.") instead of beginning anew. To start a new voyage, delete `voyage.save` from the user data folder.
 
@@ -191,11 +193,12 @@ Talking is how you get to know the crew, so it comes in two kinds (the second is
 - **Writing them:** chatter is in `data/dialogue/ambient.dlg`, the lantern's reactions in `moments.dlg`, in the same format as conversations. Each section is one remark; a `?` line just before it says when it can be said (`? night and raining`), and tags after its name say how often: `[weight 2]` (twice as likely), `[cooldown 300]` (seconds before it's said again, 120 if not given), `[priority 1]` (said before others that fit), `[on caught]` (a reaction to that moment). A line can end in `[thought]`, `[shout]` or `[sound]`. Nothing is said twice running.
 
 **Cutscenes (#100).** A cutscene is a conversation that nobody in particular starts, written in the same kind of file, whose `@` cues stage the scene. Lines wait for Interact as usual. A cue that takes time holds the script until it's done, so the file reads top to bottom as the scene plays.
-- **The cues so far:** `@shot doorway` (glide the camera to a shot; add `cut` to cut, and `@shot free` gives it back), `@fade out` / `@fade in 2.0`, `@title Somewhere at sea`, `@wait 1.5`, `@wait_for interact` (the scene waits for the player), `@place heron doorway` (stand someone on a mark), `@face heron player`, `@hide heron` / `@show heron`, and `@home heron` (back to their usual spot). Nobody walks yet, so people are moved while the camera looks elsewhere.
+- **The cues so far:** `@shot doorway` (glide the camera to a shot; add `cut` to cut, and `@shot free` gives it back), `@fade out` / `@fade in 2.0`, `@title Somewhere at sea`, `@wait 1.5`, `@wait_for interact` or `@wait_for any` (the scene waits for the player; words after it are shown as a prompt), `@place heron doorway` (stand someone on a mark), `@face heron player`, `@hide heron` / `@show heron` (people, or props such as the reaching boathook), `@home heron` (back to their usual spot), `@stage underwater` / `@stage off` (a set of its own shown over the game, or the title), `@play lantern_descends` (a movement made on the animation timeline; the script waits for it) and `@start drifting` (one that loops underneath), `@sound grasp`, `@muffle on` / `@muffle off` (the storm heard from underwater), and `@lightning`. Nobody walks yet, so people are moved while the camera looks elsewhere.
+- **Clips are yours to reshape.** A movement that needs a hand's touch (how the lantern comes down, hesitates, and offers) is an animation in an `AnimationPlayer`: open `scenes/prototype/intro/underwater.tscn`, select `Clips`, and the timeline at the bottom of the editor shows `sinking`, `lantern_descends`, `offered` and `taken` to scrub and change, without running the game.
 - **Places have names, not numbers.** A shot or a mark is a marker in the ship scene (under `Shots` and `Marks`), named for the cue: drag it in the editor to reframe, without touching the script.
 - **Skipping** (hold Tab or Start for a second) blacks the screen and runs the script to its end at once, so its flags are set and everyone ends up where they should be. It stops at a choice, which is never made for you.
 - **Tuning one:** set Start Section on the `Opening` node to open the game on a later beat. While the game runs from the editor, F8 reads the file again and replays the section you're in, so the loop is edit, save, F8. A mistyped cue is reported with its line number, and the tests check every file.
-- **Still to come:** `@play` for movements shaped on Godot's animation timeline (the lantern's descent), and lines marked to play on their own timing in a speech bubble instead of waiting for the button.
+- **Still to come:** lines marked to play on their own timing in a speech bubble instead of waiting for the button; and sounds for going through the surface and for being underwater (none of our sound packs has them yet).
 
 The text is set in Varela Round, a soft rounded face like OoT's.
 
@@ -309,6 +312,59 @@ The game opens at night in steady rain, and Studio Ghibli's rain is the referenc
 - High resolution: no pixelated low-resolution viewport. This needs the Forward+ renderer.
 - Placeholder art is simple coloured shapes (greybox) until real models are made.
 
+## The opening as intended (not yet built)
+This is where the opening is headed. What's built so far is described under "How it begins": a plain title over the sea, the lantern arriving at full strength, and his lines on waking. The version here replaces those, piece by piece.
+
+**The ship is the Salt and Ember.** That's her name in the story as well as the game's, so the crew can say it. Salt is the sea, and you, soaked through. Ember is the lantern.
+
+### The beats
+1. **Her name.** Rain. A lantern swinging on a hook at the stern, its glow sliding along wet, weathered timber: carved letters, the gilt worn off their edges, water running in the grooves. You read the name a few letters at a time as the light passes, and lightning shows the whole board once: SALT AND EMBER. It waits for a button.
+2. **He hears something.** The lantern on the hook is the lantern spirit, keeping watch. On your press the swinging stops. He drops from the hook and over the side, and her name goes dark.
+3. **The dark.** You, sinking, with nothing warm anywhere. The player knows a light is on its way and you don't.
+4. **He's going out.** Water is bad for flames. He comes down smaller and smaller, and what reaches you is a guttering spark that can barely hold a shape.
+5. **The reach.** The scene waits until you take his hand, and that's what catches him alight again. The flare is what lifts you both.
+6. **You hold him up.** At the surface the roles flip. He's a small ember and the waves want him, so you keep him out of the water. The captain finds one point of warm light on a black sea, and the boathook comes down to it.
+7. **Waking.** The bunk room. He's a dim glow under a glass on the round table, and he doesn't speak.
+8. **The rule.** The captain in the doorway: "Nobody drowns on my ship. Nobody goes hungry either." / "You've managed the first."
+9. **The pot.** The camera finds it on the galley stove, and the ship is yours. There's one quiet thing to do: make something warm and bring it back to him.
+10. **His first words.** Only then: "There you are." / "You were in the water. I pulled. You held on. Good holding." / "I'll get you home. I know exactly where it is. Roughly."
+
+**What it changes.**
+- The rescue is mutual: two things that each kept the other from going out. That's the title, acted out before anyone says it.
+- "Good holding" becomes thanks, and "I pulled" a joke between two people who both know better.
+- The rule that a warm meal rekindles him has its origin in the first minute: you've done it once already, with your hand.
+- The first ten minutes of play have a reason. Nobody tells you to cook. You've held someone's light and watched it nearly fail, and there's a stove through that door.
+- After the rescue he lives on the round table, so there's an empty hook at the stern where a lantern used to keep watch. Nobody aboard says why he came inside.
+
+### The title screen keeps your voyage
+It's the same nameboard on every launch, but it carries where you are.
+- **The hour:** storm and night on a new voyage; grey dawn and quieter rain if you last slept till morning.
+- **His warmth:** the glow on the letters is him, so it's as warm or as dim as you've kept him. A dim title screen means he hasn't been fed.
+- **The crew:** each crew member who decides to stay cuts a small mark into the wood beside the name (a heron, a mossy stone). Nobody explains them. By the end the board is a record of the trip.
+- **A saved voyage:** on your press he doesn't dive. He turns from the board toward the cabin lights, as if to say "there you are again", and the day's card follows.
+
+### The lantern's face
+He carries most of the opening without a word, so he needs to be readable. He has three voices.
+- **His eyes** say what he feels right now. The two eyes he has change shape: round for surprise, slanted in for determined, slanted out for sad or worried, flat lines for tired, curves for asleep. No mouth and no brows.
+- **His flame** says what he wants and how strong he is: it leans toward what he wants, shrinks back from what scares him, stands tall when he's pleased with himself, gutters when he's weak, and cools from amber toward blue as he fades.
+- **His glass** says what he's been through: it fogs when he's flustered, rain runs down it like tears, and a crack appears when he's badly hurt and mends when he's fed. The crack is rare: the rescue, and perhaps one or two moments later in the story, never routine damage.
+
+They work at different distances. Up close you read his eyes; across the deck, his flame; and when he's a spark too small to have a face, the flame is all there is and it still acts.
+
+Through the opening:
+
+| Moment | Eyes | Flame and glass |
+|---|---|---|
+| On watch | Half-lidded; one drifts shut and jerks open | Swaying with the hook |
+| He hears something | Snap wide and round | Stands still |
+| The dive | Narrowed, slanted in | Streaming back behind him |
+| Going out | Slanted out, pinched; one flickering | Guttering, cooling to blue |
+| Reaching you | Huge, looking up at you | Struggling to hold the shape of a hand |
+| You take it | Squeezed shut, then wide | Catches, flares tall |
+| At the surface | Two tired slits, on you | A small ember |
+| Asleep | Two curved lines | Low and bluish; a hairline crack in the glass |
+| After the meal | One opens | Warms to amber; the crack closes |
+
 ## MVP: the Prologue
 A tiny complete story arc that proves the "day is a song" loop and ends on the game's hook.
 1. **The rescue:** black water, a warm light, a hand of flame. You wake in your bunk. The heron captain is gruff, and the lantern is certain: "The nearest island, that'll be your home!"
@@ -377,5 +433,5 @@ These cover the pure-logic code that carries over to 3D. The 2D world layer (pla
 - `DayLight` (`scripts/visuals/day_light.gd`) maps the time of day to colours and lamp levels. In 3D it will drive the sun, sky and lanterns.
 - `DebugKeys` (`scripts/debug/`) gives testing shortcuts in debug builds only.
 - The 3D prototype lives in `scenes/prototype/` until it replaces `scenes/main.tscn`.
-- **Conversations** (`scripts/dialogue/`): `DialogueScript` reads a `.dlg` text file into a `DialogueTree` (steps in order, sections by name). `DialogueRunner` walks it with no nodes, so it's unit tested alone; it reads and changes a `DialogueState` (`Game.dialogue`: saved flags, plus facts the game answers on the spot, registered by `DialogueFacts`). `Conversation` is the one node that joins it to the world: it stops the player, shows lines in the `DialogueBox` (display only), reads the buttons and emits `cue` for the scene. `ShotCues` turns a `@shot` cue into `CameraRig.hold_shot`. **Cutscenes** (`scripts/cutscene/`): `Conversation.play` starts a script as a cutscene. `CueList` names every cue and how it's written, which `DialogueScript` checks as it reads. Each family of cues has a small `CueHandler` node in the scene (`ShotCues`, `FadeCues`, `WaitCues`, `ActorCues`); one that takes time calls `hold()` and later `release()`, and the runner reads no further while any hold is open. Adding a cue is one handler and one line in `CueList`. `Opening` plays `intro.dlg`; `CutsceneKeys` is the F8 replay. A `Crewmate` is anyone you can talk to: a `Person` and the name of a script, nothing about any one character.
+- **Conversations** (`scripts/dialogue/`): `DialogueScript` reads a `.dlg` text file into a `DialogueTree` (steps in order, sections by name). `DialogueRunner` walks it with no nodes, so it's unit tested alone; it reads and changes a `DialogueState` (`Game.dialogue`: saved flags, plus facts the game answers on the spot, registered by `DialogueFacts`). `Conversation` is the one node that joins it to the world: it stops the player, shows lines in the `DialogueBox` (display only), reads the buttons and emits `cue` for the scene. `ShotCues` turns a `@shot` cue into `CameraRig.hold_shot`. **Cutscenes** (`scripts/cutscene/`): `Conversation.play` starts a script as a cutscene. `CueList` names every cue and how it's written, which `DialogueScript` checks as it reads. Each family of cues has a small `CueHandler` node in the scene (`ShotCues`, `FadeCues`, `WaitCues`, `ActorCues`); one that takes time calls `hold()` and later `release()`, and the runner reads no further while any hold is open. Adding a cue is one handler and one line in `CueList`. More handlers: `StageCues` (a `Stage` is a `CanvasLayer` shown over the game; the underwater one draws a scene of its own through a `SubViewport` with its own 3D world), `ClipCues` (animations in any `AnimationPlayer` in the `clips` group), `StormCues` and `SoundCues`. `FloatOnSea` (`scripts/sea/`) keeps a shot or a prop riding the waves. `Opening` plays `intro.dlg`, telling the script whether a voyage is saved (`? saved_voyage`); `CutsceneKeys` is the F8 replay. A `Crewmate` is anyone you can talk to: a `Person` and the name of a script, nothing about any one character.
 - Godot concepts are explained in `docs/godot-notes.md`.

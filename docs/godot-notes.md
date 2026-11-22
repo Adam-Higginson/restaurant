@@ -198,6 +198,8 @@ A growing glossary of the Godot concepts this project uses: what each one is, in
 
 **AudioStreamWAV made in code.** A sound is just numbers: fill a `PackedByteArray` with a wave's samples, give it to an `AudioStreamWAV`, and an `AudioStreamPlayer` plays it. `pitch_scale` then plays it higher or lower. *Ours:* the typing blip in `ui/dialogue_sounds.gd`, pitched per speaker.
 
+**Pre-render generated sounds rather than streaming them.** An `AudioStreamGenerator` lets code push samples while a sound plays, but in Godot 4.7 its playback keeps only a raw pointer to the generator. If the player (and with it the generator) is freed while the sound is still playing or fading out, the audio thread mixes with freed memory, and a garbage sample rate can trap it in a loop that hangs the whole game. When a sound can be worked out in advance, render it once into an `AudioStreamWAV` (whose playback holds a proper reference) and play that. *Ours:* `Hum.recording()` in `scripts/companion/hum.gd`, the lantern's three-note hum; this was the CI hang tracked down in Nov 2026.
+
 ## Duels (#66)
 
 **State machine.** A thing that is always in exactly one of a few named states, with rules for when it moves to the next. In GDScript it's an `enum` for the states, a variable holding the current one, and a `match` that says what each state does. It keeps "what is it doing now?" in one place instead of a tangle of flags. *Ours:* `CrabCycle` (`scripts/combat/crab_cycle.gd`): idle, windup, attack, opening, staggered, cleared.
@@ -291,6 +293,20 @@ A growing glossary of the Godot concepts this project uses: what each one is, in
 **Static variables.** `static var` belongs to the class rather than to each node, so every instance (and tests) sees the same one. *Ours:* `CharacterModel.packs_enabled`, which tests switch off, and its cache of cut heads.
 
 **Blender's command line.** `blender -b file.blend --python script.py -- args` runs Blender without a window, opens the file and runs a Python script on it. *Ours:* `tools/blend_to_glb.py` turns the crab's `.blend` into a `.glb` Godot can import.
+
+## The intro's water half (#102)
+
+**AnimationPlayer and clips.** An `AnimationPlayer` records properties changing over time (a position, a light's brightness) as animations with keyframes, and plays them back. Select one in the editor and the Animation panel at the bottom shows its timeline: pick a clip, drag the playhead to scrub, move keys to retime. A clip can loop. *Ours:* `Clips` in `scenes/prototype/intro/underwater.tscn` (`sinking`, `lantern_descends`, `offered`, `taken`) and in `rescue_set.tscn` (`title_drift`, `dive`), played by `ClipCues` for `@play` and `@start`.
+
+**A SubViewport with its own world.** A `SubViewport` is an off-screen screen. With `own_world_3d` on, the 3D things inside it live in a separate world from the rest of the game, with their own camera, lights and `WorldEnvironment`, so nothing leaks either way. Its picture is a texture you can show anywhere. *Ours:* the underwater set in `underwater_stage.tscn`: the storm, the ship and the rain don't exist in there, and its darkness doesn't touch the game. `StageView` shows its picture full-screen.
+
+**`disable_3d` on a viewport.** Stops a viewport drawing its 3D world while leaving its 2D and UI alone. *Ours:* `Stage` sets it on the game's main viewport while the underwater set covers the screen, so the sea and ship aren't drawn behind a picture that hides them.
+
+**A camera's `current`.** Each viewport shows the view of one `Camera3D`: the one marked current. A SubViewport has its own current camera, separate from the game's. *Ours:* the `Camera` in `underwater.tscn`.
+
+**NoiseTexture2D.** A texture Godot fills with smooth random noise (from a `FastNoiseLite`), tiling if asked. Handy for anything cloudy or rippling without drawing a picture. *Ours:* the light of the surface seen from below (`shaders/sea_underside.gdshader`) slides two copies of one over each other.
+
+**CPUParticles3D.** Many small copies of a mesh, each born, moved and removed by simple rules (where they start, which way they go, how long they last). The CPU version is easier to set up than `GPUParticles3D` and fine for a few hundred. *Ours:* the bubbles and drifting motes underwater. They rise past a figure that's holding still, which is what makes it look like sinking.
 
 ## Testing
 

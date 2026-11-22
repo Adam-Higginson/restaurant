@@ -1,0 +1,526 @@
+[gd_scene format=3]
+
+[ext_resource type="Shader" path="res://shaders/sea_underside.gdshader" id="1_epcgt"]
+[ext_resource type="Script" path="res://scripts/intro/surface_glow.gd" id="2_4fduc"]
+[ext_resource type="Script" path="res://scripts/weather/lightning_light.gd" id="3_11yvj"]
+[ext_resource type="PackedScene" path="res://scenes/prototype/intro/castaway.tscn" id="4_nfwwl"]
+
+[sub_resource type="Environment" id="Environment_cl0er"]
+background_mode = 1
+background_color = Color(0.01, 0.04, 0.07, 1)
+ambient_light_source = 2
+ambient_light_color = Color(0.1, 0.22, 0.32, 1)
+ambient_light_energy = 0.5
+glow_enabled = true
+fog_enabled = true
+fog_light_color = Color(0.01, 0.04, 0.07, 1)
+fog_density = 0.05
+
+[sub_resource type="FastNoiseLite" id="FastNoiseLite_5r4gv"]
+frequency = 0.012
+
+[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_yns8w"]
+width = 256
+height = 256
+noise = SubResource("FastNoiseLite_5r4gv")
+seamless = true
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_5b0uq"]
+render_priority = 0
+shader = ExtResource("1_epcgt")
+shader_parameter/ripples = SubResource("NoiseTexture2D_yns8w")
+shader_parameter/tint = null
+shader_parameter/glow = null
+shader_parameter/flash = null
+shader_parameter/patch_size = null
+shader_parameter/drift = null
+shader_parameter/reach = null
+
+[sub_resource type="PlaneMesh" id="PlaneMesh_12ru5"]
+size = Vector2(60, 60)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_l0ui7"]
+shading_mode = 0
+albedo_color = Color(1, 0.78, 0.4, 1)
+
+[sub_resource type="SphereMesh" id="SphereMesh_853cl"]
+radius = 0.15
+height = 0.3
+radial_segments = 10
+rings = 5
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_s1pck"]
+transparency = 1
+blend_mode = 1
+shading_mode = 0
+albedo_color = Color(1, 0.6, 0.25, 0.07)
+
+[sub_resource type="SphereMesh" id="SphereMesh_2akkt"]
+radius = 0.6
+height = 1.2
+radial_segments = 12
+rings = 6
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_ncdnq"]
+top_radius = 0.012
+bottom_radius = 0.065
+height = 0.5
+radial_segments = 6
+rings = 1
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_rahqi"]
+transparency = 1
+shading_mode = 0
+albedo_color = Color(0.55, 0.72, 0.82, 0.5)
+
+[sub_resource type="SphereMesh" id="SphereMesh_5q42c"]
+material = SubResource("StandardMaterial3D_rahqi")
+radius = 0.022
+height = 0.044
+radial_segments = 8
+rings = 4
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_n12d8"]
+shading_mode = 0
+albedo_color = Color(0.22, 0.34, 0.42, 1)
+
+[sub_resource type="SphereMesh" id="SphereMesh_hgusb"]
+material = SubResource("StandardMaterial3D_n12d8")
+radius = 0.012
+height = 0.024
+radial_segments = 8
+rings = 4
+
+[sub_resource type="SphereMesh" id="SphereMesh_13tl2"]
+material = SubResource("StandardMaterial3D_rahqi")
+radius = 0.026
+height = 0.052
+radial_segments = 8
+rings = 4
+
+[sub_resource type="Animation" id="Animation_a6idw"]
+length = 7.0
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Lantern:position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 3.2, 4.4, 6),
+"transitions": PackedFloat32Array(0.6, 1, 1.6, 1),
+"update": 0,
+"values": [Vector3(1.8, 11, -0.6), Vector3(1.5, 4.2, 0), Vector3(1.45, 3.9, 0.05), Vector3(1, 1.9, 0.5)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Lantern/Light:light_energy")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 1, 6),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 0,
+"values": [0.0, 0.6, 2.2]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("Lantern/Hand:scale")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0, 6, 7),
+"transitions": PackedFloat32Array(1, 0.5, 1),
+"update": 0,
+"values": [Vector3(0.01, 0.01, 0.01), Vector3(0.01, 0.01, 0.01), Vector3(1, 1, 1)]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("Castaway:position")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector3(0, 1, 0)]
+}
+tracks/4/type = "value"
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/path = NodePath("Castaway:rotation")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector3(-1.25, 1.1, -0.1)]
+}
+tracks/5/type = "value"
+tracks/5/imported = false
+tracks/5/enabled = true
+tracks/5/path = NodePath("Surface:glow")
+tracks/5/interp = 1
+tracks/5/loop_wrap = true
+tracks/5/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [0.3]
+}
+
+[sub_resource type="Animation" id="Animation_5sp6a"]
+length = 4.0
+loop_mode = 1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Lantern:position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 2, 4),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 0,
+"values": [Vector3(1, 1.9, 0.5), Vector3(1, 2, 0.5), Vector3(1, 1.9, 0.5)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Lantern/Light:light_energy")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 2, 4),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 0,
+"values": [2.2, 2.6, 2.2]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("Lantern/Hand:scale")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0, 2, 4),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 0,
+"values": [Vector3(1, 1, 1), Vector3(1.08, 1.08, 1.08), Vector3(1, 1, 1)]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("Castaway:position")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0, 2, 4),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 0,
+"values": [Vector3(0, 1, 0), Vector3(0, 0.93, 0), Vector3(0, 1, 0)]
+}
+tracks/4/type = "value"
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/path = NodePath("Castaway:rotation")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector3(-1.25, 1.1, -0.1)]
+}
+tracks/5/type = "value"
+tracks/5/imported = false
+tracks/5/enabled = true
+tracks/5/path = NodePath("Surface:glow")
+tracks/5/interp = 1
+tracks/5/loop_wrap = true
+tracks/5/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [0.3]
+}
+
+[sub_resource type="Animation" id="Animation_w1y1v"]
+length = 8.0
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Splash:emitting")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Castaway:position")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 8),
+"transitions": PackedFloat32Array(0.45, 1),
+"update": 0,
+"values": [Vector3(0, 7.5, 0), Vector3(0, 1, 0)]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("Castaway:rotation")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0, 8),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Vector3(-0.35, 0.5, 0.17), Vector3(-1.25, 1.1, -0.1)]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("Surface:glow")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0, 8),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [1.0, 0.3]
+}
+tracks/4/type = "value"
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/path = NodePath("Lantern:position")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector3(1.8, 11, -0.6)]
+}
+tracks/5/type = "value"
+tracks/5/imported = false
+tracks/5/enabled = true
+tracks/5/path = NodePath("Lantern/Light:light_energy")
+tracks/5/interp = 1
+tracks/5/loop_wrap = true
+tracks/5/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [0.0]
+}
+tracks/6/type = "value"
+tracks/6/imported = false
+tracks/6/enabled = true
+tracks/6/path = NodePath("Lantern/Hand:scale")
+tracks/6/interp = 1
+tracks/6/loop_wrap = true
+tracks/6/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector3(0.01, 0.01, 0.01)]
+}
+
+[sub_resource type="Animation" id="Animation_8cx30"]
+length = 2.4
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Lantern/Light:light_energy")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.5, 2.4),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 0,
+"values": [2.5, 7.0, 5.0]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Lantern:position")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.5, 2.4),
+"transitions": PackedFloat32Array(1, 2.2, 1),
+"update": 0,
+"values": [Vector3(1, 1.9, 0.5), Vector3(0.75, 1.9, 0.4), Vector3(0.75, 12, 0.4)]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("Lantern/Hand:scale")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0, 0.5),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Vector3(1, 1, 1), Vector3(1.3, 1.3, 1.3)]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("Castaway:position")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0, 0.5, 2.4),
+"transitions": PackedFloat32Array(1, 2.2, 1),
+"update": 0,
+"values": [Vector3(0, 1, 0), Vector3(0, 1.05, 0), Vector3(0, 11.1, 0)]
+}
+tracks/4/type = "value"
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/path = NodePath("Castaway:rotation")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/keys = {
+"times": PackedFloat32Array(0, 2.4),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Vector3(-1.25, 1.1, -0.1), Vector3(-0.2, 1.1, 0)]
+}
+tracks/5/type = "value"
+tracks/5/imported = false
+tracks/5/enabled = true
+tracks/5/path = NodePath("Surface:glow")
+tracks/5/interp = 1
+tracks/5/loop_wrap = true
+tracks/5/keys = {
+"times": PackedFloat32Array(0, 2.4),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [0.3, 1.3]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_jsgrj"]
+_data = {
+&"lantern_descends": SubResource("Animation_a6idw"),
+&"offered": SubResource("Animation_5sp6a"),
+&"sinking": SubResource("Animation_w1y1v"),
+&"taken": SubResource("Animation_8cx30")
+}
+
+[node name="Underwater" type="Node3D" unique_id=1658417921]
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="." unique_id=1517162444]
+environment = SubResource("Environment_cl0er")
+
+[node name="Camera" type="Camera3D" parent="." unique_id=925504433]
+transform = Transform3D(1, 0, 0, 0, 0.99820054, -0.059964005, 0, 0.059964005, 0.99820054, 0, 1.2, 6.5)
+current = true
+fov = 65.0
+
+[node name="Surface" type="MeshInstance3D" parent="." unique_id=2053636813]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 10, 0)
+material_override = SubResource("ShaderMaterial_5b0uq")
+cast_shadow = 0
+mesh = SubResource("PlaneMesh_12ru5")
+script = ExtResource("2_4fduc")
+
+[node name="StormLight" type="DirectionalLight3D" parent="." unique_id=891853785]
+transform = Transform3D(1, 0, 0, 0, -4.371139e-08, 1, 0, -1, -4.371139e-08, 0, 0, 0)
+light_color = Color(0.75, 0.85, 1, 1)
+script = ExtResource("3_11yvj")
+peak_energy = 1.4
+
+[node name="Moonglow" type="DirectionalLight3D" parent="." unique_id=1227624711]
+transform = Transform3D(0.9396926, -0.3213938, 0.11697777, 0, 0.34202015, 0.9396926, -0.34202012, -0.8830222, 0.32139382, 0, 0, 0)
+light_color = Color(0.5, 0.7, 1, 1)
+light_energy = 0.12
+
+[node name="Castaway" type="Node3D" parent="." unique_id=1836598663 instance=ExtResource("4_nfwwl")]
+transform = Transform3D(0.83711946, -0.31049567, 0.45035928, 0.15892528, 0.9258315, 0.3428978, -0.5234251, -0.21547297, 0.8243771, 0, 7.5, 0)
+
+[node name="Lantern" type="Node3D" parent="." unique_id=886966253]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.8, 11, -0.6)
+
+[node name="Flame" type="MeshInstance3D" parent="Lantern" unique_id=1574584354]
+material_override = SubResource("StandardMaterial3D_l0ui7")
+mesh = SubResource("SphereMesh_853cl")
+
+[node name="Halo" type="MeshInstance3D" parent="Lantern" unique_id=732592028]
+material_override = SubResource("StandardMaterial3D_s1pck")
+cast_shadow = 0
+mesh = SubResource("SphereMesh_2akkt")
+
+[node name="Light" type="OmniLight3D" parent="Lantern" unique_id=1230943642]
+light_color = Color(1, 0.72, 0.4, 1)
+light_energy = 0.0
+omni_range = 7.0
+
+[node name="Hand" type="MeshInstance3D" parent="Lantern" unique_id=321824386]
+transform = Transform3D(-0.004024611, -0.009154371, 0, 0.009154371, -0.004024611, 0, 0, 0, 0.01, -0.29, -0.13, 0)
+material_override = SubResource("StandardMaterial3D_l0ui7")
+mesh = SubResource("CylinderMesh_ncdnq")
+
+[node name="Bubbles" type="CPUParticles3D" parent="." unique_id=1032397254]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -5, 0)
+amount = 44
+lifetime = 10.0
+preprocess = 10.0
+mesh = SubResource("SphereMesh_5q42c")
+emission_shape = 3
+emission_box_extents = Vector3(5, 0.5, 3)
+direction = Vector3(0, 1, 0)
+spread = 8.0
+gravity = Vector3(0, 0, 0)
+initial_velocity_min = 0.9
+initial_velocity_max = 1.6
+scale_amount_min = 0.5
+scale_amount_max = 1.6
+
+[node name="Motes" type="CPUParticles3D" parent="." unique_id=1199187228]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2, 0)
+amount = 70
+lifetime = 14.0
+preprocess = 14.0
+mesh = SubResource("SphereMesh_hgusb")
+emission_shape = 3
+emission_box_extents = Vector3(7, 6, 4)
+direction = Vector3(0, 1, 0)
+spread = 8.0
+gravity = Vector3(0, 0, 0)
+initial_velocity_min = 0.25
+initial_velocity_max = 0.5
+scale_amount_min = 0.5
+scale_amount_max = 1.6
+
+[node name="Splash" type="CPUParticles3D" parent="." unique_id=932415849]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.2, 4.4)
+emitting = false
+amount = 240
+lifetime = 2.6
+one_shot = true
+explosiveness = 0.9
+mesh = SubResource("SphereMesh_13tl2")
+emission_shape = 3
+emission_box_extents = Vector3(3, 1.5, 1)
+direction = Vector3(0, 1, 0)
+spread = 8.0
+gravity = Vector3(0, 0, 0)
+initial_velocity_min = 1.5
+initial_velocity_max = 4.0
+scale_amount_min = 0.5
+scale_amount_max = 1.6
+
+[node name="Clips" type="AnimationPlayer" parent="." unique_id=1437499362 groups=["clips"]]
+libraries/ = SubResource("AnimationLibrary_jsgrj")

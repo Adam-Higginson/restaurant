@@ -56,20 +56,41 @@ jobs:
       # --ignoreHeadlessMode lets gdUnit v6 run scene tests headless.
       #
       # If Godot hasn't finished after 4 minutes it has hung (it has, now and
-      # then, after every test passed). timeout then sends SIGSEGV rather than
-      # a plain stop, so Godot's crash handler prints a backtrace: where it
-      # was stuck.
+      # then, after every test passed). Then:
+      # 1. gdb attaches and prints every thread's stack, which works even when
+      #    Godot is stuck so late in shutting down that its own crash handler
+      #    is already off.
+      # 2. SIGSEGV makes Godot's crash handler print its own backtrace,
+      #    including the GDScript one, if it's still on.
       - name: Run the tests
         run: |
-          set +e
-          timeout -s SEGV -k 30 240 "$GODOT" --path . -s -d --remote-debug tcp://127.0.0.1:0 \
+          "$GODOT" --path . -s -d --remote-debug tcp://127.0.0.1:0 \
               res://addons/gdUnit4/bin/GdUnitCmdTool.gd \
               --headless --audio-driver Dummy --add res://tests \
-              -c --fixed-fps 60 --ignoreHeadlessMode 2>&1 | tee godot.log
-          code=${PIPESTATUS[0]}
-          if [ "$code" -eq 124 ]; then
-            echo "::error::Godot hung and was stopped after 4 minutes. The backtrace above shows where it was stuck."
+              -c --fixed-fps 60 --ignoreHeadlessMode > godot.log 2>&1 &
+          pid=$!
+          tail -f --pid=$pid godot.log &
+          for second in $(seq 240); do
+            kill -0 $pid 2>/dev/null || break
+            sleep 1
+          done
+          if kill -0 $pid 2>/dev/null; then
+            echo "::group::Every thread's stack (gdb)"
+            sudo apt-get install -y -qq gdb > /dev/null 2>&1
+            sudo gdb -batch -p $pid -ex "info threads" -ex "thread apply all bt" 2>&1 | tail -300
+            echo "::endgroup::"
+            kill -SEGV $pid
+            sleep 15
+            kill -KILL $pid 2>/dev/null
+            wait $pid 2>/dev/null
+            sleep 1
+            echo "::error::Godot hung and was stopped after 4 minutes. The thread stacks and backtrace above show where it was stuck."
+            echo "Run tests ends with 124"
+            exit 124
           fi
+          wait $pid
+          code=$?
+          sleep 1
           echo "Run tests ends with $code"
           exit $code
 

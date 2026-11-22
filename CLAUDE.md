@@ -77,7 +77,7 @@ Claude writes the code, all of it: nothing is left as an exercise. The user is l
   - It always passes `-c`, which turns off gdUnit's default fail-fast (otherwise each suite stops at its first failing test), and `--headless --ignoreHeadlessMode`. Input simulation works headless in this project.
   - Reports go to `reports/`, which is gitignored.
 - CI (`.github/workflows/tests.yml`) runs the tests on every PR and on pushes to `main`. A PR is only ready for review when the tests pass both locally and in CI.
-  - The workflow installs Godot and runs gdUnit's command itself (not through gdUnit4-action). If Godot hangs, which it now and then has on the Linux runner after every test passed, it's stopped after 4 minutes with SIGSEGV so Godot's crash handler prints a backtrace in the log; the log and reports are kept as the `godot-log` artifact. If CI fails with "Godot hung", read the backtrace before re-running.
+  - The workflow installs Godot and runs gdUnit's command itself (not through gdUnit4-action). If Godot hangs, which it now and then has on the Linux runner after every test passed, it's stopped after 4 minutes: gdb prints every thread's stack, then SIGSEGV makes Godot's crash handler print its backtrace (if it's still on); the log and reports are kept as the `godot-log` artifact. If CI fails with "Godot hung", read the backtrace before re-running.
 
 ## Code style
 Follow the official GDScript style guide. Godot enforces some of it: in project settings, missing types and unsafe calls/casts are **errors**, and unused or shadowed variables are warnings. `tests/code_standards_test.gd` loads every script under `scripts/`, `ui/` and `tests/`, so CI fails if any script breaks these rules.

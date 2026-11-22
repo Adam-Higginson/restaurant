@@ -1,12 +1,19 @@
 extends GameTestSuite
-## Tests for how the game begins. A new voyage opens with the intro cutscene
-## (data/dialogue/intro.dlg): black and a title, you wake by your bunk
-## unable to move, the lantern speaks, the captain appears in the doorway,
-## and then the ship is yours. It can be skipped, and started part-way in.
-## Skipped altogether (Opening.skip), you start where you stand.
+## Tests for how the game begins, in the real scene (scenes/prototype/sea.tscn),
+## so its wiring is tested too. The intro cutscene (data/dialogue/intro.dlg)
+## opens on the title and waits for a button; a new voyage then goes under,
+## through the rescue, to waking by your bunk; a saved voyage carries on.
+## It can be skipped, and started part-way in. Skipped altogether
+## (Opening.skip), you start where you stand.
+##
+## The intro is long, so each test plays one stretch of it.
 
+const SEA: String = "res://scenes/prototype/sea.tscn"
 const INTRO: StringName = &"intro"
+const NEAR: Vector3 = Vector3(0.05, 0.05, 0.05)
 
+var _sea: Node
+var _opening: Opening
 var _ship: Ship
 var _player: Player3D
 var _conversation: Conversation
@@ -14,127 +21,243 @@ var _conversation: Conversation
 
 func before_test() -> void:
 	Game.dialogue.reset()
+	SaveGame.erase()
 
 
 func after_test() -> void:
 	Game.dialogue.reset()
+	SaveGame.erase()
 	Game.set_look(PlayerLook.Body.BOY)
 
 
-func test_the_intro_plays_from_black_to_the_ship_being_yours() -> void:
-	var opening: Opening = _stage(false)
-	var runner: GdUnitSceneRunner = scene_runner(_ship.get_parent())
-	var heron: Crewmate = _ship.get_node("Crew/Heron") as Crewmate
-	var rig: CameraRig = _player.camera_rig
+func test_it_opens_on_the_title_and_waits_for_any_button() -> void:
+	_build()
+	var runner: GdUnitSceneRunner = scene_runner(_sea)
+	var title: Stage = _sea.get_node("Stages/Title") as Stage
+	var underwater: Stage = _sea.get_node("Stages/Underwater") as Stage
+	var prompt: CutscenePrompt = _sea.get_node("CutscenePrompt") as CutscenePrompt
 	await physics_ticks(runner, 3)
 
-	# Black, and the title. You're by your bunk and can't move; the captain
-	# isn't in the room.
-	assert_bool(opening.is_playing).is_true()
+	# Black at first; you're by your bunk and can't move.
+	assert_bool(_opening.is_playing).is_true()
 	assert_bool(_conversation.is_cutscene()).is_true()
-	assert_bool(_fade(opening).is_covering()).is_true()
+	assert_bool(_fade().visible).is_true()
 	assert_bool(_player.controls_enabled).is_false()
 	var at: Vector3 = _ship.to_local(_player.global_position)
-	assert_float(at.distance_to(opening.wake_spot)).is_less(0.3)
+	assert_float(at.distance_to(_opening.wake_spot)).is_less(0.3)
+
+	# The title over the sea, on a fixed shot, asking for a button.
+	await physics_ticks(runner, 240)
+	assert_bool(title.is_open).is_true()
+	assert_bool(_fade().visible).is_false()
+	assert_bool(_player.camera_rig.is_fixed).is_true()
+	assert_str(prompt.shown_text()).is_equal("Press any button")
+	assert_str(String(_conversation.section())).is_equal("start")
+
+	# However long you leave it, it waits.
+	await physics_ticks(runner, 240)
+	assert_str(String(_conversation.section())).is_equal("start")
+
+	# Any key at all: the title goes, the camera dives, and you're under.
+	runner.simulate_key_pressed(KEY_ENTER)
+	assert_bool(await _reaches(runner, &"dark")).is_true()
+	assert_bool(title.is_open).is_false()
+	assert_bool(underwater.is_open).is_true()
+	assert_bool(_ambience().submerged).is_true()
+	assert_str(prompt.shown_text()).is_empty()
+
+
+func test_the_rescue_waits_for_you_to_take_his_hand_then_goes_to_the_surface() -> void:
+	_build(&"reach")
+	var runner: GdUnitSceneRunner = scene_runner(_sea)
+	var underwater: Stage = _sea.get_node("Stages/Underwater") as Stage
+	var prompt: CutscenePrompt = _sea.get_node("CutscenePrompt") as CutscenePrompt
+	var castaway: Node3D = _ship.get_node("RescueSet/Props/Castaway") as Node3D
+	var boathook: Node3D = _ship.get_node("RescueSet/Props/ReachingBoathook") as Node3D
+	var heron: Crewmate = _ship.get_node("Crew/Heron") as Crewmate
+
+	# It waits underwater, and says what to press.
+	await physics_ticks(runner, 200)
+	assert_str(String(_conversation.section())).is_equal("reach")
+	assert_bool(underwater.is_open).is_true()
+	assert_str(prompt.shown_text()).contains("Take his hand")
+	assert_bool(castaway.visible).is_false()
+
+	# Take it: up to the surface, beside the ship, with the storm clear again.
+	_conversation.press()
+	assert_bool(await _reaches(runner, &"surface")).is_true()
+	await physics_ticks(runner, 5)
+	assert_bool(underwater.is_open).is_false()
+	assert_bool(_ambience().submerged).is_false()
+	assert_bool(castaway.visible).is_true()
+	assert_bool(_player.camera_rig.is_fixed).is_true()
+
+	# The captain at the rail with the boathook.
+	assert_bool(await _reaches(runner, &"boathook")).is_true()
+	await physics_ticks(runner, 5)
+	var rail: Node3D = _ship.get_node("RescueSet/Marks/Rail") as Node3D
+	assert_bool(heron.is_present()).is_true()
+	assert_vector(heron.global_position).is_equal_approx(rail.global_position, NEAR)
+	assert_bool(boathook.visible).is_true()
+
+	# To black and the chapter card, with the rescue's pieces put away.
+	assert_bool(await _reaches(runner, &"title")).is_true()
+	await physics_ticks(runner, 5)
+	assert_bool(castaway.visible).is_false()
+	assert_bool(boathook.visible).is_false()
 	assert_bool(heron.is_present()).is_false()
+	assert_bool(_fade().is_covering()).is_true()
+
+
+func test_you_wake_and_the_captain_appears_and_then_the_ship_is_yours() -> void:
+	_build(&"title")
+	var runner: GdUnitSceneRunner = scene_runner(_sea)
+	var heron: Crewmate = _ship.get_node("Crew/Heron") as Crewmate
+	var rig: CameraRig = _player.camera_rig
 
 	# The lantern's three lines.
 	assert_bool(await _reaches(runner, &"waking")).is_true()
-	assert_bool(_fade(opening).visible).is_false()
+	assert_bool(_fade().visible).is_false()
+	assert_bool(heron.is_present()).is_false()
 	for i: int in 3:
 		assert_str(String(_conversation.section())).is_equal("waking")
-		_conversation.press()
+		_press()
 
 	# The captain in the doorway, on a fixed shot.
 	assert_bool(await _reaches(runner, &"doorway")).is_true()
 	await physics_ticks(runner, 60)
 	var doorway: Node3D = _ship.get_node("Marks/Doorway") as Node3D
 	assert_bool(heron.is_present()).is_true()
-	assert_vector(heron.global_position).is_equal_approx(doorway.global_position,
-			Vector3(0.05, 0.05, 0.05))
+	assert_vector(heron.global_position).is_equal_approx(doorway.global_position, NEAR)
 	assert_bool(rig.is_fixed).is_true()
-	_conversation.press()
-	_conversation.press()
+	_press()
+	_press()
 
 	# The pot on the stove; the captain goes back to the fire; and it ends.
 	assert_bool(await _reaches(runner, &"stove")).is_true()
 	var night: Node3D = _ship.get_node("Crew/HeronNight") as Node3D
-	assert_vector(heron.global_position).is_equal_approx(night.global_position,
-			Vector3(0.05, 0.05, 0.05))
-	assert_bool(await wait_for_signal(opening.finished, 20.0)).is_true()
+	assert_vector(heron.global_position).is_equal_approx(night.global_position, NEAR)
+	assert_bool(await wait_for_signal(_opening.finished, 20.0)).is_true()
 
-	assert_bool(opening.is_playing).is_false()
+	assert_bool(_opening.is_playing).is_false()
 	assert_bool(_conversation.is_active()).is_false()
 	assert_bool(_player.controls_enabled).is_true()
 	assert_bool(rig.is_fixed).is_false()
 	assert_bool(heron.is_present()).is_true()
 
 
-func test_skipping_the_intro_ends_it_with_everyone_in_place() -> void:
-	var opening: Opening = _stage(false)
-	var runner: GdUnitSceneRunner = scene_runner(_ship.get_parent())
+func test_skipping_the_intro_ends_it_with_everything_put_away() -> void:
+	_build(&"dark")
+	var runner: GdUnitSceneRunner = scene_runner(_sea)
 	var heron: Crewmate = _ship.get_node("Crew/Heron") as Crewmate
-	await physics_ticks(runner, 10)
+	await physics_ticks(runner, 30)
+	assert_bool((_sea.get_node("Stages/Underwater") as Stage).is_open).is_true()
 
 	_conversation.skip()
-	await physics_ticks(runner, 30)
+	await physics_ticks(runner, 60)
 
-	assert_bool(opening.is_playing).is_false()
+	assert_bool(_opening.is_playing).is_false()
 	assert_bool(_player.controls_enabled).is_true()
-	assert_bool(_fade(opening).visible).is_false()
+	assert_bool(_fade().visible).is_false()
 	assert_bool(_player.camera_rig.is_fixed).is_false()
+	assert_bool((_sea.get_node("Stages/Underwater") as Stage).is_open).is_false()
+	assert_bool((_sea.get_node("Stages/Title") as Stage).is_open).is_false()
+	assert_bool(_ambience().submerged).is_false()
+	assert_bool((_ship.get_node("RescueSet/Props/Castaway") as Node3D).visible).is_false()
+	assert_bool((_ship.get_node("RescueSet/Props/ReachingBoathook") as Node3D).visible).is_false()
 	var night: Node3D = _ship.get_node("Crew/HeronNight") as Node3D
 	assert_bool(heron.is_present()).is_true()
-	assert_vector(heron.global_position).is_equal_approx(night.global_position,
-			Vector3(0.05, 0.05, 0.05))
+	assert_vector(heron.global_position).is_equal_approx(night.global_position, NEAR)
 	var at: Vector3 = _ship.to_local(_player.global_position)
-	assert_float(at.distance_to(opening.wake_spot)).is_less(0.6)
+	assert_float(at.distance_to(_opening.wake_spot)).is_less(0.6)
 
 
-func test_it_can_open_on_a_later_beat_with_no_black_screen() -> void:
-	var opening: Opening = _stage(false)
-	opening.start_section = &"doorway"
-	var runner: GdUnitSceneRunner = scene_runner(_ship.get_parent())
-	await physics_ticks(runner, 5)
+func test_a_saved_voyage_carries_on_after_the_title_instead_of_the_rescue() -> void:
+	SaveGame.write({"version": SaveGame.VERSION, "memories": [], "day": 5, "morning": true,
+			"warmth": 0.5})
+	_build(DialogueTree.START, true)
+	_opening.title_seconds = 0.2
+	var runner: GdUnitSceneRunner = scene_runner(_sea)
+	var heron: Crewmate = _ship.get_node("Crew/Heron") as Crewmate
+	await physics_ticks(runner, 240)
+	assert_bool((_sea.get_node("Stages/Title") as Stage).is_open).is_true()
 
-	assert_str(String(_conversation.section())).is_equal("doorway")
-	assert_bool(_fade(opening).visible).is_false()
-	assert_bool(opening.is_playing).is_true()
+	runner.simulate_key_pressed(KEY_ENTER)
+	assert_bool(await wait_for_signal(_opening.finished, 20.0)).is_true()
+
+	# No rescue: straight to the ship, the day it was, everyone aboard.
+	assert_bool((_sea.get_node("Stages/Underwater") as Stage).is_open).is_false()
+	assert_bool(_ambience().submerged).is_false()
+	assert_bool(_player.controls_enabled).is_true()
+	assert_bool(_player.camera_rig.is_fixed).is_false()
+	assert_bool(heron.is_present()).is_true()
+	var time: TimeOfDay = _sea.get_node("TimeOfDay") as TimeOfDay
+	assert_int(time.day).is_equal(5)
+	await physics_ticks(runner, 90)
+	assert_bool(_fade().visible).is_false()
 
 
-func test_every_shot_mark_and_person_the_intro_asks_for_is_aboard() -> void:
-	var opening: Opening = _stage(true)
-	var runner: GdUnitSceneRunner = scene_runner(_ship.get_parent())
+func test_everything_the_intro_asks_for_is_in_the_scene() -> void:
+	_build()
+	_opening.skip = true
+	var runner: GdUnitSceneRunner = scene_runner(_sea)
 	await physics_ticks(runner, 3)
-	assert_bool(opening.is_playing).is_false()
-	var shots: ShotCues = _ship.get_parent().get_node("ShotCues") as ShotCues
-	var actors: ActorCues = _ship.get_parent().get_node("ActorCues") as ActorCues
+	assert_bool(_opening.is_playing).is_false()
+	var shots: ShotCues = _sea.get_node("ShotCues") as ShotCues
+	var actors: ActorCues = _sea.get_node("ActorCues") as ActorCues
+	var stages: StageCues = _sea.get_node("StageCues") as StageCues
+	var clips: ClipCues = _sea.get_node("ClipCues") as ClipCues
+	var sounds: SoundCues = _sea.get_node("SoundCues") as SoundCues
 	var tree: DialogueTree = DialogueLibrary.find(INTRO)
 	assert_array(tree.errors).is_empty()
 
+	var checked: int = 0
 	for step: DialogueStep in tree.steps:
 		if step.kind != DialogueStep.Kind.CUE:
 			continue
-		var where: String = "intro.dlg, line %d" % step.line_number
+		var word: String = step.args[0] if not step.args.is_empty() else ""
+		var found: Object = self
 		match step.cue:
 			&"shot":
-				if step.args[0] != ShotCues.FREE:
-					assert_object(shots.find_shot(step.args[0])) \
-							.override_failure_message("%s: no shot '%s'" % [where, step.args[0]]) \
-							.is_not_null()
+				if word != ShotCues.FREE:
+					found = shots.find_shot(word)
 			&"place":
-				assert_object(actors.find_mark(step.args[1])) \
-						.override_failure_message("%s: no mark '%s'" % [where, step.args[1]]) \
+				found = actors.find_mark(step.args[1])
+				assert_object(actors.find_actor(word)).override_failure_message(
+						"intro.dlg, line %d: nobody called '%s'" % [step.line_number, word]) \
 						.is_not_null()
-		if actors.cues().has(step.cue):
-			assert_object(actors.find_actor(step.args[0])) \
-					.override_failure_message("%s: nobody called '%s'" % [where, step.args[0]]) \
-					.is_not_null()
+			&"face", &"hide", &"show", &"home":
+				found = actors.find_actor(word)
+			&"stage":
+				if word != "off":
+					found = stages.find_stage(word)
+			&"play", &"start":
+				found = clips.find_player(StringName(word))
+			&"sound":
+				found = sounds.find_sound(word)
+				if found != null:
+					assert_object((found as AudioStreamPlayer).stream).override_failure_message(
+							"intro.dlg, line %d: the sound '%s' has no recording"
+							% [step.line_number, word]).is_not_null()
+		assert_object(found).override_failure_message("intro.dlg, line %d: there's no '%s' for @%s"
+				% [step.line_number, word, step.cue]).is_not_null()
+		checked += 1
+	assert_int(checked).is_greater(30)
+
+
+func test_it_can_open_on_a_later_beat_with_no_black_screen() -> void:
+	_build(&"doorway")
+	var runner: GdUnitSceneRunner = scene_runner(_sea)
+	await physics_ticks(runner, 5)
+
+	assert_str(String(_conversation.section())).is_equal("doorway")
+	assert_bool(_fade().visible).is_false()
+	assert_bool(_opening.is_playing).is_true()
 
 
 func test_you_stay_aboard_while_the_ship_sails_on() -> void:
-	var opening: Opening = _stage(false)
-	var runner: GdUnitSceneRunner = scene_runner(_ship.get_parent())
+	_build()
+	var runner: GdUnitSceneRunner = scene_runner(_sea)
 	_ship.set_sail()
 
 	await physics_ticks(runner, 90)
@@ -142,40 +265,53 @@ func test_you_stay_aboard_while_the_ship_sails_on() -> void:
 	# Still by the bunk, give or take settling onto the floor; left behind, the
 	# ship would have sailed metres away.
 	var at: Vector3 = _ship.to_local(_player.global_position)
-	assert_float(at.distance_to(opening.wake_spot)).is_less(0.6)
+	assert_float(at.distance_to(_opening.wake_spot)).is_less(0.6)
 
 
 func test_with_nothing_to_play_the_intro_you_just_open_your_eyes() -> void:
 	var rig: Array[Node3D] = new_moored_ship_with_player(Vector3(0, 5.35, 7.5))
-	_ship = rig[0] as Ship
-	_player = rig[1] as Player3D
-	var opening: Opening = _opening(false)
-	var runner: GdUnitSceneRunner = scene_runner(_ship.get_parent())
+	var ship: Ship = rig[0] as Ship
+	var player: Player3D = rig[1] as Player3D
+	var opening: Opening = Opening.new()
+	opening.player = player
+	opening.ship = ship
+	opening.load_save = false
+	var fade: ScreenFade = (load("res://ui/screen_fade.tscn") as PackedScene).instantiate() \
+			as ScreenFade
+	fade.name = "ScreenFade"
+	fade.fade_seconds = 0.1
+	opening.add_child(fade)
+	ship.get_parent().add_child(opening)
+	var runner: GdUnitSceneRunner = scene_runner(ship.get_parent())
 	await physics_ticks(runner, 3)
 	assert_bool(opening.is_playing).is_true()
-	assert_bool(_player.controls_enabled).is_false()
+	assert_bool(player.controls_enabled).is_false()
 
 	await physics_ticks(runner, 30)
 
 	assert_bool(opening.is_playing).is_false()
-	assert_bool(_player.controls_enabled).is_true()
-	assert_bool(_fade(opening).visible).is_false()
+	assert_bool(player.controls_enabled).is_true()
+	assert_bool(fade.visible).is_false()
 
 
 func test_skipped_you_start_where_you_stand() -> void:
-	var opening: Opening = _stage(true)
-	var runner: GdUnitSceneRunner = scene_runner(_ship.get_parent())
+	_build()
+	_opening.skip = true
+	var before: Vector3 = _player.position
+	var runner: GdUnitSceneRunner = scene_runner(_sea)
 	await physics_ticks(runner, 5)
 
-	assert_bool(opening.is_playing).is_false()
+	assert_bool(_opening.is_playing).is_false()
 	assert_bool(_conversation.is_active()).is_false()
-	assert_float(_ship.to_local(_player.global_position).y).is_greater(5.0)
+	assert_bool(_player.controls_enabled).is_true()
+	assert_float(_player.global_position.distance_to(before)).is_less(1.0)
 
 
 func test_a_new_voyage_asks_who_you_are_before_the_intro() -> void:
-	var opening: Opening = _stage(false)
-	var choice: LookChoice = _add_choice(opening)
-	var runner: GdUnitSceneRunner = scene_runner(_ship.get_parent())
+	_build()
+	_opening.choose_look = true
+	var choice: LookChoice = _opening.get_node("LookChoice") as LookChoice
+	var runner: GdUnitSceneRunner = scene_runner(_sea)
 	await physics_ticks(runner, 10)
 
 	assert_bool(choice.is_open()).is_true()
@@ -190,75 +326,43 @@ func test_a_new_voyage_asks_who_you_are_before_the_intro() -> void:
 	assert_bool(_conversation.is_active()).is_true()
 
 
-func test_without_choosing_the_intro_starts_at_once() -> void:
-	var opening: Opening = _stage(false)
-	var choice: LookChoice = _add_choice(opening)
-	opening.choose_look = false
-	var runner: GdUnitSceneRunner = scene_runner(_ship.get_parent())
-	await physics_ticks(runner, 10)
-
-	assert_bool(choice.is_open()).is_false()
-	assert_bool(_conversation.is_active()).is_true()
-
-
-# Gives [param opening] its "Who are you?" screen, as sea.tscn has it.
-func _add_choice(opening: Opening) -> LookChoice:
-	var choice: LookChoice = (load("res://ui/look_choice.tscn") as PackedScene).instantiate() 			as LookChoice
-	opening.add_child(choice)
-	return choice
+# Presses Interact past any typing: on to the next line.
+func _press() -> void:
+	var box: DialogueBox = _conversation.box
+	if box != null and box.is_typing():
+		box.finish_typing()
+	_conversation.press()
 
 
 # Waits until the cutscene is reading [param section], and returns whether
-# it got there within 20 seconds of game time.
+# it got there within 30 seconds of game time.
 func _reaches(runner: GdUnitSceneRunner, section: StringName) -> bool:
-	for i: int in 1200:
+	for i: int in 1800:
 		if _conversation.section() == section:
 			return true
 		await physics_ticks(runner, 1)
 	return false
 
 
-func _fade(opening: Opening) -> ScreenFade:
-	return opening.get_node("ScreenFade") as ScreenFade
+func _fade() -> ScreenFade:
+	return _opening.get_node("ScreenFade") as ScreenFade
 
 
-# A moored ship with the player on deck, a conversation, every cue handler
-# and an opening, as scenes/prototype/sea.tscn has them. Called at the start
-# of each test, so everything is made (and freed) inside it.
-func _stage(skip: bool) -> Opening:
-	var rig: Array[Node3D] = new_moored_ship_with_player(Vector3(0, 5.35, 7.5))
-	_ship = rig[0] as Ship
-	_player = rig[1] as Player3D
-	var world: Node = _ship.get_parent()
-	_conversation = new_conversation(_player)
-	var opening: Opening = _opening(skip)
-	var shots: ShotCues = ShotCues.new()
-	shots.name = "ShotCues"
-	shots.player = _player
-	world.add_child(shots)
-	var fades: FadeCues = FadeCues.new()
-	fades.fade = _fade(opening)
-	world.add_child(fades)
-	world.add_child(WaitCues.new())
-	var actors: ActorCues = ActorCues.new()
-	actors.name = "ActorCues"
-	actors.player = _player
-	world.add_child(actors)
-	return opening
+func _ambience() -> Ambience:
+	return _sea.get_node("Weather/Ambience") as Ambience
 
 
-# An opening with quick fades, added to the ship's world.
-func _opening(skip: bool) -> Opening:
-	var opening: Opening = Opening.new()
-	opening.skip = skip
-	opening.player = _player
-	opening.ship = _ship
-	opening.title_seconds = 0.1
-	opening.load_save = false
-	var fade: ScreenFade = (load("res://ui/screen_fade.tscn") as PackedScene).instantiate() \
-			as ScreenFade
-	fade.name = "ScreenFade"
-	fade.fade_seconds = 0.1
-	opening.add_child(fade)
-	_ship.get_parent().add_child(opening)
-	return opening
+# The real sea scene, not yet running, with its opening set to begin at
+# [param section] and to ignore any saved voyage unless [param load_save].
+# It doesn't ask who you are (that has a test of its own).
+# Called at the start of each test, so it's made (and freed) inside it.
+func _build(section: StringName = DialogueTree.START, load_save: bool = false) -> void:
+	_sea = (load(SEA) as PackedScene).instantiate()
+	auto_free(_sea)
+	_opening = _sea.get_node("Opening") as Opening
+	_opening.start_section = section
+	_opening.load_save = load_save
+	_opening.choose_look = false
+	_ship = _sea.get_node("Ship") as Ship
+	_player = _sea.get_node("Player") as Player3D
+	_conversation = _sea.get_node("Conversation") as Conversation

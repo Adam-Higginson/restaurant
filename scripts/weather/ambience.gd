@@ -23,6 +23,9 @@ const BUS: StringName = &"Ambience"
 
 ## The mix: how sheltered the sound is now.
 var mix: AmbienceMix = AmbienceMix.new()
+## Whether we're hearing the weather from under the water: a dull rumble.
+## A cutscene sets this (see [StormCues]).
+var submerged: bool = false
 
 @onready var _rain: AudioStreamPlayer = $Rain
 @onready var _waves: AudioStreamPlayer = $Waves
@@ -41,6 +44,7 @@ func _ready() -> void:
 func _process(delta: float) -> void:
 	if is_instance_valid(weather):
 		mix.step(delta, weather.sheltered)
+	mix.sink(delta, submerged)
 	_apply()
 
 
@@ -65,7 +69,7 @@ func _start(player: AudioStreamPlayer, path: String) -> void:
 func _apply() -> void:
 	var intensity: float = weather.intensity if is_instance_valid(weather) else 1.0
 	_rain.volume_db = mix.rain_volume_db(intensity)
-	_waves.volume_db = waves_volume_db
+	_waves.volume_db = waves_volume_db + mix.submerged_drop_db()
 	var bus: int = AudioServer.get_bus_index(BUS)
 	if bus < 0 or AudioServer.get_bus_effect_count(bus) == 0:
 		return
