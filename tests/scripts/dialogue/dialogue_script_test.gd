@@ -95,12 +95,27 @@ func test_set_and_clear_change_flags() -> void:
 
 
 func test_a_cue_has_its_name_and_the_words_after_it() -> void:
-	var tree: DialogueTree = DialogueScript.parse("@shot stove_nook slowly")
+	var tree: DialogueTree = DialogueScript.parse("@shot stove_nook cut")
 
 	assert_array(tree.errors).is_empty()
 	assert_int(tree.steps[0].kind).is_equal(DialogueStep.Kind.CUE)
 	assert_str(String(tree.steps[0].cue)).is_equal("shot")
-	assert_array(tree.steps[0].args).contains_exactly(["stove_nook", "slowly"])
+	assert_array(tree.steps[0].args).contains_exactly(["stove_nook", "cut"])
+
+
+func test_a_cue_that_doesnt_exist_is_a_mistake_with_its_line_number() -> void:
+	var tree: DialogueTree = DialogueScript.parse("heron: Hm.
+@fdae in 2.0")
+
+	assert_int(tree.errors.size()).is_equal(1)
+	assert_str(tree.errors[0]).contains("line 2").contains("@fdae").contains("@fade")
+
+
+func test_a_cue_written_wrongly_is_a_mistake_that_says_how_its_written() -> void:
+	var tree: DialogueTree = DialogueScript.parse("@wait a moment")
+
+	assert_int(tree.errors.size()).is_equal(1)
+	assert_str(tree.errors[0]).contains("line 1").contains("@wait 1.5")
 
 
 func test_a_jump_to_a_section_that_isnt_there_is_reported_with_its_line() -> void:

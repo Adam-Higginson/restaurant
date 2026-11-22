@@ -185,3 +185,110 @@ func _start(script: String) -> void:
 	var tree: DialogueTree = DialogueScript.parse(script)
 	assert_array(tree.errors).is_empty()
 	_runner.start(tree, _state)
+
+
+func test_a_cue_somebody_holds_stops_the_script_until_its_released() -> void:
+	_hold_on(&"wait")
+	_start("heron: One.\n@wait 1.0\nheron: Two.")
+	_runner.advance()
+
+	assert_bool(_runner.is_held()).is_true()
+	assert_array(_said).contains_exactly(["heron: One."])
+
+	_runner.release()
+
+	assert_bool(_runner.is_held()).is_false()
+	assert_array(_said).contains_exactly(["heron: One.", "heron: Two."])
+
+
+func test_pressing_on_does_nothing_while_a_cue_holds_the_script() -> void:
+	_hold_on(&"wait")
+	_start("@wait 1.0\nheron: After.")
+
+	_runner.advance()
+	_runner.advance()
+
+	assert_bool(_runner.is_held()).is_true()
+	assert_array(_said).is_empty()
+
+
+func test_two_holds_need_two_releases() -> void:
+	_hold_on(&"wait")
+	_hold_on(&"wait")
+	_start("@wait 1.0\nheron: After.")
+
+	_runner.release()
+	assert_array(_said).is_empty()
+	_runner.release()
+
+	assert_array(_said).contains_exactly(["heron: After."])
+
+
+func test_a_hold_released_straight_away_carries_on_without_repeating_anything() -> void:
+	_runner.cue.connect(func(_name: StringName, _args: PackedStringArray) -> void:
+		_runner.hold()
+		_runner.release())
+	_start("@wait 1.0\nheron: After.\n@wait 1.0\nheron: Last.")
+	_runner.advance()
+
+	assert_array(_said).contains_exactly(["heron: After.", "heron: Last."])
+	assert_array(_cues).contains_exactly(["wait 1.0", "wait 1.0"])
+
+
+func test_release_all_lets_go_of_every_hold_at_once() -> void:
+	_hold_on(&"wait")
+	_hold_on(&"wait")
+	_start("@wait 1.0\nheron: After.")
+
+	_runner.release_all()
+
+	assert_bool(_runner.is_held()).is_false()
+	assert_array(_said).contains_exactly(["heron: After."])
+
+
+func test_stopping_forgets_its_holds_so_the_next_script_isnt_held() -> void:
+	_hold_on(&"wait")
+	_start("@wait 1.0\nheron: After.")
+
+	_runner.stop()
+	_runner.release()
+	_start("heron: Fresh.")
+
+	assert_int(_finished).is_equal(1)
+	assert_bool(_runner.is_held()).is_false()
+	assert_array(_said).contains_exactly(["heron: Fresh."])
+
+
+func test_a_release_with_nothing_held_does_nothing() -> void:
+	_start("heron: One.\nheron: Two.")
+
+	_runner.release()
+	_runner.release_all()
+
+	assert_array(_said).contains_exactly(["heron: One."])
+
+
+func test_it_knows_which_section_and_line_it_has_reached() -> void:
+	var tree: DialogueTree = DialogueScript.parse(
+			"heron: Start.\n-> second\n~ second\nheron: Second.\nheron: More.")
+	assert_str(String(_runner.section())).is_empty()
+
+	_runner.start(tree, _state)
+	assert_str(String(_runner.section())).is_equal("start")
+	assert_int(_runner.line_number()).is_equal(1)
+
+	_runner.advance()
+	assert_str(String(_runner.section())).is_equal("second")
+	assert_int(_runner.line_number()).is_equal(4)
+
+	_runner.advance()
+	assert_str(String(_runner.section())).is_equal("second")
+	assert_int(_runner.line_number()).is_equal(5)
+
+
+# Makes the runner hold once each time the script gives the cue [param name].
+func _hold_on(name: StringName) -> void:
+	var holder: Callable = func(cue: StringName, _args: PackedStringArray) -> void:
+		if cue == name:
+			_runner.hold()
+	_runner.cue.connect(holder)

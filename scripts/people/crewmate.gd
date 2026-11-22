@@ -7,6 +7,9 @@ extends StaticBody3D
 ## Who they are is data: a [Person] for their name, and a dialogue script
 ## for what they say. Nothing about any one character lives here.
 
+## The group every crewmate joins, so a cutscene can find them by name.
+const GROUP: StringName = &"crew"
+
 ## Who this is: their name shows on the prompt and in the dialogue box.
 @export var person: Person
 ## The conversation Interact starts: a file in [code]data/dialogue[/code].
@@ -30,6 +33,7 @@ var _facing: float = 0.0
 
 
 func _ready() -> void:
+	add_to_group(GROUP)
 	_reach.interacted.connect(start_talking)
 	_reach.describe_interact = func(_player: Player3D) -> String: return prompt()
 
@@ -66,3 +70,16 @@ func face_towards(point: Vector3) -> void:
 ## Turns back to how they stand when left alone.
 func rest() -> void:
 	_facing = 0.0
+
+
+## Whether they're about. Away, they can't be seen, bumped into or talked
+## to, as if they'd left the room: a cutscene uses this to bring someone in.
+func set_present(present: bool) -> void:
+	visible = present
+	# A disabled body is also taken out of the physics world.
+	process_mode = Node.PROCESS_MODE_INHERIT if present else Node.PROCESS_MODE_DISABLED
+
+
+## Whether they're about (see [method set_present]).
+func is_present() -> bool:
+	return visible and process_mode != Node.PROCESS_MODE_DISABLED

@@ -176,21 +176,28 @@ func leave_zone(zone: CameraZone) -> void:
 
 ## Glides to [param shot] and stays there, whatever zone the player is in,
 ## until [method release_shot]. From the free camera it glides; from another
-## shot it cuts, as a film would.
-func hold_shot(shot: Marker3D) -> void:
+## shot it cuts, as a film would. Set [param cut] to cut straight to it from
+## the free camera too.
+func hold_shot(shot: Marker3D, cut: bool = false) -> void:
 	_held = shot
 	_last_shot = shot
+	if cut:
+		_blend = 1.0
 
 
 ## Lets go of a held shot: the camera glides back to the free camera, or to
-## the shot of the zone the player is standing in.
-func release_shot() -> void:
+## the shot of the zone the player is standing in. Set [param cut] to cut
+## straight back instead (from a shot in another room, say, where a glide
+## would pass through the wall).
+func release_shot(cut: bool = false) -> void:
 	if _held == null:
 		return
 	_held = null
 	var still_in: CameraZone = active_zone
 	if still_in != null:
 		_last_shot = still_in.shot
+	if cut:
+		_blend = 1.0 if still_in != null else 0.0
 
 
 ## The yaw of something rotated by [param rotation_basis] (a camera or
