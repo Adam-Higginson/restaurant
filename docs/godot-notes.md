@@ -348,6 +348,22 @@ A growing glossary of the Godot concepts this project uses: what each one is, in
 
 **A node told it's been switched off.** When a node can no longer run (its `process_mode` or a parent's became Disabled) it gets `NOTIFICATION_DISABLED`, and `NOTIFICATION_ENABLED` when it can again. Catch them in `_notification(what)`. *Ours:* `OptionalSound` pauses a looping sound while its stage is put away.
 
+## The seabed and the thing in the lightning (#120)
+
+**Instance uniforms.** Normally every object sharing a material shares its shader values too. Mark a uniform `instance uniform` and each object can have its own value, set with `set_instance_shader_parameter("name", value)`, while they all still share one material. *Ours:* the 44 dead lanterns share one glass material, and `LanternField` gives each its own `glow` and `cold`.
+
+**Billboards.** A flat sheet that always turns to face the camera, so it looks the same from every side. In a shader it's done in `vertex()` by replacing the sheet's rotation with the camera's. *Ours:* `shaders/glint.gdshader`, the star of light on each dead lantern.
+
+**Moving a mesh in its vertex shader.** `vertex()` can move each corner of a mesh before it's drawn, so a flat sheet with enough corners (its Subdivide settings) can be raised into hills without modelling them. The script side has to know the same sums if anything must sit on the result. *Ours:* the dunes in `shaders/seabed.gdshader`, and `LanternField.dune_height`, which the lanterns were set down with.
+
+**Emission.** A lit material can also give off light of its own: its `EMISSION` is added whatever the lighting. *Ours:* the net of lightning on the seabed and the dead lanterns' glow.
+
+**Caustics.** The net of bright lines on the bottom of a pool: waves bend the light and gather it into lines. Ours is a well-known few lines of shader maths that fold a pattern back on itself until it gathers the same way. *Ours:* `net()` in `shaders/seabed.gdshader`, shown only while lightning flashes.
+
+**Showing something by what it hides.** The thing on the seabed has no node and no mesh. The seabed's shader is given a line and a width, and inside that shape it draws black instead of light; the lantern field does the same sum to decide which lanterns go dark. *Ours:* `in_gap` in both `shaders/seabed.gdshader` and `scripts/intro/lantern_field.gd`.
+
+**Groups as a broadcast.** `get_tree().call_group("name", "method", value)` calls that method on every node in the group, wherever it is in the tree. *Ours:* `Lightning` tells the group `lightning_lit` how bright each flash is, which now includes the `LanternField` inside the underwater set.
+
 ## Testing
 
 **gdUnit4.** The test framework (`addons/gdUnit4`). Suites extend our `GameTestSuite` and have `test_...` functions. `scene_runner` loads a scene and lets a test press inputs and wait physics ticks. *Ours:* `tests/`.

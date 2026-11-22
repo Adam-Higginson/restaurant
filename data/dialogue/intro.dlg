@@ -16,8 +16,8 @@
 #   timeline at the bottom of the editor shows them. Each moves the set's
 #   camera too, so a clip is also a shot.
 # - Sounds (@sound) are the players under SoundCues in sea.tscn. Some have
-#   no recording yet (heartbeat, flare): they're silent until one is put
-#   where the player's Recording points.
+#   no recording yet (heartbeat, flare, glints, deep_note): they're silent
+#   until one is put where the player's Recording points.
 # - The title is her nameboard at the stern: the letters, the hook, the
 #   lantern on it and his clips (takes_watch, hears, dives, welcome) are in
 #   scenes/prototype/intro/stern_watch.tscn.
@@ -116,7 +116,8 @@
 
 # Out. He's spent. Black, and no sound at all, for one held second. One
 # heartbeat. Then your hand catches him alight again: everything draws in,
-# and blooms.
+# and blooms, and for a moment his light reaches all the way down. Below you
+# is a seabed of dead lanterns, and each one glints as it passes.
 ~ out
 @stage underwater
 @muffle on
@@ -132,7 +133,29 @@
 @hush off
 @sound flare
 @look sinking_lantern surprised
+@wait 0.6
+@sound glints
 @wait 4.3
+-> thing
+
+# The thing. His light pulls in close as you rise. Lightning strikes far
+# above, and its cold light comes down through the water in a net of bright
+# lines across the seabed. A length of the net is missing, and moving. The
+# storm's rumble drops out under one low note. He doesn't look down.
+~ thing
+@stage underwater
+@muffle on
+@look sinking_lantern tired
+@start something_passes
+@wait 0.9
+@hush on
+@sound deep_note
+@wait 0.5
+@lightning
+@wait 1.5
+@lightning
+@wait 1.6
+@hush off
 -> rising
 
 # Rest. Nothing happens: only rising, him held close and panting.

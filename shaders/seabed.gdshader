@@ -16,7 +16,7 @@ shader_type spatial;
 render_mode cull_back;
 
 // The sand, and how much its colour varies from patch to patch.
-uniform vec4 sand : source_color = vec4(0.16, 0.15, 0.12, 1.0);
+uniform vec4 sand : source_color = vec4(0.34, 0.31, 0.25, 1.0);
 uniform float patchiness = 0.35;
 // The colour of the lightning's net of light, and how bright it is.
 uniform vec4 net_colour : source_color = vec4(0.62, 0.8, 1.0, 1.0);
@@ -69,12 +69,19 @@ float net(vec2 at, float time) {
 	return pow(abs(gathered), 8.0);
 }
 
-// How deep this spot is inside the thing: 1 well inside, 0 outside.
+// How deep this spot is inside the thing: 1 well inside, 0 outside. It
+// narrows towards its leading end (gap_to) and its edge is never quite
+// still, so it reads as something alive rather than a drawn shape.
+// (LanternField treats it as a plain rounded bar, which is near enough for
+// deciding which lanterns it covers.)
 float in_gap(vec2 at) {
 	vec2 along = gap_to - gap_from;
 	float h = clamp(dot(at - gap_from, along) / max(dot(along, along), 0.0001), 0.0, 1.0);
 	float away = length(at - gap_from - along * h);
-	return gap * (1.0 - smoothstep(gap_width * 0.35, gap_width * 0.5, away));
+	float lead = mix(1.0, 0.55, smoothstep(0.72, 1.0, h));
+	float ripple = 1.0 + 0.1 * sin(h * 26.0 - TIME * 1.3) + 0.05 * sin(h * 61.0 + TIME * 0.7);
+	float wide = gap_width * lead * ripple;
+	return gap * (1.0 - smoothstep(wide * 0.35, wide * 0.5, away));
 }
 
 void vertex() {

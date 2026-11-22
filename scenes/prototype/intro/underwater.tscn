@@ -1,21 +1,24 @@
 [gd_scene format=3]
 
-[ext_resource type="Shader" path="res://shaders/underwater_lens.gdshader" id="1_853cl"]
-[ext_resource type="Script" path="res://scripts/intro/underwater_lens.gd" id="2_s1pck"]
-[ext_resource type="Shader" path="res://shaders/sea_underside.gdshader" id="3_2akkt"]
-[ext_resource type="Script" path="res://scripts/intro/surface_glow.gd" id="4_ncdnq"]
-[ext_resource type="Script" path="res://scripts/weather/lightning_light.gd" id="5_rahqi"]
-[ext_resource type="PackedScene" path="res://scenes/prototype/intro/castaway.tscn" id="6_5q42c"]
-[ext_resource type="PackedScene" path="res://scenes/prototype/lantern_body.tscn" id="7_n12d8"]
-[ext_resource type="Shader" path="res://shaders/flame_hand.gdshader" id="8_hgusb"]
-[ext_resource type="Script" path="res://scripts/intro/flame_hand.gd" id="9_13tl2"]
-[ext_resource type="Shader" path="res://shaders/light_rays.gdshader" id="10_a6idw"]
-[ext_resource type="Shader" path="res://shaders/bubble.gdshader" id="11_5sp6a"]
-[ext_resource type="Script" path="res://scripts/audio/optional_sound.gd" id="12_w1y1v"]
-[ext_resource type="Shader" path="res://shaders/light_burst.gdshader" id="13_8cx30"]
-[ext_resource type="Script" path="res://scripts/intro/light_burst.gd" id="14_jsgrj"]
+[ext_resource type="Shader" path="res://shaders/underwater_lens.gdshader" id="1_ncdnq"]
+[ext_resource type="Script" path="res://scripts/intro/underwater_lens.gd" id="2_rahqi"]
+[ext_resource type="Shader" path="res://shaders/sea_underside.gdshader" id="3_5q42c"]
+[ext_resource type="Script" path="res://scripts/intro/surface_glow.gd" id="4_n12d8"]
+[ext_resource type="Script" path="res://scripts/weather/lightning_light.gd" id="5_hgusb"]
+[ext_resource type="PackedScene" path="res://scenes/prototype/intro/castaway.tscn" id="6_13tl2"]
+[ext_resource type="PackedScene" path="res://scenes/prototype/lantern_body.tscn" id="7_a6idw"]
+[ext_resource type="Shader" path="res://shaders/flame_hand.gdshader" id="8_5sp6a"]
+[ext_resource type="Script" path="res://scripts/intro/flame_hand.gd" id="9_w1y1v"]
+[ext_resource type="Shader" path="res://shaders/light_rays.gdshader" id="10_8cx30"]
+[ext_resource type="Shader" path="res://shaders/bubble.gdshader" id="11_jsgrj"]
+[ext_resource type="Script" path="res://scripts/audio/optional_sound.gd" id="12_lv5el"]
+[ext_resource type="Shader" path="res://shaders/light_burst.gdshader" id="13_ae1ut"]
+[ext_resource type="Script" path="res://scripts/intro/light_burst.gd" id="14_2bi5t"]
+[ext_resource type="Shader" path="res://shaders/seabed.gdshader" id="15_4cqk1"]
+[ext_resource type="Script" path="res://scripts/intro/lantern_field.gd" id="16_67quv"]
+[ext_resource type="PackedScene" path="res://scenes/prototype/intro/dead_lantern.tscn" id="17_pmwu1"]
 
-[sub_resource type="Environment" id="Environment_lv5el"]
+[sub_resource type="Environment" id="Environment_nh030"]
 background_mode = 1
 background_color = Color(0.004, 0.018, 0.03, 1)
 ambient_light_source = 2
@@ -30,13 +33,13 @@ volumetric_fog_density = 0.03
 volumetric_fog_albedo = Color(0.9, 0.92, 0.95, 1)
 volumetric_fog_emission = Color(0, 0.01, 0.018, 1)
 volumetric_fog_anisotropy = 0.45
-volumetric_fog_length = 32.0
+volumetric_fog_length = 90.0
 volumetric_fog_detail_spread = 1.6
 volumetric_fog_ambient_inject = 0.15
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_ae1ut"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_4sb6r"]
 render_priority = -100
-shader = ExtResource("1_853cl")
+shader = ExtResource("1_ncdnq")
 shader_parameter/soak = null
 shader_parameter/deep = null
 shader_parameter/furthest = null
@@ -46,14 +49,14 @@ shader_parameter/heat = null
 shader_parameter/exposure = null
 shader_parameter/vignette = null
 
-[sub_resource type="QuadMesh" id="QuadMesh_2bi5t"]
+[sub_resource type="QuadMesh" id="QuadMesh_4pjtv"]
 
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_4cqk1"]
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_42bj5"]
 shading_mode = 0
 albedo_color = Color(0.004, 0.018, 0.03, 1)
 
-[sub_resource type="SphereMesh" id="SphereMesh_67quv"]
-material = SubResource("StandardMaterial3D_4cqk1")
+[sub_resource type="SphereMesh" id="SphereMesh_ohrgi"]
+material = SubResource("StandardMaterial3D_42bj5")
 flip_faces = true
 radius = 70.0
 height = 140.0
@@ -69,9 +72,9 @@ height = 256
 noise = SubResource("FastNoiseLite_l0ui7")
 seamless = true
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_pmwu1"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_xedh0"]
 render_priority = 0
-shader = ExtResource("3_2akkt")
+shader = ExtResource("3_5q42c")
 shader_parameter/ripples = SubResource("NoiseTexture2D_853cl")
 shader_parameter/tint = null
 shader_parameter/mirror_tint = null
@@ -87,9 +90,9 @@ shader_parameter/rain = null
 [sub_resource type="PlaneMesh" id="PlaneMesh_2akkt"]
 size = Vector2(120, 120)
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_nh030"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_p7sjk"]
 render_priority = 0
-shader = ExtResource("8_hgusb")
+shader = ExtResource("8_5sp6a")
 shader_parameter/texels = null
 shader_parameter/hot = null
 shader_parameter/warm = null
@@ -106,92 +109,112 @@ shader_parameter/form = null
 shader_parameter/grip = null
 shader_parameter/aspect = null
 
-[sub_resource type="QuadMesh" id="QuadMesh_4sb6r"]
+[sub_resource type="QuadMesh" id="QuadMesh_vecc8"]
 size = Vector2(1, 0.625)
 center_offset = Vector3(-0.5, 0, 0)
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_4pjtv"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_16usi"]
 render_priority = 0
-shader = ExtResource("10_a6idw")
+shader = ExtResource("10_8cx30")
 shader_parameter/colour = null
 shader_parameter/brightness = null
 shader_parameter/seed = null
 
-[sub_resource type="QuadMesh" id="QuadMesh_42bj5"]
+[sub_resource type="QuadMesh" id="QuadMesh_chxrw"]
 size = Vector2(2.4, 2.4)
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_ohrgi"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_gjmhq"]
 render_priority = 0
-shader = ExtResource("11_5sp6a")
+shader = ExtResource("11_jsgrj")
 shader_parameter/tint = null
 shader_parameter/middle = null
 shader_parameter/rim = null
 
-[sub_resource type="SphereMesh" id="SphereMesh_xedh0"]
-material = SubResource("ShaderMaterial_ohrgi")
+[sub_resource type="SphereMesh" id="SphereMesh_h4uql"]
+material = SubResource("ShaderMaterial_gjmhq")
 radius = 0.03
 height = 0.06
 radial_segments = 8
 rings = 4
 
-[sub_resource type="SphereMesh" id="SphereMesh_p7sjk"]
-material = SubResource("ShaderMaterial_ohrgi")
+[sub_resource type="SphereMesh" id="SphereMesh_5eg2c"]
+material = SubResource("ShaderMaterial_gjmhq")
 radius = 0.022
 height = 0.044
 radial_segments = 8
 rings = 4
 
-[sub_resource type="SphereMesh" id="SphereMesh_vecc8"]
-material = SubResource("ShaderMaterial_ohrgi")
+[sub_resource type="SphereMesh" id="SphereMesh_1k3hu"]
+material = SubResource("ShaderMaterial_gjmhq")
 radius = 0.028
 height = 0.056
 radial_segments = 8
 rings = 4
 
 [sub_resource type="SphereMesh" id="SphereMesh_13tl2"]
-material = SubResource("ShaderMaterial_ohrgi")
+material = SubResource("ShaderMaterial_gjmhq")
 radius = 0.022
 height = 0.044
 radial_segments = 8
 rings = 4
 
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_16usi"]
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_l5j6m"]
 albedo_color = Color(0.8, 0.86, 0.9, 1)
 
 [sub_resource type="SphereMesh" id="SphereMesh_5sp6a"]
-material = SubResource("StandardMaterial3D_16usi")
+material = SubResource("StandardMaterial3D_l5j6m")
 radius = 0.012
 height = 0.024
 radial_segments = 8
 rings = 4
 
 [sub_resource type="SphereMesh" id="SphereMesh_w1y1v"]
-material = SubResource("ShaderMaterial_ohrgi")
+material = SubResource("ShaderMaterial_gjmhq")
 radius = 0.026
 height = 0.052
 radial_segments = 8
 rings = 4
 
-[sub_resource type="SphereMesh" id="SphereMesh_chxrw"]
-material = SubResource("ShaderMaterial_ohrgi")
+[sub_resource type="SphereMesh" id="SphereMesh_ppwqo"]
+material = SubResource("ShaderMaterial_gjmhq")
 radius = 0.03
 height = 0.06
 radial_segments = 8
 rings = 4
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_gjmhq"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_hjlbx"]
 render_priority = 0
-shader = ExtResource("13_8cx30")
+shader = ExtResource("13_ae1ut")
 shader_parameter/colour = null
 shader_parameter/brightness = null
 shader_parameter/front = null
 
-[sub_resource type="SphereMesh" id="SphereMesh_h4uql"]
+[sub_resource type="SphereMesh" id="SphereMesh_qslim"]
 radial_segments = 32
 rings = 16
 
-[sub_resource type="Animation" id="Animation_5eg2c"]
-length = 4.8
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_dkx21"]
+render_priority = 0
+shader = ExtResource("15_4cqk1")
+shader_parameter/sand = null
+shader_parameter/patchiness = null
+shader_parameter/net_colour = null
+shader_parameter/net_energy = null
+shader_parameter/net_size = null
+shader_parameter/net_speed = null
+shader_parameter/flash = null
+shader_parameter/gap_from = null
+shader_parameter/gap_to = null
+shader_parameter/gap_width = null
+shader_parameter/gap = null
+
+[sub_resource type="PlaneMesh" id="PlaneMesh_d2tav"]
+size = Vector2(160, 160)
+subdivide_width = 100
+subdivide_depth = 100
+
+[sub_resource type="Animation" id="Animation_den2n"]
+length = 5.4
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
@@ -199,10 +222,10 @@ tracks/0/path = NodePath("Camera:position")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
-"times": PackedFloat32Array(0, 4.8),
-"transitions": PackedFloat32Array(1, 1),
+"times": PackedFloat32Array(0, 1.04, 1.049, 1.05, 4.39, 4.399, 4.4, 5.4),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1, 1, 1),
 "update": 0,
-"values": [Vector3(0.7, 0.3, 6.4), Vector3(0.7, 0.90000004, 5.8)]
+"values": [Vector3(0.7, 0.3, 6.4), Vector3(0.7, 0.4, 6.3), Vector3(0.7, 0.4, 6.3), Vector3(3.2, 8.2, 8), Vector3(2.8, 7.7, 7.6), Vector3(2.8, 7.7, 7.6), Vector3(0.7, 1.2, 6.1), Vector3(0.7, 1.6, 5.9)]
 }
 tracks/1/type = "value"
 tracks/1/imported = false
@@ -211,10 +234,10 @@ tracks/1/path = NodePath("Camera:rotation")
 tracks/1/interp = 1
 tracks/1/loop_wrap = true
 tracks/1/keys = {
-"times": PackedFloat32Array(0, 0.55, 0.62, 0.69, 0.76, 0.83, 0.9, 0.97, 1.04, 1.3),
-"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1, 1, 1, 1, 1),
+"times": PackedFloat32Array(0, 0.55, 0.62, 0.69, 0.76, 0.83, 0.9, 1.04, 1.049, 1.05, 4.39, 4.399, 4.4),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1),
 "update": 0,
-"values": [Vector3(0.18721087, 0.20668319, 0), Vector3(0.18721087, 0.21868318, 0), Vector3(0.19430323, 0.19619226, 0), Vector3(0.1782454, 0.21565206, 0), Vector3(0.19316338, 0.1992415, 0), Vector3(0.18616492, 0.21260034, 0), Vector3(0.18479629, 0.20228015, 0), Vector3(0.19010785, 0.20959026, 0), Vector3(0.18587953, 0.20524631, 0), Vector3(0.18721087, 0.20668319, 0)]
+"values": [Vector3(0.18721087, 0.20668319, 0), Vector3(0.18721087, 0.21868318, 0), Vector3(0.19396551, 0.19669184, 0), Vector3(0.17924155, 0.21465552, 0), Vector3(0.19197288, 0.20072983, 0), Vector3(0.18651357, 0.21062796, 0), Vector3(0.18613772, 0.20472628, 0), Vector3(0.18721087, 0.20668319, 0), Vector3(0.18721087, 0.20668319, 0), Vector3(-0.9229343, 0.42087212, 0), Vector3(-0.9293773, 0.40249947, 0), Vector3(-0.9293773, 0.40249947, 0), Vector3(0.25548443, 0.14981247, 0)]
 }
 tracks/2/type = "value"
 tracks/2/imported = false
@@ -223,10 +246,10 @@ tracks/2/path = NodePath("Camera:fov")
 tracks/2/interp = 1
 tracks/2/loop_wrap = true
 tracks/2/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
+"times": PackedFloat32Array(0, 1.049, 1.05, 4.399, 4.4),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1),
 "update": 0,
-"values": [52.0]
+"values": [52.0, 52.0, 56.0, 56.0, 50.0]
 }
 tracks/3/type = "value"
 tracks/3/imported = false
@@ -235,7 +258,7 @@ tracks/3/path = NodePath("Camera/Lens:exposure")
 tracks/3/interp = 1
 tracks/3/loop_wrap = true
 tracks/3/keys = {
-"times": PackedFloat32Array(0, 0.5, 0.62, 1.5, 4.8),
+"times": PackedFloat32Array(0, 0.5, 0.62, 1.5, 5.4),
 "transitions": PackedFloat32Array(1, 1, 0.4, 1, 1),
 "update": 0,
 "values": [0.7, 0.55, 2.0, 1.1, 1.0]
@@ -247,10 +270,10 @@ tracks/4/path = NodePath("Lantern:position")
 tracks/4/interp = 1
 tracks/4/loop_wrap = true
 tracks/4/keys = {
-"times": PackedFloat32Array(0, 2.2, 4.8),
-"transitions": PackedFloat32Array(1, 1, 1.6),
+"times": PackedFloat32Array(0, 4.2, 5.4),
+"transitions": PackedFloat32Array(1, 1, 1),
 "update": 0,
-"values": [Vector3(-1.5, 1.5, 0.45), Vector3(-1.5, 1.5, 0.45), Vector3(-1.35, 3.1, 0.45)]
+"values": [Vector3(-1.5, 1.5, 0.45), Vector3(-1.5, 1.5, 0.45), Vector3(-0.35000002, 3.25, 1.1)]
 }
 tracks/5/type = "value"
 tracks/5/imported = false
@@ -295,7 +318,7 @@ tracks/8/path = NodePath("Lantern/Body:swell")
 tracks/8/interp = 1
 tracks/8/loop_wrap = true
 tracks/8/keys = {
-"times": PackedFloat32Array(0, 0.5, 0.65, 1.6, 4.8),
+"times": PackedFloat32Array(0, 0.5, 0.65, 1.6, 5.4),
 "transitions": PackedFloat32Array(1, 1, 1, 1, 1),
 "update": 0,
 "values": [0.5, 0.3, 2.3, 1.5, 1.15]
@@ -331,7 +354,7 @@ tracks/11/path = NodePath("Lantern/Body:light_energy")
 tracks/11/interp = 1
 tracks/11/loop_wrap = true
 tracks/11/keys = {
-"times": PackedFloat32Array(0, 0.5, 0.62, 1.6, 4.8),
+"times": PackedFloat32Array(0, 0.5, 0.62, 1.6, 5.4),
 "transitions": PackedFloat32Array(1, 1, 0.4, 1, 1),
 "update": 0,
 "values": [2.2, 2.2, 18.0, 7.0, 4.5]
@@ -343,7 +366,7 @@ tracks/12/path = NodePath("Lantern/Far:light_energy")
 tracks/12/interp = 1
 tracks/12/loop_wrap = true
 tracks/12/keys = {
-"times": PackedFloat32Array(0, 0.5, 0.62, 2, 4.8),
+"times": PackedFloat32Array(0, 0.5, 0.62, 2, 5.4),
 "transitions": PackedFloat32Array(1, 1, 0.4, 1, 1),
 "update": 0,
 "values": [0.02, 0.0, 4.0, 1.6, 1.0]
@@ -355,7 +378,7 @@ tracks/13/path = NodePath("Lantern/Light:light_volumetric_fog_energy")
 tracks/13/interp = 1
 tracks/13/loop_wrap = true
 tracks/13/keys = {
-"times": PackedFloat32Array(0, 0.5, 0.6, 4.8),
+"times": PackedFloat32Array(0, 0.5, 0.6, 5.4),
 "transitions": PackedFloat32Array(1, 1, 1, 1),
 "update": 0,
 "values": [6.0, 6.0, 0.5, 0.9]
@@ -367,10 +390,10 @@ tracks/14/path = NodePath("Lantern/Hand:reach")
 tracks/14/interp = 1
 tracks/14/loop_wrap = true
 tracks/14/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
+"times": PackedFloat32Array(0, 4.4, 5),
+"transitions": PackedFloat32Array(1, 1, 1),
 "update": 0,
-"values": [1.0]
+"values": [1.0, 1.0, 0.0]
 }
 tracks/15/type = "value"
 tracks/15/imported = false
@@ -391,10 +414,10 @@ tracks/16/path = NodePath("Lantern/Hand:grip")
 tracks/16/interp = 1
 tracks/16/loop_wrap = true
 tracks/16/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
+"times": PackedFloat32Array(0, 4.4, 5),
+"transitions": PackedFloat32Array(1, 1, 1),
 "update": 0,
-"values": [1.0]
+"values": [1.0, 1.0, 0.0]
 }
 tracks/17/type = "value"
 tracks/17/imported = false
@@ -451,10 +474,10 @@ tracks/21/path = NodePath("Castaway:position")
 tracks/21/interp = 1
 tracks/21/loop_wrap = true
 tracks/21/keys = {
-"times": PackedFloat32Array(0, 2.2, 4.8),
+"times": PackedFloat32Array(0, 4.2, 5.4),
 "transitions": PackedFloat32Array(1, 1, 1.6),
 "update": 0,
-"values": [Vector3(0.2, 0.4, 0.8), Vector3(0.2, 0.4, 0.8), Vector3(0.2, 2, 0.8)]
+"values": [Vector3(0.2, 0.4, 0.8), Vector3(0.2, 0.4, 0.8), Vector3(0.2, 1.6, 0.8)]
 }
 tracks/22/type = "value"
 tracks/22/imported = false
@@ -463,10 +486,10 @@ tracks/22/path = NodePath("Castaway:rotation")
 tracks/22/interp = 1
 tracks/22/loop_wrap = true
 tracks/22/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
+"times": PackedFloat32Array(0, 4.4, 5.4),
+"transitions": PackedFloat32Array(1, 1, 1),
 "update": 0,
-"values": [Vector3(-0.3, 1.25, 0)]
+"values": [Vector3(-0.3, 1.25, 0), Vector3(-0.3, 1.25, 0), Vector3(-0.2, 1.25, 0)]
 }
 tracks/23/type = "value"
 tracks/23/imported = false
@@ -475,10 +498,10 @@ tracks/23/path = NodePath("Castaway/Character:idle_animation")
 tracks/23/interp = 1
 tracks/23/loop_wrap = true
 tracks/23/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
+"times": PackedFloat32Array(0, 4.4),
+"transitions": PackedFloat32Array(1, 1),
 "update": 1,
-"values": [&"Spell_Simple_Idle"]
+"values": [&"Spell_Simple_Idle", &"Idle_Lantern"]
 }
 tracks/24/type = "value"
 tracks/24/imported = false
@@ -540,8 +563,56 @@ tracks/28/keys = {
 "update": 0,
 "values": [Vector3(-1.5, 1.5, 0.45)]
 }
+tracks/29/type = "value"
+tracks/29/imported = false
+tracks/29/enabled = true
+tracks/29/path = NodePath("FlareLight:light_energy")
+tracks/29/interp = 1
+tracks/29/loop_wrap = true
+tracks/29/keys = {
+"times": PackedFloat32Array(0, 0.5, 0.62, 2.6, 4.6),
+"transitions": PackedFloat32Array(1, 1, 0.4, 1, 1),
+"update": 0,
+"values": [0.0, 0.0, 26.0, 16.0, 0.0]
+}
+tracks/30/type = "value"
+tracks/30/imported = false
+tracks/30/enabled = true
+tracks/30/path = NodePath("Lanterns:gap")
+tracks/30/interp = 1
+tracks/30/loop_wrap = true
+tracks/30/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [0.0]
+}
+tracks/31/type = "value"
+tracks/31/imported = false
+tracks/31/enabled = true
+tracks/31/path = NodePath("Lanterns:gap_centre")
+tracks/31/interp = 1
+tracks/31/loop_wrap = true
+tracks/31/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector3(-40, 0, -20)]
+}
+tracks/32/type = "value"
+tracks/32/imported = false
+tracks/32/enabled = true
+tracks/32/path = NodePath("Lantern/Trail:direction")
+tracks/32/interp = 1
+tracks/32/loop_wrap = true
+tracks/32/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector3(0, 1, 0)]
+}
 
-[sub_resource type="Animation" id="Animation_1k3hu"]
+[sub_resource type="Animation" id="Animation_11f68"]
 length = 3.7
 tracks/0/type = "value"
 tracks/0/imported = false
@@ -891,8 +962,56 @@ tracks/28/keys = {
 "update": 0,
 "values": [Vector3(-1.5, 1.5, 0.45)]
 }
+tracks/29/type = "value"
+tracks/29/imported = false
+tracks/29/enabled = true
+tracks/29/path = NodePath("FlareLight:light_energy")
+tracks/29/interp = 1
+tracks/29/loop_wrap = true
+tracks/29/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [0.0]
+}
+tracks/30/type = "value"
+tracks/30/imported = false
+tracks/30/enabled = true
+tracks/30/path = NodePath("Lanterns:gap")
+tracks/30/interp = 1
+tracks/30/loop_wrap = true
+tracks/30/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [0.0]
+}
+tracks/31/type = "value"
+tracks/31/imported = false
+tracks/31/enabled = true
+tracks/31/path = NodePath("Lanterns:gap_centre")
+tracks/31/interp = 1
+tracks/31/loop_wrap = true
+tracks/31/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector3(-40, 0, -20)]
+}
+tracks/32/type = "value"
+tracks/32/imported = false
+tracks/32/enabled = true
+tracks/32/path = NodePath("Lantern/Trail:direction")
+tracks/32/interp = 1
+tracks/32/loop_wrap = true
+tracks/32/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector3(0, 1, 0)]
+}
 
-[sub_resource type="Animation" id="Animation_l5j6m"]
+[sub_resource type="Animation" id="Animation_7wubr"]
 length = 3.2
 tracks/0/type = "value"
 tracks/0/imported = false
@@ -1242,8 +1361,56 @@ tracks/28/keys = {
 "update": 0,
 "values": [Vector3(-1.5, 1.5, 0.45)]
 }
+tracks/29/type = "value"
+tracks/29/imported = false
+tracks/29/enabled = true
+tracks/29/path = NodePath("FlareLight:light_energy")
+tracks/29/interp = 1
+tracks/29/loop_wrap = true
+tracks/29/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [0.0]
+}
+tracks/30/type = "value"
+tracks/30/imported = false
+tracks/30/enabled = true
+tracks/30/path = NodePath("Lanterns:gap")
+tracks/30/interp = 1
+tracks/30/loop_wrap = true
+tracks/30/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [0.0]
+}
+tracks/31/type = "value"
+tracks/31/imported = false
+tracks/31/enabled = true
+tracks/31/path = NodePath("Lanterns:gap_centre")
+tracks/31/interp = 1
+tracks/31/loop_wrap = true
+tracks/31/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector3(-40, 0, -20)]
+}
+tracks/32/type = "value"
+tracks/32/imported = false
+tracks/32/enabled = true
+tracks/32/path = NodePath("Lantern/Trail:direction")
+tracks/32/interp = 1
+tracks/32/loop_wrap = true
+tracks/32/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector3(0, 1, 0)]
+}
 
-[sub_resource type="Animation" id="Animation_ppwqo"]
+[sub_resource type="Animation" id="Animation_xodi2"]
 length = 3.5
 tracks/0/type = "value"
 tracks/0/imported = false
@@ -1593,8 +1760,56 @@ tracks/28/keys = {
 "update": 0,
 "values": [Vector3(-1.5, 1.5, 0.45)]
 }
+tracks/29/type = "value"
+tracks/29/imported = false
+tracks/29/enabled = true
+tracks/29/path = NodePath("FlareLight:light_energy")
+tracks/29/interp = 1
+tracks/29/loop_wrap = true
+tracks/29/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [0.0]
+}
+tracks/30/type = "value"
+tracks/30/imported = false
+tracks/30/enabled = true
+tracks/30/path = NodePath("Lanterns:gap")
+tracks/30/interp = 1
+tracks/30/loop_wrap = true
+tracks/30/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [0.0]
+}
+tracks/31/type = "value"
+tracks/31/imported = false
+tracks/31/enabled = true
+tracks/31/path = NodePath("Lanterns:gap_centre")
+tracks/31/interp = 1
+tracks/31/loop_wrap = true
+tracks/31/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector3(-40, 0, -20)]
+}
+tracks/32/type = "value"
+tracks/32/imported = false
+tracks/32/enabled = true
+tracks/32/path = NodePath("Lantern/Trail:direction")
+tracks/32/interp = 1
+tracks/32/loop_wrap = true
+tracks/32/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector3(0, 1, 0)]
+}
 
-[sub_resource type="Animation" id="Animation_hjlbx"]
+[sub_resource type="Animation" id="Animation_e60fl"]
 length = 6.0
 loop_mode = 1
 tracks/0/type = "value"
@@ -1945,8 +2160,56 @@ tracks/28/keys = {
 "update": 0,
 "values": [Vector3(-1.5, 1.5, 0.45)]
 }
+tracks/29/type = "value"
+tracks/29/imported = false
+tracks/29/enabled = true
+tracks/29/path = NodePath("FlareLight:light_energy")
+tracks/29/interp = 1
+tracks/29/loop_wrap = true
+tracks/29/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [0.0]
+}
+tracks/30/type = "value"
+tracks/30/imported = false
+tracks/30/enabled = true
+tracks/30/path = NodePath("Lanterns:gap")
+tracks/30/interp = 1
+tracks/30/loop_wrap = true
+tracks/30/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [0.0]
+}
+tracks/31/type = "value"
+tracks/31/imported = false
+tracks/31/enabled = true
+tracks/31/path = NodePath("Lanterns:gap_centre")
+tracks/31/interp = 1
+tracks/31/loop_wrap = true
+tracks/31/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector3(-40, 0, -20)]
+}
+tracks/32/type = "value"
+tracks/32/imported = false
+tracks/32/enabled = true
+tracks/32/path = NodePath("Lantern/Trail:direction")
+tracks/32/interp = 1
+tracks/32/loop_wrap = true
+tracks/32/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector3(0, 1, 0)]
+}
 
-[sub_resource type="Animation" id="Animation_qslim"]
+[sub_resource type="Animation" id="Animation_xc8r4"]
 length = 3.4
 tracks/0/type = "value"
 tracks/0/imported = false
@@ -2296,8 +2559,56 @@ tracks/28/keys = {
 "update": 0,
 "values": [Vector3(-1.5, 1.5, 0.45)]
 }
+tracks/29/type = "value"
+tracks/29/imported = false
+tracks/29/enabled = true
+tracks/29/path = NodePath("FlareLight:light_energy")
+tracks/29/interp = 1
+tracks/29/loop_wrap = true
+tracks/29/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [0.0]
+}
+tracks/30/type = "value"
+tracks/30/imported = false
+tracks/30/enabled = true
+tracks/30/path = NodePath("Lanterns:gap")
+tracks/30/interp = 1
+tracks/30/loop_wrap = true
+tracks/30/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [0.0]
+}
+tracks/31/type = "value"
+tracks/31/imported = false
+tracks/31/enabled = true
+tracks/31/path = NodePath("Lanterns:gap_centre")
+tracks/31/interp = 1
+tracks/31/loop_wrap = true
+tracks/31/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector3(-40, 0, -20)]
+}
+tracks/32/type = "value"
+tracks/32/imported = false
+tracks/32/enabled = true
+tracks/32/path = NodePath("Lantern/Trail:direction")
+tracks/32/interp = 1
+tracks/32/loop_wrap = true
+tracks/32/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector3(0, 1, 0)]
+}
 
-[sub_resource type="Animation" id="Animation_dkx21"]
+[sub_resource type="Animation" id="Animation_n4j2n"]
 length = 3.8
 tracks/0/type = "value"
 tracks/0/imported = false
@@ -2309,7 +2620,7 @@ tracks/0/keys = {
 "times": PackedFloat32Array(0, 3.8),
 "transitions": PackedFloat32Array(1, 1),
 "update": 0,
-"values": [Vector3(0.7, 1.5, 5.2000003), Vector3(0.7, 7, 5.2000003)]
+"values": [Vector3(0.7, 2.5, 5.2000003), Vector3(0.7, 7, 5.2000003)]
 }
 tracks/1/type = "value"
 tracks/1/imported = false
@@ -2354,10 +2665,10 @@ tracks/4/path = NodePath("Lantern:position")
 tracks/4/interp = 1
 tracks/4/loop_wrap = true
 tracks/4/keys = {
-"times": PackedFloat32Array(0, 0.8, 3.8),
-"transitions": PackedFloat32Array(1, 0.6, 1),
+"times": PackedFloat32Array(0, 3.8),
+"transitions": PackedFloat32Array(1, 1),
 "update": 0,
-"values": [Vector3(-1.35, 3.1, 0.45), Vector3(-0.35000002, 3.65, 1.1), Vector3(-0.35000002, 8.75, 1.1)]
+"values": [Vector3(-0.35000002, 4.65, 1.1), Vector3(-0.35000002, 9.95, 1.1)]
 }
 tracks/5/type = "value"
 tracks/5/imported = false
@@ -2381,7 +2692,7 @@ tracks/6/keys = {
 "times": PackedFloat32Array(0, 3.8),
 "transitions": PackedFloat32Array(1, 1),
 "update": 0,
-"values": [Vector3(1.8, 1.8, 1.8), Vector3(1.3, 1.3, 1.3)]
+"values": [Vector3(1.6, 1.6, 1.6), Vector3(1.3, 1.3, 1.3)]
 }
 tracks/7/type = "value"
 tracks/7/imported = false
@@ -2393,7 +2704,7 @@ tracks/7/keys = {
 "times": PackedFloat32Array(0, 3.8),
 "transitions": PackedFloat32Array(1, 1),
 "update": 0,
-"values": [1.0, 0.5]
+"values": [0.8, 0.5]
 }
 tracks/8/type = "value"
 tracks/8/imported = false
@@ -2441,7 +2752,7 @@ tracks/11/keys = {
 "times": PackedFloat32Array(0, 3.8),
 "transitions": PackedFloat32Array(1, 1),
 "update": 0,
-"values": [4.5, 2.6]
+"values": [3.0, 2.6]
 }
 tracks/12/type = "value"
 tracks/12/imported = false
@@ -2453,7 +2764,7 @@ tracks/12/keys = {
 "times": PackedFloat32Array(0, 3.8),
 "transitions": PackedFloat32Array(1, 1),
 "update": 0,
-"values": [1.0, 0.4]
+"values": [0.3, 0.4]
 }
 tracks/13/type = "value"
 tracks/13/imported = false
@@ -2474,10 +2785,10 @@ tracks/14/path = NodePath("Lantern/Hand:reach")
 tracks/14/interp = 1
 tracks/14/loop_wrap = true
 tracks/14/keys = {
-"times": PackedFloat32Array(0, 0.6),
-"transitions": PackedFloat32Array(1, 1),
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
 "update": 0,
-"values": [1.0, 0.0]
+"values": [0.0]
 }
 tracks/15/type = "value"
 tracks/15/imported = false
@@ -2498,10 +2809,10 @@ tracks/16/path = NodePath("Lantern/Hand:grip")
 tracks/16/interp = 1
 tracks/16/loop_wrap = true
 tracks/16/keys = {
-"times": PackedFloat32Array(0, 0.6),
-"transitions": PackedFloat32Array(1, 1),
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
 "update": 0,
-"values": [1.0, 0.0]
+"values": [0.0]
 }
 tracks/17/type = "value"
 tracks/17/imported = false
@@ -2549,7 +2860,7 @@ tracks/20/keys = {
 "times": PackedFloat32Array(0, 2),
 "transitions": PackedFloat32Array(1, 1),
 "update": 0,
-"values": [-8.0, -16.0]
+"values": [-12.0, -16.0]
 }
 tracks/21/type = "value"
 tracks/21/imported = false
@@ -2561,7 +2872,7 @@ tracks/21/keys = {
 "times": PackedFloat32Array(0, 3.8),
 "transitions": PackedFloat32Array(1, 1),
 "update": 0,
-"values": [Vector3(0.2, 2, 0.8), Vector3(0.2, 8.3, 0.8)]
+"values": [Vector3(0.2, 3, 0.8), Vector3(0.2, 8.3, 0.8)]
 }
 tracks/22/type = "value"
 tracks/22/imported = false
@@ -2573,7 +2884,7 @@ tracks/22/keys = {
 "times": PackedFloat32Array(0, 3.8),
 "transitions": PackedFloat32Array(1, 1),
 "update": 0,
-"values": [Vector3(-0.3, 1.25, 0), Vector3(-0.1, 1.2, 0)]
+"values": [Vector3(-0.2, 1.25, 0), Vector3(-0.1, 1.2, 0)]
 }
 tracks/23/type = "value"
 tracks/23/imported = false
@@ -2647,8 +2958,56 @@ tracks/28/keys = {
 "update": 0,
 "values": [Vector3(-1.5, 1.5, 0.45)]
 }
+tracks/29/type = "value"
+tracks/29/imported = false
+tracks/29/enabled = true
+tracks/29/path = NodePath("FlareLight:light_energy")
+tracks/29/interp = 1
+tracks/29/loop_wrap = true
+tracks/29/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [0.0]
+}
+tracks/30/type = "value"
+tracks/30/imported = false
+tracks/30/enabled = true
+tracks/30/path = NodePath("Lanterns:gap")
+tracks/30/interp = 1
+tracks/30/loop_wrap = true
+tracks/30/keys = {
+"times": PackedFloat32Array(0, 0.6),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [1.0, 0.0]
+}
+tracks/31/type = "value"
+tracks/31/imported = false
+tracks/31/enabled = true
+tracks/31/path = NodePath("Lanterns:gap_centre")
+tracks/31/interp = 1
+tracks/31/loop_wrap = true
+tracks/31/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector3(-9.805366, 0, -7.2195864)]
+}
+tracks/32/type = "value"
+tracks/32/imported = false
+tracks/32/enabled = true
+tracks/32/path = NodePath("Lantern/Trail:direction")
+tracks/32/interp = 1
+tracks/32/loop_wrap = true
+tracks/32/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector3(0, 1, 0)]
+}
 
-[sub_resource type="Animation" id="Animation_d2tav"]
+[sub_resource type="Animation" id="Animation_ae3nf"]
 length = 8.0
 tracks/0/type = "value"
 tracks/0/imported = false
@@ -2998,8 +3357,455 @@ tracks/28/keys = {
 "update": 0,
 "values": [Vector3(-1.5, 1.5, 0.45)]
 }
+tracks/29/type = "value"
+tracks/29/imported = false
+tracks/29/enabled = true
+tracks/29/path = NodePath("FlareLight:light_energy")
+tracks/29/interp = 1
+tracks/29/loop_wrap = true
+tracks/29/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [0.0]
+}
+tracks/30/type = "value"
+tracks/30/imported = false
+tracks/30/enabled = true
+tracks/30/path = NodePath("Lanterns:gap")
+tracks/30/interp = 1
+tracks/30/loop_wrap = true
+tracks/30/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [0.0]
+}
+tracks/31/type = "value"
+tracks/31/imported = false
+tracks/31/enabled = true
+tracks/31/path = NodePath("Lanterns:gap_centre")
+tracks/31/interp = 1
+tracks/31/loop_wrap = true
+tracks/31/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector3(-40, 0, -20)]
+}
+tracks/32/type = "value"
+tracks/32/imported = false
+tracks/32/enabled = true
+tracks/32/path = NodePath("Lantern/Trail:direction")
+tracks/32/interp = 1
+tracks/32/loop_wrap = true
+tracks/32/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector3(0, 1, 0)]
+}
 
-[sub_resource type="Animation" id="Animation_den2n"]
+[sub_resource type="Animation" id="Animation_1cn7s"]
+length = 4.5
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Camera:position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 1.39, 1.399, 1.4, 4.5),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1),
+"update": 0,
+"values": [Vector3(0.7, 1.3, 5), Vector3(0.7, 1.5999999, 5), Vector3(0.7, 1.5999999, 5), Vector3(-5, 8.6, 6.5), Vector3(-4.5, 9, 6.2)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Camera:rotation")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 1.399, 1.4),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 0,
+"values": [Vector3(0.31766322, 0.16514868, 0), Vector3(0.31766322, 0.16514868, 0), Vector3(-0.98260176, -0.61466295, 0)]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("Camera:fov")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0, 1.399, 1.4),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 0,
+"values": [48.0, 48.0, 54.0]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("Camera/Lens:exposure")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [1.0]
+}
+tracks/4/type = "value"
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/path = NodePath("Lantern:position")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/keys = {
+"times": PackedFloat32Array(0, 4.5),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Vector3(-0.35000002, 3.25, 1.1), Vector3(-0.35000002, 4.65, 1.1)]
+}
+tracks/5/type = "value"
+tracks/5/imported = false
+tracks/5/enabled = true
+tracks/5/path = NodePath("Lantern:rotation")
+tracks/5/interp = 1
+tracks/5/loop_wrap = true
+tracks/5/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector3(0, 0, 0)]
+}
+tracks/6/type = "value"
+tracks/6/imported = false
+tracks/6/enabled = true
+tracks/6/path = NodePath("Lantern/Body:scale")
+tracks/6/interp = 1
+tracks/6/loop_wrap = true
+tracks/6/keys = {
+"times": PackedFloat32Array(0, 4.5),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Vector3(1.8, 1.8, 1.8), Vector3(1.6, 1.6, 1.6)]
+}
+tracks/7/type = "value"
+tracks/7/imported = false
+tracks/7/enabled = true
+tracks/7/path = NodePath("Lantern/Body:strength")
+tracks/7/interp = 1
+tracks/7/loop_wrap = true
+tracks/7/keys = {
+"times": PackedFloat32Array(0, 4.5),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [1.0, 0.8]
+}
+tracks/8/type = "value"
+tracks/8/imported = false
+tracks/8/enabled = true
+tracks/8/path = NodePath("Lantern/Body:swell")
+tracks/8/interp = 1
+tracks/8/loop_wrap = true
+tracks/8/keys = {
+"times": PackedFloat32Array(0, 0.4, 0.8, 1.2, 1.6, 2, 2.4, 2.8, 3.2, 3.6, 4, 4.4),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1),
+"update": 0,
+"values": [0.8, 1.2, 0.8, 1.2, 0.8, 1.2, 0.8, 1.2, 0.8, 1.2, 0.8, 1.2]
+}
+tracks/9/type = "value"
+tracks/9/imported = false
+tracks/9/enabled = true
+tracks/9/path = NodePath("Lantern/Body:lean")
+tracks/9/interp = 1
+tracks/9/loop_wrap = true
+tracks/9/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector3(0, 0, 0)]
+}
+tracks/10/type = "value"
+tracks/10/imported = false
+tracks/10/enabled = true
+tracks/10/path = NodePath("Lantern/Body:door")
+tracks/10/interp = 1
+tracks/10/loop_wrap = true
+tracks/10/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [1.0]
+}
+tracks/11/type = "value"
+tracks/11/imported = false
+tracks/11/enabled = true
+tracks/11/path = NodePath("Lantern/Body:light_energy")
+tracks/11/interp = 1
+tracks/11/loop_wrap = true
+tracks/11/keys = {
+"times": PackedFloat32Array(0, 1.4, 4.5),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 0,
+"values": [4.5, 3.0, 3.0]
+}
+tracks/12/type = "value"
+tracks/12/imported = false
+tracks/12/enabled = true
+tracks/12/path = NodePath("Lantern/Far:light_energy")
+tracks/12/interp = 1
+tracks/12/loop_wrap = true
+tracks/12/keys = {
+"times": PackedFloat32Array(0, 1.4),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [1.0, 0.3]
+}
+tracks/13/type = "value"
+tracks/13/imported = false
+tracks/13/enabled = true
+tracks/13/path = NodePath("Lantern/Light:light_volumetric_fog_energy")
+tracks/13/interp = 1
+tracks/13/loop_wrap = true
+tracks/13/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [0.9]
+}
+tracks/14/type = "value"
+tracks/14/imported = false
+tracks/14/enabled = true
+tracks/14/path = NodePath("Lantern/Hand:reach")
+tracks/14/interp = 1
+tracks/14/loop_wrap = true
+tracks/14/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [0.0]
+}
+tracks/15/type = "value"
+tracks/15/imported = false
+tracks/15/enabled = true
+tracks/15/path = NodePath("Lantern/Hand:form")
+tracks/15/interp = 1
+tracks/15/loop_wrap = true
+tracks/15/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [1.0]
+}
+tracks/16/type = "value"
+tracks/16/imported = false
+tracks/16/enabled = true
+tracks/16/path = NodePath("Lantern/Hand:grip")
+tracks/16/interp = 1
+tracks/16/loop_wrap = true
+tracks/16/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [0.0]
+}
+tracks/17/type = "value"
+tracks/17/imported = false
+tracks/17/enabled = true
+tracks/17/path = NodePath("Lantern/Trail:emitting")
+tracks/17/interp = 1
+tracks/17/loop_wrap = true
+tracks/17/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
+}
+tracks/18/type = "value"
+tracks/18/imported = false
+tracks/18/enabled = true
+tracks/18/path = NodePath("Lantern/Wisp:emitting")
+tracks/18/interp = 1
+tracks/18/loop_wrap = true
+tracks/18/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+tracks/19/type = "value"
+tracks/19/imported = false
+tracks/19/enabled = true
+tracks/19/path = NodePath("Lantern/Gasp:emitting")
+tracks/19/interp = 1
+tracks/19/loop_wrap = true
+tracks/19/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
+}
+tracks/20/type = "value"
+tracks/20/imported = false
+tracks/20/enabled = true
+tracks/20/path = NodePath("Lantern/Hiss:volume_db")
+tracks/20/interp = 1
+tracks/20/loop_wrap = true
+tracks/20/keys = {
+"times": PackedFloat32Array(0, 1.4),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [-8.0, -12.0]
+}
+tracks/21/type = "value"
+tracks/21/imported = false
+tracks/21/enabled = true
+tracks/21/path = NodePath("Castaway:position")
+tracks/21/interp = 1
+tracks/21/loop_wrap = true
+tracks/21/keys = {
+"times": PackedFloat32Array(0, 4.5),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Vector3(0.2, 1.6, 0.8), Vector3(0.2, 3, 0.8)]
+}
+tracks/22/type = "value"
+tracks/22/imported = false
+tracks/22/enabled = true
+tracks/22/path = NodePath("Castaway:rotation")
+tracks/22/interp = 1
+tracks/22/loop_wrap = true
+tracks/22/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector3(-0.2, 1.25, 0)]
+}
+tracks/23/type = "value"
+tracks/23/imported = false
+tracks/23/enabled = true
+tracks/23/path = NodePath("Castaway/Character:idle_animation")
+tracks/23/interp = 1
+tracks/23/loop_wrap = true
+tracks/23/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [&"Idle_Lantern"]
+}
+tracks/24/type = "value"
+tracks/24/imported = false
+tracks/24/enabled = true
+tracks/24/path = NodePath("Surface:glow")
+tracks/24/interp = 1
+tracks/24/loop_wrap = true
+tracks/24/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [0.3]
+}
+tracks/25/type = "value"
+tracks/25/imported = false
+tracks/25/enabled = true
+tracks/25/path = NodePath("Splash:emitting")
+tracks/25/interp = 1
+tracks/25/loop_wrap = true
+tracks/25/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
+}
+tracks/26/type = "value"
+tracks/26/imported = false
+tracks/26/enabled = true
+tracks/26/path = NodePath("DiveSplash:emitting")
+tracks/26/interp = 1
+tracks/26/loop_wrap = true
+tracks/26/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
+}
+tracks/27/type = "value"
+tracks/27/imported = false
+tracks/27/enabled = true
+tracks/27/path = NodePath("Flare:spread")
+tracks/27/interp = 1
+tracks/27/loop_wrap = true
+tracks/27/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [1.0]
+}
+tracks/28/type = "value"
+tracks/28/imported = false
+tracks/28/enabled = true
+tracks/28/path = NodePath("Flare:position")
+tracks/28/interp = 1
+tracks/28/loop_wrap = true
+tracks/28/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector3(-1.5, 1.5, 0.45)]
+}
+tracks/29/type = "value"
+tracks/29/imported = false
+tracks/29/enabled = true
+tracks/29/path = NodePath("FlareLight:light_energy")
+tracks/29/interp = 1
+tracks/29/loop_wrap = true
+tracks/29/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [0.0]
+}
+tracks/30/type = "value"
+tracks/30/imported = false
+tracks/30/enabled = true
+tracks/30/path = NodePath("Lanterns:gap")
+tracks/30/interp = 1
+tracks/30/loop_wrap = true
+tracks/30/keys = {
+"times": PackedFloat32Array(0, 1),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [0.0, 1.0]
+}
+tracks/31/type = "value"
+tracks/31/imported = false
+tracks/31/enabled = true
+tracks/31/path = NodePath("Lanterns:gap_centre")
+tracks/31/interp = 1
+tracks/31/loop_wrap = true
+tracks/31/keys = {
+"times": PackedFloat32Array(0, 4.5),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Vector3(-26.013414, 0, -15.048965), Vector3(-9.805366, 0, -7.2195864)]
+}
+tracks/32/type = "value"
+tracks/32/imported = false
+tracks/32/enabled = true
+tracks/32/path = NodePath("Lantern/Trail:direction")
+tracks/32/interp = 1
+tracks/32/loop_wrap = true
+tracks/32/keys = {
+"times": PackedFloat32Array(0, 2.9, 3.2, 3.9, 4.5),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1),
+"update": 0,
+"values": [Vector3(0, 1, 0), Vector3(0, 1, 0), Vector3(0.9, 0.45, 0.2), Vector3(0.4, 0.9, 0), Vector3(0, 1, 0)]
+}
+
+[sub_resource type="Animation" id="Animation_s68qq"]
 length = 1.9
 tracks/0/type = "value"
 tracks/0/imported = false
@@ -3349,55 +4155,104 @@ tracks/28/keys = {
 "update": 0,
 "values": [Vector3(-1.5, 1.5, 0.45)]
 }
+tracks/29/type = "value"
+tracks/29/imported = false
+tracks/29/enabled = true
+tracks/29/path = NodePath("FlareLight:light_energy")
+tracks/29/interp = 1
+tracks/29/loop_wrap = true
+tracks/29/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [0.0]
+}
+tracks/30/type = "value"
+tracks/30/imported = false
+tracks/30/enabled = true
+tracks/30/path = NodePath("Lanterns:gap")
+tracks/30/interp = 1
+tracks/30/loop_wrap = true
+tracks/30/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [0.0]
+}
+tracks/31/type = "value"
+tracks/31/imported = false
+tracks/31/enabled = true
+tracks/31/path = NodePath("Lanterns:gap_centre")
+tracks/31/interp = 1
+tracks/31/loop_wrap = true
+tracks/31/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector3(-40, 0, -20)]
+}
+tracks/32/type = "value"
+tracks/32/imported = false
+tracks/32/enabled = true
+tracks/32/path = NodePath("Lantern/Trail:direction")
+tracks/32/interp = 1
+tracks/32/loop_wrap = true
+tracks/32/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector3(0, 1, 0)]
+}
 
-[sub_resource type="AnimationLibrary" id="AnimationLibrary_11f68"]
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_rbr6h"]
 _data = {
-&"flares": SubResource("Animation_5eg2c"),
-&"lantern_appears": SubResource("Animation_1k3hu"),
-&"lantern_arrives": SubResource("Animation_l5j6m"),
-&"lantern_drives": SubResource("Animation_ppwqo"),
-&"offered": SubResource("Animation_hjlbx"),
-&"opens_door": SubResource("Animation_qslim"),
-&"rising": SubResource("Animation_dkx21"),
-&"sinking": SubResource("Animation_d2tav"),
-&"taken": SubResource("Animation_den2n")
+&"flares": SubResource("Animation_den2n"),
+&"lantern_appears": SubResource("Animation_11f68"),
+&"lantern_arrives": SubResource("Animation_7wubr"),
+&"lantern_drives": SubResource("Animation_xodi2"),
+&"offered": SubResource("Animation_e60fl"),
+&"opens_door": SubResource("Animation_xc8r4"),
+&"rising": SubResource("Animation_n4j2n"),
+&"sinking": SubResource("Animation_ae3nf"),
+&"something_passes": SubResource("Animation_1cn7s"),
+&"taken": SubResource("Animation_s68qq")
 }
 
 [node name="Underwater" type="Node3D" unique_id=700571466]
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="." unique_id=486641737]
-environment = SubResource("Environment_lv5el")
+environment = SubResource("Environment_nh030")
 
 [node name="Camera" type="Camera3D" parent="." unique_id=1006802645]
 transform = Transform3D(1, 0, 0, 0, 0.99820054, -0.059964005, 0, 0.059964005, 0.99820054, 0, 1.2, 6.5)
 current = true
 fov = 65.0
 
-[node name="Lens" type="MeshInstance3D" parent="Camera" unique_id=829819133 node_paths=PackedStringArray("heat_source")]
+[node name="Lens" type="MeshInstance3D" parent="Camera" unique_id=1902893187 node_paths=PackedStringArray("heat_source")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -1)
-material_override = SubResource("ShaderMaterial_ae1ut")
+material_override = SubResource("ShaderMaterial_4sb6r")
 cast_shadow = 0
 extra_cull_margin = 16384.0
-mesh = SubResource("QuadMesh_2bi5t")
-script = ExtResource("2_s1pck")
+mesh = SubResource("QuadMesh_4pjtv")
+script = ExtResource("2_rahqi")
 heat_source = NodePath("../../Lantern")
 
-[node name="Deep" type="MeshInstance3D" parent="." unique_id=338385099]
+[node name="Deep" type="MeshInstance3D" parent="." unique_id=615473047]
 cast_shadow = 0
-mesh = SubResource("SphereMesh_67quv")
+mesh = SubResource("SphereMesh_ohrgi")
 
 [node name="Surface" type="MeshInstance3D" parent="." unique_id=1657524249]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 10, 0)
-material_override = SubResource("ShaderMaterial_pmwu1")
+material_override = SubResource("ShaderMaterial_xedh0")
 cast_shadow = 0
 mesh = SubResource("PlaneMesh_2akkt")
-script = ExtResource("4_ncdnq")
+script = ExtResource("4_n12d8")
 
 [node name="StormLight" type="DirectionalLight3D" parent="." unique_id=1653939318]
 transform = Transform3D(1, 0, 0, 0, -4.371139e-08, 1, 0, -1, -4.371139e-08, 0, 0, 0)
 light_color = Color(0.75, 0.85, 1, 1)
 light_volumetric_fog_energy = 0.6
-script = ExtResource("5_rahqi")
+script = ExtResource("5_hgusb")
 peak_energy = 1.4
 
 [node name="Moonglow" type="DirectionalLight3D" parent="." unique_id=1431573173]
@@ -3406,7 +4261,7 @@ light_color = Color(0.5, 0.7, 1, 1)
 light_energy = 0.12
 light_volumetric_fog_energy = 0.3
 
-[node name="Castaway" parent="." unique_id=2019297073 instance=ExtResource("6_5q42c")]
+[node name="Castaway" parent="." unique_id=2019297073 instance=ExtResource("6_13tl2")]
 transform = Transform3D(0.83711946, -0.31049567, 0.45035928, 0.15892528, 0.9258315, 0.3428978, -0.5234251, -0.21547297, 0.8243771, 0, 7.5, 0)
 
 [node name="Character" parent="Castaway" index="5"]
@@ -3415,7 +4270,7 @@ blend_seconds = 0.8
 [node name="Lantern" type="Node3D" parent="." unique_id=1395549539]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.8, 11, -0.6)
 
-[node name="Body" parent="Lantern" unique_id=1061385630 node_paths=PackedStringArray("light") instance=ExtResource("7_n12d8")]
+[node name="Body" parent="Lantern" unique_id=1061385630 node_paths=PackedStringArray("light") instance=ExtResource("7_a6idw")]
 transform = Transform3D(-1.6311296, -0.076256774, -0.7573645, 0, 1.7909446, -0.18032488, 0.7611938, -0.16340736, -1.6229239, 0, 0, 0)
 look_name = "sinking_lantern"
 light = NodePath("../Light")
@@ -3429,42 +4284,42 @@ shadow_enabled = true
 omni_range = 6.5
 omni_attenuation = 1.3
 
-[node name="Far" type="OmniLight3D" parent="Lantern" unique_id=1904630576]
+[node name="Far" type="OmniLight3D" parent="Lantern" unique_id=87846940]
 light_color = Color(0.2, 0.62, 0.72, 1)
 light_energy = 0.0
 light_volumetric_fog_energy = 0.0
 light_specular = 0.0
 omni_range = 15.0
 
-[node name="Hand" type="MeshInstance3D" parent="Lantern" unique_id=1595257967 node_paths=PackedStringArray("face", "light", "rays")]
+[node name="Hand" type="MeshInstance3D" parent="Lantern" unique_id=1730178422 node_paths=PackedStringArray("face", "light", "rays")]
 transform = Transform3D(-0.99280864, 0.119712204, -8.742278e-08, 0.119712204, 0.99280864, 0, 8.679409e-08, -1.0465573e-08, -1, 0.14, -0.02, 0.22)
-material_override = SubResource("ShaderMaterial_nh030")
+material_override = SubResource("ShaderMaterial_p7sjk")
 cast_shadow = 0
-mesh = SubResource("QuadMesh_4sb6r")
-script = ExtResource("9_13tl2")
+mesh = SubResource("QuadMesh_vecc8")
+script = ExtResource("9_w1y1v")
 face = NodePath("../Body")
 light = NodePath("../PalmLight")
 rays = NodePath("../Rays")
 
-[node name="PalmLight" type="OmniLight3D" parent="Lantern" unique_id=350585123]
+[node name="PalmLight" type="OmniLight3D" parent="Lantern" unique_id=2111968429]
 light_energy = 0.0
 light_volumetric_fog_energy = 1.5
 omni_range = 2.6
 omni_attenuation = 1.6
 
-[node name="Rays" type="MeshInstance3D" parent="Lantern" unique_id=1838266083]
+[node name="Rays" type="MeshInstance3D" parent="Lantern" unique_id=1206224237]
 visible = false
-material_override = SubResource("ShaderMaterial_4pjtv")
+material_override = SubResource("ShaderMaterial_16usi")
 cast_shadow = 0
-mesh = SubResource("QuadMesh_42bj5")
+mesh = SubResource("QuadMesh_chxrw")
 
-[node name="Trail" type="CPUParticles3D" parent="Lantern" unique_id=439908269]
+[node name="Trail" type="CPUParticles3D" parent="Lantern" unique_id=653056140]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.25, 0)
 cast_shadow = 0
 emitting = false
 amount = 110
 lifetime = 4.5
-mesh = SubResource("SphereMesh_xedh0")
+mesh = SubResource("SphereMesh_h4uql")
 emission_shape = 1
 emission_sphere_radius = 0.16
 direction = Vector3(0, 1, 0)
@@ -3475,13 +4330,13 @@ initial_velocity_max = 1.7
 scale_amount_min = 0.5
 scale_amount_max = 1.8
 
-[node name="Wisp" type="CPUParticles3D" parent="Lantern" unique_id=2055297133]
+[node name="Wisp" type="CPUParticles3D" parent="Lantern" unique_id=891543421]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.2, 0)
 cast_shadow = 0
 emitting = false
 amount = 14
 lifetime = 3.5
-mesh = SubResource("SphereMesh_p7sjk")
+mesh = SubResource("SphereMesh_5eg2c")
 emission_shape = 1
 emission_sphere_radius = 0.1
 direction = Vector3(0, 1, 0)
@@ -3492,7 +4347,7 @@ initial_velocity_max = 0.9
 scale_amount_min = 0.5
 scale_amount_max = 1.8
 
-[node name="Gasp" type="CPUParticles3D" parent="Lantern" unique_id=1191416814]
+[node name="Gasp" type="CPUParticles3D" parent="Lantern" unique_id=1435328932]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.1, 0, 0.2)
 cast_shadow = 0
 emitting = false
@@ -3500,7 +4355,7 @@ amount = 60
 lifetime = 2.6
 one_shot = true
 explosiveness = 0.85
-mesh = SubResource("SphereMesh_vecc8")
+mesh = SubResource("SphereMesh_1k3hu")
 emission_shape = 1
 emission_sphere_radius = 0.14
 direction = Vector3(0, 1, 0)
@@ -3511,9 +4366,9 @@ initial_velocity_max = 1.8
 scale_amount_min = 0.5
 scale_amount_max = 1.8
 
-[node name="Hiss" type="AudioStreamPlayer" parent="Lantern" unique_id=1429620721]
+[node name="Hiss" type="AudioStreamPlayer" parent="Lantern" unique_id=566520910]
 volume_db = -80.0
-script = ExtResource("12_w1y1v")
+script = ExtResource("12_lv5el")
 recording = "res://assets/third_party/audio/lantern_hiss.ogg"
 loop = true
 
@@ -3570,7 +4425,7 @@ initial_velocity_max = 4.0
 scale_amount_min = 0.5
 scale_amount_max = 1.6
 
-[node name="DiveSplash" type="CPUParticles3D" parent="." unique_id=1686848993]
+[node name="DiveSplash" type="CPUParticles3D" parent="." unique_id=2068406423]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.7, 9.8, -0.4)
 cast_shadow = 0
 emitting = false
@@ -3578,7 +4433,7 @@ amount = 120
 lifetime = 2.4
 one_shot = true
 explosiveness = 0.9
-mesh = SubResource("SphereMesh_chxrw")
+mesh = SubResource("SphereMesh_ppwqo")
 emission_shape = 1
 emission_sphere_radius = 0.35
 direction = Vector3(0, -1, 0)
@@ -3589,14 +4444,172 @@ initial_velocity_max = 4.5
 scale_amount_min = 0.5
 scale_amount_max = 1.8
 
-[node name="Flare" type="MeshInstance3D" parent="." unique_id=2006851388]
-material_override = SubResource("ShaderMaterial_gjmhq")
+[node name="Flare" type="MeshInstance3D" parent="." unique_id=592668422]
+material_override = SubResource("ShaderMaterial_hjlbx")
 cast_shadow = 0
 extra_cull_margin = 100.0
-mesh = SubResource("SphereMesh_h4uql")
-script = ExtResource("14_jsgrj")
+mesh = SubResource("SphereMesh_qslim")
+script = ExtResource("14_2bi5t")
+
+[node name="Seabed" type="MeshInstance3D" parent="." unique_id=828114156]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -7, 0)
+material_override = SubResource("ShaderMaterial_dkx21")
+cast_shadow = 0
+extra_cull_margin = 2.0
+mesh = SubResource("PlaneMesh_d2tav")
+
+[node name="Lanterns" type="Node3D" parent="." unique_id=1704122058 node_paths=PackedStringArray("burst", "keeper", "floor_mesh")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -7, 0)
+script = ExtResource("16_67quv")
+burst = NodePath("../Flare")
+keeper = NodePath("Keeper")
+floor_mesh = NodePath("../Seabed")
+gap_heading = 0.45
+gap_length = 44.0
+gap_width = 4.6
+
+[node name="Keeper" parent="Lanterns" unique_id=187351882 instance=ExtResource("17_pmwu1")]
+transform = Transform3D(1.1793168, -0.006911833, -2.0902548, 0.012345406, 2.3999681, -0.00097071216, 2.0902297, -0.010275111, 1.1793365, -3, 0.1870054, 1.2)
+
+[node name="Dead01" parent="Lanterns" unique_id=861103705 instance=ExtResource("17_pmwu1")]
+transform = Transform3D(-1.880855, -1.7812091, -0.37196866, -1.78078, 1.9117848, -0.15027945, 0.3740174, 0.14510533, -2.5860658, -5.399181, 0.3515254, 11.167641)
+
+[node name="Dead02" parent="Lanterns" unique_id=942488049 instance=ExtResource("17_pmwu1")]
+transform = Transform3D(-0.19335733, 0.06377531, -1.7614503, 0.31470144, 1.7447937, 0.028626937, 1.734283, -0.30949834, -0.20158085, 14.336324, 0.28021556, -10.053593)
+
+[node name="Dead03" parent="Lanterns" unique_id=507160757 instance=ExtResource("17_pmwu1")]
+transform = Transform3D(-1.1738224, -1.2728949, 1.1058618, 1.3305081, 0.12852964, 1.5602176, -1.0358281, 1.6075662, 0.7508939, 3.4739897, 0.19580358, 6.2078633)
+
+[node name="Dead04" parent="Lanterns" unique_id=1081935119 instance=ExtResource("17_pmwu1")]
+transform = Transform3D(-0.654682, 0.71224916, 2.3275332, 1.2845048, 2.1484113, -0.29613402, -2.0675488, 1.1092111, -0.92098427, 10.246794, 0.021209495, 4.26843)
+
+[node name="Dead05" parent="Lanterns" unique_id=902287471 instance=ExtResource("17_pmwu1")]
+transform = Transform3D(1.5596465, 0.34315875, -0.7043112, -0.24228898, 1.703385, 0.29340202, 0.74505585, -0.16441038, 1.5697676, 12.412142, 0.23181708, -7.6126285)
+
+[node name="Dead06" parent="Lanterns" unique_id=461631871 instance=ExtResource("17_pmwu1")]
+transform = Transform3D(-0.5463788, 0.1496461, -2.5983355, 0.00359805, 2.6550155, 0.15215386, 2.602639, 0.027745139, -0.5456857, 11.214408, 0.15474053, -3.3533769)
+
+[node name="Dead07" parent="Lanterns" unique_id=403649336 instance=ExtResource("17_pmwu1")]
+transform = Transform3D(-0.21478982, 2.1474235, -1.1831936, 2.44889, 0.24585661, 0.0016577721, 0.1196392, -1.1771307, -2.158138, -5.8540335, 0.13677295, -13.558826)
+
+[node name="Dead08" parent="Lanterns" unique_id=1766899197 instance=ExtResource("17_pmwu1")]
+transform = Transform3D(-0.69588333, 0.22013548, 1.4511611, -0.47212288, 1.4870753, -0.45198324, -1.3897582, -0.6154098, -0.5730833, 7.2685313, 0.2641722, 12.916239)
+
+[node name="Dead09" parent="Lanterns" unique_id=568887781 instance=ExtResource("17_pmwu1")]
+transform = Transform3D(1.9981548, -0.0893334, -0.07601082, 0.09038777, 1.99938, 0.026277054, 0.07475397, -0.029664386, 1.999978, -12.3568, 0.21962868, -12.581541)
+
+[node name="Dead10" parent="Lanterns" unique_id=1367450147 instance=ExtResource("17_pmwu1")]
+transform = Transform3D(-0.26048386, -2.3300278, 0.38942018, -2.1673698, 0.39157203, 0.8931455, -0.93977946, -0.25723773, -2.1677573, 8.701201, 0.2790783, 12.062861)
+
+[node name="Dead11" parent="Lanterns" unique_id=1692817636 instance=ExtResource("17_pmwu1")]
+transform = Transform3D(-1.6601057, 1.4287161, -0.71843773, 1.2728844, 1.8073995, 0.6529976, 0.96806395, 0.07355837, -2.0906396, -14.595097, 0.19000377, -7.676904)
+
+[node name="Dead12" parent="Lanterns" unique_id=14495584 instance=ExtResource("17_pmwu1")]
+transform = Transform3D(-1.7470264, 0.16971825, 0.7277122, 0.06606886, 1.8783009, -0.2794483, -0.7443146, -0.23162934, -1.7328632, -9.252334, 0.28758577, 8.471261)
+
+[node name="Dead13" parent="Lanterns" unique_id=555591218 instance=ExtResource("17_pmwu1")]
+transform = Transform3D(1.0030847, -0.95305693, 1.7236437, 1.314518, 1.7644069, 0.21060473, -1.4667335, 0.9295129, 1.3675314, 3.8504627, -0.06777071, -16.172684)
+
+[node name="Dead14" parent="Lanterns" unique_id=5071911 instance=ExtResource("17_pmwu1")]
+transform = Transform3D(2.0091417, 0.22271815, 0.9084897, -0.118595496, 2.1957586, -0.27601874, -0.92784256, 0.20161313, 2.0025153, 3.2570686, -0.050344564, -7.3807173)
+
+[node name="Dead15" parent="Lanterns" unique_id=165408315 instance=ExtResource("17_pmwu1")]
+transform = Transform3D(2.431308, -0.3202624, -1.1790569, 0.07488268, 2.6600082, -0.5681131, 1.2194818, 0.47517565, 2.3855972, 6.9488225, -0.028911158, -1.4345864)
+
+[node name="Dead16" parent="Lanterns" unique_id=1190096698 instance=ExtResource("17_pmwu1")]
+transform = Transform3D(-1.7400447, 1.3285276, -0.85532635, 1.574443, 1.5649787, -0.7722012, 0.13303208, -1.1446311, -2.0485227, -10.373225, 0.19792874, 5.2070317)
+
+[node name="Dead17" parent="Lanterns" unique_id=823498120 instance=ExtResource("17_pmwu1")]
+transform = Transform3D(-0.3223583, -0.3967508, 1.9898249, 1.1769319, 1.6046292, 0.5106136, -1.6527692, 1.2200342, -0.024491753, 4.6123276, 0.27661592, -4.50291)
+
+[node name="Dead18" parent="Lanterns" unique_id=469903923 instance=ExtResource("17_pmwu1")]
+transform = Transform3D(-0.2679271, 1.5246531, -1.479417, -1.9875236, 0.34676057, 0.7173103, 0.750328, 1.462948, 1.3717936, -4.65218, -0.011990372, 12.490407)
+
+[node name="Dead19" parent="Lanterns" unique_id=1093846393 instance=ExtResource("17_pmwu1")]
+transform = Transform3D(-1.629813, -0.14102142, -0.3275932, -0.33672896, 1.1134853, 1.1959343, 0.11754984, 1.234406, -1.1162072, 3.4220192, -0.15399694, -15.537326)
+
+[node name="Dead20" parent="Lanterns" unique_id=253045785 instance=ExtResource("17_pmwu1")]
+transform = Transform3D(0.67440736, -1.9676116, -1.208753, -1.635575, 0.48194832, -1.6970636, 1.6301761, 1.2975497, -1.2026203, 4.539695, 0.07912717, 13.39891)
+
+[node name="Dead21" parent="Lanterns" unique_id=460015974 instance=ExtResource("17_pmwu1")]
+transform = Transform3D(-1.7018679, -0.10555906, -0.16792238, -0.08444428, 1.6981642, -0.21166685, 0.1794709, -0.20196778, -1.69195, 8.624166, 0.17650138, -6.731711)
+
+[node name="Dead22" parent="Lanterns" unique_id=284848883 instance=ExtResource("17_pmwu1")]
+transform = Transform3D(0.45258993, 1.1055156, -1.2806885, 1.687809, -0.20355383, 0.42075294, 0.116745256, -1.3429695, -1.1180203, 14.512757, -0.080582, 5.830954)
+
+[node name="Dead23" parent="Lanterns" unique_id=1793717049 instance=ExtResource("17_pmwu1")]
+transform = Transform3D(-0.26939273, 0.9905133, -1.3780372, 0.10612037, 1.4023923, 0.98727393, 1.6937654, 0.06967593, -0.28103244, 7.1629734, -0.12308318, -2.6356447)
+
+[node name="Dead24" parent="Lanterns" unique_id=1885133583 instance=ExtResource("17_pmwu1")]
+transform = Transform3D(1.5478574, -1.4516153, -0.5165509, 1.4072474, 1.6300542, -0.36393997, 0.6274287, -0.07490265, 2.0905974, -0.050931457, -0.16026053, 14.636478)
+
+[node name="Dead25" parent="Lanterns" unique_id=927689424 instance=ExtResource("17_pmwu1")]
+transform = Transform3D(-1.571068, 0.02566847, -1.1512588, 0.025175063, 1.9477152, 0.009071058, 1.1512699, -0.0075628995, -1.5712515, -14.064263, 0.29287064, -8.165402)
+
+[node name="Dead26" parent="Lanterns" unique_id=430895236 instance=ExtResource("17_pmwu1")]
+transform = Transform3D(2.2400582, -0.33065996, -0.7919572, -0.41048282, 1.5312018, -1.8003659, 0.7536816, 1.8167216, 1.373273, 11.474971, 0.10672628, -5.231331)
+
+[node name="Dead27" parent="Lanterns" unique_id=409285771 instance=ExtResource("17_pmwu1")]
+transform = Transform3D(1.9031503, -0.42859906, -1.0863472, -0.017463371, 2.0664089, -0.84585893, 1.1677082, 0.7294417, 1.7578969, 10.062332, -0.016311195, -5.0581813)
+
+[node name="Dead28" parent="Lanterns" unique_id=1584016355 instance=ExtResource("17_pmwu1")]
+transform = Transform3D(1.3673197, -0.1127097, 1.4234684, -0.3430113, 1.8871984, 0.47890887, -1.3861129, -0.57819283, 1.2856563, 13.141515, 0.13191381, 7.8083096)
+
+[node name="Dead29" parent="Lanterns" unique_id=1356424928 instance=ExtResource("17_pmwu1")]
+transform = Transform3D(-1.4345134, -0.71234286, -0.6243666, -0.5477984, 1.5482643, -0.5078281, 0.77277607, -0.22481126, -1.5190036, 13.343066, -0.076989934, 1.0042781)
+
+[node name="Dead30" parent="Lanterns" unique_id=880752576 instance=ExtResource("17_pmwu1")]
+transform = Transform3D(-2.1588607, -0.070230916, 1.2814974, 0.52801216, 2.2371137, 1.0121124, -1.1697737, 1.1394014, -1.9082031, -6.49012, 0.16307977, 2.6754766)
+
+[node name="Dead31" parent="Lanterns" unique_id=1139197160 instance=ExtResource("17_pmwu1")]
+transform = Transform3D(-0.76172775, 0.36587986, -2.3052154, 1.3948166, 2.0156202, -0.14098276, 1.8714623, -1.3533373, -0.8331992, 7.237278, 0.15721327, -12.310473)
+
+[node name="Dead32" parent="Lanterns" unique_id=1640283317 instance=ExtResource("17_pmwu1")]
+transform = Transform3D(0.13444743, 2.2225895, -1.5561128, 2.7019281, 0.032119267, 0.2793211, 0.24693282, -1.5615797, -2.2090633, -0.6975732, -0.20654276, 10.052361)
+
+[node name="Dead33" parent="Lanterns" unique_id=1012350817 instance=ExtResource("17_pmwu1")]
+transform = Transform3D(0.8645405, 0.071398, 1.455721, -0.2905392, 1.6670322, 0.09078672, -1.4282186, -0.29590133, 0.8627199, 2.8704343, -0.23769975, 10.80437)
+
+[node name="Dead34" parent="Lanterns" unique_id=188021071 instance=ExtResource("17_pmwu1")]
+transform = Transform3D(-0.5664937, 0.4302894, 2.351314, -1.3671938, 1.9238353, -0.6814542, -1.9607668, -1.4657593, -0.20416734, 10.883465, 0.5640227, -13.457771)
+
+[node name="Dead35" parent="Lanterns" unique_id=444685678 instance=ExtResource("17_pmwu1")]
+transform = Transform3D(1.8841217, 1.0890754, 1.5338624, -0.95248663, 2.424357, -0.5513579, -1.622217, -0.158559, 2.1052325, -0.41810694, 0.39056194, -5.5029006)
+
+[node name="Dead36" parent="Lanterns" unique_id=944311529 instance=ExtResource("17_pmwu1")]
+transform = Transform3D(-0.13452138, 1.8102504, 0.08072164, 1.7352189, 0.10536994, 0.52870685, 0.52205145, 0.11622894, -1.7365401, 4.5733266, -0.17017984, 11.023327)
+
+[node name="Dead37" parent="Lanterns" unique_id=46414676 instance=ExtResource("17_pmwu1")]
+transform = Transform3D(1.1847333, 1.1915338, -1.6280897, -0.23967418, 1.9577922, 1.258423, 2.0032437, -0.47044578, 1.113426, 8.894764, 0.25080144, -6.8436303)
+
+[node name="Dead38" parent="Lanterns" unique_id=2041410693 instance=ExtResource("17_pmwu1")]
+transform = Transform3D(-0.34364152, -1.6586341, -1.6257515, -0.03368283, 1.6468371, -1.6730263, 2.3222833, -0.2215515, -0.26483756, 12.31782, 0.06944803, -3.4492428)
+
+[node name="Dead39" parent="Lanterns" unique_id=212389308 instance=ExtResource("17_pmwu1")]
+transform = Transform3D(-2.223463, 0.6924506, -0.69096255, 0.33636513, 2.1523829, 1.0746217, 0.91857255, 0.8879558, -2.0660262, -11.317239, 0.14952058, -6.80925)
+
+[node name="Dead40" parent="Lanterns" unique_id=1816207233 instance=ExtResource("17_pmwu1")]
+transform = Transform3D(-1.3717531, -0.62576765, -1.5873171, -0.06175793, 2.0535812, -0.75621206, 1.7050943, -0.4290518, -1.3043907, -0.7385685, -0.19421256, 8.740039)
+
+[node name="Dead41" parent="Lanterns" unique_id=1712008912 instance=ExtResource("17_pmwu1")]
+transform = Transform3D(0.92731494, -1.3642467, 0.85686237, 1.3948553, 1.1745902, 0.36057216, -0.8060778, 0.46310273, 1.6096802, -5.9323997, -0.012640436, -0.86768657)
+
+[node name="Dead42" parent="Lanterns" unique_id=555629204 instance=ExtResource("17_pmwu1")]
+transform = Transform3D(1.7948827, 0.21769617, 1.2947383, -0.07746406, 2.2067685, -0.26365653, -1.310625, 0.16770156, 1.7887092, 1.0152215, 0.19675529, -4.2453136)
+
+[node name="Dead43" parent="Lanterns" unique_id=2074820451 instance=ExtResource("17_pmwu1")]
+transform = Transform3D(-0.052138727, 0.037948895, 2.1602004, 0.9200789, 1.9554877, -0.0121455705, -1.9548304, 0.91937613, -0.063332856, -9.769121, 0.2585933, 5.5795403)
+
+[node name="FlareLight" type="OmniLight3D" parent="." unique_id=23978901]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.5, 1.5, 0.45)
+light_color = Color(1, 0.7, 0.36, 1)
+light_energy = 0.0
+light_volumetric_fog_energy = 0.0
+light_specular = 0.2
+omni_range = 40.0
+omni_attenuation = 0.5
 
 [node name="Clips" type="AnimationPlayer" parent="." unique_id=400324578 groups=["clips"]]
-libraries/ = SubResource("AnimationLibrary_11f68")
+libraries/ = SubResource("AnimationLibrary_rbr6h")
 
 [editable path="Castaway"]

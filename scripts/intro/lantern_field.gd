@@ -2,7 +2,9 @@ class_name LanternField
 extends Node3D
 ## The dead lanterns on the seabed in the underwater set, and what happens
 ## to them. Its children are the lanterns (each a Node3D with a
-## [code]Glass[/code] mesh drawn by shaders/dead_glass.gdshader).
+## [code]Glass[/code] mesh drawn by shaders/dead_glass.gdshader, and
+## optionally a [code]Glint[/code], a small star of light drawn by
+## shaders/glint.gdshader so its glow shows from any side).
 ##
 ## - [b]The flare.[/b] When the living lantern catches alight, a ring of
 ##   light spreads from him ([member burst]). As it reaches each dead
@@ -218,6 +220,10 @@ func _apply() -> void:
 		if glass != null:
 			glass.set_instance_shader_parameter(&"glow", glow_of(index))
 			glass.set_instance_shader_parameter(&"cold", _flash * (1.0 - _dark[index]))
+		var glint: GeometryInstance3D = lantern.get_node_or_null("Glint") as GeometryInstance3D
+		if glint != null:
+			glint.set_instance_shader_parameter(&"glow", glow_of(index))
+			glint.visible = glow_of(index) > 0.001
 		lantern.transform = _rest[index] * Transform3D(
 				Basis(Vector3.RIGHT, tilt_of(index)), Vector3.ZERO)
 	if not is_instance_valid(floor_mesh) or not is_inside_tree():
