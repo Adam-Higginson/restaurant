@@ -11,6 +11,9 @@ extends Resource
 ## takes any food that can be stored. New kinds go at the end, because the
 ## .tres files save them as numbers.
 enum StorageKind { NONE, FRIDGE, CUPBOARD, PANTRY }
+## How a vessel is drawn: flat (a board or plate), a bowl, a pan with a long
+## handle, or a deep pot. New shapes go at the end (saved as numbers).
+enum VesselShape { FLAT, BOWL, PAN, POT }
 
 ## Stable internal name (e.g. &"sliced_tomato"). Saves will refer to this, so don't change it.
 @export var id: StringName = &""
@@ -26,6 +29,8 @@ enum StorageKind { NONE, FRIDGE, CUPBOARD, PANTRY }
 @export var carried_whole: bool = false
 ## Which container it can be put away in. See Storage in docs/GDD.md.
 @export var storage: StorageKind = StorageKind.NONE
+## For vessels, how it's drawn (see [ItemModel]).
+@export var vessel_shape: VesselShape = VesselShape.FLAT
 
 
 ## Whether food can go in it. Vessels never go inside other vessels.

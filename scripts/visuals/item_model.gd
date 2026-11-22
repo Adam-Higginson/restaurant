@@ -37,10 +37,7 @@ static func build(instance: ItemInstance) -> Node3D:
 				Vector3.UP * FOOD_SIZE / 2.0))
 		return root
 	var base: float = vessel_height(instance.item)
-	if instance.item.carried_whole:
-		root.add_child(_disc(PLATE_RADIUS, PLATE_HEIGHT, instance.item.color))
-	else:
-		root.add_child(_box(BOARD_SIZE, instance.item.color, Vector3.UP * BOARD_SIZE.y / 2.0))
+	_add_vessel(root, instance.item)
 	var food: Array[ItemInstance] = instance.contents.get_contents()
 	for i: int in food.size():
 		var spot: Vector2 = _food_spot(i, food.size())
@@ -57,7 +54,58 @@ static func build(instance: ItemInstance) -> Node3D:
 
 ## How tall the vessel [param item] is without its food.
 static func vessel_height(item: Item) -> float:
+	match item.vessel_shape:
+		Item.VesselShape.BOWL:
+			return 0.05
+		Item.VesselShape.PAN:
+			return 0.04
+		Item.VesselShape.POT:
+			return 0.1
 	return PLATE_HEIGHT if item.carried_whole else BOARD_SIZE.y
+
+
+# The vessel itself, by its shape: a board or plate, a bowl, a pan with a
+# long handle, or a deep pot with two side handles.
+static func _add_vessel(root: Node3D, item: Item) -> void:
+	var colour: Color = item.color
+	match item.vessel_shape:
+		Item.VesselShape.BOWL:
+			var bowl: MeshInstance3D = _cup(0.15, 0.09, 0.09, colour)
+			bowl.name = "Bowl"
+			root.add_child(bowl)
+		Item.VesselShape.PAN:
+			var pan: MeshInstance3D = _cup(0.2, 0.18, 0.05, colour)
+			pan.name = "Pan"
+			root.add_child(pan)
+			var handle: MeshInstance3D = _box(Vector3(0.3, 0.03, 0.04), colour.darkened(0.3),
+					Vector3(0.33, 0.04, 0.0))
+			handle.name = "Handle"
+			root.add_child(handle)
+		Item.VesselShape.POT:
+			var pot: MeshInstance3D = _cup(0.17, 0.16, 0.18, colour)
+			pot.name = "Pot"
+			root.add_child(pot)
+			for side: float in [-1.0, 1.0]:
+				var ear: MeshInstance3D = _box(Vector3(0.06, 0.03, 0.08), colour.darkened(0.3),
+						Vector3(side * 0.2, 0.15, 0.0))
+				ear.name = "Handle%d" % int(side)
+				root.add_child(ear)
+		_:
+			if item.carried_whole:
+				root.add_child(_disc(PLATE_RADIUS, PLATE_HEIGHT, colour))
+			else:
+				root.add_child(_box(BOARD_SIZE, colour, Vector3.UP * BOARD_SIZE.y / 2.0))
+
+
+# An open vessel, [param top] wide at the rim and [param bottom] at the base.
+static func _cup(top: float, bottom: float, height: float, color: Color) -> MeshInstance3D:
+	var mesh: CylinderMesh = CylinderMesh.new()
+	mesh.top_radius = top
+	mesh.bottom_radius = bottom
+	mesh.height = height
+	mesh.radial_segments = 12
+	mesh.rings = 1
+	return _mesh_instance(mesh, color, Vector3.UP * height / 2.0)
 
 
 # Where food number [param index] of [param count] sits on a vessel, as x and

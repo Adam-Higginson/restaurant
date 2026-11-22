@@ -126,6 +126,11 @@ The GDD's "fragment of a song from home, a few notes at first" now exists: the l
 - Tests: `tests/scripts/companion/hum_test.gd` (notes in tune, in order, swelling in and silent after, he hums when a memory comes back).
 - **Listen to it** before keeping it: I could test the maths, not the sound. `loudness` and the notes are easy to change.
 
+### 15. Pans, pots and bowls look like themselves
+The frying pan, saucepan and bowls drew as slabs and plates; now a vessel's `vessel_shape` (flat, bowl, pan, pot) picks its model: a shallow pan with a long handle, a deep copper pot with two side handles (the stove's steam rises from it), a flared bowl. Food sits at each shape's own height.
+- `Item.vessel_shape` (new enum `VesselShape`), drawn by `ItemModel`; set on `frying_pan`, `saucepan` and `bowl`.
+- Test: `item_model_test` (pans, pots and bowls look like themselves).
+
 ## Notes, loose ends and decisions for you
 
 **Bugs on `main` I found (fixed here, but `main` needs them too):**
@@ -139,7 +144,6 @@ The GDD's "fragment of a song from home, a few notes at first" now exists: the l
 - **How these become real work:** I'd suggest issues roughly by feature (the lantern companion could close #65; the bell is half of #67), each a PR from this branch's commits.
 
 **Known gaps (deliberately small):**
-- The frying pan and saucepan draw as slabs like the chopping board (`ItemModel` has no pan shape yet).
 - The hum is synthesised and tested as maths; it needs a listen.
 - The lighthouse island can't be reached; the ship circles it. Mooring there is the natural next step (#67).
 - Fish only bite while hove to, and there's one kind of fish.

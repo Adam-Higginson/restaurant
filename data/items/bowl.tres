@@ -9,3 +9,4 @@ display_name = "Bowl"
 color = Color(0.93, 0.9, 0.82, 1)
 capacity = 1
 carried_whole = true
+vessel_shape = 1

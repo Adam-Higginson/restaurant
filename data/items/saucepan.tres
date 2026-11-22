@@ -8,3 +8,4 @@ id = &"saucepan"
 display_name = "Saucepan"
 color = Color(0.62, 0.4, 0.28, 1)
 capacity = 3
+vessel_shape = 3
