@@ -29,6 +29,7 @@ var _list: VBoxContainer = null
 func _ready() -> void:
 	mouse_filter = Control.MOUSE_FILTER_IGNORE
 	set_anchors_preset(Control.PRESET_FULL_RECT)
+	add_to_group(&"memory_card")
 	_build()
 	Game.memories.remembered.connect(show_memory)
 

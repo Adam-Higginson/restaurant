@@ -5,13 +5,13 @@
 [ext_resource type="PackedScene" path="res://ui/screen_fade.tscn" id="3_fade"]
 
 [sub_resource type="BoxShape3D" id="Reach"]
-size = Vector3(1.0, 1.2, 1.8)
+size = Vector3(1.0, 1.2, 1.1)
 
 [node name="Bedside" type="Node3D"]
 script = ExtResource("1_bedside")
 
 [node name="Reach" type="Area3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.6, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.6, 0.4)
 script = ExtResource("2_reach")
 focus_height = 1.3
 

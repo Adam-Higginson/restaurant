@@ -1,0 +1,17 @@
+[gd_scene format=3 uid="uid://memorynoteyrs"]
+
+[ext_resource type="Script" path="res://scripts/props/memory_note.gd" id="1_note"]
+[ext_resource type="Script" path="res://scripts/interaction/interactable_3d.gd" id="2_reach"]
+
+[sub_resource type="BoxShape3D" id="Reach"]
+size = Vector3(0.8, 1.0, 0.7)
+
+[node name="MemoryNote" type="Node3D"]
+script = ExtResource("1_note")
+
+[node name="Reach" type="Area3D" parent="."]
+script = ExtResource("2_reach")
+focus_height = 0.9
+
+[node name="Shape" type="CollisionShape3D" parent="Reach"]
+shape = SubResource("Reach")

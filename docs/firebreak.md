@@ -47,3 +47,8 @@ Go down to the bunk room and Interact at your bunk ("Sleep until morning"). The 
 - `scripts/weather/time_of_day.gd` (`TimeOfDay`, in `sea.tscn`: one `dawn` value from 0 to 1 blends the sky shader's colours and clouds, the environment's ambient light, fog and exposure, the moon's colour and energy, the rain, and the water's glow and reflection).
 - `scripts/props/bedside.gd` + `scenes/prototype/props/bedside.tscn` (at your bunk in `ship.tscn`; reuses the existing `ScreenFade`; you can't walk while asleep).
 - Tests: `tests/scripts/weather/time_of_day_test.gd` (night vs dawn, the warm sun, halfway is halfway, sleeping brings the morning and back, you can't walk off while asleep).
+
+### 7. The note by your pillow replays your memories
+The GDD already put "a folded note in your own hand" by your pillow; now it's your memory book. At the head of your bunk, Interact ("Read your note") and every memory you've got back comes back again, one after another, on the memory card. Before you've remembered anything it says only: "Don't forget. Cook something. Catch something. It comes back." Sleeping moved to the foot of the bunk so the two don't fight over Interact.
+- `scripts/props/memory_note.gd` + `scenes/prototype/props/memory_note.tscn` (in `ship.tscn`'s bunk room); the memory card joined a `memory_card` group so the note can find it.
+- Tests: `tests/scripts/props/memory_note_test.gd` (the blank note, replaying memories, reading at the head of the bunk, sleeping at its foot).

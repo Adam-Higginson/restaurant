@@ -213,6 +213,7 @@
 [ext_resource type="Script" uid="uid://bny62dgwvun7x" path="res://scripts/sea/bow_spray.gd" id="90_spray"]
 [ext_resource type="PackedScene" uid="uid://h0bonhearth0a" path="res://scenes/prototype/props/hob.tscn" id="91_hob"]
 [ext_resource type="PackedScene" uid="uid://bedsideyourbk" path="res://scenes/prototype/props/bedside.tscn" id="92_bedside"]
+[ext_resource type="PackedScene" uid="uid://memorynoteyrs" path="res://scenes/prototype/props/memory_note.tscn" id="93_note"]
 
 [sub_resource type="BoxMesh" id="Mesh_Hull"]
 size = Vector3(12, 2.5, 30)
@@ -1676,6 +1677,9 @@ lamp_lit = true
 
 [node name="Bedside" parent="BunkRoom" unique_id=1903317741 instance=ExtResource("92_bedside")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4.55, 1, 13.45)
+
+[node name="MemoryNote" parent="BunkRoom" unique_id=1188350219 instance=ExtResource("93_note")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4.7, 1.5, 12.85)
 
 [node name="PortBay1" parent="BunkRoom" unique_id=752909106 instance=ExtResource("57_1yecb")]
 transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, -5.7, 1, 10.6)
