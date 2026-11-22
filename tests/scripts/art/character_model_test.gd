@@ -103,6 +103,19 @@ func test_it_stands_idle_then_walks_when_you_walk() -> void:
 	runner.simulate_action_release("move_up")
 
 
+func test_quick_walking_is_a_run_and_slow_walking_a_walk() -> void:
+	var player: Player3D = _new_dressed_player()
+	var model: CharacterModel = _model(player)
+	model.animation_files = PackedStringArray([FIXTURES + "moves.tscn", FIXTURES + "jog.tscn"])
+	var runner: GdUnitSceneRunner = scene_runner(player.get_parent())
+	await physics_ticks(runner, 2)
+
+	player.speed = 5.0
+	assert_str(String(model.animation_for(CharacterModel.Pose.WALK))).is_equal("Jog_Fwd")
+	player.speed = 2.0
+	assert_str(String(model.animation_for(CharacterModel.Pose.WALK))).is_equal("Walk")
+
+
 func test_a_strike_plays_the_strike() -> void:
 	var player: Player3D = _new_dressed_player()
 	var model: CharacterModel = _model(player)
@@ -145,7 +158,7 @@ func test_animations_turn_our_bones_without_stretching_them() -> void:
 	var moves: Node = (load(FIXTURES + "moves.tscn") as PackedScene).instantiate()
 	auto_free(moves)
 	var source: Animation = (moves.get_node("AnimationPlayer") as AnimationPlayer) \
-			.get_animation(&"Idle_Lantern")
+			.get_animation(&"Idle")
 
 	var copy: Animation = CharacterModel.retarget(source, NodePath("Body/Skeleton3D"))
 
@@ -274,8 +287,8 @@ func test_the_intros_castaway_is_the_same_character_as_the_player() -> void:
 	assert_object(theirs.boy).is_same(ours.boy)
 	assert_object(theirs.girl).is_same(ours.girl)
 	assert_array(Array(theirs.animation_files)).is_equal(Array(ours.animation_files))
-	# Drifting in the water, limbs loose, rather than standing.
-	assert_str(String(theirs.idle_animation)).is_equal("NinjaJump_Idle")
+	# Treading water, rather than standing.
+	assert_str(String(theirs.idle_animation)).is_equal("Swim_Idle")
 	assert_int(theirs.stand_ins.size()).is_equal(5)
 
 

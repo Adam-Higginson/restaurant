@@ -55,8 +55,13 @@ static var _heads: Dictionary[String, ArrayMesh] = {}
 ## Animation Library). Later files win when two have the same animation.
 @export_file("*.glb", "*.gltf") var animation_files: PackedStringArray = []
 ## The animation for each [enum Pose].
-@export var idle_animation: StringName = &"Idle_Lantern"
-@export var walk_animation: StringName = &"Walk_Carry"
+@export var idle_animation: StringName = &"Idle"
+@export var walk_animation: StringName = &"Walk"
+## The animation for walking quickly: at [member run_from] metres per second
+## or faster, the walk becomes this.
+@export var run_animation: StringName = &"Jog_Fwd"
+## The walking speed, in metres per second, from which the walk is a run.
+@export var run_from: float = 3.0
 @export var strike_animation: StringName = &"Sword_Regular_A"
 @export var parry_animation: StringName = &"Idle_Shield"
 ## Greybox meshes to hide while the character shows.
@@ -92,10 +97,11 @@ var _duellist: Duellist = null
 ## How high a toe joint is when its boot's sole is on the floor, in metres
 ## above this node: measured from the rest pose when the character is built.
 var _toe_height: float = 0.0
-## How fast the walk animation moves its feet, played at normal speed, in
-## metres per second: the speed it was made for. Measured when built; 0 if
-## there's no walk.
+## How fast the walk and run animations move their feet, played at normal
+## speed, in metres per second: the speed each was made for. Measured when
+## built; 0 if there's no such animation.
 var _stride_speed: float = 0.0
+var _run_stride_speed: float = 0.0
 
 
 func _ready() -> void:
@@ -116,7 +122,8 @@ func _process(_delta: float) -> void:
 	play(pose_for(walking, striking, parrying))
 	# Walk in step: the walk plays as fast as the feet must go to keep up.
 	var speed: float = player.speed if player != null else 0.0
-	_animator.speed_scale = walk_playback(speed, _stride_speed) if pose == Pose.WALK else 1.0
+	var stride: float = _run_stride_speed if is_running() else _stride_speed
+	_animator.speed_scale = walk_playback(speed, stride) if pose == Pose.WALK else 1.0
 
 
 ## Builds the character for who the player is now. Returns whether it's
@@ -134,9 +141,11 @@ func dress() -> bool:
 	return true
 
 
-## Raises or lowers the character so the lower foot's sole is on the floor.
+## Raises the character so the lower foot's sole is never below the floor.
 ## The animations come from a skeleton with other proportions, so without
-## this the boots sink into the ground in some poses and float in others.
+## this the boots sink into the ground in some poses. It only ever lifts:
+## running has moments with both feet in the air, and pulling the body down
+## then would drag the feet along the ground.
 func plant_feet() -> void:
 	if skeleton == null:
 		return
@@ -147,11 +156,11 @@ func plant_feet() -> void:
 			return
 		var toe: Vector3 = skeleton.global_transform * skeleton.get_bone_global_pose(bone).origin
 		lowest = minf(lowest, to_local(toe).y)
-	character.position.y = clampf(character.position.y + _toe_height - lowest, -0.2, 0.2)
+	character.position.y = clampf(character.position.y + _toe_height - lowest, 0.0, 0.2)
 
 
 ## How high the lower foot's sole is above the floor, in metres: 0 when
-## planted. For tests.
+## planted, never below. For tests.
 func sole_height() -> float:
 	if skeleton == null:
 		return 0.0
@@ -178,10 +187,19 @@ func play(next: Pose) -> void:
 	_animator.play(full, blend_seconds)
 
 
+## Whether walking is quick enough to be a run (see [member run_from]), and
+## there's a run to play.
+func is_running() -> bool:
+	return player != null and player.speed >= run_from and _run_stride_speed > 0.0
+
+
 ## The animation played for [param of].
 func animation_for(of: Pose) -> StringName:
 	match of:
 		Pose.WALK:
+			# A quick walk is a run, if there's a run to play.
+			if is_running() and _animator != null 					and _animator.has_animation("%s/%s" % [LIBRARY, run_animation]):
+				return run_animation
 			return walk_animation
 		Pose.STRIKE:
 			return strike_animation
@@ -200,10 +218,10 @@ static func walk_playback(speed: float, stride_speed: float) -> float:
 	return clampf(speed / stride_speed, 0.3, 4.0)
 
 
-## The speed the walk animation was made for, in metres per second (see
-## [method walk_playback]). 0 without a character or a walk.
+## The speed the walk (or the run, when running) was made for, in metres
+## per second (see [method walk_playback]). 0 without a character or a walk.
 func stride_speed() -> float:
-	return _stride_speed
+	return _run_stride_speed if is_running() else _stride_speed
 
 
 ## What to play: a strike or a parry wins over walking, and walking over
@@ -317,7 +335,8 @@ func _build(parts: CharacterParts) -> void:
 	_animator.add_animation_library(LIBRARY, _library(_animator.get_node(_animator.root_node)))
 	right_hand = _hand("hand_r")
 	left_hand = _hand("hand_l")
-	_stride_speed = _measure_stride()
+	_stride_speed = _measure_stride(walk_animation)
+	_run_stride_speed = _measure_stride(run_animation)
 	pose = Pose.IDLE
 	play(Pose.IDLE)
 
@@ -421,8 +440,8 @@ func _rest_toe_height() -> float:
 # The speed the walk was made for: plays it through once, watching a toe.
 # While that foot is down it sweeps backwards under the body exactly as fast
 # as the body is meant to go forwards, so that's the speed.
-func _measure_stride() -> float:
-	var walk: StringName = StringName("%s/%s" % [LIBRARY, walk_animation])
+func _measure_stride(anim_name: StringName) -> float:
+	var walk: StringName = StringName("%s/%s" % [LIBRARY, anim_name])
 	var toe: int = skeleton.find_bone(TOE_BONES[0])
 	if not _animator.has_animation(walk) or toe < 0:
 		return 0.0

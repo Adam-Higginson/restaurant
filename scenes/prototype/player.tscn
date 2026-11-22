@@ -135,7 +135,7 @@ mesh = SubResource("BoxMesh_7uydm")
 script = ExtResource("38_character")
 boy = ExtResource("39_boy")
 girl = ExtResource("39_girl")
-animation_files = PackedStringArray("res://assets/third_party/quaternius_ual2/Universal Animation Library 2[Standard]/Unreal-Godot/UAL2_Standard.glb")
+animation_files = PackedStringArray("res://assets/third_party/quaternius_ual1/Universal Animation Library[Standard]/Unreal-Godot/UAL1_Standard.glb", "res://assets/third_party/quaternius_ual2/Universal Animation Library 2[Standard]/Unreal-Godot/UAL2_Standard.glb")
 stand_ins = [NodePath("../Body"), NodePath("../Head"), NodePath("../EyeLeft"), NodePath("../EyeRight"), NodePath("../Satchel")]
 player = NodePath("../..")
 

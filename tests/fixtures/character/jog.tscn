@@ -1,0 +1,20 @@
+[gd_scene format=3]
+
+[sub_resource type="Animation" id="Animation_qddjf"]
+tracks/0/type = "position_3d"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Armature/Skeleton3D:pelvis")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = PackedFloat32Array(0, 1, 0, 0.3, 0.2, 1, 1, 0, 0.3, -0.2)
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_k5v0i"]
+_data = {
+&"Jog_Fwd": SubResource("Animation_qddjf")
+}
+
+[node name="Jog" type="Node3D" unique_id=788170527]
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="." unique_id=73090752]
+libraries/ = SubResource("AnimationLibrary_k5v0i")
