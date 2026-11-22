@@ -41,3 +41,9 @@ The story says you remember home only as tastes and sounds, so now cooking *is* 
 - Hooks: `CounterSlot` gained a `food_made` signal (from its vessel's finished reactions), which every `Counter3D` (and so the hob) passes to the book; the rod tells it what you caught.
 - Tests: `tests/scripts/story/memory_book_test.gd` (once only, nothing for things without one, every memory well-formed, slicing on the board and frying on the hob bring theirs back, the card shows a line at a time, the lantern lights up).
 - **Bug found on `main` (from #90):** the player's start spot in `sea.tscn` (ship-space z 11) is now inside the cabin under the quarterdeck. Fixed here (z 7, open deck); `main` needs the same one-line fix.
+
+### 6. Sleep through the storm into dawn
+Go down to the bunk room and Interact at your bunk ("Sleep until morning"). The screen fades to black, "Morning", and you wake to a misty grey-rose dawn: the rain is a drizzle (so no lightning), the fog has thinned and warmed, the moon is a low warm sun, the sea's night glow has gone and it mirrors the pale sky; the lanterns and windows still glow. Sleep again ("Rest until nightfall") and the storm comes back. It's the first sense of time passing: the night now has an ending.
+- `scripts/weather/time_of_day.gd` (`TimeOfDay`, in `sea.tscn`: one `dawn` value from 0 to 1 blends the sky shader's colours and clouds, the environment's ambient light, fog and exposure, the moon's colour and energy, the rain, and the water's glow and reflection).
+- `scripts/props/bedside.gd` + `scenes/prototype/props/bedside.tscn` (at your bunk in `ship.tscn`; reuses the existing `ScreenFade`; you can't walk while asleep).
+- Tests: `tests/scripts/weather/time_of_day_test.gd` (night vs dawn, the warm sun, halfway is halfway, sleeping brings the morning and back, you can't walk off while asleep).

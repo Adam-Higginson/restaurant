@@ -10,6 +10,7 @@
 [ext_resource type="PackedScene" path="res://scenes/prototype/weather/weather.tscn" id="10_weather"]
 [ext_resource type="Shader" uid="uid://onbwj0r4wa7r" path="res://shaders/night_sky.gdshader" id="11_sky"]
 [ext_resource type="Shader" path="res://shaders/far_light.gdshader" id="12_far"]
+[ext_resource type="Script" path="res://scripts/weather/time_of_day.gd" id="13_time"]
 
 [sub_resource type="FastNoiseLite" id="Noise_Cloud"]
 frequency = 0.008
@@ -246,3 +247,9 @@ ship = NodePath("../Ship")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -175, 9, 40)
 cast_shadow = 0
 mesh = SubResource("Mesh_FarLight")
+
+[node name="TimeOfDay" type="Node" parent="." unique_id=1418227360 node_paths=PackedStringArray("world", "moon", "weather")]
+script = ExtResource("13_time")
+world = NodePath("../WorldEnvironment")
+moon = NodePath("../Moon")
+weather = NodePath("../Weather")
