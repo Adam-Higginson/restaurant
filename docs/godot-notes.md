@@ -356,7 +356,9 @@ A growing glossary of the Godot concepts this project uses: what each one is, in
 
 **Faking shafts of light.** Real light shafts need something in the way to break the light up. A cheap stand-in is a tall see-through tube, added on top of the picture (`blend_add`), bright at the top and fading to nothing, with its sides faded out by how squarely each bit faces the camera so it never looks solid. *Ours:* `shaders/light_shaft.gdshader` on the tubes under `Shafts`, shown only while lightning flashes.
 
-**Showing something by what it hides.** The thing is an ordinary mesh with an unshaded material the colour of the deep. It never catches light, so in the dark it can't be seen at all. In a flash, the lit haze behind it and the shafts and lanterns it covers are what give away its shape. *Ours:* `Thing` in `underwater.tscn`.
+**Showing something by what it hides.** The thing's body is an ordinary mesh drawn in one flat colour, the colour of the deep. It never catches light, so in the dark it can't be seen at all. In a flash, the lit haze behind it and the shafts and lanterns it covers are what give away its shape. *Ours:* `Thing/Body` in `underwater.tscn`.
+
+**Shaping a mesh in its vertex shader.** `vertex()` can move each corner of a mesh before it's drawn. A plain tube with plenty of rings along it can be squeezed here and swollen there into a body, and bent a little differently every frame so it moves, without modelling or rigging anything. *Ours:* `shaders/the_thing.gdshader` turns a cylinder into a head, a body and a swaying tail.
 
 **Groups as a broadcast.** `get_tree().call_group("name", "method", value)` calls that method on every node in the group, wherever it is in the tree. *Ours:* `Lightning` tells the group `lightning_lit` how bright each flash is, which now includes `Lanterns` and `Shafts` inside the underwater set.
 

@@ -139,9 +139,11 @@
 
 # The thing. His light pulls in close as you rise. Lightning strikes far
 # above, and its cold light comes down through the water in shafts that
-# fade out before they find anything. Far below the lanterns, something
-# enormous is passing: the shafts and the lowest lanterns are lost in it.
-# The storm's rumble drops out under one low note. He doesn't look down.
+# fade out before they find anything. Just beneath the nearest lanterns,
+# something enormous is passing: a body, by its outline, and the shafts
+# and every lantern below it are lost in it. On the second flash it's
+# under you, and one eye is open. The storm's rumble drops out under one
+# low note. He doesn't look down.
 ~ thing
 @stage underwater
 @muffle on
