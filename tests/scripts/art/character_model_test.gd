@@ -152,6 +152,25 @@ func test_the_pose_is_a_strike_or_parry_first_then_walking() -> void:
 	assert_int(CharacterModel.pose_for(true, false, false)).is_equal(CharacterModel.Pose.WALK)
 	assert_int(CharacterModel.pose_for(true, false, true)).is_equal(CharacterModel.Pose.PARRY)
 	assert_int(CharacterModel.pose_for(true, true, true)).is_equal(CharacterModel.Pose.STRIKE)
+	assert_int(CharacterModel.pose_for(true, false, false, true)) \
+			.is_equal(CharacterModel.Pose.CHARGE)
+	assert_int(CharacterModel.pose_for(true, true, false, true)) \
+			.is_equal(CharacterModel.Pose.STRIKE)
+
+
+func test_a_cut_plays_for_its_own_time_then_gives_way() -> void:
+	var player: Player3D = _new_dressed_player()
+	var model: CharacterModel = _model(player)
+	var runner: GdUnitSceneRunner = scene_runner(player.get_parent())
+	await physics_ticks(runner, 2)
+
+	duellist_of(player).strike()
+	await physics_ticks(runner, 2)
+	assert_bool(model.is_acting()).is_true()
+	await physics_ticks(runner, int(Duellist.CHOP.seconds * 60.0) + 2)
+
+	assert_bool(model.is_acting()).is_false()
+	assert_int(model.pose).is_not_equal(CharacterModel.Pose.STRIKE)
 
 
 func test_animations_turn_our_bones_without_stretching_them() -> void:

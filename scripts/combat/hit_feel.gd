@@ -52,6 +52,7 @@ var _muffle_index: int = -1
 func _ready() -> void:
 	_duellist.strike_landed.connect(_on_strike_landed)
 	_duellist.parried.connect(_on_parried)
+	_duellist.parried_perfectly.connect(_on_parried_perfectly)
 	_duellist.hurt.connect(_on_hurt)
 	_find_muffle()
 
@@ -77,15 +78,34 @@ static func muffle_hz(amount: float) -> float:
 	return CLEAR_HZ * pow(MUFFLED_HZ / CLEAR_HZ, clampf(amount, 0.0, 1.0))
 
 
-func _on_strike_landed(_crab: FogCrab, cleared: bool) -> void:
-	_hit_stop.freeze(HitStop.CLEARING_TICKS if cleared else HitStop.STRIKE_TICKS)
-	_camera_rig.shake(clearing_shake if cleared else strike_shake)
+## How long [param cut] landing freezes the game, in physics ticks: its own
+## [member KnifeCut.hitstop_ticks], or longer if it cleared the fog or
+## flipped the crab.
+static func strike_ticks(cut: KnifeCut, cleared: bool, flipped: bool) -> int:
+	if cleared:
+		return maxi(cut.hitstop_ticks, HitStop.CLEARING_TICKS)
+	if flipped:
+		return maxi(cut.hitstop_ticks, HitStop.FLIP_TICKS)
+	return cut.hitstop_ticks
+
+
+func _on_strike_landed(crab: FogCrab, cleared: bool, cut: KnifeCut) -> void:
+	var flipped: bool = crab.is_flipped() and cut.flips_lunging
+	_hit_stop.freeze(strike_ticks(cut, cleared, flipped))
+	# The bigger the blow, the bigger the shake.
+	var shake: float = strike_shake * float(cut.hitstop_ticks) / 4.0
+	_camera_rig.shake(clearing_shake if cleared or flipped else shake)
 
 
 func _on_parried() -> void:
 	_hit_stop.freeze(HitStop.PARRY_TICKS)
 	_camera_rig.shake(parry_shake)
 	_sparks.restart()
+
+
+func _on_parried_perfectly() -> void:
+	_hit_stop.freeze(HitStop.FLIP_TICKS)
+	_camera_rig.shake(clearing_shake)
 
 
 func _on_hurt(_halves: int) -> void:

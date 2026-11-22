@@ -42,11 +42,15 @@ var facing: Vector3:
 	get:
 		return -_model.global_basis.z
 
+## How much of their speed the player walks at: 1 normally, less while
+## something slows them (charging the knife). Set by whatever slows them.
+var stride_factor: float = 1.0
+
 ## How fast the player moves when they walk, in metres per second: their
-## [member speed], or faster while sprinting.
+## [member speed], or faster while sprinting, times the [member stride_factor].
 var move_speed: float:
 	get:
-		return speed * sprint_factor if is_sprinting() else speed
+		return (speed * sprint_factor if is_sprinting() else speed) * stride_factor
 
 ## Whether the player walked on the last physics tick, from your input
 ## (riding the sailing ship doesn't count).
@@ -139,6 +143,13 @@ func _unhandled_input(event: InputEvent) -> void:
 func knock_back(push: Vector3, stumble_seconds: float) -> void:
 	_push = Vector3(push.x, 0.0, push.z)
 	_stumble_left = stumble_seconds
+
+
+## Sends the player along [param push], a flat velocity in metres per second
+## that dies away like a knock back, without taking the stick from them: a
+## step into a cut.
+func lunge(push: Vector3) -> void:
+	_push = Vector3(push.x, 0.0, push.z)
 
 
 ## Whether the player is sprinting: holding sprint while they can move.

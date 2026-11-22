@@ -73,7 +73,7 @@ func test_a_strike_flashes_the_real_model_white() -> void:
 	# Its first blow lands and freezes the game; then it's open.
 	await physics_ticks(runner, 70 + HitStop.HURT_TICKS)
 
-	assert_bool(duellist_of(player).strike()).is_true()
+	assert_bool(await strike_and_land(runner, player)).is_true()
 	await physics_ticks(runner, 1)
 
 	var shell: MeshInstance3D = crab.find_child("Shell", true, false) as MeshInstance3D

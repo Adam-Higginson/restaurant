@@ -64,7 +64,7 @@ func test_a_swing_at_nothing_whooshes_and_no_more() -> void:
 	var runner: GdUnitSceneRunner = scene_runner(player.get_parent())
 	await physics_ticks(runner, 2)
 
-	duellist_of(player).strike()
+	await strike_and_land(runner, player)
 
 	assert_int(_sounds(player).times_played(DuelSounds.SWING)).is_equal(1)
 	assert_int(_sounds(player).times_played(DuelSounds.SLICE)).is_equal(0)
@@ -78,7 +78,7 @@ func test_a_strike_that_counts_slices() -> void:
 	var runner: GdUnitSceneRunner = scene_runner(player.get_parent())
 	await physics_ticks(runner, FIRST_OPENING)
 
-	duellist_of(player).strike()
+	await strike_and_land(runner, player)
 
 	assert_int(_sounds(player).times_played(DuelSounds.SWING)).is_equal(1)
 	assert_int(_sounds(player).times_played(DuelSounds.SLICE)).is_equal(1)
@@ -91,7 +91,7 @@ func test_a_strike_on_a_crab_that_isnt_open_tinks() -> void:
 	var runner: GdUnitSceneRunner = scene_runner(player.get_parent())
 	await physics_ticks(runner, 20)
 
-	duellist_of(player).strike()
+	await strike_and_land(runner, player)
 
 	assert_int(_sounds(player).times_played(DuelSounds.SWING)).is_equal(1)
 	assert_int(_sounds(player).times_played(DuelSounds.TINK)).is_equal(1)
@@ -204,7 +204,7 @@ func test_clearing_the_fog_chimes_once_and_it_ticks_away() -> void:
 	var runner: GdUnitSceneRunner = scene_runner(player.get_parent())
 	await physics_ticks(runner, FIRST_OPENING)
 
-	duellist_of(player).strike()
+	await strike_and_land(runner, player)
 	var clicks: int = _crab_sounds(crab).times_played(CrabSounds.CLICK)
 	# It shakes itself off for a second, then wanders.
 	await physics_ticks(runner, 180)
@@ -225,7 +225,7 @@ func test_the_wandering_tick_is_quieter_than_the_rattle() -> void:
 	var rattle_db: float = click.volume_db
 	await physics_ticks(runner, FIRST_OPENING - 40)
 
-	duellist_of(player).strike()
+	await strike_and_land(runner, player)
 	await physics_ticks(runner, 180)
 
 	assert_float(click.volume_db).is_less(rattle_db)

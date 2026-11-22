@@ -123,6 +123,13 @@ func is_cutting() -> bool:
 	return _cut_left > 0.0
 
 
+## How far through the cut being made it is, from 0 to 1 (0 with none).
+func cut_progress() -> float:
+	if _cut_left <= 0.0 or _current == null:
+		return 0.0
+	return clampf(1.0 - _cut_left / maxf(_current.seconds, 0.001), 0.0, 1.0)
+
+
 ## Whether a held press is charging.
 func is_charging() -> bool:
 	return _charging

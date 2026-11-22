@@ -10,7 +10,8 @@ extends Node
 ## at a slightly different pitch, so a repeated sound doesn't feel stamped
 ## out. The recordings are Kenney's (CC0); their licences are beside them.
 
-## The knife sweeping through the air: every swing.
+## The knife sweeping through the air, as a cut starts (each [KnifeCut]
+## names its own swing sound; this is the plain one).
 const SWING: StringName = &"Swing"
 ## The knife landing a strike that counts.
 const SLICE: StringName = &"Slice"
@@ -40,6 +41,7 @@ var _beat_time: float = -1.0
 
 
 func _ready() -> void:
+	_duellist.cut_started.connect(func(cut: KnifeCut) -> void: play(cut.sound))
 	_duellist.struck.connect(_on_struck)
 	_duellist.glanced.connect(play.bind(TINK))
 	_duellist.pan_raised.connect(play.bind(PAN_UP))
@@ -67,7 +69,6 @@ func times_played(sound: StringName) -> int:
 
 
 func _on_struck(hit: bool) -> void:
-	play(SWING)
 	if hit:
 		play(SLICE)
 
