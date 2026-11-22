@@ -77,6 +77,7 @@ func _on_interacted(player: Player3D) -> void:
 				var fish: ItemInstance = ItemInstance.new(catch)
 				if player.toolbar.add(fish):
 					caught.emit(fish)
+					Game.memories.notice(catch)
 
 
 func _on_bitten() -> void:

@@ -40,6 +40,12 @@
 [ext_resource type="Resource" path="res://data/items/pan_fried_herring.tres" id="31_fried"]
 [ext_resource type="Resource" path="res://data/reactions/fry_herring.tres" id="32_fry"]
 [ext_resource type="Resource" path="res://data/reactions/fry_whole_herring.tres" id="33_fry_whole"]
+[ext_resource type="Script" path="res://scripts/data/memory.gd" id="39_memory"]
+[ext_resource type="Resource" path="res://data/memories/first_catch.tres" id="40_mem"]
+[ext_resource type="Resource" path="res://data/memories/scales.tres" id="41_mem"]
+[ext_resource type="Resource" path="res://data/memories/fogged_window.tres" id="42_mem"]
+[ext_resource type="Resource" path="res://data/memories/warm_tomatoes.tres" id="43_mem"]
+[ext_resource type="Resource" path="res://data/memories/squeaky_gate.tres" id="44_mem"]
 
 [resource]
 script = ExtResource("23_itf3g")
@@ -48,3 +54,4 @@ elements = Array[ExtResource("1_sq7co")]([ExtResource("2_gpcun"), ExtResource("2
 reactions = Array[ExtResource("17_gx03v")]([ExtResource("18_dxvgn"), ExtResource("19_qdmq8"), ExtResource("20_oyiyi"), ExtResource("21_m07uu"), ExtResource("22_3onb0"), ExtResource("28_fillet_herring"), ExtResource("32_fry"), ExtResource("33_fry_whole")])
 tools = Array[ExtResource("24_tool")]([ExtResource("25_knife")])
 people = Array[ExtResource("17_7671r")]([ExtResource("18_5u5l8"), ExtResource("19_lcsjk"), ExtResource("20_vx4vr"), ExtResource("21_cta3b"), ExtResource("22_wwfey"), ExtResource("23_rhhc8")])
+memories = Array[ExtResource("39_memory")]([ExtResource("40_mem"), ExtResource("41_mem"), ExtResource("42_mem"), ExtResource("43_mem"), ExtResource("44_mem")])

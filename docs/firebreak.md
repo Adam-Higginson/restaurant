@@ -33,3 +33,11 @@ The first heat in the game. On the galley hearth's iron top, right of the stew p
 - Data: `data/elements/fire.tres`, `data/items/frying_pan.tres`, `pan_fried_herring.tres`, `data/reactions/fry_herring.tres` and `fry_whole_herring.tres`; in the catalog and the GDD's dishes table.
 - Tests: `tests/scripts/props/hob_test.gd` (the pan's over the fire, a fillet fries with the right quality, the shortcut, lifting it off pauses, it's on the hearth aboard), and the catalog checks the three herring reactions.
 - The frying pan draws as a dark slab for now, like the board.
+
+### 5. Tastes of home: memories that come back as you cook and fish
+The story says you remember home only as tastes and sounds, so now cooking *is* remembering. The first time you make or catch certain things, a memory comes back: a soft panel at the top of the screen, its title in amber, then each line fading in, lingering, and fading away; your lantern lights up. Five so far: catching your first herring ("A cold jetty"), filleting it ("Silver on a tin plate"), frying it ("A fogged window"), slicing a tomato ("Warm from the vine") and a Garden Salad ("A squeaky gate"). Each comes back once and is kept in a `MemoryBook` on the game state.
+- `scripts/data/memory.gd` (a `Memory` resource: trigger item, title, lines), `data/memories/*.tres`, listed in the catalog's new `memories`.
+- `scripts/story/memory_book.gd` (on `Game.memories`; `notice(item)` returns a new memory once), `ui/memory_card.gd` (on the 3D HUD; queues memories that come together).
+- Hooks: `CounterSlot` gained a `food_made` signal (from its vessel's finished reactions), which every `Counter3D` (and so the hob) passes to the book; the rod tells it what you caught.
+- Tests: `tests/scripts/story/memory_book_test.gd` (once only, nothing for things without one, every memory well-formed, slicing on the board and frying on the hob bring theirs back, the card shows a line at a time, the lantern lights up).
+- **Bug found on `main` (from #90):** the player's start spot in `sea.tscn` (ship-space z 11) is now inside the cabin under the quarterdeck. Fixed here (z 7, open deck); `main` needs the same one-line fix.

@@ -25,6 +25,8 @@ var _slot: CounterSlot = null
 func _ready() -> void:
 	_slot = CounterSlot.new(start_item)
 	_slot.changed.connect(_show_item)
+	# Making something for the first time can bring back a memory of home.
+	_slot.food_made.connect(func(result: ItemInstance) -> void: Game.memories.notice(result.item))
 	_interactable.interacted.connect(_on_interacted)
 	_interactable.tool_used.connect(_on_tool_used)
 	_interactable.describe_interact = func(player: Player3D) -> String:

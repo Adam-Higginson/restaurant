@@ -11,6 +11,8 @@ const PATH: String = "res://data/catalog.tres"
 @export var reactions: Array[Reaction] = []
 @export var tools: Array[HandTool] = []
 @export var people: Array[Person] = []
+## The memories of home that cooking and fishing bring back.
+@export var memories: Array[Memory] = []
 
 
 ## Loads the game's catalog.
