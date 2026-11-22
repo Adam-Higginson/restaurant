@@ -1,0 +1,50 @@
+# The opening cutscene of a new voyage: the night the lantern pulled you
+# from the sea. Played by the Opening node in scenes/prototype/sea.tscn.
+# Placeholder writing: rewrite freely.
+#
+# A cutscene is a conversation whose @ cues stage the scene. Lines wait for
+# the Interact button; cues that take time (a fade, a wait) hold the script
+# until they're done. Every cue is listed in scripts/cutscene/cue_list.gd.
+#
+# Shots (where the camera goes) and marks (where people stand) are Marker3D
+# nodes in scenes/prototype/ship.tscn, under Shots and Marks: drag them in
+# the editor to reframe a shot, without touching this file.
+#
+# To tune one beat: set Start Section on the Opening node to its name
+# (waking, doorway, stove) and the game opens there. While it runs, F8
+# reads this file again and replays the section you're in.
+
+# Black, and where we are. The captain isn't in the room yet.
+~ start
+@hide heron
+@title Somewhere at sea
+@wait 2.5
+@fade in 2.0
+-> waking
+
+# You wake by your bunk, the lantern across the room.
+~ waking
+lantern: There you are.
+lantern: You were in the water. I pulled. You held on. Good holding.
+lantern: I'll get you home. I know exactly where it is. Roughly.
+@wait 0.6
+-> doorway
+
+# A tall shadow in the doorway: the captain, come to look you over.
+~ doorway
+@place heron doorway
+@show heron
+@face heron player
+@shot doorway cut
+@wait 0.8
+heron: Nobody drowns on my ship. Nobody goes hungry either.
+heron: You've managed the first.
+-> stove
+
+# Through to the galley: something has been left warm on the stove. While
+# we look at it, the captain goes back to the fire. Then the ship is yours.
+~ stove
+@shot pot_on_stove
+@home heron
+@wait 2.5
+@shot free cut

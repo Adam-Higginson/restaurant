@@ -40,6 +40,12 @@ func place(morning: bool) -> void:
 	moved.emit(spot)
 
 
+## Moves the crewmate back to where they belong at this time of day, after
+## a cutscene has had them somewhere else.
+func return_to_post() -> void:
+	place(_was_morning)
+
+
 func _begin() -> void:
 	var time: TimeOfDay = get_tree().get_first_node_in_group(&"time_of_day") as TimeOfDay
 	if time == null:

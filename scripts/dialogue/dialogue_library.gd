@@ -48,6 +48,28 @@ static func remarks(id: StringName) -> Array[Remark]:
 	return found
 
 
+## Reads the conversation called [param id] from its file again, for tuning
+## it while the game runs. If the file's fine, the fresh version is kept and
+## returned. If it has mistakes they're reported and the version already
+## read (if any) is returned instead, so a typo never leaves you with
+## nothing to play. Null if there's no such file.
+static func reread(id: StringName) -> DialogueTree:
+	var path: String = "%s/%s%s" % [FOLDER, id, ENDING]
+	if not FileAccess.file_exists(path):
+		return null
+	var tree: DialogueTree = DialogueScript.parse(FileAccess.get_file_as_string(path), id,
+			is_remarks(id))
+	if tree.errors.is_empty():
+		_trees[id] = tree
+		_remarks.erase(id)
+		return tree
+	for error: String in tree.errors:
+		push_error("%s, %s" % [path, error])
+	if _trees.has(id):
+		return _trees[id]
+	return null
+
+
 ## Whether the file called [param id] holds remarks rather than a conversation.
 static func is_remarks(id: StringName) -> bool:
 	return REMARK_FILES.has(id)

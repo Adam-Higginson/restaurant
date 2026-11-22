@@ -222,6 +222,37 @@ func moment_lines(moment: StringName) -> PackedStringArray:
 	return lines
 
 
+## A [Conversation] added to [param player]'s world, so it's freed with it.
+## Add it before the scene runs.
+func new_conversation(player: Player3D) -> Conversation:
+	var conversation: Conversation = Conversation.new()
+	conversation.name = "Conversation"
+	player.get_parent().add_child(conversation)
+	return conversation
+
+
+## Reads [param script] (written as a .dlg file is) and plays it as a
+## cutscene for [param player] from [param section], failing the test if the
+## script has mistakes or doesn't start.
+func play_cutscene(conversation: Conversation, player: Player3D, script: String,
+		section: StringName = DialogueTree.START) -> void:
+	var tree: DialogueTree = DialogueScript.parse(script, &"test")
+	assert_array(tree.errors).is_empty()
+	assert_bool(conversation.play_tree(tree, player, section)).is_true()
+
+
+## A [Marker3D] called [param marker_name] in [param group], added to
+## [param world] at [param at]: a shot for the camera or a mark to stand on.
+func new_marker(world: Node, group: StringName, marker_name: String,
+		at: Transform3D) -> Marker3D:
+	var marker: Marker3D = Marker3D.new()
+	marker.name = marker_name
+	marker.transform = at
+	marker.add_to_group(group)
+	world.add_child(marker)
+	return marker
+
+
 ## A [Hud3D] for [param player], added to the player's world, so it's freed
 ## with it. Add it before the scene runs.
 func new_hud_3d(player: Player3D) -> Hud3D:

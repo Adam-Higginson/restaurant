@@ -1,0 +1,121 @@
+class_name ActorCues
+extends CueHandler
+## Puts people where a cutscene needs them. Nobody walks yet, so each of
+## these happens at once: do it while the camera is looking elsewhere.
+##
+## [codeblock]
+## @place heron doorway     stand them on the mark called Doorway
+## @face heron player       turn them towards someone, or towards a mark
+## @hide heron              take them out of the scene
+## @show heron              bring them back
+## @home heron              send them back to their usual spot
+## [/codeblock]
+##
+## Someone is named by their [member Person.id] ([code]heron[/code]), or
+## [code]player[/code]. A mark is a [Marker3D] in the group
+## [constant GROUP], named for the cue: [code]Doorway[/code] answers
+## [code]doorway[/code]. They stand on the mark facing the way its blue
+## arrow (its -Z) points.
+
+## The group marks are in.
+const GROUP: StringName = &"marks"
+## The name for the player in a script.
+const PLAYER: String = "player"
+
+## The player, for [code]@place player ...[/code] and [code]@face ... player[/code].
+@export var player: Player3D
+
+
+func cues() -> Array[StringName]:
+	return [&"place", &"face", &"hide", &"show", &"home"]
+
+
+## Whoever is called [param who] in a script, or null: the player, or the
+## crewmate with that [member Person.id].
+func find_actor(who: String) -> Node3D:
+	if who == PLAYER:
+		return player if is_instance_valid(player) else null
+	if not is_inside_tree():
+		return null
+	for node: Node in get_tree().get_nodes_in_group(Crewmate.GROUP):
+		var crewmate: Crewmate = node as Crewmate
+		if crewmate != null and crewmate.person != null and String(crewmate.person.id) == who:
+			return crewmate
+	return null
+
+
+## The mark called [param mark_name], or null.
+func find_mark(mark_name: String) -> Marker3D:
+	return find_marker(GROUP, mark_name)
+
+
+func _perform(cue: StringName, args: PackedStringArray) -> void:
+	var actor: Node3D = find_actor(args[0])
+	if actor == null:
+		warn("nobody is called '%s' (a crewmate's Person id, or 'player')" % args[0])
+		return
+	match cue:
+		&"place":
+			_place(actor, args[1])
+		&"face":
+			_face(actor, args[1])
+		&"hide":
+			_set_present(actor, false)
+		&"show":
+			_set_present(actor, true)
+		&"home":
+			_send_home(actor)
+
+
+func _place(actor: Node3D, mark_name: String) -> void:
+	var mark: Marker3D = find_mark(mark_name)
+	if mark == null:
+		warn("no mark called '%s' (a Marker3D in group '%s')" % [mark_name, GROUP])
+		return
+	var ahead: Vector3 = mark.global_position - mark.global_basis.z
+	if actor is Player3D:
+		var body: Player3D = actor as Player3D
+		body.global_position = mark.global_position
+		body.velocity = Vector3.ZERO
+		body.face_towards(ahead)
+	else:
+		actor.global_transform = mark.global_transform
+		if actor is Crewmate:
+			(actor as Crewmate).rest()
+	# A jump, not a move: draw them there at once rather than gliding over.
+	actor.reset_physics_interpolation()
+
+
+func _face(actor: Node3D, target: String) -> void:
+	var point: Vector3
+	var mark: Marker3D = find_mark(target)
+	var other: Node3D = find_actor(target)
+	if mark != null:
+		point = mark.global_position
+	elif other != null:
+		point = other.global_position
+	else:
+		warn("nothing to face called '%s' (a mark, a crewmate or 'player')" % target)
+		return
+	if actor is Player3D:
+		(actor as Player3D).face_towards(point)
+	elif actor is Crewmate:
+		(actor as Crewmate).face_towards(point)
+
+
+func _set_present(actor: Node3D, present: bool) -> void:
+	if actor is Crewmate:
+		(actor as Crewmate).set_present(present)
+	else:
+		actor.visible = present
+
+
+func _send_home(actor: Node3D) -> void:
+	_set_present(actor, true)
+	if actor is Crewmate:
+		(actor as Crewmate).rest()
+	for child: Node in actor.get_children():
+		if child is CrewStation:
+			(child as CrewStation).return_to_post()
+			return
+	warn("'%s' has no usual spot to go home to (a CrewStation)" % actor.name)

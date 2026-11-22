@@ -248,6 +248,22 @@ A growing glossary of the Godot concepts this project uses: what each one is, in
 
 **Inner classes.** A `class Name:` block inside a script defines a small type only that script needs, like a struct. *Ours:* `Speaker.Queued`, a line and its bubble style waiting their turn.
 
+## Cutscenes (#100)
+
+**`await` and coroutines.** `await something` pauses a function at that line until `something` happens (a signal fires, or another function that itself awaits finishes), then carries on from there. Meanwhile the rest of the game keeps running. A function with an `await` in it is a coroutine. *Ours:* `WaitCues` waits out a pause one physics tick at a time; `FadeCues` awaits the fade's tween; `Opening` awaits the cutscene's `ended` signal.
+
+**Calling a coroutine without `await`.** If you call a function that awaits and don't `await` it yourself, it runs up to its first pause and your code carries straight on; the rest happens later by itself. *Ours:* `CueHandler.handle` starts a cue's work this way, which is why a handler has to tell the script to wait explicitly, with `hold()` and `release()`.
+
+**`_enter_tree` comes before `_ready`.** When a scene is added, every node in it gets `_enter_tree` first (parents before children), and only then do the `_ready` calls happen. So something done in `_enter_tree` is in place before any node's `_ready` runs. *Ours:* `Conversation` joins its group in `_enter_tree`, so the cue handlers can find it in their `_ready` wherever they sit in the scene.
+
+**Disabling a node (`PROCESS_MODE_DISABLED`).** Setting `process_mode` to disabled stops a node and its children running their `_process` and `_physics_process`, and a physics body that's disabled is also taken out of the physics world, so nothing collides with it. With `visible = false` as well, it's as if it weren't there. *Ours:* `Crewmate.set_present`, used by `@hide` and `@show`.
+
+**Instance ids.** Every object has a number, `get_instance_id()`. Keeping the number instead of the object lets you ask later whether it still exists (`is_instance_id_valid`) and get it back (`instance_from_id`), without ever holding a freed object in a typed variable, which is an error. *Ours:* `Conversation` remembers who holds the script this way, so a handler that's been freed can't leave a cutscene waiting for ever.
+
+**Holding a button (`Input.is_action_pressed`).** `_unhandled_input` tells you the moment a button goes down. To know it's still down, ask `Input.is_action_pressed("action")` every frame in `_process` and add up the time. *Ours:* `Conversation` counts a second of `skip_cutscene` before skipping.
+
+**Default arguments.** A parameter with `= value` can be left out by callers: `func hold_shot(shot: Marker3D, cut: bool = false)`. It lets a function grow a new option without changing the code that already calls it. *Ours:* `CameraRig.hold_shot` and `release_shot` gained `cut`; `ScreenFade.fade_in` and `fade_out` gained `seconds`.
+
 ## Testing
 
 **gdUnit4.** The test framework (`addons/gdUnit4`). Suites extend our `GameTestSuite` and have `test_...` functions. `scene_runner` loads a scene and lets a test press inputs and wait physics ticks. *Ours:* `tests/`.

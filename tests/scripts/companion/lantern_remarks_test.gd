@@ -32,14 +32,20 @@ func test_he_never_says_the_same_thing_twice_running() -> void:
 func test_a_moment_with_one_thing_to_say_says_it_every_time() -> void:
 	var picker: RemarkPicker = RemarkPicker.new()
 	var places: Dictionary[StringName, Vector3] = {&"lantern": Vector3.ZERO}
-	var remarks: Array[Remark] = DialogueLibrary.remarks(LanternSpirit.MOMENTS)
+	var tree: DialogueTree = DialogueScript.parse(
+			"~ only_one [on landed]
+lantern: Land!
+~ other [on caught]
+lantern: Fish!",
+			&"test", true)
+	var remarks: Array[Remark] = Remark.all_in(tree)
 	for i: int in 3:
-		var picked: Remark = picker.pick(remarks, places, DialogueState.new(), i, &"woke")
-		assert_str(String(picked.section)).is_equal("first_words")
+		var picked: Remark = picker.pick(remarks, places, DialogueState.new(), i, &"landed")
+		assert_str(String(picked.section)).is_equal("only_one")
 		picker.said(picked, i)
 
 
-func test_his_first_words_come_one_after_another() -> void:
+func test_the_lines_of_a_remark_come_one_after_another() -> void:
 	var rig: Array[Node3D] = new_moored_ship_with_player(Vector3(0, 1.05, 6))
 	var runner: GdUnitSceneRunner = scene_runner(rig[0].get_parent())
 	var spirit: LanternSpirit = lantern_at_shoulder(rig[1])
@@ -52,10 +58,17 @@ func test_his_first_words_come_one_after_another() -> void:
 	voice.said.connect(func(line: String) -> void: heard.append(line))
 	await physics_ticks(runner, 2)
 
-	spirit.remark(&"woke")
-	await physics_ticks(runner, 40)
+	# He never says the same thing twice running, so two welcomes back are
+	# both of them, one after the other: one is a single line, one is two.
+	spirit.remark(&"returned")
+	spirit.remark(&"returned")
+	await physics_ticks(runner, 60)
 
-	assert_array(Array(heard)).is_equal(Array(_lines_of(&"first_words")))
+	var short: PackedStringArray = _lines_of(&"returned_1")
+	var long: PackedStringArray = _lines_of(&"returned_2")
+	assert_int(long.size()).is_equal(2)
+	assert_array(Array(heard)).contains_exactly_in_any_order(Array(short + long))
+	assert_int(heard.find(long[1])).is_equal(heard.find(long[0]) + 1)
 	assert_str(spirit.saying()).is_empty()
 
 

@@ -91,6 +91,41 @@ func test_shot_free_gives_the_camera_back_mid_talk() -> void:
 	assert_bool(_rig.is_fixed).is_false()
 
 
+func test_a_cut_goes_straight_to_the_shot_and_straight_back() -> void:
+	_build()
+	var runner: GdUnitSceneRunner = scene_runner(_player.get_parent())
+	await physics_ticks(runner, 3)
+	var camera: Camera3D = _rig.get_node("Camera3D") as Camera3D
+	var free: Vector3 = camera.global_position
+
+	# Two ticks is far too short for a glide (12 ticks here): only a cut
+	# gets there.
+	_begin("@shot stove_nook cut
+heron: One.
+@shot free cut
+heron: Two.")
+	await physics_ticks(runner, 2)
+	assert_vector(camera.global_position).is_equal_approx(SHOT.origin, NEAR)
+
+	_conversation.press()
+	await physics_ticks(runner, 2)
+	assert_bool(_rig.is_fixed).is_false()
+	assert_vector(camera.global_position).is_equal_approx(free, NEAR)
+
+
+func test_without_cut_the_camera_is_still_gliding_two_ticks_later() -> void:
+	_build()
+	var runner: GdUnitSceneRunner = scene_runner(_player.get_parent())
+	await physics_ticks(runner, 3)
+	var camera: Camera3D = _rig.get_node("Camera3D") as Camera3D
+
+	_begin("@shot stove_nook
+heron: One.")
+	await physics_ticks(runner, 2)
+
+	assert_float(camera.global_position.distance_to(SHOT.origin)).is_greater(0.5)
+
+
 func test_a_talk_with_no_shot_never_touches_the_camera() -> void:
 	_build()
 	var runner: GdUnitSceneRunner = scene_runner(_player.get_parent())

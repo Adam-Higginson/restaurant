@@ -4,13 +4,13 @@ extends GameTestSuite
 ## a talk.
 
 ## Every moment the game asks the lantern to react to.
-const MOMENTS: Array[StringName] = [&"woke", &"returned", &"remembered", &"caught",
+const MOMENTS: Array[StringName] = [&"returned", &"remembered", &"caught",
 		&"morning", &"hove_to", &"supper", &"dim", &"far_light", &"island", &"pulled_out",
 		&"fog_cleared"]
 
 
 func test_there_are_conversations_to_check() -> void:
-	assert_array(DialogueLibrary.all_ids()).contains([&"heron", &"lantern"])
+	assert_array(DialogueLibrary.all_ids()).contains([&"heron", &"lantern", &"intro"])
 	assert_array(DialogueLibrary.all_ids()).contains(DialogueLibrary.REMARK_FILES)
 
 

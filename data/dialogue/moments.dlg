@@ -4,22 +4,20 @@
 # caught sections (never the same one twice running, if there's another).
 # See scripts/dialogue/remark.gd for the tags and guards a section can have.
 #
-# Moments: woke, returned, remembered, caught, morning, hove_to, supper, dim,
+# Moments: returned, remembered, caught, morning, hove_to, supper, dim,
 # far_light, island, pulled_out, fog_cleared.
 # Placeholder writing: rewrite freely.
 
-# Your first waking, in your bunk, the night he pulled you from the sea.
-~ first_words [on woke]
-lantern: There you are.
-lantern: You were in the water. I pulled. You held on. Good holding.
-lantern: I'll get you home. I know exactly where it is. Roughly.
+# (His first words, the night he pulled you from the sea, are in the opening
+# cutscene: intro.dlg.)
 
 # You've come back to a saved voyage.
 ~ returned_1 [on returned]
 lantern: You're back. I kept the light on.
 
 ~ returned_2 [on returned]
-lantern: There you are again. I didn't go anywhere. I can't, really.
+lantern: There you are again.
+lantern: I didn't go anywhere. I can't, really.
 
 # A memory of home has just come back.
 ~ remembered_1 [on remembered]

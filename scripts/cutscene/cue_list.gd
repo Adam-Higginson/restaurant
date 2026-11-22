@@ -1,0 +1,62 @@
+class_name CueList
+extends RefCounted
+## Every cue a script can give the scene (the lines that start with @), and
+## how each is written. [DialogueScript] checks a script's cues against this
+## as it reads, so a mistyped one is reported with its line number instead of
+## quietly doing nothing.
+##
+## Each cue is acted on by a [CueHandler] in the scene. To add a new cue,
+## write its handler and add a line here.
+
+## How each cue is written, by name. Shown when a script gets one wrong.
+const USAGE: Dictionary[StringName, String] = {
+	&"shot": "@shot stove_nook or @shot free, with 'cut' after to cut instead of glide",
+	&"fade": "@fade out or @fade in, with seconds after if you like: @fade in 2.0",
+	&"title": "@title Somewhere at sea",
+	&"wait": "@wait 1.5",
+	&"wait_for": "@wait_for interact",
+	&"place": "@place heron doorway",
+	&"face": "@face heron player",
+	&"hide": "@hide heron",
+	&"show": "@show heron",
+	&"home": "@home heron",
+}
+
+
+## What's wrong with the cue [param cue] followed by the words [param args],
+## or "" if it's written properly.
+static func error_in(cue: StringName, args: PackedStringArray) -> String:
+	if not USAGE.has(cue):
+		var names: PackedStringArray = PackedStringArray()
+		for known: StringName in USAGE:
+			names.append("@%s" % known)
+		return "there's no cue called '@%s'. The cues are: %s" % [cue, ", ".join(names)]
+	if not _fits(cue, args):
+		return "can't read this @%s. It's written like: %s" % [cue, USAGE[cue]]
+	return ""
+
+
+# Whether the words after a cue are the ones it takes.
+static func _fits(cue: StringName, args: PackedStringArray) -> bool:
+	match cue:
+		&"shot":
+			return args.size() == 1 or (args.size() == 2 and args[1] == "cut")
+		&"fade":
+			if args.is_empty() or args.size() > 2 or not ["in", "out"].has(args[0]):
+				return false
+			return args.size() == 1 or _is_seconds(args[1])
+		&"title":
+			return not args.is_empty()
+		&"wait":
+			return args.size() == 1 and _is_seconds(args[0])
+		&"wait_for":
+			return args.size() == 1 and args[0] == "interact"
+		&"place", &"face":
+			return args.size() == 2
+		&"hide", &"show", &"home":
+			return args.size() == 1
+	return false
+
+
+static func _is_seconds(word: String) -> bool:
+	return word.is_valid_float() and word.to_float() >= 0.0
