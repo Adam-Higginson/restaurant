@@ -1,0 +1,153 @@
+[gd_scene format=3 uid="uid://d0k16oj8gsqw6"]
+
+[ext_resource type="Material" path="res://assets/placeholder/materials/chart.tres" id="1_4be2p"]
+[ext_resource type="Material" path="res://assets/placeholder/materials/brass.tres" id="2_i412d"]
+[ext_resource type="Material" path="res://assets/placeholder/materials/dark_prop_wood.tres" id="3_iqqu4"]
+[ext_resource type="Material" path="res://assets/placeholder/materials/crockery.tres" id="4_858au"]
+
+[sub_resource type="QuadMesh" id="QuadMesh_6ei5r"]
+size = Vector2(0.72, 0.54)
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_b4apk"]
+top_radius = 0.015
+bottom_radius = 0.015
+height = 0.01
+radial_segments = 6
+rings = 1
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_2tp53"]
+top_radius = 0.015
+bottom_radius = 0.015
+height = 0.01
+radial_segments = 6
+rings = 1
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_kew28"]
+top_radius = 0.015
+bottom_radius = 0.015
+height = 0.01
+radial_segments = 6
+rings = 1
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_t8grm"]
+top_radius = 0.015
+bottom_radius = 0.015
+height = 0.01
+radial_segments = 6
+rings = 1
+
+[sub_resource type="BoxMesh" id="BoxMesh_nom0g"]
+size = Vector3(0.012, 0.22, 0.008)
+
+[sub_resource type="BoxMesh" id="BoxMesh_waqdi"]
+size = Vector3(0.012, 0.22, 0.008)
+
+[sub_resource type="BoxMesh" id="BoxMesh_o3q2t"]
+size = Vector3(0.56, 0.04, 0.22)
+
+[sub_resource type="BoxMesh" id="BoxMesh_xarye"]
+size = Vector3(0.04, 0.14, 0.16)
+
+[sub_resource type="BoxMesh" id="BoxMesh_eyunn"]
+size = Vector3(0.04, 0.14, 0.16)
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_ab7au"]
+top_radius = 0.024
+bottom_radius = 0.03
+height = 0.3
+radial_segments = 8
+rings = 1
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_uu1ba"]
+top_radius = 0.022
+bottom_radius = 0.022
+height = 0.06
+radial_segments = 8
+rings = 1
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_6mb5p"]
+top_radius = 0.035
+bottom_radius = 0.035
+height = 0.36
+radial_segments = 8
+rings = 1
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_80y2w"]
+top_radius = 0.055
+bottom_radius = 0.055
+height = 0.03
+radial_segments = 10
+rings = 1
+
+[node name="ChartCorner" type="Node3D" unique_id=1621154716]
+
+[node name="Chart" type="MeshInstance3D" parent="." unique_id=440922128]
+transform = Transform3D(0.99939084, 0.034899496, 0, -0.034899496, 0.99939084, 0, 0, 0, 1, 0, 0, 0.01)
+material_override = ExtResource("1_4be2p")
+cast_shadow = 0
+mesh = SubResource("QuadMesh_6ei5r")
+
+[node name="Pin1" type="MeshInstance3D" parent="." unique_id=1276827266]
+transform = Transform3D(1, 0, 0, 0, -4.371139e-08, -1, 0, 1, -4.371139e-08, -0.33, 0.24, 0.016)
+material_override = ExtResource("2_i412d")
+mesh = SubResource("CylinderMesh_b4apk")
+
+[node name="Pin2" type="MeshInstance3D" parent="." unique_id=1930284332]
+transform = Transform3D(1, 0, 0, 0, -4.371139e-08, -1, 0, 1, -4.371139e-08, 0.33, 0.24, 0.016)
+material_override = ExtResource("2_i412d")
+mesh = SubResource("CylinderMesh_2tp53")
+
+[node name="Pin3" type="MeshInstance3D" parent="." unique_id=1184490169]
+transform = Transform3D(1, 0, 0, 0, -4.371139e-08, -1, 0, 1, -4.371139e-08, -0.33, -0.24, 0.016)
+material_override = ExtResource("2_i412d")
+mesh = SubResource("CylinderMesh_kew28")
+
+[node name="Pin4" type="MeshInstance3D" parent="." unique_id=144801607]
+transform = Transform3D(1, 0, 0, 0, -4.371139e-08, -1, 0, 1, -4.371139e-08, 0.33, -0.24, 0.016)
+material_override = ExtResource("2_i412d")
+mesh = SubResource("CylinderMesh_t8grm")
+
+[node name="DividerL" type="MeshInstance3D" parent="." unique_id=1224316620]
+transform = Transform3D(0.98162717, 0.190809, 0, -0.190809, 0.98162717, 0, 0, 0, 1, 0.098, -0.04, 0.022)
+material_override = ExtResource("2_i412d")
+mesh = SubResource("BoxMesh_nom0g")
+
+[node name="DividerR" type="MeshInstance3D" parent="." unique_id=1696136708]
+transform = Transform3D(0.98162717, -0.190809, 0, 0.190809, 0.98162717, 0, 0, 0, 1, 0.142, -0.04, 0.022)
+material_override = ExtResource("2_i412d")
+mesh = SubResource("BoxMesh_waqdi")
+
+[node name="Shelf" type="MeshInstance3D" parent="." unique_id=1269719516]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.5, 0.11)
+material_override = ExtResource("3_iqqu4")
+mesh = SubResource("BoxMesh_o3q2t")
+
+[node name="Bracket1" type="MeshInstance3D" parent="." unique_id=732122218]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.22, -0.59, 0.08)
+material_override = ExtResource("3_iqqu4")
+mesh = SubResource("BoxMesh_xarye")
+
+[node name="Bracket2" type="MeshInstance3D" parent="." unique_id=827580123]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.22, -0.59, 0.08)
+material_override = ExtResource("3_iqqu4")
+mesh = SubResource("BoxMesh_eyunn")
+
+[node name="Spyglass" type="MeshInstance3D" parent="." unique_id=549120311]
+transform = Transform3D(-4.371139e-08, -1, 0, 1, -4.371139e-08, 0, 0, 0, 1, -0.1, -0.45, 0.12)
+material_override = ExtResource("2_i412d")
+mesh = SubResource("CylinderMesh_ab7au")
+
+[node name="Eyepiece" type="MeshInstance3D" parent="Spyglass" unique_id=227254515]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.17, 0)
+material_override = ExtResource("2_i412d")
+mesh = SubResource("CylinderMesh_uu1ba")
+
+[node name="RolledChart" type="MeshInstance3D" parent="." unique_id=407064739]
+transform = Transform3D(-4.275619e-08, -0.9781476, 0.2079117, 1, -4.371139e-08, 0, 9.088109e-09, 0.2079117, 0.9781476, 0.05, -0.443, 0.06)
+material_override = ExtResource("4_858au")
+mesh = SubResource("CylinderMesh_6mb5p")
+
+[node name="Compass" type="MeshInstance3D" parent="." unique_id=1631303177]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.2, -0.465, 0.13)
+material_override = ExtResource("2_i412d")
+mesh = SubResource("CylinderMesh_80y2w")

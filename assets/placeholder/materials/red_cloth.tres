@@ -1,0 +1,8 @@
+[gd_resource type="StandardMaterial3D" format=3 uid="uid://ifsffdb6b1mi"]
+
+[ext_resource type="Texture2D" path="res://assets/placeholder/textures/runner.png" id="1_curvn"]
+
+[resource]
+albedo_texture = ExtResource("1_curvn")
+metallic_specular = 0.1
+texture_filter = 0

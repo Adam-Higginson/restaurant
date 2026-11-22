@@ -35,6 +35,17 @@ func test_moves_as_time_passes() -> void:
 	assert_float(swing.rotation.z).is_not_equal(0.0)
 
 
+func test_keeps_facing_the_way_it_was_turned() -> void:
+	# Like the pan by the porthole: turned to hang flat along the wall.
+	var swing: Swinging = _new_swing(4.0, 2.0, 0.0)
+	swing.rotation_degrees = Vector3(0, 90, 0)
+	var runner: GdUnitSceneRunner = scene_runner(swing)
+	await physics_ticks(runner, 10)
+	# Still turned about 90 degrees, give or take the small sway.
+	assert_float(swing.rotation_degrees.y).is_equal_approx(90.0, 5.0)
+	assert_float(swing.rotation.length()).is_greater(0.0)
+
+
 func _new_swing(degrees: float, period: float, phase: float) -> Swinging:
 	var swing: Swinging = Swinging.new()
 	swing.swing_degrees = degrees

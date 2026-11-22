@@ -1,0 +1,9 @@
+[gd_resource type="StandardMaterial3D" format=3 uid="uid://cy7ibulsa8hdp"]
+
+[ext_resource type="Texture2D" path="res://assets/placeholder/textures/chart.png" id="1_sj2ge"]
+
+[resource]
+albedo_texture = ExtResource("1_sj2ge")
+metallic_specular = 0.15
+roughness = 0.95
+texture_filter = 0

@@ -34,7 +34,14 @@ The ship's bell marks the day, as on real ships: eight bells calls everyone down
 - **Deck:** open to the sky, with the mast, the wheel, the ship's bell and the hatch down below.
 - **Below deck:**
   - **The galley:** the kitchen and the mess in one room, so the crew eats at a table beside the stove. Its stations stand in a row along the bulkhead: the pantry, a counter, the chopping board on its counter, and the plate rack.
-  - **The hearth:** the galley is a snug, low room (about 9 x 6.5 m, a plank ceiling 2.6 m up), closed off from the ramp's corridor and from the bunks aft, and crammed with things like the reference image. A stone stove with an iron grate and chimney glows at the fore starboard corner, its pot steaming and embers drifting. The crew's table stands against the starboard wall under a riveted brass porthole, with benches, bread, cheese, tankards and a bowl. A crock shelf and a hanging pan, barrels, sacks, rope, drying herbs, a rug, two framed lanterns and golden motes in the air fill it. At the table the camera glides to a framed shot like the reference.
+  - **The hearth:** the galley is a snug, low room (about 9 x 6.5 m, a plank ceiling 2.6 m up), closed off from the ramp's corridor and from the bunks aft, with posts down the walls under heavy beams. It's crammed with things like the reference image, but every corner is for something:
+    - **The table** stands in the middle of the room under the middle beam, long side across the ship, with a bench along each side, a red runner, a deep red woven rug and a half-eaten supper (bread, cheese, stew, tankards, one knocked over). Two lanterns hang over it. A stool at its head is for whoever's in charge.
+    - **The hearth** is a stone fireplace by the cooking row, its fire burning in an arched mouth, a big pot steaming on its iron top, a flue up to the ceiling and an iron chimney through the deck. Firewood with a hatchet stands beside it.
+    - **By the door** to the bunks (hung open): coats on hooks, an oilskin, a sou'wester and a scarf, a lantern on a bracket, and the ship's bell.
+    - **The navigator's corner**, by the riveted brass porthole: a pinned sea chart with dividers, a spyglass, a rolled chart and a compass.
+    - **Stores:** barrels, sacks and crates, a fishing net with cork floats, a lifebuoy, a rope coil.
+    - **Little lives:** a recipe pinned above the counters, a wool jacket dropped over a bench, a ship in a bottle on the bookshelf, drying herbs, golden motes in the air.
+  - The free camera works everywhere in the galley; the walkways (doorway to counters, round the table, between the table and the hearth) stay open, and tests walk them.
   - **The pantry:** a tall cupboard at the end of the galley's row (see Storage).
   - **Your bunk.**
 - The ship **really moves** between islands, but it never tilts or rocks: the deck stays level and still, so nothing slides off the counters and nobody feels seasick. The sea's motion shows in the water moving around the hull and in hanging things that swing, like the lanterns.
@@ -177,7 +184,11 @@ N64 / OoT style with modern rendering. The reference is a ship's galley at night
 - **Models:** low-poly with flat faces. The characters are chunky folk-tale creatures.
 - **Textures:** small, blocky and low-resolution, with nearest-neighbour filtering.
 - **Lighting:** modern, where the cosiness comes from. Warm lantern point lights with soft shadows, glowing emissive flames, a stove fire that lights the room.
-- **Particles:** steam from pots, drifting embers, fireflies.
+  - **Pools, not a wash:** indoors, light comes only from what's in the room (lanterns, the hearth, the porthole), so it gathers in warm pools with dark corners between. A room's own dim, warm ambient light (an interior ReflectionProbe) stands in for the night sky's, and subtle SSAO darkens creases and the space under furniture.
+  - **Warm inside, cold outside:** the only cold colour in the galley is the blue moonlight through the porthole.
+  - **A shadow budget:** point-light shadows are costly, so in a room only the lights that matter most cast them (in the galley, the hearth and the two lanterns over the table).
+- **Particles:** steam from pots, drifting embers, chimney smoke, fireflies.
+- **Small motion everywhere:** flickering firelight, swinging lanterns, a swaying net and bell, mugs rocking with the sea. Slow and small, so nothing on screen lurches.
 - **The N64 recipe:** every surface has a small texture (32 x 32) stretched so its pixels show, about 64 per metre. Big things are simple textured blocks (tables, benches, barrels, the stove). Planks run on floors, ceilings and walls.
 - **Third-party models** (KayKit, Tiny Treats) are only for small detailed props (pots, jars, bread, cheese). They keep their colours under a chunky grain so they don't read as smooth modern toys. They dress our greybox when downloaded; gameplay always lives on our own shapes, so the game works without them.
 - **Sea and sky:** fog, good-looking water, weather.
@@ -189,6 +200,8 @@ The game opens at night in steady rain, and Studio Ghibli's rain is the referenc
 - **Wet, not shiny:** soaked wood goes darker and richer rather than glossy. Water pools in low spots and plank seams, and those puddles are what mirror the lanterns and the moon. Rain rings ripple across them, water runs down the rails and mast, and drips fall from the hatch rim and the sail. Undersides stay dry.
 - **Rain lands everywhere:** every drop that hits the ship splashes where it lands, on the deck, the rails or your head, and the deck above keeps the galley dry.
 - **The moon** shows faintly through drifting cloud, lighting the cloud edges silver, so the moonlight has a source.
+- **Distant lightning:** while it rains hard, every so often the sky flashes, a quick double flicker. Below deck you see it as the porthole lighting up and a moment of cold light across the galley. (Thunder to follow, with audio.)
+- **The galley chimney** smokes up on deck, the plume leaning astern in the wind.
 - **The sea:** a long, heavy swell with a fine chop on top, modern water (Gerstner waves, Fresnel sky reflection, light through the crests, foam on crests, along the hull and in the wake, rain rings). The ship stays level and still; the sea rises and falls around the hull instead.
 - **Sound:** rain loud on deck, muffled and quieter below deck, with waves underneath, gliding as you go through the hatch.
 - **The moment to aim for:** sitting by the stove while the crew drift in from the rain, with stories and music. In the score, the music *is* the crew playing.

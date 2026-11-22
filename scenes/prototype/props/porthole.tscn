@@ -2,6 +2,7 @@
 
 [ext_resource type="Material" path="res://assets/placeholder/materials/brass.tres" id="1_x"]
 [ext_resource type="Shader" path="res://shaders/rain_glass.gdshader" id="2_x"]
+[ext_resource type="Script" path="res://scripts/props/porthole.gd" id="3_x"]
 
 [sub_resource type="TorusMesh" id="R1"]
 inner_radius = 0.27
@@ -24,11 +25,13 @@ rings = 1
 
 [sub_resource type="ShaderMaterial" id="R4"]
 shader = ExtResource("2_x")
+shader_parameter/tint = Color(0.22, 0.36, 0.7, 0.32)
 
 [sub_resource type="QuadMesh" id="R5"]
 size = Vector2(0.56, 0.56)
 
 [node name="Porthole" type="Node3D"]
+script = ExtResource("3_x")
 
 [node name="Rim" type="MeshInstance3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 0, -1, 0, 1, 0, 0, 0, 0)
@@ -102,9 +105,9 @@ surface_material_override/0 = SubResource("R4")
 cast_shadow = 0
 
 [node name="Moonlight" type="SpotLight3D" parent="."]
-transform = Transform3D(-1, 0, 0, 0, 0.9394, 0.3429, 0, 0.3429, -0.9394, 0, 0.25, 0.1)
-light_color = Color(0.45, 0.6, 1, 1)
-light_energy = 3.0
-spot_range = 6.0
-spot_angle = 38.0
+transform = Transform3D(-1, 0, 0, 0, 0.743, 0.669, 0, 0.669, -0.743, 0, 0.25, 0.1)
+light_color = Color(0.4, 0.55, 1, 1)
+light_energy = 3.5
+spot_range = 7.0
+spot_angle = 30.0
 spot_attenuation = 0.8

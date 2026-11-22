@@ -15,6 +15,11 @@ uniform vec4 drop_light : source_color = vec4(1.0, 0.78, 0.5, 1.0);
 uniform float columns = 9.0;
 // How many texels across the drops are drawn with, for the chunky look.
 uniform float texels = 40.0;
+// The colour the pane turns when lightning flashes outside.
+uniform vec4 flash_color : source_color = vec4(0.75, 0.85, 1.0, 1.0);
+// How bright the lightning is right now, 0 to 1. Each porthole has its own
+// (set by Porthole), so it's an instance uniform.
+instance uniform float flash = 0.0;
 
 
 vec3 hash3(vec2 cell) {
@@ -60,4 +65,8 @@ void fragment() {
 	float glint = smoothstep(0.2, 0.6, water) * (1.0 - smoothstep(0.6, 1.0, water));
 	ALBEDO = mix(tint.rgb, drop_light.rgb, glint);
 	ALPHA = tint.a + 0.3 * water + 0.06 * trail;
+	// Lightning lights the whole pane cold white-blue, and the drops stand out
+	// dark against it.
+	ALBEDO = mix(ALBEDO, flash_color.rgb * (1.0 - 0.5 * water), flash);
+	ALPHA = mix(ALPHA, 0.85, flash);
 }

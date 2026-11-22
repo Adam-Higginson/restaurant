@@ -19,6 +19,21 @@ func test_the_stove_flickers_steams_and_sparks() -> void:
 	assert_bool(stove.embers().local_coords).is_true()
 
 
+func test_the_chimney_smokes_up_on_deck_leaning_astern() -> void:
+	var stove: GalleyStove = (load(STOVE_SCENE) as PackedScene).instantiate() as GalleyStove
+	add_child(stove)
+	auto_free(stove)
+	assert_bool(stove.smoke().emitting).is_true()
+	# It comes out of the chimney top, above the deck (5.3 m up the ship, so
+	# 4.3 m above the galley floor the stove stands on).
+	assert_float(stove.to_local(stove.smoke().global_position).y).is_greater(4.3)
+	# It sails with the ship, and the wind leans it astern (+z) as it rises.
+	assert_bool(stove.smoke().local_coords).is_true()
+	var process: ParticleProcessMaterial = stove.smoke().process_material 			as ParticleProcessMaterial
+	assert_float(process.gravity.y).is_greater(0.0)
+	assert_float(process.gravity.z).is_greater(0.0)
+
+
 func test_the_galley_has_its_hearth_table_and_lanterns() -> void:
 	var ship: Ship = new_moored_ship_with_player(Vector3(0, 1.05, 6))[0] as Ship
 	assert_object(ship.get_node("Galley/Stove") as GalleyStove).is_not_null()
@@ -59,6 +74,42 @@ func test_the_lanterns_glow_as_bright_as_set() -> void:
 	var light: OmniLight3D = lantern.get_node("Light") as OmniLight3D
 	assert_float(light.light_energy).is_equal_approx(0.7, 0.0001)
 	assert_float(light.omni_range).is_equal_approx(3.0, 0.0001)
+
+
+func test_a_lantern_can_be_set_not_to_cast_shadows() -> void:
+	var lantern: Lantern = (load("res://scenes/prototype/props/lantern.tscn") as PackedScene) \
+			.instantiate() as Lantern
+	lantern.casts_shadows = false
+	add_child(lantern)
+	auto_free(lantern)
+	assert_bool((lantern.get_node("Light") as OmniLight3D).shadow_enabled).is_false()
+
+
+func test_no_more_than_three_galley_lights_cast_shadows() -> void:
+	# Shadows from point lights are costly: only the hearth and the two
+	# lanterns over the table cast them.
+	var ship: Ship = new_moored_ship_with_player(Vector3(0, 1.05, 6))[0] as Ship
+	# Running it calls each lantern's _ready, which sets its shadows.
+	var runner: GdUnitSceneRunner = scene_runner(ship.get_parent())
+	await physics_ticks(runner, 2)
+	var galley: AABB = AABB(Vector3(-3.4, 1.0, 1.15), Vector3(9.1, 2.6, 6.65))
+	var shadowed: Array[String] = []
+	for node: Node in ship.find_children("*", "Light3D", true, false):
+		var light: Light3D = node as Light3D
+		if light.shadow_enabled and galley.has_point(ship.to_local(light.global_position)):
+			shadowed.append(str(ship.get_path_to(light)))
+	assert_array(shadowed).override_failure_message(
+			"Lights casting shadows in the galley: %s" % [shadowed]).has_size(3)
+
+
+func test_the_galley_has_its_own_dim_ambient_light() -> void:
+	# Inside, the dark warm ambient of the galley's probe replaces the night
+	# sky's, so the corners stay dark.
+	var ship: Ship = new_moored_ship_with_player(Vector3(0, 1.05, 6))[0] as Ship
+	var probe: ReflectionProbe = ship.get_node("Visuals/GalleyProbe") as ReflectionProbe
+	assert_bool(probe.interior).is_true()
+	assert_int(probe.ambient_mode).is_equal(ReflectionProbe.AMBIENT_COLOR)
+	assert_float(probe.ambient_color_energy).is_less(0.5)
 
 
 func test_golden_motes_drift_with_the_ship() -> void:

@@ -3,6 +3,7 @@
 [ext_resource type="Script" path="res://scripts/weather/weather.gd" id="1_cr2av"]
 [ext_resource type="Script" path="res://scripts/weather/rain_effect.gd" id="2_yqodj"]
 [ext_resource type="Script" path="res://scripts/weather/ambience.gd" id="3_fodvc"]
+[ext_resource type="Script" path="res://scripts/weather/lightning.gd" id="4_light"]
 
 [node name="Weather" type="Node" unique_id=91335981 node_paths=PackedStringArray("rain")]
 script = ExtResource("1_cr2av")
@@ -20,3 +21,6 @@ bus = &"Ambience"
 
 [node name="Waves" type="AudioStreamPlayer" parent="Ambience" unique_id=1859045830]
 bus = &"Ambience"
+
+[node name="Lightning" type="Node" parent="." unique_id=1730245561]
+script = ExtResource("4_light")
