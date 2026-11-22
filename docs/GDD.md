@@ -196,7 +196,7 @@ N64 / OoT style with modern rendering. The reference is a ship's galley at night
   - **Warm inside, cold outside:** the only cold colour in the galley is the blue moonlight through the porthole.
   - **A shadow budget:** point-light shadows are costly, so in a room only the lights that matter most cast them (in the galley, the hearth and the two lanterns over the table).
 - **Particles:** steam from pots, drifting embers, chimney smoke, fireflies.
-- **Small motion everywhere:** flickering firelight, swinging lanterns, a swaying net and bell, mugs rocking with the sea. Slow and small, so nothing on screen lurches.
+- **Small motion everywhere:** flickering firelight, swinging lanterns, a swaying net and bell, mugs rocking with the sea, candle flames wavering, hammocks rolling, curtains and blanket ends swaying, socks stirring in a stove's warm air. Slow and small, so nothing on screen lurches.
 - **The N64 recipe:** every surface has a small texture (32 x 32) stretched so its pixels show, about 64 per metre. Big things are simple textured blocks (tables, benches, barrels, the stove). Planks run on floors, ceilings and walls.
 - **Third-party models** (KayKit, Tiny Treats) are only for small detailed props (pots, jars, bread, cheese). They keep their colours under a chunky grain so they don't read as smooth modern toys. They dress our greybox when downloaded; gameplay always lives on our own shapes, so the game works without them.
 - **Sea and sky:** fog, good-looking water, weather.
