@@ -1,0 +1,18 @@
+[gd_resource type="Resource" script_class="Reaction" format=3 uid="uid://b56psrj47k5vo"]
+
+[ext_resource type="Script" path="res://scripts/data/item.gd" id="1_item"]
+[ext_resource type="Resource" path="res://data/items/herring.tres" id="2_herring"]
+[ext_resource type="Script" path="res://scripts/data/element.gd" id="3_element"]
+[ext_resource type="Resource" path="res://data/elements/cut.tres" id="4_cut"]
+[ext_resource type="Resource" path="res://data/items/chopping_board.tres" id="5_board"]
+[ext_resource type="Resource" path="res://data/items/herring_fillet.tres" id="6_fillet"]
+[ext_resource type="Script" path="res://scripts/data/reaction.gd" id="7_reaction"]
+
+[resource]
+script = ExtResource("7_reaction")
+id = &"fillet_herring"
+consumes = Array[ExtResource("1_item")]([ExtResource("2_herring")])
+requires = Array[ExtResource("1_item")]([ExtResource("5_board")])
+elements = Array[ExtResource("3_element")]([ExtResource("4_cut")])
+amount = 3.0
+result = ExtResource("6_fillet")

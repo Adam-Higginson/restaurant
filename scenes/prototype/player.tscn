@@ -9,6 +9,7 @@
 [ext_resource type="Script" path="res://scripts/data/hand_tool.gd" id="9_tool"]
 [ext_resource type="Script" path="res://scripts/interaction/interaction_detector_3d.gd" id="7_detect"]
 [ext_resource type="Script" path="res://scripts/player/carried_stack_3d.gd" id="8_stack"]
+[ext_resource type="PackedScene" uid="uid://cl4ntrnspr1t0" path="res://scenes/prototype/lantern_spirit.tscn" id="20_spirit"]
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_raosb"]
 radius = 0.4
@@ -123,3 +124,7 @@ material_override = SubResource("StandardMaterial3D_arrow")
 [node name="CarriedStack" type="Node3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.95, 0)
 script = ExtResource("8_stack")
+
+[node name="LanternSpirit" parent="." unique_id=1650650065 node_paths=PackedStringArray("player", "detector") instance=ExtResource("20_spirit")]
+player = NodePath("..")
+detector = NodePath("../InteractionDetector")

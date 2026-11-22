@@ -1,0 +1,51 @@
+[gd_scene format=3 uid="uid://hxhdjrnfqhq"]
+
+[ext_resource type="Script" path="res://scripts/props/hob.gd" id="1_hob"]
+[ext_resource type="Resource" path="res://data/items/frying_pan.tres" id="2_pan"]
+[ext_resource type="Resource" path="res://data/elements/fire.tres" id="3_fire"]
+[ext_resource type="Script" path="res://scripts/interaction/interactable_3d.gd" id="4_reach"]
+[ext_resource type="Material" path="res://assets/placeholder/materials/iron.tres" id="5_iron"]
+[ext_resource type="Material" path="res://assets/placeholder/materials/embers.tres" id="6_embers"]
+
+[sub_resource type="TorusMesh" id="Trivet"]
+inner_radius = 0.19
+outer_radius = 0.23
+rings = 12
+ring_segments = 4
+
+[sub_resource type="CylinderMesh" id="Glow"]
+top_radius = 0.17
+bottom_radius = 0.17
+height = 0.005
+radial_segments = 12
+rings = 1
+
+[sub_resource type="BoxShape3D" id="Reach"]
+size = Vector3(0.6, 0.5, 0.6)
+
+[node name="Hob" type="StaticBody3D"]
+script = ExtResource("1_hob")
+heat = ExtResource("3_fire")
+start_item = ExtResource("2_pan")
+
+[node name="Trivet" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.01, 0)
+material_override = ExtResource("5_iron")
+mesh = SubResource("Trivet")
+
+[node name="HotIron" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.003, 0)
+material_override = ExtResource("6_embers")
+cast_shadow = 0
+mesh = SubResource("Glow")
+
+[node name="Interactable" type="Area3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.2, 0)
+script = ExtResource("4_reach")
+focus_height = 0.9
+
+[node name="Shape" type="CollisionShape3D" parent="Interactable"]
+shape = SubResource("Reach")
+
+[node name="ItemSpot" type="Node3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.02, 0)

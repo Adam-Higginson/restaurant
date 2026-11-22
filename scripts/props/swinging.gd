@@ -17,6 +17,8 @@ extends Node3D
 
 var _time: float = 0.0
 var _rest: Basis = Basis.IDENTITY
+## Extra swing from a knock (a bell rung, say), dying away, in radians.
+var _kick: float = 0.0
 
 
 func _ready() -> void:
@@ -30,11 +32,19 @@ func _ready() -> void:
 # rest of the ship.
 func _physics_process(delta: float) -> void:
 	_time += delta
+	_kick = move_toward(_kick, 0.0, _kick * 0.6 * delta + 0.002 * delta)
 	_swing_to(_time)
 
 
+## Knocks it into a bigger swing, [param degrees] wide, that dies away over a
+## few seconds: a bell being rung.
+func kick(degrees: float) -> void:
+	_kick = maxf(_kick, deg_to_rad(degrees))
+
+
 func _swing_to(time: float) -> void:
-	basis = _rest * Basis.from_euler(angle_at(time))
+	var knock: Vector3 = Vector3(_kick * sin(time * TAU * 1.1), 0.0, 0.0)
+	basis = _rest * Basis.from_euler(angle_at(time) + knock)
 
 
 ## The swing's rotation at [param time] seconds, in radians: a side-to-side

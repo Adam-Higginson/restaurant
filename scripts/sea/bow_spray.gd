@@ -37,7 +37,7 @@ func _ready() -> void:
 
 
 func _physics_process(delta: float) -> void:
-	if ship == null or not ship.is_sailing:
+	if ship == null or ship.way < 0.5:
 		return
 	_wait -= delta
 	if _wait <= 0.0:

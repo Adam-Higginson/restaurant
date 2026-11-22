@@ -14,11 +14,17 @@ A cosy 3D adventure in the spirit of Ocarina of Time. You're pulled from the sea
 
 ## Story
 - **The rescue:** a young adult sinks in dark water. A small, warm light drifts down and a hand of flame takes theirs. It's a **lantern spirit** (he/him), and he pulls them aboard a ship.
-- **The promise:** the lantern promises to get them home. He's sure they came from the nearest island. He's wrong, and he keeps being cheerfully wrong, island after island ("perhaps your home *moved*?"). Over time his guesses get more tender: he quietly hopes he's wrong, because if they find home, they'll leave the ship.
+- **The promise:** the lantern promises to get them home. He's sure they came from the nearest island. He's wrong, and he keeps being cheerfully wrong, island after island ("perhaps your home *moved*?"). Over time his guesses get more tender: he quietly hopes he's wrong, because if they find home, they'll leave the ship. **He talks (first sketch):** a few words float beside him at the moments that matter: a memory coming back ("Was that home? It sounded like home."), a fish landed ("A fish! Is home a fish? ...No. Probably not."), the ship stopping, waking at dawn, and standing at the bow at night looking at the far light ("A light! That's it. That's home. Probably. Almost certainly. Maybe."). His lines are in `scripts/companion/lantern_lines.gd`. **He follows you** at your shoulder, lighting the way, and drifts over to hover above whatever you stop at. **His warmth (first sketch):** he fades slowly over time (dimmer, his light reaching less far, never out), and says so when he's low ("I'm a bit... dim. Is there soup?"). Share a dish with him at the little round table by the bunk room's stove and he drifts down to it, it's gone, and he glows warm again, more for a better dish: the GDD's "a warm meal by the stove rekindles him", and a reason to cook well.
 - **Memory:** the player remembers home only as **tastes and sounds**: a bread with something bitter and green in it, and three notes of a song. They search by cooking that taste and humming that tune to the people they meet, who recognise flavours and melodies and point the way ("That's sea-fennel. That only grows in the north."). The melody gains notes and the dish gets closer as the voyage goes on.
+  - **Tastes of home (first sketch):** the first time you make or catch certain things, a memory comes back: a few quiet lines that fade in at the top of the screen while the lantern lights up ("A fogged window": butter spitting in a black pan, a boat drawn in a steamed-up window, somebody calling down the stairs). Each comes back once and is kept in your memory book. So far: your first herring, filleting it, frying it, slicing a tomato and a Garden Salad. They're data (`data/memories/`), so writing more is just writing.
 - **The crew:** each crew member comes from an island that turned out not to be home. The first is the gruff **heron captain**. The second (in the Prologue) is a **mossy rock cook**.
 - **The ending question:** when you finally find home, do you stay?
 - The wider story is still to be written.
+
+## How it begins (first sketch)
+Black, and a title: "Somewhere at sea". You wake standing by your bunk at night, the storm outside, the bunk room warm and lamplit, the camera looking aft over your shoulder at your bunk, the stove and the stern windows. The lantern is at your shoulder: "There you are." / "You were in the water. I pulled. You held on. Good holding." / "I'll get you home. I know exactly where it is. Roughly." Then the ship is yours. (In `sea.tscn`, the `Opening` node; tick its Skip to start on deck.)
+
+**Keeping the voyage (first sketch):** sleeping in your bunk is where the game saves: the memories you've got back, the day and whether it's morning, and the lantern's warmth. Start again and the opening carries on ("Day 3. Morning", "You're back. I kept the light on.") instead of beginning anew. To start a new voyage, delete `voyage.save` from the user data folder.
 
 ## A day is a song
 A day has four parts, like a song:
@@ -183,10 +189,13 @@ Worked example: a tomato (★) sliced properly gives (1 + 3) / 2 = ★★ sliced
 | Dish | Proper (★★★) | Shortcut |
 |---|---|---|
 | Garden Salad | Chop lettuce, slice tomato, put both on a plate | Whole lettuce and tomato on a plate |
-| Tomato Soup | Fill the saucepan at the water barrel, boil it (4s) → boiling water. Add diced tomato and chopped onion, boil (8s). Tip it into a bowl. | Diced tomato and chopped onion into cold water, then heat (12s) |
+| Tomato Soup | Fill the saucepan with rainwater at the water butt on deck, boil it on the hearth (4s) → boiling water. Add diced tomato and chopped onion (3 cuts), boil (8s). Ladle it into a bowl from the stack on the table. | Diced tomato and chopped onion into cold water, then heat (12s) |
 | Grilled Cheese | Bread + cheese on a plate → sandwich. Melt butter in the hot frying pan (2s), add the sandwich, fry (6s). | Sandwich straight into the frying pan without butter (6s) |
+| Pan-fried Herring | Catch a herring, fillet it on the board (3 cuts), fry the fillet in the pan on the hob (6s). | A whole herring straight into the pan (9s) |
 
-Garden Salad works today. Tomato Soup and Grilled Cheese need the stove, pans and water barrel.
+Garden Salad, Tomato Soup and Pan-fried Herring work today, and the galley's **recipe book** (open on the cook's stool at the head of the table) shows how to make each, a page at a time (`data/recipes/`). The hearth has two hobs (a saucepan where the stew pot was, and a frying pan); bowls are stacked on the crew table. Grilled Cheese still needs butter and the sandwich step.
+
+**Caught, not bought:** a **herring** (at night; at dawn, a **mackerel**, which fillets and fries the same way) from the rod at the starboard rail (fish only bite while the ship is hove to: ring the bell). Fillet it on the chopping board (3 cuts) for a **herring fillet**, fried in the pan on the galley **hob** (the hearth's hot iron top, which gives fire to whatever vessel sits on it; lift the pan off and cooking pauses). The fish keep in the fridge.
 
 ## Storage
 - The galley **pantry** (and later the hold) stores ingredients. Containers have a fixed number of slots, and each item uses one.
@@ -199,7 +208,7 @@ Garden Salad works today. Tomato Soup and Grilled Cheese need the stove, pans an
 ## Music
 - The user composes the score.
 - **A mix:** a score underneath (themes for the galley, the deck, the open sea and each island, shifting with time and weather), with music from inside the world woven in. The crew play at dinner, islanders sing, and the player hums.
-- **The memory melody:** a fragment of a song from home, a few notes at first. The player can hum it (the lantern accompanies them), and they learn more of it on the voyage. The full theme is only heard when it's complete.
+- **The memory melody:** a fragment of a song from home, a few notes at first. (First sketch: the lantern hums three notes, A, C, B, when a memory comes back and after supper, synthesised in `scripts/companion/hum.gd`; more notes can join `MELODY` as the voyage goes on.) The player can hum it (the lantern accompanies them), and they learn more of it on the voyage. The full theme is only heard when it's complete.
 - Islands can be heard before they're seen, and their melody merges into the score as you arrive.
 
 ## Look and feel
@@ -225,10 +234,11 @@ The game opens at night in steady rain, and Studio Ghibli's rain is the referenc
 - **Rain lands everywhere:** every drop that hits the ship splashes where it lands, on the deck, the rails or your head, and the deck above keeps the galley dry.
 - **The moon** shows faintly through drifting cloud, lighting the cloud edges silver, so the moonlight has a source.
 - **Distant lightning:** while it rains hard, every so often the sky flashes, a quick double flicker. On deck the whole ship is lit cold-white for a moment, every rope thrown in sharp shadow. Below deck you see it as the porthole lighting up and a moment of cold light across the galley. (Thunder to follow, with audio.)
-- **A light far off:** somewhere out in the fog, always far away, a light swells and fades as if a lighthouse beam were sweeping past. Nobody aboard knows what it is.
+- **A light far off:** somewhere out in the fog, always far away, a light swells and fades as if a lighthouse beam were sweeping past. At night that's all you see; at dawn the island it comes from shows through the mist as a ghostly silhouette, cliffs, hills and a lighthouse on its headland. The ship circles it on its route but never reaches it (yet). The lantern has guesses about both from the bow.
 - **The galley chimney** smokes up on deck, the plume leaning astern in the wind.
 - **The sea:** a long, heavy swell with a steep wind sea and a fine chop on top, modern water (Gerstner waves, Fresnel sky reflection, light through the crests, whitecaps on crests, foam along the hull and in the wake, rain rings). Under way, the bow throws up a wave of foam and every few seconds a burst of spray. Where the water is stirred (along the hull, in the wake) tiny specks of plankton glint blue-green. The ship stays level and still; the sea rises and falls around the hull instead.
 - **Sound:** rain loud on deck, muffled and quieter below deck, with waves underneath, gliding as you go through the hatch. The ship makes its own sounds from where they happen: timbers creaking at the mast and the hull, the rigging groaning, the sail cracking in a gust, rain drumming on the canvas, the bell knocking in the swell. (Each needs a recording in `assets/third_party/audio/ship/`; without one it stays silent.)
+- **Dawn (first sketch):** sleep in your bunk (Interact at it) and the screen fades to black: "Morning". You wake to a misty, grey-rose dawn: the rain eases to a drizzle (so the lightning stops), the fog thins and warms, the moon becomes a low warm sun, the sea stops glowing and mirrors the paler sky. Sleep again ("Rest until nightfall") for the night and the storm. Each morning is a new day ("Day 2. Morning"). One number blends it all (`TimeOfDay.dawn`), so dusk and a full day can come later by moving it slowly.
 - **The moment to aim for:** sitting by the stove while the crew drift in from the rain, with stories and music. In the score, the music *is* the crew playing.
 - Rain and weather are one intensity, so a heavier or lighter night changes the rain, the rings on the sea, how wet everything looks and the sound together.
 - High resolution: no pixelated low-resolution viewport. This needs the Forward+ renderer.

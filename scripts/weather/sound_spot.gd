@@ -18,6 +18,9 @@ extends AudioStreamPlayer3D
 @export var max_gap: float = 12.0
 ## Whether to play the first recording on a loop rather than now and then.
 @export var loop: bool = false
+## Whether it plays by itself now and then. Off for sounds something else
+## starts, like the bell when it's rung (see [method play_now]).
+@export var automatic: bool = true
 
 var _streams: Array[AudioStream] = []
 var _wait: float = 0.0
@@ -42,14 +45,21 @@ func _ready() -> void:
 
 
 func _process(delta: float) -> void:
-	if loop or _streams.is_empty():
+	if loop or not automatic or _streams.is_empty():
 		return
 	_wait -= delta
 	if _wait <= 0.0:
-		stream = _streams[_rng.randi_range(0, _streams.size() - 1)]
-		pitch_scale = _rng.randf_range(0.9, 1.1)
-		play()
+		play_now()
 		_wait = next_gap()
+
+
+## Plays one of its recordings now, picked at random, if it has any.
+func play_now() -> void:
+	if _streams.is_empty():
+		return
+	stream = _streams[_rng.randi_range(0, _streams.size() - 1)]
+	pitch_scale = _rng.randf_range(0.9, 1.1)
+	play()
 
 
 ## Whether it has any recordings to play.

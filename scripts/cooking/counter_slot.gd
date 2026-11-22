@@ -14,6 +14,9 @@ signal item_changed(item: ItemInstance)
 ## Emitted whenever anything that shows changes: the item, the food in a
 ## vessel here, or a reaction's progress. Views redraw on it.
 signal changed
+## Emitted when a reaction in the vessel here makes something, with what it
+## made (a sliced tomato, a Garden Salad).
+signal food_made(result: ItemInstance)
 
 ## What Interact would do here. See [method interact_action].
 enum Action {
@@ -195,8 +198,17 @@ func _watch(contents: VesselContents, watching: bool) -> void:
 			vessel_signal.connect(_on_vessel_changed)
 		else:
 			vessel_signal.disconnect(_on_vessel_changed)
+	if watching:
+		contents.reaction_finished.connect(_on_reaction_finished)
+	else:
+		contents.reaction_finished.disconnect(_on_reaction_finished)
 
 
 # Takes the signals' arguments, if any, and ignores them.
 func _on_vessel_changed(_active: ActiveReaction = null) -> void:
+	changed.emit()
+
+
+func _on_reaction_finished(_active: ActiveReaction, result: ItemInstance) -> void:
+	food_made.emit(result)
 	changed.emit()

@@ -50,3 +50,14 @@ func test_an_empty_board_has_no_progress_bar() -> void:
 	auto_free(model)
 
 	assert_object(model.find_child("ProgressBar", false, false)).is_null()
+
+
+func test_pans_pots_and_bowls_look_like_themselves() -> void:
+	var catalog: Catalog = Catalog.load_default()
+	var pan: Node3D = auto_free(ItemModel.build(ItemInstance.new(catalog.find_item(&"frying_pan"))))
+	var pot: Node3D = auto_free(ItemModel.build(ItemInstance.new(catalog.find_item(&"saucepan"))))
+	var bowl: Node3D = auto_free(ItemModel.build(ItemInstance.new(catalog.find_item(&"bowl"))))
+
+	assert_object(pan.get_node_or_null("Handle")).is_not_null()
+	assert_object(pot.get_node_or_null("Pot")).is_not_null()
+	assert_object(bowl.get_node_or_null("Bowl")).is_not_null()

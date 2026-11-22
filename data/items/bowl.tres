@@ -1,0 +1,12 @@
+[gd_resource type="Resource" script_class="Item" format=3 uid="uid://b0wlforsoup0"]
+
+[ext_resource type="Script" path="res://scripts/data/item.gd" id="1_item"]
+
+[resource]
+script = ExtResource("1_item")
+id = &"bowl"
+display_name = "Bowl"
+color = Color(0.93, 0.9, 0.82, 1)
+capacity = 1
+carried_whole = true
+vessel_shape = 1

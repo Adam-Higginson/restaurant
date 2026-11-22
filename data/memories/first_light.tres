@@ -1,0 +1,11 @@
+[gd_resource type="Resource" script_class="Memory" format=3 uid="uid://memf1rstl1ght"]
+
+[ext_resource type="Script" path="res://scripts/data/memory.gd" id="1_memory"]
+[ext_resource type="Resource" path="res://data/items/mackerel.tres" id="2_item"]
+
+[resource]
+script = ExtResource("1_memory")
+id = &"first_light"
+trigger = ExtResource("2_item")
+title = "First light"
+lines = PackedStringArray("Up before anyone, the kitchen still blue.", "A bucket of mackerel on the step, striped like they'd been drawn on.", "Someone had left the kettle warm for you. They always did.")

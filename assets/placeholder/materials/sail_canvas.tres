@@ -1,4 +1,4 @@
-[gd_resource type="ShaderMaterial" format=3 uid="uid://mfnmtf2exsge5"]
+[gd_resource type="ShaderMaterial" format=3 uid="uid://tf02abm86s4u"]
 
 [ext_resource type="Shader" path="res://shaders/sail.gdshader" id="1_ys7u8"]
 [ext_resource type="Texture2D" path="res://assets/placeholder/textures/canvas.png" id="2_7oceg"]

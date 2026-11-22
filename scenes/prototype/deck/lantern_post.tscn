@@ -3,64 +3,64 @@
 [ext_resource type="Material" path="res://assets/placeholder/materials/wet_dark_wood.tres" id="1_yxoqy"]
 [ext_resource type="Material" path="res://assets/placeholder/materials/iron.tres" id="2_pykor"]
 
-[sub_resource type="BoxMesh" id="BoxMesh_j64xp"]
+[sub_resource type="BoxMesh" id="BoxMesh_1"]
 size = Vector3(0.3, 0.18, 0.3)
 
-[sub_resource type="BoxMesh" id="BoxMesh_tmoqw"]
+[sub_resource type="BoxMesh" id="BoxMesh_2"]
 size = Vector3(0.16, 2.6, 0.16)
 
-[sub_resource type="BoxMesh" id="BoxMesh_hf7xc"]
+[sub_resource type="BoxMesh" id="BoxMesh_3"]
 size = Vector3(0.22, 0.08, 0.22)
 
-[sub_resource type="BoxMesh" id="BoxMesh_ts52b"]
+[sub_resource type="BoxMesh" id="BoxMesh_4"]
 size = Vector3(0.72, 0.1, 0.1)
 
-[sub_resource type="BoxMesh" id="BoxMesh_it3f5"]
+[sub_resource type="BoxMesh" id="BoxMesh_5"]
 size = Vector3(0.06, 0.5, 0.06)
 
-[sub_resource type="CylinderMesh" id="CylinderMesh_bnkuy"]
+[sub_resource type="CylinderMesh" id="CylinderMesh_6"]
 top_radius = 0.012
 bottom_radius = 0.012
 height = 0.12
 radial_segments = 4
 rings = 1
 
-[sub_resource type="BoxShape3D" id="BoxShape3D_yqscc"]
+[sub_resource type="BoxShape3D" id="BoxShape3D_7"]
 size = Vector3(0.22, 2.6, 0.22)
 
-[node name="LanternPost" type="StaticBody3D" unique_id=312931023]
+[node name="LanternPost" type="StaticBody3D" unique_id=245107025]
 
-[node name="Foot" type="MeshInstance3D" parent="." unique_id=1819644833]
+[node name="Foot" type="MeshInstance3D" parent="." unique_id=714925766]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.09, 0)
 material_override = ExtResource("1_yxoqy")
-mesh = SubResource("BoxMesh_j64xp")
+mesh = SubResource("BoxMesh_1")
 
-[node name="Post" type="MeshInstance3D" parent="." unique_id=918368437]
+[node name="Post" type="MeshInstance3D" parent="." unique_id=529920140]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.3, 0)
 material_override = ExtResource("1_yxoqy")
-mesh = SubResource("BoxMesh_tmoqw")
+mesh = SubResource("BoxMesh_2")
 
-[node name="Cap" type="MeshInstance3D" parent="." unique_id=75014434]
+[node name="Cap" type="MeshInstance3D" parent="." unique_id=901735809]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.64, 0)
 material_override = ExtResource("1_yxoqy")
-mesh = SubResource("BoxMesh_hf7xc")
+mesh = SubResource("BoxMesh_3")
 
-[node name="Arm" type="MeshInstance3D" parent="." unique_id=1446030560]
+[node name="Arm" type="MeshInstance3D" parent="." unique_id=1183112161]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.34, 2.45, 0)
 material_override = ExtResource("1_yxoqy")
-mesh = SubResource("BoxMesh_ts52b")
+mesh = SubResource("BoxMesh_4")
 
-[node name="Brace" type="MeshInstance3D" parent="." unique_id=640435029]
+[node name="Brace" type="MeshInstance3D" parent="." unique_id=1152306806]
 transform = Transform3D(0.70710677, -0.70710677, 0, 0.70710677, 0.70710677, 0, 0, 0, 1, 0.17, 2.24, 0)
 material_override = ExtResource("1_yxoqy")
-mesh = SubResource("BoxMesh_it3f5")
+mesh = SubResource("BoxMesh_5")
 
-[node name="Hook" type="MeshInstance3D" parent="." unique_id=1420267002]
+[node name="Hook" type="MeshInstance3D" parent="." unique_id=617043914]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.64, 2.36, 0)
 material_override = ExtResource("2_pykor")
 cast_shadow = 0
-mesh = SubResource("CylinderMesh_bnkuy")
+mesh = SubResource("CylinderMesh_6")
 
-[node name="Shape" type="CollisionShape3D" parent="." unique_id=2084704402]
+[node name="Shape" type="CollisionShape3D" parent="." unique_id=1771918559]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.3, 0)
-shape = SubResource("BoxShape3D_yqscc")
+shape = SubResource("BoxShape3D_7")

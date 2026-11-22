@@ -1,0 +1,13 @@
+[gd_scene format=3 uid="uid://dxutiqyrovxfh"]
+
+[ext_resource type="Script" path="res://scripts/companion/lookout.gd" id="1_lookout"]
+
+[sub_resource type="BoxShape3D" id="Bow"]
+size = Vector3(7.0, 2.4, 3.6)
+
+[node name="Lookout" type="Area3D"]
+script = ExtResource("1_lookout")
+
+[node name="Shape" type="CollisionShape3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.2, 0)
+shape = SubResource("Bow")

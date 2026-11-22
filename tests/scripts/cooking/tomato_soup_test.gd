@@ -1,0 +1,117 @@
+extends GameTestSuite
+## Tests for Tomato Soup the way the GDD designs it, with rain from the deck:
+## fill the saucepan at the water butt, boil the water on the hearth, add
+## diced tomato and chopped onion, boil, and ladle it into a bowl. Dumping it
+## all in cold is the rough shortcut.
+
+## By the water butt on deck, facing it (port).
+const AT_THE_BUTT: Vector3 = Vector3(-3.9, 5.35, -1.6)
+
+
+func before_test() -> void:
+	Game.memories.clear()
+
+
+func after_test() -> void:
+	Game.memories.clear()
+
+
+func test_the_water_butt_fills_a_held_saucepan() -> void:
+	var rig: Array[Node3D] = new_moored_ship_with_player(AT_THE_BUTT)
+	var player: Player3D = rig[1] as Player3D
+	var runner: GdUnitSceneRunner = scene_runner(rig[0].get_parent())
+	await physics_ticks(runner, 2)
+	player.toolbar.add(ItemInstance.new(_item(&"saucepan")))
+
+	await walk(runner, "move_left", 2)
+	await press(runner, "interact")
+
+	var food: Array[ItemInstance] = player.toolbar.top().contents.get_contents()
+	assert_int(food.size()).is_equal(1)
+	assert_str(String(food[0].item.id)).is_equal("rainwater")
+
+
+func test_it_offers_nothing_to_empty_hands() -> void:
+	var butt: WaterButt = (load("res://scenes/prototype/props/water_butt.tscn") as PackedScene) \
+			.instantiate() as WaterButt
+	auto_free(butt)
+	var toolbar: Toolbar = Toolbar.new()
+
+	assert_str(butt.prompt(toolbar)).is_empty()
+	assert_bool(butt.fill(toolbar)).is_false()
+
+
+func test_soup_done_properly_is_three_stars() -> void:
+	var rig: Array[Node3D] = new_moored_ship_with_player(Vector3(0, 1.05, 6))
+	var runner: GdUnitSceneRunner = scene_runner(rig[0].get_parent())
+	var pan: VesselContents = _soup_pan(rig[0] as Ship)
+	await physics_ticks(runner, 2)
+
+	pan.add_item(ItemInstance.new(_item(&"rainwater")))
+	await physics_ticks(runner, 4 * 60 + 5)
+	assert_str(String(pan.get_contents()[0].item.id)).is_equal("boiling_water")
+	pan.add_item(ItemInstance.new(_item(&"diced_tomato"), 2))
+	pan.add_item(ItemInstance.new(_item(&"chopped_onion"), 2))
+	await physics_ticks(runner, 8 * 60 + 5)
+
+	var food: Array[ItemInstance] = pan.get_contents()
+	assert_int(food.size()).is_equal(1)
+	assert_str(String(food[0].item.id)).is_equal("tomato_soup")
+	assert_int(food[0].quality).is_equal(3)
+
+
+func test_dumping_it_all_in_cold_is_the_rough_shortcut() -> void:
+	var rig: Array[Node3D] = new_moored_ship_with_player(Vector3(0, 1.05, 6))
+	var runner: GdUnitSceneRunner = scene_runner(rig[0].get_parent())
+	var pan: VesselContents = _soup_pan(rig[0] as Ship)
+	await physics_ticks(runner, 2)
+
+	pan.add_item(ItemInstance.new(_item(&"rainwater")))
+	pan.add_item(ItemInstance.new(_item(&"diced_tomato")))
+	pan.add_item(ItemInstance.new(_item(&"chopped_onion")))
+	await physics_ticks(runner, 12 * 60 + 5)
+
+	var food: Array[ItemInstance] = pan.get_contents()
+	assert_str(String(food[0].item.id)).is_equal("tomato_soup")
+	assert_int(food[0].quality).is_equal(1)
+
+
+func test_soup_ladles_into_a_bowl_from_the_stack() -> void:
+	var rig: Array[Node3D] = new_moored_ship_with_player(Vector3(0, 1.05, 6))
+	var ship: Ship = rig[0] as Ship
+	var player: Player3D = rig[1] as Player3D
+	var runner: GdUnitSceneRunner = scene_runner(ship.get_parent())
+	await physics_ticks(runner, 2)
+	var hob: Hob = ship.get_node("Galley/SoupHob") as Hob
+	hob.heated.contents.add_item(ItemInstance.new(_item(&"tomato_soup")))
+	var bowls: Dispenser3D = ship.get_node("Galley/BowlStack") as Dispenser3D
+
+	assert_bool(bowls.dispense(player.arms)).is_true()
+	assert_bool(hob.slot.exchange_with(player.arms)).is_true()
+
+	var bowl: ItemInstance = player.arms.top()
+	assert_str(String(bowl.item.id)).is_equal("bowl")
+	assert_str(String(bowl.contents.get_contents()[0].item.id)).is_equal("tomato_soup")
+	assert_bool(hob.heated.contents.get_contents().is_empty()).is_true()
+
+
+func test_your_first_soup_brings_back_rain_on_the_roof() -> void:
+	var rig: Array[Node3D] = new_moored_ship_with_player(Vector3(0, 1.05, 6))
+	var runner: GdUnitSceneRunner = scene_runner(rig[0].get_parent())
+	var pan: VesselContents = _soup_pan(rig[0] as Ship)
+	await physics_ticks(runner, 2)
+
+	pan.add_item(ItemInstance.new(_item(&"rainwater")))
+	pan.add_item(ItemInstance.new(_item(&"diced_tomato")))
+	pan.add_item(ItemInstance.new(_item(&"chopped_onion")))
+	await physics_ticks(runner, 12 * 60 + 5)
+
+	assert_bool(Game.memories.has(&"rain_on_the_roof")).is_true()
+
+
+func _soup_pan(ship: Ship) -> VesselContents:
+	return (ship.get_node("Galley/SoupHob") as Hob).heated.contents
+
+
+func _item(id: StringName) -> Item:
+	return Catalog.load_default().find_item(id)

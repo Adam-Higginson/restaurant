@@ -38,6 +38,8 @@ var _material: ShaderMaterial = null
 
 
 func _ready() -> void:
+	# So things aboard (a fishing float) can find the water's height.
+	add_to_group(&"sea")
 	_material = material_override as ShaderMaterial
 	_follow_ship()
 	_apply()
@@ -96,4 +98,4 @@ func _apply() -> void:
 	if is_instance_valid(ship):
 		var hull: Transform3D = ship.get_global_transform_interpolated()
 		_material.set_shader_parameter("hull_inverse", Projection(hull.affine_inverse()))
-		_material.set_shader_parameter("wake", 1.0 if ship.is_sailing else 0.0)
+		_material.set_shader_parameter("wake", ship.way)

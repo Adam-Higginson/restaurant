@@ -1,0 +1,9 @@
+[gd_resource type="Resource" script_class="Element" format=3 uid="uid://b6disjhdtgx8i"]
+
+[ext_resource type="Script" path="res://scripts/data/element.gd" id="1_element"]
+
+[resource]
+script = ExtResource("1_element")
+id = &"fire"
+display_name = "Fire"
+kind = 1

@@ -11,6 +11,7 @@ extends CanvasLayer
 @onready var _toolbar: ToolbarBar = %Toolbar
 @onready var _held_item: HeldItemLabel3D = %HeldItem
 @onready var _action_prompt: ActionPrompt = %ActionPrompt
+@onready var _memory_card: MemoryCard = %MemoryCard
 
 
 func _ready() -> void:
@@ -20,3 +21,11 @@ func _ready() -> void:
 	_toolbar.setup(player)
 	_held_item.setup(player)
 	_action_prompt.setup(player)
+	# The lantern lights up when a memory comes back.
+	Game.memories.remembered.connect(_on_remembered)
+
+
+func _on_remembered(_memory: Memory) -> void:
+	var spirit: LanternSpirit = player.get_node_or_null("LanternSpirit") as LanternSpirit
+	if spirit != null:
+		spirit.excite()

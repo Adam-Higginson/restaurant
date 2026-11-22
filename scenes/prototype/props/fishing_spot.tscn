@@ -1,0 +1,122 @@
+[gd_scene format=3 uid="uid://b6emgljj5hx8i"]
+
+[ext_resource type="Script" path="res://scripts/fishing/fishing_spot.gd" id="1_spot"]
+[ext_resource type="Resource" path="res://data/items/herring.tres" id="2_herring"]
+[ext_resource type="Resource" path="res://data/items/mackerel.tres" id="11_mackerel"]
+[ext_resource type="Script" path="res://scripts/interaction/interactable_3d.gd" id="3_reach"]
+[ext_resource type="Material" path="res://assets/placeholder/materials/wet_dark_wood.tres" id="4_wood"]
+[ext_resource type="Material" path="res://assets/placeholder/materials/wet_prop_wood.tres" id="5_light_wood"]
+[ext_resource type="Material" path="res://assets/placeholder/materials/wet_rope.tres" id="6_rope"]
+[ext_resource type="Material" path="res://assets/placeholder/materials/red_cloth.tres" id="7_red"]
+[ext_resource type="Material" path="res://assets/placeholder/materials/crockery.tres" id="8_white"]
+[ext_resource type="Material" path="res://assets/placeholder/materials/iron.tres" id="9_iron"]
+[ext_resource type="Material" path="res://assets/placeholder/materials/water.tres" id="10_water"]
+
+[sub_resource type="BoxMesh" id="Holder"]
+size = Vector3(0.14, 1.0, 0.14)
+
+[sub_resource type="CylinderMesh" id="Unit"]
+top_radius = 0.5
+bottom_radius = 0.5
+height = 1.0
+radial_segments = 6
+rings = 1
+
+[sub_resource type="CylinderMesh" id="Reel"]
+top_radius = 0.06
+bottom_radius = 0.06
+height = 0.06
+radial_segments = 8
+rings = 1
+
+[sub_resource type="SphereMesh" id="BobberTop"]
+radius = 0.055
+height = 0.055
+radial_segments = 8
+rings = 3
+is_hemisphere = true
+
+[sub_resource type="SphereMesh" id="Ball"]
+radius = 0.055
+height = 0.11
+radial_segments = 8
+rings = 4
+
+[sub_resource type="CylinderMesh" id="Bucket"]
+top_radius = 0.16
+bottom_radius = 0.13
+height = 0.28
+radial_segments = 10
+rings = 1
+
+[sub_resource type="CylinderMesh" id="BucketWater"]
+top_radius = 0.15
+bottom_radius = 0.15
+height = 0.01
+radial_segments = 10
+rings = 1
+
+[sub_resource type="BoxShape3D" id="ReachShape"]
+size = Vector3(1.1, 1.4, 1.3)
+
+[node name="FishingSpot" type="Node3D"]
+script = ExtResource("1_spot")
+catch = ExtResource("2_herring")
+dawn_catch = ExtResource("11_mackerel")
+
+[node name="Holder" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5, 0)
+material_override = ExtResource("4_wood")
+mesh = SubResource("Holder")
+
+[node name="RodBase" type="Marker3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.05, 0.85, 0)
+
+[node name="RodTip" type="Marker3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.9, 2.75, 0)
+
+[node name="Rod" type="MeshInstance3D" parent="."]
+material_override = ExtResource("5_light_wood")
+mesh = SubResource("Unit")
+
+[node name="Reel" type="MeshInstance3D" parent="."]
+transform = Transform3D(-4.371139e-08, -1, 0, 1, -4.371139e-08, 0, 0, 0, 1, 0.15, 1.05, 0.06)
+material_override = ExtResource("9_iron")
+mesh = SubResource("Reel")
+
+[node name="Line" type="MeshInstance3D" parent="."]
+material_override = ExtResource("6_rope")
+cast_shadow = 0
+mesh = SubResource("Unit")
+
+[node name="Bobber" type="Node3D" parent="."]
+
+[node name="Float" type="MeshInstance3D" parent="Bobber"]
+material_override = ExtResource("7_red")
+cast_shadow = 0
+mesh = SubResource("Ball")
+
+[node name="Cap" type="MeshInstance3D" parent="Bobber"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.01, 0)
+material_override = ExtResource("8_white")
+cast_shadow = 0
+mesh = SubResource("BobberTop")
+
+[node name="BaitBucket" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.45, 0.14, 0.4)
+material_override = ExtResource("5_light_wood")
+mesh = SubResource("Bucket")
+
+[node name="BaitWater" type="MeshInstance3D" parent="BaitBucket"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.1, 0)
+material_override = ExtResource("10_water")
+cast_shadow = 0
+mesh = SubResource("BucketWater")
+
+[node name="Reach" type="Area3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.55, 0.9, 0)
+script = ExtResource("3_reach")
+focus_height = 1.5
+
+[node name="Shape" type="CollisionShape3D" parent="Reach"]
+shape = SubResource("ReachShape")

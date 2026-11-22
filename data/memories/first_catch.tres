@@ -1,0 +1,11 @@
+[gd_resource type="Resource" script_class="Memory" format=3 uid="uid://memf1rstcatch"]
+
+[ext_resource type="Script" path="res://scripts/data/memory.gd" id="1_memory"]
+[ext_resource type="Resource" path="res://data/items/herring.tres" id="2_item"]
+
+[resource]
+script = ExtResource("1_memory")
+id = &"first_catch"
+trigger = ExtResource("2_item")
+title = "A cold jetty"
+lines = PackedStringArray("Bare feet on wet boards.", "A line held between two fingers, waiting.", "Someone beside you, very patient, humming the same four notes over and over.")

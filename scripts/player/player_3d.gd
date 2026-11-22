@@ -25,6 +25,10 @@ extends CharacterBody3D
 ## The tools on the toolbar at the start, from the first slot on.
 @export var start_tools: Array[HandTool] = []
 
+## Whether the player walks when you push the stick. Off while asleep or in
+## a cutscene: they stand still, but the deck still carries them as it sails.
+var controls_enabled: bool = true
+
 ## The flat direction the model faces, in world space.
 var facing: Vector3:
 	get:
@@ -71,7 +75,9 @@ func _ready() -> void:
 
 
 func _physics_process(delta: float) -> void:
-	var input: Vector2 = Input.get_vector("move_left", "move_right", "move_up", "move_down")
+	var input: Vector2 = Vector2.ZERO
+	if controls_enabled:
+		input = Input.get_vector("move_left", "move_right", "move_up", "move_down")
 	var direction: Vector3 = camera_relative(input, _movement_yaw(input))
 	velocity.x = direction.x * speed
 	velocity.z = direction.z * speed

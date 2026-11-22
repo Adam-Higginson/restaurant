@@ -1,0 +1,159 @@
+[gd_scene format=3 uid="uid://l1ghth0use1sl"]
+
+[ext_resource type="Script" path="res://scripts/weather/distant_island.gd" id="1_island"]
+[ext_resource type="Shader" path="res://shaders/distant_silhouette.gdshader" id="2_shader"]
+
+[sub_resource type="ShaderMaterial" id="Silhouette"]
+shader = ExtResource("2_shader")
+shader_parameter/colour = Color(0.24, 0.25, 0.3, 1)
+shader_parameter/mist = Color(0.6, 0.55, 0.58, 1)
+shader_parameter/reveal = 0.05
+shader_parameter/mist_from = 4.0
+shader_parameter/mist_to = 40.0
+
+[sub_resource type="CylinderMesh" id="Mesh0"]
+top_radius = 40
+bottom_radius = 48
+height = 16
+radial_segments = 7
+rings = 1
+
+[sub_resource type="CylinderMesh" id="Mesh1"]
+top_radius = 22
+bottom_radius = 34
+height = 8
+radial_segments = 7
+rings = 1
+
+[sub_resource type="CylinderMesh" id="Mesh2"]
+top_radius = 6
+bottom_radius = 20
+height = 9
+radial_segments = 6
+rings = 1
+
+[sub_resource type="CylinderMesh" id="Mesh3"]
+top_radius = 8
+bottom_radius = 18
+height = 6
+radial_segments = 6
+rings = 1
+
+[sub_resource type="CylinderMesh" id="Mesh4"]
+top_radius = 2.5
+bottom_radius = 4
+height = 14
+radial_segments = 5
+rings = 1
+
+[sub_resource type="CylinderMesh" id="Mesh5"]
+top_radius = 1.5
+bottom_radius = 3
+height = 9
+radial_segments = 5
+rings = 1
+
+[sub_resource type="CylinderMesh" id="Mesh6"]
+top_radius = 9
+bottom_radius = 13
+height = 6
+radial_segments = 6
+rings = 1
+
+[sub_resource type="CylinderMesh" id="Mesh7"]
+top_radius = 1.6
+bottom_radius = 2.2
+height = 16
+radial_segments = 8
+rings = 1
+
+[sub_resource type="CylinderMesh" id="Mesh8"]
+top_radius = 2.7
+bottom_radius = 2.7
+height = 0.6
+radial_segments = 8
+rings = 1
+
+[sub_resource type="CylinderMesh" id="Mesh9"]
+top_radius = 1.5
+bottom_radius = 1.5
+height = 2.2
+radial_segments = 8
+rings = 1
+
+[sub_resource type="CylinderMesh" id="Mesh10"]
+top_radius = 0.2
+bottom_radius = 1.9
+height = 2
+radial_segments = 8
+rings = 1
+
+[node name="LighthouseIsland" type="Node3D"]
+script = ExtResource("1_island")
+silhouette = SubResource("Silhouette")
+
+[node name="Cliffs" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -1, 0)
+material_override = SubResource("Silhouette")
+cast_shadow = 0
+mesh = SubResource("Mesh0")
+
+[node name="Slopes" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6, 11, 0)
+material_override = SubResource("Silhouette")
+cast_shadow = 0
+mesh = SubResource("Mesh1")
+
+[node name="Hill" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -8, 19.5, 4)
+material_override = SubResource("Silhouette")
+cast_shadow = 0
+mesh = SubResource("Mesh2")
+
+[node name="Knoll" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 14, 10, -12)
+material_override = SubResource("Silhouette")
+cast_shadow = 0
+mesh = SubResource("Mesh3")
+
+[node name="StackNear" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 44, 2, -10)
+material_override = SubResource("Silhouette")
+cast_shadow = 0
+mesh = SubResource("Mesh4")
+
+[node name="StackFar" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -48, 0.5, 16)
+material_override = SubResource("Silhouette")
+cast_shadow = 0
+mesh = SubResource("Mesh5")
+
+[node name="Headland" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 28, 5, 18)
+material_override = SubResource("Silhouette")
+cast_shadow = 0
+mesh = SubResource("Mesh6")
+
+[node name="Tower" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 28, 16, 18)
+material_override = SubResource("Silhouette")
+cast_shadow = 0
+mesh = SubResource("Mesh7")
+
+[node name="Gallery" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 28, 24.3, 18)
+material_override = SubResource("Silhouette")
+cast_shadow = 0
+mesh = SubResource("Mesh8")
+
+[node name="LampRoom" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 28, 25.7, 18)
+material_override = SubResource("Silhouette")
+cast_shadow = 0
+mesh = SubResource("Mesh9")
+
+[node name="Cap" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 28, 27.8, 18)
+material_override = SubResource("Silhouette")
+cast_shadow = 0
+mesh = SubResource("Mesh10")
