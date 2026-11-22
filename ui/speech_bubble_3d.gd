@@ -20,6 +20,10 @@ const NEAR: float = 3.0
 const FADE_START: float = 9.0
 const FADE_END: float = 13.0
 
+## Bubbles are placed after anything with a lower process priority, such as
+## the camera rig (0), so they line up with where the camera is this frame.
+const PROCESS_PRIORITY: int = 100
+
 ## Seconds to fade in and out.
 @export var fade_seconds: float = 0.25
 
@@ -44,6 +48,10 @@ var _tween: Tween = null
 
 func _init() -> void:
 	top_level = true
+	# Placed afresh every frame, so it mustn't be smoothed between physics
+	# ticks as well: that drags it behind and makes it shake.
+	physics_interpolation_mode = Node.PHYSICS_INTERPOLATION_MODE_OFF
+	process_priority = PROCESS_PRIORITY
 	_viewport.transparent_bg = true
 	_viewport.disable_3d = true
 	_viewport.size_2d_override_stretch = true

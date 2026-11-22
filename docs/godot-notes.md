@@ -212,6 +212,8 @@ A growing glossary of the Godot concepts this project uses: what each one is, in
 
 **`call_group`.** `get_tree().call_group("name", "method")` calls a method on every node in a group, and does nothing if there are none, so two parts can talk without either holding a reference to the other. *Ours:* `Chatter.hush_all()`, which the lantern uses to cut the chatter off when he has something to say.
 
+**Turning off physics interpolation, and `process_priority`.** A node placed afresh every frame (in `_process`) must set `physics_interpolation_mode` to Off, or Godot also smooths it between physics ticks and it lags and shakes (see Physics interpolation above). `process_priority` sets the order nodes' `_process` runs in each frame, lowest first, so a node that depends on another (a bubble facing the camera) can run after it. *Ours:* `SpeechBubble3D` does both, so bubbles keep still and line up with the camera this frame, not last frame.
+
 **Inner classes.** A `class Name:` block inside a script defines a small type only that script needs, like a struct. *Ours:* `Speaker.Queued`, a line and its bubble style waiting their turn.
 
 ## Testing

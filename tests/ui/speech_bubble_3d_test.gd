@@ -28,3 +28,19 @@ func test_it_shows_the_words_its_given() -> void:
 	bubble.say("Hm.", anchor, SpeechBubble.Style.THOUGHT)
 
 	assert_str(bubble.text).is_equal("Hm.")
+
+
+func test_it_isnt_smoothed_between_physics_ticks() -> void:
+	var bubble: SpeechBubble3D = auto_free(SpeechBubble3D.new())
+
+	# It's placed every frame; smoothing it between physics ticks too makes it shake.
+	assert_int(bubble.physics_interpolation_mode).is_equal(Node.PHYSICS_INTERPOLATION_MODE_OFF)
+
+
+func test_it_is_placed_after_the_camera_has_moved() -> void:
+	var rig: CameraRig = (load("res://scenes/prototype/player.tscn") as PackedScene) \
+			.instantiate().get_node("CameraRig") as CameraRig
+	auto_free(rig.owner)
+	var bubble: SpeechBubble3D = auto_free(SpeechBubble3D.new())
+
+	assert_int(bubble.process_priority).is_greater(rig.process_priority)
