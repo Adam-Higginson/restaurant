@@ -21,6 +21,7 @@
 [ext_resource type="AudioStream" path="res://assets/audio/combat/clang.tres" id="34_clang"]
 [ext_resource type="AudioStream" path="res://assets/audio/combat/hurt.tres" id="35_hurt"]
 [ext_resource type="AudioStream" path="res://assets/audio/combat/heartbeat.tres" id="36_heartbeat"]
+[ext_resource type="Script" path="res://scripts/art/third_party_model.gd" id="37_model"]
 [ext_resource type="Script" path="res://scripts/combat/hit_stop.gd" id="40_stop"]
 [ext_resource type="Script" path="res://scripts/combat/hit_feel.gd" id="41_feel"]
 [ext_resource type="Script" path="res://scripts/combat/knife_trail.gd" id="42_trail"]
@@ -136,17 +137,35 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -0.95)
 material_override = SubResource("StandardMaterial3D_blade")
 mesh = SubResource("BoxMesh_blade")
 
+[node name="KnifeModel" type="Node3D" parent="Model/Knife" node_paths=PackedStringArray("stand_ins")]
+transform = Transform3D(1, 0, 0, 0, 0, 1, 0, -1, 0, 0, 0, -0.35)
+script = ExtResource("37_model")
+path = "res://assets/third_party/kaykit_restaurant/Assets/gltf/knife.gltf"
+fit_size = Vector3(0.3, 1.15, 0.12)
+stand_ins = [NodePath("../Blade")]
+grain_metres = 0.08
+
 [node name="Heel" type="Marker3D" parent="Model/Knife"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -0.5)
 
 [node name="Tip" type="Marker3D" parent="Model/Knife"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -1.4)
 
-[node name="Pan" type="MeshInstance3D" parent="Model"]
+[node name="Pan" type="Node3D" parent="Model"]
 transform = Transform3D(1, 0, 0, 0, 0, -1, 0, 1, 0, 0, 1.0, -0.55)
 visible = false
+
+[node name="Plate" type="MeshInstance3D" parent="Model/Pan"]
 material_override = ExtResource("23_iron")
 mesh = SubResource("CylinderMesh_pan")
+
+[node name="PanModel" type="Node3D" parent="Model/Pan" node_paths=PackedStringArray("stand_ins")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.06, 0.18)
+script = ExtResource("37_model")
+path = "res://assets/third_party/kaykit_restaurant/Assets/gltf/pan_A.gltf"
+fit_size = Vector3(0.7, 0.2, 1.05)
+stand_ins = [NodePath("../Plate")]
+grain_metres = 0.08
 
 [node name="Sparks" type="CPUParticles3D" parent="Model"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.0, -0.6)
