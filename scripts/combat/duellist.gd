@@ -11,7 +11,7 @@ extends Node
 ## - Use tool, with nothing here for a tool to work on, swings the knife at
 ##   whatever is in front (the [InteractionDetector3D] says when).
 ## - Parry raises the pan for a moment, if there's a frying pan anywhere on
-##   the toolbar. A hit landing in that moment is turned away.
+##   the toolbar. A hit landing in that moment is turned away, with a clang.
 ## - With no hearts left, the lantern pulls the player back to the landing
 ##   (a node in the [constant LANDING_GROUP] group) and half of what they
 ##   carry is lost.
@@ -64,6 +64,7 @@ var _shown: FogCrab = null
 @onready var _spirit: LanternSpirit = $"../LanternSpirit"
 @onready var _knife: Node3D = $"../Model/Knife"
 @onready var _pan: Node3D = $"../Model/Pan"
+@onready var _clang: Clang = $"../Clang"
 
 
 func _ready() -> void:
@@ -145,6 +146,7 @@ func raise_pan() -> bool:
 func receive_hit(halves: int) -> bool:
 	if parry.is_active() and has_pan():
 		parry.spend()
+		_clang.ring()
 		_spirit.excite()
 		parried.emit()
 		return false

@@ -222,6 +222,8 @@ A growing glossary of the Godot concepts this project uses: what each one is, in
 
 **`is_action_pressed` and `is_action_released` on an event.** In `_unhandled_input(event)`, these say whether this event is a button going down or coming up, which is what a held button needs. *Ours:* `LockOn` locks on at the press and lets go at the release.
 
+**A sound made of several pitches.** A metal clang is a handful of sine waves at pitches that aren't whole multiples of each other, each fading at its own speed (`exp(-decay * t)`), plus a few milliseconds of noise for the knock. Written into an `AudioStreamWAV` like the typing blip. *Ours:* `Clang` (`scripts/combat/clang.gd`), the `Clang` node on the player, rung by `Duellist` when a parry lands.
+
 ## Testing
 
 **gdUnit4.** The test framework (`addons/gdUnit4`). Suites extend our `GameTestSuite` and have `test_...` functions. `scene_runner` loads a scene and lets a test press inputs and wait physics ticks. *Ours:* `tests/`.

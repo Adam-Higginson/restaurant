@@ -13,6 +13,7 @@
 [ext_resource type="Script" path="res://scripts/combat/lock_on.gd" id="21_lock"]
 [ext_resource type="Script" path="res://scripts/combat/duellist.gd" id="22_duel"]
 [ext_resource type="Material" path="res://assets/placeholder/materials/iron.tres" id="23_iron"]
+[ext_resource type="Script" path="res://scripts/combat/clang.gd" id="24_clang"]
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_raosb"]
 radius = 0.4
@@ -166,6 +167,9 @@ script = ExtResource("21_lock")
 
 [node name="Duellist" type="Node" parent="."]
 script = ExtResource("22_duel")
+
+[node name="Clang" type="AudioStreamPlayer" parent="."]
+script = ExtResource("24_clang")
 
 [node name="LanternSpirit" parent="." unique_id=1650650065 node_paths=PackedStringArray("player", "detector") instance=ExtResource("20_spirit")]
 player = NodePath("..")
