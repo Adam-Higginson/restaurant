@@ -92,6 +92,8 @@ A growing glossary of the Godot concepts this project uses: what each one is, in
 
 **Building nodes in code.** `MeshInstance3D.new()`, a `BoxMesh` or `CylinderMesh` with a size, and `add_child()` make scenery from a script, which suits things that change shape often. Free the old ones with `remove_child()` then `queue_free()`, so the old and new never show at once. *Ours:* `ItemModel.build()`, used by `Counter3D` and `CarriedStack3D`.
 
+**One scene, many instances, dressed by exports.** A scene placed many times is the same everywhere, but each instance can set its root's `@export` properties differently, and its script applies them in `_ready()`. That's how one scene can look different in each place without copying it. *Ours:* every bunk bay is `bunk_bay.tscn`; `BunkBay`'s exports pick each bay's quilts, whether its curtains are drawn and whether its lantern is lit.
+
 **Static variables.** `static var` belongs to the class, not to each instance, so every user shares one copy. *Ours:* `ItemModel._materials`, one material per colour for every item model.
 
 **`RefCounted` logic classes.** A script that `extends RefCounted` isn't a node: it lives as long as something refers to it, and can be tested without a scene. Keeping rules in one and having a node wrap it splits "what happens" from "how it looks". *Ours:* `CounterSlot` (wrapped by `Counter3D`), `Arms`, `ToolBelt`.

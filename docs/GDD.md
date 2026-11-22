@@ -41,9 +41,15 @@ The ship's bell marks the day, as on real ships: eight bells calls everyone down
     - **The navigator's corner**, by the riveted brass porthole: a pinned sea chart with dividers, a spyglass, a rolled chart and a compass.
     - **Stores:** barrels, sacks and crates, a fishing net with cork floats, a lifebuoy, a rope coil.
     - **Little lives:** a recipe pinned above the counters, a wool jacket dropped over a bench, a ship in a bottle on the bookshelf, drying herbs, golden motes in the air.
-  - The free camera works everywhere in the galley; the walkways (doorway to counters, round the table, between the table and the hearth) stay open, and tests walk them.
+  - The free camera works everywhere in the galley; the walkways (doorway to counters, round the table, between the table and the hearth) stay open, and tests walk them. Its walls run right up to the deck, so there's no gap above its ceiling.
+  - **The bunk room:** aft of the galley, through its open door (and at the foot of the hatch ramp), 4 m high under the deck's beams. Warm, dim and sleepy.
+    - **Bunks down both sides**, two tiers to a bay, with ladders, drawers and curtains: bunched open, or drawn where someone's asleep. Each bay is dressed for whoever sleeps there: their quilt, a little lantern if they're up, their things (a fiddle, a sketchbook, fishing tackle, a kit bag, books). Socks dry on a line; boots stand by the ladders.
+    - **Two hammocks** slung from the beams over the aisle, well above your head, roll with the sea.
+    - **The stern wall** has two round windows onto the night, a shelf between them, sea chests below and a locker in the corner.
+    - **The middle:** a woven rug, a stack of crates, a sea chest and a barrel.
+    - Light comes from two lanterns over the aisle, the bunks' little lanterns and the cold windows; the corners stay dark.
   - **The pantry:** a tall cupboard at the end of the galley's row (see Storage).
-  - **Your bunk.**
+  - **Your bunk:** the aft starboard lower bunk in the bunk room, under a gold patchwork quilt, its lantern lit. By the pillow: a shell from a beach you can't name, a folded note in your own hand, and a cushion where the lantern likes to sit.
 - The ship **really moves** between islands, but it never tilts or rocks: the deck stays level and still, so nothing slides off the counters and nobody feels seasick. The sea's motion shows in the water moving around the hull and in hanging things that swing, like the lanterns.
 - **Mooring:** at an island, a **gangplank** connects the ship to the shore. **Ring the ship's bell** while aboard to set sail.
 
