@@ -222,7 +222,7 @@ A growing glossary of the Godot concepts this project uses: what each one is, in
 
 **`is_action_pressed` and `is_action_released` on an event.** In `_unhandled_input(event)`, these say whether this event is a button going down or coming up, which is what a held button needs. *Ours:* `LockOn` locks on at the press and lets go at the release.
 
-**A sound made of several pitches.** A metal clang is a handful of sine waves at pitches that aren't whole multiples of each other, each fading at its own speed (`exp(-decay * t)`), plus a few milliseconds of noise for the knock. Written into an `AudioStreamWAV` like the typing blip. *Ours:* `Clang` (`scripts/combat/clang.gd`), the `Clang` node on the player, rung by `Duellist` when a parry lands.
+**Sound files and AudioStreamPlayer.** Drop an `.ogg` or `.wav` into the project and Godot imports it as an `AudioStream` (the `.import` file beside it records how). An `AudioStreamPlayer` node plays whatever is in its `stream`; `pitch_scale` plays it a little higher or lower. Playing one of several recordings at a slightly different pitch each time stops a repeated sound feeling mechanical. *Ours:* `Clang` (`scripts/combat/clang.gd`), the `Clang` node on the player: five metal knocks in `assets/audio/combat/`, rung by `Duellist` when a parry lands.
 
 ## Overheard chatter (#94)
 
