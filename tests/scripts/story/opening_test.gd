@@ -95,17 +95,43 @@ func test_the_rescue_waits_for_you_to_take_his_hand_then_goes_to_the_surface() -
 	var castaway: Node3D = _ship.get_node("RescueSet/Props/Castaway") as Node3D
 	var boathook: Node3D = _ship.get_node("RescueSet/Props/ReachingBoathook") as Node3D
 	var heron: Crewmate = _ship.get_node("Crew/Heron") as Crewmate
+	var face: LanternFace = _sinking_lantern()
+	var hand: FlameHand = _underwater_set().get_node("Lantern/Hand") as FlameHand
 
-	# It waits underwater, and says what to press.
-	await physics_ticks(runner, 200)
+	# He opens his own door, and it waits underwater, saying what to press:
+	# he's nearly out, his glass cracked, a hand of fire held out.
+	await physics_ticks(runner, 300)
 	assert_str(String(_conversation.section())).is_equal("reach")
 	assert_bool(underwater.is_open).is_true()
 	assert_str(prompt.shown_text()).contains("Take his hand")
 	assert_bool(castaway.visible).is_false()
+	assert_float(face.strength).is_less(0.2)
+	assert_float(face.door).is_equal_approx(1.0, 0.01)
+	assert_bool(face.cracked).is_true()
+	assert_float(hand.reach).is_greater(0.8)
 
-	# Take it: up to the surface, beside the ship, with the storm clear again.
+	# Take it: his hand closes on yours, and then black, and not a sound.
 	_conversation.press()
+	assert_bool(await _reaches(runner, &"out")).is_true()
+	await physics_ticks(runner, 20)
+	assert_float(hand.grip).is_equal_approx(1.0, 0.01)
+	assert_bool(_fade().is_covering()).is_true()
+	assert_bool(_ambience().hushed).is_true()
+
+	# Your hand catches him alight again, and the storm's rumble comes back.
+	assert_bool(await _reaches(runner, &"rising")).is_true()
+	assert_float(face.strength).is_equal_approx(1.0, 0.01)
+	assert_bool(_fade().is_covering()).is_false()
+	assert_bool(_ambience().hushed).is_false()
+	assert_bool(_ambience().submerged).is_true()
+
+	# Up to the surface, beside the ship, with the storm clear again. He's a
+	# small ember now, his door hanging open.
 	assert_bool(await _reaches(runner, &"surface")).is_true()
+	var ember: LanternFace = _ship.get_node("RescueSet/Props/Castaway/Body") as LanternFace
+	assert_float(ember.strength).is_less(0.6)
+	assert_float(ember.door).is_equal(1.0)
+	assert_bool(ember.cracked).is_true()
 	await physics_ticks(runner, 5)
 	assert_bool(underwater.is_open).is_false()
 	assert_bool(_ambience().submerged).is_false()
@@ -127,6 +153,32 @@ func test_the_rescue_waits_for_you_to_take_his_hand_then_goes_to_the_surface() -
 	assert_bool(boathook.visible).is_false()
 	assert_bool(heron.is_present()).is_false()
 	assert_bool(_fade().is_covering()).is_true()
+
+
+func test_he_comes_down_strong_and_reaches_you_nearly_out() -> void:
+	_build(&"light")
+	var runner: GdUnitSceneRunner = scene_runner(_sea)
+	var face: LanternFace = _sinking_lantern()
+	var hand: FlameHand = _underwater_set().get_node("Lantern/Hand") as FlameHand
+	var body: Node3D = face
+	var trail: CPUParticles3D = _underwater_set().get_node("Lantern/Trail") as CPUParticles3D
+
+	# Through the surface at full strength, bubbles streaming off him.
+	await physics_ticks(runner, 60)
+	assert_str(String(_conversation.section())).is_equal("light")
+	assert_float(face.strength).is_greater(0.8)
+	assert_bool(trail.emitting).is_true()
+	var size_at_first: float = body.scale.x
+
+	# Every push costs him: by the time he reaches you he's smaller and
+	# nearly out, with his door still shut and no hand offered yet.
+	assert_bool(await _reaches(runner, &"reach")).is_true()
+	assert_float(face.strength).is_less(0.2)
+	assert_float(body.scale.x).is_less(size_at_first * 0.8)
+	assert_bool(trail.emitting).is_false()
+	assert_float(face.door).is_less(0.1)
+	assert_float(hand.reach).is_equal(0.0)
+	assert_bool(face.cracked).is_false()
 
 
 func test_you_wake_and_the_captain_appears_and_then_the_ship_is_yours() -> void:
@@ -267,7 +319,8 @@ func test_everything_the_intro_asks_for_is_in_the_scene() -> void:
 				found = looks.find_face(word)
 			&"sound":
 				found = sounds.find_sound(word)
-				if found != null:
+				# One that's still waiting for its recording is allowed to be silent.
+				if found != null and not found is OptionalSound:
 					assert_object((found as AudioStreamPlayer).stream).override_failure_message(
 							"intro.dlg, line %d: the sound '%s' has no recording"
 							% [step.line_number, word]).is_not_null()
@@ -405,6 +458,16 @@ func _reaches(runner: GdUnitSceneRunner, section: StringName) -> bool:
 # The lantern hanging from the hook at the stern.
 func _hook_lantern() -> Node3D:
 	return _ship.get_node("SternWatch/Swing/HookLantern") as Node3D
+
+
+# The set you sink through, inside its stage.
+func _underwater_set() -> Node:
+	return _sea.get_node("Stages/Underwater/View/World/Set")
+
+
+# The lantern who comes down for you.
+func _sinking_lantern() -> LanternFace:
+	return _underwater_set().get_node("Lantern/Body") as LanternFace
 
 
 func _fade() -> ScreenFade:

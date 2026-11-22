@@ -3,7 +3,8 @@ extends CueHandler
 ## One-off sounds for a cutscene. [code]@sound splash[/code] plays the child
 ## of this node named for the cue ([code]Splash[/code], an
 ## [AudioStreamPlayer]) and carries straight on. To add a sound, add a
-## player as a child and give it a recording.
+## player as a child and give it a recording. One whose recording isn't
+## there yet (an [OptionalSound] with no file) is simply silent.
 ##
 ## Nothing is played while a cutscene is being skipped.
 
@@ -25,5 +26,5 @@ func _perform(_cue: StringName, args: PackedStringArray) -> void:
 	if player == null:
 		warn("no sound called '%s' (an AudioStreamPlayer under %s)" % [args[0], name])
 		return
-	if not is_skipping():
+	if not is_skipping() and player.stream != null:
 		player.play()

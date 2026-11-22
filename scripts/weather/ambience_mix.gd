@@ -15,6 +15,8 @@ const SHELTERED_DROP_DB: float = -8.0
 const SUBMERGED_CUTOFF_HZ: float = 260.0
 ## How much quieter the weather is underwater, in decibels.
 const SUBMERGED_DROP_DB: float = -6.0
+## How much quieter everything is when it's hushed, in decibels: silent.
+const HUSHED_DROP_DB: float = -80.0
 
 ## Seconds to glide between outside and sheltered.
 var fade_seconds: float = 0.8
@@ -29,8 +31,14 @@ var depth: float:
 	get:
 		return _depth
 
+## How far the weather has been hushed: 0 as usual, 1 silent.
+var hush: float:
+	get:
+		return _hush
+
 var _shelter: float = 0.0
 var _depth: float = 0.0
+var _hush: float = 0.0
 
 
 ## Moves [member shelter] towards [param sheltered] for [param delta] seconds.
@@ -50,6 +58,17 @@ func sink(delta: float, submerged: bool, seconds: float = 0.25) -> void:
 		_depth = target
 		return
 	_depth = move_toward(_depth, target, delta / seconds)
+
+
+## Moves [member hush] towards [param hushed] for [param delta] seconds, in
+## [param seconds] from one to the other (0 jumps): the sound drops away
+## almost at once, like a held breath.
+func quiet(delta: float, hushed: bool, seconds: float = 0.12) -> void:
+	var target: float = 1.0 if hushed else 0.0
+	if seconds <= 0.0:
+		_hush = target
+		return
+	_hush = move_toward(_hush, target, delta / seconds)
 
 
 ## Jumps straight to outside or sheltered, with no glide (the scene starting).
@@ -77,3 +96,9 @@ func rain_volume_db(intensity: float) -> float:
 ## How much quieter everything is for the current [member depth], in decibels.
 func submerged_drop_db() -> float:
 	return SUBMERGED_DROP_DB * _depth
+
+
+## How loud the whole of the weather is for the current [member hush], in
+## decibels: 0 as usual, down to silence.
+func hush_db() -> float:
+	return HUSHED_DROP_DB * _hush

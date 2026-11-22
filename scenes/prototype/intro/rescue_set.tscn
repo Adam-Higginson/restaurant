@@ -48,15 +48,18 @@ light_color = Color(1, 0.72, 0.4, 1)
 light_energy = 2.4
 
 [node name="Body" type="Node3D" parent="Props/Castaway" unique_id=1411871022 node_paths=PackedStringArray("light") instance=ExtResource("3_rqkdy")]
-transform = Transform3D(-6.9938224e-08, 0, 1.6, 0, 1.6, 0, -1.6, 0, -6.9938224e-08, 0.35, 2, 0.2)
+transform = Transform3D(-5.2453668e-08, 0, 1.2, 0, 1.2, 0, -1.2, 0, -5.2453668e-08, 0.35, 2, 0.2)
 script = ExtResource("4_nx0ag")
 look_name = "rescued_lantern"
+strength = 0.55
+door = 1.0
 streaked = true
+cracked = true
 light = NodePath("../LanternGlow")
-light_energy = 2.4
+light_energy = 1.3
 
 [node name="ReachingBoathook" type="Node3D" parent="Props" unique_id=778325693 groups=["props"]]
 visible = false
 
 [node name="Boathook" type="Node3D" parent="Props/ReachingBoathook" unique_id=1296053555 instance=ExtResource("5_vvpxu")]
-transform = Transform3D(-2.573397, -1.3958333, 0.43203658, 1.4611659, -2.4583333, 0.7609004, 0, 0.875, 2.826969, -5.85, 6.9, 0.3)
+transform = Transform3D(-2.573397, -1.3958333, 0.43203658, 1.4611659, -2.4583333, 0.7609004, 0, 0.875, 2.826969, -5.77, 6.55, 0.74)

@@ -324,6 +324,30 @@ A growing glossary of the Godot concepts this project uses: what each one is, in
 
 **Enums as a list of named choices.** `enum Look { CALM, SURPRISED, ... }` gives each choice a name and a number. An exported enum shows as a dropdown in the Inspector, and an animation clip can key it. *Ours:* `LanternFace.Look`. (Don't name one after a built-in class: `Expression` is taken.)
 
+## The mutual rescue and the light underwater (#119)
+
+**Volumetric fog.** Ordinary fog just tints far things. Volumetric fog (Forward+ only, a tick-box on the `Environment`) fills the air with a haze that lights shine *through*: a lamp makes a visible glow round itself, and things in the way cast shadows through the haze. It's worked out on a coarse 3D grid, so it's soft and can't show fine detail. Each light has a `Volumetric Fog Energy` saying how strongly it lights the haze. *Ours:* the water in `underwater.tscn` (`WorldEnvironment`), which is what gives the lantern's glow a body. A clip turns his light's fog energy down when he's strong, or the haze round him would drown him out.
+
+**Reading the screen in a shader.** A shader can ask for the picture drawn so far (`hint_screen_texture`) and how far away each pixel is (`hint_depth_texture`), and draw a changed version of it. Draw that on a sheet that covers the screen and it works like a lens over the camera. *Ours:* `shaders/underwater_lens.gdshader` on `Camera/Lens`, which takes the red out of far things and wobbles the picture near the lantern.
+
+**Covering the screen from a vertex shader.** Setting `POSITION` in a shader's `vertex()` says exactly where on screen each corner goes, ignoring where the mesh is in the world. Four corners at the screen's corners make a sheet that always fills the view. *Ours:* the lens.
+
+**Opaque and see-through are drawn in two rounds.** Solid things are drawn first; anything see-through (or that reads the screen) is drawn afterwards, back to front. A screen-reading shader only sees the first round. `render_priority` on a material moves it earlier or later within the second round. *Ours:* the lens has a low priority so the bubbles and the burst of light are drawn over it; and the surface overhead is drawn solid, so the lens tints it like everything else.
+
+**Drawing a shape with distances.** Instead of a picture of a hand, the shader works out, for each pixel, how far it is from the nearest part of the hand (a line for the arm, a circle for the palm, a line for each finger). Inside if the distance is below zero. Move those lines and the shape moves; add noise to the distance and its edge flickers like fire. (The usual name is a signed distance field.) *Ours:* `shaders/flame_hand.gdshader`.
+
+**Lit and unlit materials.** An `unshaded` material shows its own colour whatever the lighting (a flame, a glow). A lit one shows only what light falls on it. *Ours:* his flame and hand are unshaded; the bubbles (`shaders/bubble.gdshader`) and the dust in the water are lit, so they glow amber near him and vanish in the dark.
+
+**Adding instead of covering (`blend_add`).** A see-through material normally covers what's behind it. With `blend_add` its colour is added on top, so it can only brighten: right for light. *Ours:* the burst of light and the shafts between the hands.
+
+**A camera moved by a clip.** A `Camera3D`'s position, rotation and field of view are properties like any other, so an animation can key them. A cut is two keys a thousandth of a second apart. *Ours:* every clip in `underwater.tscn` moves `Camera`, so each clip is also a shot.
+
+**Total internal reflection (the window overhead).** Light leaving water bends, and past about 49 degrees from straight up it can't leave at all and bounces back. So from below the sky shows only through a round window, with a mirror round it. *Ours:* `shaders/sea_underside.gdshader` works this out per pixel from the angle between the camera and the surface.
+
+**Audio buses.** Sounds play through named buses (Project > Audio, bottom panel), each with its own volume and effects, so a whole group can be changed at once. *Ours:* the weather plays on the `Ambience` bus; `@muffle` turns down its filter, and `@hush` turns the whole bus down to silence for a held breath.
+
+**A node told it's been switched off.** When a node can no longer run (its `process_mode` or a parent's became Disabled) it gets `NOTIFICATION_DISABLED`, and `NOTIFICATION_ENABLED` when it can again. Catch them in `_notification(what)`. *Ours:* `OptionalSound` pauses a looping sound while its stage is put away.
+
 ## Testing
 
 **gdUnit4.** The test framework (`addons/gdUnit4`). Suites extend our `GameTestSuite` and have `test_...` functions. `scene_runner` loads a scene and lets a test press inputs and wait physics ticks. *Ours:* `tests/`.

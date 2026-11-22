@@ -81,3 +81,16 @@ func test_rain_is_quieter_under_a_roof_and_silent_when_dry() -> void:
 			outside + AmbienceMix.SHELTERED_DROP_DB, 0.001)
 	assert_float(_mix.rain_volume_db(0.0)).is_equal(-80.0)
 	assert_float(_mix.rain_volume_db(0.5)).is_less(_mix.rain_volume_db(1.0))
+
+
+func test_hushed_the_weather_drops_to_silence_almost_at_once_and_comes_back() -> void:
+	assert_float(_mix.hush_db()).is_equal(0.0)
+
+	_mix.quiet(0.06, true, 0.12)
+	assert_float(_mix.hush).is_equal_approx(0.5, 0.0001)
+
+	_mix.quiet(1.0, true, 0.12)
+	assert_float(_mix.hush_db()).is_equal(AmbienceMix.HUSHED_DROP_DB)
+
+	_mix.quiet(1.0, false, 0.0)
+	assert_float(_mix.hush_db()).is_equal(0.0)
