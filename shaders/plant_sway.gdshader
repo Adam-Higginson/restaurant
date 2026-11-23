@@ -19,8 +19,8 @@ uniform float still_below = 0.1;
 uniform float glow_through = 0.6;
 // The way the wind blows (x, z).
 uniform vec2 wind = vec2(0.8, 0.6);
-// How much harder a gust pushes than the steady wind.
-uniform float gustiness = 1.6;
+// How much harder the swell pushes than the steady breeze.
+uniform float gustiness = 0.35;
 // Multiplies the painted colours: below 1 darkens the plant.
 uniform vec4 tint : source_color = vec4(1.0);
 
@@ -33,18 +33,18 @@ void vertex() {
 	float up = clamp((VERTEX.y - origin.y) / tall + 0.5, 0.0, 1.0);
 	float moves = smoothstep(still_below, 1.0, up);
 	float beat = origin.x * 0.37 + origin.z * 0.51;
-	float swing = sin(TIME * 0.9 + beat) * 0.6 + sin(TIME * 2.1 + beat * 1.7) * 0.4;
-	// Gusts cross the island as slow waves travelling with the wind: each
-	// plant bows as one passes over it.
+	// A slow sway, a few seconds there and back, with a slower drift under it
+	// so it never quite repeats.
+	float swing = sin(TIME * 0.55 + beat) * 0.7 + sin(TIME * 0.23 + beat * 1.7) * 0.3;
+	// A long, gentle swell of breeze crosses the island: each plant leans a
+	// little more as it passes.
 	vec2 blowing = normalize(wind);
-	float gust = sin(dot(origin.xz, blowing) * 0.09 - TIME * 0.7);
-	gust = smoothstep(0.1, 1.0, gust);
-	// Leaning with the wind a little all the time, more in a gust, and
-	// swinging about that.
-	vec2 push = blowing * (0.5 + gust * gustiness + swing * (0.6 + gust * 0.6))
+	float gust = sin(dot(origin.xz, blowing) * 0.05 - TIME * 0.25) * 0.5 + 0.5;
+	// Leaning with the breeze a little all the time, and swaying about that.
+	vec2 push = blowing * (0.3 + gust * gustiness + swing * 0.55)
 			* sway * tall * moves * moves;
-	float shiver = sin(TIME * (4.3 + gust * 3.0) + VERTEX.x * 2.1 + VERTEX.z * 2.7 + beat)
-			* (1.0 + gust * 1.5);
+	// The leaves stir slowly.
+	float shiver = sin(TIME * 1.1 + VERTEX.x * 0.9 + VERTEX.z * 1.1 + beat) * 0.5;
 	VERTEX.xz += push;
 	VERTEX.y += shiver * flutter * tall * moves * moves;
 	VERTEX.xz += vec2(shiver) * flutter * 0.5 * tall * moves * moves;
