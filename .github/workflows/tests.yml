@@ -94,9 +94,17 @@ jobs:
           echo "Run tests ends with $code"
           exit $code
 
+      # The reporter creates its check run, then updates it half a second later.
+      # GitHub sometimes hasn't caught up and answers the update with 404, which
+      # failed this step with every test passing (dorny/test-reporter#866).
+      # The fix (#867, retry on 404) is on their main but not yet released, so
+      # this pins that commit; move to v3.3.0 or later once it's tagged.
+      # Whether the tests passed is decided by "Run the tests", so a hiccup
+      # while publishing the report shouldn't turn CI red.
       - name: Publish the test report
         if: ${{ !cancelled() }}
-        uses: dorny/test-reporter@d1b5dff021aa968b288b02285a8bf47471c5928a # v3.2.0
+        continue-on-error: true
+        uses: dorny/test-reporter@79b4b4400dc2354b89e9dd811ef9caa9bdd4f665 # main after v3.2.0, with #867
         with:
           name: test-report.xml
           path: 'reports/**/*.xml'
