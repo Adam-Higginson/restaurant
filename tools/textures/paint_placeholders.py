@@ -197,6 +197,45 @@ def stripes_across(old, row, base):
     return found
 
 
+def book_spread(old):
+    """The open book you read in (#145): two cream pages in a leather cover,
+    bowing down into a shadowed gutter, each framed by a double ink rule,
+    with a few age spots."""
+    c = Canvas(100, 58, 8, seed=10)
+    leather, worn = colour(old, 50, 0), colour(old, 50, 1)
+    paper, edge = colour(old, 20, 20), colour(old, 50, 55)
+    ink, stain = colour(old, 20, 6), colour(old, 12, 44)
+    c.fill(leather)
+    c.mottle(0.12, 2)
+    c.paint(c.rect(0.5, 0.5, 99.5, 57.5, 1.9) & ~c.rect(1.5, 1.5, 98.5, 56.5, 1.3), worn, 0.45)
+    c.alpha = c.rect(0.0, 0.0, 100.0, 58.0, 2.2).astype(numpy.float32)
+    # Both pages bow down into the gutter, top and bottom edges alike.
+    dip = 1.4 * numpy.exp(-numpy.abs(c.x - 50.0) / 4.0)
+    inside_x = (c.x >= 3.6) & (c.x <= 96.4)
+    # The stack of pages under each page shows below it as a few thin edges.
+    stack = inside_x & (c.y >= 2.6 + dip) & (c.y <= 56.0 + dip * 0.6)
+    c.paint(stack, edge)
+    for y in [54.9, 55.5]:
+        c.paint(stack & (numpy.abs(c.y - (y + dip * 0.6)) < 0.12), paper, 0.6)
+    page = (c.x >= 4.2) & (c.x <= 95.8) & (c.y >= 2.0 + dip) & (c.y <= 54.0 + dip * 0.6)
+    page &= c.rect(4.2, 2.0, 95.8, 56.0, 0.8)
+    c.paint(page, paper)
+    gutter = 1.0 - 0.34 * numpy.exp(-numpy.abs(c.x - 50.0) / 2.4)
+    gutter -= 0.07 * numpy.exp(-numpy.abs(c.x - 50.0) / 12.0)
+    outer = 1.0 - 0.07 * numpy.exp(-numpy.minimum(c.x - 4.2, 95.8 - c.x) / 2.0)
+    c.rgb *= numpy.where(page, gutter * outer, 1.0)[..., None]
+    for x0, x1 in [(9.0, 46.0), (54.0, 91.0)]:
+        for y, width in [(6.0, 0.22), (6.55, 0.12), (49.45, 0.12), (50.0, 0.22)]:
+            c.paint(c.stroke([(x0, y), (x1, y)], width), ink, 0.85)
+    rng = numpy.random.default_rng(7)
+    for x, y in [(12.0, 44.0), (88.0, 10.0), (61.0, 47.0)]:
+        r = 0.9 + rng.random() * 0.8
+        c.paint(c.ellipse(x, y, r, r * 0.8) & page, stain, 0.3)
+        c.paint(c.ellipse(x, y, r * 0.45, r * 0.35) & page, stain, 0.25)
+    c.mottle(0.035, 5)
+    return c
+
+
 def bedlinen(old):
     c = Canvas(8, 8, 8, seed=11)
     c.fill(colour(old, 3, 3))
@@ -466,6 +505,7 @@ def weathered_wood(old):
 
 RECIPES = {
     "bedlinen": bedlinen,
+    "book_spread": book_spread,
     "blanket_grey": blanket,
     "blanket_wool": blanket,
     "braided_rug": braided_rug,

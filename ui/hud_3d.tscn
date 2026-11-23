@@ -2,6 +2,7 @@
 
 [ext_resource type="PackedScene" path="res://ui/dialogue_box.tscn" id="20_box"]
 [ext_resource type="Script" path="res://ui/dialogue_sounds.gd" id="21_sounds"]
+[ext_resource type="PackedScene" path="res://ui/book_view.tscn" id="22_book"]
 [ext_resource type="Script" path="res://ui/hud_3d.gd" id="1_hud"]
 [ext_resource type="Script" path="res://ui/toolbar_bar.gd" id="2_belt"]
 [ext_resource type="Script" path="res://ui/held_item_label_3d.gd" id="3_held"]
@@ -103,6 +104,12 @@ grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
 script = ExtResource("9_memory")
+
+[node name="BookLayer" type="CanvasLayer" parent="."]
+layer = 16
+
+[node name="BookView" parent="BookLayer" instance=ExtResource("22_book")]
+unique_name_in_owner = true
 
 [node name="SpeechLayer" type="CanvasLayer" parent="."]
 layer = 17

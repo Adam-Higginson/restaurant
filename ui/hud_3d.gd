@@ -4,7 +4,8 @@ extends CanvasLayer
 ## bottom, their hearts in the top-left corner, and what Interact and Use
 ## tool would do in the top-right. Under all of them, the hurt laid over the
 ## screen when a blow lands.
-## While you're in a conversation those step aside for the dialogue box.
+## While you're in a conversation those step aside for the dialogue box, and
+## while you're reading, for the open book.
 ##
 ## Set [member player] in the scene; this hands it to each part when ready.
 
@@ -19,6 +20,7 @@ extends CanvasLayer
 @onready var _memory_card: MemoryCard = %MemoryCard
 @onready var _dialogue_box: DialogueBox = %DialogueBox
 @onready var _dialogue_sounds: DialogueSounds = %DialogueSounds
+@onready var _book_view: BookView = %BookView
 
 
 func _ready() -> void:
@@ -32,6 +34,8 @@ func _ready() -> void:
 	_hurt_overlay.setup(player)
 	# The lantern lights up when a memory comes back.
 	Game.memories.remembered.connect(_on_remembered)
+	_book_view.opened.connect(func(_book: Book) -> void: _show_play_parts(false))
+	_book_view.closed.connect(func(_book: Book) -> void: _show_play_parts(true))
 	# The world's conversation may be ready after us.
 	_join_conversation.call_deferred()
 
