@@ -33,3 +33,22 @@ Wait on each task with `meshy <kind> wait ID`, then fetch it with `meshy <kind> 
 ## What the heron cost
 
 Three pictures (33), the model (15), the rig (5) and seven animations (21): 74 credits.
+
+## Props and food (#152)
+
+Not every Meshy model is a character. The galley's treasure chests and the fish and crab meat were made the same way, with steps 1 and 2 only (no rig):
+
+- **The concept picture**, three-quarter view, whole and unobstructed, on plain light grey; for something meant to open, ask for "a clear seam where it opens". Pictures come out in crisp pixels, but the model's own texture is painted soft.
+- **The model** with fewer triangles than a character: 2,000 for a chest, 1,000 for a fish.
+- **A lid that opens:** Meshy makes a chest as one closed mesh. `tools/meshy/split_lid.py` (Blender 4.4) cuts it at the seam's height into a `Body` and a `Lid` whose origin is its back edge on the cut, so turning the lid about X opens it on a hinge. Find the seam by eye: run it with a preview path and it renders the chest open, from the front and from the side (where a lid floating off its hinge would show). The hinge is measured on the cut line only: the dome can bulge further back higher up.
+- **See-through by accident:** Meshy's textures carry an alpha channel, so the imported materials are see-through and don't hide what's behind them. The chest (`TreasureChest`) and the food (`ItemModel`) set them solid when the model loads.
+- **One model, several items:** an item can reuse another's model with a `model_tint`: the mackerel is the herring tinted greener, and the cooked dishes are the fillet and the claw tinted golden brown.
+
+The chests' seams: the big gold one at -0.005 (just under its band, so the band lifts with the lid like a hasp), the small sea-worn one at 0.025. Each split model is saved beside its download as `chest_big.glb` / `chest_small.glb`:
+
+```bash
+"C:/Program Files/Blender Foundation/Blender 4.4/blender.exe" -b -P tools/meshy/split_lid.py -- \
+    assets/third_party/meshy/chest_big/model/model.glb assets/third_party/meshy/chest_big/chest_big.glb -0.005
+```
+
+What they cost: the chests (two pictures, 18; two models, 30) and the food (three pictures, 27; three models, 45): 120 credits.

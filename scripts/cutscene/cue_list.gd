@@ -38,7 +38,9 @@ const USAGE: Dictionary[StringName, String] = {
 			+ "glass: fogged, clear, streaked, dry, cracked, mended)",
 	&"who_are_you": "@who_are_you (asks a boy or a girl, and waits for the answer)",
 	&"open": "@open (the chest being opened swings open, with you stepping up to it)",
-	&"hold_up": "@hold_up (you turn round and hold up what was in the chest)",
+	&"hold_up": "@hold_up (you turn round and hold up what was in the chest), or "
+			+ "@hold_up frying_pan (hold up that item or tool, no chest needed)",
+	&"put_away": "@put_away (you lower what you were holding up)",
 }
 
 
@@ -80,7 +82,9 @@ static func _fits(cue: StringName, args: PackedStringArray) -> bool:
 			return args.size() >= 4 and _is_seconds(args[0]) and _is_seconds(args[2])
 		&"muffle", &"hush":
 			return args.size() == 1 and ["on", "off"].has(args[0])
-		&"lightning", &"who_are_you", &"open", &"hold_up":
+		&"hold_up":
+			return args.size() <= 1
+		&"lightning", &"who_are_you", &"open", &"put_away":
 			return args.is_empty()
 		&"look":
 			return args.size() == 2 and LanternFace.knows(args[1])

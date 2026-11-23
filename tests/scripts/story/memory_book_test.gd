@@ -59,10 +59,15 @@ func test_slicing_a_tomato_on_the_board_brings_one_back() -> void:
 
 
 func test_frying_on_the_hob_brings_one_back() -> void:
-	var ship: Ship = new_moored_ship_with_player(Vector3(0, 1.05, 6))[0] as Ship
+	var rig: Array[Node3D] = new_moored_ship_with_player(Vector3(0, 1.05, 6))
+	var ship: Ship = rig[0] as Ship
+	var player: Player3D = rig[1] as Player3D
 	var runner: GdUnitSceneRunner = scene_runner(ship.get_parent())
 	await physics_ticks(runner, 2)
 	var hob: Hob = ship.get_node("Galley/Hob") as Hob
+	# You bring the pan to the hob.
+	player.toolbar.add(ItemInstance.new(Catalog.load_default().find_item(&"frying_pan")))
+	hob.slot.exchange_with(player.arms)
 
 	hob.heated.contents.add_item(
 			ItemInstance.new(Catalog.load_default().find_item(&"herring_fillet")))

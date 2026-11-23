@@ -51,8 +51,18 @@ static func food(item: Item, size: float) -> Node3D:
 	var cube: MeshInstance3D = _box(Vector3.ONE * size, item.color, Vector3.UP * size / 2.0)
 	cube.name = "Greybox"
 	piece.add_child(cube)
+	# Fitted to its own size (one Kiln job per item), then shrunk on a vessel
+	# as the cubes are, so up to three fit.
+	_add_model(piece, item, [cube], size / FOOD_SIZE)
+	return piece
+
+
+# Adds [param item]'s real model to [param parent], scaled by [param scale],
+# hiding [param stand_ins] while it shows. Nothing if it has no model file.
+static func _add_model(parent: Node3D, item: Item, stand_ins: Array[VisualInstance3D],
+		scale: float) -> void:
 	if item.model_path.is_empty() or not ResourceLoader.exists(item.model_path):
-		return piece
+		return
 	var model: ThirdPartyModel = ThirdPartyModel.new()
 	model.name = "Model"
 	model.look = item.model_look
@@ -60,7 +70,7 @@ static func food(item: Item, size: float) -> Node3D:
 	model.grain = false
 	model.detail = 1.0
 	model.fit_size = item.model_size
-	model.stand_ins = [cube]
+	model.stand_ins = stand_ins
 	model.tint = item.model_tint
 	if model.keep_as_made:
 		# A model drawn as made (Meshy) isn't tinted by ThirdPartyModel, and
@@ -68,12 +78,9 @@ static func food(item: Item, size: float) -> Node3D:
 		model.dressed.connect(func(shown: bool) -> void:
 			if shown:
 				_as_made(model.model, item.model_tint))
-	# Fitted to its own size (one Kiln job per item), then shrunk on a vessel
-	# as the cubes are, so up to three fit.
-	model.scale = Vector3.ONE * (size / FOOD_SIZE)
+	model.scale = Vector3.ONE * scale
 	model.path = item.model_path
-	piece.add_child(model)
-	return piece
+	parent.add_child(model)
 
 
 ## Makes every surface under [param node] solid and multiplies its colours
@@ -123,6 +130,12 @@ static func _add_vessel(root: Node3D, item: Item) -> void:
 					Vector3(0.33, 0.04, 0.0))
 			handle.name = "Handle"
 			root.add_child(handle)
+			# The real pan (the one you parry with), when it's there, turned so
+			# its handle points the way the greybox's does.
+			_add_model(root, item, [pan, handle], 1.0)
+			var real: Node3D = root.get_node_or_null("Model") as Node3D
+			if real != null:
+				real.rotation_degrees.y = 90.0
 		Item.VesselShape.POT:
 			var pot: MeshInstance3D = _cup(0.17, 0.16, 0.18, colour)
 			pot.name = "Pot"

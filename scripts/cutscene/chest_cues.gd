@@ -5,15 +5,19 @@ extends CueHandler
 ## opened, and these cues stage it:
 ##
 ## [codeblock]
-## @open     you step up to the chest, the camera looks over your shoulder,
-##           you open it: the lid creaks up and the light pours out
-## @hold_up  you turn round and hold the treasure up over your head, turning
-##           slowly in the light, with a fanfare
+## @open                you step up to the chest, the camera looks over your
+##                      shoulder, you open it: the lid creaks up and the
+##                      light pours out
+## @hold_up             you turn round and hold the treasure up over your
+##                      head, turning slowly in the light, with a fanfare
+## @hold_up frying_pan  you hold that up, no chest needed: a gift (the
+##                      heron's pan), by its item or tool id
+## @put_away            you lower it, and the camera's back as it was
 ## [/codeblock]
 ##
-## The treasure stays held up while the lines are read. When the cutscene
-## ends you lower it (it's on your toolbar by then: the script gives it), the
-## camera is yours again, and the chest's light settles.
+## The treasure stays held up while the lines are read, until
+## [code]@put_away[/code] or the end of the script. The script gives it
+## ([code]set has_frying_pan[/code]: see [member HandTool.owned_flag]).
 
 ## The soft glow behind a treasure held up: a round spot facing the camera.
 const HALO_SHADER: Shader = preload("res://shaders/sparkle.gdshader")
@@ -30,6 +34,11 @@ const HALO_SHADER: Shader = preload("res://shaders/sparkle.gdshader")
 @export var rise_seconds: float = 0.9
 ## How fast the treasure turns while it's held up, in turns a second.
 @export var spin_turns: float = 0.35
+## Where the camera stands for a gift held up without a chest: how far in
+## front of you, how high, and how far round to one side, in degrees.
+@export var gift_shot_distance: float = 2.3
+@export var gift_shot_height: float = 1.35
+@export var gift_shot_angle: float = 40.0
 ## The lid creaking up, and the fanfare as the treasure is held up.
 @export var creak: AudioStream
 @export var fanfare: AudioStream
@@ -41,6 +50,8 @@ var _treasure: Node3D = null
 ## Whether the treasure has reached the hands and follows them.
 var _held: bool = false
 var _sound: AudioStreamPlayer = null
+## The camera's mark for a gift held up without a chest, or null.
+var _gift_shot: Marker3D = null
 
 
 func _ready() -> void:
@@ -61,7 +72,7 @@ func _process(delta: float) -> void:
 
 
 func cues() -> Array[StringName]:
-	return [&"open", &"hold_up"]
+	return [&"open", &"hold_up", &"put_away"]
 
 
 ## The treasure held up, or null.
@@ -69,9 +80,15 @@ func treasure() -> Node3D:
 	return _treasure if is_instance_valid(_treasure) else null
 
 
-func _perform(cue: StringName, _args: PackedStringArray) -> void:
+func _perform(cue: StringName, args: PackedStringArray) -> void:
 	if not is_instance_valid(player):
 		warn("@%s needs the player (ChestCues' Player)" % cue)
+		return
+	if cue == &"put_away":
+		_put_away()
+		return
+	if cue == &"hold_up" and not args.is_empty():
+		_hold_up_gift(StringName(args[0]))
 		return
 	var chest: TreasureChest = TreasureChest.opening_in(get_tree())
 	if chest == null:
@@ -108,13 +125,49 @@ func _open(chest: TreasureChest) -> void:
 
 
 func _hold_up(chest: TreasureChest) -> void:
+	_raise(make_treasure(chest.contents), chest.hold_shot(), chest.get_parent(),
+			chest.item_spot().global_position)
+
+
+# Holds up [param id] (an item's or a tool's), handed over rather than found
+# in a chest: it rises from your hands, and the camera looks at you from in
+# front, a little to one side.
+func _hold_up_gift(id: StringName) -> void:
+	var catalog: Catalog = Catalog.load_default()
+	var treasure_node: Node3D = null
+	var tool: HandTool = catalog.find_tool(id)
+	var item: Item = catalog.find_item(id)
+	if tool != null:
+		treasure_node = make_treasure(tool)
+	elif item != null:
+		treasure_node = make_item_treasure(item)
+	else:
+		warn("@hold_up: there's no item or tool called '%s'" % id)
+		return
+	_gift_shot = Marker3D.new()
+	_gift_shot.name = "GiftShot"
+	player.add_child(_gift_shot)
+	var round_by: Vector3 = player.facing.rotated(Vector3.UP, deg_to_rad(gift_shot_angle))
+	var head: Vector3 = player.global_position + Vector3.UP * 1.75
+	var at: Vector3 = player.global_position + round_by * gift_shot_distance \
+			+ Vector3.UP * gift_shot_height
+	_gift_shot.global_transform = Transform3D(Basis.looking_at(head - at, Vector3.UP), at)
+	_raise(treasure_node, _gift_shot, player.get_parent(),
+			player.global_position + Vector3.UP * 1.1 + player.facing * 0.3)
+
+
+# Raises [param treasure_node] from [param from] to over your head as your
+# arms go up, with the fanfare and the camera at [param shot]. It joins
+# [param world] so it stays put in the world as it rises.
+func _raise(treasure_node: Node3D, shot: Marker3D, world: Node, from: Vector3) -> void:
 	var held: int = hold()
-	var shot: Marker3D = chest.hold_shot()
 	player.face_towards(shot.global_position)
 	player.camera_rig.hold_shot(shot, true)
-	_treasure = make_treasure(chest.contents)
-	chest.get_parent().add_child(_treasure)
-	_treasure.global_position = chest.item_spot().global_position
+	if is_instance_valid(_treasure):
+		_treasure.queue_free()
+	_treasure = treasure_node
+	world.add_child(_treasure)
+	_treasure.global_position = from
 	_held = false
 	var model: CharacterModel = _character()
 	if is_skipping():
@@ -140,18 +193,40 @@ func _hold_up(chest: TreasureChest) -> void:
 ## The model of [param tool] to hold up: its own model when it has one,
 ## otherwise a greybox bar in its colour. Freed by whoever adds it.
 static func make_treasure(tool: HandTool) -> Node3D:
+	if tool == null:
+		return _treasure_of("", null, Vector3(0.15, 0.6, 0.06), Color.WHITE, false)
+	return _treasure_of(tool.model_path, tool.model_look, tool.model_size, tool.color, false)
+
+
+## The model of [param item] to hold up (the heron's pan): its own model
+## stood on end, handle up, so it shows its face; otherwise a greybox block.
+static func make_item_treasure(item: Item) -> Node3D:
+	return _treasure_of(item.model_path, item.model_look, item.model_size, item.color, true)
+
+
+# A treasure to hold up: the model at [param path] fitted into [param size]
+# (a greybox block in [param tint] without it), lit and haloed, centred on
+# the hands. [param stood_up] turns a flat thing (a pan) on end.
+static func _treasure_of(path: String, look: ArtLook, size: Vector3, tint: Color,
+		stood_up: bool) -> Node3D:
 	var root: Node3D = Node3D.new()
 	root.name = "Treasure"
+	# What turns it on end, if it's stood up: its length (Z) becomes its height.
+	var turn: Node3D = Node3D.new()
+	turn.name = "Turn"
+	if stood_up:
+		turn.rotation_degrees.x = -90.0
+	root.add_child(turn)
 	var bar: MeshInstance3D = MeshInstance3D.new()
 	bar.name = "Greybox"
 	var box: BoxMesh = BoxMesh.new()
-	box.size = tool.model_size if tool != null else Vector3(0.15, 0.6, 0.06)
+	box.size = size
 	bar.mesh = box
 	var colour: StandardMaterial3D = StandardMaterial3D.new()
-	colour.albedo_color = tool.color if tool != null else Color.WHITE
+	colour.albedo_color = tint
 	colour.metallic = 0.4
 	bar.material_override = colour
-	root.add_child(bar)
+	turn.add_child(bar)
 	# Lit as a treasure is: a warm light of its own, and a soft halo behind
 	# it bright enough to bloom.
 	var light: OmniLight3D = OmniLight3D.new()
@@ -171,34 +246,42 @@ static func make_treasure(tool: HandTool) -> Node3D:
 	halo.mesh = halo_mesh
 	halo.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
 	root.add_child(halo)
-	if tool != null and not tool.model_path.is_empty():
+	if not path.is_empty():
 		var model: ThirdPartyModel = ThirdPartyModel.new()
 		model.name = "Model"
-		model.look = tool.model_look
-		model.fit_size = tool.model_size
+		model.look = look
+		model.fit_size = size
 		model.stand_ins = [bar]
 		# Centred on the hands rather than sitting on them.
-		model.position = Vector3.DOWN * tool.model_size.y / 2.0
-		root.add_child(model)
-		model.path = tool.model_path
+		model.position = Vector3.DOWN * size.y / 2.0
+		turn.add_child(model)
+		model.path = path
 	return root
 
 
-func _on_ended(_tree_id: StringName) -> void:
-	if _chest == null:
-		return
+# Lowers whatever's held up: it's gone (it's on your toolbar by now), your
+# arms come down, the camera's back as it was, and a chest's light settles.
+func _put_away() -> void:
 	if is_instance_valid(_treasure):
 		_treasure.queue_free()
 	_treasure = null
 	_held = false
 	var model: CharacterModel = _character()
-	if model != null:
+	if model != null and model.hold_up > 0.0:
 		create_tween().tween_property(model, "hold_up", 0.0, 0.35)
 	if is_instance_valid(player):
 		player.camera_rig.release_shot(true)
+	if is_instance_valid(_gift_shot):
+		_gift_shot.queue_free()
+	_gift_shot = null
 	if is_instance_valid(_chest):
 		_chest.settle()
 	_chest = null
+
+
+func _on_ended(_tree_id: StringName) -> void:
+	if _chest != null or is_instance_valid(_treasure) or is_instance_valid(_gift_shot):
+		_put_away()
 
 
 func _character() -> CharacterModel:
