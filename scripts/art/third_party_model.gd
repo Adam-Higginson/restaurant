@@ -23,6 +23,11 @@ extends Node3D
 ## without a look, the pack's own model shows, its smooth flat colours given
 ## the chunky N64 grain (shaders/n64_prop.gdshader).
 
+## Emitted each time [method dress] has run. [param shown] says whether the
+## model is showing (true) or the greybox is (false), so a node that drives
+## the model (its animations, say) can find it.
+signal dressed(shown: bool)
+
 const N64_SHADER: Shader = preload("res://shaders/n64_prop.gdshader")
 ## The chunky grain laid over models: a 32 x 32 noise texture of our own.
 const GRAIN: Texture2D = preload("res://assets/placeholder/materials/n64_grain.tres")
@@ -118,11 +123,13 @@ func dress() -> bool:
 		scene = load(path) as PackedScene
 	if scene == null:
 		_show_stand_ins(true)
+		dressed.emit(false)
 		return false
 	model = scene.instantiate() as Node3D
 	if model == null:
 		fired = false
 		_show_stand_ins(true)
+		dressed.emit(false)
 		return false
 	add_child(model)
 	_fit(model)
@@ -133,6 +140,7 @@ func dress() -> bool:
 			_use_n64(model, {})
 		_set_detail(model)
 	_show_stand_ins(false)
+	dressed.emit(true)
 	return true
 
 
