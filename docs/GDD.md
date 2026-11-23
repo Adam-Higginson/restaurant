@@ -220,8 +220,25 @@ The text is set in Varela Round, a soft rounded face like OoT's.
 ## Books
 Reading a book is reading a book (#145). Interact with one and play pauses: the world dims and the book lies open across the screen, two pages of painted paper in a worn leather cover, bowing into a shadowed gutter, each page framed by a double ink rule. The words are in ink, set in IM Fell English (an old printed face, cut in the 1670s), with headings picked out in red-brown as old books did. Left and right (or A and D, or the stick) turn the pages two at a time, with a rustle; Interact or Cancel closes it with a soft thump. An odd last page has a blank one beside it. A page too full for its paper is set a size smaller.
 - **The recipe book** on the cook's stool is the first: a page per dish, written from the recipes themselves (`data/recipes/`).
-- **Next:** the old book on the galley shelf with a page on fire spirits, the clue to the first quest; small drawings on pages (a page can already carry one); notes in the margins in a hand.
+- **Next:** the old book on the galley shelf with a page on fire spirits, the clue to the first quest (see Quests); small drawings on pages (a page can already carry one); notes in the margins in a hand.
 - The memory card at the top of the screen stays for memories coming back: those come to you, a book you open.
+
+## Quests (first sketch)
+Nothing floats over anyone's head: no exclamation marks, no quest log, no markers on the screen. With a handful of people on a small ship there's no crowd to scan, so work reaches you the way it does aboard, from people, as in OoT.
+- **The crew ask outright.** Talk to someone and, if they want something, they say so, in their own voice: "Nets want mending. Unless you're too grand." What they ask for, and how they put it, is part of who they are.
+- **The lantern keeps you pointed.** When you're lost, help comes from a friend, never from the interface. His flame leans toward what's next (the pot, the captain, the bow at night), and if you go and sit with him at his round table he says something gently pointed ("That pot smells... important."). Asking what now is visiting him.
+- **Clues are things in the world:** a page in a book, a smell, a name someone lets drop.
+- **Kept for later:** crew lamps lit when someone has something to say; jobs chalked on a galley slate; the lantern's own to-do list, cheerfully wrong ("1. Find home (nearest island, easy). 2. Soup."); the folded note by your pillow in your own hand.
+
+### The first quest: warming the lantern
+The rescue cost him. He pulled you out of the sea and you held him up out of it, and he comes aboard spent: your first job is to bring him back. It's also how you learn to cook.
+1. **The captain wakes you.** Not the lantern: he lies on the round table by the stove under a glass, small and blue, a hairline crack across it, and says nothing. The captain is gruff and pretends not to be worried ("Up. You've slept enough for two." A glance at the table: "He's not said a word since."), but he doesn't know how to help his friend, and he'd rather swim than say so. He asks outright, in his way: you're the one who held him, so do something. (Lines are a first draft.)
+2. **The lean.** Even now the lantern points: the only thing his flame does is lean, barely, toward the galley.
+3. **The book.** On the galley shelf, an old book (read in the book view) has a page on fire spirits: fond of consumption, warm things, spiced things, things that bite back, and a bowl of red soup, well peppered. That's the clue: a spicy tomato soup.
+4. **The soup teaches the cooking.** Slice the tomatoes, chop in something hot (a chilli, a new ingredient), water in the saucepan, boil it on the hearth, ladle it into a bowl, carry it through to him. It's the cooking basics with a reason: you aren't learning the controls, you're saving someone. No timer and no failing: a better soup only warms him more.
+5. **He comes back.** Set the bowl by him and he drinks in its steam: amber climbs back up through the blue, the crack closes, his eyes open, and only now does he speak: "There you are." / "You were in the water. I pulled. You held on. Good holding." / "I'll get you home. I know exactly where it is. Roughly." The captain, who has been hovering in the doorway the whole time, says "Hm. Soup." and takes a bowl himself, which is as close as he gets to crying. Both of them are happy.
+
+Still to decide: whether the book's page is already marked with a heron feather (the captain looked it up himself and couldn't bring himself to cook, or can't cook), and where the chilli is kept.
 
 ## Crew and meals
 - For now you cook **for the crew only**. There are no paying customers and no money.
@@ -278,6 +295,7 @@ Worked example: a tomato (★) sliced properly gives (1 + 3) / 2 = ★★ sliced
 |---|---|---|
 | Garden Salad | Chop lettuce, slice tomato, put both on a plate | Whole lettuce and tomato on a plate |
 | Tomato Soup | Fill the saucepan with rainwater at the water butt on deck, boil it on the hearth (4s) → boiling water. Add diced tomato and chopped onion (3 cuts), boil (8s). Ladle it into a bowl from the stack on the table. | Diced tomato and chopped onion into cold water, then heat (12s) |
+| Spicy Tomato Soup (planned: the first quest) | As Tomato Soup, with a chilli chopped in alongside the tomato and onion | Everything into cold water, then heat |
 | Grilled Cheese | Bread + cheese on a plate → sandwich. Melt butter in the hot frying pan (2s), add the sandwich, fry (6s). | Sandwich straight into the frying pan without butter (6s) |
 | Pan-fried Herring | Catch a herring, fillet it on the board (3 cuts), fry the fillet in the pan on the hob (6s). | A whole herring straight into the pan (9s) |
 | Pan-seared Crab | Hunt a crab ashore and pick up its meat; sear it in the pan on the hob (5s). The meat's quality is the crab's level. | None |
@@ -349,7 +367,7 @@ The game opens at night in steady rain, and Studio Ghibli's rain is the referenc
 - Placeholder art is simple coloured shapes (greybox) until real models are made.
 
 ## The opening as intended (partly built)
-This is where the opening is headed. What's built so far is described under "How it begins". From this section, her nameboard as the title, his watch and his dive (beats 1 and 2), and his face are built (#114). The descent, the door, the reach and the flare of the mutual rescue are built too (#119), and so are the dead lanterns in the deep and the thing in the lightning (#120). Still to come: holding him up at the surface (#121), waking to him asleep and the first meal (he says his lines on waking for now), and the title screen keeping your voyage.
+This is where the opening is headed. What's built so far is described under "How it begins". From this section, her nameboard as the title, his watch and his dive (beats 1 and 2), and his face are built (#114). The descent, the door, the reach and the flare of the mutual rescue are built too (#119), and so are the dead lanterns in the deep and the thing in the lightning (#120). Still to come: holding him up at the surface (#121), the captain waking you and the first quest, warming the lantern (see Quests; he says his lines on waking for now), and the title screen keeping your voyage.
 
 **The ship is the Salt and Ember.** That's her name in the story as well as the game's, so the crew can say it. Salt is the sea, and you, soaked through. Ember is the lantern.
 
@@ -360,16 +378,16 @@ This is where the opening is headed. What's built so far is described under "How
 4. **He's going out.** Water is bad for flames. He comes down small and fierce, shoving through the water, smaller and cooler with every push, and never once looks at himself: only at you. What reaches you is a guttering spark that can barely hold a shape.
 5. **The reach.** He opens his own door to reach out, which is what lets the sea in. The scene waits until you take his hand. He goes out, altogether, for one held second of black and silence. Then your hand catches him alight again, and the flare is what lifts you both.
 6. **You hold him up.** At the surface the roles flip. He's a small ember and the waves want him, so you keep him out of the water. The captain finds one point of warm light on a black sea. How you're brought aboard isn't shown.
-7. **Waking.** The bunk room. He's a dim glow under a glass on the round table, and he doesn't speak.
-8. **The rule.** The captain in the doorway: "Nobody drowns on my ship. Nobody goes hungry either." / "You've managed the first."
-9. **The pot.** The camera finds it on the galley stove, and the ship is yours. There's one quiet thing to do: make something warm and bring it back to him.
-10. **His first words.** Only then: "There you are." / "You were in the water. I pulled. You held on. Good holding." / "I'll get you home. I know exactly where it is. Roughly."
+7. **Waking.** The bunk room. The captain wakes you. He's a dim glow under a glass on the round table, cracked, and he doesn't speak.
+8. **The rule.** The captain: "Nobody drowns on my ship. Nobody goes hungry either." / "You've managed the first." Gruff, not worried, he'd tell you; he looks at the glass anyway.
+9. **The first quest.** Warm him: an old book in the galley points to a spicy tomato soup, and making it teaches you to cook (see Quests).
+10. **His first words.** Only once he's fed: "There you are." / "You were in the water. I pulled. You held on. Good holding." / "I'll get you home. I know exactly where it is. Roughly."
 
 **What it changes.**
 - The rescue is mutual: two things that each kept the other from going out. That's the title, acted out before anyone says it.
 - "Good holding" becomes thanks, and "I pulled" a joke between two people who both know better.
 - The rule that a warm meal rekindles him has its origin in the first minute: you've done it once already, with your hand.
-- The first ten minutes of play have a reason. Nobody tells you to cook. You've held someone's light and watched it nearly fail, and there's a stove through that door.
+- The first ten minutes of play have a reason. You've held someone's light and watched it nearly fail, the captain doesn't know how to bring it back, and there's a stove through that door.
 - After the rescue he lives on the round table, so there's an empty hook at the stern where a lantern used to keep watch. Nobody aboard says why he came inside.
 
 ### The rescue in full
@@ -422,11 +440,11 @@ Through the opening:
 | You take it | Squeezed shut, then wide | Catches, flares tall |
 | At the surface | Two tired slits, on you | A small ember |
 | Asleep | Two curved lines | Low and bluish; a hairline crack in the glass |
-| After the meal | One opens | Warms to amber; the crack closes |
+| After the soup | One opens | Warms to amber; the crack closes |
 
 ## MVP: the Prologue
 A tiny complete story arc that proves the "day is a song" loop and ends on the game's hook.
-1. **The rescue:** black water, a warm light, a hand of flame. You wake in your bunk. The heron captain is gruff, and the lantern is certain: "The nearest island, that'll be your home!"
+1. **The rescue:** black water, a warm light, a hand of flame. The heron captain wakes you in your bunk; the lantern lies dim and silent under a glass. **The first quest** is to warm him: a page in an old book points to spicy tomato soup, and making it teaches the cooking (see Quests). Fed, he wakes, and he's certain: "The nearest island, that'll be your home!"
 2. **Evening one, the galley:** cook your first meal (Garden Salad) for the captain. Dinner gossip hints at the island ("mind the crabs"). The meal gives tomorrow's blessing (+1 heart).
 3. **Night on deck:** hum the three notes you remember. Nothing answers yet.
 4. **Morning ashore, the first island:**
