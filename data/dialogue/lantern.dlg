@@ -7,6 +7,8 @@
 # asks about the first one waiting, then forgets it.
 
 ~ start
+? lantern_low
+-> low
 ? news_fish
 -> fish
 ? news_bell
@@ -96,4 +98,10 @@ lantern: Always. He likes you, though. He said "hm" in the nice way.
 
 ~ bye
 lantern: Hello! And goodbye. And hello again, later.
+-> END
+
+# Home from the sea, low and cracked (#158): he can't answer. Fed the
+# remedy, he can (#155).
+~ low
+lantern: ...
 -> END

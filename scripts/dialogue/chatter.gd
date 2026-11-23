@@ -132,7 +132,7 @@ func audible() -> Dictionary[StringName, Speaker]:
 	var eye: Vector3 = Speaker.eye_of(player)
 	for node: Node in get_tree().get_nodes_in_group(Speaker.GROUP):
 		var speaker: Speaker = node as Speaker
-		if speaker == null or speaker.who == &"":
+		if speaker == null or speaker.who == &"" or speaker.muted:
 			continue
 		if speaker.global_position.distance_to(eye) > earshot:
 			continue

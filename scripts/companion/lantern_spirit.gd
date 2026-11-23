@@ -34,6 +34,15 @@ const HOME_GROUP: StringName = &"lantern_home"
 ## The file of his reactions to things you do, in [code]data/dialogue[/code]:
 ## each section is tagged with the moment it's for, like [code][on caught][/code].
 const MOMENTS: StringName = &"moments"
+## The story flag that says he's gone low (#158): home from the sea small,
+## blue and cracked, and silent until he's fed (#155). Set by the intro,
+## cleared by the remedy, saved with the voyage.
+const LOW_FLAG: StringName = &"lantern_low"
+## While he's low his flame leans, barely, toward a node in this group: the
+## galley's hob, the one nudge he can still give.
+const LONGS_FOR_GROUP: StringName = &"lantern_longs_for"
+## How far his flame leans while he's low, 0 to 1.
+const LOW_LEAN: float = 0.45
 
 ## Where he floats relative to the player, in metres: to the right, up, and
 ## behind (along the way the player faces).
@@ -149,7 +158,7 @@ func _ready() -> void:
 	if is_instance_valid(detector):
 		detector.focus_changed.connect(_on_focus_changed)
 	Game.memories.remembered.connect(func(_memory: Memory) -> void:
-		if is_in_earshot():
+		if is_in_earshot() and not is_low():
 			hum()
 		tell(&"remembered", &"news_memory"))
 	# He's a child of the player, so he's ready before the player is: wait
@@ -279,6 +288,8 @@ func is_in_earshot() -> bool:
 ## Otherwise he missed it, and [param news] (if given) is flagged so he can
 ## bring it up when you next talk to him. Returns whether he said something.
 func tell(moment: StringName, news: StringName = &"") -> bool:
+	if is_low():
+		return false
 	if is_in_earshot() and not _is_in_conversation():
 		remark(moment)
 		return true
@@ -290,6 +301,8 @@ func tell(moment: StringName, news: StringName = &"") -> bool:
 ## Says what he says at [param moment], picked from [constant MOMENTS], in
 ## speech bubbles beside him, with a hop. Any chatter stops so he's heard.
 func remark(moment: StringName) -> void:
+	if is_low():
+		return
 	var places: Dictionary[StringName, Vector3] = {_voice.who: _voice.global_position}
 	var now: float = Time.get_ticks_msec() / 1000.0
 	var picked: Remark = _moments.pick(DialogueLibrary.remarks(MOMENTS), places, Game.dialogue,
@@ -339,6 +352,32 @@ func blink() -> void:
 	_body.blink()
 
 
+## Whether he's gone low from the sea and not yet been fed (#158).
+func is_low() -> bool:
+	return Game.dialogue.is_set(LOW_FLAG)
+
+
+## The way his flame leans while he's low, in his own space: toward the
+## nearest node in [constant LONGS_FOR_GROUP], level, [constant LOW_LEAN]
+## long; zero if there's none.
+func longing_lean() -> Vector3:
+	if not is_inside_tree():
+		return Vector3.ZERO
+	var nearest: Node3D = null
+	for node: Node in get_tree().get_nodes_in_group(LONGS_FOR_GROUP):
+		var place: Node3D = node as Node3D
+		if place != null and (nearest == null or global_position.distance_to(place.global_position)
+				< global_position.distance_to(nearest.global_position)):
+			nearest = place
+	if nearest == null:
+		return Vector3.ZERO
+	var toward: Vector3 = _body.global_basis.inverse() * (nearest.global_position - global_position)
+	toward.y = 0.0
+	if toward.length() < 0.01:
+		return Vector3.ZERO
+	return toward.normalized() * LOW_LEAN
+
+
 ## His face: his eyes, his flame and his glass.
 func face() -> LanternFace:
 	return _body
@@ -354,7 +393,7 @@ func everyday_expression() -> LanternFace.Look:
 			return LanternFace.Look.WORRIED
 		Mood.OPEN:
 			return LanternFace.Look.DETERMINED
-	if warmth < 0.4:
+	if warmth < 0.4 or is_low():
 		return LanternFace.Look.TIRED
 	if _excited > 0.0:
 		return LanternFace.Look.PLEASED
@@ -418,8 +457,13 @@ func _notice(delta: float) -> void:
 		_set_attention(_candidate)
 
 
-# Fades a little, and lets you know when he's getting low.
+# Fades a little, and lets you know when he's getting low. Gone low from the
+# sea, he's as dim as he goes and says nothing about it.
 func _cool(delta: float) -> void:
+	if is_low():
+		warmth = min_warmth
+		_apply_warmth()
+		return
 	warmth -= warmth_per_minute * delta / 60.0
 	_apply_warmth()
 	if warmth < 0.4 and not _said_dim:
@@ -511,9 +555,12 @@ func _express(delta: float) -> void:
 	if _body.streaked and not in_rain:
 		_fogged_left = fog_seconds
 	_fogged_left = maxf(_fogged_left - delta, 0.0)
+	_voice.muted = is_low()
 	if _body.directed:
 		return
 	_body.expression = everyday_expression()
+	_body.cracked = is_low()
+	_body.lean = longing_lean() if is_low() else Vector3.ZERO
 	_body.streaked = in_rain
 	_body.fogged = _fogged_left > 0.0
 
