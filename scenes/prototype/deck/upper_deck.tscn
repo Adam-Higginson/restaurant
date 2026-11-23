@@ -29,8 +29,6 @@
 [ext_resource type="PackedScene" path="res://scenes/prototype/props/water_butt.tscn" id="27_lbw8e"]
 [ext_resource type="Script" path="res://scripts/props/water_butt.gd" id="28_sv7ji"]
 [ext_resource type="Resource" path="res://data/items/rainwater.tres" id="29_v8w0a"]
-[ext_resource type="PackedScene" path="res://scenes/prototype/props/lookout.tscn" id="30_dvptx"]
-[ext_resource type="Script" path="res://scripts/companion/lookout.gd" id="31_qipvs"]
 [ext_resource type="PackedScene" path="res://scenes/prototype/props/fishing_spot.tscn" id="32_ddph0"]
 [ext_resource type="Script" path="res://scripts/fishing/fishing_spot.gd" id="33_pkgkr"]
 [ext_resource type="Resource" path="res://data/items/herring.tres" id="34_rtfdt"]
@@ -5178,10 +5176,6 @@ mesh = SubResource("BoxMesh_168")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -5, 5.3, -1.6)
 script = ExtResource("28_sv7ji")
 water = ExtResource("29_v8w0a")
-
-[node name="Lookout" type="Area3D" parent="Dressing" unique_id=1424236025 instance=ExtResource("30_dvptx")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 6.2, -16.4)
-script = ExtResource("31_qipvs")
 
 [node name="FishingSpot" type="Node3D" parent="Dressing" unique_id=1852587873 instance=ExtResource("32_ddph0")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5.62, 5.3, 4.3)

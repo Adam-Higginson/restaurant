@@ -3,7 +3,7 @@
 # Placeholder writing: rewrite freely.
 #
 # The news_* flags are set by the game when something happens that he wasn't
-# there to see (a fish caught, the bell rung, the light off the bow). He
+# there to see (a fish caught, the bell rung, a memory coming back). He
 # asks about the first one waiting, then forgets it.
 
 ~ start
@@ -13,10 +13,6 @@
 -> fish
 ? news_bell
 -> bell
-? news_island
--> island
-? news_light
--> light
 ? news_memory
 -> memory
 ? morning
@@ -42,27 +38,6 @@ lantern: They always do. They never say.
 ~ bell
 clear news_bell
 lantern: I heard the bell! Are we stopping? I like it when the sea holds still.
--> ask
-
-~ island
-clear news_island
-clear news_light
-lantern: You've been at the bow. Did you see it? The *island*? With the lighthouse?
-lantern: Lighthouses are for people who are lost. So, us.
--> ask
-
-~ light
-clear news_light
-lantern: You've been up at the bow. Was the *light* there? Tell me it was there.
-- It was there. -> light_there
-- I'm not sure what I saw. -> light_unsure
-
-~ light_there
-lantern: That's it. That's home. Probably. Almost certainly. Maybe.
--> ask
-
-~ light_unsure
-lantern: That's all right. I'm sure enough for both of us.
 -> ask
 
 ~ memory

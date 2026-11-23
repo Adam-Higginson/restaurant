@@ -5,7 +5,7 @@
 # See scripts/dialogue/remark.gd for the tags and guards a section can have.
 #
 # Moments: returned, remembered, caught, morning, hove_to, supper, dim,
-# far_light, island, pulled_out, crab_killed.
+# pulled_out, crab_killed.
 # Placeholder writing: rewrite freely.
 
 # (His first words, the night he pulled you from the sea, are in the opening
@@ -78,26 +78,6 @@ lantern: I'm a bit... dim. Is there soup?
 
 ~ dim_2 [on dim]
 lantern: Is it me, or is it darker in here? It's me, isn't it. [thought]
-
-# You're at the bow at night, looking towards the far light.
-~ far_light_1 [on far_light]
-lantern: A light! That's it. That's home. Probably. Almost certainly. Maybe. [shout]
-
-~ far_light_2 [on far_light]
-lantern: If it isn't home, it's very good at pretending.
-
-~ far_light_3 [on far_light]
-lantern: Somebody's keeping that light lit. For somebody.
-
-# You're at the bow at dawn, and the island has come out of the mist.
-~ island_1 [on island]
-lantern: There! An island. With a lighthouse. Lighthouses are for people who are lost. So, us.
-
-~ island_2 [on island]
-lantern: That's where the light lives. I knew it. I didn't, but I knew it.
-
-~ island_3 [on island]
-lantern: Do you think it remembers you? Islands are very good at remembering.
 
 # A creature has beaten you, and he's pulled you back to the landing.
 ~ pulled_out_1 [on pulled_out]
