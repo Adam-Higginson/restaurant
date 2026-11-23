@@ -31,7 +31,7 @@ func test_the_kiln_gets_every_firing_setting() -> void:
 	assert_float(grain).is_equal_approx(0.2, 0.0001)
 	assert_bool(symmetric).is_true()
 	for key: String in ["pixels_per_metre", "max_texture", "flatten_degrees", "creases",
-			"protect_edges"]:
+			"protect_edges", "grain_size"]:
 		assert_bool(firing.has(key)).override_failure_message(key).is_true()
 
 
@@ -40,6 +40,20 @@ func test_drawing_settings_are_not_firing_settings() -> void:
 	var firing: Dictionary = ArtLook.new().firing()
 	for key: String in ["faceted", "roughness", "specular"]:
 		assert_bool(firing.has(key)).override_failure_message(key).is_false()
+
+
+func test_every_look_is_soft_n64_not_voxel_blocks() -> void:
+	# The user's pick (#129, look C+): the N64's own three-point filter and
+	# smooth shading, lit by our modern lights; grain painted in soft blobs.
+	# Props, creatures and the player alike.
+	for preset: String in ["prop", "creature", "character_body", "character_head",
+			"character_hair"]:
+		var look: ArtLook = load("res://data/art/looks/%s.tres" % preset) as ArtLook
+		assert_bool(look.three_point_filter).override_failure_message(preset).is_true()
+		assert_bool(look.faceted).override_failure_message(preset).is_false()
+		assert_bool(look.vertex_lighting).override_failure_message(preset).is_false()
+	var prop: ArtLook = load("res://data/art/looks/prop.tres") as ArtLook
+	assert_int(prop.grain_size).is_greater(1)
 
 
 func test_the_presets_keep_to_the_n64_budgets() -> void:

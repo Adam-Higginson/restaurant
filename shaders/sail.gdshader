@@ -20,7 +20,7 @@ render_mode cull_disabled, diffuse_burley, specular_schlick_ggx;
 global uniform float wetness;
 
 uniform vec4 albedo : source_color = vec4(0.78, 0.71, 0.58, 1.0);
-uniform sampler2D canvas_texture : source_color, filter_nearest_mipmap, repeat_enable, hint_default_white;
+uniform sampler2D canvas_texture : source_color, filter_linear_mipmap, repeat_enable, hint_default_white;
 // One copy of the texture covers this many metres.
 uniform float texture_metres = 1.0;
 // The sail's size in metres (x across, y down), to keep the texture's pixels

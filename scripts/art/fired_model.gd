@@ -6,6 +6,8 @@ extends RefCounted
 ## [CharacterModel], so every fired model is drawn the same way.
 
 const SHADER: Shader = preload("res://shaders/n64_surface.gdshader")
+## The same, lit per corner (the look's [member ArtLook.vertex_lighting]).
+const VERTEX_SHADER: Shader = preload("res://shaders/n64_surface_vertex.gdshader")
 
 ## Materials already made, by texture and look, so every copy of a model
 ## shares one.
@@ -21,12 +23,13 @@ static func material(texture_path: String, look: ArtLook,
 	if known != null:
 		return known
 	var made: ShaderMaterial = ShaderMaterial.new()
-	made.shader = SHADER
+	made.shader = VERTEX_SHADER if look.vertex_lighting else SHADER
 	made.set_shader_parameter(&"albedo_texture", load(texture_path) as Texture2D)
 	made.set_shader_parameter(&"albedo_color", tint)
 	made.set_shader_parameter(&"roughness", look.roughness)
 	made.set_shader_parameter(&"specular", look.specular)
 	made.set_shader_parameter(&"faceted", look.faceted)
+	made.set_shader_parameter(&"three_point", look.three_point_filter)
 	_made[key] = made
 	return made
 

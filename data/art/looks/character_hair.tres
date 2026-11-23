@@ -14,3 +14,4 @@ symmetric = true
 faceted = false
 palette = ExtResource("2_palette")
 palette_strength = 0.6
+three_point_filter = true
