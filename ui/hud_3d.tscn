@@ -10,6 +10,7 @@
 [ext_resource type="Script" path="res://ui/memory_card.gd" id="9_memory"]
 [ext_resource type="Script" path="res://ui/hearts_bar.gd" id="10_hearts"]
 [ext_resource type="Script" path="res://ui/hurt_overlay.gd" id="11_hurt"]
+[ext_resource type="Script" path="res://ui/chop_meter_bar.gd" id="13_chop"]
 [ext_resource type="Shader" path="res://shaders/hurt_overlay.gdshader" id="12_hurt_shader"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_hurt"]
@@ -93,6 +94,13 @@ offset_right = 86.0
 offset_bottom = 14.0
 mouse_filter = 2
 script = ExtResource("10_hearts")
+
+[node name="ChopMeterBar" type="Control" parent="."]
+unique_name_in_owner = true
+offset_right = 68.0
+offset_bottom = 18.0
+mouse_filter = 2
+script = ExtResource("13_chop")
 
 [node name="MemoryCard" type="Control" parent="."]
 unique_name_in_owner = true

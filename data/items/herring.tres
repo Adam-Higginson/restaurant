@@ -8,3 +8,5 @@ id = &"herring"
 display_name = "Herring"
 color = Color(0.62, 0.72, 0.78, 1)
 storage = 1
+model_path = "res://assets/third_party/meshy/herring/model/model.glb"
+model_size = Vector3(0.32, 0.32, 0.32)

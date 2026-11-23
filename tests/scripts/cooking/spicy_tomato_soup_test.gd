@@ -61,13 +61,32 @@ func test_the_whole_soup_from_water_to_spice() -> void:
 	pan.add_item(ItemInstance.new(_item(&"diced_tomato")))
 	pan.add_item(ItemInstance.new(_item(&"chopped_onion")))
 	pan.tick(8.1)
+	# Both the soup and the spice caught at their golden moments (#152): off
+	# the heat as each is done, and back on for the next.
+	var fire: Element = pan.get_golden_moments()[0].reaction.driving_element()
+	pan.remove_element(fire)
+	pan.add_element(fire)
 	pan.add_item(ItemInstance.new(_item(&"chopped_chilli")))
 	pan.tick(4.1)
+	pan.remove_element(fire)
 
 	var food: Array[ItemInstance] = pan.get_contents()
 	assert_int(food.size()).is_equal(1)
 	assert_str(String(food[0].item.id)).is_equal("spicy_tomato_soup")
+	# ★ tomato, onion and chilli, with every step done at its best.
 	assert_int(food[0].quality).is_equal(3)
+
+
+func test_a_spicy_soup_left_on_the_hob_is_just_done() -> void:
+	var pan: VesselContents = _hot_pan()
+	pan.add_item(ItemInstance.new(_item(&"tomato_soup"), 2))
+	pan.add_item(ItemInstance.new(_item(&"chopped_chilli"), 2))
+	pan.tick(4.1)
+	pan.tick(5.0)
+
+	var food: Array[ItemInstance] = pan.get_contents()
+	assert_str(String(food[0].item.id)).is_equal("spicy_tomato_soup")
+	assert_int(food[0].quality).is_equal(2)
 
 
 func test_the_pantry_keeps_chillies_and_onions() -> void:

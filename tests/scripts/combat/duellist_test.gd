@@ -819,3 +819,36 @@ func _interactable(player: Player3D, pos: Vector3) -> Interactable3D:
 	area.add_child(shape)
 	player.get_parent().add_child(area)
 	return area
+
+
+# --- The tools you carry (#152) ---------------------------------------------------
+
+func test_the_pan_you_carry_sets_the_parry_window() -> void:
+	var player: Player3D = new_player_3d_on_floor()
+	scene_runner(player.get_parent())
+	var better: Item = PAN.duplicate() as Item
+	better.parry_seconds = 0.5
+	better.perfect_parry_seconds = 0.2
+	player.toolbar.add(ItemInstance.new(better))
+
+	assert_bool(duellist_of(player).raise_pan()).is_true()
+
+	assert_float(duellist_of(player).parry.window_seconds).is_equal(0.5)
+	assert_float(duellist_of(player).parry.perfect_seconds).is_equal(0.2)
+
+
+func test_a_better_knife_hits_harder() -> void:
+	var player: Player3D = new_player_3d_on_floor()
+	scene_runner(player.get_parent())
+	var better: HandTool = KNIFE.duplicate() as HandTool
+	better.damage = 1.5
+	player.toolbar.set_tool(0, better)
+
+	assert_float(duellist_of(player).knife_damage()).is_equal(1.5)
+
+
+func test_the_cheap_knife_hits_as_hard_as_its_cuts_say() -> void:
+	var player: Player3D = new_player_3d_on_floor()
+	scene_runner(player.get_parent())
+
+	assert_float(duellist_of(player).knife_damage()).is_equal(1.0)

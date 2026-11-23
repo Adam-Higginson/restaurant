@@ -8,3 +8,5 @@ id = &"crab_meat"
 display_name = "Crab Meat"
 color = Color(0.95, 0.78, 0.72, 1)
 storage = 1
+model_path = "res://assets/third_party/meshy/crab_meat/model/model.glb"
+model_size = Vector3(0.24, 0.24, 0.24)

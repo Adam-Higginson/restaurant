@@ -31,16 +31,29 @@ heron: Hm. Can you cook?
 - Who are you? -> who
 
 ~ cook_little
-heron: A little is more than the rest of us. The *galley*'s forward, through the door.
--> met
+heron: A little is more than the rest of us.
+-> the_pan
 
 ~ cook_tastes
 heron: Tastes. Hm. That's a start. Better than a name, some would say.
--> met
+-> the_pan
 
 ~ who
 heron: Captain. That'll do for now.
-heron: The galley's forward, through the door. We eat at eight bells.
+-> the_pan
+
+# The ship needs a cook, so he hands you the last cook's pan (#152), and you
+# take it as if it were treasure.
+~ the_pan
+heron: You'll be cooking for us, then. You'll want this.
+heron: The last cook's pan. It's seen some service.
+set has_frying_pan
+@hold_up frying_pan
+narrator: You got the *Frying Pan*! Put it on the *hob* to cook, and raise it to fend off a blow.
+@put_away
+heron: ...That was a strange way to take a frying pan.
+heron: And how in the blazes did you make it float over your head?
+heron: Anyway. The *galley*'s forward, through the door. We eat at eight bells.
 -> met
 
 ~ met

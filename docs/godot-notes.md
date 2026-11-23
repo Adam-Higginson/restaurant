@@ -516,6 +516,24 @@ A growing glossary of the Godot concepts this project uses: what each one is, in
 
 **Raycasts in tests.** `get_world_3d().direct_space_state.intersect_ray(query)` asks the physics engine what a line hits; `query.exclude` lists bodies to ignore. A test can use it to check level layout. *Ours:* `walkways_test.gd` makes sure no walkway runs through a wall.
 
+## Cooking feel and the knife in the chest (#152)
+
+**A hinge is a pivot node.** A node turns about its own origin, so to make a lid swing on its back edge, put a `Node3D` exactly on that edge and the lid's mesh under it, offset forward; turning the pivot's `rotation.x` swings the lid open. *Ours:* `TreasureChest`'s greybox `LidHinge`, and the Meshy chest's `Lid`, whose origin `tools/meshy/split_lid.py` moved to its back edge in Blender.
+
+**A light in the volumetric fog.** With volumetric fog on in the `Environment`, every light also lights the air, and its `light_volumetric_fog_energy` says how much: that's what makes a glowing haze (god rays) around it. Too high and the whole room goes orange. *Ours:* the chest's `Glow` (1.5), on top of the `chest_beam` shader's painted shaft.
+
+**Particles that ride with their node.** By default a particle, once born, stays where it is in the world while its emitter moves on. `local_coords = true` keeps the particles in the emitter's own space, so they travel with it. On a sailing ship, steam that doesn't streams away behind the pan. *Ours:* `PanFeel`'s steam and glints.
+
+**A child is ready before its parent.** `_ready` runs from the leaves up, so in a child's `_ready` the parent's own `_ready` hasn't run and anything it makes there doesn't exist yet. `await get_parent().ready` waits for it. *Ours:* `PanFeel` waits for its `Hob`'s slot.
+
+**Reading a scene's settings without running it.** `PackedScene.get_state()` gives a `SceneState`: every node's name and the properties saved on it, read from the file without building the scene. *Ours:* tests check that the real game's `Player` starts with no tools and that the `GalleyChest` holds the knife.
+
+**Tweening a function.** `tween_method(callable, from, to, seconds)` calls a function with a value easing from one number to another, for anything a property tween can't reach in one go. `callable.bind(x)` adds more arguments after the value. *Ours:* `TreasureChest.swing_open` (the lid and its light together) and `CharacterModel.chop_at` (`_set_chop.bind(point)`).
+
+**See-through by accident: alpha textures.** A model whose texture has an alpha channel is often imported with its material set to *Alpha* transparency, even where every pixel is solid. See-through materials don't hide what's behind them reliably (they're drawn in a later pass, sorted by distance), so a light inside a box shows through its walls. Setting the material's `transparency` back to *Disabled* makes it solid. *Ours:* `TreasureChest._make_solid` and `ItemModel._as_made`, for Meshy's models.
+
+**A fixed time step for pictures.** Saving a screenshot stalls the game, and the next frame's `delta` swallows the stall, so a moment you meant to photograph is skipped. Running Godot with `--fixed-fps 60` makes every frame advance exactly 1/60 s however long it took, so a capture shows what really happens at that frame. (The tests run this way too.)
+
 ## Testing
 
 **gdUnit4.** The test framework (`addons/gdUnit4`). Suites extend our `GameTestSuite` and have `test_...` functions. `scene_runner` loads a scene and lets a test press inputs and wait physics ticks. *Ours:* `tests/`.

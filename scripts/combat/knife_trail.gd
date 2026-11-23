@@ -17,6 +17,11 @@ extends MeshInstance3D
 ## How long a piece of the ribbon lasts, in seconds.
 @export var fade_seconds: float = 0.12
 
+## While true the knife leaves no ribbon, even when it's out: a cut at the
+## chopping board is small and close, and a ribbon there would fill the
+## screen. Set by the [Duellist].
+var quiet: bool = false
+
 ## Each remembered place: the heel and tip in the world, and its age.
 var _heels: PackedVector3Array = []
 var _tips: PackedVector3Array = []
@@ -45,7 +50,7 @@ func _process(delta: float) -> void:
 		_heels.remove_at(0)
 		_tips.remove_at(0)
 		_ages.remove_at(0)
-	if heel != null and tip != null and heel.is_visible_in_tree():
+	if heel != null and tip != null and heel.is_visible_in_tree() and not quiet:
 		_heels.append(heel.global_position)
 		_tips.append(tip.global_position)
 		_ages.append(0.0)

@@ -148,13 +148,14 @@ func can_use_tool(tool: HandTool) -> bool:
 	return _item.contents.would_react_to(tool.element)
 
 
-## Uses [param tool] on what's here: the knife cuts food on a board. Returns
-## whether it did anything; it doesn't without a vessel or with nothing the
-## tool can work on.
-func use_tool(tool: HandTool) -> bool:
+## Uses [param tool] on what's here: the knife cuts food on a board.
+## [param grade] is how well the cut was timed on the chop meter (3 perfect,
+## 2 good, 1 ragged; 0 ungraded). Returns whether it did anything; it doesn't
+## without a vessel or with nothing the tool can work on.
+func use_tool(tool: HandTool, grade: int = 0) -> bool:
 	if _item == null or not _item.is_vessel() or tool.element == null:
 		return false
-	return _item.contents.add_element(tool.element)
+	return _item.contents.add_element(tool.element, grade)
 
 
 # The top food on a board here (a vessel not carried whole), or null.

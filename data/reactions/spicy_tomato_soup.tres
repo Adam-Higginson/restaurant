@@ -18,3 +18,4 @@ elements = Array[ExtResource("2_element")]([ExtResource("4_el")])
 amount = 4.0
 result = ExtResource("6_res")
 quality = 3
+golden_moment = true

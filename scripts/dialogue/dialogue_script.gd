@@ -228,6 +228,8 @@ static func _read_statement(tree: DialogueTree, line: String, number: int,
 		return null
 	step.kind = DialogueStep.Kind.LINE
 	step.speaker = StringName(said.get_string(1))
+	if step.speaker == DialogueStep.NARRATOR:
+		step.speaker = &""
 	step.text = said.get_string(2)
 	step.tag = StringName(said.get_string(3))
 	if remarks and step.tag != &"" and not Remark.LINE_TAGS.has(String(step.tag)):

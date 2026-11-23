@@ -35,6 +35,9 @@ const GROUP: StringName = &"player"
 @export var knockback_fade: float = 20.0
 ## The tools on the toolbar at the start, from the first slot on.
 @export var start_tools: Array[HandTool] = []
+## The items on the toolbar at the start, after the tools: the frying pan
+## you cook with and parry with.
+@export var start_items: Array[Item] = []
 
 ## Whether the player walks when you push the stick. Off while asleep or in
 ## a cutscene: they stand still, but the deck still carries them as it sails.
@@ -111,6 +114,13 @@ func _ready() -> void:
 	add_to_group(GROUP)
 	for i: int in mini(start_tools.size(), Toolbar.SLOT_COUNT):
 		toolbar.set_tool(i, start_tools[i])
+	for item: Item in start_items:
+		toolbar.add(ItemInstance.new(item))
+	toolbar.select(0)
+	# Tools you've found are kept as flags, so they come back with a saved
+	# voyage (restored after we're ready) and arrive the moment one is set.
+	give_owned_tools()
+	Game.dialogue.flag_changed.connect(_on_flag_changed)
 
 
 func _physics_process(delta: float) -> void:
@@ -154,6 +164,18 @@ func _unhandled_input(event: InputEvent) -> void:
 				get_viewport().set_input_as_handled()
 				toolbar.select(i)
 				return
+
+
+## Puts every tool and item the voyage owns on the toolbar, if it isn't there
+## already: a tool or item is owned when its conversation flag
+## [code]has_<id>[/code] is set (see [member HandTool.owned_flag]), which a
+## chest or a gift sets. The selected slot doesn't change. Called as the
+## player arrives (a saved voyage's flags are back by then).
+func give_owned_tools() -> void:
+	for tool: HandTool in Catalog.load_default().tools:
+		_give(tool.owned_flag)
+	for item: Item in Catalog.load_default().items:
+		_give(StringName("has_%s" % item.id))
 
 
 ## Throws the player along [param push], a flat velocity in metres per second
@@ -267,3 +289,27 @@ func _movement_yaw(input: Vector2) -> float:
 func _face(direction: Vector3, _delta: float) -> void:
 	# The yaw that turns the model's forward (-Z) to point along direction.
 	_model.rotation.y = atan2(-direction.x, -direction.z)
+
+
+# Gives the tool or item that the flag [param flag] ([code]has_<id>[/code])
+# says you own, if it's set and you haven't got it on the toolbar.
+func _give(flag: StringName) -> void:
+	if not Game.dialogue.is_set(flag) or not String(flag).begins_with("has_"):
+		return
+	var id: StringName = StringName(String(flag).trim_prefix("has_"))
+	var catalog: Catalog = Catalog.load_default()
+	var selected: int = toolbar.selected_index
+	var tool: HandTool = catalog.find_tool(id)
+	var item: Item = catalog.find_item(id)
+	if tool != null:
+		toolbar.add_tool(tool)
+	elif item != null and not toolbar.has_item(id):
+		toolbar.add(ItemInstance.new(item))
+	toolbar.select(selected)
+
+
+# Just this flag's: a pan you've already put down on the hob isn't handed to
+# you again because some other flag was set.
+func _on_flag_changed(flag: StringName, value: int) -> void:
+	if value > 0:
+		_give(flag)

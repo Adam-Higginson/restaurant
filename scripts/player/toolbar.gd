@@ -136,6 +136,32 @@ func set_tool(index: int, tool: HandTool) -> void:
 	changed.emit()
 
 
+## Puts [param tool] in the first free slot and selects it, unless it's on
+## the toolbar already. Returns whether it's on the toolbar now: false only
+## when every slot is taken.
+func add_tool(tool: HandTool) -> bool:
+	if tool == null:
+		push_error("Toolbar: tool is null")
+		return false
+	if has_tool(tool.id):
+		return true
+	var slot: int = _free_slot()
+	if slot == -1:
+		return false
+	_tools[slot] = tool
+	_selected = slot
+	changed.emit()
+	return true
+
+
+## Whether any slot holds the tool with this [param id] (e.g. &"chefs_knife").
+func has_tool(id: StringName) -> bool:
+	for tool: HandTool in _tools:
+		if tool != null and tool.id == id:
+			return true
+	return false
+
+
 ## The tool in the selected slot, or null.
 func selected_tool() -> HandTool:
 	return _tools[_selected]

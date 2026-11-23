@@ -4,6 +4,10 @@
 [ext_resource type="Material" path="res://assets/placeholder/materials/prop_wood.tres" id="2_wood"]
 [ext_resource type="Script" path="res://scripts/interaction/interactable_3d.gd" id="3_inter"]
 [ext_resource type="Material" path="res://assets/placeholder/materials/dark_prop_wood.tres" id="4_dark"]
+[ext_resource type="Script" path="res://scripts/visuals/chop_feel.gd" id="5_feel"]
+[ext_resource type="AudioStream" path="res://assets/audio/combat/slice.tres" id="6_slice"]
+[ext_resource type="AudioStream" path="res://assets/audio/cooking/board_knock.tres" id="7_knock"]
+[ext_resource type="AudioStream" path="res://assets/audio/combat/charged.tres" id="8_chime"]
 
 [sub_resource type="BoxMesh" id="BoxMesh_top"]
 size = Vector3(1.1, 0.9, 0.6)
@@ -51,3 +55,16 @@ shape = SubResource("BoxShape3D_reach")
 
 [node name="ItemSpot" type="Node3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.9, 0)
+
+[node name="ChopShot" type="Marker3D" parent="."]
+transform = Transform3D(0.744242, -0.271686, 0.610156, 0, 0.91353, 0.406771, -0.66791, -0.302736, 0.679888, 1.05, 1.6, 1.15)
+
+[node name="ChopFeel" type="Node3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.98, 0)
+script = ExtResource("5_feel")
+slice_sound = ExtResource("6_slice")
+knock_sound = ExtResource("7_knock")
+chime_sound = ExtResource("8_chime")
+
+[node name="ChopStand" type="Marker3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0.6)

@@ -1,7 +1,8 @@
 class_name KilnCatalog
 extends RefCounted
 ## Finds every model the game fires in the Kiln: each [ThirdPartyModel] with a
-## look in the scenes, and each [CharacterParts] in the data. The batch
+## look in the scenes, and each [CharacterParts], [Item] and [HandTool] model
+## in the data. The batch
 ## (kiln.sh) fires the stale ones, and the Lookbook lays them all out.
 
 ## Where to look, by default.
@@ -60,10 +61,24 @@ static func models_in_scene(path: String) -> Array[ThirdPartyModel]:
 	return found
 
 
-## The Kiln jobs of the resource at [param path], if it's [CharacterParts].
+## The Kiln jobs of the resource at [param path]: a [CharacterParts]'s, or
+## the model of an [Item] or a [HandTool] (#152).
 static func jobs_in_resource(path: String) -> Array[KilnJob]:
-	var parts: CharacterParts = load(path) as CharacterParts
-	return parts.jobs() if parts != null else ([] as Array[KilnJob])
+	var found: Array[KilnJob] = []
+	var resource: Resource = load(path)
+	var parts: CharacterParts = resource as CharacterParts
+	if parts != null:
+		return parts.jobs()
+	var job: KilnJob = null
+	var item: Item = resource as Item
+	if item != null:
+		job = item.kiln_job()
+	var tool: HandTool = resource as HandTool
+	if tool != null:
+		job = tool.kiln_job()
+	if job != null:
+		found.append(job)
+	return found
 
 
 ## Every scene and resource file under [param root], in every folder.

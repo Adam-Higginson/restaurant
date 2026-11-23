@@ -6,6 +6,8 @@
 [ext_resource type="Script" path="res://scripts/interaction/interactable_3d.gd" id="4_reach"]
 [ext_resource type="Material" path="res://assets/placeholder/materials/iron.tres" id="5_iron"]
 [ext_resource type="Material" path="res://assets/placeholder/materials/embers.tres" id="6_embers"]
+[ext_resource type="Script" path="res://scripts/visuals/pan_feel.gd" id="7_feel"]
+[ext_resource type="AudioStream" path="res://assets/audio/combat/charged.tres" id="8_chime"]
 
 [sub_resource type="TorusMesh" id="Trivet"]
 inner_radius = 0.19
@@ -49,3 +51,8 @@ shape = SubResource("Reach")
 
 [node name="ItemSpot" type="Node3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.02, 0)
+
+[node name="PanFeel" type="Node3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.05, 0)
+script = ExtResource("7_feel")
+chime_sound = ExtResource("8_chime")

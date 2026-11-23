@@ -71,6 +71,9 @@ static var _heads: Dictionary[String, ArrayMesh] = {}
 ## Files holding the animations, on the same skeleton (the Universal
 ## Animation Library). Later files win when two have the same animation.
 @export_file("*.glb", "*.gltf") var animation_files: PackedStringArray = []
+## How far through a chop (see [method chop_at]) the knife meets the board.
+const CHOP_CONTACT: float = 0.62
+
 ## The animation for each [enum Pose].
 @export var idle_animation: StringName = &"Idle"
 @export var walk_animation: StringName = &"Walk"
@@ -132,6 +135,19 @@ static var _heads: Dictionary[String, ArrayMesh] = {}
 		hand_grip = clampf(value, 0.0, 1.0)
 		if _arm != null:
 			_arm.grip = hand_grip
+## How far both arms are raised over the head, holding something up for all
+## to see (a treasure from a chest): 0 as the animation has them, 1 held up
+## (see [ArmReach]). The shoulders lift with them; the hands stay open.
+@export_range(0.0, 1.0) var hold_up: float = 0.0:
+	set(value):
+		hold_up = clampf(value, 0.0, 1.0)
+		for arm: ArmReach in _lifts:
+			arm.amount = hold_up
+## Where the hands meet when held up, above the head, in metres: how high
+## over the head bone, how far in front of it, and how far apart the hands are.
+@export var hold_up_height: float = 0.6
+@export var hold_up_forward: float = 0.14
+@export var hold_up_spread: float = 0.17
 ## Something for the head to turn towards. Optional.
 @export var watch: Node3D
 ## How far the head has turned towards [member watch], leaving the rest of
@@ -170,6 +186,10 @@ var left_hand: BoneAttachment3D = null
 var _animator: AnimationPlayer = null
 ## What lifts the left arm when it reaches.
 var _arm: ArmReach = null
+## What lifts both arms when something is held up: the left, then the right.
+var _lifts: Array[ArmReach] = []
+## What brings the right arm (the knife hand) down in a chop at the board.
+var _chop_arm: ArmReach = null
 ## The fired head's meshes, awake and asleep: shown by [member eyes_shut].
 ## Empty unless both have been fired.
 var _awake_head: Array[MeshInstance3D] = []
@@ -220,6 +240,8 @@ func _process(delta: float) -> void:
 		_arm.target = reach_for.global_position
 	if _head != null and is_instance_valid(watch):
 		_head.target = watch.global_position
+	if hold_up > 0.0:
+		_aim_lifts()
 	var walking: bool = player != null and player.is_walking
 	var charging: bool = _duellist != null and _duellist.is_charging()
 	var parrying: bool = _duellist != null and _duellist.parry.is_active()
@@ -369,7 +391,8 @@ func animation_for(of: Pose) -> StringName:
 	match of:
 		Pose.WALK:
 			# A quick walk is a run, if there's a run to play.
-			if is_running() and _animator != null 					and _animator.has_animation("%s/%s" % [LIBRARY, run_animation]):
+			if is_running() and _animator != null \
+					and _animator.has_animation("%s/%s" % [LIBRARY, run_animation]):
 				return run_animation
 			return walk_animation
 		Pose.STRIKE:
@@ -395,6 +418,40 @@ static func walk_playback(speed: float, stride_speed: float) -> float:
 ## per second (see [method walk_playback]). 0 without a character or a walk.
 func stride_speed() -> float:
 	return _run_stride_speed if is_running() else _stride_speed
+
+
+## Chops at [param point] in the world with the knife hand, over
+## [param seconds]: the hand lifts above it, strikes down onto it a little
+## past halfway ([constant CHOP_CONTACT] of the way through), and goes back
+## to where the animation has it. Does nothing without a character.
+func chop_at(point: Vector3, seconds: float) -> void:
+	if _chop_arm == null or seconds <= 0.0:
+		return
+	create_tween().tween_method(_set_chop.bind(point), 0.0, 1.0, seconds)
+
+
+## Where the treasure sits while it's held up: between the two hands as
+## they really are (the arms reach towards [method hold_up_point] but stop
+## where their length does), a little above them. Without hands, the
+## [method hold_up_point].
+func held_point() -> Vector3:
+	if right_hand == null or left_hand == null:
+		return hold_up_point()
+	var between: Vector3 = (right_hand.global_position + left_hand.global_position) / 2.0
+	return between + Vector3.UP * 0.08
+
+
+## Where something held up is held, in the world: above the head, a little
+## in front (see [member hold_up]). Without a character, over the greybox.
+func hold_up_point() -> Vector3:
+	var forward: Vector3 = -global_basis.z.normalized()
+	if skeleton == null:
+		return global_position + Vector3.UP * 2.0 + forward * hold_up_forward
+	var head: int = skeleton.find_bone("Head")
+	if head == -1:
+		return global_position + Vector3.UP * 2.0 + forward * hold_up_forward
+	var at: Vector3 = skeleton.global_transform * skeleton.get_bone_global_pose(head).origin
+	return at + Vector3.UP * hold_up_height + forward * hold_up_forward
 
 
 ## What to play: a strike, a charge or a parry wins over walking, and
@@ -548,6 +605,27 @@ func _build(parts: CharacterParts) -> void:
 	_arm.amount = reach
 	_arm.grip = hand_grip
 	skeleton.add_child(_arm)
+	_lifts.clear()
+	for side: String in ["_l", "_r"]:
+		var lift: ArmReach = ArmReach.new()
+		lift.name = "HoldUp" + side.to_upper()
+		lift.upper_bone = StringName("upperarm" + side)
+		lift.lower_bone = StringName("lowerarm" + side)
+		lift.hand_bone = StringName("hand" + side)
+		lift.shoulder_bone = StringName("clavicle" + side)
+		lift.side = side
+		lift.amount = hold_up
+		skeleton.add_child(lift)
+		_lifts.append(lift)
+	_chop_arm = ArmReach.new()
+	_chop_arm.name = "ChopArm"
+	_chop_arm.upper_bone = &"upperarm_r"
+	_chop_arm.lower_bone = &"lowerarm_r"
+	_chop_arm.hand_bone = &"hand_r"
+	_chop_arm.side = "_r"
+	_chop_arm.shoulder_bone = &"clavicle_r"
+	_chop_arm.shoulder_share = 0.15
+	skeleton.add_child(_chop_arm)
 	_head = HeadLook.new()
 	_head.name = "HeadLook"
 	_head.amount = head_turn
@@ -788,12 +866,35 @@ func _undress() -> void:
 	left_hand = null
 	_animator = null
 	_arm = null
+	_lifts.clear()
+	_chop_arm = null
 	_awake_head.clear()
 	_asleep_head.clear()
 	_head = null
 	_legs = null
 	_act_left = 0.0
 	_recovery = &""
+
+
+# How far through a chop at [param point] it is, [param through] from 0 to 1:
+# up above it, down onto it, then back.
+func _set_chop(through: float, point: Vector3) -> void:
+	if _chop_arm == null:
+		return
+	_chop_arm.amount = smoothstep(0.0, 0.3, through) * (1.0 - smoothstep(0.75, 1.0, through))
+	var strike: float = smoothstep(CHOP_CONTACT - 0.14, CHOP_CONTACT, through)
+	_chop_arm.target = point + Vector3.UP * lerpf(0.32, -0.04, strike)
+
+
+# Points each raised hand at its side of the hold-up point, so the hands
+# meet round what they hold.
+func _aim_lifts() -> void:
+	var point: Vector3 = hold_up_point()
+	var across: Vector3 = global_basis.x.normalized() * hold_up_spread
+	if _lifts.size() == 2:
+		# The character faces -Z, so its right hand is towards +X.
+		_lifts[0].target = point - across
+		_lifts[1].target = point + across
 
 
 func _show_stand_ins(shown: bool) -> void:

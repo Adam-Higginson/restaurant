@@ -60,7 +60,8 @@ func find_actor(who: String) -> Node3D:
 	if who == PLAYER:
 		return player if is_instance_valid(player) else null
 	if who == LANTERN:
-		return player.get_node_or_null("LanternSpirit") as LanternSpirit 				if is_instance_valid(player) else null
+		return player.get_node_or_null("LanternSpirit") as LanternSpirit \
+				if is_instance_valid(player) else null
 	if not is_inside_tree():
 		return null
 	for node: Node in get_tree().get_nodes_in_group(Crewmate.GROUP):
