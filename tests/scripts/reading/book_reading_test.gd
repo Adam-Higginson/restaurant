@@ -65,6 +65,23 @@ func test_an_empty_book_opens_on_blank_pages() -> void:
 	assert_bool(reading.turn_forward()).is_false()
 
 
+func test_a_marked_book_falls_open_at_the_pair_holding_its_page() -> void:
+	var book: Book = _book(6)
+	book.opens_at = 3
+
+	var reading: BookReading = BookReading.new(book)
+
+	assert_int(reading.left_index).is_equal(2)
+	assert_str(reading.right_page().heading).is_equal("Page 4")
+
+
+func test_a_mark_past_the_end_opens_at_the_start() -> void:
+	var book: Book = _book(2)
+	book.opens_at = 9
+
+	assert_int(BookReading.new(book).left_index).is_equal(0)
+
+
 func _book(pages: int) -> Book:
 	var book: Book = Book.new()
 	for i: int in pages:

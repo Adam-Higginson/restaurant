@@ -8,3 +8,6 @@ extends Resource
 @export var title: String = ""
 ## The pages, first to last.
 @export var pages: Array[BookPage] = []
+## The page it falls open at, counting from 0: a page someone marked. It opens
+## at the pair of pages holding it.
+@export var opens_at: int = 0
