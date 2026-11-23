@@ -40,6 +40,8 @@
 [ext_resource type="Resource" path="res://data/items/frying_pan.tres" id="40_pan"]
 [ext_resource type="Resource" path="res://data/items/tomato.tres" id="41_tomato"]
 [ext_resource type="Resource" path="res://data/items/lettuce.tres" id="42_lettuce"]
+[ext_resource type="Shader" path="res://shaders/far_canopy.gdshader" id="43_canopy"]
+[ext_resource type="Script" path="res://scripts/islands/near_mist.gd" id="44_mist"]
 
 [sub_resource type="FastNoiseLite" id="Noise_cloud"]
 noise_type = 3
@@ -84,13 +86,13 @@ fog_enabled = true
 fog_light_color = Color(0.86, 0.84, 0.8, 1)
 fog_light_energy = 1.0
 fog_sun_scatter = 0.15
-fog_density = 0.0008
+fog_density = 0.0014
 fog_aerial_perspective = 0.3
 fog_sky_affect = 0.0
 volumetric_fog_enabled = true
 volumetric_fog_density = 0.0012
 volumetric_fog_albedo = Color(1, 0.96, 0.9, 1)
-volumetric_fog_anisotropy = 0.7
+volumetric_fog_anisotropy = 0.45
 volumetric_fog_length = 140.0
 volumetric_fog_ambient_inject = 0.3
 volumetric_fog_sky_affect = 0.25
@@ -222,10 +224,14 @@ shader = ExtResource("26_fish")
 shader = ExtResource("33_hills")
 shader_parameter/treetops = SubResource("Texture_cloud")
 
+[sub_resource type="ShaderMaterial" id="Material_canopy"]
+shader = ExtResource("43_canopy")
+
 [sub_resource type="FogMaterial" id="Fog_mist"]
-density = 0.022
+density = 0.03
 albedo = Color(1, 0.94, 0.82, 1)
-edge_fade = 0.5
+height_falloff = 0.22
+edge_fade = 1.5
 
 [sub_resource type="StandardMaterial3D" id="Material_mote"]
 transparency = 1
@@ -335,14 +341,17 @@ mesh = SubResource("Mesh_bank")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8, -36)
 size = Vector3(200, 20, 44)
 material = SubResource("Fog_mist")
+script = ExtResource("44_mist")
 
-[node name="FarHills" type="MeshInstance3D" parent="."]
+[node name="FarHills" type="MeshInstance3D" parent="." node_paths=PackedStringArray("sun")]
 material_override = SubResource("Material_hills")
 cast_shadow = 0
 script = ExtResource("32_backdrop")
 first_distance = 95.0
 first_height = 62.0
 height_step = 50.0
+crown_material = SubResource("Material_canopy")
+sun = NodePath("../Sun")
 
 [node name="ScreenFade" parent="." instance=ExtResource("36_fade")]
 

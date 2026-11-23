@@ -111,15 +111,12 @@ func test_shafts_lie_along_the_suns_rays() -> void:
 		assert_float(frame.basis.y.length()).is_between(12.0, 20.0)
 
 
-func test_far_ridges_stand_taller_and_hazier_the_further_back() -> void:
+func test_far_ridges_stand_taller_the_further_back() -> void:
 	var backdrop: IslandBackdrop = IslandBackdrop.new()
 	auto_free(backdrop)
 	backdrop.ridges = 3
 	add_child(backdrop)
 	assert_object(backdrop.mesh).is_not_null()
-	assert_float(backdrop.haze(1)).is_greater(backdrop.haze(0))
-	assert_float(backdrop.haze(2)).is_greater(backdrop.haze(1))
-	assert_float(backdrop.haze(50)).is_less_equal(1.0)
 	# A ridge's lowest point is still above the tallest point of the one in front.
 	var front_top: float = 0.0
 	var behind_bottom: float = INF
@@ -128,6 +125,47 @@ func test_far_ridges_stand_taller_and_hazier_the_further_back() -> void:
 		front_top = maxf(front_top, backdrop.skyline(0, x))
 		behind_bottom = minf(behind_bottom, backdrop.skyline(2, x))
 	assert_float(behind_bottom).is_greater(front_top * 0.9)
+
+
+func test_the_far_hills_are_covered_in_treetops() -> void:
+	var backdrop: IslandBackdrop = IslandBackdrop.new()
+	auto_free(backdrop)
+	backdrop.ridges = 2
+	backdrop.crowns_per_ridge = 60
+	add_child(backdrop)
+	var crowns: Array[Vector4] = backdrop.crowns()
+	assert_int(crowns.size()).is_equal(120)
+	for crown: Vector4 in crowns:
+		assert_float(crown.w).is_greater(0.0)
+		# Inland, and on a slope: never below a ridge's buried foot.
+		assert_float(crown.z).is_less(0.0)
+		assert_float(crown.y).is_greater(-IslandBackdrop.FOOT_DEPTH)
+	assert_object(backdrop.get_node_or_null("Treetops")).is_not_null()
+	# A crown at the top of a ridge's slope stands on its skyline.
+	assert_float(backdrop.on_slope(1, 40.0, 1.0).y).is_equal_approx(backdrop.skyline(1, 40.0), 0.0001)
+	backdrop.crowns_per_ridge = 0
+	assert_int(backdrop.crowns().size()).is_equal(0)
+	assert_object(backdrop.get_node_or_null("Treetops")).is_null()
+
+
+func test_mist_is_thick_close_by_and_gone_from_far_off() -> void:
+	var mist: NearMist = NearMist.new()
+	auto_free(mist)
+	mist.size = Vector3(20.0, 10.0, 8.0)
+	mist.full_density = 0.04
+	mist.thins_from = 10.0
+	mist.gone_by = 50.0
+	add_child(mist)
+	mist.global_position = Vector3(0.0, 5.0, -30.0)
+	# Inside it, and just beside it, it's as thick as it gets.
+	assert_float(mist.distance_to(Vector3(3.0, 6.0, -31.0))).is_equal(0.0)
+	assert_float(mist.density_at(0.0)).is_equal(0.04)
+	assert_float(mist.density_at(9.0)).is_equal(0.04)
+	# Twenty metres out to sea of its near face.
+	assert_float(mist.distance_to(Vector3(0.0, 5.0, -6.0))).is_equal_approx(20.0, 0.0001)
+	assert_float(mist.density_at(30.0)).is_between(0.005, 0.035)
+	assert_float(mist.density_at(50.0)).is_equal(0.0)
+	assert_float(mist.density_at(400.0)).is_equal(0.0)
 
 
 func _new_scatter() -> IslandScatter:

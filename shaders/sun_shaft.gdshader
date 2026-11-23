@@ -16,6 +16,10 @@ uniform float soft_metres = 1.5;
 // A shaft fades as you come within this many metres of it, so you never
 // walk through a bright sheet.
 uniform float near_metres = 6.0;
+// Shafts fade out with distance, between these two distances in metres: from
+// far off they'd pile up into a bright smear over the trees.
+uniform float far_from = 35.0;
+uniform float far_to = 70.0;
 
 uniform sampler2D depth_texture : hint_depth_texture, filter_linear, repeat_disable;
 
@@ -42,5 +46,7 @@ void fragment() {
 	float soft = clamp(gap / soft_metres, 0.0, 1.0);
 	float close_by = clamp(-VERTEX.z / near_metres - 0.3, 0.0, 1.0);
 
-	ALBEDO = colour.rgb * energy * across * streaks * along * breathe * soft * close_by;
+	float far_off = 1.0 - smoothstep(far_from, far_to, -VERTEX.z);
+
+	ALBEDO = colour.rgb * energy * across * streaks * along * breathe * soft * close_by * far_off;
 }

@@ -510,7 +510,7 @@ A growing glossary of the Godot concepts this project uses: what each one is, in
 
 **`@tool` scripts.** A script marked `@tool` also runs inside the editor, so what it builds shows in the 3D view while you work. *Ours:* the island's ground, groves, grass, shafts and far hills are all built by `@tool` scripts: change a number in the Inspector and the island changes in front of you. What they build is never saved into the scene file (a child node added in code has no owner, and only owned nodes are saved).
 
-**`MultiMesh`.** One mesh drawn many times in a single go, each copy with its own place, turn and size. Thousands of copies cost about what one does, which is how grass is done. *Ours:* `GrassPatch` draws 70,000 tufts of grass (and the leafy undergrowth, and the beach grass) this way; `SunShafts` and `FishShoal` use it too.
+**`MultiMesh`.** One mesh drawn many times in a single go, each copy with its own place, turn and size. Thousands of copies cost about what one does, which is how grass is done. *Ours:* `GrassPatch` draws 70,000 tufts of grass (and the leafy undergrowth, and the beach grass) this way; `SunShafts` and `FishShoal` use it too, and `IslandBackdrop` covers the far hills in 15,000 tree crowns with it (each given its own haze and tint through the MultiMesh's per-copy colour).
 
 **Scattering by rule and seed.** Instead of placing forty palms by hand, give a rule (so many, this far inland, not on steep ground, no closer than so far) and a seed: a number that makes the "random" choices come out the same every time. *Ours:* `IslandScatter` (`scripts/islands/island_scatter.gd`), one node for each kind of plant or rock in `cove.tscn`.
 

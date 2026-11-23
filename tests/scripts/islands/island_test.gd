@@ -117,6 +117,24 @@ func test_crabs_wait_on_the_beach_and_you_come_armed() -> void:
 	assert_bool(duellist_of(player).has_pan()).is_true()
 
 
+func test_the_ships_lanterns_are_out_by_day() -> void:
+	var runner: GdUnitSceneRunner = scene_runner(COVE)
+	await physics_ticks(runner, 2)
+	var lanterns: Array[Node] = runner.scene().get_tree().get_nodes_in_group(Lantern.GROUP)
+	assert_int(lanterns.size()).is_greater(5)
+	for node: Node in lanterns:
+		var lantern: Lantern = node as Lantern
+		assert_bool(lantern.lit).is_false()
+		assert_bool((lantern.get_node("Light") as Light3D).visible).is_false()
+	for node: Node in runner.scene().get_tree().get_nodes_in_group(Island.NIGHT_GLOW_GROUP):
+		assert_bool((node as Node3D).visible).is_false()
+	# And they can be lit again.
+	var island: Island = runner.scene() as Island
+	island.light_lanterns(true)
+	assert_bool((lanterns[0] as Lantern).lit).is_true()
+	assert_bool(((lanterns[0] as Lantern).get_node("Pane1") as Node3D).visible).is_true()
+
+
 func test_falling_out_of_the_world_puts_you_back_on_deck() -> void:
 	var runner: GdUnitSceneRunner = scene_runner(COVE)
 	await physics_ticks(runner, 5)

@@ -1,6 +1,6 @@
 class_name Island
 extends Node3D
-## An island scene's root. It does three small things.
+## An island scene's root. It does four small things.
 ##
 ## It smooths the edges of everything drawn while the island is showing.
 ## Antialiasing is a setting of the viewport (the surface the game is drawn
@@ -10,12 +10,20 @@ extends Node3D
 ## MSAA smooths the outlines of models, which is what an island is made of:
 ## fronds, blades of grass, rocks against the sky.
 ##
+## It puts the ship's lanterns out: it's broad daylight here.
+##
 ## It stands the player where the visit begins (on the ship's deck, looking
 ## at the island), and it puts them back there if they ever fall out of the
 ## world (over the ship's rail, say).
 
+## The group of lights that fake a glow by night (lit windows, the galley
+## skylight): put out along with the lanterns.
+const NIGHT_GLOW_GROUP: StringName = &"night_glow"
+
 ## How much to smooth edges while the island is showing.
 @export var edge_smoothing: Viewport.MSAA = Viewport.MSAA_4X
+## Whether the ship's lanterns burn here. Off by day.
+@export var lanterns_lit: bool = false
 ## The player visiting.
 @export var player: Player3D
 ## Where the visit begins: the player stands here, facing the way this node
@@ -38,6 +46,7 @@ func _exit_tree() -> void:
 
 
 func _ready() -> void:
+	light_lanterns(lanterns_lit)
 	if player != null and start != null:
 		stand_at(player, start)
 
@@ -45,6 +54,16 @@ func _ready() -> void:
 func _physics_process(_delta: float) -> void:
 	if player != null and start != null and player.global_position.y < fall_below:
 		stand_at(player, start)
+
+
+## Lights every lantern in the scene, and the lights that fake a glow by
+## night, or puts them all out.
+func light_lanterns(burning: bool) -> void:
+	get_tree().call_group(Lantern.GROUP, &"set_lit", burning)
+	for node: Node in get_tree().get_nodes_in_group(NIGHT_GLOW_GROUP):
+		var glow: Node3D = node as Node3D
+		if glow != null:
+			glow.visible = burning
 
 
 ## Stands [param who] at [param spot] at once, still, facing the way the
