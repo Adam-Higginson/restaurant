@@ -118,6 +118,23 @@ static var _heads: Dictionary[String, ArrayMesh] = {}
 		reach = clampf(value, 0.0, 1.0)
 		if _arm != null:
 			_arm.amount = reach
+## Something for the head to turn towards. Optional.
+@export var watch: Node3D
+## How far the head has turned towards [member watch], leaving the rest of
+## the body as it is: 0 not at all, 1 looking at it (see [HeadLook]). A clip
+## can move it.
+@export_range(0.0, 1.0) var head_turn: float = 0.0:
+	set(value):
+		head_turn = clampf(value, 0.0, 1.0)
+		if _head != null:
+			_head.amount = head_turn
+## How much the legs hang as they do in water instead of standing: 0 the
+## animation's own legs, 1 floating (see [FloatingLegs]).
+@export_range(0.0, 1.0) var afloat: float = 0.0:
+	set(value):
+		afloat = clampf(value, 0.0, 1.0)
+		if _legs != null:
+			_legs.amount = afloat
 
 ## The character, or null while the greybox shows.
 var character: Node3D = null
@@ -133,6 +150,10 @@ var left_hand: BoneAttachment3D = null
 var _animator: AnimationPlayer = null
 ## What lifts the left arm when it reaches.
 var _arm: ArmReach = null
+## What turns the head when it watches something.
+var _head: HeadLook = null
+## What lets the legs hang when afloat.
+var _legs: FloatingLegs = null
 var _duellist: Duellist = null
 ## How high a toe joint is when its boot's sole is on the floor, in metres
 ## above this node: measured from the rest pose when the character is built.
@@ -169,6 +190,8 @@ func _process(delta: float) -> void:
 	_turn_for_flip()
 	if _arm != null and is_instance_valid(reach_for):
 		_arm.target = reach_for.global_position
+	if _head != null and is_instance_valid(watch):
+		_head.target = watch.global_position
 	var walking: bool = player != null and player.is_walking
 	var charging: bool = _duellist != null and _duellist.is_charging()
 	var parrying: bool = _duellist != null and _duellist.parry.is_active()
@@ -455,6 +478,14 @@ func _build(parts: CharacterParts) -> void:
 	_arm.name = "ArmReach"
 	_arm.amount = reach
 	skeleton.add_child(_arm)
+	_head = HeadLook.new()
+	_head.name = "HeadLook"
+	_head.amount = head_turn
+	skeleton.add_child(_head)
+	_legs = FloatingLegs.new()
+	_legs.name = "FloatingLegs"
+	_legs.amount = afloat
+	skeleton.add_child(_legs)
 	pose = Pose.IDLE
 	play(Pose.IDLE)
 
@@ -657,6 +688,8 @@ func _undress() -> void:
 	left_hand = null
 	_animator = null
 	_arm = null
+	_head = null
+	_legs = null
 	_act_left = 0.0
 	_recovery = &""
 
