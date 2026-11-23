@@ -14,6 +14,12 @@ extends Resource
 	set(value):
 		top = value
 		emit_changed()
+## Whether the top has long sleeves (a coat): the arms under them aren't
+## drawn then, so an elbow can't poke through the cloth. The hands stay.
+@export var long_sleeves: bool = false:
+	set(value):
+		long_sleeves = value
+		emit_changed()
 ## Trousers (and the belt).
 @export_file("*.glb", "*.gltf") var legs: String = "":
 	set(value):
@@ -26,6 +32,10 @@ extends Resource
 		emit_changed()
 
 
+## The arm bones a long sleeve covers.
+const SLEEVED_BONES: PackedStringArray = ["LeftArm", "LeftForeArm", "RightArm", "RightForeArm"]
+
+
 ## The names of the body bones under clothing, by what's worn, so the body
 ## there isn't drawn and can't poke through.
 func hidden_bones() -> PackedStringArray:
@@ -33,6 +43,8 @@ func hidden_bones() -> PackedStringArray:
 	var worn: Dictionary[StringName, String] = pieces()
 	for slot: StringName in worn:
 		hidden.append_array(covers(slot))
+	if worn.has(&"top") and long_sleeves:
+		hidden.append_array(SLEEVED_BONES)
 	if worn.has(&"legs") and worn.has(&"feet"):
 		# The shins: half under the trousers, half in the boots.
 		hidden.append_array(PackedStringArray(["LeftLeg", "RightLeg"]))
