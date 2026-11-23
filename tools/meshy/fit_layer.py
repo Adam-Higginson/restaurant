@@ -41,7 +41,9 @@ from mathutils import Vector
 # 1.6 m body), how far in from the middle counts as the trunk (to measure
 # the body without the arms), and how far to raise the arms (degrees).
 SLOTS = {
-    "top": {"band": (0.91, 1.34), "trunk": 0.16, "raise": 0.0},
+    # "hem" straightens a ragged bottom edge: every point within that many
+    # metres of the bottom is brought up level with it.
+    "top": {"band": (0.91, 1.34), "trunk": 0.16, "raise": 0.0, "hem": 0.035},
     "legs": {"band": (0.33, 0.97), "trunk": 0.3, "raise": 0.0},
     "feet": {"band": (0.0, 0.385), "trunk": 0.3, "raise": 0.0},
     # "raise" below zero lowers the arms. "trim_top" cuts that share off the
@@ -265,6 +267,14 @@ else:
     widen_to_body(piece, trunk_points, (low + high) / 2.0)
     # drop_lining(piece, posed) tore holes at the shoulders; with the cloth
     # drawn on both sides and held 12 mm off the body it isn't needed.
+
+# Straighten a ragged hem: Meshy draws a shirt's bottom edge as an uneven
+# line, which shows as dark jags against the belt.
+if settings.get("hem", 0.0) > 0.0:
+    level = low + settings["hem"] * scale_to_body
+    for v in piece.data.vertices:
+        if v.co.z < level:
+            v.co.z = level
 
 # Push anything inside the body back out, by a hair.
 select_only(piece)

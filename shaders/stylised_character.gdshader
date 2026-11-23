@@ -87,6 +87,11 @@ varying float covered;
 // The surface's real facing, in view space, kept for the rim when the
 // shading uses a rounded one.
 varying vec3 true_normal;
+// The facing the shading uses (in view space): the surface's own, or the
+// rounded one. The mesh's real NORMAL is left alone, because Godot also
+// uses it to place shadows, and a rounded one there makes the mesh shadow
+// itself in dark patches.
+varying vec3 shade_normal;
 // Where this point is on the shell, about -1 to 1 each way, and which way
 // its surface faces in the mesh's own space.
 varying vec3 shell_point;
@@ -110,15 +115,17 @@ void vertex() {
 	true_normal = MODELVIEW_NORMAL_MATRIX * NORMAL;
 	shell_point = (VERTEX - ball_centre) / max(ball_radius, 0.0001);
 	shell_facing = NORMAL;
+	vec3 shaded = NORMAL;
 	if (ball_form > 0.0) {
 		// A dome: squashed a little, so the top faces up more than a ball's.
 		vec3 dome = normalize(shell_point * vec3(1.0, 1.6, 1.0) + vec3(0.0, 0.25, 0.0));
-		NORMAL = normalize(mix(NORMAL, dome, ball_form));
+		shaded = normalize(mix(shaded, dome, ball_form));
 	}
 	if (round_form > 0.0) {
 		vec3 outward = normalize(vec3(VERTEX.x, 0.0, VERTEX.z) + vec3(0.0, 0.0, 0.0001));
-		NORMAL = normalize(mix(NORMAL, outward, round_form));
+		shaded = normalize(mix(shaded, outward, round_form));
 	}
+	shade_normal = MODELVIEW_NORMAL_MATRIX * shaded;
 }
 
 
@@ -179,7 +186,8 @@ float steps(float facing) {
 
 
 void light() {
-	float facing = dot(NORMAL, LIGHT);
+	vec3 shading = normalize(shade_normal);
+	float facing = dot(shading, LIGHT);
 	float lit = steps(facing);
 	// Cast shadows cut cleanly too. Sun and moon shadows come in ATTENUATION
 	// alone; lamps also fade with distance there, which should stay smooth.
@@ -200,7 +208,7 @@ void light() {
 	// A small hard highlight, only where lit.
 	vec3 half_way = normalize(VIEW + LIGHT);
 	float shine = smoothstep(1.0 - specular_size - specular_softness,
-			1.0 - specular_size + specular_softness, dot(NORMAL, half_way));
+			1.0 - specular_size + specular_softness, dot(shading, half_way));
 	SPECULAR_LIGHT += light * shine * specular_strength * lit;
 
 	// The rim: the edge seen side-on, on the side the light reaches.

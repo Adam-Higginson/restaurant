@@ -344,6 +344,9 @@ func _wear(node: Node3D) -> void:
 			part += 1
 			skeleton.add_child(skinned)
 			skinned.skeleton = NodePath("..")
+			# No outline on clothes: the outline round a garment's lining
+			# shows through the cloth as dark patches.
+			skinned.set_instance_shader_parameter(&"outline_amount", 0.0)
 		piece.free()
 	_hide_under_outfit(skeleton)
 

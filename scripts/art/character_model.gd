@@ -70,6 +70,8 @@ const PACK_HAND_RIGHT: Basis = Basis(Vector3(0, 1, 0), Vector3(-1, 0, 0), Vector
 const PACK_HAND_LEFT: Basis = Basis(Vector3(0, -1, 0), Vector3(1, 0, 0), Vector3(0, 0, 1))
 const PACK_FOREARM_RIGHT: Vector3 = Vector3(-1, 0, 0)
 const PACK_FOREARM_LEFT: Vector3 = Vector3(1, 0, 0)
+## The look a whole character is drawn with.
+const WHOLE_STYLE: CharacterStyle = preload("res://data/art/styles/character.tres")
 ## A whole character's clips that play once; every other loops.
 const ONCE_CLIPS: PackedStringArray = ["Sword_Regular", "Sword_Heavy", "Roll", "Jump"]
 ## How high the hips are that a backflip turns about, in metres, when the
@@ -717,6 +719,9 @@ func _build_whole(parts: CharacterParts) -> void:
 	dresser.grain = false
 	dresser.detail = 1.0
 	dresser.outfit = parts.whole_outfit
+	# Always stylised: the body under the clothes is only left undrawn by the
+	# stylised look's shader, so drawn as made its feet show through its boots.
+	dresser.style = WHOLE_STYLE
 	# Meshy models face +Z; our forward is -Z.
 	dresser.rotation.y = PI
 	dresser.scale = Vector3.ONE * parts.whole_scale
@@ -803,6 +808,12 @@ func _hook_whole() -> void:
 	_head.name = "HeadLook"
 	_head.amount = head_turn
 	skeleton.add_child(_head)
+	# Lit as a smooth round form (one clean shadow edge on lumpy clothes),
+	# with no one light burning it out.
+	for found: Node in dresser.model.find_children("*", "MeshInstance3D", true, false):
+		var mesh_node: MeshInstance3D = found as MeshInstance3D
+		mesh_node.set_instance_shader_parameter(&"round_form", 0.75)
+		mesh_node.set_instance_shader_parameter(&"light_cap", 0.85)
 	# Pick up whatever was playing on the new animator.
 	var was: Pose = pose
 	pose = Pose.IDLE
@@ -838,8 +849,8 @@ func _place_hands() -> void:
 
 
 # A whole character's moves: each of its clips under the name the game asks
-# for. A clip plays where the character stands (its hips don't wander off
-# sideways), and loops unless it's a strike or a tumble.
+# for. A clip plays where the character stands (one that starts off-centre is
+# moved back), and loops unless it's a strike or a tumble.
 func _whole_library(parts: CharacterParts) -> AnimationLibrary:
 	var library: AnimationLibrary = AnimationLibrary.new()
 	var hips_at: Vector3 = Vector3.ZERO
@@ -867,9 +878,14 @@ func _whole_library(parts: CharacterParts) -> AnimationLibrary:
 			var bone: String = String(clip.track_get_path(track).get_concatenated_subnames())
 			if bone != _bone("pelvis") or clip.track_get_type(track) != Animation.TYPE_POSITION_3D:
 				continue
+			# Only where the clip starts off-centre is taken out: the hips
+			# still shift as the clip has them, or the body's lean to balance
+			# them would be left as a slump.
+			var first: Vector3 = clip.track_get_key_value(track, 0)
+			var off: Vector3 = Vector3(first.x - hips_at.x, 0.0, first.z - hips_at.z)
 			for key: int in clip.track_get_key_count(track):
 				var at: Vector3 = clip.track_get_key_value(track, key)
-				clip.track_set_key_value(track, key, Vector3(hips_at.x, at.y, hips_at.z))
+				clip.track_set_key_value(track, key, at - off)
 		clip.loop_mode = Animation.LOOP_NONE if plays_once(anim_name) else Animation.LOOP_LINEAR
 		library.add_animation(anim_name, clip)
 	return library
