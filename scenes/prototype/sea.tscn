@@ -344,10 +344,6 @@ volume_db = -8.0
 stream = ExtResource("316_grasp")
 volume_db = 0.0
 
-[node name="Heartbeat" type="AudioStreamPlayer" parent="SoundCues"]
-script = ExtResource("318_optional")
-recording = "res://assets/third_party/audio/heartbeat.ogg"
-
 [node name="Flare" type="AudioStreamPlayer" parent="SoundCues"]
 script = ExtResource("318_optional")
 recording = "res://assets/third_party/audio/lantern_flare.ogg"
@@ -363,10 +359,6 @@ recording = "res://assets/third_party/audio/plunge.ogg"
 [node name="Bell" type="AudioStreamPlayer" parent="SoundCues"]
 script = ExtResource("318_optional")
 recording = "res://assets/third_party/audio/bell_far.ogg"
-
-[node name="HeartbeatSmall" type="AudioStreamPlayer" parent="SoundCues"]
-script = ExtResource("318_optional")
-recording = "res://assets/third_party/audio/heartbeat_small.ogg"
 
 [node name="Stages" type="Node" parent="."]
 

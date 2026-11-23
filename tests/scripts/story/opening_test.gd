@@ -85,20 +85,32 @@ func test_it_opens_on_her_name_and_waits_for_any_button() -> void:
 	assert_str(_conversation.box.line_text()).is_equal("Someone in the water!")
 	assert_str(_conversation.box.speaker_name()).is_equal("Lantern")
 
+	# Down there, under the storm: you, close, eyes shut. Then back up to him.
+	var you: CharacterModel = _underwater_set().get_node("Castaway/Character") as CharacterModel
+	for i: int in 300:
+		if underwater.is_open:
+			break
+		await physics_ticks(runner, 1)
+	assert_bool(underwater.is_open).is_true()
+	assert_bool(you.eyes_shut).is_true()
+	assert_str(String(_conversation.section())).is_equal("he_hears")
+
 	# Off the hook and over the side. From out on the water we watch him go:
 	# a lantern in the air astern of her, where he wasn't a moment ago.
 	var flying: Node3D = _ship.get_node("RescueSet/Props/FlyingLantern") as Node3D
 	assert_bool(flying.visible).is_false()
 	var hung_at: Vector3 = flying.position
 	assert_bool(await _reaches(runner, &"plunge")).is_true()
+	assert_bool(underwater.is_open).is_false()
 	await physics_ticks(runner, 45)
 	assert_bool(flying.visible).is_true()
 	assert_bool(_player.camera_rig.is_fixed).is_true()
 	assert_float(flying.position.distance_to(hung_at)).is_greater(2.0)
 	assert_bool(hook_lantern.is_visible_in_tree()).is_false()
 
-	# He hits the water, and then her name is dark, and you're under.
-	assert_bool(await _reaches(runner, &"dark")).is_true()
+	# He hits the water, and then her name is dark, and we're under with
+	# him, straight away.
+	assert_bool(await _reaches(runner, &"light")).is_true()
 	assert_bool(flying.visible).is_false()
 	assert_bool(hook_lantern.is_visible_in_tree()).is_false()
 	assert_float(carved.lamp_glow()).is_equal(0.0)
@@ -145,7 +157,8 @@ func test_the_rescue_waits_for_you_to_take_his_hand_then_goes_to_the_surface() -
 	assert_bool(_conversation.box.is_visible_in_tree()).is_true()
 	assert_bool(prompt.raised).is_true()
 
-	# Take it: his hand closes on yours, and then black, and not a sound.
+	# Take it: his hand closes on yours, and he catches at once: no black,
+	# no wait.
 	_conversation.press()
 	assert_bool(await _reaches(runner, &"out")).is_true()
 	await physics_ticks(runner, 20)
@@ -155,8 +168,9 @@ func test_the_rescue_waits_for_you_to_take_his_hand_then_goes_to_the_surface() -
 	# And your head came up to him.
 	assert_float(you.head_turn).is_equal_approx(1.0, 0.01)
 	assert_str(String(you.idle_animation)).is_equal("Zombie_Idle")
-	assert_bool(_fade().is_covering()).is_true()
-	assert_bool(_ambience().hushed).is_true()
+	assert_bool(_fade().is_covering()).is_false()
+	assert_float(face.strength).is_greater(0.9)
+	assert_bool(you.eyes_shut).is_false()
 
 	# Your hand catches him alight again, and the storm's rumble comes back.
 	# Below you the dead lanterns hang in the deep, and nothing is among

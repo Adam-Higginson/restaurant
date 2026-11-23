@@ -16,8 +16,7 @@
 #   timeline at the bottom of the editor shows them. Each moves the set's
 #   camera too, so a clip is also a shot.
 # - Sounds (@sound) are the players under SoundCues in sea.tscn. Some have
-#   no recording yet (plunge, bell, heartbeat, heartbeat_small, flare,
-#   deep_note):
+#   no recording yet (plunge, bell, flare, deep_note):
 #   they're silent until one is put where the player's Recording points.
 # - The title is her nameboard at the stern: the letters, the hook, the
 #   lantern on it and his clips (takes_watch, hears, dives, welcome) are in
@@ -64,8 +63,9 @@
 # A quiet night first. Then he's heard something. The swinging stops. He
 # leans out on his hook and looks over the water, one way and then the
 # other, and finds it. He calls it to the ship, the way a lookout does.
-# Nobody answers. One look back at the lit windows, and he's off the hook
-# and over the side.
+# Down there, under the storm: you, eyes shut, slumped, held a moment. Back
+# up top, nobody answers. One look back at the lit windows, and he's off
+# the hook and over the side.
 ~ he_hears
 @play takes_watch
 @shot the_board cut
@@ -78,7 +78,12 @@
 @play looks_out
 @look hook_lantern surprised
 @say lantern 2.2 Someone in the water!
-@wait 2.0
+@wait 1.6
+@stage underwater
+@muffle on
+@play sinking
+@stage off
+@muffle off
 @look hook_lantern worried
 @play glances_back
 @look hook_lantern determined
@@ -102,18 +107,12 @@
 @hide flying_lantern
 -> dark
 
-# The dark. The storm stops dead as the water closes over. Your face,
-# close: eyes shut, slumped, going down. Far above, a bell: somebody heard
-# him. Then straight to him.
+# The dark. The storm stops dead as the water closes over, and he's
+# already in it. Far above, a bell: somebody heard him.
 ~ dark
 @stage underwater
 @muffle on
-@hush on
-@start sinking
-@wait 1.2
-@hush off
 @sound bell
-@wait 1.4
 -> light
 
 # The light. A small warm thing comes through the surface, a long way off,
@@ -155,36 +154,25 @@
 @play taken
 -> out
 
-# Out. He's spent. Black, and no sound at all, for two held seconds. Your
-# heartbeat. Then, smaller, his. Your hand catches him alight again:
-# everything draws in, and blooms, your eyes open, and for a moment his
-# light reaches a long way down. There's no bottom to see. Hanging below
+# Out. The moment your hands close, your hand catches him alight again:
+# everything blooms, your eyes open, and for a moment his light reaches a
+# long way down. There's no bottom to see. Hanging below
 # you at every depth are more of them, fainter and fainter until the murk
 # takes them. Then he turns upward and takes your weight.
 ~ out
 @stage underwater
 @muffle on
-@fade out 0
-@hush on
-@wait 2.0
-@sound heartbeat
-@wait 0.9
-@sound heartbeat_small
-@wait 0.7
-@look sinking_lantern effort
 @start flares
-@fade in 0
-@wait 0.5
-@hush off
 @sound flare
 @look sinking_lantern surprised
-@wait 5.1
+@wait 5.6
 -> haul
 
 # The haul. From above him, down the line of his arm: he drags you up in
 # hard pushes, the others falling away beneath you. Lightning lands on his
 # pushes and comes down past you in shafts. A very long way down there's
-# an outline, and it's moving. He doesn't look. He tells you not to.
+# an outline, and it's moving. He doesn't look. He tells you not to, and
+# then there's time to look anyway, in the lightning, with nothing said.
 ~ haul
 @stage underwater
 @muffle on
@@ -199,9 +187,11 @@
 @lightning
 @wait 2.0
 @say lantern 2.2 Don't look down.
-@wait 1.2
+@wait 2.6
 @lightning
-@wait 1.6
+@wait 1.4
+@lightning
+@wait 1.8
 @hush off
 -> rising
 
