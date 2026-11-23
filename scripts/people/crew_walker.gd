@@ -95,12 +95,7 @@ func walk_home() -> bool:
 
 ## Stops where they are, going nowhere.
 func stop() -> void:
-	var was_walking: bool = is_walking
-	_path = PackedVector3Array()
-	_next = 0
-	_set_moving(false)
-	if was_walking:
-		walk_ended.emit()
+	_end(false)
 
 
 ## The way still to go (in the walkways' space), for tests and the editor.
@@ -135,12 +130,25 @@ func _physics_process(delta: float) -> void:
 			step = 0.0
 	_crewmate.global_position = _walkways.to_global(here)
 	if _next >= _path.size():
-		stop()
-		arrived.emit()
+		_end(true)
 		return
 	var heading: Vector3 = _walkways.global_basis * (_path[_next] - here)
 	if Vector2(heading.x, heading.z).length() > 0.001:
 		_turn_to(_yaw_of(heading), delta)
+
+
+# Ends the walk under way: [param reached] says whether they got there.
+# [signal arrived] (if they did) comes before [signal walk_ended], so whoever
+# waits for the end can already tell which it was.
+func _end(reached: bool) -> void:
+	var was_walking: bool = is_walking
+	_path = PackedVector3Array()
+	_next = 0
+	_set_moving(false)
+	if reached:
+		arrived.emit()
+	if was_walking:
+		walk_ended.emit()
 
 
 # Whether something is stopping them for now: someone talking with them, or
