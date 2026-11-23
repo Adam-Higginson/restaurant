@@ -406,6 +406,12 @@ A growing glossary of the Godot concepts this project uses: what each one is, in
 
 **Photographing the screen.** After `await RenderingServer.frame_post_draw`, `get_viewport().get_texture().get_image()` is what was just drawn; `save_png` writes it. It needs a real window (not `--headless`). *Ours:* `tools/kiln/capture.sh`.
 
+**OKLab.** A colour space where equal distances look equally different to the eye (plain RGB doesn't: a step in green looks bigger than the same step in blue). One axis is lightness, two are colour. *Ours:* `KilnPalette.nearest` and the Kiln's palette snap compare colours in OKLab (#128).
+
+**k-means clustering.** Finds a few colours that best stand for many: start with some, give every pixel to its nearest, move each colour to the average of its pixels, repeat. *Ours:* `tools/kiln/make_palette.py` makes the 64-colour Salt and Ember palette this way (#128).
+
+**The "keep" importer.** A `.import` file with `importer="keep"` tells Godot to leave a file as it is, not make a texture of it. *Ours:* the Kiln's `.raw.png` copies, kept only for making palettes (#128).
+
 ## Testing
 
 **gdUnit4.** The test framework (`addons/gdUnit4`). Suites extend our `GameTestSuite` and have `test_...` functions. `scene_runner` loads a scene and lets a test press inputs and wait physics ticks. *Ours:* `tests/`.

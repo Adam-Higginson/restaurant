@@ -373,17 +373,77 @@ def _bake(low, high, size: int, job: dict, scale: float):
     if creases > 0.0:
         shade = _bake_pass(low, high, big, "AO", diagonal)
         colour[..., :3] *= (1.0 - creases) + creases * shade[..., :1]
-    # Average each block down to one pixel.
-    blocks = colour.reshape(size, SUPERSAMPLE, size, SUPERSAMPLE, 4).mean(axis=(1, 3))
     grain = float(job.get("grain", 0.0))
     if grain > 0.0:
-        # A chunky speck per pixel, lighter or darker, the same every firing:
-        # flat-coloured packs get the small busy texture N64 surfaces had.
+        # A chunky speck per final pixel, lighter or darker, the same every
+        # firing: flat-coloured packs get the busy texture N64 surfaces had.
         seed = sum(ord(letter) for letter in job["out"]) % (2 ** 32)
         specks = numpy.random.default_rng(seed).random((size, size, 1)).astype(numpy.float32)
-        blocks[..., :3] *= 1.0 + (specks - 0.5) * 2.0 * grain
+        specks = specks.repeat(SUPERSAMPLE, axis=0).repeat(SUPERSAMPLE, axis=1)
+        colour[..., :3] *= 1.0 + (specks - 0.5) * 2.0 * grain
+    # Average each block down to one pixel.
+    blocks = colour.reshape(size, SUPERSAMPLE, size, SUPERSAMPLE, 4).mean(axis=(1, 3))
+    blocks[..., 3] = 1.0
+    # Kept before snapping to the palette, so a new palette is made from the
+    # models' own colours (tools/kiln/make_palette.sh), not the last palette.
+    _save_png(blocks.copy(), size, raw_png(job["out_png"]))
+    palette = job.get("palette", [])
+    strength = float(job.get("palette_strength", 1.0))
+    if palette and strength > 0.0:
+        # Each pixel takes the palette colour most of its block snaps to,
+        # as pixel art is drawn: averaging first would make in-between
+        # colours where two meet, which snap to some third colour.
+        blocks[..., :3] += (_block_palette(colour[..., :3], size, palette)
+                - blocks[..., :3]) * strength
     blocks[..., 3] = 1.0
     return blocks
+
+
+def _block_palette(big, size: int, palette):
+    """For each [size] x [size] block of [big] (linear light), the palette
+    colour most of the block's pixels are nearest to."""
+    colours = srgb_to_linear(numpy.array(palette, dtype=numpy.float32)[:, :3])
+    flat = big.reshape(-1, 3)
+    distance = ((oklab(flat)[:, None, :] - oklab(colours)[None, :, :]) ** 2).sum(axis=2)
+    nearest = distance.argmin(axis=1).reshape(size, SUPERSAMPLE, size, SUPERSAMPLE)
+    per_block = nearest.transpose(0, 2, 1, 3).reshape(size * size, SUPERSAMPLE * SUPERSAMPLE)
+    counts = numpy.zeros((size * size, len(colours)), dtype=numpy.int32)
+    numpy.add.at(counts, (numpy.arange(size * size)[:, None], per_block), 1)
+    return colours[counts.argmax(axis=1)].reshape(size, size, 3)
+
+
+def raw_png(png: str) -> str:
+    """Where the texture's copy from before the palette snap goes."""
+    return png[:-len(".png")] + ".raw.png"
+
+
+def srgb_to_linear(srgb):
+    srgb = numpy.asarray(srgb, dtype=numpy.float32)
+    return numpy.where(srgb <= 0.04045, srgb / 12.92, ((srgb + 0.055) / 1.055) ** 2.4)
+
+
+def oklab(linear):
+    """Linear-light RGB (..., 3) in OKLab, where equal distances look equally
+    different to the eye."""
+    matrix_lms = numpy.array([[0.4122214708, 0.5363325363, 0.0514459929],
+            [0.2119034982, 0.6806995451, 0.1073969566],
+            [0.0883024619, 0.2817188376, 0.6299787005]], dtype=numpy.float32)
+    matrix_lab = numpy.array([[0.2104542553, 0.7936177850, -0.0040720468],
+            [1.9779984951, -2.4285922050, 0.4505937099],
+            [0.0259040371, 0.7827717662, -0.8086757660]], dtype=numpy.float32)
+    lms = numpy.cbrt(numpy.clip(linear, 0.0, None) @ matrix_lms.T)
+    return lms @ matrix_lab.T
+
+
+def snap_to_palette(linear, palette, strength: float):
+    """Moves each linear-light colour in [linear] (..., 3) [strength] of the way
+    to the nearest of [palette] (sRGB [r, g, b] lists), as the eye sees it."""
+    colours = srgb_to_linear(numpy.array(palette, dtype=numpy.float32)[:, :3])
+    shape = linear.shape
+    flat = linear.reshape(-1, 3)
+    distance = ((oklab(flat)[:, None, :] - oklab(colours)[None, :, :]) ** 2).sum(axis=2)
+    nearest = colours[distance.argmin(axis=1)]
+    return (flat + (nearest - flat) * strength).reshape(shape)
 
 
 def _bake_pass(low, high, big: int, kind: str, diagonal: float):
@@ -461,6 +521,10 @@ def _write_imports(job: dict) -> None:
         handle.write('[remap]\n\nimporter="texture"\ntype="CompressedTexture2D"\n\n'
                 "[params]\n\ncompress/mode=0\nmipmaps/generate=false\n"
                 "detect_3d/compress_to=0\n")
+    # The unsnapped copy is only for making palettes: Godot keeps it as a
+    # plain file and doesn't make a texture of it.
+    with open(raw_png(job["out_png"]) + ".import", "w", encoding="utf-8") as handle:
+        handle.write('[remap]\n\nimporter="keep"\n')
     with open(job["out"] + ".import", "w", encoding="utf-8") as handle:
         handle.write('[remap]\n\nimporter="scene"\ntype="PackedScene"\n\n'
                 "[params]\n\nmeshes/generate_lods=false\nmeshes/create_shadow_meshes=false\n")

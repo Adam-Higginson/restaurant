@@ -256,6 +256,9 @@ func _aim(exhibit: Exhibit, angle: Vector2) -> void:
 			cos(turn + facing) * cos(up))
 	_camera.global_position = centre + direction * reach
 	_camera.look_at(centre)
+	# Jump straight there: physics interpolation would glide the camera over
+	# a few frames, and the picture would catch it on the way.
+	_camera.reset_physics_interpolation()
 
 
 # Whether [param exhibit] walks: a character, or a model with a walk.
@@ -274,9 +277,9 @@ func _pose_walk(exhibit: Exhibit, moment: float) -> void:
 	for side: String in ["before", "after"]:
 		var body: CharacterModel = (exhibit.before if side == "before" else exhibit.after) as CharacterModel
 		if body != null:
-			# Played so slowly it stands still at that moment.
+
 			var length: float = body.clip_length(body.walk_animation)
-			body.act(body.walk_animation, length * moment, 0.001, 1000.0, CharacterModel.Pose.WALK)
+			body.hold(body.walk_animation, length * moment)
 
 
 # The animation players with a walk on both sides of a model exhibit (not
