@@ -1,0 +1,46 @@
+SALT AND EMBER
+A work in progress by Adam Higginson.
+https://github.com/Adam-Higginson/restaurant
+
+Made with the Godot Engine (godotengine.org), MIT licence.
+Godot's own licence and the licences of the libraries it uses:
+https://godotengine.org/license
+
+
+ART
+Most models are reshaped and repainted for the game by our own tools.
+
+Kay Lousberg (kaylousberg.com), CC0
+  KayKit: Restaurant Bits, KayKit: Furniture Bits
+
+Isa Lousberg (isalousberg.com), CC0
+  Tiny Treats: Charming Kitchen
+
+Quaternius (quaternius.com), CC0
+  Universal Base Characters, Modular Character Outfits: Fantasy,
+  Universal Animation Library 1 and 2
+
+Screaming Brain Studios, CC0
+  Seamless textures (128 px)
+
+OpenGameArt.org, CC0
+  Low-poly crab
+
+The heron was made with Meshy (meshy.ai).
+
+
+SOUND
+Kenney (kenney.nl), CC0
+  Impact Sounds, Interface Sounds, RPG Audio
+
+Rain and waves: CC0 recordings.
+
+
+FONTS
+Cinzel, copyright 2020 The Cinzel Project Authors
+Varela Round, copyright 2023 The Varela Round Project Authors
+Both under the SIL Open Font Licence 1.1: see the licences folder.
+
+
+CC0 doesn't ask for credit, but these people made the game look and sound
+the way it does. Thank you.
