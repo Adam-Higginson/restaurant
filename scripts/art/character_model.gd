@@ -61,7 +61,15 @@ const WHOLE_BONES: Dictionary[String, String] = {
 	"upperarm_l": "LeftArm", "upperarm_r": "RightArm",
 	"clavicle_l": "LeftShoulder", "clavicle_r": "RightShoulder",
 	"pelvis": "Hips",
+	"thigh_l": "LeftUpLeg", "thigh_r": "RightUpLeg",
+	"calf_l": "LeftLeg", "calf_r": "RightLeg",
+	"foot_l": "LeftFoot", "foot_r": "RightFoot",
 }
+## Poses a whole character has no clip for, made here ([method _pose_clip])
+## and filed under the names the game asks for: hanging limp (the castaway
+## underwater) and lying flat on its back (asleep in the bunk).
+const LIMP_NAMES: PackedStringArray = ["Zombie_Idle", "Swim_Idle"]
+const LYING_NAMES: PackedStringArray = ["LayToIdle"]
 ## How the packs' hands sit at rest, in the skeleton's space (which way each
 ## hand bone's own x, y and z point, and which way the forearm runs): held
 ## things are placed for these, so a whole character's hands are turned to
@@ -216,6 +224,10 @@ var _whole_moves: AnimationLibrary = null
 ## How each of a whole character's hand nodes is turned from its hand bone.
 var _hand_fixes: Dictionary[Node3D, Basis] = {}
 var _hand_bones: Dictionary[Node3D, int] = {}
+## A whole character's meshes and its hips bone, for the rounded shading's
+## line (which follows the body as it lies down or bends).
+var _whole_meshes: Array[MeshInstance3D] = []
+var _whole_hips: int = -1
 ## What lifts the left arm when it reaches.
 var _arm: ArmReach = null
 ## What lifts both arms when something is held up: the left, then the right.
@@ -808,12 +820,21 @@ func _hook_whole() -> void:
 	_head.name = "HeadLook"
 	_head.amount = head_turn
 	skeleton.add_child(_head)
+	_legs = FloatingLegs.new()
+	_legs.name = "FloatingLegs"
+	_legs.bones = WHOLE_BONES
+	_legs.amount = afloat
+	skeleton.add_child(_legs)
+	_show_eyes()
 	# Lit as a smooth round form (one clean shadow edge on lumpy clothes),
 	# with no one light burning it out.
+	_whole_meshes.clear()
+	_whole_hips = skeleton.find_bone(_bone("pelvis"))
 	for found: Node in dresser.model.find_children("*", "MeshInstance3D", true, false):
 		var mesh_node: MeshInstance3D = found as MeshInstance3D
 		mesh_node.set_instance_shader_parameter(&"round_form", 0.75)
 		mesh_node.set_instance_shader_parameter(&"light_cap", 0.85)
+		_whole_meshes.append(mesh_node)
 	# Pick up whatever was playing on the new animator.
 	var was: Pose = pose
 	pose = Pose.IDLE
@@ -846,6 +867,14 @@ func _place_hands() -> void:
 		var at: Transform3D = skeleton.global_transform * skeleton.get_bone_global_pose(bone)
 		hand.global_transform = Transform3D(
 				at.basis.orthonormalized() * _hand_fixes[hand], at.origin)
+	# The rounded shading's line runs through the hips, the way the body does.
+	if _whole_hips >= 0:
+		var hips: Transform3D = skeleton.get_bone_global_pose(_whole_hips)
+		var along: Vector3 = hips.basis.y.normalized()
+		for mesh_node: MeshInstance3D in _whole_meshes:
+			if is_instance_valid(mesh_node):
+				mesh_node.set_instance_shader_parameter(&"round_origin", hips.origin)
+				mesh_node.set_instance_shader_parameter(&"round_axis", along)
 
 
 # A whole character's moves: each of its clips under the name the game asks
@@ -888,7 +917,95 @@ func _whole_library(parts: CharacterParts) -> AnimationLibrary:
 				clip.track_set_key_value(track, key, at - off)
 		clip.loop_mode = Animation.LOOP_NONE if plays_once(anim_name) else Animation.LOOP_LINEAR
 		library.add_animation(anim_name, clip)
+	# The poses it has no clip for.
+	var forward: Vector3 = Vector3.RIGHT
+	var across: Vector3 = Vector3.BACK
+	var limp: Animation = _pose_clip({
+		"Spine02": [[forward, 10.0]], "Spine01": [[forward, 10.0]], "Spine": [[forward, 8.0]],
+		"neck": [[forward, 18.0]], "Head": [[forward, 22.0]],
+		"LeftArm": [[across, -34.0], [forward, -22.0]],
+		"RightArm": [[across, 34.0], [forward, -22.0]],
+		"LeftForeArm": [[forward, -28.0]], "RightForeArm": [[forward, -28.0]],
+	}, 0.0, Vector3(0.0, 1.0, 0.0))
+	for anim_name: String in LIMP_NAMES:
+		if not library.has_animation(anim_name):
+			library.add_animation(anim_name, limp)
+	# On its back, head towards our +Z (as the packs' character lies), hips
+	# just above the floor, arms by its sides.
+	var lying: Animation = _pose_clip({
+		"LeftArm": [[across, -20.0], [forward, -14.0]],
+		"RightArm": [[across, 20.0], [forward, -14.0]],
+	}, -90.0, Vector3(0.0, 0.12, -0.38))
+	for anim_name: String in LYING_NAMES:
+		if not library.has_animation(anim_name):
+			library.add_animation(anim_name, lying)
+	for anim_name: StringName in library.get_animation_list():
+		_proportion(library.get_animation(anim_name), parts)
 	return library
+
+
+# A still pose as a clip: the skeleton at rest, with the bones in
+# [param turns] turned (each a list of [axis, degrees] in the skeleton's own
+# space, where +X is the character's left, +Y up and +Z its front: turning
+# about +X tips what's above forwards), then the whole body tipped
+# [param lay] degrees about X (-90 lays it on its back), with the hips at
+# [param hips_at], as shares of how high the hips stand at rest.
+func _pose_clip(turns: Dictionary, lay: float, hips_at: Vector3) -> Animation:
+	var clip: Animation = Animation.new()
+	clip.length = 1.0
+	clip.loop_mode = Animation.LOOP_LINEAR
+	var to_skeleton: String = String(_animator.get_node(_animator.root_node).get_path_to(skeleton))
+	var hips: int = skeleton.find_bone(_bone("pelvis"))
+	# Each bone's facing in the skeleton's space, as posed, parents first.
+	var posed: Array[Basis] = []
+	for bone: int in skeleton.get_bone_count():
+		var parent: int = skeleton.get_bone_parent(bone)
+		var above: Basis = posed[parent] if parent >= 0 else Basis.IDENTITY
+		var local: Basis = skeleton.get_bone_rest(bone).basis.orthonormalized()
+		var bone_name: String = skeleton.get_bone_name(bone)
+		if turns.has(bone_name):
+			var list: Array = turns[bone_name]
+			for entry: Array in list:
+				var axis: Vector3 = entry[0]
+				var degrees: float = entry[1]
+				# Turned in the skeleton's space, on top of what it inherits.
+				local = above.inverse() * Basis(axis.normalized(), deg_to_rad(degrees)) * above * local
+		posed.append(above * local)
+		var shown: Basis = local
+		if bone == hips and lay != 0.0:
+			shown = Basis(Vector3.RIGHT, deg_to_rad(lay)) * local
+		var turn: int = clip.add_track(Animation.TYPE_ROTATION_3D)
+		clip.track_set_path(turn, NodePath("%s:%s" % [to_skeleton, bone_name]))
+		clip.rotation_track_insert_key(turn, 0.0, shown.get_rotation_quaternion())
+		if bone == hips:
+			var rest: Vector3 = skeleton.get_bone_rest(bone).origin
+			var place: int = clip.add_track(Animation.TYPE_POSITION_3D)
+			clip.track_set_path(place, NodePath("%s:%s" % [to_skeleton, bone_name]))
+			clip.position_track_insert_key(place, 0.0,
+					Vector3(rest.x + hips_at.x * rest.y, hips_at.y * rest.y, rest.z + hips_at.z * rest.y)
+					if lay != 0.0 else rest)
+	return clip
+
+
+# Gives a clip the look's proportions: every key of its arms and hands is
+# the size the parts ask for, whatever size the clip had them.
+func _proportion(clip: Animation, parts: CharacterParts) -> void:
+	if is_equal_approx(parts.whole_arm_scale, 1.0) and is_equal_approx(parts.whole_hand_scale, 1.0):
+		return
+	for track: int in range(clip.get_track_count() - 1, -1, -1):
+		if clip.track_get_type(track) == Animation.TYPE_SCALE_3D:
+			clip.remove_track(track)
+	var to_skeleton: String = String(_animator.get_node(_animator.root_node).get_path_to(skeleton))
+	var sizes: Dictionary[String, float] = {
+		"upperarm_l": parts.whole_arm_scale, "upperarm_r": parts.whole_arm_scale,
+		"hand_l": parts.whole_hand_scale, "hand_r": parts.whole_hand_scale,
+	}
+	for pack_name: String in sizes:
+		if skeleton.find_bone(_bone(pack_name)) < 0:
+			continue
+		var track: int = clip.add_track(Animation.TYPE_SCALE_3D)
+		clip.track_set_path(track, NodePath("%s:%s" % [to_skeleton, _bone(pack_name)]))
+		clip.scale_track_insert_key(track, 0.0, Vector3.ONE * sizes[pack_name])
 
 
 # The head and neck of [param path]'s body, and its eyes.
@@ -1051,6 +1168,14 @@ func _measure_stride(anim_name: StringName) -> float:
 func _show_eyes() -> void:
 	if skeleton == null:
 		return
+	if _whole:
+		# No eyelids to shut: the stylised shader paints the eyes over. Only
+		# on the body, not the clothes (a blue shirt is eye-coloured).
+		for child: Node in skeleton.get_children():
+			var body: MeshInstance3D = child as MeshInstance3D
+			if body != null and not String(body.name).begins_with("Outfit_"):
+				body.set_instance_shader_parameter(&"eyes_shut", 1.0 if eyes_shut else 0.0)
+		return
 	if not _asleep_head.is_empty():
 		for mesh: MeshInstance3D in _awake_head:
 			mesh.visible = not eyes_shut
@@ -1115,6 +1240,8 @@ func _undress() -> void:
 			hand.queue_free()
 	_hand_fixes.clear()
 	_hand_bones.clear()
+	_whole_meshes.clear()
+	_whole_hips = -1
 	_whole = false
 	_whole_parts = null
 	_whole_moves = null

@@ -18,6 +18,8 @@ uniform sampler2D albedo_texture : source_color, filter_linear_mipmap_anisotropi
 uniform vec4 albedo_color : source_color = vec4(1.0);
 // Multiplies every character's colours: the shared base colour of the look.
 uniform vec4 base_tint : source_color = vec4(1.0);
+// The skin colour shut eyes are painted in.
+uniform vec4 eyelid_color : source_color = vec4(0.9, 0.6, 0.4, 1.0);
 
 // Where light turns to shadow, as the cosine between the surface and the
 // light: 0 is side-on, above 0 pushes more of the body into shadow.
@@ -66,10 +68,21 @@ instance uniform int hidden_bones = 0;
 // about the model's upright axis, 0 to 1. Lumps and folds in the mesh stop
 // breaking the light/shadow edge into patches, leaving one clean shape.
 instance uniform float round_form = 0.0;
+// The column's line: a point on it and which way it runs, in the mesh's own
+// space. Upright through the middle by default; a character that lies down
+// or bends passes its hips and which way its body runs, or the rounding
+// (made for a body standing up) shades it in dark patches.
+instance uniform vec3 round_origin = vec3(0.0);
+instance uniform vec3 round_axis = vec3(0.0, 1.0, 0.0);
 // PROTOTYPE: the brightest any one light may be on this mesh (0 is no cap).
 // A low sun hits an upright character far harder than the floor; capped, the
 // lit side stays the character's own colour, warmed, and doesn't burn out.
 instance uniform float light_cap = 0.0;
+// How far this mesh's eyes are shut, 0 to 1 (#172). A Meshy face is one
+// painted texture with no eyelids, so shut eyes are painted: whatever is
+// eye-coloured (the whites, a blue iris) is painted over in [eyelid_color],
+// which leaves the dark lash line the texture already has as a closed eye.
+instance uniform float eyes_shut = 0.0;
 // PROTOTYPE: creatures with a shell (the crab). [ball_form] lights the mesh
 // as a smooth dome about [ball_centre] (in the mesh's own space, [ball_radius]
 // across), so a low-poly shell shades as one clean curve and not as facets.
@@ -122,7 +135,9 @@ void vertex() {
 		shaded = normalize(mix(shaded, dome, ball_form));
 	}
 	if (round_form > 0.0) {
-		vec3 outward = normalize(vec3(VERTEX.x, 0.0, VERTEX.z) + vec3(0.0, 0.0, 0.0001));
+		vec3 from_line = VERTEX - round_origin;
+		from_line -= round_axis * dot(from_line, round_axis);
+		vec3 outward = normalize(from_line + vec3(0.0, 0.0, 0.0001));
 		shaded = normalize(mix(shaded, outward, round_form));
 	}
 	shade_normal = MODELVIEW_NORMAL_MATRIX * shaded;
@@ -148,6 +163,13 @@ void fragment() {
 		// Keep the cloth's own folds and shading: dye it, scaled by its brightness.
 		vec3 dyed = dye * clamp(brightest / 0.85, 0.0, 1.2);
 		paint = mix(paint, dyed, cloth * recolour_strength);
+	}
+	if (eyes_shut > 0.0) {
+		// Judged as it looks (sRGB): near white, or bluer than it is red or green.
+		vec3 looks = pow(clamp(paint, 0.0, 1.0), vec3(1.0 / 2.2));
+		float white = smoothstep(0.74, 0.88, min(looks.r, min(looks.g, looks.b)));
+		float blue = smoothstep(0.02, 0.1, looks.b - max(looks.r, looks.g));
+		paint = mix(paint, eyelid_color.rgb, clamp(white + blue, 0.0, 1.0) * eyes_shut);
 	}
 	if (shell > 0.0) {
 		float top = smoothstep(-0.25, 0.6, normalize(shell_facing).y);

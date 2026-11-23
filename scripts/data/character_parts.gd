@@ -55,6 +55,11 @@ const ASLEEP: String = "asleep"
 @export var whole_clip_names: Dictionary[StringName, String] = {}
 ## How big the whole character is drawn, against its file.
 @export var whole_scale: float = 1.0
+## How long and thick its arms are, against its file (hands and all), and
+## how big its hands are against those arms: a model's arms can come out too
+## long and its hands too big.
+@export_range(0.5, 1.5) var whole_arm_scale: float = 1.0
+@export_range(0.5, 1.5) var whole_hand_scale: float = 1.0
 
 @export_group("Kiln")
 ## How the outfit is fired.

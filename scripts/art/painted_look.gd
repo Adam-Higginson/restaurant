@@ -11,12 +11,12 @@ extends Node
 ## - takes the N64 look off: every pack model is drawn as it was made (not
 ##   the Kiln's crunched copy, and with no grain), and the ship's planking
 ##   loses its small blurred wood-grain picture, leaving clean painted planks.
-## F8 switches it on and off while the game runs (debug builds only), to
-## compare. It leaves the scene's own time of day, weather and fog alone.
+## F7 switches it on and off while the game runs (debug builds only), to
+## compare (F8 is taken: it replays a cutscene's section). It leaves the scene's own time of day, weather and fog alone.
 
 const FILTER: Shader = preload("res://shaders/painted_filter.gdshader")
 const STYLE: CharacterStyle = preload("res://data/art/styles/character.tres")
-const TOGGLE_KEY: Key = KEY_F8
+const TOGGLE_KEY: Key = KEY_F7
 const WOOD_HUE: float = 0.06
 ## What a planked surface is given: no grain picture (null is plain white),
 ## no grain bumps, and more difference between one plank and the next.
