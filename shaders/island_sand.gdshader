@@ -47,6 +47,16 @@ uniform vec4 grass_color : source_color = vec4(0.13, 0.24, 0.06, 1.0);
 uniform float grass_from = 1.5;
 uniform float grass_over = 1.6;
 
+// A photograph of a forest floor (earth and creeping leaves), painted
+// under the trees in place of the plain earth and grass colours. White
+// (unused) until ThirdPartyTexture swaps the real one in.
+uniform sampler2D floor_photo : source_color, hint_default_white, filter_linear_mipmap_anisotropic, repeat_enable;
+uniform sampler2D floor_bumps : hint_normal, filter_linear_mipmap_anisotropic, repeat_enable;
+// How many metres one copy of it covers, and how dark it's painted (it's
+// in the shade of the trees).
+uniform float floor_metres = 3.2;
+uniform vec4 floor_tint : source_color = vec4(0.62, 0.66, 0.52, 1.0);
+
 // --- Under the water ------------------------------------------------------
 // Bright wavering lines of sunlight on the seabed.
 uniform float caustics : hint_range(0.0, 2.0) = 0.5;
@@ -100,6 +110,11 @@ void fragment() {
 	// Steep ground sheds its grass.
 	float steep = smoothstep(0.75, 0.55, v_world_normal.y);
 	ground = mix(ground, earth_color.rgb, steep);
+	vec3 forest_near = texture(floor_photo, at / floor_metres).rgb;
+	vec3 forest_far = texture(floor_photo, at / (floor_metres * 3.7) + vec2(0.43, 0.19)).rgb;
+	vec3 forest = mix(forest_near, forest_far, 0.4);
+	float has_forest = step(dot(forest, vec3(1.0)), 2.99);
+	ground = mix(ground, forest * floor_tint.rgb, has_forest);
 
 	vec3 colour = mix(sand, wet_color.rgb, damp * 0.85);
 	colour = mix(colour, ground, inland);
@@ -119,9 +134,10 @@ void fragment() {
 	// Stretched one way so the bumps lie in streaks, as the wind lays them.
 	vec3 bump = texture(ripples, at * vec2(1.0, 0.3) / ripple_metres).rgb;
 	vec3 grit = texture(detail_bumps, at / detail_metres).rgb;
-	NORMAL_MAP = mix(bump, grit, 0.7);
-	NORMAL_MAP_DEPTH = mix(ripple_strength, detail_bump_strength, 0.7)
-			* (1.0 - damp * 0.7) * (1.0 - inland);
+	vec3 litter = texture(floor_bumps, at / floor_metres).rgb;
+	NORMAL_MAP = mix(mix(bump, grit, 0.7), litter, inland);
+	NORMAL_MAP_DEPTH = mix(mix(ripple_strength, detail_bump_strength, 0.7) * (1.0 - damp * 0.7),
+			1.0, inland);
 
 	// Single grains flash: a few bright specks that change as you move.
 	float speck = texture(grain, at * 5.3 + VIEW.xy * 0.6).r;

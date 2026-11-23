@@ -50,10 +50,14 @@ func _ready() -> void:
 
 ## Builds the mesh, the collision and the height picture from [member shape].
 func build() -> void:
+	# Taken out of the tree at once (not just queued to be freed), so the new
+	# ones can have the same names.
 	if _mesh != null:
+		remove_child(_mesh)
 		_mesh.queue_free()
 		_mesh = null
 	if _collision != null:
+		remove_child(_collision)
 		_collision.queue_free()
 		_collision = null
 	_heights = null

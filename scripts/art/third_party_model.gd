@@ -69,6 +69,10 @@ const GRAIN: Texture2D = preload("res://assets/placeholder/materials/n64_grain.t
 ## lower-poly ones, for the chunky N64 look. 1 is Godot's usual choice.
 ## Fired models are always drawn in full: the Kiln made them simple already.
 @export var detail: float = 0.05
+## Whether the model casts shadows. Off for a backdrop that would otherwise
+## put the whole scene in its shade (an island's cliffs, with a low sun
+## behind them).
+@export var casts_shadow: bool = true
 
 @export_group("Kiln")
 ## Never fire this model: it's drawn exactly as it was made, at full quality.
@@ -147,6 +151,8 @@ func dress() -> bool:
 		if grain:
 			_use_n64(model, {})
 		_set_detail(model)
+	if not casts_shadow:
+		_cast_no_shadows(model)
 	_show_stand_ins(false)
 	dressed.emit(true)
 	return true
@@ -280,6 +286,15 @@ func _set_detail(node: Node) -> void:
 		shape.lod_bias = detail
 	for child: Node in node.get_children():
 		_set_detail(child)
+
+
+# Stops every mesh in the model casting shadows.
+func _cast_no_shadows(node: Node) -> void:
+	var shape: GeometryInstance3D = node as GeometryInstance3D
+	if shape != null:
+		shape.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
+	for child: Node in node.get_children():
+		_cast_no_shadows(child)
 
 
 # Shows or hides the greybox. In the editor this is done on the renderer

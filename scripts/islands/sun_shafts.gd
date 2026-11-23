@@ -68,14 +68,23 @@ func to_sun() -> Vector3:
 
 ## Lays the shafts afresh.
 func lay() -> void:
+	var frames: Array[Transform3D] = shafts()
 	var many: MultiMesh = MultiMesh.new()
 	many.transform_format = MultiMesh.TRANSFORM_3D
 	many.mesh = _shaft_mesh()
+	many.instance_count = frames.size()
+	for index: int in frames.size():
+		many.set_instance_transform(index, frames[index])
+	multimesh = many
+
+
+## Where each shaft lies: its foot on the ground, its length (its Y) along
+## the sun's rays, as wide as its X and Z are long. Worked out from the
+## shape, the sun and the seed alone.
+func shafts() -> Array[Transform3D]:
+	var frames: Array[Transform3D] = []
 	if shape == null:
-		many.instance_count = 0
-		multimesh = many
-		return
-	many.instance_count = count
+		return frames
 	var random: RandomNumberGenerator = RandomNumberGenerator.new()
 	random.seed = shaft_seed
 	var up: Vector3 = to_sun()
@@ -93,8 +102,8 @@ func lay() -> void:
 		var long: float = random.randf_range(length.x, length.y)
 		var frame: Basis = Basis(side.rotated(up, turn) * wide, up * long, front.rotated(up, turn) * wide)
 		# Start a little below the ground so the foot's fade is buried.
-		many.set_instance_transform(index, Transform3D(frame, foot - up * long * 0.1))
-	multimesh = many
+		frames.append(Transform3D(frame, foot - up * long * 0.1))
+	return frames
 
 
 # Two strips crossed along their length, one unit long and one wide, so a

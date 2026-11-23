@@ -29,7 +29,7 @@ keep_as_made = true
 [node name="Sway" type="Node" parent="." node_paths=PackedStringArray("model")]
 script = ExtResource("2_sway")
 model = NodePath("../Model")
-sway = 0.03
-flutter = 0.02
+sway = 0.045
+flutter = 0.03
 still_below = 0.0
 tint = Color(0.5, 0.62, 0.42, 1)

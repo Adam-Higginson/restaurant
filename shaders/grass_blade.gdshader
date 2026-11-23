@@ -17,7 +17,10 @@ varying float v_shade;
 void vertex() {
 	float up = UV.y;
 	// Gusts cross the patch as waves, so the grass moves in sweeps.
-	float gust = sin(TIME * 1.3 + VERTEX.x * 0.35 + VERTEX.z * 0.27);
+	// (The same slow waves that bow the palms, and quicker ones on top.)
+	vec2 blowing = normalize(wind);
+	float big = smoothstep(0.1, 1.0, sin(dot(VERTEX.xz, blowing) * 0.09 - TIME * 0.7));
+	float gust = sin(TIME * 1.3 + VERTEX.x * 0.35 + VERTEX.z * 0.27) + big * 1.8;
 	float shiver = sin(TIME * 5.1 + VERTEX.x * 3.3 + VERTEX.z * 2.9);
 	VERTEX.xz += normalize(wind) * (0.3 + gust * 0.7 + shiver * 0.15) * sway * up * up;
 	// Tufts differ a little in colour, by where they stand.

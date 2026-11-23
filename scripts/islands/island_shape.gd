@@ -46,6 +46,11 @@ extends Resource
 @export var dune_width: float = 7.0
 ## Rise for each metre further inland behind the bank.
 @export var inland_slope: float = 0.03
+## How far inland the hillside begins: behind this the land climbs away
+## towards the far hills.
+@export var hill_from: float = 30.0
+## Rise for each metre further inland on the hillside.
+@export var hill_slope: float = 0.5
 ## How tall the bumps of the inland ground are.
 @export var bumps: float = 1.3
 ## How far apart the bumps are, in metres.
@@ -77,6 +82,9 @@ func height_at(x: float, z: float) -> float:
 	var past_beach: float = maxf(0.0, s - beach_width)
 	height += dune_height * smoothstep(0.0, dune_width, past_beach)
 	height += inland_slope * past_beach
+	# The hillside: its foot is rounded over a few metres, not a crease.
+	var up_hill: float = maxf(0.0, s - hill_from)
+	height += hill_slope * (up_hill * up_hill / (up_hill + 6.0))
 	# The beach has soft humps (none at the waterline, so the edge stays
 	# clean); the big bumps grow in over the bank.
 	var humpy: float = smoothstep(0.5, 3.0, s)
