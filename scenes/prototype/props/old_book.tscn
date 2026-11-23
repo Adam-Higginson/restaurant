@@ -1,0 +1,72 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://scripts/props/readable_book.gd" id="1_book"]
+[ext_resource type="Resource" path="res://data/books/fire_spirits.tres" id="2_spirits"]
+[ext_resource type="Script" path="res://scripts/interaction/interactable_3d.gd" id="3_reach"]
+[ext_resource type="Material" path="res://assets/placeholder/materials/leather.tres" id="4_leather"]
+[ext_resource type="Material" path="res://assets/placeholder/materials/linen.tres" id="5_pages"]
+[ext_resource type="Material" path="res://assets/placeholder/materials/gull_feathers.tres" id="6_feather"]
+
+[sub_resource type="BoxMesh" id="Cover"]
+size = Vector3(0.17, 0.012, 0.23)
+
+[sub_resource type="BoxMesh" id="Pages"]
+size = Vector3(0.155, 0.028, 0.215)
+
+[sub_resource type="BoxMesh" id="Spine"]
+size = Vector3(0.018, 0.05, 0.23)
+
+[sub_resource type="BoxMesh" id="Quill"]
+size = Vector3(0.004, 0.003, 0.16)
+
+[sub_resource type="BoxMesh" id="Vane"]
+size = Vector3(0.022, 0.002, 0.1)
+
+[sub_resource type="BoxShape3D" id="Reach"]
+size = Vector3(0.5, 0.5, 0.5)
+
+[node name="OldBook" type="Node3D"]
+script = ExtResource("1_book")
+book = ExtResource("2_spirits")
+prompt = "Read the old book"
+read_flag = &"read_fire_spirits"
+
+[node name="Back" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.006, 0)
+material_override = ExtResource("4_leather")
+mesh = SubResource("Cover")
+
+[node name="Pages" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.004, 0.026, 0)
+material_override = ExtResource("5_pages")
+mesh = SubResource("Pages")
+
+[node name="Front" type="MeshInstance3D" parent="."]
+transform = Transform3D(0.9994, 0.0349, 0, -0.0349, 0.9994, 0, 0, 0, 1, 0, 0.046, 0)
+material_override = ExtResource("4_leather")
+mesh = SubResource("Cover")
+
+[node name="Spine" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.085, 0.026, 0)
+material_override = ExtResource("4_leather")
+mesh = SubResource("Spine")
+
+[node name="Feather" type="Node3D" parent="."]
+transform = Transform3D(0.9659, 0, -0.2588, 0, 1, 0, 0.2588, 0, 0.9659, 0.03, 0.04, -0.13)
+
+[node name="Quill" type="MeshInstance3D" parent="Feather"]
+material_override = ExtResource("6_feather")
+mesh = SubResource("Quill")
+
+[node name="Vane" type="MeshInstance3D" parent="Feather"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -0.035)
+material_override = ExtResource("6_feather")
+mesh = SubResource("Vane")
+
+[node name="Reach" type="Area3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.1, 0)
+script = ExtResource("3_reach")
+focus_height = 0.35
+
+[node name="Shape" type="CollisionShape3D" parent="Reach"]
+shape = SubResource("Reach")
