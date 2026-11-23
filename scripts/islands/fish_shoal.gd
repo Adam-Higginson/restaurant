@@ -49,6 +49,9 @@ var _places: PackedVector3Array = PackedVector3Array()
 
 
 func _ready() -> void:
+	# The fish are placed afresh every drawn frame, so there's nothing for
+	# Godot to smooth between physics ticks.
+	physics_interpolation_mode = Node.PHYSICS_INTERPOLATION_MODE_OFF
 	var random: RandomNumberGenerator = RandomNumberGenerator.new()
 	random.seed = shoal_seed
 	_phase = random.randf_range(0.0, TAU)

@@ -1,6 +1,7 @@
 extends GameTestSuite
-## Tests for the island scene itself (the cove), its root (Island) and the
-## plants' wind (PlantSway).
+## Tests for the island scene itself (the cove), its root (Island), the
+## jolly boat that takes you ashore (JollyBoat) and the plants' wind
+## (PlantSway).
 
 const COVE: String = "res://scenes/prototype/islands/cove.tscn"
 
@@ -51,15 +52,109 @@ func test_plants_that_share_a_model_share_the_swaying_material() -> void:
 			first_mesh.get_surface_override_material(0))
 
 
-func test_the_cove_loads_and_you_stand_on_its_beach() -> void:
+func test_the_visit_begins_on_the_ships_deck_facing_the_island() -> void:
 	var runner: GdUnitSceneRunner = scene_runner(COVE)
 	await physics_ticks(runner, 40)
 	var player: Player3D = runner.find_child("Player") as Player3D
+	var start: Node3D = runner.find_child("DeckStart") as Node3D
 	var ground: IslandGround = runner.find_child("Ground") as IslandGround
 	assert_bool(player.is_on_floor()).is_true()
-	var under: float = ground.shape.height_at(player.global_position.x, player.global_position.z)
-	assert_float(under).is_greater(0.0)
-	assert_float(player.global_position.y).is_equal_approx(under, 0.25)
+	# On the deck, well above the sea and well out from the shore.
+	assert_float(player.global_position.y).is_greater(4.0)
+	assert_float(player.global_position.distance_to(start.global_position)).is_less(1.0)
+	assert_float(-ground.shape.inland(player.global_position.x, player.global_position.z)).is_greater(40.0)
+	# The island is towards -Z, and that's the way the start faces.
+	assert_float((-start.global_basis.z).z).is_less(-0.9)
+
+
+func test_the_jolly_boat_takes_you_ashore_and_back() -> void:
+	var runner: GdUnitSceneRunner = scene_runner(COVE)
+	await physics_ticks(runner, 10)
+	var player: Player3D = runner.find_child("Player") as Player3D
+	var ground: IslandGround = runner.find_child("Ground") as IslandGround
+	var deck_boat: JollyBoat = runner.find_child("JollyBoat") as JollyBoat
+	var beach_boat: JollyBoat = runner.find_child("BeachBoat") as JollyBoat
+	var went: bool = await finishes_within(func() -> void: await deck_boat.cross(player), 6.0)
+	assert_bool(went).is_true()
+	await physics_ticks(runner, 40)
+	assert_bool(player.controls_enabled).is_true()
+	assert_bool(player.is_on_floor()).is_true()
+	var back: float = ground.shape.inland(player.global_position.x, player.global_position.z)
+	assert_float(back).is_between(0.5, ground.shape.beach_width)
+	assert_float(player.global_position.y).is_greater(0.0)
+	var returned: bool = await finishes_within(func() -> void: await beach_boat.cross(player), 6.0)
+	assert_bool(returned).is_true()
+	await physics_ticks(runner, 40)
+	assert_bool(player.is_on_floor()).is_true()
+	assert_float(player.global_position.y).is_greater(4.0)
+
+
+func test_the_beach_boat_sits_on_the_sand_and_is_where_defeat_returns_you() -> void:
+	var runner: GdUnitSceneRunner = scene_runner(COVE)
+	await physics_ticks(runner, 2)
+	var ground: IslandGround = runner.find_child("Ground") as IslandGround
+	var beach_boat: JollyBoat = runner.find_child("BeachBoat") as JollyBoat
+	var at: Vector3 = beach_boat.global_position
+	assert_float(at.y).is_equal_approx(ground.shape.height_at(at.x, at.z) - beach_boat.settle_sink, 0.001)
+	var landing: Node3D = runner.scene().get_tree().get_first_node_in_group(Duellist.LANDING_GROUP) as Node3D
+	assert_object(landing).is_same(runner.find_child("StepOut"))
+	var back: float = ground.shape.inland(landing.global_position.x, landing.global_position.z)
+	assert_float(back).is_between(0.5, ground.shape.beach_width)
+
+
+func test_crabs_wait_on_the_beach_and_you_come_armed() -> void:
+	var runner: GdUnitSceneRunner = scene_runner(COVE)
+	await physics_ticks(runner, 60)
+	var ground: IslandGround = runner.find_child("Ground") as IslandGround
+	var crabs: Array[Node] = runner.scene().find_children("*", "Crab", true, false)
+	assert_int(crabs.size()).is_equal(3)
+	for node: Node in crabs:
+		var crab: Crab = node as Crab
+		assert_bool(crab.is_on_floor()).is_true()
+		var back: float = ground.shape.inland(crab.global_position.x, crab.global_position.z)
+		assert_float(back).is_between(1.0, ground.shape.beach_width)
+	var player: Player3D = runner.find_child("Player") as Player3D
+	assert_bool(duellist_of(player).has_pan()).is_true()
+
+
+func test_falling_out_of_the_world_puts_you_back_on_deck() -> void:
+	var runner: GdUnitSceneRunner = scene_runner(COVE)
+	await physics_ticks(runner, 5)
+	var start: Node3D = runner.find_child("DeckStart") as Node3D
+	var player: Player3D = place_player_3d(runner, Vector3(150.0, -30.0, 150.0))
+	await physics_ticks(runner, 3)
+	assert_float(player.global_position.distance_to(start.global_position)).is_less(1.0)
+
+
+func test_a_jolly_boat_with_nowhere_to_go_stays_put() -> void:
+	var boat: JollyBoat = (load("res://scenes/prototype/islands/props/jolly_boat.tscn") as PackedScene).instantiate() as JollyBoat
+	auto_free(boat)
+	add_child(boat)
+	var player: Player3D = new_player_3d_on_floor()
+	add_child(player.get_parent())
+	var before: Vector3 = player.global_position
+	await boat.cross(player)
+	assert_vector(player.global_position).is_equal(before)
+	assert_bool(boat.is_crossing()).is_false()
+
+
+func test_a_jolly_boat_without_a_fade_crosses_at_once() -> void:
+	var boat: JollyBoat = (load("res://scenes/prototype/islands/props/jolly_boat.tscn") as PackedScene).instantiate() as JollyBoat
+	auto_free(boat)
+	var spot: Marker3D = Marker3D.new()
+	auto_free(spot)
+	add_child(spot)
+	spot.global_position = Vector3(30.0, 2.0, -12.0)
+	boat.destination = spot
+	add_child(boat)
+	var player: Player3D = new_player_3d_on_floor()
+	add_child(player.get_parent())
+	var crossings: Dictionary[String, int] = {"count": 0}
+	boat.crossed.connect(func(_who: Player3D) -> void: crossings["count"] += 1)
+	await boat.cross(player)
+	assert_vector(player.global_position).is_equal_approx(spot.global_position, Vector3.ONE * 0.001)
+	assert_bool(player.controls_enabled).is_true()
+	assert_int(crossings["count"]).is_equal(1)
 
 
 func test_you_can_wade_into_the_cove_but_not_under() -> void:
