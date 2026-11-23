@@ -500,6 +500,8 @@ A growing glossary of the Godot concepts this project uses: what each one is, in
 
 **One page per push of a stick.** A key sends one "pressed" event (repeats are marked as echoes and ignored by default), but a stick held over sends a stream of motion events, and each counts as "pressed". To act once per push, remember the action as held when it's pressed and forget it when `event.is_action_released(...)` comes. *Ours:* `BookView._newly_pushed`.
 
+**A resource made of resources (sub-resources).** A `.tres` file can hold small resources of its own as well as the main one: each `[sub_resource]` block is one, used inside the file with `SubResource("id")`. They live and die with the file, so they're right for parts nobody else shares. *Ours:* `data/books/fire_spirits.tres`, a `Book` whose six `BookPage`s are sub-resources; open it in the Inspector and click into Pages to edit each page.
+
 **CanvasLayer order.** Each `CanvasLayer` has a `layer` number; higher layers draw on top of lower ones, whatever their place in the tree. *Ours:* the HUD's `BookLayer` (16) covers the HUD, and the dialogue's `SpeechLayer` (17) sits above that.
 
 ## The first island (#163)
@@ -539,6 +541,18 @@ A growing glossary of the Godot concepts this project uses: what each one is, in
 **MSAA (antialiasing).** Smooths the stair-stepped edges of models by sampling each pixel several times along edges. It's a setting of the viewport. *Ours:* `Island` (`scripts/islands/island.gd`) turns 4x MSAA on while an island is showing and puts it back after.
 
 **Mipmaps.** Smaller copies of a texture that Godot draws when the texture is far away; without them fine detail shimmers in the distance. *Ours:* `ThirdPartyTexture` can make them as it loads (its `mipmaps` setting), used for the photographed sand and forest floor.
+
+## Crew walking (#157)
+
+**AStar3D (shortest paths over a graph).** You give it points (an id and a position) and say which pairs are connected; `get_id_path(from, to)` returns the shortest chain of points between two, and `get_closest_point(position)` the nearest point to anywhere. It's the A* search games have long used for pathfinding. *Ours:* `Walkways` builds one from its `Waypoint` children.
+
+**Waypoints vs navigation meshes.** Godot can also bake a *navigation mesh* (`NavigationRegion3D`) from the floor and let a `NavigationAgent3D` find its own way across it. A hand-placed set of waypoints is simpler and stays put on a moving ship, and you can see exactly where people will walk. *Ours:* the ship's `Walkways`, a child of the ship, so its ways sail with her.
+
+**Moving in a parent's space.** `node.to_local(world_point)` turns a world position into a node's own coordinates, and `to_global` back. Doing the walking in the ship's coordinates means a walker keeps their place on deck while the ship heaves and turns under them. *Ours:* `CrewWalker._physics_process`.
+
+**Borrowing an animation from another file.** An `AnimationPlayer` keeps its animations in `AnimationLibrary`s. Another imported model on the same skeleton has the same bone names, so one of its animations can be copied (`duplicate()`) and added to this player's library with `add_animation(name, animation)`. *Ours:* `CrewAnimator._borrow_walk` takes the heron's walk from his rig's `walk.glb`.
+
+**Raycasts in tests.** `get_world_3d().direct_space_state.intersect_ray(query)` asks the physics engine what a line hits; `query.exclude` lists bodies to ignore. A test can use it to check level layout. *Ours:* `walkways_test.gd` makes sure no walkway runs through a wall.
 
 ## Testing
 

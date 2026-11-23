@@ -37,6 +37,7 @@
 [ext_resource type="PackedScene" path="res://ui/look_choice.tscn" id="90_look"]
 [ext_resource type="Script" path="res://scripts/cutscene/choice_cues.gd" id="91_choice"]
 [ext_resource type="PackedScene" path="res://ui/build_tag.tscn" id="92_build_tag"]
+[ext_resource type="Script" path="res://scripts/story/first_quest.gd" id="93_first_quest"]
 
 [sub_resource type="FastNoiseLite" id="Noise_Cloud"]
 frequency = 0.008
@@ -298,6 +299,9 @@ script = ExtResource("93_voyage")
 
 [node name="Conversation" type="Node" parent="."]
 script = ExtResource("300_talk")
+
+[node name="FirstQuest" type="Node" parent="."]
+script = ExtResource("93_first_quest")
 
 [node name="ShotCues" type="Node" parent="." node_paths=PackedStringArray("player")]
 script = ExtResource("301_shots")

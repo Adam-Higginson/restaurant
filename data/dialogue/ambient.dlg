@@ -17,6 +17,16 @@
 
 # --- The heron, by the stove at night ---
 
+# The first quest (#158): you've read the old book and still have no water.
+# He grumbles about it, sideways, as you pass.
+? lantern_low and read_fire_spirits and not fetched_water
+~ water_grumble [priority 1] [cooldown 90]
+heron: Soup wants water. Not the sea's. [thought]
+
+? lantern_low
+~ watching_the_lantern [weight 2]
+heron: Hm. Still blue. [thought]
+
 ? night
 ~ stove_drawing [weight 2]
 heron: Hm. Stove's drawing well tonight.

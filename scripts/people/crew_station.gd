@@ -5,7 +5,8 @@ extends Node
 ## which only happens while the screen is black (asleep) or as a saved
 ## voyage is loaded, so nobody is seen popping from place to place.
 ##
-## A stand-in until the crew can walk the ship on a schedule.
+## A stand-in until the crew walk the ship on a schedule (#95); a
+## [CrewWalker] can walk them back to [method post] meanwhile.
 
 ## Emitted when the crewmate has been moved to a spot.
 signal moved(spot: Node3D)
@@ -38,6 +39,11 @@ func place(morning: bool) -> void:
 	crewmate.global_transform = spot.global_transform
 	crewmate.reset_physics_interpolation()
 	moved.emit(spot)
+
+
+## Where they belong at this time of day.
+func post() -> Node3D:
+	return spot_for(_was_morning)
 
 
 ## Moves the crewmate back to where they belong at this time of day, after

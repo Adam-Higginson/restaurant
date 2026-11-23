@@ -1,8 +1,9 @@
 class_name ActorCues
 extends CueHandler
-## Puts people where a cutscene needs them. Nobody walks yet, so each of
-## these happens at once: do it while the camera is looking elsewhere. Only
-## the lantern can float somewhere while you watch ([code]@go[/code]).
+## Puts people where a cutscene needs them. Placing, hiding and sending home
+## happen at once: do them while the camera is looking elsewhere. The crew
+## can walk somewhere while you watch ([code]@walk[/code], [code]@send[/code],
+## #157), and the lantern can float ([code]@go[/code]).
 ##
 ## [codeblock]
 ## @place heron doorway     stand them on the mark called Doorway
@@ -11,6 +12,10 @@ extends CueHandler
 ## @show heron              bring them back
 ## @home heron              send them back to their usual spot
 ## @go lantern room_middle  the lantern floats over to a mark, and stays
+## @walk heron water_butt   they walk there along the walkways; the script
+##                          waits until they arrive
+## @send heron water_butt   they set off walking there; the script goes on
+## @walk heron home         walk back to their usual spot (@send too)
 ## [/codeblock]
 ##
 ## Someone is named by their [member Person.id] ([code]heron[/code]),
@@ -33,13 +38,20 @@ const PROPS: StringName = &"props"
 const PLAYER: String = "player"
 ## The name for the lantern spirit in a script.
 const LANTERN: String = "lantern"
+## The place name for someone's usual spot, in [code]@walk[/code] and
+## [code]@send[/code].
+const HOME: String = "home"
 
 ## The player, for [code]@place player ...[/code] and [code]@face ... player[/code].
 @export var player: Player3D
 
+## Walks a cue started that are still under way: each walker, and the mark
+## it's walking to. Skipping finishes them at once.
+var _walks: Dictionary[CrewWalker, Node3D] = {}
+
 
 func cues() -> Array[StringName]:
-	return [&"place", &"face", &"hide", &"show", &"home", &"go"]
+	return [&"place", &"face", &"hide", &"show", &"home", &"go", &"walk", &"send"]
 
 
 ## Whoever (or whatever) is called [param who] in a script, or null: the
@@ -85,6 +97,8 @@ func _perform(cue: StringName, args: PackedStringArray) -> void:
 			_send_home(actor)
 		&"go":
 			_go(actor, args[1])
+		&"walk", &"send":
+			_walk(actor, args[1], cue == &"walk")
 
 
 func _place(actor: Node3D, mark_name: String) -> void:
@@ -136,6 +150,18 @@ func _on_ended(_tree_id: StringName) -> void:
 		spirit.let_go()
 
 
+# Skipping: whoever is still walking somewhere is there at once.
+func _on_skip_started() -> void:
+	for walker: CrewWalker in _walks.keys():
+		var mark: Node3D = _walks[walker]
+		var actor: Node3D = walker.get_parent() as Node3D
+		walker.stop()
+		if is_instance_valid(mark) and actor != null:
+			actor.global_transform = mark.global_transform
+			actor.reset_physics_interpolation()
+	_walks.clear()
+
+
 # Floats the lantern over to the mark called [param mark_name], to stay.
 func _go(actor: Node3D, mark_name: String) -> void:
 	var spirit: LanternSpirit = actor as LanternSpirit
@@ -148,6 +174,40 @@ func _go(actor: Node3D, mark_name: String) -> void:
 		warn("no mark called '%s' (a Marker3D in group '%s')" % [mark_name, GROUP])
 		return
 	spirit.hold_at(mark)
+
+
+# Walks [param actor] to the mark called [param place_name] (or home), the
+# script waiting until they're there if [param wait]. Skipping, they're simply
+# put there.
+func _walk(actor: Node3D, place_name: String, wait: bool) -> void:
+	var walker: CrewWalker = actor.get_node_or_null("Walker") as CrewWalker
+	if walker == null:
+		warn("'%s' can't walk (only crew with a CrewWalker called Walker can)" % actor.name)
+		return
+	var mark: Node3D = null
+	if place_name == HOME:
+		for child: Node in actor.get_children():
+			if child is CrewStation:
+				mark = (child as CrewStation).post()
+	else:
+		mark = find_mark(place_name)
+	if mark == null:
+		warn("nowhere called '%s' to walk to (a Marker3D in group '%s', or 'home')"
+				% [place_name, GROUP])
+		return
+	if is_skipping():
+		walker.stop()
+		actor.global_transform = mark.global_transform
+		actor.reset_physics_interpolation()
+		return
+	if not walker.walk_to(mark):
+		warn("no way for '%s' to '%s' along the walkways" % [actor.name, place_name])
+		return
+	_walks[walker] = mark
+	walker.walk_ended.connect(func() -> void: _walks.erase(walker), CONNECT_ONE_SHOT)
+	if wait:
+		var held: int = hold()
+		walker.walk_ended.connect(func() -> void: release(held), CONNECT_ONE_SHOT)
 
 
 func _set_present(actor: Node3D, present: bool) -> void:

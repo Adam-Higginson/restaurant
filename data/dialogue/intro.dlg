@@ -250,32 +250,33 @@
 -> asleep
 
 # Black, for a while. Then, slowly, the bunk room at night, the storm
-# outside: you asleep in your bunk, and him beside you, keeping watch. The
-# captain isn't in the bunk room yet.
+# outside: you asleep in your bunk. He isn't beside you: he's on his round
+# table by the stove, small and blue, his glass cracked, and silent. The sea
+# took nearly all of him (#158).
 ~ asleep
 @hide heron
 @hide player
 @show sleeping_you
-@place lantern by_your_bunk
+@home lantern
+@look lantern tired
+@look lantern cracked
+set lantern_low
 @shot in_your_bunk cut
 @wait 1.5
 @fade in 3.0
 @wait 0.8
 -> waking
 
-# You wake, and he's right there. When he's said his piece he floats off to
-# the middle of the room, and leaves you be.
+# It's the captain who wakes you, from the doorway.
 ~ waking
+heron: Up. You've slept enough for two.
 @start wakes
-lantern: There you are.
-lantern: You were in the water. I pulled. You held on. Good holding.
-lantern: I'll get you home. I know exactly where it is. Roughly.
-@go lantern room_middle
-@wait 1.8
+@wait 1.2
 -> doorway
 
 # A tall shadow in the doorway: the captain, come to look you over. By the
-# time we look back you're up, by your bunk.
+# time we look back you're up, by your bunk. He's gruff, and not worried,
+# he'd tell you; he looks at the lantern anyway.
 ~ doorway
 @hide sleeping_you
 @show player
@@ -286,13 +287,19 @@ lantern: I'll get you home. I know exactly where it is. Roughly.
 @wait 0.8
 heron: Nobody drowns on my ship. Nobody goes hungry either.
 heron: You've managed the first.
--> stove
+@face heron lantern
+@shot stove_nook
+@wait 1.5
+heron: He's not said a word since.
+@wait 0.8
+@face heron player
+@shot doorway
+heron: I don't know lamps. I know ships.
+heron: You held on to him out there. See if you can't hold on a bit longer.
+-> yours
 
-# Through to the galley: something has been left warm on the stove. While
-# we look at it, the captain goes back to the fire. Then the ship is yours.
-~ stove
-@shot pot_on_stove
-@home heron
-@home lantern
-@wait 2.5
+# Then the ship is yours. The captain goes about his business: up on deck
+# for a drink at the water butt, and back to his fire (the FirstQuest node
+# in sea.tscn walks him there and back).
+~ yours
 @shot free cut
