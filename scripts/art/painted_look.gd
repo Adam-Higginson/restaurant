@@ -7,13 +7,24 @@ extends Node
 ## - paints the picture: a painterly filter and ink lines over everything
 ##   (shaders/painted_filter.gdshader), on whichever camera is in use;
 ## - draws rigged Meshy characters with the stylised look, so they keep a
-##   fine brush and crisp faces, and no one light burns them out.
+##   fine brush and crisp faces, and no one light burns them out;
+## - takes the N64 look off: every pack model is drawn as it was made (not
+##   the Kiln's crunched copy, and with no grain), and the ship's planking
+##   loses its small blurred wood-grain picture, leaving clean painted planks.
 ## F8 switches it on and off while the game runs (debug builds only), to
 ## compare. It leaves the scene's own time of day, weather and fog alone.
 
 const FILTER: Shader = preload("res://shaders/painted_filter.gdshader")
 const STYLE: CharacterStyle = preload("res://data/art/styles/character.tres")
 const TOGGLE_KEY: Key = KEY_F8
+const WOOD_HUE: float = 0.06
+## What a planked surface is given: no grain picture (null is plain white),
+## no grain bumps, and more difference between one plank and the next.
+const SURFACE: Dictionary[StringName, Variant] = {
+	&"albedo_texture": null,
+	&"grain_bump": 0.0,
+	&"plank_tint": 0.24,
+}
 
 ## Whether the look is on.
 @export var enabled: bool = true:
@@ -31,8 +42,13 @@ const TOGGLE_KEY: Key = KEY_F8
 @export_range(0.0, 8.0) var brush: float = 3.0
 @export_range(0.0, 8.0) var character_brush: float = 0.9
 ## Ink line width in pixels at 1080p, and how dark the line is.
-@export_range(0.0, 4.0) var line_width: float = 1.2
-@export_range(0.0, 1.0) var line_strength: float = 0.7
+@export_range(0.0, 4.0) var line_width: float = 1.0
+@export_range(0.0, 1.0) var line_strength: float = 0.6
+@export_group("Surfaces")
+## How much richer and darker a planked surface's own colour is made, now
+## that no grain picture colours it.
+@export_range(0.5, 3.0) var surface_saturation: float = 1.55
+@export_range(0.2, 1.5) var surface_value: float = 0.74
 @export_group("Characters")
 ## The brightest any one light may be on a stylised character.
 @export_range(0.0, 4.0) var light_cap: float = 0.85
@@ -41,6 +57,21 @@ var _filter: MeshInstance3D
 var _style: CharacterStyle
 var _was: Dictionary[StringName, Variant] = {}
 var _styled: Array[ThirdPartyModel] = []
+# Each pack model's own [keep_as_made, grain, detail], to put back.
+var _models_were: Dictionary[ThirdPartyModel, Array] = {}
+# Each pack character's own [use_kiln, n64, detail], to put back.
+var _people_were: Dictionary[CharacterModel, Array] = {}
+# Each planked material's own settings, to put back.
+var _surfaces_were: Dictionary[ShaderMaterial, Dictionary] = {}
+
+
+func _enter_tree() -> void:
+	# Before anything in the scene is dressed: nothing uses a Kiln copy.
+	KilnJob.use_fired = not enabled
+
+
+func _exit_tree() -> void:
+	KilnJob.use_fired = true
 
 
 func _ready() -> void:
@@ -95,7 +126,9 @@ static func make_filter(compare: String, brush_size: float) -> MeshInstance3D:
 
 
 func _apply() -> void:
+	KilnJob.use_fired = not enabled
 	_apply_environment()
+	_apply_people()
 	if enabled and _filter == null:
 		_filter = make_filter("compare_not_equal", brush)
 		_filter.add_child(make_filter("compare_equal", character_brush))
@@ -106,6 +139,7 @@ func _apply() -> void:
 			material.set_shader_parameter(&"line_strength", line_strength)
 	if _filter != null:
 		_filter.visible = enabled
+	_apply_surfaces()
 	if enabled:
 		for found: Node in get_tree().root.find_children("*", "ThirdPartyModel", true, false):
 			_on_node_added(found)
@@ -114,6 +148,73 @@ func _apply() -> void:
 			if is_instance_valid(model):
 				model.style = null
 		_styled.clear()
+		for model: ThirdPartyModel in _models_were:
+			if is_instance_valid(model):
+				model.keep_as_made = _models_were[model][0]
+				model.grain = _models_were[model][1]
+				model.detail = _models_were[model][2]
+				model.dress()
+		_models_were.clear()
+
+
+# Pack characters (the player) are built from the packs' own parts at full
+# quality, with their own smooth textures: no Kiln copies, no N64 filtering.
+func _apply_people() -> void:
+	if not enabled:
+		for person: CharacterModel in _people_were:
+			if is_instance_valid(person):
+				person.use_kiln = _people_were[person][0]
+				person.n64 = _people_were[person][1]
+				person.detail = _people_were[person][2]
+				person.dress()
+		_people_were.clear()
+		return
+	for found: Node in get_tree().root.find_children("*", "CharacterModel", true, false):
+		var person: CharacterModel = found as CharacterModel
+		if _people_were.has(person):
+			continue
+		_people_were[person] = [person.use_kiln, person.n64, person.detail]
+		person.use_kiln = false
+		person.n64 = false
+		person.detail = 1.0
+		person.dress()
+
+
+# Planked surfaces (the wet_surface shader) lose their blurred grain picture
+# and its bumps, and each plank gets more of its own shade.
+func _apply_surfaces() -> void:
+	if not enabled:
+		for material: ShaderMaterial in _surfaces_were:
+			var was: Dictionary = _surfaces_were[material]
+			for parameter: StringName in was:
+				material.set_shader_parameter(parameter, was[parameter])
+		_surfaces_were.clear()
+		return
+	var materials: Array[ShaderMaterial] = []
+	for found: Node in get_tree().root.find_children("*", "SurfaceSpace", true, false):
+		materials.append_array((found as SurfaceSpace).materials)
+	for found: Node in get_tree().root.find_children("*", "ThirdPartyTexture", true, false):
+		materials.append((found as ThirdPartyTexture).material)
+	for material: ShaderMaterial in materials:
+		if material == null or _surfaces_were.has(material):
+			continue
+		var was: Dictionary = {}
+		for parameter: StringName in SURFACE:
+			was[parameter] = material.get_shader_parameter(parameter)
+			material.set_shader_parameter(parameter, SURFACE[parameter])
+		# The grain picture also made the surface darker and browner: give
+		# its own colour that richness.
+		var colour: Variant = material.get_shader_parameter(&"albedo")
+		if colour is Color:
+			var own: Color = colour
+			was[&"albedo"] = own
+			# Yellowish browns lean towards a warmer, redder wood.
+			var hue: float = own.h
+			if hue > 0.03 and hue < 0.16:
+				hue = lerpf(hue, WOOD_HUE, 0.6)
+			material.set_shader_parameter(&"albedo", Color.from_hsv(hue,
+					minf(own.s * surface_saturation, 1.0), own.v * surface_value, own.a))
+		_surfaces_were[material] = was
 
 
 func _apply_environment() -> void:
@@ -136,6 +237,10 @@ func _apply_environment() -> void:
 	_override(env, &"ssil_radius", 2.5)
 	_override(env, &"ssil_intensity", 1.2)
 	_override(env, &"ssao_light_affect", 0.0)
+	# Only lamps and flames bloom, not every pale thing a lamp shines on.
+	_override(env, &"glow_bloom", 0.02)
+	_override(env, &"glow_intensity", 0.7)
+	_override(env, &"glow_hdr_threshold", 1.3)
 
 
 func _override(env: Environment, property: StringName, value: Variant) -> void:
@@ -150,6 +255,13 @@ func _on_node_added(node: Node) -> void:
 	if model == null or not enabled or _styled.has(model):
 		return
 	_styled.append(model)
+	if not model.keep_as_made or model.grain or model.detail < 1.0:
+		_models_were[model] = [model.keep_as_made, model.grain, model.detail]
+		model.keep_as_made = true
+		model.grain = false
+		model.detail = 1.0
+		if model.is_inside_tree() and model.model != null:
+			model.dress()
 	if not model.dressed.is_connected(_on_dressed):
 		model.dressed.connect(_on_dressed.bind(model))
 	_on_dressed.call_deferred(model.model != null, model)

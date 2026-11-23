@@ -52,6 +52,12 @@ var scale: float = 1.0
 var variant: String = ""
 
 
+## PROTOTYPE (#168): off, nothing counts as fired, so every model in the game
+## is drawn from its pack as it was made, at full quality. The painted look
+## ([PaintedLook]) turns it off.
+static var use_fired: bool = true
+
+
 func _init(model: String = "", with_look: ArtLook = null) -> void:
 	if not model.is_empty():
 		sources = [model]
@@ -91,6 +97,8 @@ func job_path() -> String:
 ## Whether the model has been fired: its model and texture are there and
 ## Godot has imported them.
 func is_fired() -> bool:
+	if not use_fired:
+		return false
 	return ResourceLoader.exists(fired_path()) and ResourceLoader.exists(texture_path())
 
 

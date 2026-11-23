@@ -711,3 +711,163 @@ stand_ins = [NodePath("../TopBoard1"), NodePath("../TopBoard2"), NodePath("../To
 grain = false
 detail = 1.0
 keep_as_made = true
+
+[node name="Plate1Model" type="Node3D" parent="." node_paths=PackedStringArray("stand_ins")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.75, 0.824, -0.3)
+script = ExtResource("900_meshy")
+path = "res://assets/third_party/kaykit_restaurant/Assets/gltf/plate.gltf"
+fit_size = Vector3(0.32, 0.06, 0.32)
+stand_ins = [NodePath("../Plate1")]
+grain = false
+keep_as_made = true
+
+[node name="Plate2Model" type="Node3D" parent="." node_paths=PackedStringArray("stand_ins")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.25, 0.824, 0.33)
+script = ExtResource("900_meshy")
+path = "res://assets/third_party/kaykit_restaurant/Assets/gltf/plate.gltf"
+fit_size = Vector3(0.32, 0.06, 0.32)
+stand_ins = [NodePath("../Plate2")]
+grain = false
+keep_as_made = true
+
+[node name="Plate3Model" type="Node3D" parent="." node_paths=PackedStringArray("stand_ins")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.62, 0.824, 0.34)
+script = ExtResource("900_meshy")
+path = "res://assets/third_party/kaykit_restaurant/Assets/gltf/plate.gltf"
+fit_size = Vector3(0.32, 0.06, 0.32)
+stand_ins = [NodePath("../Plate3")]
+grain = false
+keep_as_made = true
+
+[node name="PlateFinishedModel" type="Node3D" parent="." node_paths=PackedStringArray("stand_ins")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1, 0.824, 0.28)
+script = ExtResource("900_meshy")
+path = "res://assets/third_party/kaykit_restaurant/Assets/gltf/plate_dirty.gltf"
+fit_size = Vector3(0.32, 0.06, 0.32)
+stand_ins = [NodePath("../PlateFinished")]
+grain = false
+keep_as_made = true
+
+[node name="Bowl1Model" type="Node3D" parent="." node_paths=PackedStringArray("stand_ins")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.75, 0.844, -0.3)
+script = ExtResource("900_meshy")
+path = "res://assets/third_party/kaykit_restaurant/Assets/gltf/stew_bowl.gltf"
+fit_size = Vector3(0.24, 0.14, 0.24)
+stand_ins = [NodePath("../Bowl1")]
+grain = false
+keep_as_made = true
+
+[node name="Bowl2Model" type="Node3D" parent="." node_paths=PackedStringArray("stand_ins")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.25, 0.844, 0.33)
+script = ExtResource("900_meshy")
+path = "res://assets/third_party/kaykit_restaurant/Assets/gltf/stew_bowl.gltf"
+fit_size = Vector3(0.24, 0.14, 0.24)
+stand_ins = [NodePath("../Bowl2")]
+grain = false
+keep_as_made = true
+
+[node name="Bowl3Model" type="Node3D" parent="." node_paths=PackedStringArray("stand_ins")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.62, 0.844, 0.34)
+script = ExtResource("900_meshy")
+path = "res://assets/third_party/kaykit_restaurant/Assets/gltf/stew_bowl.gltf"
+fit_size = Vector3(0.24, 0.14, 0.24)
+stand_ins = [NodePath("../Bowl3")]
+grain = false
+keep_as_made = true
+
+[node name="Tankard1Model" type="Node3D" parent="." node_paths=PackedStringArray("stand_ins")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.42, 0.824, -0.4)
+script = ExtResource("900_meshy")
+path = "res://assets/third_party/tiny_treats_charming_kitchen/Assets/gltf/mug_red.gltf"
+fit_size = Vector3(0.15, 0.14, 0.15)
+stand_ins = [NodePath("../Tankard1")]
+grain = false
+keep_as_made = true
+
+[node name="Tankard2Model" type="Node3D" parent="." node_paths=PackedStringArray("stand_ins")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.08, 0.824, -0.02)
+script = ExtResource("900_meshy")
+path = "res://assets/third_party/tiny_treats_charming_kitchen/Assets/gltf/mug_blue.gltf"
+fit_size = Vector3(0.15, 0.14, 0.15)
+stand_ins = [NodePath("../Tankard2")]
+grain = false
+keep_as_made = true
+
+[node name="Tankard3Model" type="Node3D" parent="." node_paths=PackedStringArray("stand_ins")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.05, 0.824, -0.36)
+script = ExtResource("900_meshy")
+path = "res://assets/third_party/tiny_treats_charming_kitchen/Assets/gltf/mug_yellow.gltf"
+fit_size = Vector3(0.15, 0.14, 0.15)
+stand_ins = [NodePath("../Tankard3")]
+grain = false
+keep_as_made = true
+
+[node name="TankardTippedModel" type="Node3D" parent="." node_paths=PackedStringArray("stand_ins")]
+transform = Transform3D(-3.78552e-08, -0.866025, -0.5, 1, -4.37114e-08, 0, -2.18557e-08, -0.5, 0.866025, -0.922058, 0.894, 0.265)
+script = ExtResource("900_meshy")
+path = "res://assets/third_party/tiny_treats_charming_kitchen/Assets/gltf/mug_red.gltf"
+fit_size = Vector3(0.15, 0.14, 0.15)
+stand_ins = [NodePath("../TankardTipped")]
+grain = false
+keep_as_made = true
+
+[node name="JugModel" type="Node3D" parent="." node_paths=PackedStringArray("stand_ins")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.15, 0.824, -0.33)
+script = ExtResource("900_meshy")
+path = "res://assets/third_party/tiny_treats_charming_kitchen/Assets/gltf/kettle.gltf"
+fit_size = Vector3(0.26, 0.26, 0.26)
+stand_ins = [NodePath("../Jug")]
+grain = false
+keep_as_made = true
+
+[node name="BreadBoardModel" type="Node3D" parent="." node_paths=PackedStringArray("stand_ins")]
+transform = Transform3D(0.978148, 0, 0.207912, 0, 1, 0, -0.207912, 0, 0.978148, -0.05, 0.824, 0)
+script = ExtResource("900_meshy")
+path = "res://assets/third_party/kaykit_restaurant/Assets/gltf/cuttingboard.gltf"
+fit_size = Vector3(0.56, 0.05, 0.34)
+stand_ins = [NodePath("../BreadBoard")]
+grain = false
+keep_as_made = true
+
+[node name="CheeseModel" type="Node3D" parent="." node_paths=PackedStringArray("stand_ins")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.45, 0.829, -0.14)
+script = ExtResource("900_meshy")
+path = "res://assets/third_party/kaykit_restaurant/Assets/gltf/food_ingredient_cheese.gltf"
+fit_size = Vector3(0.2, 0.14, 0.2)
+stand_ins = [NodePath("../Cheese")]
+grain = false
+keep_as_made = true
+
+[node name="CheeseWedgeModel" type="Node3D" parent="." node_paths=PackedStringArray("stand_ins")]
+transform = Transform3D(0.819152, 0, 0.573576, 0, 1, 0, -0.573576, 0, 0.819152, 0.66, 0.829, 0.02)
+script = ExtResource("900_meshy")
+path = "res://assets/third_party/kaykit_restaurant/Assets/gltf/food_ingredient_cheese_slice.gltf"
+fit_size = Vector3(0.16, 0.1, 0.16)
+stand_ins = [NodePath("../CheeseWedge")]
+grain = false
+keep_as_made = true
+
+[node name="KnifeModel" type="Node3D" parent="." node_paths=PackedStringArray("stand_ins")]
+transform = Transform3D(0.965926, 0, -0.258819, 0, 1, 0, 0.258819, 0, 0.965926, 0.98, 0.824, 0.36)
+script = ExtResource("900_meshy")
+path = "res://assets/third_party/kaykit_restaurant/Assets/gltf/knife.gltf"
+fit_size = Vector3(0.3, 0.06, 0.3)
+stand_ins = [NodePath("../Knife")]
+grain = false
+keep_as_made = true
+
+[node name="Loaf" type="Node3D" parent="."]
+transform = Transform3D(0.978148, 0, 0.207912, 0, 1, 0, -0.207912, 0, 0.978148, -0.1, 0.864, 0)
+script = ExtResource("900_meshy")
+path = "res://assets/third_party/kaykit_restaurant/Assets/gltf/food_ingredient_bun.gltf"
+fit_size = Vector3(0.26, 0.16, 0.26)
+grain = false
+keep_as_made = true
+
+[node name="LoafHeel" type="Node3D" parent="."]
+transform = Transform3D(0.978148, 0, 0.207912, 0, 1, 0, -0.207912, 0, 0.978148, 0.15, 0.864, 0.02)
+script = ExtResource("900_meshy")
+path = "res://assets/third_party/kaykit_restaurant/Assets/gltf/food_ingredient_bun_bottom.gltf"
+fit_size = Vector3(0.16, 0.08, 0.16)
+grain = false
+keep_as_made = true
