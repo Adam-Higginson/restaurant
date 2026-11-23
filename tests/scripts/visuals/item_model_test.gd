@@ -40,7 +40,7 @@ func test_a_board_leaves_its_cuts_to_the_chop_meter() -> void:
 	assert_object(model.find_child("ProgressBar", false, false)).is_null()
 
 
-func test_a_pan_shows_progress_while_it_cooks() -> void:
+func test_a_pan_leaves_its_cooking_to_its_bubble() -> void:
 	var catalog: Catalog = Catalog.load_default()
 	var pan: ItemInstance = ItemInstance.new(catalog.find_item(&"frying_pan"))
 	pan.contents.add_item(ItemInstance.new(catalog.find_item(&"herring_fillet")))
@@ -50,7 +50,7 @@ func test_a_pan_shows_progress_while_it_cooks() -> void:
 	var model: Node3D = ItemModel.build(pan)
 	auto_free(model)
 
-	assert_object(model.find_child("ProgressBar", false, false)).is_not_null()
+	assert_object(model.find_child("ProgressBar", false, false)).is_null()
 
 
 func test_an_empty_board_has_no_progress_bar() -> void:
@@ -69,3 +69,21 @@ func test_pans_pots_and_bowls_look_like_themselves() -> void:
 	assert_object(pan.get_node_or_null("Handle")).is_not_null()
 	assert_object(pot.get_node_or_null("Pot")).is_not_null()
 	assert_object(bowl.get_node_or_null("Bowl")).is_not_null()
+
+
+func test_food_whose_model_file_is_missing_is_a_greybox_cube() -> void:
+	var item: Item = Item.new()
+	item.model_path = "res://assets/third_party/nowhere/missing.glb"
+
+	var piece: Node3D = ItemModel.food(item, 0.2)
+	auto_free(piece)
+
+	assert_object(piece.find_child("Greybox", false, false)).is_not_null()
+	assert_object(piece.find_child("Model", false, false)).is_null()
+
+
+func test_food_without_a_model_is_a_greybox_cube() -> void:
+	var piece: Node3D = ItemModel.food(Item.new(), 0.2)
+	auto_free(piece)
+
+	assert_int(piece.get_child_count()).is_equal(1)

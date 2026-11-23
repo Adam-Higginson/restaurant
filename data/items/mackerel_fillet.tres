@@ -8,3 +8,6 @@ id = &"mackerel_fillet"
 display_name = "Mackerel Fillet"
 color = Color(0.82, 0.66, 0.6, 1)
 storage = 1
+model_path = "res://assets/third_party/meshy/herring_fillet/model/model.glb"
+model_tint = Color(0.92, 0.84, 0.84, 1)
+model_size = Vector3(0.26, 0.26, 0.26)

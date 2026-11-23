@@ -8,3 +8,6 @@ id = &"pan_fried_herring"
 display_name = "Pan-fried Herring"
 color = Color(0.86, 0.6, 0.28, 1)
 storage = 1
+model_path = "res://assets/third_party/meshy/herring_fillet/model/model.glb"
+model_tint = Color(0.92, 0.66, 0.4, 1)
+model_size = Vector3(0.26, 0.26, 0.26)

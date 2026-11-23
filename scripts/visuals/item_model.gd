@@ -1,9 +1,9 @@
 class_name ItemModel
 extends RefCounted
-## Builds greybox 3D models for items: food is a small cube in the item's
-## colour, a chopping board is a flat slab, and a plate is a flat disc. A
-## vessel shows its food on top, and a bar above it fills as a reaction runs
-## (the cuts towards the next chop).
+## Builds 3D models for items: food is its real model ([member Item.model_path],
+## #152) or, without one, a small cube in the item's colour; a chopping board
+## is a flat slab, and a plate is a flat disc. A vessel shows its food on
+## top. (How far it's cooked shows in a bubble over the pan, [PanFeel].)
 ##
 ## Display only. Counters and the carried stack throw the old model away and
 ## build a new one whenever what they hold changes.
@@ -17,12 +17,6 @@ const BOARD_SIZE: Vector3 = Vector3(0.5, 0.04, 0.34)
 ## A plate or bowl (a vessel carried whole).
 const PLATE_RADIUS: float = 0.21
 const PLATE_HEIGHT: float = 0.03
-## The progress bar's full length and thickness, and how far above the vessel.
-const BAR_LENGTH: float = 0.4
-const BAR_THICKNESS: float = 0.03
-const BAR_ABOVE: float = 0.25
-const BAR_BACK_COLOR: Color = Color(0.15, 0.12, 0.12, 1)
-const BAR_COLOR: Color = Color(0.95, 0.85, 0.3, 1)
 
 ## One material per colour, shared by every model.
 static var _materials: Dictionary[Color, StandardMaterial3D] = {}
@@ -33,36 +27,80 @@ static func build(instance: ItemInstance) -> Node3D:
 	var root: Node3D = Node3D.new()
 	root.name = "Item"
 	if not instance.is_vessel():
-		root.add_child(_box(Vector3.ONE * FOOD_SIZE, instance.item.color,
-				Vector3.UP * FOOD_SIZE / 2.0))
+		var whole: Node3D = food(instance.item, FOOD_SIZE)
+		whole.name = "Food"
+		root.add_child(whole)
 		return root
 	var base: float = vessel_height(instance.item)
 	_add_vessel(root, instance.item)
-	var food: Array[ItemInstance] = instance.contents.get_contents()
-	for i: int in food.size():
-		var spot: Vector2 = _food_spot(i, food.size())
-		var centre: Vector3 = Vector3(spot.x, base + FOOD_ON_VESSEL_SIZE / 2.0, spot.y)
-		var piece: MeshInstance3D = _box(Vector3.ONE * FOOD_ON_VESSEL_SIZE,
-				food[i].item.color, centre)
+	var pieces: Array[ItemInstance] = instance.contents.get_contents()
+	for i: int in pieces.size():
+		var spot: Vector2 = _food_spot(i, pieces.size())
+		var piece: Node3D = food(pieces[i].item, FOOD_ON_VESSEL_SIZE)
+		piece.position = Vector3(spot.x, base, spot.y)
 		piece.name = "Food%d" % i
 		root.add_child(piece)
-	# Heat's progress shows as a bar over the vessel. A cut's shows under the
-	# chop meter instead (ChopMeterBar), so it isn't drawn twice.
-	for active: ActiveReaction in instance.contents.get_active_reactions():
-		var element: Element = active.reaction.driving_element()
-		if element != null and element.kind == Element.Kind.TIMED:
-			root.add_child(_progress_bar(active.get_fraction()))
-			break
 	return root
+
+
+## A piece of [param item] about [param size] metres across, standing on its
+## base at the origin: its real model, with a greybox cube in its colour in
+## its place whenever the model isn't there (a fresh clone, CI).
+static func food(item: Item, size: float) -> Node3D:
+	var piece: Node3D = Node3D.new()
+	var cube: MeshInstance3D = _box(Vector3.ONE * size, item.color, Vector3.UP * size / 2.0)
+	cube.name = "Greybox"
+	piece.add_child(cube)
+	if item.model_path.is_empty() or not ResourceLoader.exists(item.model_path):
+		return piece
+	var model: ThirdPartyModel = ThirdPartyModel.new()
+	model.name = "Model"
+	model.look = item.model_look
+	model.keep_as_made = item.model_look == null
+	model.grain = false
+	model.detail = 1.0
+	model.fit_size = item.model_size
+	model.stand_ins = [cube]
+	model.tint = item.model_tint
+	if model.keep_as_made:
+		# A model drawn as made (Meshy) isn't tinted by ThirdPartyModel, and
+		# comes in see-through (its textures have an alpha channel): fix both.
+		model.dressed.connect(func(shown: bool) -> void:
+			if shown:
+				_as_made(model.model, item.model_tint))
+	# Fitted to its own size (one Kiln job per item), then shrunk on a vessel
+	# as the cubes are, so up to three fit.
+	model.scale = Vector3.ONE * (size / FOOD_SIZE)
+	model.path = item.model_path
+	piece.add_child(model)
+	return piece
+
+
+## Makes every surface under [param node] solid and multiplies its colours
+## by [param tint], on copies of their materials.
+static func _as_made(node: Node, tint: Color) -> void:
+	var mesh_instance: MeshInstance3D = node as MeshInstance3D
+	if mesh_instance != null and mesh_instance.mesh != null:
+		for surface: int in mesh_instance.mesh.get_surface_count():
+			var material: BaseMaterial3D = mesh_instance.get_active_material(surface) \
+					as BaseMaterial3D
+			if material != null:
+				var made: BaseMaterial3D = material.duplicate() as BaseMaterial3D
+				made.albedo_color = material.albedo_color * tint
+				made.transparency = BaseMaterial3D.TRANSPARENCY_DISABLED
+				mesh_instance.set_surface_override_material(surface, made)
+	for child: Node in node.get_children():
+		_as_made(child, tint)
 
 
 ## How tall the vessel [param item] is without its food.
 static func vessel_height(item: Item) -> float:
 	match item.vessel_shape:
+		# Food sits on top: the greybox bowls and pans are solid.
 		Item.VesselShape.BOWL:
-			return 0.05
+			return 0.09
 		Item.VesselShape.PAN:
-			return 0.04
+			return 0.05
 		Item.VesselShape.POT:
 			return 0.1
 	return PLATE_HEIGHT if item.carried_whole else BOARD_SIZE.y
@@ -125,24 +163,6 @@ static func _food_spot(index: int, count: int) -> Vector2:
 			var spots: Array[Vector2] = [Vector2(-step, step * 0.6),
 					Vector2(step, step * 0.6), Vector2(0.0, -step * 0.8)]
 			return spots[index % spots.size()]
-
-
-# A bar floating above the vessel, filled from the left by [param fraction].
-static func _progress_bar(fraction: float) -> Node3D:
-	var bar: Node3D = Node3D.new()
-	bar.name = "ProgressBar"
-	bar.position = Vector3.UP * BAR_ABOVE
-	bar.add_child(_box(Vector3(BAR_LENGTH, BAR_THICKNESS, BAR_THICKNESS), BAR_BACK_COLOR,
-			Vector3.ZERO))
-	if fraction > 0.0:
-		var length: float = BAR_LENGTH * fraction
-		# In front of the back bar (towards +Z), so it isn't hidden inside it.
-		var fill: MeshInstance3D = _box(
-				Vector3(length, BAR_THICKNESS * 1.2, BAR_THICKNESS * 1.2), BAR_COLOR,
-				Vector3(-BAR_LENGTH / 2.0 + length / 2.0, 0.0, 0.0))
-		fill.name = "Fill"
-		bar.add_child(fill)
-	return bar
 
 
 static func _box(size: Vector3, color: Color, centre: Vector3) -> MeshInstance3D:

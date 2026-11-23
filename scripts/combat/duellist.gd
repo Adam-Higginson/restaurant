@@ -85,13 +85,10 @@ const WEAK_SPIN: KnifeCut = preload("res://data/combat/weak_spin.tres")
 ## How much of their speed the player walks at while charging.
 @export_range(0.0, 1.0) var charge_walk_factor: float = 0.5
 @export_group("Pan")
-## How long the pan stays up after a press, in seconds: the parry window.
-@export var parry_window_seconds: float = 0.3
 ## How long after the window before the pan can go up again, in seconds.
+## (How long the window is, and how soon a blow must land to be parried
+## perfectly, belong to the pan you carry: [member Item.parry_seconds].)
 @export var parry_recovery_seconds: float = 0.4
-## How soon after the pan goes up a blow must land to be parried perfectly,
-## flipping a crab, in seconds.
-@export var parry_perfect_seconds: float = 0.12
 @export_group("Blows taken")
 ## How long after a blow lands before another can, in seconds.
 @export var invulnerable_seconds: float = 1.0
@@ -158,9 +155,7 @@ var _pan_home: Transform3D
 func _ready() -> void:
 	add_to_group(GROUP)
 	hearts = Hearts.new(max_hearts)
-	parry.window_seconds = parry_window_seconds
 	parry.recovery_seconds = parry_recovery_seconds
-	parry.perfect_seconds = parry_perfect_seconds
 	combo.chain = chain
 	combo.fillet = fillet
 	combo.weak_spin = weak_spin
@@ -261,11 +256,21 @@ func has_pan() -> bool:
 	return _player.toolbar.has_item(PAN_ID)
 
 
+## How hard the knife you carry cuts: its [member HandTool.damage], or 1
+## without one.
+func knife_damage() -> float:
+	for tool: HandTool in _player.toolbar.get_tools():
+		if tool.element != null and tool.element.id == &"cut":
+			return tool.damage
+	return 1.0
+
+
 ## Raises the pan to parry. Returns whether it went up: not without a pan,
 ## too soon after the last time, or while the player can't act.
 func raise_pan() -> bool:
 	if not _player.controls_enabled or not has_pan():
 		return false
+	_fit_parry_to_pan()
 	if not parry.press():
 		return false
 	combo.cancel_charge()
@@ -365,6 +370,15 @@ func _on_cut_started(cut: KnifeCut) -> void:
 	cut_started.emit(cut)
 
 
+# Takes the parry window's length and its perfect part from the pan carried.
+func _fit_parry_to_pan() -> void:
+	for item: ItemInstance in _player.toolbar.get_items():
+		if item.item.id == PAN_ID:
+			parry.window_seconds = item.item.parry_seconds
+			parry.perfect_seconds = item.item.perfect_parry_seconds
+			return
+
+
 # [param cut] meeting every crab in its reach: each that's open takes
 # its damage and is knocked back; a fillet flips one that's mid-lunge.
 func _land(cut: KnifeCut) -> void:
@@ -377,7 +391,7 @@ func _land(cut: KnifeCut) -> void:
 		reached = true
 		var push: Vector3 = flat_direction(_player.global_position, crab.global_position) \
 				* cut.push
-		if crab.take_strike(push, cut.damage, cut.flips_lunging):
+		if crab.take_strike(push, roundi(cut.damage * knife_damage()), cut.flips_lunging):
 			hit = true
 			strike_landed.emit(crab, crab.is_dead(), cut)
 			if crab.is_dead():

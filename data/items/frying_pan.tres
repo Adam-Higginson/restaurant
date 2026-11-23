@@ -9,3 +9,6 @@ display_name = "Frying Pan"
 color = Color(0.34, 0.32, 0.31, 1)
 capacity = 1
 vessel_shape = 2
+golden_window = 1.5
+parry_seconds = 0.3
+perfect_parry_seconds = 0.12

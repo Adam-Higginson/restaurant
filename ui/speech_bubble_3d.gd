@@ -85,10 +85,37 @@ func say(words: String, anchor: Node3D,
 		style: SpeechBubble.Style = SpeechBubble.Style.SPEECH) -> void:
 	_anchor = anchor
 	_face.show_words(words, style)
-	_viewport.size_2d_override = Vector2i(_face.size)
-	_viewport.size = Vector2i(_face.size) * DETAIL
+	refit()
 	_follow()
 	_fade_to(1.0)
+
+
+## Swaps the bubble's face for another kind of bubble: a [CookBubble] over
+## a pan. Before it's shown.
+func use_face(face: SpeechBubble) -> void:
+	_viewport.remove_child(_face)
+	_face.queue_free()
+	_face = face
+	_viewport.add_child(_face)
+
+
+## The bubble's face, to change what it shows (then [method refit]).
+func face() -> SpeechBubble:
+	return _face
+
+
+## Shows the face as it is now beside [param anchor], fading in.
+func show_beside(anchor: Node3D) -> void:
+	_anchor = anchor
+	refit()
+	_follow()
+	_fade_to(1.0)
+
+
+## Resizes the picture to the face, after the face has changed size.
+func refit() -> void:
+	_viewport.size_2d_override = Vector2i(_face.size)
+	_viewport.size = Vector2i(_face.size) * DETAIL
 
 
 ## Fades the bubble away.

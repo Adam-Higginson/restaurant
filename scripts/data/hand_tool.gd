@@ -20,6 +20,9 @@ extends Resource
 ## good cut, as shares of the bar. A better knife has wider ones.
 @export_range(0.0, 1.0) var sweet_spot: float = 0.12
 @export_range(0.0, 1.0) var good_spot: float = 0.34
+## How hard it cuts in a fight: each cut's damage is multiplied by this.
+## 1 for the cheap knife; a better one hits harder.
+@export var damage: float = 1.0
 ## The tool's model, shown when it's held up out of a chest: a file under
 ## res://assets/third_party/, fitted into [member model_size] standing up.
 ## Without one (or on a fresh clone) a greybox bar in [member color] shows.
@@ -35,3 +38,12 @@ extends Resource
 var owned_flag: StringName:
 	get:
 		return StringName("has_%s" % id)
+
+
+## The Kiln job for [member model_path], or null if it's never fired.
+func kiln_job() -> KilnJob:
+	if model_path.is_empty() or model_look == null:
+		return null
+	var job: KilnJob = KilnJob.new(model_path, model_look)
+	job.fit_size = model_size
+	return job

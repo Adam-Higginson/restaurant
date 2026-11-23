@@ -4,13 +4,22 @@ extends Node3D
 ## steam rises from it, thicker as it nears done, and it sizzles, rising in
 ## pitch. When it reaches its golden moment ([GoldenMoment]) it glints with a
 ## chime and glows gold, pulsing, for as long as the moment lasts: take it off
-## the heat then. Caught, "Golden!" pops up with a sparkle; missed, "Done".
+## the heat then: caught, it sparkles and chimes.
+##
+## A bubble over the pan, like the crew's speech bubbles, shows how it's
+## going ([CookBubble]): a ring filling round a flame as it cooks, gold and
+## pulsing with "Now!" at the golden moment, and the dish and its stars for a
+## moment once it's done.
 ##
 ## A child of a [Hob], placed where the pan sits. It follows whichever pan
 ## is on the hob and listens to what's cooking in it.
 
 const GOLD: Color = Color(1.0, 0.8, 0.3)
 const DONE_COLOUR: Color = Color(0.7, 0.66, 0.6)
+## How long the bubble names the dish once it's done, in seconds.
+const DONE_SECONDS: float = 3.0
+## Where the bubble's tail points, above the pan.
+const BUBBLE_HEIGHT: float = 0.3
 
 ## The sizzle, looping while something cooks (none yet: a recording is
 ## still to come), and the chime of the golden moment.
@@ -26,6 +35,14 @@ var _glints: CPUParticles3D
 var _glow: OmniLight3D
 var _sizzle: AudioStreamPlayer3D
 var _chime: AudioStreamPlayer3D
+var _bubble: SpeechBubble3D
+var _bubble_anchor: Node3D
+var _bubble_up: bool = false
+## What the bubble says once the dish is done, in what colour, and for how
+## much longer.
+var _done_words: String = ""
+var _done_colour: Color = Color.WHITE
+var _done_left: float = 0.0
 
 @onready var _hob: Hob = get_parent() as Hob
 
@@ -42,6 +59,14 @@ func _ready() -> void:
 	add_child(_glow)
 	_sizzle = _sound_player("Sizzle", sizzle_sound)
 	_chime = _sound_player("Chime", chime_sound)
+	_bubble_anchor = Node3D.new()
+	_bubble_anchor.name = "BubbleAnchor"
+	_bubble_anchor.position = Vector3.UP * BUBBLE_HEIGHT
+	add_child(_bubble_anchor)
+	_bubble = SpeechBubble3D.new()
+	_bubble.name = "Bubble"
+	_bubble.use_face(CookBubble.new())
+	add_child(_bubble)
 	if _hob == null:
 		return
 	# A child is ready before its parent, so the hob's slot may not exist yet.
@@ -51,11 +76,12 @@ func _ready() -> void:
 	_follow(_hob.slot.get_item())
 
 
-func _process(_delta: float) -> void:
+func _process(delta: float) -> void:
+	_done_left = maxf(_done_left - delta, 0.0)
 	var cooking: ActiveReaction = _cooking()
 	var through: float = cooking.get_fraction() if cooking != null else 0.0
 	_steam.emitting = cooking != null
-	_steam.scale_amount_max = 1.2 + 1.6 * through
+	_steam.scale_amount_max = 0.9 + 0.7 * through
 	if cooking != null and _sizzle.stream != null:
 		if not _sizzle.playing:
 			_sizzle.play()
@@ -69,8 +95,31 @@ func _process(_delta: float) -> void:
 		var left: float = moment.fraction_left()
 		var beat: float = 0.5 + 0.5 * sin(Time.get_ticks_msec() / 1000.0 * lerpf(18.0, 7.0, left))
 		_glow.light_energy = glow_energy * (0.4 + 0.6 * beat)
+		_show_bubble(1.0, "Now!", GOLD, beat)
 	else:
 		_glow.light_energy = 0.0
+		if cooking != null:
+			_show_bubble(through)
+		elif _done_left > 0.0:
+			_show_bubble(1.0, _done_words, _done_colour)
+		elif _bubble_up:
+			_bubble.hush()
+			_bubble_up = false
+
+
+## The bubble over the pan.
+func bubble() -> SpeechBubble3D:
+	return _bubble
+
+
+## Whether the bubble is up.
+func is_bubble_up() -> bool:
+	return _bubble_up
+
+
+## What a done dish is called in the bubble: its name and its stars.
+static func dish_words(food: ItemInstance) -> String:
+	return "%s %s" % [food.item.display_name, "★".repeat(food.quality)]
 
 
 ## The golden moment in the pan now, or null.
@@ -114,19 +163,31 @@ func _on_opened(_moment_opened: GoldenMoment) -> void:
 	_play(_chime, 1.0)
 
 
-func _on_caught(_moment_caught: GoldenMoment) -> void:
+func _on_caught(caught: GoldenMoment) -> void:
 	_glints.restart()
 	_play(_chime, 1.35)
-	_say("Golden!", GOLD, true)
+	_done_words = dish_words(caught.result)
+	_done_colour = GOLD
+	_done_left = DONE_SECONDS
 
 
-func _on_missed(_moment_missed: GoldenMoment) -> void:
-	_say("Done", DONE_COLOUR, false)
+func _on_missed(missed: GoldenMoment) -> void:
+	_done_words = dish_words(missed.result)
+	_done_colour = DONE_COLOUR
+	_done_left = DONE_SECONDS
 
 
-func _say(words: String, colour: Color, big: bool) -> void:
-	var world: Node = _hob.get_parent() if _hob != null else self
-	DamageNumber.spawn_words(world, global_position + Vector3.UP * 0.3, words, colour, big)
+# Shows the bubble's ring [param cooked] of the way round, with [param said]
+# in [param colour] beside it, pulsing by [param pulse] at the golden moment.
+func _show_bubble(cooked: float, said: String = "", colour: Color = CookBubble.WORDS,
+		pulse: float = -1.0) -> void:
+	var face: CookBubble = _bubble.face() as CookBubble
+	face.show_cooking(cooked, said, colour, pulse)
+	if not _bubble_up:
+		_bubble.show_beside(_bubble_anchor)
+		_bubble_up = true
+	else:
+		_bubble.refit()
 
 
 func _play(player: AudioStreamPlayer3D, pitch: float) -> void:
@@ -149,6 +210,9 @@ func _make_steam() -> CPUParticles3D:
 	var steam: CPUParticles3D = CPUParticles3D.new()
 	steam.name = "Steam"
 	steam.emitting = false
+	# Riding with the pan: the ship sails on, and steam left in the world
+	# would stream away behind it.
+	steam.local_coords = true
 	steam.amount = 18
 	steam.lifetime = 1.6
 	steam.position = Vector3.UP * 0.08
@@ -171,7 +235,7 @@ func _make_steam() -> CPUParticles3D:
 	fade.set_color(fade.get_point_count() - 1, Color(1, 1, 1, 0.0))
 	steam.color_ramp = fade
 	var puff: QuadMesh = QuadMesh.new()
-	puff.size = Vector2(0.14, 0.14)
+	puff.size = Vector2(0.09, 0.09)
 	var soft: StandardMaterial3D = StandardMaterial3D.new()
 	soft.shading_mode = BaseMaterial3D.SHADING_MODE_UNSHADED
 	soft.billboard_mode = BaseMaterial3D.BILLBOARD_ENABLED
@@ -188,6 +252,7 @@ func _make_glints() -> CPUParticles3D:
 	var glints: CPUParticles3D = CPUParticles3D.new()
 	glints.name = "Glints"
 	glints.emitting = false
+	glints.local_coords = true
 	glints.one_shot = true
 	glints.explosiveness = 1.0
 	glints.amount = 12
