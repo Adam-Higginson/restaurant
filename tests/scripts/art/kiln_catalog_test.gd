@@ -29,6 +29,19 @@ func test_copies_of_the_models_come_without_their_scene() -> void:
 	models[0].free()
 
 
+func test_every_pack_model_in_the_game_has_a_look() -> void:
+	for file: String in KilnCatalog.files_in("res://scenes"):
+		if not file.ends_with(".tscn"):
+			continue
+		var root: Node = (load(file) as PackedScene).instantiate()
+		for found: Node in root.find_children("*", "", true, false):
+			var model: ThirdPartyModel = found as ThirdPartyModel
+			if model != null:
+				assert_object(model.look).override_failure_message(
+						"%s in %s has no look" % [model.name, file]).is_not_null()
+		root.free()
+
+
 func test_characters_parts_each_fire() -> void:
 	var jobs: Array[KilnJob] = KilnCatalog.jobs_in_resource("res://data/characters/boy.tres")
 	assert_int(jobs.size()).is_equal(3)
@@ -43,10 +56,13 @@ func test_the_game_fires_its_props_crab_and_player_each_once() -> void:
 	var fired: PackedStringArray = []
 	for job: KilnJob in KilnCatalog.all_jobs():
 		fired.append(job.fired_path().get_file())
-	for wanted: String in ["pot_A.prop.glb", "kettle.prop.glb", "crab.creature.glb",
+	for wanted: String in ["pot_A.prop.", "kettle.prop.", "crab.creature.", "knife.prop.",
 			"Male_Peasant.character_body.glb", "Superhero_Female_FullBody.character_head.glb",
 			"Hair_Buns.character_hair.glb"]:
-		assert_bool(fired.has(wanted)).override_failure_message(wanted).is_true()
+		var found: bool = false
+		for file: String in fired:
+			found = found or file.begins_with(wanted)
+		assert_bool(found).override_failure_message(wanted).is_true()
 	var once: Dictionary = {}
 	for file: String in fired:
 		assert_bool(once.has(file)).override_failure_message(file).is_false()

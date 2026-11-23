@@ -5,6 +5,7 @@
 #   ./kiln.sh            fire what's stale
 #   ./kiln.sh --all      fire everything again
 #   ./kiln.sh --list     only say where each model stands
+#   ./kiln.sh --report   also print the budget report (every model against its look)
 #   ./kiln.sh crab pot   only models whose name has one of these words
 #
 # Needs Blender 4.4 (BLENDER=<path to blender.exe> if it's elsewhere) and the

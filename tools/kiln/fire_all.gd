@@ -4,6 +4,7 @@ extends Node
 ## Options, after --:
 ## - [code]--all[/code]: fire every model, stale or not.
 ## - [code]--list[/code]: only say where each model stands.
+## - [code]--report[/code]: print the budget report too.
 ## - any other word: only models whose file name contains it.
 
 
@@ -39,6 +40,11 @@ func _ready() -> void:
 			for line: String in lines:
 				printerr(line.right(2000))
 	print("KILN fired %d, %d failed" % [fired, failed])
+	var jobs: Array[KilnJob] = KilnCatalog.all_jobs()
+	if options.has("--report"):
+		print(KilnReport.table(jobs))
+	print("KILN %d of %d models have something out of budget (--report to see)" % [
+			KilnReport.count_problems(jobs), jobs.size()])
 	get_tree().quit(1 if failed > 0 else 0)
 
 
