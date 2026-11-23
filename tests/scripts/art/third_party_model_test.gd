@@ -128,11 +128,66 @@ func test_a_model_can_be_told_to_cast_no_shadow() -> void:
 				GeometryInstance3D.SHADOW_CASTING_SETTING_OFF)
 
 
+func test_with_a_style_it_draws_the_model_stylised_instead_of_grainy() -> void:
+	var dresser: ThirdPartyModel = _new_dresser(STAND_IN_MODEL)[0] as ThirdPartyModel
+	dresser.style = CharacterStyle.new()
+
+	var material: ShaderMaterial = _box_material(dresser) as ShaderMaterial
+	assert_object(material).is_not_null()
+	assert_object(material.shader).is_same(CharacterStyle.SHADER)
+	# It keeps the box's own paint.
+	assert_that(material.get_shader_parameter(&"albedo_color")).is_equal(Color(0.6, 0.4, 0.2))
+
+
+func test_clearing_the_style_draws_it_as_made_again() -> void:
+	var dresser: ThirdPartyModel = _new_dresser(STAND_IN_MODEL)[0] as ThirdPartyModel
+	dresser.grain = false
+	dresser.style = CharacterStyle.new()
+
+	dresser.style = null
+
+	var material: StandardMaterial3D = _box_material(dresser) as StandardMaterial3D
+	assert_object(material).is_not_null()
+	assert_that(material.albedo_color).is_equal(Color(0.6, 0.4, 0.2))
+
+
+func test_changes_to_its_style_show_at_once() -> void:
+	var dresser: ThirdPartyModel = _new_dresser(STAND_IN_MODEL)[0] as ThirdPartyModel
+	var style: CharacterStyle = CharacterStyle.new()
+	dresser.style = style
+
+	style.shadow_threshold = 0.4
+	style.outline = false
+
+	var material: ShaderMaterial = _box_material(dresser) as ShaderMaterial
+	var threshold: float = material.get_shader_parameter(&"shadow_threshold")
+	assert_float(threshold).is_equal_approx(0.4, 0.0001)
+	assert_object(material.next_pass).is_null()
+
+
+func test_a_style_left_behind_no_longer_changes_it() -> void:
+	var dresser: ThirdPartyModel = _new_dresser(STAND_IN_MODEL)[0] as ThirdPartyModel
+	var old: CharacterStyle = CharacterStyle.new()
+	dresser.style = old
+	dresser.style = CharacterStyle.new()
+
+	old.shadow_threshold = 0.9
+
+	var material: ShaderMaterial = _box_material(dresser) as ShaderMaterial
+	var threshold: float = material.get_shader_parameter(&"shadow_threshold")
+	assert_float(threshold).is_less(0.5)
+
+
 func test_without_a_look_it_cant_be_fired() -> void:
 	var dresser: ThirdPartyModel = _new_dresser(STAND_IN_MODEL)[0] as ThirdPartyModel
 	assert_str(dresser.kiln_status()).starts_with("No look")
 	var started: bool = await dresser.fire_in_kiln()
 	assert_bool(started).is_false()
+
+
+# The material over the test box's mesh.
+func _box_material(dresser: ThirdPartyModel) -> Material:
+	return (dresser.model.get_node("Mesh") as MeshInstance3D).material_override
 
 
 func _use_fired_stand_ins() -> void:
