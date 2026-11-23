@@ -466,6 +466,30 @@ A growing glossary of the Godot concepts this project uses: what each one is, in
 
 **An armature's scale and its animations' units.** A model's skeleton can sit under a scaled node: Meshy's `Armature` is scaled by 0.01, its bones and animations are in centimetres, and the mesh is in metres. It all lines up inside the file, but measuring the mesh's box through that scale reads it 100 times too small. Scale the node that holds the whole model instead. *Ours:* the heron's `Model/Meshy` node is scaled by 1.21, with `fit_size` left at zero.
 
+## Publishing builds (#143)
+
+**Exporting.** Turning the project into a game people can run without Godot: a program for each system plus a `.pck` of the game's data. *Ours:* `tools/build/export.sh` runs `godot --headless --export-release "Windows" <path>`.
+
+**Export templates.** The ready-made Godot player programs an export starts from, one per system, downloaded once per Godot version (about 1.2 GB for all of them; *Editor > Manage Export Templates*). They live in your user folder, not the project. *Ours:* the workflow keeps only the Windows and Mac ones.
+
+**Export presets (`export_presets.cfg`).** One per platform: its settings (the app's name, icon, texture formats, signing) and which files go in. *Project > Export* shows them. *Ours:* "Windows" and "macOS". Their file lists are written just before each build, by `tools/build/prepare_export.gd`.
+
+**The `.pck` file.** Every scene, script and imported asset packed into one file, which the game program reads at startup. Godot can run one directly: `godot --main-pack Game.pck`. *Ours:* the smoke test in `export.sh` runs the Windows build's `.pck` that way, headless, and fails on any error.
+
+**Which files are exported.** By default everything the project has imported. "Export selected resources" takes a list and adds whatever each one depends on (a model's textures, a scene's scripts). Files loaded by a path written in a string can't be seen that way, and plain text files like our `.dlg` scripts need the preset's non-resource filter. *Ours:* `ExportList` (`scripts/build/`).
+
+**Release and debug builds.** A release export leaves out debugging help: no console window, and `OS.is_debug_build()` is false, so our debug keys switch themselves off. *Ours:* every published build is a release build.
+
+**Texture formats (S3TC/BPTC and ETC2/ASTC).** Graphics cards read compressed textures in a few formats: PCs use S3TC/BPTC, and Apple Silicon and phones use ETC2/ASTC. *Project Settings > Rendering > Textures > VRAM Compression > Import ETC2 ASTC* makes Godot import both, so the Mac build has them. *Ours:* turned on in #143.
+
+**Ad-hoc signing (Mac).** Apple Silicon Macs only run signed apps. Ad hoc means signed without an Apple Developer account: the Mac runs it, but macOS warns the first time and asks to *Open Anyway*. *Ours:* the macOS preset's *Codesign: Built-in (ad-hoc only)*.
+
+**Stamping settings with `ProjectSettings.save()`.** A script can set any project setting, even one of our own like `application/config/build_commit`, and save it to `project.godot`. *Ours:* `BuildInfo.stamp`, run only while building; `export.sh` puts `project.godot` back afterwards.
+
+**A script run with `-s`.** `godot --headless -s res://some_script.gd` runs a script that `extends SceneTree` instead of the game: a command-line tool written in GDScript. It can't see autoloads like `Game`. *Ours:* `tools/build/prepare_export.gd`.
+
+**Deploy keys (GitHub).** A key that opens one repo only, read-only unless allowed to write. The private half is kept as an encrypted secret that workflows can use. *Ours:* `ASSETS_DEPLOY_KEY` lets the publish workflow read the private art repo.
+
 ## Books (#145)
 
 **TextureRect.** A `Control` that shows a picture. `expand_mode` *Ignore Size* lets it be any size, not the picture's own, and `stretch_mode` says how the picture fills it (*Scale* stretches it to fit; *Keep Centered* shows it at its own size in the middle). Like any `CanvasItem` it has its own `texture_filter`: *Linear* blends pixels smoothly when the picture is drawn bigger or smaller than it is. *Ours:* `ui/book_view.tscn`'s `Spread`, the painted open book.

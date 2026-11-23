@@ -91,6 +91,13 @@ Claude writes the code, all of it: nothing is left as an exercise. The user is l
 - CI (`.github/workflows/tests.yml`) runs the tests on every PR and on pushes to `main`. A PR is only ready for review when the tests pass both locally and in CI.
   - The workflow installs Godot and runs gdUnit's command itself (not through gdUnit4-action). If Godot hangs, which it now and then has on the Linux runner after every test passed, it's stopped after 4 minutes: gdb prints every thread's stack, then SIGSEGV makes Godot's crash handler print its backtrace (if it's still on); the log and reports are kept as the `godot-log` artifact. If CI fails with "Godot hung", read the backtrace before re-running.
 
+## Builds
+- Players download builds from the repo's Releases page (#143). The user publishes one by hand (*Actions > Publish build > Run workflow* on `main`); never start a publish run yourself unless asked. How it works is in `docs/GDD.md` under *Publishing builds*.
+- Every file the game loads by a path in a string is found by `ExportList` (`scripts/build/`) as long as the full `res://assets/third_party/...` path is written in a scene, resource, script or `.dlg` file. A path built up in code (joined from pieces) isn't seen: add it to `ExportList` or the build won't have it.
+- A new kind of plain-text (non-resource) file the game reads, like `.dlg`, must be added to both presets' `include_filter` in `export_presets.cfg`.
+- To try a build locally: `tools/build/export.sh` in Git Bash (needs the art and the 4.7.2 export templates). A PR that touches `export_presets.cfg`, `project.godot`, `scripts/build/`, `tools/build/`, `CREDITS.txt` or the publish workflow does a dry-run build in CI, kept as a download on the run.
+- Add a credit to `CREDITS.txt` whenever a new pack, font or sound comes in.
+
 ## Code style
 Follow the official GDScript style guide. Godot enforces some of it: in project settings, missing types and unsafe calls/casts are **errors**, and unused or shadowed variables are warnings. `tests/code_standards_test.gd` loads every script under `scripts/`, `ui/` and `tests/`, so CI fails if any script breaks these rules.
 - **Naming:** `snake_case` files, variables and functions. `PascalCase` for `class_name` and node names. `CONSTANT_CASE` for constants and enum values. Prefix private members with `_`.
