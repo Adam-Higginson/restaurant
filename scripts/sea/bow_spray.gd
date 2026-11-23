@@ -85,7 +85,7 @@ func _spray_motion() -> ParticleProcessMaterial:
 	return motion
 
 
-# A small square of white water that always faces the camera. It's lit (per
+# A small round blob of white water that always faces the camera. It's lit (per
 # vertex, cheaply), so the lanterns warm it as it flies past.
 func _droplet() -> QuadMesh:
 	var mesh: QuadMesh = QuadMesh.new()
@@ -97,7 +97,7 @@ func _droplet() -> QuadMesh:
 	material.vertex_color_use_as_albedo = true
 	material.albedo_color = Color(0.82, 0.88, 0.92)
 	material.albedo_texture = _droplet_texture()
-	material.texture_filter = BaseMaterial3D.TEXTURE_FILTER_NEAREST
+	material.texture_filter = BaseMaterial3D.TEXTURE_FILTER_LINEAR
 	material.emission_enabled = true
 	material.emission = Color(0.22, 0.27, 0.32)
 	material.disable_receive_shadows = true
@@ -105,12 +105,15 @@ func _droplet() -> QuadMesh:
 	return mesh
 
 
-# A round blob of water, eight pixels across, its edge a little see-through.
+# A round blob of water, its edge fading softly to see-through, smoothly
+# filtered as N64 sprites were (#137).
 func _droplet_texture() -> ImageTexture:
-	var image: Image = Image.create(8, 8, false, Image.FORMAT_RGBA8)
-	for y: int in 8:
-		for x: int in 8:
-			var from_centre: float = Vector2(x - 3.5, y - 3.5).length()
-			var alpha: float = 1.0 if from_centre < 2.6 else (0.5 if from_centre < 3.6 else 0.0)
+	const SIZE: int = 16
+	var image: Image = Image.create(SIZE, SIZE, false, Image.FORMAT_RGBA8)
+	var middle: float = (SIZE - 1) / 2.0
+	for y: int in SIZE:
+		for x: int in SIZE:
+			var from_centre: float = Vector2(x - middle, y - middle).length() / (SIZE / 2.0)
+			var alpha: float = 1.0 - smoothstep(0.55, 0.95, from_centre)
 			image.set_pixel(x, y, Color(1, 1, 1, alpha))
 	return ImageTexture.create_from_image(image)

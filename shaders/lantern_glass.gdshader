@@ -1,5 +1,5 @@
 // The glass of the lantern spirit. His flame is drawn on the panes as
-// chunky pixel fire, the same way as every other lantern aboard
+// soft N64 fire, the same way as every other lantern aboard
 // (shaders/pixel_fire.gdshader), but his can act: it grows and shrinks with
 // his strength, cools from amber to blue as he weakens, and leans the way he
 // leans. Over it, the glass shows what he's been through: it clouds (fog),
@@ -42,6 +42,9 @@ uniform float streaks = 0.0;
 uniform float crack = 0.0;
 // Half the glass's width and height, in metres, to measure across it.
 uniform vec2 half_size = vec2(0.085, 0.1);
+// Blend the flame's texels softly, as N64 textures were filtered; off draws
+// them as chunky squares.
+uniform bool soft = true;
 
 varying vec3 local_spot;
 varying vec3 local_normal;
@@ -63,6 +66,21 @@ void vertex() {
 	local_normal = NORMAL;
 }
 
+
+// How hot his flame is at the middle of the texel at [uv], leaning [tip].
+float heat_at(vec2 uv, float t, float tip) {
+	// Weak, the flame is low and quick; strong, tall and steady.
+	float height = mix(0.3, 1.0, strength) * max(swell, 0.05);
+	float up = uv.y / height;
+	// The higher up, the further the flame is pushed the way he leans.
+	float x = uv.x - tip * 0.45 * uv.y;
+	float lick = noise(vec2(x * 4.0, up * 3.0 - t)) * 0.6
+			+ noise(vec2(x * 9.0 + 3.0, up * 6.0 - t * 1.7)) * 0.4;
+	// Hottest low and in the middle, thinning to tongues at the top.
+	float centre = 1.0 - abs(x - 0.5) * 1.6;
+	return clamp(centre * (1.2 - up) + lick * 0.7 - up * 0.5, 0.0, 1.0);
+}
+
 void fragment() {
 	// Across and up the pane being drawn, each from 0 to 1.
 	bool side_pane = abs(local_normal.x) > 0.5;
@@ -71,21 +89,27 @@ void fragment() {
 	float v = clamp(local_spot.y / half_size.y * 0.5 + 0.5, 0.0, 1.0);
 	float tip = side_pane ? lean.z : lean.x;
 
-	// Snap to the texel grid, so the flame is drawn in chunky squares.
-	vec2 uv = (floor(vec2(u, v) * texels) + 0.5) / texels;
-	// Weak, the flame is low and quick; strong, tall and steady.
-	float height = mix(0.3, 1.0, strength) * max(swell, 0.05);
-	float up = uv.y / height;
 	float t = TIME * speed * mix(2.4, 1.0, strength) + seed * 17.0;
-	// The higher up, the further the flame is pushed the way he leans.
-	float x = uv.x - tip * 0.45 * uv.y;
-	float lick = noise(vec2(x * 4.0, up * 3.0 - t)) * 0.6
-			+ noise(vec2(x * 9.0 + 3.0, up * 6.0 - t * 1.7)) * 0.4;
-	// Hottest low and in the middle, thinning to tongues at the top.
-	float centre = 1.0 - abs(x - 0.5) * 1.6;
-	float heat = clamp(centre * (1.2 - up) + lick * 0.7 - up * 0.5, 0.0, 1.0);
-	// Snap the heat into a few bands, like a small palette.
-	heat = floor(heat * 5.0) / 5.0;
+	float heat;
+	if (soft) {
+		// The N64 way: still a few texels, blended between them like a
+		// filtered texture, so the flame glows in soft blobs.
+		vec2 cell = vec2(u, v) * texels - 0.5;
+		vec2 base = floor(cell);
+		vec2 f = fract(cell);
+		float a = heat_at((base + 0.5) / texels, t, tip);
+		float b = heat_at((base + vec2(1.5, 0.5)) / texels, t, tip);
+		float c = heat_at((base + vec2(0.5, 1.5)) / texels, t, tip);
+		float d = heat_at((base + 1.5) / texels, t, tip);
+		heat = mix(mix(a, b, f.x), mix(c, d, f.x), f.y);
+		// A few bands still, like a small palette, but their edges blend.
+		float banded = heat * 5.0;
+		heat = (floor(banded) + smoothstep(0.25, 0.75, fract(banded))) / 5.0;
+	} else {
+		// Chunky squares and hard bands.
+		heat = heat_at((floor(vec2(u, v) * texels) + 0.5) / texels, t, tip);
+		heat = floor(heat * 5.0) / 5.0;
+	}
 
 	float cool = 1.0 - smoothstep(0.08, 0.55, strength);
 	vec3 hot_now = mix(hot.rgb, cold_hot.rgb, cool);
