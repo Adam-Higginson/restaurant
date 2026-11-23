@@ -590,6 +590,28 @@ A growing glossary of the Godot concepts this project uses: what each one is, in
 
 **Editable children of an instanced scene.** A scene placed inside another (an instance) is sealed: you can move it, but not touch the nodes inside it. Right-click it → *Editable Children* opens it up, so one inner node's property can be changed for this placement only, without touching the original scene. *Ours:* the look-dev cabin's `Heron`, whose `Model/Meshy` gets the stylised `style` there and nowhere else.
 
+## The painted look on the ship and the island (#168)
+
+**A full-screen filter as a mesh.** A quad whose shader ignores its own shape and writes `POSITION = vec4(VERTEX.xy, 1.0, 1.0)` covers the whole screen wherever the camera is. Its shader can read the picture already drawn (`hint_screen_texture`), each pixel's depth and which way its surface faces, and write a new picture. *Ours:* `shaders/painted_filter.gdshader`, hung on the camera by `PaintedLook`.
+
+**The stencil buffer.** A hidden number per pixel that one shader can write (`stencil_mode write, ...`) and a later one can test (`stencil_mode read, compare_equal, ...`), drawing only where it matches. *Ours:* stylised characters mark it; one copy of the painted filter draws only over them (fine brush), another only everywhere else.
+
+**Instance uniforms.** A shader setting declared `instance uniform` belongs to one mesh, not to the material, and is set with `set_instance_shader_parameter`. Many meshes can share one material and still differ. *Ours:* each curtain's width, folds and swing; each character's light cap.
+
+**Shaping a mesh in the vertex shader.** `vertex()` can put every point wherever it likes, from its UV or position, each frame. Nothing is simulated, so it's cheap and can't break. *Ours:* `shaders/curtain_cloth.gdshader` (pleats, swing and ripples), and the plants' sway.
+
+**A viewport's texture sharpness.** `Viewport.texture_mipmap_bias` below zero makes Godot draw every texture from a finer copy than the distance alone would pick, and `anisotropic_filtering_level` keeps them sharp at glancing angles. *Ours:* `PaintedLook` sets both while it's on.
+
+## The boy as the player, and what he wears (#172, #173)
+
+**One skin per mesh, one skeleton for all.** A skinned mesh carries its own `Skin` (which bones move it, and their rest poses), so several meshes made separately can hang on one `Skeleton3D` and follow the same animation. *Ours:* the boy's shirt, trousers, boots and coat, each fitted to his body by `tools/meshy/fit_layer.py` and put on his skeleton by `ThirdPartyModel`.
+
+**An `AnimationLibrary` built in code.** An `AnimationPlayer` plays animations from named libraries. A library can be made at runtime and filled with animations copied from other files, under any names you like. *Ours:* `CharacterModel._whole_library` files the boy's own clips under the names the game asks for ("Walk", "Sword_Regular_A").
+
+**Following a bone without being its child.** A `BoneAttachment3D` follows a bone but lives under the skeleton, so it dies when the model is reloaded. A plain node can follow a bone instead by copying the bone's pose each time the skeleton emits `skeleton_updated`. *Ours:* the boy's hand nodes (`CharacterModel._place_hands`), so the knife he holds outlives his model being dressed again.
+
+**Moving loose parts in code.** A model with no skeleton can still move if it's cut into parts whose origins are their joints: turning a part's `transform` swings it from that joint. *Ours:* the crab's legs and claws (`Crab._move_parts`), cut by `tools/meshy/split_crab.py`.
+
 ## Testing
 
 **gdUnit4.** The test framework (`addons/gdUnit4`). Suites extend our `GameTestSuite` and have `test_...` functions. `scene_runner` loads a scene and lets a test press inputs and wait physics ticks. *Ours:* `tests/`.

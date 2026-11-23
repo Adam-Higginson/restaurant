@@ -4,6 +4,7 @@
 [ext_resource type="Resource" path="res://data/art/looks/character_body.tres" id="2_body"]
 [ext_resource type="Resource" path="res://data/art/looks/character_head.tres" id="3_head"]
 [ext_resource type="Resource" path="res://data/art/looks/character_hair.tres" id="4_hair"]
+[ext_resource type="Resource" path="res://data/art/outfits/boy_sea.tres" id="5_outfit"]
 
 [resource]
 script = ExtResource("1")
@@ -15,3 +16,24 @@ hair_colour = Color(0.45, 0.28, 0.16, 1)
 body_look = ExtResource("2_body")
 head_look = ExtResource("3_head")
 hair_look = ExtResource("4_hair")
+whole = "res://assets/third_party/meshy/boy/anim/idle.glb"
+whole_outfit = ExtResource("5_outfit")
+whole_clips = Dictionary[StringName, String]({
+&"Idle": "res://assets/third_party/meshy/boy/anim/idle.glb",
+&"Walk": "res://assets/third_party/meshy/boy/rig/walking_glb.glb",
+&"Jog_Fwd": "res://assets/third_party/meshy/boy/rig/running_glb.glb",
+&"Sword_Idle": "res://assets/third_party/meshy/boy/anim/combat.glb",
+&"Sword_Regular_A": "res://assets/third_party/meshy/boy/anim/combat.glb",
+&"Sword_Regular_B": "res://assets/third_party/meshy/boy/anim/combat.glb",
+&"Sword_Regular_C": "res://assets/third_party/meshy/boy/anim/combat.glb",
+&"Sword_Heavy_Combo": "res://assets/third_party/meshy/boy/anim/combat.glb",
+&"Idle_Shield": "res://assets/third_party/meshy/boy/anim/combat.glb"
+})
+whole_clip_names = Dictionary[StringName, String]({
+&"Sword_Idle": "Combat_Stance",
+&"Sword_Regular_A": "Right_Hand_Sword_Slash",
+&"Sword_Regular_B": "Right_Hand_Sword_Slash",
+&"Sword_Regular_C": "Right_Hand_Sword_Slash",
+&"Sword_Heavy_Combo": "Right_Hand_Sword_Slash",
+&"Idle_Shield": "Sword_Parry"
+})

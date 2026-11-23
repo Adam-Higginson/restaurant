@@ -491,3 +491,36 @@ func _use_fired_stand_ins() -> void:
 
 func _model(player: Player3D) -> CharacterModel:
 	return player.get_node("Model/Character") as CharacterModel
+
+
+# --- A whole character (the Meshy boy, #172) ---------------------------------------
+
+func test_a_whole_character_has_its_own_names_for_the_bones_we_ask_for() -> void:
+	assert_str(CharacterModel.whole_bone("hand_r")).is_equal("RightHand")
+	assert_str(CharacterModel.whole_bone("lowerarm_l")).is_equal("LeftForeArm")
+	assert_str(CharacterModel.whole_bone("ball_l")).is_equal("LeftToeBase")
+	assert_str(CharacterModel.whole_bone("pelvis")).is_equal("Hips")
+	# A bone both call the same keeps its name.
+	assert_str(CharacterModel.whole_bone("Head")).is_equal("Head")
+
+
+func test_a_whole_character_s_strikes_play_once_and_everything_else_loops() -> void:
+	for strike: StringName in [&"Sword_Regular_A", &"Sword_Heavy_Combo", &"Roll"]:
+		assert_bool(CharacterModel.plays_once(strike)).override_failure_message(
+				String(strike)).is_true()
+	for held: StringName in [&"Idle", &"Walk", &"Jog_Fwd", &"Sword_Idle", &"Idle_Shield"]:
+		assert_bool(CharacterModel.plays_once(held)).override_failure_message(
+				String(held)).is_false()
+
+
+func test_the_boy_has_a_clip_for_every_move_the_player_makes() -> void:
+	# The real resource: every animation the model plays by default has a
+	# file to play it from, and every clip it names is one of those.
+	var boy: CharacterParts = load("res://data/characters/boy.tres") as CharacterParts
+	var model: CharacterModel = CharacterModel.new()
+	auto_free(model)
+	for move: StringName in [model.idle_animation, model.walk_animation, model.run_animation,
+			model.strike_animation, model.parry_animation, model.charge_animation]:
+		assert_bool(boy.whole_clips.has(move)).override_failure_message(String(move)).is_true()
+	for named: StringName in boy.whole_clip_names:
+		assert_bool(boy.whole_clips.has(named)).override_failure_message(String(named)).is_true()

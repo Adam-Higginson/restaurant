@@ -2,6 +2,8 @@ class_name CharacterModel
 extends Node3D
 ## The player's body: a Quaternius character put together from pack files
 ## and animated, standing in for the greybox capsule when the files are there.
+## Or, when the look has one ([member CharacterParts.whole]), a whole Meshy
+## character in its outfit, playing its own clips ([method _build_whole]).
 ##
 ## Which character depends on who the player is ([member GameState.look]):
 ## [member boy] or [member girl], each a [CharacterParts] list of files. They
@@ -50,6 +52,26 @@ const HEAD_BONES: PackedStringArray = CharacterParts.HEAD_BONES
 const MOVING_BONES: PackedStringArray = ["root", "pelvis"]
 ## The animation library's name on the [AnimationPlayer].
 const LIBRARY: StringName = &"moves"
+## The whole character's (Meshy's) name for each bone this script and its
+## helpers ask for by the packs' names.
+const WHOLE_BONES: Dictionary[String, String] = {
+	"ball_l": "LeftToeBase", "ball_r": "RightToeBase",
+	"hand_l": "LeftHand", "hand_r": "RightHand",
+	"lowerarm_l": "LeftForeArm", "lowerarm_r": "RightForeArm",
+	"upperarm_l": "LeftArm", "upperarm_r": "RightArm",
+	"clavicle_l": "LeftShoulder", "clavicle_r": "RightShoulder",
+	"pelvis": "Hips",
+}
+## How the packs' hands sit at rest, in the skeleton's space (which way each
+## hand bone's own x, y and z point, and which way the forearm runs): held
+## things are placed for these, so a whole character's hands are turned to
+## match ([method _hand_fix]).
+const PACK_HAND_RIGHT: Basis = Basis(Vector3(0, 1, 0), Vector3(-1, 0, 0), Vector3(0, 0, 1))
+const PACK_HAND_LEFT: Basis = Basis(Vector3(0, -1, 0), Vector3(1, 0, 0), Vector3(0, 0, 1))
+const PACK_FOREARM_RIGHT: Vector3 = Vector3(-1, 0, 0)
+const PACK_FOREARM_LEFT: Vector3 = Vector3(1, 0, 0)
+## A whole character's clips that play once; every other loops.
+const ONCE_CLIPS: PackedStringArray = ["Sword_Regular", "Sword_Heavy", "Roll", "Jump"]
 ## How high the hips are that a backflip turns about, in metres, when the
 ## skeleton doesn't say.
 const FLIP_PIVOT_HEIGHT: float = 0.7
@@ -179,11 +201,19 @@ var skeleton: Skeleton3D = null
 ## The pose being played.
 var pose: Pose = Pose.IDLE
 ## The character's right hand, which holds the knife, or null.
-var right_hand: BoneAttachment3D = null
+var right_hand: Node3D = null
 ## The character's left hand, which holds the pan, or null.
-var left_hand: BoneAttachment3D = null
+var left_hand: Node3D = null
 
 var _animator: AnimationPlayer = null
+## Whether the character showing is a whole one (Meshy), and its parts.
+var _whole: bool = false
+var _whole_parts: CharacterParts = null
+## A whole character's moves, made once per build.
+var _whole_moves: AnimationLibrary = null
+## How each of a whole character's hand nodes is turned from its hand bone.
+var _hand_fixes: Dictionary[Node3D, Basis] = {}
+var _hand_bones: Dictionary[Node3D, int] = {}
 ## What lifts the left arm when it reaches.
 var _arm: ArmReach = null
 ## What lifts both arms when something is held up: the left, then the right.
@@ -294,7 +324,7 @@ func plant_feet() -> void:
 		return
 	var lowest: float = INF
 	for bone_name: String in TOE_BONES:
-		var bone: int = skeleton.find_bone(bone_name)
+		var bone: int = skeleton.find_bone(_bone(bone_name))
 		if bone < 0:
 			return
 		var toe: Vector3 = skeleton.global_transform * skeleton.get_bone_global_pose(bone).origin
@@ -309,7 +339,7 @@ func sole_height() -> float:
 		return 0.0
 	var lowest: float = INF
 	for bone_name: String in TOE_BONES:
-		var bone: int = skeleton.find_bone(bone_name)
+		var bone: int = skeleton.find_bone(_bone(bone_name))
 		var toe: Vector3 = skeleton.global_transform * skeleton.get_bone_global_pose(bone).origin
 		lowest = minf(lowest, to_local(toe).y)
 	return lowest - _toe_height
@@ -342,6 +372,11 @@ func act(anim_name: StringName, from: float, length: float, seconds: float,
 	var full: StringName = StringName("%s/%s" % [LIBRARY, anim_name])
 	if not _animator.has_animation(full):
 		return false
+	if _whole:
+		# The stretch was chosen for the packs' animation of this name; a
+		# whole character's own clip is played from start to finish.
+		from = 0.0
+		length = 0.0
 	var span: float = length if length > 0.0 else _animator.get_animation(full).length - from
 	_animator.play(full, blend_seconds)
 	_animator.seek(from, true)
@@ -539,6 +574,23 @@ static func retarget(animation: Animation, skeleton_path: NodePath,
 	return copy
 
 
+## A whole character's (Meshy's) name for the bone the packs call
+## [param pack_name]; the name itself if it has no other.
+static func whole_bone(pack_name: String) -> String:
+	if WHOLE_BONES.has(pack_name):
+		return WHOLE_BONES[pack_name]
+	return pack_name
+
+
+## Whether a whole character's clip for the animation [param anim_name] plays
+## once (a strike or a tumble) and doesn't loop.
+static func plays_once(anim_name: StringName) -> bool:
+	for start: String in ONCE_CLIPS:
+		if String(anim_name).begins_with(start):
+			return true
+	return false
+
+
 ## How high [param skeleton]'s hips are at rest, or 0 if it has none.
 static func hip_height(skeleton: Skeleton3D) -> float:
 	var hips: int = skeleton.find_bone("pelvis")
@@ -546,6 +598,9 @@ static func hip_height(skeleton: Skeleton3D) -> float:
 
 
 func _build(parts: CharacterParts) -> void:
+	if parts.is_whole():
+		_build_whole(parts)
+		return
 	# Each part is the Kiln's fired one if it's there, else the pack's own.
 	var body_job: KilnJob = parts.outfit_job() if use_kiln else null
 	var body_fired: bool = body_job != null and body_job.is_fired()
@@ -638,6 +693,186 @@ func _build(parts: CharacterParts) -> void:
 	play(Pose.IDLE)
 	if not held_animation.is_empty():
 		hold(held_animation, held_at)
+
+
+# The bone a whole character has for [param pack_name], the packs' name for
+# it; the name itself for a character built from the packs.
+func _bone(pack_name: String) -> String:
+	return whole_bone(pack_name) if _whole else pack_name
+
+
+# Builds a whole character (a Meshy model): a [ThirdPartyModel] draws it in
+# its outfit, and this plays its own clips on it. Its model can be dressed
+# again while the game runs (a new outfit, the painted look switching on),
+# which makes a new skeleton: [method _hook_whole] wires this to whichever is
+# showing. Its hands are nodes of ours that follow the hand bones, so what
+# they hold outlives the model being dressed again.
+func _build_whole(parts: CharacterParts) -> void:
+	_whole = true
+	_whole_parts = parts
+	var dresser: ThirdPartyModel = ThirdPartyModel.new()
+	dresser.name = "Whole"
+	dresser.path = parts.whole
+	dresser.keep_as_made = true
+	dresser.grain = false
+	dresser.detail = 1.0
+	dresser.outfit = parts.whole_outfit
+	# Meshy models face +Z; our forward is -Z.
+	dresser.rotation.y = PI
+	dresser.scale = Vector3.ONE * parts.whole_scale
+	character = dresser
+	add_child(dresser)
+	right_hand = _whole_hand("HandR")
+	left_hand = _whole_hand("HandL")
+	dresser.dressed.connect(func(_shown: bool) -> void: _hook_whole())
+	_hook_whole()
+	pose = Pose.IDLE
+	play(Pose.IDLE)
+	if not held_animation.is_empty():
+		hold(held_animation, held_at)
+
+
+func _whole_hand(called: String) -> Node3D:
+	var hand: Node3D = Node3D.new()
+	hand.name = called
+	add_child(hand)
+	_hand_fixes[hand] = Basis.IDENTITY
+	_hand_bones[hand] = -1
+	return hand
+
+
+# Wires this to the whole character's model as it now stands: its skeleton,
+# an animator with its moves, its hands and what moves its arms and head.
+func _hook_whole() -> void:
+	var dresser: ThirdPartyModel = character as ThirdPartyModel
+	if dresser == null or dresser.model == null:
+		return
+	var skeletons: Array[Node] = dresser.model.find_children("*", "Skeleton3D", true, false)
+	if skeletons.is_empty():
+		return
+	# Already wired to this very skeleton (the model says it's dressed more
+	# than once as it puts its outfit on).
+	if skeletons[0] == skeleton and is_instance_valid(_animator):
+		return
+	skeleton = skeletons[0] as Skeleton3D
+	_toe_height = _rest_toe_height()
+	_animator = AnimationPlayer.new()
+	dresser.model.add_child(_animator)
+	_stepper = AnimationStepper.new(0.0)
+	if _whole_moves == null:
+		_whole_moves = _whole_library(_whole_parts)
+	_animator.add_animation_library(LIBRARY, _whole_moves)
+	_hand_bones[right_hand] = skeleton.find_bone(_bone("hand_r"))
+	_hand_bones[left_hand] = skeleton.find_bone(_bone("hand_l"))
+	_hand_fixes[right_hand] = _hand_fix("_r", PACK_HAND_RIGHT, PACK_FOREARM_RIGHT)
+	_hand_fixes[left_hand] = _hand_fix("_l", PACK_HAND_LEFT, PACK_FOREARM_LEFT)
+	skeleton.skeleton_updated.connect(_place_hands)
+	_place_hands()
+	_stride_speed = _measure_stride(walk_animation)
+	_run_stride_speed = _measure_stride(run_animation)
+	_arm = ArmReach.new()
+	_arm.name = "ArmReach"
+	_arm.upper_bone = StringName(_bone("upperarm_l"))
+	_arm.lower_bone = StringName(_bone("lowerarm_l"))
+	_arm.hand_bone = StringName(_bone("hand_l"))
+	_arm.amount = reach
+	_arm.grip = hand_grip
+	skeleton.add_child(_arm)
+	_lifts.clear()
+	for side: String in ["_l", "_r"]:
+		var lift: ArmReach = ArmReach.new()
+		lift.name = "HoldUp" + side.to_upper()
+		lift.upper_bone = StringName(_bone("upperarm" + side))
+		lift.lower_bone = StringName(_bone("lowerarm" + side))
+		lift.hand_bone = StringName(_bone("hand" + side))
+		lift.shoulder_bone = StringName(_bone("clavicle" + side))
+		lift.side = side
+		lift.amount = hold_up
+		skeleton.add_child(lift)
+		_lifts.append(lift)
+	_chop_arm = ArmReach.new()
+	_chop_arm.name = "ChopArm"
+	_chop_arm.upper_bone = StringName(_bone("upperarm_r"))
+	_chop_arm.lower_bone = StringName(_bone("lowerarm_r"))
+	_chop_arm.hand_bone = StringName(_bone("hand_r"))
+	_chop_arm.side = "_r"
+	_chop_arm.shoulder_bone = StringName(_bone("clavicle_r"))
+	_chop_arm.shoulder_share = 0.15
+	skeleton.add_child(_chop_arm)
+	_head = HeadLook.new()
+	_head.name = "HeadLook"
+	_head.amount = head_turn
+	skeleton.add_child(_head)
+	# Pick up whatever was playing on the new animator.
+	var was: Pose = pose
+	pose = Pose.IDLE
+	play(was if _act_left <= 0.0 else Pose.IDLE)
+
+
+# How a whole character's hand node is turned from its hand bone, so that
+# it sits as the packs' hand does: the packs' hand, swung from the way their
+# forearm runs to the way this one's does.
+func _hand_fix(side: String, pack_hand: Basis, pack_forearm: Vector3) -> Basis:
+	var hand: int = skeleton.find_bone(_bone("hand" + side))
+	var elbow: int = skeleton.find_bone(_bone("lowerarm" + side))
+	if hand < 0 or elbow < 0:
+		return Basis.IDENTITY
+	var rest: Transform3D = skeleton.get_bone_global_rest(hand)
+	var forearm: Vector3 = (rest.origin - skeleton.get_bone_global_rest(elbow).origin).normalized()
+	var swung: Basis = Basis(Quaternion(pack_forearm, forearm)) * pack_hand
+	return rest.basis.orthonormalized().inverse() * swung
+
+
+# Puts a whole character's hand nodes on its hand bones, each time the
+# skeleton has moved.
+func _place_hands() -> void:
+	if skeleton == null or not is_instance_valid(skeleton):
+		return
+	for hand: Node3D in _hand_bones:
+		var bone: int = _hand_bones[hand]
+		if bone < 0 or not is_instance_valid(hand):
+			continue
+		var at: Transform3D = skeleton.global_transform * skeleton.get_bone_global_pose(bone)
+		hand.global_transform = Transform3D(
+				at.basis.orthonormalized() * _hand_fixes[hand], at.origin)
+
+
+# A whole character's moves: each of its clips under the name the game asks
+# for. A clip plays where the character stands (its hips don't wander off
+# sideways), and loops unless it's a strike or a tumble.
+func _whole_library(parts: CharacterParts) -> AnimationLibrary:
+	var library: AnimationLibrary = AnimationLibrary.new()
+	var hips_at: Vector3 = Vector3.ZERO
+	var hips: int = skeleton.find_bone(_bone("pelvis"))
+	if hips >= 0:
+		hips_at = skeleton.get_bone_rest(hips).origin
+	for anim_name: StringName in parts.whole_clips:
+		var path: String = parts.whole_clips[anim_name]
+		if not ResourceLoader.exists(path):
+			continue
+		var source: Node = (load(path) as PackedScene).instantiate()
+		var wanted: String = parts.whole_clip_names.get(anim_name, "")
+		var clip: Animation = null
+		for found: Node in source.find_children("*", "AnimationPlayer", true, false):
+			var animator: AnimationPlayer = found as AnimationPlayer
+			for clip_name: StringName in animator.get_animation_list():
+				if clip_name == &"RESET":
+					continue
+				if clip == null and (wanted.is_empty() or String(clip_name) == wanted):
+					clip = animator.get_animation(clip_name).duplicate(true) as Animation
+		source.free()
+		if clip == null:
+			continue
+		for track: int in clip.get_track_count():
+			var bone: String = String(clip.track_get_path(track).get_concatenated_subnames())
+			if bone != _bone("pelvis") or clip.track_get_type(track) != Animation.TYPE_POSITION_3D:
+				continue
+			for key: int in clip.track_get_key_count(track):
+				var at: Vector3 = clip.track_get_key_value(track, key)
+				clip.track_set_key_value(track, key, Vector3(hips_at.x, at.y, hips_at.z))
+		clip.loop_mode = Animation.LOOP_NONE if plays_once(anim_name) else Animation.LOOP_LINEAR
+		library.add_animation(anim_name, clip)
+	return library
 
 
 # The head and neck of [param path]'s body, and its eyes.
@@ -744,7 +979,7 @@ func _library(animator_root: Node) -> AnimationLibrary:
 # How far a toe joint sits above the boot's sole at rest, in metres in this
 # node's space: the toe's rest height less the lowest point of the outfit.
 func _rest_toe_height() -> float:
-	var toe: int = skeleton.find_bone(TOE_BONES[0])
+	var toe: int = skeleton.find_bone(_bone(TOE_BONES[0]))
 	if toe < 0:
 		return 0.0
 	var toe_at: Vector3 = skeleton.global_transform * skeleton.get_bone_global_rest(toe).origin
@@ -762,7 +997,7 @@ func _rest_toe_height() -> float:
 # as the body is meant to go forwards, so that's the speed.
 func _measure_stride(anim_name: StringName) -> float:
 	var walk: StringName = StringName("%s/%s" % [LIBRARY, anim_name])
-	var toe: int = skeleton.find_bone(TOE_BONES[0])
+	var toe: int = skeleton.find_bone(_bone(TOE_BONES[0]))
 	if not _animator.has_animation(walk) or toe < 0:
 		return 0.0
 	var length: float = _animator.get_animation(walk).length
@@ -858,6 +1093,15 @@ func _hand(bone: String) -> BoneAttachment3D:
 
 
 func _undress() -> void:
+	# A whole character's hands are ours, not its skeleton's.
+	for hand: Node3D in _hand_fixes:
+		if is_instance_valid(hand):
+			hand.queue_free()
+	_hand_fixes.clear()
+	_hand_bones.clear()
+	_whole = false
+	_whole_parts = null
+	_whole_moves = null
 	if character != null:
 		character.queue_free()
 	character = null

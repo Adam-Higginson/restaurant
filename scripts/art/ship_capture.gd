@@ -46,6 +46,9 @@ func _ready() -> void:
 	ship.add_child(camera)
 	camera.make_current()
 	var shots: Array[Shot] = [
+		# Shots named "player" are measured from where the player stands.
+		Shot.new("player_dawn", Vector3(1.0, 1.3, -2.8), Vector3(0.0, 0.95, 0.0), 1.0),
+		Shot.new("player_side_dawn", Vector3(2.6, 1.2, -0.4), Vector3(0.0, 0.95, 0.0), 1.0),
 		Shot.new("galley_night", Vector3(-1.2, 2.5, 7.6), Vector3(2.6, 1.7, 2.6), 0.0),
 		Shot.new("table_night", Vector3(0.2, 2.2, 6.4), Vector3(1.6, 1.8, 4.9), 0.0),
 		Shot.new("counters_night", Vector3(2.6, 2.5, 5.6), Vector3(-0.6, 1.6, 1.6), 0.0),
@@ -65,12 +68,18 @@ func _ready() -> void:
 		if not only.is_empty() and not shot.name.begins_with(only):
 			continue
 		time.dawn = shot.dawn
-		camera.position = shot.from
+		var from: Vector3 = shot.from
+		var to: Vector3 = shot.to
+		if shot.name.begins_with("player"):
+			var player: Node3D = sea.get_node(^"Player") as Node3D
+			from = ship.to_local(player.global_position + shot.from)
+			to = ship.to_local(player.global_position + shot.to)
+		camera.position = from
 		for on: bool in both:
 			look.enabled = on
 			for frame: int in SETTLE:
 				await get_tree().process_frame
-				camera.look_at(ship.to_global(shot.to))
+				camera.look_at(ship.to_global(to))
 			var picture: Image = get_viewport().get_texture().get_image()
 			picture.save_png("%s/%s_%s.png" % [out, shot.name, "painted" if on else "before"])
 	get_tree().quit()
