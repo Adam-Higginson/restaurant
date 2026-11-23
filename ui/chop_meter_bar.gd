@@ -59,6 +59,13 @@ func _draw() -> void:
 		return
 	var meter: ChopMeter = _counter.meter
 	var bar: Rect2 = Rect2(Vector2(2, 6), BAR)
+	# A cut lights the rim up a moment: gold and wider for a perfect one.
+	var flash: float = _counter.flash_left / Counter3D.FLASH_SECONDS
+	if flash > 0.0:
+		var perfect: bool = _counter.last_grade == ChopMeter.Grade.PERFECT
+		var glow: Color = PERFECT if perfect else MARKER
+		glow.a = flash * (0.9 if perfect else 0.45)
+		draw_rect(bar.grow(3 if perfect else 2), glow)
 	draw_rect(bar.grow(1), BRASS)
 	draw_rect(bar, BACKGROUND)
 	_draw_zone(bar, meter.good_width, GOOD)

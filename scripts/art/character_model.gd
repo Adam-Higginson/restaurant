@@ -71,6 +71,9 @@ static var _heads: Dictionary[String, ArrayMesh] = {}
 ## Files holding the animations, on the same skeleton (the Universal
 ## Animation Library). Later files win when two have the same animation.
 @export_file("*.glb", "*.gltf") var animation_files: PackedStringArray = []
+## How far through a chop (see [method chop_at]) the knife meets the board.
+const CHOP_CONTACT: float = 0.62
+
 ## The animation for each [enum Pose].
 @export var idle_animation: StringName = &"Idle"
 @export var walk_animation: StringName = &"Walk"
@@ -185,6 +188,8 @@ var _animator: AnimationPlayer = null
 var _arm: ArmReach = null
 ## What lifts both arms when something is held up: the left, then the right.
 var _lifts: Array[ArmReach] = []
+## What brings the right arm (the knife hand) down in a chop at the board.
+var _chop_arm: ArmReach = null
 ## The fired head's meshes, awake and asleep: shown by [member eyes_shut].
 ## Empty unless both have been fired.
 var _awake_head: Array[MeshInstance3D] = []
@@ -414,6 +419,16 @@ func stride_speed() -> float:
 	return _run_stride_speed if is_running() else _stride_speed
 
 
+## Chops at [param point] in the world with the knife hand, over
+## [param seconds]: the hand lifts above it, strikes down onto it a little
+## past halfway ([constant CHOP_CONTACT] of the way through), and goes back
+## to where the animation has it. Does nothing without a character.
+func chop_at(point: Vector3, seconds: float) -> void:
+	if _chop_arm == null or seconds <= 0.0:
+		return
+	create_tween().tween_method(_set_chop.bind(point), 0.0, 1.0, seconds)
+
+
 ## Where the treasure sits while it's held up: between the two hands as
 ## they really are (the arms reach towards [method hold_up_point] but stop
 ## where their length does), a little above them. Without hands, the
@@ -601,6 +616,15 @@ func _build(parts: CharacterParts) -> void:
 		lift.amount = hold_up
 		skeleton.add_child(lift)
 		_lifts.append(lift)
+	_chop_arm = ArmReach.new()
+	_chop_arm.name = "ChopArm"
+	_chop_arm.upper_bone = &"upperarm_r"
+	_chop_arm.lower_bone = &"lowerarm_r"
+	_chop_arm.hand_bone = &"hand_r"
+	_chop_arm.side = "_r"
+	_chop_arm.shoulder_bone = &"clavicle_r"
+	_chop_arm.shoulder_share = 0.15
+	skeleton.add_child(_chop_arm)
 	_head = HeadLook.new()
 	_head.name = "HeadLook"
 	_head.amount = head_turn
@@ -842,12 +866,23 @@ func _undress() -> void:
 	_animator = null
 	_arm = null
 	_lifts.clear()
+	_chop_arm = null
 	_awake_head.clear()
 	_asleep_head.clear()
 	_head = null
 	_legs = null
 	_act_left = 0.0
 	_recovery = &""
+
+
+# How far through a chop at [param point] it is, [param through] from 0 to 1:
+# up above it, down onto it, then back.
+func _set_chop(through: float, point: Vector3) -> void:
+	if _chop_arm == null:
+		return
+	_chop_arm.amount = smoothstep(0.0, 0.3, through) * (1.0 - smoothstep(0.75, 1.0, through))
+	var strike: float = smoothstep(CHOP_CONTACT - 0.14, CHOP_CONTACT, through)
+	_chop_arm.target = point + Vector3.UP * lerpf(0.32, -0.04, strike)
 
 
 # Points each raised hand at its side of the hold-up point, so the hands

@@ -22,6 +22,10 @@ signal chopped(grade: int)
 ## The group every counter is in, so the HUD can find the one being chopped at.
 const GROUP: StringName = &"counters"
 const CUT: Element = preload("res://data/elements/cut.tres")
+## How long a cut lights the meter up for, in seconds.
+const FLASH_SECONDS: float = 0.3
+## How fast you step up to the board, in metres a second.
+const STEP_SPEED: float = 4.0
 
 ## Something already on the counter when the scene starts (the galley's
 ## chopping board).
@@ -36,12 +40,20 @@ var slot: CounterSlot:
 
 ## The chop meter. Created once, never replaced.
 var meter: ChopMeter = ChopMeter.new()
+## How the last cut went (a [enum ChopMeter.Grade]), and how much longer it
+## lights the meter up, in seconds.
+var last_grade: int = 0
+var flash_left: float = 0.0
 
 var _slot: CounterSlot = null
 var _meter_up: bool = false
 var _needs_knife: bool = false
 ## The player whose camera is leaning in over this board, or null.
 var _leaning: Player3D = null
+## Whoever cut here last, or null.
+var _last_chopper: Player3D = null
+## Whoever is stepping up to the board, or null.
+var _stepping: Player3D = null
 
 @onready var _interactable: Interactable3D = $Interactable
 @onready var _item_spot: Node3D = $ItemSpot
@@ -64,6 +76,7 @@ func _ready() -> void:
 
 
 func _process(delta: float) -> void:
+	flash_left = maxf(flash_left - delta, 0.0)
 	var player: Player3D = _chopper()
 	var knife: HandTool = cutting_tool(player) if player != null else null
 	var up: bool = knife != null
@@ -72,6 +85,7 @@ func _process(delta: float) -> void:
 		meter.reset()
 	_meter_up = up
 	_needs_knife = player != null and not up and has_food_to_cut()
+	_step(player, delta)
 	if up:
 		meter.tick(delta)
 	elif _leaning != null:
@@ -119,6 +133,11 @@ func cut_progress() -> Vector2i:
 	return Vector2i.ZERO
 
 
+## Whoever cut here last, or null.
+func last_chopper() -> Player3D:
+	return _last_chopper if is_instance_valid(_last_chopper) else null
+
+
 ## Where the HUD draws the meter: a little above the board.
 func meter_anchor() -> Vector3:
 	return _item_spot.global_position + Vector3.UP * 0.45
@@ -130,10 +149,14 @@ func cut_with(player: Player3D, tool: HandTool) -> bool:
 	var grade: int = meter.grade() if _meter_up else 0
 	if not _slot.use_tool(tool, grade):
 		return false
-	chopped.emit(grade if grade > 0 else ChopMeter.Grade.GOOD)
+	_last_chopper = player
+	last_grade = grade if grade > 0 else ChopMeter.Grade.GOOD
+	flash_left = FLASH_SECONDS
+	chopped.emit(last_grade)
 	if lean_in and _chop_shot != null and player != null and _leaning == null:
 		_leaning = player
 		player.camera_rig.hold_shot(_chop_shot)
+		_step_up(player)
 	return true
 
 
@@ -161,6 +184,31 @@ func _chopper() -> Player3D:
 	if detector == null or detector.focused != _interactable:
 		return null
 	return player
+
+
+# Starts [param player] stepping up to the board (its ChopStand mark), so the
+# knife comes down on the food rather than the air in front of it.
+func _step_up(player: Player3D) -> void:
+	if get_node_or_null("ChopStand") != null:
+		_stepping = player
+		player.face_towards(_item_spot.global_position)
+
+
+# Moves whoever is stepping up a little nearer the board, [param facing] the
+# player facing it now. Walking, or turning to something else, stops it.
+func _step(facing: Player3D, delta: float) -> void:
+	if _stepping == null:
+		return
+	if _stepping != facing or _stepping.is_walking:
+		_stepping = null
+		return
+	var stand: Marker3D = get_node("ChopStand") as Marker3D
+	var gap: Vector3 = stand.global_position - _stepping.global_position
+	gap.y = 0.0
+	if gap.length() < 0.02:
+		_stepping = null
+		return
+	_stepping.global_position += gap.limit_length(STEP_SPEED * delta)
 
 
 func _lean_out() -> void:

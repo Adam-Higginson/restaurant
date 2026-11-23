@@ -45,3 +45,27 @@ func test_it_faces_the_camera_and_shows_through() -> void:
 
 	assert_int(number.billboard).is_equal(BaseMaterial3D.BILLBOARD_ENABLED)
 	assert_bool(number.no_depth_test).is_true()
+
+
+func test_in_a_running_world_it_rises_from_where_it_was_made() -> void:
+	var player: Player3D = new_player_3d_on_floor()
+	var world: Node3D = player.get_parent() as Node3D
+	world.position = Vector3(5, 0, 0)
+	var runner: GdUnitSceneRunner = scene_runner(world)
+	await physics_ticks(runner, 1)
+
+	var number: DamageNumber = DamageNumber.spawn(world, Vector3(2, 1, 3), 10, false)
+	await physics_ticks(runner, 2)
+
+	assert_float(number.global_position.x).is_equal_approx(2.0, 0.3)
+	assert_float(number.global_position.z).is_equal_approx(3.0, 0.15)
+
+
+func test_it_can_say_words_instead() -> void:
+	var player: Player3D = new_player_3d_on_floor()
+	var label: DamageNumber = DamageNumber.spawn_words(player.get_parent(), Vector3(0, 1, 0),
+			"Perfect!", Color.GOLD, true)
+	scene_runner(player.get_parent())
+
+	assert_str(label.text).is_equal("Perfect!")
+	assert_object(label.modulate).is_equal(Color.GOLD)

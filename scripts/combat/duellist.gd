@@ -132,6 +132,9 @@ var _landing: KnifeCut = null
 var _land_left: float = 0.0
 ## Seconds left before another blow can land.
 var _invulnerable_left: float = 0.0
+## Seconds left of showing the knife for something other than a fight: a cut
+## at the chopping board (see [method show_knife]).
+var _knife_shown_left: float = 0.0
 ## The crab whose fight the lantern is showing, or null.
 var _shown: Crab = null
 ## Whether the knife and pan are in the character's hands, rather than
@@ -146,6 +149,7 @@ var _pan_home: Transform3D
 @onready var _lock_on: LockOn = $"../LockOn"
 @onready var _spirit: LanternSpirit = $"../LanternSpirit"
 @onready var _knife: Node3D = $"../Model/Knife"
+@onready var _trail: KnifeTrail = get_node_or_null("../KnifeTrail") as KnifeTrail
 @onready var _pan: Node3D = $"../Model/Pan"
 @onready var _model: Node3D = $"../Model"
 @onready var _character: CharacterModel = get_node_or_null("../Model/Character") as CharacterModel
@@ -188,7 +192,8 @@ func _physics_process(delta: float) -> void:
 	_player.stride_factor = charge_walk_factor if combo.is_charging() else 1.0
 
 
-func _process(_delta: float) -> void:
+func _process(delta: float) -> void:
+	_knife_shown_left = maxf(_knife_shown_left - delta, 0.0)
 	_pose_knife_and_pan()
 
 
@@ -210,6 +215,12 @@ func position() -> Vector3:
 ## of the chain, or if one is being made, the next once it ends. Held on, it
 ## charges. Returns whether the knife took the press: not without a tool,
 ## or while the player can't act.
+## Shows the knife in the hand for [param seconds], outside a fight: a cut at
+## the chopping board.
+func show_knife(seconds: float) -> void:
+	_knife_shown_left = maxf(_knife_shown_left, seconds)
+
+
 func press_knife() -> bool:
 	if not _can_cut():
 		return false
@@ -435,7 +446,10 @@ func _hold(in_hands: bool) -> void:
 # work. In the character's hands the animation moves them; on the greybox,
 # the knife sweeps across in front.
 func _pose_knife_and_pan() -> void:
-	_knife.visible = combo.is_cutting() or combo.is_charging()
+	var fighting: bool = combo.is_cutting() or combo.is_charging()
+	_knife.visible = fighting or _knife_shown_left > 0.0
+	if _trail != null:
+		_trail.quiet = not fighting
 	if combo.is_cutting() and not _in_hands:
 		var through: float = combo.cut_progress()
 		_knife.rotation.y = lerpf(deg_to_rad(70.0), deg_to_rad(-70.0), through)

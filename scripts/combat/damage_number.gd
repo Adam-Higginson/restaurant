@@ -20,6 +20,11 @@ const CRITICAL_COLOUR: Color = Color(1.0, 0.78, 0.25)
 
 ## The damage it shows.
 var amount: int = 0
+## Words to show instead of a number ("Perfect!" over the chopping board),
+## or "" for the [member amount].
+var words: String = ""
+## The words' colour, when there are words.
+var words_colour: Color = NORMAL_COLOUR
 ## Whether it was a critical hit.
 var critical: bool = false
 
@@ -36,19 +41,44 @@ static func spawn(parent: Node, at: Vector3, damage: int, is_critical: bool) -> 
 	var number: DamageNumber = DamageNumber.new()
 	number.amount = damage
 	number.critical = is_critical
-	parent.add_child(number)
-	number.global_position = at
+	_place(number, parent, at)
 	return number
 
 
+## Makes a pop-up of [param said] instead of a number, in [param colour]:
+## how a cut on the chopping board went. [param big] pops it in large, as a
+## critical's number does.
+static func spawn_words(parent: Node, at: Vector3, said: String, colour: Color,
+		big: bool = false) -> DamageNumber:
+	var label: DamageNumber = DamageNumber.new()
+	label.words = said
+	label.words_colour = colour
+	label.critical = big
+	label.rise = 0.22
+	_place(label, parent, at)
+	return label
+
+
+# Puts [param label] at [param at] in the world, as a child of [param parent].
+# It's placed before it joins the tree, so it rises from there: it notes
+# where it starts as it becomes ready.
+static func _place(label: DamageNumber, parent: Node, at: Vector3) -> void:
+	var space: Node3D = parent as Node3D
+	label.position = space.global_transform.affine_inverse() * at 			if space != null and space.is_inside_tree() else at
+	parent.add_child(label)
+
+
 func _ready() -> void:
-	text = str(amount)
+	text = words if not words.is_empty() else str(amount)
 	font = FONT
 	font_size = 128 if critical else 84
 	pixel_size = 0.004
 	outline_size = 18
 	outline_modulate = Color(0.12, 0.08, 0.06, 1.0)
 	modulate = CRITICAL_COLOUR if critical else NORMAL_COLOUR
+	if not words.is_empty():
+		modulate = words_colour
+		font_size = 30 if critical else 24
 	billboard = BaseMaterial3D.BILLBOARD_ENABLED
 	no_depth_test = true
 	# Drawn after the world, over the crab and its particles.
