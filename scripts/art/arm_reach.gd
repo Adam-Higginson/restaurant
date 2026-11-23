@@ -20,6 +20,12 @@ const FINGERS: PackedStringArray = ["index", "middle", "ring", "pinky"]
 @export var upper_bone: StringName = &"upperarm_l"
 @export var lower_bone: StringName = &"lowerarm_l"
 @export var hand_bone: StringName = &"hand_l"
+## The collarbone, which lifts a share of the way too when the arm reaches
+## high ([member shoulder_share]): a real shoulder rises with a raised arm,
+## and without it the arm looks short and bunched at the top. Empty leaves
+## the shoulder as the animation has it.
+@export var shoulder_bone: StringName = &""
+@export_range(0.0, 1.0) var shoulder_share: float = 0.35
 ## The side the bones are on, as their names end.
 @export var side: String = "_l"
 ## How far the arm has gone from where the animation has it (0) to
@@ -45,6 +51,8 @@ func _process_modification() -> void:
 		return
 	if amount > 0.0:
 		var aim_at: Vector3 = skeleton.global_transform.affine_inverse() * target
+		if shoulder_bone != &"":
+			aim(skeleton, shoulder_bone, upper_bone, aim_at, amount * shoulder_share)
 		aim(skeleton, upper_bone, lower_bone, aim_at, amount)
 		aim(skeleton, lower_bone, hand_bone, aim_at, amount)
 		# The wrist straight too, so the hand doesn't hang off the end.

@@ -134,13 +134,12 @@ static var _heads: Dictionary[String, ArrayMesh] = {}
 			_arm.grip = hand_grip
 ## How far both arms are raised over the head, holding something up for all
 ## to see (a treasure from a chest): 0 as the animation has them, 1 held up
-## (see [ArmReach]). The hands close on it as they rise.
+## (see [ArmReach]). The shoulders lift with them; the hands stay open.
 @export_range(0.0, 1.0) var hold_up: float = 0.0:
 	set(value):
 		hold_up = clampf(value, 0.0, 1.0)
 		for arm: ArmReach in _lifts:
 			arm.amount = hold_up
-			arm.grip = hold_up
 ## Where the hands meet when held up, above the head, in metres: how high
 ## over the head bone, how far in front of it, and how far apart the hands are.
 @export var hold_up_height: float = 0.6
@@ -597,9 +596,9 @@ func _build(parts: CharacterParts) -> void:
 		lift.upper_bone = StringName("upperarm" + side)
 		lift.lower_bone = StringName("lowerarm" + side)
 		lift.hand_bone = StringName("hand" + side)
+		lift.shoulder_bone = StringName("clavicle" + side)
 		lift.side = side
 		lift.amount = hold_up
-		lift.grip = hold_up
 		skeleton.add_child(lift)
 		_lifts.append(lift)
 	_head = HeadLook.new()
