@@ -504,6 +504,18 @@ A growing glossary of the Godot concepts this project uses: what each one is, in
 
 **CanvasLayer order.** Each `CanvasLayer` has a `layer` number; higher layers draw on top of lower ones, whatever their place in the tree. *Ours:* the HUD's `BookLayer` (16) covers the HUD, and the dialogue's `SpeechLayer` (17) sits above that.
 
+## Crew walking (#157)
+
+**AStar3D (shortest paths over a graph).** You give it points (an id and a position) and say which pairs are connected; `get_id_path(from, to)` returns the shortest chain of points between two, and `get_closest_point(position)` the nearest point to anywhere. It's the A* search games have long used for pathfinding. *Ours:* `Walkways` builds one from its `Waypoint` children.
+
+**Waypoints vs navigation meshes.** Godot can also bake a *navigation mesh* (`NavigationRegion3D`) from the floor and let a `NavigationAgent3D` find its own way across it. A hand-placed set of waypoints is simpler and stays put on a moving ship, and you can see exactly where people will walk. *Ours:* the ship's `Walkways`, a child of the ship, so its ways sail with her.
+
+**Moving in a parent's space.** `node.to_local(world_point)` turns a world position into a node's own coordinates, and `to_global` back. Doing the walking in the ship's coordinates means a walker keeps their place on deck while the ship heaves and turns under them. *Ours:* `CrewWalker._physics_process`.
+
+**Borrowing an animation from another file.** An `AnimationPlayer` keeps its animations in `AnimationLibrary`s. Another imported model on the same skeleton has the same bone names, so one of its animations can be copied (`duplicate()`) and added to this player's library with `add_animation(name, animation)`. *Ours:* `CrewAnimator._borrow_walk` takes the heron's walk from his rig's `walk.glb`.
+
+**Raycasts in tests.** `get_world_3d().direct_space_state.intersect_ray(query)` asks the physics engine what a line hits; `query.exclude` lists bodies to ignore. A test can use it to check level layout. *Ours:* `walkways_test.gd` makes sure no walkway runs through a wall.
+
 ## Testing
 
 **gdUnit4.** The test framework (`addons/gdUnit4`). Suites extend our `GameTestSuite` and have `test_...` functions. `scene_runner` loads a scene and lets a test press inputs and wait physics ticks. *Ours:* `tests/`.
