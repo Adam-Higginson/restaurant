@@ -500,6 +500,8 @@ A growing glossary of the Godot concepts this project uses: what each one is, in
 
 **One page per push of a stick.** A key sends one "pressed" event (repeats are marked as echoes and ignored by default), but a stick held over sends a stream of motion events, and each counts as "pressed". To act once per push, remember the action as held when it's pressed and forget it when `event.is_action_released(...)` comes. *Ours:* `BookView._newly_pushed`.
 
+**A resource made of resources (sub-resources).** A `.tres` file can hold small resources of its own as well as the main one: each `[sub_resource]` block is one, used inside the file with `SubResource("id")`. They live and die with the file, so they're right for parts nobody else shares. *Ours:* `data/books/fire_spirits.tres`, a `Book` whose six `BookPage`s are sub-resources; open it in the Inspector and click into Pages to edit each page.
+
 **CanvasLayer order.** Each `CanvasLayer` has a `layer` number; higher layers draw on top of lower ones, whatever their place in the tree. *Ours:* the HUD's `BookLayer` (16) covers the HUD, and the dialogue's `SpeechLayer` (17) sits above that.
 
 ## Crew walking (#157)

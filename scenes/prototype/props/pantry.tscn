@@ -5,6 +5,8 @@
 [ext_resource type="Resource" path="res://data/items/lettuce.tres" id="3_g7815"]
 [ext_resource type="Resource" path="res://data/items/tomato.tres" id="4_laobp"]
 [ext_resource type="Resource" path="res://data/items/crab_meat.tres" id="9_crab"]
+[ext_resource type="Resource" path="res://data/items/onion.tres" id="10_onion"]
+[ext_resource type="Resource" path="res://data/items/chilli.tres" id="11_chilli"]
 [ext_resource type="Material" path="res://assets/placeholder/materials/prop_wood.tres" id="5_12nj7"]
 [ext_resource type="Material" path="res://assets/placeholder/materials/dark_prop_wood.tres" id="6_72gnv"]
 [ext_resource type="Script" path="res://scripts/interaction/interactable_3d.gd" id="7_d7ys4"]
@@ -25,11 +27,13 @@ size = Vector3(1.1, 1, 0.7)
 [node name="Pantry" type="StaticBody3D" unique_id=783196520]
 script = ExtResource("1_hcdsu")
 display_name = "Pantry"
-slots = 12
+slots = 16
 start_items = Dictionary[ExtResource("2_84ndg"), int]({
 ExtResource("3_g7815"): 3,
 ExtResource("4_laobp"): 3,
-ExtResource("9_crab"): 1
+ExtResource("9_crab"): 1,
+ExtResource("10_onion"): 2,
+ExtResource("11_chilli"): 2
 })
 
 [node name="Mesh" type="MeshInstance3D" parent="." unique_id=24910583]
