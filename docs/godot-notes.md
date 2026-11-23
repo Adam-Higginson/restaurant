@@ -504,6 +504,44 @@ A growing glossary of the Godot concepts this project uses: what each one is, in
 
 **CanvasLayer order.** Each `CanvasLayer` has a `layer` number; higher layers draw on top of lower ones, whatever their place in the tree. *Ours:* the HUD's `BookLayer` (16) covers the HUD, and the dialogue's `SpeechLayer` (17) sits above that.
 
+## The first island (#163)
+
+**Building a mesh in code (`ArrayMesh`).** A mesh is lists of numbers: the corners (vertices), which way each faces (normals), where each sits on a texture (UVs), and which corners make each triangle (indices). Fill those lists and hand them to an `ArrayMesh` and you have a mesh no modelling program ever saw. *Ours:* `IslandGround` (`scripts/islands/island_ground.gd`) builds the island's ground, a point every metre, from the heights `IslandShape` gives it; `GrassPatch`, `SunShafts`, `FishShoal` and `IslandBackdrop` build a tuft, a shaft, a fish and the far hills the same way.
+
+**Height-map collision (`HeightMapShape3D`).** A collision shape made of a grid of heights: Godot's shape for terrain. Far cheaper than giving the ground's mesh to the physics engine triangle by triangle. *Ours:* `IslandGround` fills one from the same heights as the mesh, but stops it at knee depth under the sea (`wade_depth`), so you can wade in and no deeper.
+
+**`@tool` scripts.** A script marked `@tool` also runs inside the editor, so what it builds shows in the 3D view while you work. *Ours:* the island's ground, groves, grass, shafts and far hills are all built by `@tool` scripts: change a number in the Inspector and the island changes in front of you. What they build is never saved into the scene file (a child node added in code has no owner, and only owned nodes are saved).
+
+**`MultiMesh`.** One mesh drawn many times in a single go, each copy with its own place, turn and size. Thousands of copies cost about what one does, which is how grass is done. *Ours:* `GrassPatch` draws 70,000 tufts of grass (and the leafy undergrowth, and the beach grass) this way; `SunShafts` and `FishShoal` use it too, and `IslandBackdrop` covers the far hills in 15,000 tree crowns with it (each given its own haze and tint through the MultiMesh's per-copy colour).
+
+**Scattering by rule and seed.** Instead of placing forty palms by hand, give a rule (so many, this far inland, not on steep ground, no closer than so far) and a seed: a number that makes the "random" choices come out the same every time. *Ours:* `IslandScatter` (`scripts/islands/island_scatter.gd`), one node for each kind of plant or rock in `cove.tscn`.
+
+**Volumetric fog and `FogVolume`.** Ordinary fog just fades distant things to a colour. Volumetric fog is lit in 3D: sunlight brightens it, shadows darken it, so light pours visibly between trees. A `FogVolume` node is a box (or other shape) of extra-thick fog in one place. *Ours:* the cove's `WorldEnvironment` has a thin haze everywhere, and the `JungleMist` box hangs thicker mist among the trees behind the front row, so the nearest palms stand dark against a glowing jungle. Volumetric fog only reaches so far from the camera (`volumetric_fog_length`), which is why the fog wall out at sea is painted instead (`shaders/fog_bank.gdshader`).
+
+**SDFGI, SSAO, glow, tonemapping.** Settings on the `Environment`. *SDFGI* bounces light: sunlit sand lights the undersides of the palms. *SSAO* darkens creases where things meet. *Glow* makes very bright things bleed light. *Tonemapping* squeezes the huge range of real brightness into what a screen can show; the mode chosen sets the picture's contrast and colour. *Ours:* all four are on in `cove.tscn`'s `WorldEnvironment`; open it in the Inspector to see each group.
+
+**Sky shader.** A shader of type `sky` paints the background, and Godot takes the scene's ambient light and reflections from it. *Ours:* `shaders/island_sky.gdshader`: blue overhead, warm haze at the horizon, drifting clouds lit on the sun's side.
+
+**Screen and depth textures in a shader.** A material can read what's already been drawn behind it (`hint_screen_texture`) and how far away that is (`hint_depth_texture`). *Ours:* the shore water (`shaders/shore_water.gdshader`) draws the seabed seen through it, bent by its ripples, from the screen texture, and uses the depth texture to find rocks standing in it and ring them with foam. `shaders/sun_shaft.gdshader` uses depth to fade a shaft of light where it meets the ground, so there's no hard line.
+
+**Handing a shader a picture of the world.** A shader only knows about the one point it's drawing. To let the water know how deep it is everywhere, the ground is baked into a small picture (red: its height; green: how far inland of the waterline), and the water shader looks itself up in it. *Ours:* `IslandGround.height_texture()`, handed to the water by `Shore` (`scripts/islands/shore.gd`).
+
+**Moving a mesh in the vertex function.** A shader's `vertex()` function can move each corner of the mesh before it's drawn, with no cost to the CPU. *Ours:* the water's waves (the surface is lifted into crests that roll in and break), the palms' and grass's sway in the wind (`shaders/plant_sway.gdshader`, `shaders/grass_blade.gdshader`: each point is pushed more the higher up the plant it is, and gusts cross the island as travelling waves), and the fish wagging their tails.
+
+**Two shaders that must agree.** The sand goes dark and wet where the water has just been, but the sand and the water are different materials. Each works the wave out for itself from the same numbers (sea level, how far the water rises, how often). *Ours:* `Shore` is the one place those numbers live, and hands them to both; a test checks they match.
+
+**Backlight.** A material's `BACKLIGHT` lets light through from behind, so a thin thing glows when the sun is the other side of it. *Ours:* palm fronds, leaves and grass, in the plant shaders.
+
+**Adding to an instanced scene.** A scene placed inside another is one node there, but you can still hang extra children on it from the outer scene, and they move with it. *Ours:* in `cove.tscn` the ship is the whole `ship.tscn`, with two things added under it: `DeckStart` (a `Marker3D`, an invisible point with a direction, marking where you begin and which way you face) and the deck's `JollyBoat`.
+
+**Awaiting a fade.** A function that uses `await` pauses there until the thing it waits for is done, and the game carries on meanwhile. *Ours:* `JollyBoat.cross` (`scripts/islands/jolly_boat.gd`) awaits the screen fading out, moves you, then awaits it fading back in, with your controls off in between.
+
+**`RigidBody3D`, impulses and physics layers.** A rigid body is moved by the physics engine itself: it falls, rolls and comes to rest. An *impulse* is a sudden push given to one. Every body is on some physics *layers* and collides with the layers in its *mask*, which is how two things can be made to ignore each other. *Ours:* a `Coconut` (`scripts/islands/coconut.gd`) is a rigid body on a layer of its own, so it rests on the ground but never blocks you; when you walk into it, it gives itself an impulse the way you were going.
+
+**MSAA (antialiasing).** Smooths the stair-stepped edges of models by sampling each pixel several times along edges. It's a setting of the viewport. *Ours:* `Island` (`scripts/islands/island.gd`) turns 4x MSAA on while an island is showing and puts it back after.
+
+**Mipmaps.** Smaller copies of a texture that Godot draws when the texture is far away; without them fine detail shimmers in the distance. *Ours:* `ThirdPartyTexture` can make them as it loads (its `mipmaps` setting), used for the photographed sand and forest floor.
+
 ## Crew walking (#157)
 
 **AStar3D (shortest paths over a graph).** You give it points (an id and a position) and say which pairs are connected; `get_id_path(from, to)` returns the shortest chain of points between two, and `get_closest_point(position)` the nearest point to anywhere. It's the A* search games have long used for pathfinding. *Ours:* `Walkways` builds one from its `Waypoint` children.

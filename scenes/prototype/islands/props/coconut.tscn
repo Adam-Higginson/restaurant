@@ -1,0 +1,56 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://scripts/islands/coconut.gd" id="1_coconut"]
+
+[sub_resource type="PhysicsMaterial" id="Physics_coconut"]
+friction = 0.9
+bounce = 0.25
+
+[sub_resource type="SphereShape3D" id="Shape_coconut"]
+radius = 0.14
+
+[sub_resource type="StandardMaterial3D" id="Material_husk"]
+albedo_color = Color(0.33, 0.22, 0.12, 1)
+roughness = 0.95
+
+[sub_resource type="SphereMesh" id="Mesh_coconut"]
+material = SubResource("Material_husk")
+radius = 0.14
+height = 0.32
+radial_segments = 7
+rings = 4
+
+[sub_resource type="StandardMaterial3D" id="Material_eye"]
+albedo_color = Color(0.14, 0.09, 0.05, 1)
+roughness = 1.0
+
+[sub_resource type="SphereMesh" id="Mesh_eye"]
+material = SubResource("Material_eye")
+radius = 0.035
+height = 0.05
+radial_segments = 5
+rings = 2
+
+[node name="Coconut" type="RigidBody3D"]
+mass = 1.2
+physics_material_override = SubResource("Physics_coconut")
+angular_damp = 1.2
+script = ExtResource("1_coconut")
+
+[node name="Shape" type="CollisionShape3D" parent="."]
+shape = SubResource("Shape_coconut")
+
+[node name="Husk" type="MeshInstance3D" parent="."]
+mesh = SubResource("Mesh_coconut")
+
+[node name="EyeA" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.04, 0.14, 0.02)
+mesh = SubResource("Mesh_eye")
+
+[node name="EyeB" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.04, 0.14, 0.02)
+mesh = SubResource("Mesh_eye")
+
+[node name="EyeC" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.14, -0.045)
+mesh = SubResource("Mesh_eye")

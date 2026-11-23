@@ -1,0 +1,23 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://scripts/art/third_party_model.gd" id="1_model"]
+[ext_resource type="Material" path="res://assets/placeholder/materials/greybox_wood.tres" id="3_mat"]
+
+[sub_resource type="BoxMesh" id="Mesh_stand_in"]
+size = Vector3(3.4, 0.7, 1.4)
+
+[node name="RowingBoat" type="Node3D"]
+
+[node name="StandIn" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.35, 0)
+material_override = ExtResource("3_mat")
+mesh = SubResource("Mesh_stand_in")
+
+[node name="Model" type="Node3D" parent="." node_paths=PackedStringArray("stand_ins")]
+script = ExtResource("1_model")
+path = "res://assets/third_party/meshy/rowing_boat/model/model.glb"
+fit_size = Vector3(3.4, 5, 5)
+stand_ins = [NodePath("../StandIn")]
+grain = false
+detail = 1.0
+keep_as_made = true

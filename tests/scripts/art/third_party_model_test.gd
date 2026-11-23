@@ -114,6 +114,20 @@ func test_its_kiln_job_carries_the_fit() -> void:
 	assert_object(plain.kiln_job()).is_null()
 
 
+func test_a_model_can_be_told_to_cast_no_shadow() -> void:
+	var dresser: ThirdPartyModel = _new_dresser(STAND_IN_MODEL)[0] as ThirdPartyModel
+	var meshes: Array[Node] = dresser.model.find_children("*", "MeshInstance3D", true, false)
+	assert_int(meshes.size()).is_greater(0)
+	for node: Node in meshes:
+		assert_int((node as MeshInstance3D).cast_shadow).is_not_equal(
+				GeometryInstance3D.SHADOW_CASTING_SETTING_OFF)
+	dresser.casts_shadow = false
+	dresser.dress()
+	for node: Node in dresser.model.find_children("*", "MeshInstance3D", true, false):
+		assert_int((node as MeshInstance3D).cast_shadow).is_equal(
+				GeometryInstance3D.SHADOW_CASTING_SETTING_OFF)
+
+
 func test_without_a_look_it_cant_be_fired() -> void:
 	var dresser: ThirdPartyModel = _new_dresser(STAND_IN_MODEL)[0] as ThirdPartyModel
 	assert_str(dresser.kiln_status()).starts_with("No look")

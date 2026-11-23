@@ -1,0 +1,35 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://scripts/art/third_party_model.gd" id="1_model"]
+[ext_resource type="Script" path="res://scripts/islands/plant_sway.gd" id="2_sway"]
+[ext_resource type="Material" path="res://assets/placeholder/materials/greybox_grass.tres" id="3_mat"]
+
+[sub_resource type="SphereMesh" id="Mesh_stand_in"]
+radius = 0.8
+height = 1.4
+radial_segments = 8
+rings = 4
+
+[node name="Bush" type="Node3D"]
+
+[node name="StandIn" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.7, 0)
+material_override = ExtResource("3_mat")
+mesh = SubResource("Mesh_stand_in")
+
+[node name="Model" type="Node3D" parent="." node_paths=PackedStringArray("stand_ins")]
+script = ExtResource("1_model")
+path = "res://assets/third_party/meshy/bush/model/model.glb"
+fit_size = Vector3(40, 1.4, 40)
+stand_ins = [NodePath("../StandIn")]
+grain = false
+detail = 1.0
+keep_as_made = true
+
+[node name="Sway" type="Node" parent="." node_paths=PackedStringArray("model")]
+script = ExtResource("2_sway")
+model = NodePath("../Model")
+sway = 0.045
+flutter = 0.03
+still_below = 0.0
+tint = Color(0.5, 0.62, 0.42, 1)

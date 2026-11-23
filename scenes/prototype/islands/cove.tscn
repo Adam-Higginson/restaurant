@@ -1,0 +1,780 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://scripts/islands/island_ground.gd" id="1_ground"]
+[ext_resource type="Script" path="res://scripts/islands/shore.gd" id="2_shore"]
+[ext_resource type="Script" path="res://scripts/islands/island_scatter.gd" id="3_scatter"]
+[ext_resource type="Script" path="res://scripts/islands/grass_patch.gd" id="4_grass"]
+[ext_resource type="Resource" path="res://data/islands/cove_shape.tres" id="5_shape"]
+[ext_resource type="Shader" path="res://shaders/island_sand.gdshader" id="6_sand"]
+[ext_resource type="Shader" path="res://shaders/shore_water.gdshader" id="7_water"]
+[ext_resource type="Shader" path="res://shaders/grass_blade.gdshader" id="8_blade"]
+[ext_resource type="PackedScene" path="res://scenes/prototype/player.tscn" id="9_player"]
+[ext_resource type="PackedScene" path="res://ui/hud_3d.tscn" id="10_hud"]
+[ext_resource type="PackedScene" path="res://scenes/prototype/islands/props/palm.tscn" id="11_palm"]
+[ext_resource type="PackedScene" path="res://scenes/prototype/islands/props/palm_stout.tscn" id="12_stout"]
+[ext_resource type="PackedScene" path="res://scenes/prototype/islands/props/bush.tscn" id="13_bush"]
+[ext_resource type="PackedScene" path="res://scenes/prototype/islands/props/boulder.tscn" id="14_boulder"]
+[ext_resource type="PackedScene" path="res://scenes/prototype/islands/props/outcrop.tscn" id="15_outcrop"]
+[ext_resource type="PackedScene" path="res://scenes/prototype/islands/props/driftwood.tscn" id="16_driftwood"]
+[ext_resource type="Shader" path="res://shaders/island_sky.gdshader" id="19_sky"]
+[ext_resource type="Shader" path="res://shaders/sun_shaft.gdshader" id="20_shaft"]
+[ext_resource type="Script" path="res://scripts/islands/sun_shafts.gd" id="21_shafts"]
+[ext_resource type="Shader" path="res://shaders/fog_bank.gdshader" id="22_bank"]
+[ext_resource type="Script" path="res://scripts/weather/sound_spot.gd" id="23_sound"]
+[ext_resource type="Script" path="res://scripts/art/third_party_texture.gd" id="24_texture"]
+[ext_resource type="Script" path="res://scripts/islands/fish_shoal.gd" id="25_fish"]
+[ext_resource type="Shader" path="res://shaders/fish.gdshader" id="26_fish"]
+[ext_resource type="Script" path="res://scripts/islands/island.gd" id="27_island"]
+[ext_resource type="PackedScene" path="res://scenes/prototype/islands/props/cliff.tscn" id="28_cliff"]
+[ext_resource type="PackedScene" path="res://scenes/prototype/islands/props/fern.tscn" id="29_fern"]
+[ext_resource type="PackedScene" path="res://scenes/prototype/islands/props/jungle_tree.tscn" id="30_tree"]
+[ext_resource type="PackedScene" path="res://scenes/prototype/islands/props/leaf_plant.tscn" id="31_leaf"]
+[ext_resource type="Script" path="res://scripts/islands/island_backdrop.gd" id="32_backdrop"]
+[ext_resource type="Shader" path="res://shaders/far_hills.gdshader" id="33_hills"]
+[ext_resource type="PackedScene" path="res://scenes/prototype/ship.tscn" id="34_ship"]
+[ext_resource type="PackedScene" path="res://scenes/prototype/islands/props/jolly_boat.tscn" id="35_jolly"]
+[ext_resource type="PackedScene" path="res://ui/screen_fade.tscn" id="36_fade"]
+[ext_resource type="PackedScene" path="res://scenes/prototype/creatures/crab.tscn" id="37_crab"]
+[ext_resource type="Script" path="res://scripts/combat/duel_arena.gd" id="38_duel"]
+[ext_resource type="Script" path="res://scripts/data/item.gd" id="39_item"]
+[ext_resource type="Resource" path="res://data/items/frying_pan.tres" id="40_pan"]
+[ext_resource type="Resource" path="res://data/items/tomato.tres" id="41_tomato"]
+[ext_resource type="Resource" path="res://data/items/lettuce.tres" id="42_lettuce"]
+[ext_resource type="Shader" path="res://shaders/far_canopy.gdshader" id="43_canopy"]
+[ext_resource type="Script" path="res://scripts/islands/near_mist.gd" id="44_mist"]
+[ext_resource type="Script" path="res://scripts/islands/gull_flock.gd" id="45_gulls"]
+[ext_resource type="Shader" path="res://shaders/gull.gdshader" id="46_gull"]
+[ext_resource type="PackedScene" path="res://scenes/prototype/islands/props/coconut.tscn" id="47_coconut"]
+[ext_resource type="Shader" path="res://shaders/blown_leaf.gdshader" id="48_leaf"]
+
+[sub_resource type="FastNoiseLite" id="Noise_cloud"]
+noise_type = 3
+seed = 31
+frequency = 0.012
+fractal_octaves = 4
+
+[sub_resource type="NoiseTexture2D" id="Texture_cloud"]
+width = 512
+height = 512
+seamless = true
+noise = SubResource("Noise_cloud")
+
+[sub_resource type="ShaderMaterial" id="Sky_material"]
+shader = ExtResource("19_sky")
+shader_parameter/cloud_noise = SubResource("Texture_cloud")
+
+[sub_resource type="Sky" id="Sky_cove"]
+sky_material = SubResource("Sky_material")
+
+[sub_resource type="Environment" id="Environment_cove"]
+background_mode = 2
+sky = SubResource("Sky_cove")
+ambient_light_source = 3
+ambient_light_energy = 0.75
+reflected_light_source = 2
+tonemap_mode = 3
+tonemap_white = 6.0
+ssao_enabled = true
+ssao_radius = 1.5
+ssao_intensity = 2.5
+sdfgi_enabled = true
+sdfgi_cascades = 4
+sdfgi_max_distance = 204.8
+sdfgi_energy = 1.0
+glow_enabled = true
+glow_intensity = 0.5
+glow_bloom = 0.12
+glow_blend_mode = 1
+glow_hdr_threshold = 1.25
+fog_enabled = true
+fog_light_color = Color(0.86, 0.84, 0.8, 1)
+fog_light_energy = 1.0
+fog_sun_scatter = 0.15
+fog_density = 0.0014
+fog_aerial_perspective = 0.3
+fog_sky_affect = 0.0
+volumetric_fog_enabled = true
+volumetric_fog_density = 0.0012
+volumetric_fog_albedo = Color(1, 0.96, 0.9, 1)
+volumetric_fog_anisotropy = 0.45
+volumetric_fog_length = 140.0
+volumetric_fog_ambient_inject = 0.3
+volumetric_fog_sky_affect = 0.25
+adjustment_enabled = true
+adjustment_contrast = 1.08
+adjustment_saturation = 1.18
+
+[sub_resource type="FastNoiseLite" id="Noise_grain"]
+noise_type = 3
+frequency = 0.06
+fractal_octaves = 3
+
+[sub_resource type="NoiseTexture2D" id="Texture_grain"]
+width = 128
+height = 128
+seamless = true
+noise = SubResource("Noise_grain")
+
+[sub_resource type="FastNoiseLite" id="Noise_ripples"]
+noise_type = 3
+seed = 4
+frequency = 0.05
+fractal_octaves = 2
+
+[sub_resource type="NoiseTexture2D" id="Texture_ripples"]
+width = 128
+height = 128
+seamless = true
+as_normal_map = true
+bump_strength = 4.0
+noise = SubResource("Noise_ripples")
+
+[sub_resource type="ShaderMaterial" id="Material_sand"]
+shader = ExtResource("6_sand")
+shader_parameter/grain = SubResource("Texture_grain")
+shader_parameter/ripples = SubResource("Texture_ripples")
+
+[sub_resource type="FastNoiseLite" id="Noise_water_a"]
+noise_type = 3
+seed = 21
+frequency = 0.03
+fractal_octaves = 3
+
+[sub_resource type="NoiseTexture2D" id="Texture_water_a"]
+width = 256
+height = 256
+seamless = true
+as_normal_map = true
+bump_strength = 5.0
+noise = SubResource("Noise_water_a")
+
+[sub_resource type="FastNoiseLite" id="Noise_water_b"]
+noise_type = 3
+seed = 22
+frequency = 0.04
+fractal_octaves = 3
+
+[sub_resource type="NoiseTexture2D" id="Texture_water_b"]
+width = 256
+height = 256
+seamless = true
+as_normal_map = true
+bump_strength = 5.0
+noise = SubResource("Noise_water_b")
+
+[sub_resource type="FastNoiseLite" id="Noise_foam"]
+noise_type = 3
+seed = 9
+frequency = 0.03
+fractal_octaves = 3
+
+[sub_resource type="NoiseTexture2D" id="Texture_foam"]
+width = 256
+height = 256
+seamless = true
+noise = SubResource("Noise_foam")
+
+[sub_resource type="ShaderMaterial" id="Material_water"]
+shader = ExtResource("7_water")
+shader_parameter/detail_a = SubResource("Texture_water_a")
+shader_parameter/detail_b = SubResource("Texture_water_b")
+shader_parameter/foam_noise = SubResource("Texture_foam")
+
+[sub_resource type="PlaneMesh" id="Mesh_water"]
+size = Vector2(200, 70)
+subdivide_width = 560
+subdivide_depth = 196
+
+[sub_resource type="PlaneMesh" id="Mesh_far_water"]
+size = Vector2(560, 300)
+subdivide_width = 112
+subdivide_depth = 60
+
+[sub_resource type="ShaderMaterial" id="Material_leaf"]
+shader = ExtResource("8_blade")
+shader_parameter/root_color = Color(0.03, 0.08, 0.02, 1)
+shader_parameter/tip_color = Color(0.2, 0.36, 0.08, 1)
+shader_parameter/sway = 0.08
+
+[sub_resource type="ShaderMaterial" id="Material_blade"]
+shader = ExtResource("8_blade")
+
+[sub_resource type="ShaderMaterial" id="Material_shaft"]
+shader = ExtResource("20_shaft")
+
+[sub_resource type="ShaderMaterial" id="Material_bank"]
+render_priority = -1
+shader = ExtResource("22_bank")
+shader_parameter/billows = SubResource("Texture_cloud")
+
+[sub_resource type="ShaderMaterial" id="Material_veil"]
+shader = ExtResource("22_bank")
+shader_parameter/thickness = 0.45
+shader_parameter/billows = SubResource("Texture_cloud")
+
+[sub_resource type="QuadMesh" id="Mesh_bank"]
+size = Vector2(900, 70)
+
+[sub_resource type="BoxShape3D" id="Shape_side"]
+size = Vector3(2, 30, 140)
+
+[sub_resource type="BoxShape3D" id="Shape_end"]
+size = Vector3(180, 30, 2)
+
+[sub_resource type="ShaderMaterial" id="Material_fish"]
+shader = ExtResource("26_fish")
+
+[sub_resource type="ShaderMaterial" id="Material_hills"]
+shader = ExtResource("33_hills")
+shader_parameter/treetops = SubResource("Texture_cloud")
+
+[sub_resource type="ShaderMaterial" id="Material_canopy"]
+shader = ExtResource("43_canopy")
+
+[sub_resource type="ShaderMaterial" id="Material_gull"]
+shader = ExtResource("46_gull")
+
+[sub_resource type="FogMaterial" id="Fog_mist"]
+density = 0.03
+albedo = Color(1, 0.94, 0.82, 1)
+height_falloff = 0.22
+edge_fade = 1.5
+
+[sub_resource type="StandardMaterial3D" id="Material_mote"]
+transparency = 1
+blend_mode = 1
+shading_mode = 0
+albedo_color = Color(1, 0.9, 0.65, 0.4)
+billboard_mode = 1
+
+[sub_resource type="ShaderMaterial" id="Material_blown_leaf"]
+shader = ExtResource("48_leaf")
+
+[sub_resource type="QuadMesh" id="Mesh_blown_leaf"]
+material = SubResource("Material_blown_leaf")
+size = Vector2(0.2, 0.09)
+
+[sub_resource type="QuadMesh" id="Mesh_mote"]
+material = SubResource("Material_mote")
+size = Vector2(0.02, 0.02)
+
+[node name="Cove" type="Node3D" node_paths=PackedStringArray("player", "start")]
+script = ExtResource("27_island")
+player = NodePath("Player")
+start = NodePath("Ship/DeckStart")
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+environment = SubResource("Environment_cove")
+
+[node name="Sun" type="DirectionalLight3D" parent="."]
+transform = Transform3D(-0.846, -0.1876, 0.4989, 0, 0.936, 0.352, -0.533, 0.2978, -0.7919, 0, 0, 0)
+light_color = Color(1, 0.84, 0.62, 1)
+light_energy = 2.4
+shadow_blur = 1.6
+light_volumetric_fog_energy = 1.0
+shadow_enabled = true
+shadow_bias = 0.08
+shadow_normal_bias = 3.0
+directional_shadow_max_distance = 90.0
+
+[node name="Ground" type="StaticBody3D" parent="."]
+script = ExtResource("1_ground")
+shape = ExtResource("5_shape")
+material = SubResource("Material_sand")
+
+[node name="SandDetail" type="Node" parent="Ground"]
+script = ExtResource("24_texture")
+material = SubResource("Material_sand")
+path = "res://assets/third_party/polyhaven_sand/coast_sand_04_diff_1k.jpg"
+parameter = &"detail"
+mipmaps = true
+
+[node name="SandBumps" type="Node" parent="Ground"]
+script = ExtResource("24_texture")
+material = SubResource("Material_sand")
+path = "res://assets/third_party/polyhaven_sand/coast_sand_04_nor_gl_1k.jpg"
+parameter = &"detail_bumps"
+mipmaps = true
+
+[node name="ForestFloor" type="Node" parent="Ground"]
+script = ExtResource("24_texture")
+material = SubResource("Material_sand")
+path = "res://assets/third_party/polyhaven_forest_floor/brown_mud_leaves_01_diff_1k.jpg"
+parameter = &"floor_photo"
+mipmaps = true
+
+[node name="ForestFloorBumps" type="Node" parent="Ground"]
+script = ExtResource("24_texture")
+material = SubResource("Material_sand")
+path = "res://assets/third_party/polyhaven_forest_floor/brown_mud_leaves_01_nor_gl_1k.jpg"
+parameter = &"floor_bumps"
+mipmaps = true
+
+[node name="Water" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 20)
+material_override = SubResource("Material_water")
+cast_shadow = 0
+mesh = SubResource("Mesh_water")
+
+[node name="FarWater" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 204.5)
+material_override = SubResource("Material_water")
+cast_shadow = 0
+mesh = SubResource("Mesh_far_water")
+
+[node name="Shore" type="Node" parent="." node_paths=PackedStringArray("ground", "water")]
+script = ExtResource("2_shore")
+ground = NodePath("../Ground")
+water = NodePath("../Water")
+swash_period = 5.0
+
+[node name="FogWall" type="MeshInstance3D" parent="."]
+transform = Transform3D(-1, 0, 0, 0, 1, 0, 0, 0, -1, 0, 33, 175)
+material_override = SubResource("Material_bank")
+cast_shadow = 0
+mesh = SubResource("Mesh_bank")
+
+[node name="FogVeil" type="MeshInstance3D" parent="."]
+transform = Transform3D(-1, 0, 0, 0, 0.5, 0, 0, 0, -1, 40, 16, 96)
+material_override = SubResource("Material_veil")
+cast_shadow = 0
+mesh = SubResource("Mesh_bank")
+
+[node name="JungleMist" type="FogVolume" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8, -36)
+size = Vector3(200, 20, 44)
+material = SubResource("Fog_mist")
+script = ExtResource("44_mist")
+
+[node name="FarHills" type="MeshInstance3D" parent="." node_paths=PackedStringArray("sun")]
+material_override = SubResource("Material_hills")
+cast_shadow = 0
+script = ExtResource("32_backdrop")
+first_distance = 95.0
+first_height = 62.0
+height_step = 50.0
+crown_material = SubResource("Material_canopy")
+sun = NodePath("../Sun")
+
+[node name="ScreenFade" parent="." instance=ExtResource("36_fade")]
+
+[node name="Ship" parent="." instance=ExtResource("34_ship")]
+transform = Transform3D(0, 0, 1, 0, 1, 0, -1, 0, 0, 10, 0, 80)
+sail_on_ready = false
+
+[node name="DeckStart" type="Marker3D" parent="Ship"]
+transform = Transform3D(0, 0, -1, 0, 1, 0, 1, 0, 0, 3.5, 5.45, 4)
+
+[node name="JollyBoat" parent="Ship" node_paths=PackedStringArray("destination", "fade") instance=ExtResource("35_jolly")]
+transform = Transform3D(0, 0, 1, 0, 1, 0, -1, 0, 0, 4.2, 5.35, -3)
+destination = NodePath("../../StepOut")
+fade = NodePath("../../ScreenFade")
+
+[node name="BeachBoat" parent="." node_paths=PackedStringArray("destination", "fade") instance=ExtResource("35_jolly")]
+transform = Transform3D(0.259, 0, 0.966, 0, 1, 0, -0.966, 0, 0.259, -22.00, 0, 11.37)
+destination = NodePath("../Ship/DeckStart")
+fade = NodePath("../ScreenFade")
+prompt = "Row back to the ship"
+settle_on = ExtResource("5_shape")
+
+[node name="StepOut" type="Marker3D" parent="." groups=["landing"]]
+transform = Transform3D(0, 0, -1, 0, 1, 0, 1, 0, 0, -21.00, 1.0, 7.64)
+
+[node name="NearCrab" parent="." instance=ExtResource("37_crab")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.00, 1.6, 1.94)
+
+[node name="MiddleCrab" parent="." instance=ExtResource("37_crab")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 15.00, 1.6, 7.89)
+
+[node name="FarCrab" parent="." instance=ExtResource("37_crab")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 29.00, 1.6, 11.78)
+
+[node name="Bounds" type="StaticBody3D" parent="."]
+
+[node name="West" type="CollisionShape3D" parent="Bounds"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -80, 10, 0)
+shape = SubResource("Shape_side")
+
+[node name="East" type="CollisionShape3D" parent="Bounds"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 80, 10, 0)
+shape = SubResource("Shape_side")
+
+[node name="Inland" type="CollisionShape3D" parent="Bounds"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 10, -56)
+shape = SubResource("Shape_end")
+
+[node name="Sea" type="CollisionShape3D" parent="Bounds"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 10, 30)
+shape = SubResource("Shape_end")
+
+[node name="SurfWest" type="AudioStreamPlayer3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -22, 0.5, 9)
+volume_db = -6.0
+unit_size = 14.0
+max_distance = 90.0
+script = ExtResource("23_sound")
+recordings = Array[String](["res://assets/third_party/audio/waves_shore.ogg"])
+loop = true
+
+[node name="SurfEast" type="AudioStreamPlayer3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 24, 0.5, 11)
+volume_db = -6.0
+unit_size = 14.0
+max_distance = 90.0
+script = ExtResource("23_sound")
+recordings = Array[String](["res://assets/third_party/audio/waves_shore.ogg"])
+loop = true
+
+[node name="ShoalWest" type="MultiMeshInstance3D" parent="." node_paths=PackedStringArray("wary_of")]
+material_override = SubResource("Material_fish")
+cast_shadow = 0
+script = ExtResource("25_fish")
+shape = ExtResource("5_shape")
+home_x = -14.0
+wary_of = NodePath("../Player")
+
+[node name="ShoalMiddle" type="MultiMeshInstance3D" parent="." node_paths=PackedStringArray("wary_of")]
+material_override = SubResource("Material_fish")
+cast_shadow = 0
+script = ExtResource("25_fish")
+shape = ExtResource("5_shape")
+home_x = 4.0
+count = 34
+shoal_seed = 5
+wary_of = NodePath("../Player")
+
+[node name="ShoalEast" type="MultiMeshInstance3D" parent="." node_paths=PackedStringArray("wary_of")]
+material_override = SubResource("Material_fish")
+cast_shadow = 0
+script = ExtResource("25_fish")
+shape = ExtResource("5_shape")
+home_x = 22.0
+count = 18
+shoal_seed = 9
+wary_of = NodePath("../Player")
+
+[node name="Gulls" type="MultiMeshInstance3D" parent="."]
+material_override = SubResource("Material_gull")
+cast_shadow = 0
+script = ExtResource("45_gulls")
+count = 14
+height = Vector2(8, 22)
+
+[node name="BlownLeaves" type="CPUParticles3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -22, 4, -3)
+amount = 130
+lifetime = 11.0
+preprocess = 11.0
+randomness = 0.6
+mesh = SubResource("Mesh_blown_leaf")
+emission_shape = 3
+emission_box_extents = Vector3(55, 3.5, 14)
+particle_flag_rotate_y = true
+direction = Vector3(0.8, -0.05, 0.6)
+spread = 14.0
+gravity = Vector3(0, -0.25, 0)
+initial_velocity_min = 2.0
+initial_velocity_max = 5.0
+angular_velocity_min = -260.0
+angular_velocity_max = 260.0
+angle_min = -180.0
+angle_max = 180.0
+scale_amount_min = 0.6
+scale_amount_max = 1.5
+
+[node name="Motes" type="CPUParticles3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.5, -4)
+amount = 160
+lifetime = 10.0
+preprocess = 10.0
+mesh = SubResource("Mesh_mote")
+emission_shape = 3
+emission_box_extents = Vector3(45, 2.5, 16)
+direction = Vector3(0.8, 0.1, 0.6)
+spread = 35.0
+gravity = Vector3(0, 0.01, 0)
+initial_velocity_min = 0.3
+initial_velocity_max = 0.9
+scale_amount_min = 0.5
+scale_amount_max = 1.6
+
+[node name="SunShafts" type="MultiMeshInstance3D" parent="." node_paths=PackedStringArray("sun")]
+material_override = SubResource("Material_shaft")
+cast_shadow = 0
+script = ExtResource("21_shafts")
+sun = NodePath("../Sun")
+shape = ExtResource("5_shape")
+count = 90
+inland = Vector2(4, 26)
+length = Vector2(14, 26)
+width = Vector2(1, 3.6)
+
+[node name="Grass" type="MultiMeshInstance3D" parent="."]
+material_override = SubResource("Material_blade")
+cast_shadow = 0
+script = ExtResource("4_grass")
+shape = ExtResource("5_shape")
+count = 70000
+inland = Vector2(8.5, 56)
+fray = 3.0
+blade_height = 0.34
+
+[node name="BeachGrass" type="MultiMeshInstance3D" parent="."]
+material_override = SubResource("Material_blade")
+cast_shadow = 0
+script = ExtResource("4_grass")
+shape = ExtResource("5_shape")
+count = 1400
+grass_seed = 17
+inland = Vector2(3, 10.5)
+fray = 9.0
+blade_height = 0.36
+blades = 9
+
+[node name="Undergrowth" type="MultiMeshInstance3D" parent="."]
+material_override = SubResource("Material_leaf")
+script = ExtResource("4_grass")
+shape = ExtResource("5_shape")
+count = 16000
+grass_seed = 23
+inland = Vector2(11, 56)
+fray = 2.5
+blade_height = 0.6
+blade_width = 0.07
+reach = Vector2(0.5, 1.0)
+blades = 9
+
+[node name="Palms" type="Node3D" parent="."]
+script = ExtResource("3_scatter")
+shape = ExtResource("5_shape")
+prop = ExtResource("11_palm")
+count = 55
+scatter_seed = 4
+along = Vector2(-78, 78)
+inland = Vector2(11.5, 56)
+spacing = 4.0
+size_range = Vector2(1.4, 2.2)
+lean_degrees = 6.0
+sink = 0.7
+max_slope = 1.2
+
+[node name="BeachPalms" type="Node3D" parent="."]
+script = ExtResource("3_scatter")
+shape = ExtResource("5_shape")
+prop = ExtResource("11_palm")
+count = 7
+scatter_seed = 12
+along = Vector2(-40, 50)
+inland = Vector2(9, 12)
+spacing = 7.0
+size_range = Vector2(1.5, 2.1)
+lean_degrees = 10.0
+sink = 0.7
+max_slope = 1.2
+
+[node name="ShorePalms" type="Node3D" parent="."]
+script = ExtResource("3_scatter")
+shape = ExtResource("5_shape")
+prop = ExtResource("11_palm")
+count = 4
+scatter_seed = 21
+along = Vector2(4, 46)
+inland = Vector2(6.5, 9)
+spacing = 8.0
+size_range = Vector2(1.4, 1.9)
+lean_degrees = 16.0
+sink = 0.7
+max_slope = 1.2
+
+[node name="StoutPalms" type="Node3D" parent="."]
+script = ExtResource("3_scatter")
+shape = ExtResource("5_shape")
+prop = ExtResource("12_stout")
+count = 60
+scatter_seed = 8
+along = Vector2(-80, 80)
+inland = Vector2(11.5, 58)
+spacing = 3.6
+size_range = Vector2(1.2, 2.3)
+lean_degrees = 5.0
+sink = 0.15
+max_slope = 1.2
+
+[node name="EdgeBushes" type="Node3D" parent="."]
+script = ExtResource("3_scatter")
+shape = ExtResource("5_shape")
+prop = ExtResource("13_bush")
+count = 110
+scatter_seed = 9
+along = Vector2(-80, 80)
+inland = Vector2(9, 13.5)
+spacing = 1.1
+size_range = Vector2(0.8, 2.0)
+lean_degrees = 10.0
+sink = 0.08
+max_slope = 1.2
+
+[node name="Bushes" type="Node3D" parent="."]
+script = ExtResource("3_scatter")
+shape = ExtResource("5_shape")
+prop = ExtResource("13_bush")
+count = 200
+scatter_seed = 5
+along = Vector2(-80, 80)
+inland = Vector2(12.5, 58)
+spacing = 1.4
+size_range = Vector2(1.0, 3.0)
+lean_degrees = 8.0
+sink = 0.08
+max_slope = 1.2
+
+[node name="Crags" type="Node3D" parent="."]
+script = ExtResource("3_scatter")
+shape = ExtResource("5_shape")
+prop = ExtResource("28_cliff")
+count = 5
+scatter_seed = 2
+along = Vector2(-85, 85)
+inland = Vector2(44, 56)
+spacing = 26.0
+size_range = Vector2(0.45, 0.8)
+lean_degrees = 3.0
+sink = 2.0
+max_slope = 4.0
+
+[node name="JungleTrees" type="Node3D" parent="."]
+script = ExtResource("3_scatter")
+shape = ExtResource("5_shape")
+prop = ExtResource("30_tree")
+count = 16
+scatter_seed = 14
+along = Vector2(-82, 82)
+inland = Vector2(23, 54)
+spacing = 9.0
+size_range = Vector2(0.8, 1.4)
+lean_degrees = 3.0
+sink = 0.2
+max_slope = 1.2
+
+[node name="Ferns" type="Node3D" parent="."]
+script = ExtResource("3_scatter")
+shape = ExtResource("5_shape")
+prop = ExtResource("29_fern")
+count = 260
+scatter_seed = 18
+along = Vector2(-80, 80)
+inland = Vector2(9.5, 56)
+spacing = 1.2
+size_range = Vector2(0.7, 1.7)
+lean_degrees = 8.0
+sink = 0.05
+max_slope = 1.2
+
+[node name="LeafPlants" type="Node3D" parent="."]
+script = ExtResource("3_scatter")
+shape = ExtResource("5_shape")
+prop = ExtResource("31_leaf")
+count = 130
+scatter_seed = 19
+along = Vector2(-80, 80)
+inland = Vector2(10.5, 56)
+spacing = 1.6
+size_range = Vector2(0.7, 1.5)
+lean_degrees = 6.0
+sink = 0.05
+max_slope = 1.2
+
+[node name="Boulders" type="Node3D" parent="."]
+script = ExtResource("3_scatter")
+shape = ExtResource("5_shape")
+prop = ExtResource("14_boulder")
+count = 18
+scatter_seed = 6
+along = Vector2(-55, 55)
+inland = Vector2(-1.5, 9.5)
+spacing = 2.6
+size_range = Vector2(0.25, 1.0)
+lean_degrees = 14.0
+sink = 0.25
+max_slope = 1.0
+
+[node name="ShallowRocks" type="Node3D" parent="."]
+script = ExtResource("3_scatter")
+shape = ExtResource("5_shape")
+prop = ExtResource("14_boulder")
+count = 16
+scatter_seed = 16
+along = Vector2(-55, 60)
+inland = Vector2(-9, -1.5)
+spacing = 3.2
+size_range = Vector2(0.6, 1.9)
+lean_degrees = 15.0
+sink = 0.35
+max_slope = 1.0
+
+[node name="WestPoint" type="Node3D" parent="."]
+script = ExtResource("3_scatter")
+shape = ExtResource("5_shape")
+prop = ExtResource("15_outcrop")
+count = 1
+scatter_seed = 1
+along = Vector2(-46, -45.9)
+inland = Vector2(1, 1.1)
+size_range = Vector2(1.0, 1.0)
+turn_degrees = Vector2(60, 60)
+lean_degrees = 0.0
+sink = 0.6
+max_slope = 2.0
+
+[node name="EastPoint" type="Node3D" parent="."]
+script = ExtResource("3_scatter")
+shape = ExtResource("5_shape")
+prop = ExtResource("15_outcrop")
+count = 1
+scatter_seed = 1
+along = Vector2(40, 40.1)
+inland = Vector2(2, 2.1)
+size_range = Vector2(1.3, 1.3)
+turn_degrees = Vector2(200, 200)
+lean_degrees = 0.0
+sink = 0.6
+max_slope = 2.0
+
+[node name="Coconuts" type="Node3D" parent="."]
+script = ExtResource("3_scatter")
+shape = ExtResource("5_shape")
+prop = ExtResource("47_coconut")
+count = 11
+scatter_seed = 7
+along = Vector2(-34, 44)
+inland = Vector2(2.5, 10)
+spacing = 2.0
+size_range = Vector2(1.0, 1.0)
+lean_degrees = 0.0
+sink = -0.25
+max_slope = 1.2
+
+[node name="Driftwood" type="Node3D" parent="."]
+script = ExtResource("3_scatter")
+shape = ExtResource("5_shape")
+prop = ExtResource("16_driftwood")
+count = 6
+scatter_seed = 3
+along = Vector2(-40, 40)
+inland = Vector2(2.5, 9.5)
+spacing = 7.0
+size_range = Vector2(0.7, 1.2)
+lean_degrees = 3.0
+sink = 0.12
+max_slope = 1.2
+
+[node name="Player" parent="." instance=ExtResource("9_player")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 14, 5.6, 76.5)
+
+[node name="Hud3D" parent="." node_paths=PackedStringArray("player") instance=ExtResource("10_hud")]
+player = NodePath("../Player")
+
+[node name="Duel" type="Node3D" parent="." node_paths=PackedStringArray("player")]
+script = ExtResource("38_duel")
+player = NodePath("../Player")
+start_items = Array[ExtResource("39_item")]([ExtResource("40_pan"), ExtResource("41_tomato"), ExtResource("42_lettuce"), ExtResource("41_tomato")])

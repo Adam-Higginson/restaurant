@@ -34,6 +34,15 @@ func test_shrinks_to_chunky_pixels() -> void:
 	assert_int(shrunk.get_height()).is_equal(8)
 
 
+func test_can_give_the_texture_mipmaps() -> void:
+	var dresser: ThirdPartyTexture = _new_dresser(GRID)
+	dresser.mipmaps = true
+	assert_bool(dresser.apply()).is_true()
+	var swapped: Texture2D = dresser.material.get_shader_parameter(&"albedo_texture")
+	assert_bool(swapped.get_image().has_mipmaps()).is_true()
+	assert_int(swapped.get_width()).is_equal((load(GRID) as Texture2D).get_width())
+
+
 func _new_dresser(path: String) -> ThirdPartyTexture:
 	var material: ShaderMaterial = ShaderMaterial.new()
 	material.shader = load("res://shaders/wet_surface.gdshader") as Shader
