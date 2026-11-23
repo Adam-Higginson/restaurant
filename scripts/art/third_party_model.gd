@@ -71,6 +71,10 @@ const GRAIN: Texture2D = preload("res://assets/placeholder/materials/n64_grain.t
 @export var detail: float = 0.05
 
 @export_group("Kiln")
+## Never fire this model: it's drawn exactly as it was made, at full quality.
+## For models made for the game (the Meshy crew) rather than taken from a
+## pack, which every pack model otherwise must be (see [member look]).
+@export var keep_as_made: bool = false
 ## How the Kiln fires this model (a preset from data/art/looks/). Without one
 ## it's never fired.
 @export var look: ArtLook:
@@ -148,9 +152,9 @@ func dress() -> bool:
 	return true
 
 
-## The Kiln job for this model, or null without a look.
+## The Kiln job for this model, or null without a look (or when it's kept as made).
 func kiln_job() -> KilnJob:
-	if look == null or path.is_empty():
+	if keep_as_made or look == null or path.is_empty():
 		return null
 	var job: KilnJob = KilnJob.new(path, look)
 	job.fit_size = fit_size
