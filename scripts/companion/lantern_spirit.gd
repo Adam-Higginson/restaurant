@@ -128,6 +128,8 @@ var _home_was: Vector3 = Vector3.ZERO
 var _visit: Node3D = null
 var _visit_left: float = 0.0
 var _said_dim: bool = false
+## Warmth from the remedy, waiting for him to be well enough to take it.
+var _owed_warmth: float = 0.0
 var _candidate: Node3D = null
 var _candidate_time: float = 0.0
 var _velocity: Vector3 = Vector3.ZERO
@@ -157,6 +159,11 @@ func _ready() -> void:
 	_calm_speed = _light.speed
 	if is_instance_valid(detector):
 		detector.focus_changed.connect(_on_focus_changed)
+	Game.dialogue.flag_changed.connect(func(flag: StringName, value: int) -> void:
+		if flag == LOW_FLAG and value == 0 and _owed_warmth > 0.0:
+			var owed: float = _owed_warmth
+			_owed_warmth = 0.0
+			rekindle(owed))
 	Game.memories.remembered.connect(func(_memory: Memory) -> void:
 		if is_in_earshot() and not is_low():
 			hum()
@@ -235,6 +242,15 @@ func let_go() -> void:
 func rekindle(amount: float) -> void:
 	warmth += amount
 	_apply_warmth()
+
+
+## Warms him by [param amount] now, or, while he's low, the moment he's well
+## again (#155): fed the remedy, the warmth arrives as he comes back.
+func rekindle_when_well(amount: float) -> void:
+	if not is_low():
+		rekindle(amount)
+		return
+	_owed_warmth += amount
 
 
 ## Goes to hover just over [param place] for [param seconds] (to eat
