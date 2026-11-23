@@ -29,6 +29,12 @@ extends Resource
 ## random: the busy grain N64 surfaces had, for packs painted in flat colour.
 ## 0 for painted textures, which have their own.
 @export_range(0.0, 0.5) var grain: float = 0.0
+## The shared paintbox the texture's colours are snapped to (the Salt and
+## Ember palette), or none to keep the original's colours.
+@export var palette: KilnPalette
+## How far each pixel moves to its nearest palette colour: 1 all the way, 0
+## not at all.
+@export_range(0.0, 1.0) var palette_strength: float = 1.0
 ## Crunch both sides alike (left and right of the model), so a character's
 ## or creature's face and body stay even.
 @export var symmetric: bool = false
@@ -66,6 +72,8 @@ func firing() -> Dictionary:
 		"flatten_degrees": flatten_degrees,
 		"creases": creases,
 		"grain": grain,
+		"palette": palette.to_list() if palette != null else [],
+		"palette_strength": palette_strength,
 		"symmetric": symmetric,
 		"protect_edges": protect_edges,
 	}

@@ -275,6 +275,20 @@ func clip_length(anim_name: StringName) -> float:
 	return _animator.get_animation(full).length
 
 
+## Holds the character still [param at] seconds into the animation
+## [param anim_name], until something else plays (the Lookbook's pictures).
+## Returns whether there's such an animation.
+func hold(anim_name: StringName, at: float) -> bool:
+	var full: StringName = StringName("%s/%s" % [LIBRARY, anim_name])
+	if _animator == null or not _animator.has_animation(full):
+		return false
+	_animator.play(full, 0.0)
+	_animator.seek(at, true)
+	_animator.pause()
+	set_process(false)
+	return true
+
+
 ## Whether an action is playing (see [method act]).
 func is_acting() -> bool:
 	return _act_left > 0.0

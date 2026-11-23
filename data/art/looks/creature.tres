@@ -1,6 +1,7 @@
 [gd_resource type="Resource" script_class="ArtLook" format=3]
 
 [ext_resource type="Script" path="res://scripts/art/art_look.gd" id="1_look"]
+[ext_resource type="Resource" path="res://data/art/palettes/salt_and_ember.tres" id="2_palette"]
 
 [resource]
 script = ExtResource("1_look")
@@ -11,3 +12,4 @@ flatten_degrees = 2.0
 creases = 0.4
 symmetric = true
 faceted = false
+palette = ExtResource("2_palette")
