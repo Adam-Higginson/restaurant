@@ -39,7 +39,8 @@ Rain and waves: CC0 recordings.
 FONTS
 Cinzel, copyright 2020 The Cinzel Project Authors
 Varela Round, copyright 2023 The Varela Round Project Authors
-Both under the SIL Open Font Licence 1.1: see the licences folder.
+IM Fell English, copyright 2010 Igino Marini
+All three under the SIL Open Font Licence 1.1: see the licences folder.
 
 
 CC0 doesn't ask for credit, but these people made the game look and sound
