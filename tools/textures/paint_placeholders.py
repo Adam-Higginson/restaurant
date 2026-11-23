@@ -1,5 +1,4 @@
-"""Paints our placeholder textures (assets/placeholder/textures/) as soft N64
-textures: the same designs and colours as the old pixel art, but drawn with
+"""Paints our placeholder textures (assets/placeholder/textures/): the same designs and colours as the old pixel art, but drawn with
 smooth shapes and anti-aliased edges at several times the size, so nothing
 reads as blocky squares (#135).
 
@@ -23,6 +22,10 @@ import bpy
 import numpy
 
 SAMPLES = 4
+# How many times bigger than #135's soft N64 size each texture is painted,
+# and the most pixels across its longer side.
+DETAIL = 4
+LARGEST = 1024
 
 
 def load(path):
@@ -50,6 +53,10 @@ class Canvas:
     """A texture [w] x [h] old pixels, painted [scale] times bigger."""
 
     def __init__(self, w, h, scale, seed=1):
+        # The painted look (#168) wants crisp painted cloth, not small soft
+        # textures: paint each DETAIL times bigger again, up to LARGEST
+        # pixels on its longer side.
+        scale = max(scale, min(scale * DETAIL, LARGEST // max(w, h)))
         self.w, self.h, self.scale = w, h, scale
         fine = scale * SAMPLES
         ys, xs = numpy.mgrid[0:h * fine, 0:w * fine].astype(numpy.float32)

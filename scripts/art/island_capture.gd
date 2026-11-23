@@ -39,7 +39,7 @@ func _ready() -> void:
 	camera.make_current()
 	var shots: Array[Shot] = [
 		Shot.new("beach", Vector3(9.0, 3.4, 13.0), Vector3(2.0, 2.2, 0.0)),
-		Shot.new("crab", Vector3(4.2, 2.3, 4.6), Vector3(2.0, 1.8, 1.9)),
+		Shot.new("crab", Vector3(3.4, 3.1, 5.0), Vector3(2.0, 0.9, 1.9)),
 		Shot.new("shore_wide", Vector3(-12.0, 5.5, 24.0), Vector3(6.0, 3.0, -6.0)),
 		Shot.new("jungle", Vector3(14.0, 3.0, 6.0), Vector3(20.0, 4.0, -14.0)),
 	]

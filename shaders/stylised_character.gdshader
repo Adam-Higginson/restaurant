@@ -70,6 +70,15 @@ instance uniform float round_form = 0.0;
 // A low sun hits an upright character far harder than the floor; capped, the
 // lit side stays the character's own colour, warmed, and doesn't burn out.
 instance uniform float light_cap = 0.0;
+// PROTOTYPE: creatures with a shell (the crab). [ball_form] lights the mesh
+// as a smooth dome about [ball_centre] (in the mesh's own space, [ball_radius]
+// across), so a low-poly shell shades as one clean curve and not as facets.
+// [shell] paints it like a shell: deeper and mottled with pale speckles on
+// top, lighter and warmer underneath.
+instance uniform float ball_form = 0.0;
+instance uniform vec3 ball_centre = vec3(0.0);
+instance uniform float ball_radius = 1.0;
+instance uniform float shell = 0.0;
 
 // How high this point is above the model's feet, in metres.
 varying float height;
@@ -78,6 +87,10 @@ varying float covered;
 // The surface's real facing, in view space, kept for the rim when the
 // shading uses a rounded one.
 varying vec3 true_normal;
+// Where this point is on the shell, about -1 to 1 each way, and which way
+// its surface faces in the mesh's own space.
+varying vec3 shell_point;
+varying vec3 shell_facing;
 
 // How much of a point hangs off hidden bones, 0 to 1.
 float under_cloth(uvec4 bones, vec4 weights) {
@@ -95,6 +108,13 @@ void vertex() {
 	height = (MODEL_MATRIX * vec4(VERTEX, 1.0)).y - MODEL_MATRIX[3].y;
 	covered = hidden_bones == 0 ? 0.0 : under_cloth(BONE_INDICES, BONE_WEIGHTS);
 	true_normal = MODELVIEW_NORMAL_MATRIX * NORMAL;
+	shell_point = (VERTEX - ball_centre) / max(ball_radius, 0.0001);
+	shell_facing = NORMAL;
+	if (ball_form > 0.0) {
+		// A dome: squashed a little, so the top faces up more than a ball's.
+		vec3 dome = normalize(shell_point * vec3(1.0, 1.6, 1.0) + vec3(0.0, 0.25, 0.0));
+		NORMAL = normalize(mix(NORMAL, dome, ball_form));
+	}
 	if (round_form > 0.0) {
 		vec3 outward = normalize(vec3(VERTEX.x, 0.0, VERTEX.z) + vec3(0.0, 0.0, 0.0001));
 		NORMAL = normalize(mix(NORMAL, outward, round_form));
@@ -121,6 +141,18 @@ void fragment() {
 		// Keep the cloth's own folds and shading: dye it, scaled by its brightness.
 		vec3 dyed = dye * clamp(brightest / 0.85, 0.0, 1.2);
 		paint = mix(paint, dyed, cloth * recolour_strength);
+	}
+	if (shell > 0.0) {
+		float top = smoothstep(-0.25, 0.6, normalize(shell_facing).y);
+		vec3 at = shell_point * 4.2;
+		// Soft blotches, and small pale speckles among them.
+		float blotch = sin(at.x * 1.7 + sin(at.z * 2.3)) * sin(at.z * 1.9 + sin(at.x * 1.3));
+		float speckle = sin(at.x * 5.3 + sin(at.z * 4.1) * 2.0) * sin(at.z * 6.1 + sin(at.x * 3.7) * 2.0);
+		vec3 under = paint * vec3(1.3, 1.08, 0.92);
+		vec3 over = paint * vec3(0.82, 0.52, 0.5);
+		over = mix(over, paint * vec3(0.62, 0.36, 0.4), smoothstep(0.1, 0.7, blotch) * 0.7);
+		over = mix(over, paint * vec3(1.45, 1.05, 0.85), smoothstep(0.72, 0.9, speckle) * 0.8);
+		paint = mix(paint, mix(under, over, top), shell);
 	}
 	ALBEDO = paint * base_tint.rgb;
 	// No metal and no glossy reflections: the look's highlight is our own.

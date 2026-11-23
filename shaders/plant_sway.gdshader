@@ -9,7 +9,7 @@
 shader_type spatial;
 render_mode cull_disabled, world_vertex_coords;
 
-uniform sampler2D albedo_texture : source_color, filter_linear_mipmap, repeat_enable;
+uniform sampler2D albedo_texture : source_color, filter_linear_mipmap_anisotropic, repeat_enable;
 // How far the top swings and the leaves flutter, as a part of the plant's height.
 uniform float sway = 0.035;
 uniform float flutter = 0.012;
@@ -51,7 +51,9 @@ void vertex() {
 }
 
 void fragment() {
-	vec3 colour = texture(albedo_texture, UV).rgb;
+	// A sharper copy than the distance alone would pick, so bark and leaf
+	// paint stay crisp.
+	vec3 colour = texture(albedo_texture, UV, -0.8).rgb;
 	ALBEDO = colour * tint.rgb;
 	ROUGHNESS = 0.8;
 	SPECULAR = 0.2;

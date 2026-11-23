@@ -39,7 +39,7 @@ const SURFACE: Dictionary[StringName, Variant] = {
 ## How much richer colours are than the scene's own grade.
 @export_range(0.5, 2.0) var saturation: float = 1.12
 ## Brush widths in pixels at 1080p: the scenery's, and the characters'.
-@export_range(0.0, 8.0) var brush: float = 3.0
+@export_range(0.0, 8.0) var brush: float = 2.3
 @export_range(0.0, 8.0) var character_brush: float = 0.9
 ## Ink line width in pixels at 1080p, and how dark the line is.
 @export_range(0.0, 4.0) var line_width: float = 1.0
@@ -49,12 +49,18 @@ const SURFACE: Dictionary[StringName, Variant] = {
 ## that no grain picture colours it.
 @export_range(0.5, 3.0) var surface_saturation: float = 1.55
 @export_range(0.2, 1.5) var surface_value: float = 0.74
+## How much sharper than usual every texture is drawn (0 is as usual): Godot
+## picks a finer copy of each texture than the distance alone would.
+@export_range(0.0, 2.0) var texture_sharpness: float = 0.8
 @export_group("Characters")
 ## The brightest any one light may be on a stylised character.
 @export_range(0.0, 4.0) var light_cap: float = 0.85
 
 var _filter: MeshInstance3D
 var _style: CharacterStyle
+# The look for shelled creatures: two steps of shade, a wet shine, a firmer line.
+var _shell_style: CharacterStyle
+var _viewport_was: Dictionary[StringName, Variant] = {}
 var _was: Dictionary[StringName, Variant] = {}
 var _styled: Array[ThirdPartyModel] = []
 # Each pack model's own [keep_as_made, grain, detail], to put back.
@@ -77,6 +83,15 @@ func _exit_tree() -> void:
 func _ready() -> void:
 	_style = STYLE.duplicate() as CharacterStyle
 	_style.specular_strength = 0.0
+	_shell_style = STYLE.duplicate() as CharacterStyle
+	_shell_style.bands = 2
+	_shell_style.shadow_softness = 0.03
+	_shell_style.specular_strength = 0.3
+	_shell_style.specular_size = 0.025
+	_shell_style.rim_strength = 0.45
+	_shell_style.outline_thickness = 2.6
+	_shell_style.outline_max_width = 0.02
+	_shell_style.outline_color = Color(0.3, 0.06, 0.07)
 	if world == null:
 		var found: Array[Node] = get_tree().root.find_children("*", "WorldEnvironment", true, false)
 		if not found.is_empty():
@@ -127,6 +142,7 @@ static func make_filter(compare: String, brush_size: float) -> MeshInstance3D:
 
 func _apply() -> void:
 	KilnJob.use_fired = not enabled
+	_apply_sharpness()
 	_apply_environment()
 	_apply_people()
 	if enabled and _filter == null:
@@ -155,6 +171,25 @@ func _apply() -> void:
 				model.detail = _models_were[model][2]
 				model.dress()
 		_models_were.clear()
+
+
+# Every texture in the picture is drawn from a finer copy, with the sharpest
+# filtering at glancing angles.
+func _apply_sharpness() -> void:
+	var viewport: Viewport = get_viewport()
+	if not enabled:
+		for property: StringName in _viewport_was:
+			viewport.set(property, _viewport_was[property])
+		_viewport_was.clear()
+		return
+	var sharper: Dictionary[StringName, Variant] = {
+		&"texture_mipmap_bias": -texture_sharpness,
+		&"anisotropic_filtering_level": Viewport.ANISOTROPY_16X,
+	}
+	for property: StringName in sharper:
+		if not _viewport_was.has(property):
+			_viewport_was[property] = viewport.get(property)
+		viewport.set(property, sharper[property])
 
 
 # Pack characters (the player) are built from the packs' own parts at full
@@ -267,16 +302,33 @@ func _on_node_added(node: Node) -> void:
 	_on_dressed.call_deferred(model.model != null, model)
 
 
+# Whether [param model] is a creature with a shell: a [Crab]'s model.
+func _is_shelled(model: ThirdPartyModel) -> bool:
+	var node: Node = model.get_parent()
+	while node != null:
+		if node is Crab:
+			return true
+		node = node.get_parent()
+	return false
+
+
 func _on_dressed(shown: bool, model: ThirdPartyModel) -> void:
 	if not shown or not enabled or model.model == null:
 		return
 	if model.model.find_children("*", "Skeleton3D", true, false).is_empty():
 		return
+	var shelled: bool = _is_shelled(model)
 	if model.style == null:
-		model.style = _style
+		model.style = _shell_style if shelled else _style
 		return
 	for found: Node in model.model.find_children("*", "MeshInstance3D", true, false):
 		var mesh_node: MeshInstance3D = found as MeshInstance3D
 		mesh_node.set_instance_shader_parameter(&"light_cap", light_cap)
+		if shelled:
+			var box: AABB = mesh_node.get_aabb()
+			mesh_node.set_instance_shader_parameter(&"ball_form", 0.85)
+			mesh_node.set_instance_shader_parameter(&"ball_centre", box.get_center())
+			mesh_node.set_instance_shader_parameter(&"ball_radius", box.get_longest_axis_size() * 0.5)
+			mesh_node.set_instance_shader_parameter(&"shell", 1.0)
 		if model.outfit != null:
 			mesh_node.set_instance_shader_parameter(&"round_form", 0.75)
