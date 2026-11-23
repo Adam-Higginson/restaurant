@@ -41,6 +41,15 @@ func test_each_size_a_model_is_fitted_to_gets_its_own_fired_files() -> void:
 	assert_str(small.fired_path()).starts_with("res://assets/third_party/_kiln/box_model.test.")
 
 
+func test_a_second_firing_of_a_model_gets_its_own_files() -> void:
+	var usual: KilnJob = KilnJob.new(STAND_IN, _look())
+	var asleep: KilnJob = KilnJob.new(STAND_IN, _look())
+	asleep.variant = "asleep"
+	assert_str(asleep.fired_path()).is_equal("res://assets/third_party/_kiln/box_model.test.asleep.glb")
+	assert_str(asleep.texture_path()).is_equal("res://assets/third_party/_kiln/box_model.test.asleep.png")
+	assert_str(asleep.fired_path()).is_not_equal(usual.fired_path())
+
+
 func test_it_can_fire_only_with_a_look_and_every_file() -> void:
 	assert_bool(KilnJob.new(STAND_IN, null).can_fire()).is_false()
 	assert_bool(KilnJob.new("res://no_such_model.glb", _look()).can_fire()).is_false()

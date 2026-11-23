@@ -70,15 +70,48 @@ func test_it_opens_on_her_name_and_waits_for_any_button() -> void:
 	await physics_ticks(runner, 240)
 	assert_str(String(_conversation.section())).is_equal("start")
 
-	# Any key at all: he hears something, and stops.
+	# Any key at all. The night goes on a moment longer, then he hears
+	# something, and stops.
 	runner.simulate_key_pressed(KEY_ENTER)
 	assert_bool(await _reaches(runner, &"he_hears")).is_true()
-	await physics_ticks(runner, 20)
+	await physics_ticks(runner, 130)
 	assert_bool(swing.swinging).is_false()
 	assert_int(face.expression).is_equal(LanternFace.Look.SURPRISED)
 
-	# Off the hook and over the side: her name is dark, and you're under.
-	assert_bool(await _reaches(runner, &"dark")).is_true()
+	# He looks out over the water, finds it, and calls it to the ship: his
+	# first words, in the dialogue box, with nobody pressing anything.
+	await physics_ticks(runner, 240)
+	assert_bool(_conversation.is_aside_up()).is_true()
+	assert_str(_conversation.box.line_text()).is_equal("Someone in the water!")
+	assert_str(_conversation.box.speaker_name()).is_equal("Lantern")
+
+	# Down there, under the storm: you, close, eyes shut. Then back up to him.
+	var you: CharacterModel = _underwater_set().get_node("Castaway/Character") as CharacterModel
+	for i: int in 300:
+		if underwater.is_open:
+			break
+		await physics_ticks(runner, 1)
+	assert_bool(underwater.is_open).is_true()
+	assert_bool(you.eyes_shut).is_true()
+	assert_str(String(_conversation.section())).is_equal("he_hears")
+
+	# Off the hook and over the side. From out on the water we watch him go:
+	# a lantern in the air astern of her, where he wasn't a moment ago.
+	var flying: Node3D = _ship.get_node("RescueSet/Props/FlyingLantern") as Node3D
+	assert_bool(flying.visible).is_false()
+	var hung_at: Vector3 = flying.position
+	assert_bool(await _reaches(runner, &"plunge")).is_true()
+	assert_bool(underwater.is_open).is_false()
+	await physics_ticks(runner, 45)
+	assert_bool(flying.visible).is_true()
+	assert_bool(_player.camera_rig.is_fixed).is_true()
+	assert_float(flying.position.distance_to(hung_at)).is_greater(2.0)
+	assert_bool(hook_lantern.is_visible_in_tree()).is_false()
+
+	# He hits the water, and then her name is dark, and we're under with
+	# him, straight away.
+	assert_bool(await _reaches(runner, &"light")).is_true()
+	assert_bool(flying.visible).is_false()
 	assert_bool(hook_lantern.is_visible_in_tree()).is_false()
 	assert_float(carved.lamp_glow()).is_equal(0.0)
 	assert_bool(dimmer.dimmed).is_false()
@@ -93,7 +126,6 @@ func test_the_rescue_waits_for_you_to_take_his_hand_then_goes_to_the_surface() -
 	var underwater: Stage = _sea.get_node("Stages/Underwater") as Stage
 	var prompt: CutscenePrompt = _sea.get_node("CutscenePrompt") as CutscenePrompt
 	var castaway: Node3D = _ship.get_node("RescueSet/Props/Castaway") as Node3D
-	var boathook: Node3D = _ship.get_node("RescueSet/Props/ReachingBoathook") as Node3D
 	var heron: Crewmate = _ship.get_node("Crew/Heron") as Crewmate
 	var face: LanternFace = _sinking_lantern()
 	var hand: FlameHand = _underwater_set().get_node("Lantern/Hand") as FlameHand
@@ -109,21 +141,72 @@ func test_the_rescue_waits_for_you_to_take_his_hand_then_goes_to_the_surface() -
 	assert_float(face.door).is_equal_approx(1.0, 0.01)
 	assert_bool(face.cracked).is_true()
 	assert_float(hand.reach).is_greater(0.8)
+	# You're out cold: your eyes are shut. And he's told you what to do.
+	var you: CharacterModel = _underwater_set().get_node("Castaway/Character") as CharacterModel
+	assert_bool(you.eyes_shut).is_true()
+	assert_float(you.reach).is_equal(0.0)
+	assert_float(you.head_turn).is_equal(0.0)
+	# You're floating, not standing.
+	assert_float(you.afloat).is_equal(1.0)
+	assert_bool(_conversation.is_aside_up()).is_true()
+	# What he says can be seen: the dialogue box is drawn over the water you're
+	# sinking through, and the prompt has moved up out of its way.
+	var box_layer: CanvasLayer = _conversation.box.get_parent() as CanvasLayer
+	assert_object(box_layer).is_not_null()
+	assert_int(box_layer.layer).is_greater(underwater.layer)
+	assert_bool(_conversation.box.is_visible_in_tree()).is_true()
+	assert_bool(prompt.raised).is_true()
 
-	# Take it: his hand closes on yours, and then black, and not a sound.
+	# Take it: his hand closes on yours, and he catches at once: no black,
+	# no wait.
 	_conversation.press()
 	assert_bool(await _reaches(runner, &"out")).is_true()
 	await physics_ticks(runner, 20)
 	assert_float(hand.grip).is_equal_approx(1.0, 0.01)
-	assert_bool(_fade().is_covering()).is_true()
-	assert_bool(_ambience().hushed).is_true()
+	# Only your arm went out to him: you're where you were, as you were.
+	assert_float(you.reach).is_equal_approx(1.0, 0.01)
+	# And your head came up to him.
+	assert_float(you.head_turn).is_equal_approx(1.0, 0.01)
+	assert_str(String(you.idle_animation)).is_equal("Zombie_Idle")
+	assert_bool(_fade().is_covering()).is_false()
+	assert_float(face.strength).is_greater(0.9)
+	assert_bool(you.eyes_shut).is_false()
 
 	# Your hand catches him alight again, and the storm's rumble comes back.
-	assert_bool(await _reaches(runner, &"rising")).is_true()
+	# Below you the dead lanterns hang in the deep, and nothing is among
+	# them yet.
+	var field: LanternField = _underwater_set().get_node("Lanterns") as LanternField
+	var lightning: Lightning = _sea.get_node("Weather/Lightning") as Lightning
+	var strikes: Array[int] = []
+	lightning.struck.connect(func() -> void: strikes.append(1))
+	assert_bool(await _reaches(runner, &"haul")).is_true()
 	assert_float(face.strength).is_equal_approx(1.0, 0.01)
 	assert_bool(_fade().is_covering()).is_false()
 	assert_bool(_ambience().hushed).is_false()
 	assert_bool(_ambience().submerged).is_true()
+	# Your eyes opened as he caught, and by now he's above you with his arm
+	# taut down to your hand.
+	assert_bool(you.eyes_shut).is_false()
+	var lantern_node: Node3D = _underwater_set().get_node("Lantern") as Node3D
+	var castaway_node: Node3D = _underwater_set().get_node("Castaway") as Node3D
+	assert_float(lantern_node.position.y).is_greater(castaway_node.position.y + 1.0)
+	var thing: Node3D = _underwater_set().get_node("Thing") as Node3D
+	var shafts: LightningShafts = _underwater_set().get_node("Shafts") as LightningShafts
+	assert_int(field.count()).is_greater(60)
+	assert_bool(shafts.is_in_group(Lightning.LIT_GROUP)).is_true()
+	var thing_at_first: Vector3 = thing.global_position
+
+	# The thing: lightning comes down through the water, twice, and by the
+	# end something enormous has slid in beneath the lanterns, deep down.
+	assert_bool(await _reaches(runner, &"rising")).is_true()
+	assert_int(strikes.size()).is_greater_equal(2)
+	assert_float(thing.global_position.distance_to(thing_at_first)).is_greater(10.0)
+	assert_float(thing.global_position.y).is_less(-10.0)
+	# Its head is somewhere beneath you by now, a long way down.
+	assert_float(field.distance_to_thing(Vector3(0, thing.global_position.y, 0))).is_less(15.0)
+	assert_float(thing.global_position.y).is_less(-30.0)
+	assert_bool(_ambience().hushed).is_false()
+	assert_float(face.strength).is_less(0.9)
 
 	# Up to the surface, beside the ship, with the storm clear again. He's a
 	# small ember now, his door hanging open.
@@ -137,20 +220,29 @@ func test_the_rescue_waits_for_you_to_take_his_hand_then_goes_to_the_surface() -
 	assert_bool(_ambience().submerged).is_false()
 	assert_bool(castaway.visible).is_true()
 	assert_bool(_player.camera_rig.is_fixed).is_true()
+	# You've come up gasping, eyes open, holding him up out of the waves:
+	# your arm raised to him, your hand closed round him.
+	var surfaced: CharacterModel = castaway.get_node("Figure/Character") as CharacterModel
+	assert_bool(surfaced.eyes_shut).is_false()
+	assert_float(surfaced.reach).is_equal(1.0)
+	assert_float(surfaced.hand_grip).is_equal(1.0)
+	assert_object(surfaced.reach_for).is_same(ember)
+	await physics_ticks(runner, 120)
+	assert_float(ember.global_position.y).is_greater(castaway.global_position.y + 0.6)
 
-	# The captain at the rail with the boathook.
-	assert_bool(await _reaches(runner, &"boathook")).is_true()
+	# Lightning shows the captain at the rail, looking down. No boathook is
+	# shown: how you got aboard is left out.
+	assert_bool(await _reaches(runner, &"rail")).is_true()
 	await physics_ticks(runner, 5)
 	var rail: Node3D = _ship.get_node("RescueSet/Marks/Rail") as Node3D
 	assert_bool(heron.is_present()).is_true()
 	assert_vector(heron.global_position).is_equal_approx(rail.global_position, NEAR)
-	assert_bool(boathook.visible).is_true()
 
-	# To black and the chapter card, with the rescue's pieces put away.
-	assert_bool(await _reaches(runner, &"title")).is_true()
+	# A long fade to black, no chapter card, with the rescue's pieces put
+	# away.
+	assert_bool(await _reaches(runner, &"asleep")).is_true()
 	await physics_ticks(runner, 5)
 	assert_bool(castaway.visible).is_false()
-	assert_bool(boathook.visible).is_false()
 	assert_bool(heron.is_present()).is_false()
 	assert_bool(_fade().is_covering()).is_true()
 
@@ -182,18 +274,39 @@ func test_he_comes_down_strong_and_reaches_you_nearly_out() -> void:
 
 
 func test_you_wake_and_the_captain_appears_and_then_the_ship_is_yours() -> void:
-	_build(&"title")
+	_build(&"asleep")
 	var runner: GdUnitSceneRunner = scene_runner(_sea)
 	var heron: Crewmate = _ship.get_node("Crew/Heron") as Crewmate
 	var rig: CameraRig = _player.camera_rig
+	var sleeping: Node3D = _ship.get_node("WakingSet/Props/SleepingYou") as Node3D
+	var you_asleep: CharacterModel = sleeping.get_node("Character") as CharacterModel
+	var spirit: LanternSpirit = _player.get_node("LanternSpirit") as LanternSpirit
+	var by_bunk: Node3D = _ship.get_node("WakingSet/Marks/ByYourBunk") as Node3D
+	var middle: Node3D = _ship.get_node("WakingSet/Marks/RoomMiddle") as Node3D
+	var your_body: Node3D = _player.get_node("Model") as Node3D
 
-	# The lantern's three lines.
+	# Out of the black: you, asleep in your bunk, and him right beside you.
+	# You're not up yet.
 	assert_bool(await _reaches(runner, &"waking")).is_true()
 	assert_bool(_fade().visible).is_false()
 	assert_bool(heron.is_present()).is_false()
+	assert_bool(sleeping.visible).is_true()
+	assert_bool(your_body.visible).is_false()
+	assert_object(spirit.held).is_same(by_bunk)
+	assert_float(spirit.global_position.distance_to(by_bunk.global_position)).is_less(0.3)
+	assert_bool(rig.is_fixed).is_true()
+
+	# Your eyes open as he speaks his three lines.
+	await physics_ticks(runner, 60)
+	assert_bool(you_asleep.eyes_shut).is_false()
 	for i: int in 3:
 		assert_str(String(_conversation.section())).is_equal("waking")
 		_press()
+
+	# Then he floats off to the middle of the room.
+	await physics_ticks(runner, 60)
+	assert_object(spirit.held).is_same(middle)
+	assert_float(spirit.global_position.distance_to(middle.global_position)).is_less(1.0)
 
 	# The captain in the doorway, on a fixed shot.
 	assert_bool(await _reaches(runner, &"doorway")).is_true()
@@ -202,6 +315,9 @@ func test_you_wake_and_the_captain_appears_and_then_the_ship_is_yours() -> void:
 	assert_bool(heron.is_present()).is_true()
 	assert_vector(heron.global_position).is_equal_approx(doorway.global_position, NEAR)
 	assert_bool(rig.is_fixed).is_true()
+	# By now you're up, standing by your bunk.
+	assert_bool(sleeping.visible).is_false()
+	assert_bool(your_body.visible).is_true()
 	_press()
 	_press()
 
@@ -216,6 +332,8 @@ func test_you_wake_and_the_captain_appears_and_then_the_ship_is_yours() -> void:
 	assert_bool(_player.controls_enabled).is_true()
 	assert_bool(rig.is_fixed).is_false()
 	assert_bool(heron.is_present()).is_true()
+	# And he's back to his usual place.
+	assert_object(spirit.held).is_null()
 
 
 func test_skipping_the_intro_ends_it_with_everything_put_away() -> void:
@@ -237,7 +355,10 @@ func test_skipping_the_intro_ends_it_with_everything_put_away() -> void:
 	assert_bool((_ship.get_node("SternWatch/WindowDimmer") as WindowDimmer).dimmed).is_false()
 	assert_bool(_ambience().submerged).is_false()
 	assert_bool((_ship.get_node("RescueSet/Props/Castaway") as Node3D).visible).is_false()
-	assert_bool((_ship.get_node("RescueSet/Props/ReachingBoathook") as Node3D).visible).is_false()
+	# Up and about: not asleep in the bunk, and him not kept anywhere.
+	assert_bool((_ship.get_node("WakingSet/Props/SleepingYou") as Node3D).visible).is_false()
+	assert_bool((_player.get_node("Model") as Node3D).visible).is_true()
+	assert_object((_player.get_node("LanternSpirit") as LanternSpirit).held).is_null()
 	var night: Node3D = _ship.get_node("Crew/HeronNight") as Node3D
 	assert_bool(heron.is_present()).is_true()
 	assert_vector(heron.global_position).is_equal_approx(night.global_position, NEAR)
@@ -313,7 +434,7 @@ func test_everything_the_intro_asks_for_is_in_the_scene() -> void:
 			&"stage":
 				if word != "off":
 					found = stages.find_stage(word)
-			&"play", &"start":
+			&"play", &"start", &"queue":
 				found = clips.find_player(StringName(word))
 			&"look":
 				found = looks.find_face(word)

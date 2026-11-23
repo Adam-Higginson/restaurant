@@ -17,8 +17,8 @@
 [ext_resource type="PackedScene" path="res://ui/cutscene_prompt.tscn" id="314_prompt"]
 [ext_resource type="AudioStream" path="res://assets/audio/ui/confirmation_001.wav" id="315_confirm"]
 [ext_resource type="AudioStream" path="res://assets/audio/intro/grasp.tres" id="316_grasp"]
-[ext_resource type="AudioStream" path="res://assets/audio/intro/hook.tres" id="317_hook"]
 [ext_resource type="Script" path="res://scripts/audio/optional_sound.gd" id="318_optional"]
+[ext_resource type="Script" path="res://scripts/cutscene/speech_cues.gd" id="319_speech"]
 [ext_resource type="Material" path="res://assets/placeholder/materials/greybox_sand.tres" id="2_dlk4p"]
 [ext_resource type="Material" path="res://assets/placeholder/materials/greybox_grass.tres" id="3_nk5mb"]
 [ext_resource type="Material" path="res://assets/placeholder/materials/greybox_dark_wood.tres" id="4_8v0wy"]
@@ -326,6 +326,10 @@ choice = NodePath("../LookChoice")
 
 [node name="LookChoice" parent="." instance=ExtResource("90_look")]
 
+[node name="SpeechCues" type="Node" parent="." node_paths=PackedStringArray("prompt")]
+script = ExtResource("319_speech")
+prompt = NodePath("../CutscenePrompt")
+
 [node name="LookCues" type="Node" parent="."]
 script = ExtResource("312_looks")
 
@@ -340,17 +344,25 @@ volume_db = -8.0
 stream = ExtResource("316_grasp")
 volume_db = 0.0
 
-[node name="Hook" type="AudioStreamPlayer" parent="SoundCues"]
-stream = ExtResource("317_hook")
-volume_db = 6.0
-
-[node name="Heartbeat" type="AudioStreamPlayer" parent="SoundCues"]
-script = ExtResource("318_optional")
-recording = "res://assets/third_party/audio/heartbeat.ogg"
-
 [node name="Flare" type="AudioStreamPlayer" parent="SoundCues"]
 script = ExtResource("318_optional")
 recording = "res://assets/third_party/audio/lantern_flare.ogg"
+
+[node name="DeepNote" type="AudioStreamPlayer" parent="SoundCues"]
+script = ExtResource("318_optional")
+recording = "res://assets/third_party/audio/deep_note.ogg"
+
+[node name="Plunge" type="AudioStreamPlayer" parent="SoundCues"]
+script = ExtResource("318_optional")
+recording = "res://assets/third_party/audio/plunge.ogg"
+
+[node name="Bell" type="AudioStreamPlayer" parent="SoundCues"]
+script = ExtResource("318_optional")
+recording = "res://assets/third_party/audio/bell_far.ogg"
+
+[node name="Gasp" type="AudioStreamPlayer" parent="SoundCues"]
+script = ExtResource("318_optional")
+recording = "res://assets/third_party/audio/gasp.ogg"
 
 [node name="Stages" type="Node" parent="."]
 

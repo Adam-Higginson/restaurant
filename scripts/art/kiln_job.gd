@@ -46,6 +46,10 @@ var fit_size: Vector3 = Vector3.ZERO
 var stretch: bool = false
 ## How much it's scaled in the game, on top of the fit.
 var scale: float = 1.0
+## A name for a second firing of the same model made differently (a head
+## with its eyes left out, "asleep"), so the two don't overwrite each
+## other. Empty for the usual one.
+var variant: String = ""
 
 
 func _init(model: String = "", with_look: ArtLook = null) -> void:
@@ -200,4 +204,6 @@ func _stem() -> String:
 	if fit_size != Vector3.ZERO:
 		var placement: String = "%s|%s|%s" % [fit_size, stretch, scale]
 		stem += "." + placement.md5_text().left(6)
+	if not variant.is_empty():
+		stem += "." + variant
 	return stem

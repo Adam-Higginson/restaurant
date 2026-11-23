@@ -1,0 +1,51 @@
+[gd_scene format=3]
+
+[ext_resource type="Material" path="res://assets/placeholder/materials/iron.tres" id="1_iron"]
+[ext_resource type="Shader" path="res://shaders/dead_glass.gdshader" id="2_glass"]
+
+[sub_resource type="ShaderMaterial" id="Material_Glass"]
+shader = ExtResource("2_glass")
+
+[sub_resource type="BoxMesh" id="Glass"]
+size = Vector3(0.17, 0.2, 0.17)
+
+[sub_resource type="CylinderMesh" id="Cap"]
+top_radius = 0.03
+bottom_radius = 0.12
+height = 0.08
+radial_segments = 8
+rings = 1
+
+[sub_resource type="TorusMesh" id="Ring"]
+inner_radius = 0.025
+outer_radius = 0.045
+rings = 8
+ring_segments = 4
+
+[sub_resource type="CylinderMesh" id="Base"]
+top_radius = 0.11
+bottom_radius = 0.09
+height = 0.05
+radial_segments = 8
+rings = 1
+
+[node name="DeadLantern" type="Node3D"]
+
+[node name="Glass" type="MeshInstance3D" parent="."]
+material_override = SubResource("Material_Glass")
+mesh = SubResource("Glass")
+
+[node name="Cap" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.14, 0)
+material_override = ExtResource("1_iron")
+mesh = SubResource("Cap")
+
+[node name="Ring" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, -4.371139e-08, -1, 0, 1, -4.371139e-08, 0, 0.21, 0)
+material_override = ExtResource("1_iron")
+mesh = SubResource("Ring")
+
+[node name="Base" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.12, 0)
+material_override = ExtResource("1_iron")
+mesh = SubResource("Base")

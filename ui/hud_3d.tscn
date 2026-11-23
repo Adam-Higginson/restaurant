@@ -104,7 +104,10 @@ grow_vertical = 2
 mouse_filter = 2
 script = ExtResource("9_memory")
 
-[node name="DialogueBox" parent="." instance=ExtResource("20_box")]
+[node name="SpeechLayer" type="CanvasLayer" parent="."]
+layer = 17
+
+[node name="DialogueBox" parent="SpeechLayer" instance=ExtResource("20_box")]
 unique_name_in_owner = true
 
 [node name="DialogueSounds" type="Node" parent="."]

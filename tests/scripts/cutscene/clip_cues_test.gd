@@ -1,7 +1,8 @@
 extends GameTestSuite
 ## Tests for clips (movements made on the animation timeline) in a cutscene:
-## @play holds the script until the clip ends, @start doesn't, and skipping
-## leaves whatever a clip moves where the clip leaves it.
+## @play holds the script until the clip ends, @start doesn't, @queue lines
+## one up to follow another, and skipping leaves whatever a clip moves where
+## the clip leaves it.
 ##
 ## The clip "slide" moves a thing from x = 0 to x = 2 in half a second;
 ## "bob" loops, between x = 5 and x = 6.
@@ -61,6 +62,39 @@ func test_a_looping_clip_keeps_going_however_long_the_script_waits() -> void:
 
 	assert_bool(_clips.is_playing()).is_true()
 	assert_str(String(_clips.current_animation)).is_equal("bob")
+
+
+func test_queue_lines_a_clip_up_to_follow_the_one_thats_playing() -> void:
+	_build()
+	var runner: GdUnitSceneRunner = scene_runner(_player.get_parent())
+	await physics_ticks(runner, 3)
+
+	play_cutscene(_conversation, _player, "@start slide
+@queue bob
+heron: Meanwhile.")
+	assert_int(_lines).is_equal(1)
+
+	# The first clip plays through...
+	await physics_ticks(runner, 15)
+	assert_float(_thing.position.x).is_between(0.2, 1.8)
+
+	# ...and the loop takes over from it.
+	await physics_ticks(runner, 40)
+	assert_bool(_clips.is_playing()).is_true()
+	assert_float(_thing.position.x).is_between(5.0, 6.0)
+
+
+func test_queued_with_nothing_playing_a_clip_just_starts() -> void:
+	_build()
+	var runner: GdUnitSceneRunner = scene_runner(_player.get_parent())
+	await physics_ticks(runner, 3)
+
+	play_cutscene(_conversation, _player, "@queue bob
+heron: Meanwhile.")
+	await physics_ticks(runner, 10)
+
+	assert_bool(_clips.is_playing()).is_true()
+	assert_float(_thing.position.x).is_between(5.0, 6.0)
 
 
 func test_skipping_past_a_clip_leaves_things_where_it_ends() -> void:

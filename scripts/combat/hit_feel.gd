@@ -154,8 +154,11 @@ func _on_charge_filled() -> void:
 # Blinks the model while the player can't be hit, and shows it steadily after.
 func _flicker(delta: float) -> void:
 	if not _duellist.is_invulnerable():
+		# Shown again once a flicker's done, and otherwise left alone (a
+		# cutscene may have hidden the body).
+		if _flicker_time > 0.0:
+			_model.visible = true
 		_flicker_time = 0.0
-		_model.visible = true
 		return
 	_flicker_time += delta
 	_model.visible = int(_flicker_time * flicker_rate * 2.0) % 2 == 0

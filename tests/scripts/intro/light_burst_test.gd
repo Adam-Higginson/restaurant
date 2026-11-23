@@ -8,15 +8,19 @@ const SHADER: Shader = preload("res://shaders/light_burst.gdshader")
 
 func test_nothing_shows_until_it_begins_or_once_its_spent() -> void:
 	var burst: LightBurst = _new_burst()
-	assert_bool(burst.visible).is_false()
+	assert_bool(burst.is_showing()).is_false()
 	assert_float(burst.brightness_now()).is_equal(0.0)
+	assert_float(_brightness_sent(burst)).is_equal(0.0)
 
 	burst.spread = 0.3
-	assert_bool(burst.visible).is_true()
+	assert_bool(burst.is_showing()).is_true()
 
 	burst.spread = 1.0
-	assert_bool(burst.visible).is_false()
+	assert_bool(burst.is_showing()).is_false()
 	assert_float(burst.brightness_now()).is_equal(0.0)
+	assert_float(_brightness_sent(burst)).is_equal(0.0)
+	# It's drawn all along, dark, so nothing has to be prepared mid-scene.
+	assert_bool(burst.visible).is_true()
 
 
 func test_it_shoots_out_and_then_slows() -> void:

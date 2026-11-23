@@ -21,9 +21,14 @@ const USAGE: Dictionary[StringName, String] = {
 	&"hide": "@hide heron",
 	&"show": "@show heron",
 	&"home": "@home heron",
+	&"go": "@go lantern room_middle (the lantern floats to a mark and stays)",
 	&"stage": "@stage underwater or @stage off",
 	&"play": "@play lantern_descends",
 	&"start": "@start drifting",
+	&"queue": "@queue offered (to follow the clip that's playing now)",
+	&"say": "@say lantern 2.0 Someone in the water! (who, seconds it's up for, the words)",
+	&"say_in": "@say_in 3.5 lantern 2.0 Come on. (seconds until, who, seconds it's up for, "
+			+ "the words)",
 	&"sound": "@sound splash",
 	&"muffle": "@muffle on or @muffle off",
 	&"hush": "@hush on or @hush off",
@@ -63,10 +68,14 @@ static func _fits(cue: StringName, args: PackedStringArray) -> bool:
 			return args.size() == 1 and _is_seconds(args[0])
 		&"wait_for":
 			return not args.is_empty() and ["interact", "any"].has(args[0])
-		&"place", &"face":
+		&"place", &"face", &"go":
 			return args.size() == 2
-		&"hide", &"show", &"home", &"stage", &"play", &"start", &"sound":
+		&"hide", &"show", &"home", &"stage", &"play", &"start", &"queue", &"sound":
 			return args.size() == 1
+		&"say":
+			return args.size() >= 3 and _is_seconds(args[1])
+		&"say_in":
+			return args.size() >= 4 and _is_seconds(args[0]) and _is_seconds(args[2])
 		&"muffle", &"hush":
 			return args.size() == 1 and ["on", "off"].has(args[0])
 		&"lightning", &"who_are_you":
