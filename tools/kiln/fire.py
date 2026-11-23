@@ -107,7 +107,10 @@ def fire(job: dict) -> dict:
     low = _join(low_parts, "KilnLow")
 
     scale = _game_scale(job, high)
+    bones_before = _moved_by(low)
     _crunch(low, job, scale)
+    # Bones whose part was crunched away: they'd have nothing left to move.
+    bones_lost = sorted(bones_before - _moved_by(low))
     _unwrap(low)
     size, achieved = _texture_size(low, job, scale)
     pixels = _bake(low, high, size, job, scale)
@@ -126,6 +129,7 @@ def fire(job: dict) -> dict:
         "pixels_per_metre": round(achieved, 1),
         "game_scale": round(scale, 4),
         "rigged": armature is not None,
+        "bones_lost": bones_lost,
     }
 
 
@@ -226,6 +230,37 @@ def _dimensions(objs) -> Vector:
     return high - low
 
 
+def _moved_by(obj) -> set:
+    """The names of the bones that are the strongest at some point of [obj]."""
+    names = {group.index: group.name for group in obj.vertex_groups}
+    found = set()
+    for vert in obj.data.vertices:
+        if vert.groups:
+            found.add(names[max(vert.groups, key=lambda group: group.weight).group])
+    return found
+
+
+def _joints(mesh) -> set:
+    """The indices of [mesh]'s points that sit where one bone's part meets
+    another's: their strongest bone differs from a neighbour's. Empty if it
+    isn't rigged."""
+    deform = mesh.verts.layers.deform.active
+    if deform is None:
+        return set()
+    strongest = {}
+    for vert in mesh.verts:
+        weights = vert[deform]
+        strongest[vert.index] = max(weights.items(), key=lambda item: item[1])[0] \
+                if weights else -1
+    joints = set()
+    for edge in mesh.edges:
+        a, b = edge.verts
+        if strongest[a.index] != strongest[b.index]:
+            joints.add(a.index)
+            joints.add(b.index)
+    return joints
+
+
 def _crunch(obj, job: dict, scale: float) -> None:
     diagonal = _dimensions(obj).length
     mesh = bmesh.new()
@@ -234,7 +269,14 @@ def _crunch(obj, job: dict, scale: float) -> None:
     bmesh.ops.remove_doubles(mesh, verts=mesh.verts, dist=diagonal * 0.0005)
     flatten = math.radians(float(job.get("flatten_degrees", 0.0)))
     if flatten > 0.0:
-        bmesh.ops.dissolve_limit(mesh, angle_limit=flatten, verts=mesh.verts, edges=mesh.edges,
+        # On a rig, faces only merge within one bone's part: a point where
+        # the strongest bone changes (a joint) is never merged away, or a
+        # bone would be left with nothing to move (the crab's legs folded).
+        joints = _joints(mesh)
+        verts = [vert for vert in mesh.verts if vert.index not in joints]
+        edges = [edge for edge in mesh.edges
+                if not any(vert.index in joints for vert in edge.verts)]
+        bmesh.ops.dissolve_limit(mesh, angle_limit=flatten, verts=verts, edges=edges,
                 delimit=set())
     bmesh.ops.triangulate(mesh, faces=mesh.faces)
     # Open edges (a neckline, a collar) are kept where they are.
@@ -333,6 +375,13 @@ def _bake(low, high, size: int, job: dict, scale: float):
         colour[..., :3] *= (1.0 - creases) + creases * shade[..., :1]
     # Average each block down to one pixel.
     blocks = colour.reshape(size, SUPERSAMPLE, size, SUPERSAMPLE, 4).mean(axis=(1, 3))
+    grain = float(job.get("grain", 0.0))
+    if grain > 0.0:
+        # A chunky speck per pixel, lighter or darker, the same every firing:
+        # flat-coloured packs get the small busy texture N64 surfaces had.
+        seed = sum(ord(letter) for letter in job["out"]) % (2 ** 32)
+        specks = numpy.random.default_rng(seed).random((size, size, 1)).astype(numpy.float32)
+        blocks[..., :3] *= 1.0 + (specks - 0.5) * 2.0 * grain
     blocks[..., 3] = 1.0
     return blocks
 

@@ -162,13 +162,15 @@ func _label_all() -> void:
 		var after: Node3D = exhibit.after
 		var high: float = maxf(bounds(before).end.y, bounds(after).end.y)
 		_label(before, "%s\npack: %d triangles" % [exhibit.name, triangles(before)], high)
-		_label(after, "fired: %s" % _fired_line(after), high)
+		_label(after, _fired_line(after), high)
 
 
 func _fired_line(after: Node3D) -> String:
 	var model: ThirdPartyModel = after as ThirdPartyModel
 	if model != null:
-		return model.kiln_status() if model.fired else "not fired"
+		if not model.fired:
+			return "Not fired"
+		return model.kiln_status().replace(": ", ":\n").replace("), ", ")\n")
 	var body: CharacterModel = after as CharacterModel
 	var lines: PackedStringArray = []
 	for job: KilnJob in body.parts_override.jobs():
@@ -177,7 +179,7 @@ func _fired_line(after: Node3D) -> String:
 		var texture: float = made.get("texture", 0.0)
 		lines.append("%s %d tris %d px" % [job.look.tag().trim_prefix("character_"),
 				roundi(tris), roundi(texture)])
-	return "%d triangles\n%s" % [triangles(after), "\n".join(lines)]
+	return "Fired: %d triangles\n%s" % [triangles(after), "\n".join(lines)]
 
 
 func _label(over: Node3D, text: String, high: float) -> void:

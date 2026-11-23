@@ -4,7 +4,7 @@ extends RefCounted
 ## One model to fire in the Kiln: which pack files, with which [ArtLook], and
 ## where the fired model goes. Pure logic, no nodes, so it's tested alone.
 ##
-## The fired files sit beside each other under [constant OUT_ROOT], mirroring
+## The fired files sit beside each other under [member out_root], mirroring
 ## the pack's own folders, and are gitignored with the packs they're made
 ## from:
 ## - [method fired_path]: the model (.glb), crunched, without materials;
@@ -13,11 +13,17 @@ extends RefCounted
 ##   [method fingerprint] it was fired with, which says if it's stale.
 
 ## Bump to make every fired model stale, when fire.py changes what it makes.
-const VERSION: int = 3
+const VERSION: int = 4
 ## Where the packs live.
 const THIRD_PARTY: String = "res://assets/third_party/"
 ## Where fired models go.
 const OUT_ROOT: String = "res://assets/third_party/_kiln/"
+
+## Where fired models are looked for. Tests point it at their own stand-ins.
+static var out_root: String = OUT_ROOT
+## The fired model's file type. Tests use scenes of their own (tscn) as
+## stand-in fired models, since real ones are made from pack files.
+static var fired_extension: String = "glb"
 
 ## The files to read. The first is the model; any others only lend their
 ## look (eyebrows painted onto a head).
@@ -60,7 +66,7 @@ func can_fire() -> bool:
 
 ## The fired model's path.
 func fired_path() -> String:
-	return _stem() + ".glb"
+	return _stem() + "." + fired_extension
 
 
 ## The fired model's texture.
@@ -182,10 +188,10 @@ func status() -> String:
 
 
 # The fired files' path without an extension: the source's path under the
-# packs, mirrored under OUT_ROOT, with the look's tag.
+# packs, mirrored under out_root, with the look's tag.
 func _stem() -> String:
 	var source: String = sources[0] if not sources.is_empty() else ""
 	var inside: String = source.trim_prefix(THIRD_PARTY) if source.begins_with(THIRD_PARTY) \
 			else source.get_file()
 	var tag: String = look.tag() if look != null else "none"
-	return OUT_ROOT + inside.get_basename() + "." + tag
+	return out_root + inside.get_basename() + "." + tag

@@ -25,6 +25,10 @@ extends Resource
 ## How much the creases and the spaces between parts are darkened in the
 ## texture, as N64 artists painted shading in: 0 none, 1 fully.
 @export_range(0.0, 1.0) var creases: float = 0.4
+## How strongly each texture pixel is made a little lighter or darker at
+## random: the busy grain N64 surfaces had, for packs painted in flat colour.
+## 0 for painted textures, which have their own.
+@export_range(0.0, 0.5) var grain: float = 0.0
 ## Crunch both sides alike (left and right of the model), so a character's
 ## or creature's face and body stay even.
 @export var symmetric: bool = false
@@ -61,6 +65,7 @@ func firing() -> Dictionary:
 		"max_texture": max_texture,
 		"flatten_degrees": flatten_degrees,
 		"creases": creases,
+		"grain": grain,
 		"symmetric": symmetric,
 		"protect_edges": protect_edges,
 	}
