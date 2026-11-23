@@ -6,28 +6,75 @@ extends SkeletonModifier3D
 ## animation has posed them, every frame.
 ##
 ## It turns the upper arm so it points at the target, then the forearm so
-## it carries on in the same line: a straight arm, reaching. [member amount]
-## blends from the animation's own arm (0) to the full reach (1), so a clip
-## can raise the arm slowly.
+## it carries on in the same line, then the hand: a straight arm and wrist,
+## reaching. [member amount] blends from the animation's own arm (0) to the
+## full reach (1), so a clip can raise the arm slowly. [member grip] curls
+## the fingers and thumb, to hold something.
+
+## The fingers, by the start of their bones' names: each has three joints,
+## [code]<name>_01[/code] to [code]_03[/code], then the side
+## ([code]_l[/code]).
+const FINGERS: PackedStringArray = ["index", "middle", "ring", "pinky"]
 
 ## The bones of the arm, from the shoulder out: upper arm, forearm, hand.
 @export var upper_bone: StringName = &"upperarm_l"
 @export var lower_bone: StringName = &"lowerarm_l"
 @export var hand_bone: StringName = &"hand_l"
+## The side the bones are on, as their names end.
+@export var side: String = "_l"
 ## How far the arm has gone from where the animation has it (0) to
 ## reaching for the target (1).
 @export_range(0.0, 1.0) var amount: float = 0.0
+## How far the fingers have closed: 0 as the animation has them, 1 holding.
+@export_range(0.0, 1.0) var grip: float = 0.0
+## How far each finger joint bends at a full grip, in radians, and each of
+## the thumb's.
+@export var finger_curl: float = 0.62
+@export var thumb_curl: float = 0.45
+## Which way a finger joint bends to close the hand, about its own axis, and
+## which way the thumb's do (the thumb lies across the others).
+@export var curl_axis: Vector3 = Vector3(0, 0, 1)
+@export var thumb_axis: Vector3 = Vector3(1, 0, 0)
 ## Where it's reaching, in the world.
 var target: Vector3 = Vector3.ZERO
 
 
 func _process_modification() -> void:
 	var skeleton: Skeleton3D = get_skeleton()
-	if skeleton == null or amount <= 0.0:
+	if skeleton == null:
 		return
-	var aim_at: Vector3 = skeleton.global_transform.affine_inverse() * target
-	aim(skeleton, upper_bone, lower_bone, aim_at, amount)
-	aim(skeleton, lower_bone, hand_bone, aim_at, amount)
+	if amount > 0.0:
+		var aim_at: Vector3 = skeleton.global_transform.affine_inverse() * target
+		aim(skeleton, upper_bone, lower_bone, aim_at, amount)
+		aim(skeleton, lower_bone, hand_bone, aim_at, amount)
+		# The wrist straight too, so the hand doesn't hang off the end.
+		aim(skeleton, hand_bone, StringName("middle_01" + side), aim_at, amount)
+	if grip > 0.0:
+		close_hand(skeleton, side, grip * finger_curl, grip * thumb_curl, curl_axis, thumb_axis)
+
+
+## Bends every joint of the fingers on [param hand_side] by
+## [param finger_angle] radians, and the thumb's by [param thumb_angle],
+## about [param axis] (each bone's own; the thumb's about [param thumb]):
+## closing the hand. Missing bones are left alone.
+static func close_hand(skeleton: Skeleton3D, hand_side: String, finger_angle: float,
+		thumb_angle: float, axis: Vector3 = Vector3(0, 0, 1),
+		thumb: Vector3 = Vector3(1, 0, 0)) -> void:
+	for finger: String in FINGERS:
+		for joint: int in [1, 2, 3]:
+			bend(skeleton, StringName("%s_0%d%s" % [finger, joint, hand_side]), finger_angle, axis)
+	for joint: int in [1, 2, 3]:
+		bend(skeleton, StringName("thumb_0%d%s" % [joint, hand_side]), thumb_angle, thumb)
+
+
+## Turns [param bone] by [param angle] radians about [param axis], in its own
+## space, on top of its pose. Does nothing if it's missing.
+static func bend(skeleton: Skeleton3D, bone: StringName, angle: float, axis: Vector3) -> void:
+	var index: int = skeleton.find_bone(bone)
+	if index < 0 or is_zero_approx(angle):
+		return
+	skeleton.set_bone_pose_rotation(index,
+			skeleton.get_bone_pose_rotation(index) * Quaternion(axis.normalized(), angle))
 
 
 ## How long the arm is from shoulder to wrist in [param skeleton]'s own

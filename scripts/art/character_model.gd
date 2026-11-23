@@ -120,6 +120,13 @@ static var _heads: Dictionary[String, ArrayMesh] = {}
 		reach = clampf(value, 0.0, 1.0)
 		if _arm != null:
 			_arm.amount = reach
+## How far the left hand has closed, holding something: 0 as the animation
+## has it, 1 holding (see [ArmReach]). A clip can move it.
+@export_range(0.0, 1.0) var hand_grip: float = 0.0:
+	set(value):
+		hand_grip = clampf(value, 0.0, 1.0)
+		if _arm != null:
+			_arm.grip = hand_grip
 ## Something for the head to turn towards. Optional.
 @export var watch: Node3D
 ## How far the head has turned towards [member watch], leaving the rest of
@@ -534,6 +541,7 @@ func _build(parts: CharacterParts) -> void:
 	_arm = ArmReach.new()
 	_arm.name = "ArmReach"
 	_arm.amount = reach
+	_arm.grip = hand_grip
 	skeleton.add_child(_arm)
 	_head = HeadLook.new()
 	_head.name = "HeadLook"

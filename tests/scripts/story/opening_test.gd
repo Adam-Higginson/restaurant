@@ -220,6 +220,15 @@ func test_the_rescue_waits_for_you_to_take_his_hand_then_goes_to_the_surface() -
 	assert_bool(_ambience().submerged).is_false()
 	assert_bool(castaway.visible).is_true()
 	assert_bool(_player.camera_rig.is_fixed).is_true()
+	# You've come up gasping, eyes open, holding him up out of the waves:
+	# your arm raised to him, your hand closed round him.
+	var surfaced: CharacterModel = castaway.get_node("Figure/Character") as CharacterModel
+	assert_bool(surfaced.eyes_shut).is_false()
+	assert_float(surfaced.reach).is_equal(1.0)
+	assert_float(surfaced.hand_grip).is_equal(1.0)
+	assert_object(surfaced.reach_for).is_same(ember)
+	await physics_ticks(runner, 120)
+	assert_float(ember.global_position.y).is_greater(castaway.global_position.y + 0.6)
 
 	# Lightning shows the captain at the rail, looking down. No boathook is
 	# shown: how you got aboard is left out.

@@ -16,7 +16,7 @@
 #   timeline at the bottom of the editor shows them. Each moves the set's
 #   camera too, so a clip is also a shot.
 # - Sounds (@sound) are the players under SoundCues in sea.tscn. Some have
-#   no recording yet (plunge, bell, flare, deep_note):
+#   no recording yet (plunge, bell, flare, deep_note, gasp):
 #   they're silent until one is put where the player's Recording points.
 # - The title is her nameboard at the stern: the letters, the hook, the
 #   lantern on it and his clips (takes_watch, hears, dives, welcome) are in
@@ -204,19 +204,22 @@
 @fade out 0.4
 -> surface
 
-# The surface. The roles flip: he's a small ember with his door hanging open,
-# the waves want him, and you hold him up out of the water, the ship
-# towering over you both. He's done his part, and his eyes close.
+# The surface. You burst up into the storm, gasping, his hand still in
+# yours. Then the roles flip: he's a small ember with his door hanging open,
+# he settles into your hand, and you hold him up out of the waves, the ship
+# towering ahead. He's done his part, and his eyes close.
 ~ surface
 @stage off
 @muffle off
 @show castaway
 @look rescued_lantern tired
-@shot from_the_water cut
-@fade in 0.4
-@wait 2.2
+@shot surfacing cut
+@start surfaces
+@fade in 0.15
+@sound gasp
+@wait 2.4
 @look rescued_lantern asleep
-@wait 1.2
+@wait 1.4
 -> rail
 
 # The rail. Lightning shows a tall thin shape up there against the sky,

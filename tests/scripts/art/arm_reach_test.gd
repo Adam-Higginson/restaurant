@@ -1,7 +1,8 @@
 extends GameTestSuite
 ## Tests for lifting one arm towards a point: the upper arm and then the
 ## forearm turn so the hand lies on the line to the target, part-way if
-## asked, and nothing else in the body moves.
+## asked, and nothing else in the body moves. And the hand closing: each
+## finger and thumb joint bends, as far as the grip asks.
 ##
 ## The skeleton here is a small made-up one with the characters' arm bones,
 ## hanging straight down at rest.
@@ -100,6 +101,67 @@ func test_as_part_of_a_skeleton_it_lifts_the_arm_each_frame() -> void:
 	assert_bool(seen.is_empty()).is_false()
 	assert_vector(seen[0]).is_equal_approx(Vector3(-1.0, 1.0, 0.0).normalized(),
 			Vector3(0.02, 0.02, 0.02))
+
+
+func test_the_wrist_straightens_in_line_with_the_arm() -> void:
+	var skeleton: Skeleton3D = _new_skeleton()
+	_add_fingers(skeleton)
+	# The animation has the hand hanging limp at the wrist.
+	var wrist: int = skeleton.find_bone("hand_l")
+	skeleton.set_bone_pose_rotation(wrist, Quaternion(Vector3.RIGHT, 1.2))
+	var target: Vector3 = Vector3(-2.0, 1.5, 0.0)
+
+	ArmReach.aim(skeleton, &"upperarm_l", &"lowerarm_l", target, 1.0)
+	ArmReach.aim(skeleton, &"lowerarm_l", &"hand_l", target, 1.0)
+	ArmReach.aim(skeleton, &"hand_l", &"middle_01_l", target, 1.0)
+
+	var forearm: Vector3 = (_joint(skeleton, "hand_l") - _joint(skeleton, "lowerarm_l")).normalized()
+	var hand: Vector3 = (_joint(skeleton, "middle_01_l") - _joint(skeleton, "hand_l")).normalized()
+	assert_float(hand.angle_to(forearm)).is_less(0.02)
+
+
+func test_a_grip_bends_every_finger_and_thumb_joint() -> void:
+	var skeleton: Skeleton3D = _new_skeleton()
+	_add_fingers(skeleton)
+	var open: Dictionary = {}
+	for bone: String in ["index_01_l", "middle_02_l", "pinky_03_l", "thumb_02_l"]:
+		open[bone] = skeleton.get_bone_pose_rotation(skeleton.find_bone(bone))
+
+	ArmReach.close_hand(skeleton, "_l", 0.6, 0.4)
+
+	for bone: String in open:
+		var now: Quaternion = skeleton.get_bone_pose_rotation(skeleton.find_bone(bone))
+		var expected: float = 0.4 if bone.begins_with("thumb") else 0.6
+		var before: Quaternion = open[bone]
+		assert_float(before.angle_to(now)).override_failure_message(bone).is_equal_approx(expected, 0.001)
+	# The other hand is left as it was.
+	var other: Quaternion = skeleton.get_bone_pose_rotation(skeleton.find_bone("index_01_r"))
+	assert_float(other.angle_to(Quaternion.IDENTITY)).is_equal_approx(0.0, 0.001)
+
+
+func test_with_no_grip_the_fingers_stay_as_the_animation_has_them() -> void:
+	var skeleton: Skeleton3D = _new_skeleton()
+	_add_fingers(skeleton)
+
+	ArmReach.close_hand(skeleton, "_l", 0.0, 0.0)
+
+	var index: Quaternion = skeleton.get_bone_pose_rotation(skeleton.find_bone("index_01_l"))
+	assert_float(index.angle_to(Quaternion.IDENTITY)).is_equal_approx(0.0, 0.001)
+
+
+# Gives each hand of [param skeleton] the characters' finger bones: four
+# fingers and a thumb, three joints each, along +Y from the hand.
+func _add_fingers(skeleton: Skeleton3D) -> void:
+	for side: String in ["_l", "_r"]:
+		for finger: String in ["index", "middle", "ring", "pinky", "thumb"]:
+			var parent: String = "hand" + side
+			for joint: int in [1, 2, 3]:
+				var bone_name: String = "%s_0%d%s" % [finger, joint, side]
+				var bone: int = skeleton.add_bone(bone_name)
+				skeleton.set_bone_parent(bone, skeleton.find_bone(parent))
+				skeleton.set_bone_rest(bone, Transform3D(Basis.IDENTITY, Vector3(0, -0.03, 0)))
+				parent = bone_name
+	skeleton.reset_bone_poses()
 
 
 # Where [param bone]'s joint is, in the skeleton's own space.

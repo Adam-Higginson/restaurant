@@ -360,6 +360,10 @@ recording = "res://assets/third_party/audio/plunge.ogg"
 script = ExtResource("318_optional")
 recording = "res://assets/third_party/audio/bell_far.ogg"
 
+[node name="Gasp" type="AudioStreamPlayer" parent="SoundCues"]
+script = ExtResource("318_optional")
+recording = "res://assets/third_party/audio/gasp.ogg"
+
 [node name="Stages" type="Node" parent="."]
 
 [node name="Underwater" parent="Stages" instance=ExtResource("313_underwater")]
