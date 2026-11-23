@@ -42,10 +42,12 @@ func test_drawing_settings_are_not_firing_settings() -> void:
 		assert_bool(firing.has(key)).override_failure_message(key).is_false()
 
 
-func test_props_and_creatures_are_soft_n64_not_voxel_blocks() -> void:
+func test_every_look_is_soft_n64_not_voxel_blocks() -> void:
 	# The user's pick (#129, look C+): the N64's own three-point filter and
 	# smooth shading, lit by our modern lights; grain painted in soft blobs.
-	for preset: String in ["prop", "creature"]:
+	# Props, creatures and the player alike.
+	for preset: String in ["prop", "creature", "character_body", "character_head",
+			"character_hair"]:
 		var look: ArtLook = load("res://data/art/looks/%s.tres" % preset) as ArtLook
 		assert_bool(look.three_point_filter).override_failure_message(preset).is_true()
 		assert_bool(look.faceted).override_failure_message(preset).is_false()

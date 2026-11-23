@@ -96,9 +96,10 @@ static var _heads: Dictionary[String, ArrayMesh] = {}
 @export var body_scale: float = 0.85
 ## Seconds to blend from one animation into the next.
 @export var blend_seconds: float = 0.12
-## Draw it the N64 way: chunky texture pixels (nearest-neighbour, not
-## smoothed) and no shine. Its own materials are kept: the props' N64 shader
-## turns these textures the wrong colours.
+## Draw parts the Kiln hasn't fired the N64 way: softly filtered texture
+## pixels, as the N64 drew them, and no shine. Their own materials are kept:
+## the props' N64 shader turns these textures the wrong colours. (Fired parts
+## are drawn as their look says.)
 @export var n64: bool = true
 ## How fine a version of the model to draw (see [member ThirdPartyModel.detail]).
 ## Parts fired in the Kiln are always drawn in full.
@@ -525,8 +526,8 @@ func _add_meshes(path: String, colour: Color) -> void:
 	source.free()
 
 
-# Draws each of [param mesh]'s surfaces with chunky texture pixels and no
-# shine, keeping its colour, texture and any tint already given.
+# Draws each of [param mesh]'s surfaces with softly filtered texture pixels
+# and no shine, keeping its colour, texture and any tint already given.
 func _use_n64(mesh: MeshInstance3D) -> void:
 	for surface: int in mesh.mesh.get_surface_count():
 		var source: BaseMaterial3D = mesh.get_surface_override_material(surface) as BaseMaterial3D
@@ -535,7 +536,7 @@ func _use_n64(mesh: MeshInstance3D) -> void:
 		if source == null:
 			continue
 		var material: BaseMaterial3D = source.duplicate() as BaseMaterial3D
-		material.texture_filter = BaseMaterial3D.TEXTURE_FILTER_NEAREST_WITH_MIPMAPS
+		material.texture_filter = BaseMaterial3D.TEXTURE_FILTER_LINEAR_WITH_MIPMAPS
 		material.metallic_specular = 0.2
 		mesh.set_surface_override_material(surface, material)
 
