@@ -25,9 +25,8 @@ Run with Blender 4.4 from Git Bash:
         -P tools/meshy/fit_layer.py -- BODY.glb PIECE.glb OUT.glb SLOT
 
 SLOT is top, legs, feet, coat or boots (see SLOTS). A coat is a top that
-reaches the thighs, made hanging from a peg with its sleeves straight down:
-the peg is trimmed off and the arms are lowered into the sleeves to bind it.
-Boots are feet that reach the knee. Heights are in metres for a 1.6 m
+reaches the thighs and sits outside the trousers; boots are feet that reach
+below the knee, slimmed to the leg. Heights are in metres for a 1.6 m
 character, measured off the outfit's concept picture; they scale with the
 body's height.
 """
@@ -48,7 +47,11 @@ SLOTS = {
     # "raise" below zero lowers the arms. "trim_top" cuts that share off the
     # top of the piece first (a coat's peg). "gap" holds it further off the
     # body than GAP, to clear the clothes under it.
-    "coat": {"band": (0.7, 1.4), "trunk": 0.16, "raise": -38.0, "trim_top": 0.1, "gap": 0.03},
+    "coat": {"band": (0.72, 1.41), "trunk": 0.16, "raise": 0.0, "gap": 0.03},
+    # A coat made hanging from a peg, sleeves straight down: the peg is cut
+    # off and the arms lowered into the sleeves. It fits poorly (the sleeves
+    # are fused to the coat's body); make coats on the body, as "coat".
+    "hung_coat": {"band": (0.7, 1.4), "trunk": 0.16, "raise": -38.0, "trim_top": 0.1, "gap": 0.03},
     # "slim" narrows each boot about its own middle after it's sized by
     # height, so a chunky pair hugs a thin leg.
     "boots": {"band": (0.0, 0.41), "trunk": 0.3, "raise": 0.0, "pair": True, "slim": 0.74},
