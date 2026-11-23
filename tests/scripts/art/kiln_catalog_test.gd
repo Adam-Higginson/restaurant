@@ -44,7 +44,8 @@ func test_every_pack_model_in_the_game_has_a_look() -> void:
 
 func test_characters_parts_each_fire() -> void:
 	var jobs: Array[KilnJob] = KilnCatalog.jobs_in_resource("res://data/characters/boy.tres")
-	assert_int(jobs.size()).is_equal(3)
+	# The outfit, the head awake and asleep, and the hair.
+	assert_int(jobs.size()).is_equal(4)
 
 
 func test_other_resources_have_nothing_to_fire() -> void:

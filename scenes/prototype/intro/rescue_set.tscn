@@ -3,8 +3,245 @@
 [ext_resource type="Script" path="res://scripts/sea/float_on_sea.gd" id="1_ejl8o"]
 [ext_resource type="PackedScene" path="res://scenes/prototype/intro/castaway.tscn" id="2_qsrks"]
 [ext_resource type="PackedScene" path="res://scenes/prototype/lantern_body.tscn" id="3_rqkdy"]
-[ext_resource type="Script" path="res://scripts/companion/lantern_face.gd" id="4_nx0ag"]
-[ext_resource type="PackedScene" path="res://scenes/prototype/props/boathook.tscn" id="5_vvpxu"]
+[ext_resource type="Script" path="res://scripts/intro/splash_ring.gd" id="5_ring"]
+[ext_resource type="Shader" path="res://shaders/splash_ring.gdshader" id="6_ring"]
+
+[sub_resource type="StandardMaterial3D" id="Material_spray"]
+transparency = 1
+shading_mode = 0
+vertex_color_use_as_albedo = true
+albedo_color = Color(0.84, 0.91, 0.96, 1)
+
+[sub_resource type="SphereMesh" id="Mesh_spray"]
+material = SubResource("Material_spray")
+radius = 0.07
+height = 0.14
+radial_segments = 6
+rings = 3
+
+[sub_resource type="Gradient" id="Gradient_spray"]
+offsets = PackedFloat32Array(0, 0.65, 1)
+colors = PackedColorArray(1, 1, 1, 1, 1, 1, 1, 0.9, 1, 1, 1, 0)
+
+[sub_resource type="Gradient" id="Gradient_puff"]
+offsets = PackedFloat32Array(0, 0.55, 1)
+colors = PackedColorArray(1, 1, 1, 1, 1, 1, 1, 0.45, 1, 1, 1, 0)
+
+[sub_resource type="GradientTexture2D" id="Texture_puff"]
+gradient = SubResource("Gradient_puff")
+fill = 1
+fill_from = Vector2(0.5, 0.5)
+fill_to = Vector2(1, 0.5)
+
+[sub_resource type="StandardMaterial3D" id="Material_mist"]
+transparency = 1
+shading_mode = 0
+vertex_color_use_as_albedo = true
+albedo_color = Color(0.78, 0.86, 0.92, 0.13)
+albedo_texture = SubResource("Texture_puff")
+billboard_mode = 3
+billboard_keep_scale = true
+particles_anim_h_frames = 1
+particles_anim_v_frames = 1
+particles_anim_loop = false
+
+[sub_resource type="QuadMesh" id="Mesh_mist"]
+material = SubResource("Material_mist")
+size = Vector2(1.6, 1.6)
+
+[sub_resource type="Gradient" id="Gradient_mist"]
+offsets = PackedFloat32Array(0, 0.25, 1)
+colors = PackedColorArray(1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 0)
+
+[sub_resource type="ShaderMaterial" id="Material_ring"]
+render_priority = 0
+shader = ExtResource("6_ring")
+shader_parameter/colour = null
+shader_parameter/spread = null
+shader_parameter/strength = null
+
+[sub_resource type="QuadMesh" id="Mesh_ring"]
+size = Vector2(11, 11)
+
+[sub_resource type="Animation" id="Animation_flies"]
+length = 3.3
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Props/FlyingLantern:position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.7, 1.45, 1.6),
+"transitions": PackedFloat32Array(0.6, 1.7, 1, 1),
+"update": 0,
+"values": [Vector3(0.2, 5.2, 17.6), Vector3(0.9, 9, 22.2), Vector3(1.5, 2.7, 26.6), Vector3(1.6, 0.8, 27)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Props/FlyingLantern:rotation")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 1.45),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Vector3(0.3, 3.1415927, 0), Vector3(2.6, 3.1415927, 0.4)]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("Props/FlyingLantern:visible")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0, 1.5),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [true, false]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("Props/FlyingLantern/Body:lean")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0, 0.5),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Vector3(0, 0, -1), Vector3(0, 0, -1)]
+}
+tracks/4/type = "value"
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/path = NodePath("PlungeSplash/Jet:emitting")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/keys = {
+"times": PackedFloat32Array(0, 1.45),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [false, true]
+}
+tracks/5/type = "value"
+tracks/5/imported = false
+tracks/5/enabled = true
+tracks/5/path = NodePath("PlungeSplash/Crown:emitting")
+tracks/5/interp = 1
+tracks/5/loop_wrap = true
+tracks/5/keys = {
+"times": PackedFloat32Array(0, 1.45),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [false, true]
+}
+tracks/6/type = "value"
+tracks/6/imported = false
+tracks/6/enabled = true
+tracks/6/path = NodePath("PlungeSplash/Mist:emitting")
+tracks/6/interp = 1
+tracks/6/loop_wrap = true
+tracks/6/keys = {
+"times": PackedFloat32Array(0, 1.5),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [false, true]
+}
+tracks/7/type = "value"
+tracks/7/imported = false
+tracks/7/enabled = true
+tracks/7/path = NodePath("PlungeSplash/Ring:spread")
+tracks/7/interp = 1
+tracks/7/loop_wrap = true
+tracks/7/keys = {
+"times": PackedFloat32Array(0, 1.44, 1.45, 3.3),
+"transitions": PackedFloat32Array(1, 1, 0.45, 1),
+"update": 0,
+"values": [0.0, 0.0, 0.01, 1.0]
+}
+tracks/8/type = "value"
+tracks/8/imported = false
+tracks/8/enabled = true
+tracks/8/path = NodePath("PlungeSplash/Glow:light_energy")
+tracks/8/interp = 1
+tracks/8/loop_wrap = true
+tracks/8/keys = {
+"times": PackedFloat32Array(0, 1.4, 1.52, 2, 2.9),
+"transitions": PackedFloat32Array(1, 1, 0.5, 1, 1),
+"update": 0,
+"values": [0.0, 0.0, 9.0, 3.0, 0.0]
+}
+
+[sub_resource type="Animation" id="Animation_ejl8o"]
+length = 3.6
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Props/Castaway/Float:height_above")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.3, 0.75, 1.3, 2, 3.6),
+"transitions": PackedFloat32Array(1, 0.4, 1, 1, 1, 1),
+"update": 0,
+"values": [-1.4000000000000001, -0.06, -0.4, -0.26, -0.32, -0.3]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Props/Castaway/Body:position")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.8, 1.8),
+"transitions": PackedFloat32Array(1, 1, 0.5),
+"update": 0,
+"values": [Vector3(-0.0888476, 1.061952, -0.15350856), Vector3(-0.0888476, 1.061952, -0.15350856), Vector3(-0.0888476, 0.901952, -0.15350856)]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("Props/Castaway/LanternGlow:position")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0, 0.8, 1.8),
+"transitions": PackedFloat32Array(1, 1, 0.5),
+"update": 0,
+"values": [Vector3(-0.0888476, 1.161952, -0.15350856), Vector3(-0.0888476, 1.161952, -0.15350856), Vector3(-0.0888476, 1.001952, -0.15350856)]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("Props/Castaway/Figure/Character:head_turn")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0, 0.5, 1.6),
+"transitions": PackedFloat32Array(1, 1, 0.5),
+"update": 0,
+"values": [0.15, 0.15, 0.8]
+}
+tracks/4/type = "value"
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/path = NodePath("Props/Castaway/LanternGlow:light_energy")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/keys = {
+"times": PackedFloat32Array(0, 3.6),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [2.4, 1.3]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_rescue"]
+_data = {
+&"flies": SubResource("Animation_flies"),
+&"surfaces": SubResource("Animation_ejl8o")
+}
 
 [node name="RescueSet" type="Node3D" unique_id=1722548210]
 
@@ -18,11 +255,21 @@ script = ExtResource("1_ejl8o")
 height_above = 0.5
 
 [node name="TheRail" type="Marker3D" parent="Shots" unique_id=1132034457 groups=["shots"]]
-transform = Transform3D(0.40135863, -0.44491565, -0.80060065, 0, 0.87409353, -0.48575768, 0.915921, 0.19496304, 0.350825, -14.5, 0.8, 4.5)
+transform = Transform3D(0.551062, -0.567931, -0.61138, 0, 0.732662, -0.680593, 0.834465, 0.375049, 0.403742, -10.9, 0.6, 3.6)
 
 [node name="Float" type="Node" parent="Shots/TheRail" unique_id=1092106892]
 script = ExtResource("1_ejl8o")
-height_above = 0.8
+height_above = 0.6
+
+[node name="ThePlunge" type="Marker3D" parent="Shots" unique_id=709512225 groups=["shots"]]
+transform = Transform3D(0.463748, 0.247319, -0.850747, 0, 0.960247, 0.279151, 0.885967, -0.129456, 0.445313, -13, 6.8, 29.5)
+
+[node name="Surfacing" type="Marker3D" parent="Shots" unique_id=858355138 groups=["shots"]]
+transform = Transform3D(0.08172958, -0.14058849, -0.986689, 0, 0.990001, -0.1410604, 0.99665457, 0.011528808, 0.08091237, -11.483061, 0, 2.090765)
+
+[node name="Float" type="Node" parent="Shots/Surfacing" unique_id=1833938679]
+script = ExtResource("1_ejl8o")
+height_above = 0.3
 
 [node name="Marks" type="Node3D" parent="." unique_id=583183069]
 
@@ -37,19 +284,24 @@ visible = false
 
 [node name="Float" type="Node" parent="Props/Castaway" unique_id=1931545759]
 script = ExtResource("1_ejl8o")
-height_above = -1.15
+height_above = -0.3
 
-[node name="Figure" type="Node3D" parent="Props/Castaway" unique_id=2013599010 instance=ExtResource("2_qsrks")]
+[node name="Figure" parent="Props/Castaway" unique_id=2013599010 instance=ExtResource("2_qsrks")]
 transform = Transform3D(0.3623577, 0.18516758, -0.9134604, 0, 0.9800666, 0.19866933, 0.9320391, -0.071989365, 0.3551347, 0, 0, 0)
 
+[node name="Character" parent="Props/Castaway/Figure" index="5" node_paths=PackedStringArray("reach_for", "watch")]
+reach_for = NodePath("../../Body")
+reach = 1.0
+hand_grip = 1.0
+watch = NodePath("../../Body")
+
 [node name="LanternGlow" type="OmniLight3D" parent="Props/Castaway" unique_id=46930765]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.35, 2, 0.2)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.0888476, 1.001952, -0.15350856)
 light_color = Color(1, 0.72, 0.4, 1)
 light_energy = 2.4
 
-[node name="Body" type="Node3D" parent="Props/Castaway" unique_id=1411871022 node_paths=PackedStringArray("light") instance=ExtResource("3_rqkdy")]
-transform = Transform3D(-5.2453668e-08, 0, 1.2, 0, 1.2, 0, -1.2, 0, -5.2453668e-08, 0.35, 2, 0.2)
-script = ExtResource("4_nx0ag")
+[node name="Body" parent="Props/Castaway" unique_id=1411871022 node_paths=PackedStringArray("light") instance=ExtResource("3_rqkdy")]
+transform = Transform3D(-5.2453668e-08, 0, 1.2, 0, 1.2, 0, -1.2, 0, -5.2453668e-08, -0.0888476, 0.901952, -0.15350856)
 look_name = "rescued_lantern"
 strength = 0.55
 door = 1.0
@@ -58,8 +310,100 @@ cracked = true
 light = NodePath("../LanternGlow")
 light_energy = 1.3
 
-[node name="ReachingBoathook" type="Node3D" parent="Props" unique_id=778325693 groups=["props"]]
+[node name="FlyingLantern" type="Node3D" parent="Props" unique_id=541317971 groups=["props"]]
+transform = Transform3D(-1, 0, -8.742278e-08, 0, 1, 0, 8.742278e-08, 0, -1, 0.2, 5.2, 17.6)
 visible = false
 
-[node name="Boathook" type="Node3D" parent="Props/ReachingBoathook" unique_id=1296053555 instance=ExtResource("5_vvpxu")]
-transform = Transform3D(-2.573397, -1.3958333, 0.43203658, 1.4611659, -2.4583333, 0.7609004, 0, 0.875, 2.826969, -5.77, 6.55, 0.74)
+[node name="Glow" type="OmniLight3D" parent="Props/FlyingLantern" unique_id=606525772]
+light_color = Color(1, 0.72, 0.4, 1)
+light_energy = 5.0
+omni_range = 12.0
+omni_attenuation = 1.2
+
+[node name="Body" parent="Props/FlyingLantern" unique_id=1834368676 node_paths=PackedStringArray("light") instance=ExtResource("3_rqkdy")]
+transform = Transform3D(3, 0, 0, 0, 3, 0, 0, 0, 3, 0, 0, 0)
+look_name = "flying_lantern"
+expression = 2
+streaked = true
+light = NodePath("../Glow")
+light_energy = 3.0
+
+[node name="PlungeSplash" type="Node3D" parent="." unique_id=1976417428]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.5, 0.1, 26.6)
+
+[node name="Float" type="Node" parent="PlungeSplash" unique_id=707114881]
+script = ExtResource("1_ejl8o")
+height_above = 0.05
+
+[node name="Jet" type="CPUParticles3D" parent="PlungeSplash" unique_id=418054085]
+emitting = false
+amount = 170
+lifetime = 1.6
+one_shot = true
+explosiveness = 0.9
+mesh = SubResource("Mesh_spray")
+emission_shape = 1
+emission_sphere_radius = 0.25
+direction = Vector3(0, 1, 0)
+spread = 11.0
+gravity = Vector3(0, -13, 0)
+initial_velocity_min = 7.0
+initial_velocity_max = 15.0
+scale_amount_min = 0.6
+scale_amount_max = 1.9
+color_ramp = SubResource("Gradient_spray")
+
+[node name="Crown" type="CPUParticles3D" parent="PlungeSplash" unique_id=1875796310]
+emitting = false
+amount = 220
+lifetime = 1.2
+one_shot = true
+explosiveness = 0.96
+mesh = SubResource("Mesh_spray")
+emission_shape = 1
+emission_sphere_radius = 0.5
+direction = Vector3(0, 1, 0)
+spread = 62.0
+gravity = Vector3(0, -11, 0)
+initial_velocity_min = 3.5
+initial_velocity_max = 8.5
+scale_amount_min = 0.5
+scale_amount_max = 1.5
+color_ramp = SubResource("Gradient_spray")
+
+[node name="Mist" type="CPUParticles3D" parent="PlungeSplash" unique_id=671381657]
+emitting = false
+amount = 34
+lifetime = 2.4
+one_shot = true
+explosiveness = 0.75
+mesh = SubResource("Mesh_mist")
+emission_shape = 1
+emission_sphere_radius = 0.7
+direction = Vector3(0, 1, 0)
+spread = 50.0
+gravity = Vector3(0, -0.6, 0)
+initial_velocity_min = 0.8
+initial_velocity_max = 3.2
+scale_amount_min = 0.9
+scale_amount_max = 2.6
+color_ramp = SubResource("Gradient_mist")
+
+[node name="Ring" type="MeshInstance3D" parent="PlungeSplash" unique_id=2130608825]
+transform = Transform3D(1, 0, 0, 0, -4.371139e-08, 1, 0, -1, -4.371139e-08, 0, 0.12, 0)
+material_override = SubResource("Material_ring")
+cast_shadow = 0
+mesh = SubResource("Mesh_ring")
+script = ExtResource("5_ring")
+
+[node name="Glow" type="OmniLight3D" parent="PlungeSplash" unique_id=994861409]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5, 0)
+light_color = Color(1, 0.72, 0.4, 1)
+light_energy = 0.0
+omni_range = 9.0
+omni_attenuation = 1.1
+
+[node name="Clips" type="AnimationPlayer" parent="." unique_id=259918600 groups=["clips"]]
+libraries/ = SubResource("AnimationLibrary_rescue")
+
+[editable path="Props/Castaway/Figure"]

@@ -96,6 +96,11 @@ static var _heads: Dictionary[String, ArrayMesh] = {}
 @export var body_scale: float = 0.85
 ## Seconds to blend from one animation into the next.
 @export var blend_seconds: float = 0.12
+## An animation to be held still on instead of idling, [member held_at]
+## seconds in: someone asleep ([code]LayToIdle[/code] at 0 is lying flat).
+## Empty to idle as usual.
+@export var held_animation: StringName = &""
+@export var held_at: float = 0.0
 ## Draw parts the Kiln hasn't fired the N64 way: softly filtered texture
 ## pixels, as the N64 drew them, and no shine. Their own materials are kept:
 ## the props' N64 shader turns these textures the wrong colours. (Fired parts
@@ -104,6 +109,46 @@ static var _heads: Dictionary[String, ArrayMesh] = {}
 ## How fine a version of the model to draw (see [member ThirdPartyModel.detail]).
 ## Parts fired in the Kiln are always drawn in full.
 @export var detail: float = 0.3
+## Whether the character's eyes are shut: asleep, or out cold. A clip can
+## move it.
+@export var eyes_shut: bool = false:
+	set(value):
+		eyes_shut = value
+		_show_eyes()
+## Something for the left arm to reach for. Optional.
+@export var reach_for: Node3D
+## How far the left arm has lifted towards [member reach_for], leaving the
+## rest of the body as it is: 0 not at all, 1 reaching (see [ArmReach]). A
+## clip can move it.
+@export_range(0.0, 1.0) var reach: float = 0.0:
+	set(value):
+		reach = clampf(value, 0.0, 1.0)
+		if _arm != null:
+			_arm.amount = reach
+## How far the left hand has closed, holding something: 0 as the animation
+## has it, 1 holding (see [ArmReach]). A clip can move it.
+@export_range(0.0, 1.0) var hand_grip: float = 0.0:
+	set(value):
+		hand_grip = clampf(value, 0.0, 1.0)
+		if _arm != null:
+			_arm.grip = hand_grip
+## Something for the head to turn towards. Optional.
+@export var watch: Node3D
+## How far the head has turned towards [member watch], leaving the rest of
+## the body as it is: 0 not at all, 1 looking at it (see [HeadLook]). A clip
+## can move it.
+@export_range(0.0, 1.0) var head_turn: float = 0.0:
+	set(value):
+		head_turn = clampf(value, 0.0, 1.0)
+		if _head != null:
+			_head.amount = head_turn
+## How much the legs hang as they do in water instead of standing: 0 the
+## animation's own legs, 1 floating (see [FloatingLegs]).
+@export_range(0.0, 1.0) var afloat: float = 0.0:
+	set(value):
+		afloat = clampf(value, 0.0, 1.0)
+		if _legs != null:
+			_legs.amount = afloat
 ## Draw the parts the Kiln has fired (see [CharacterParts]) instead of the
 ## packs' own. Off shows the packs' as they come (the Lookbook's "before").
 @export var use_kiln: bool = true
@@ -123,6 +168,16 @@ var right_hand: BoneAttachment3D = null
 var left_hand: BoneAttachment3D = null
 
 var _animator: AnimationPlayer = null
+## What lifts the left arm when it reaches.
+var _arm: ArmReach = null
+## The fired head's meshes, awake and asleep: shown by [member eyes_shut].
+## Empty unless both have been fired.
+var _awake_head: Array[MeshInstance3D] = []
+var _asleep_head: Array[MeshInstance3D] = []
+## What turns the head when it watches something.
+var _head: HeadLook = null
+## What lets the legs hang when afloat.
+var _legs: FloatingLegs = null
 var _duellist: Duellist = null
 ## How high a toe joint is when its boot's sole is on the floor, in metres
 ## above this node: measured from the rest pose when the character is built.
@@ -161,6 +216,10 @@ func _process(delta: float) -> void:
 		_animator.advance(_stepper.take(delta))
 	plant_feet()
 	_turn_for_flip()
+	if _arm != null and is_instance_valid(reach_for):
+		_arm.target = reach_for.global_position
+	if _head != null and is_instance_valid(watch):
+		_head.target = watch.global_position
 	var walking: bool = player != null and player.is_walking
 	var charging: bool = _duellist != null and _duellist.is_charging()
 	var parrying: bool = _duellist != null and _duellist.parry.is_active()
@@ -444,8 +503,13 @@ func _build(parts: CharacterParts) -> void:
 	skeleton = character.find_children("*", "Skeleton3D", true, false)[0] as Skeleton3D
 	# Measured on the outfit alone: its boots are what stand on the floor.
 	_toe_height = _rest_toe_height()
-	var head_fired: bool = use_kiln and _add_fired(parts.head_job())
-	if not head_fired:
+	_awake_head = _fired_meshes(parts.head_job()) if use_kiln else ([] as Array[MeshInstance3D])
+	var head_fired: bool = not _awake_head.is_empty()
+	if head_fired:
+		_asleep_head = _fired_meshes(parts.sleeping_head_job())
+		if _asleep_head.is_empty():
+			_awake_head.clear()
+	else:
 		_add_head(parts.head_from)
 	if not parts.hair.is_empty() and not (use_kiln and _add_fired(parts.hair_job())):
 		_add_meshes(parts.hair, parts.hair_colour)
@@ -478,8 +542,24 @@ func _build(parts: CharacterParts) -> void:
 	left_hand = _hand("hand_l")
 	_stride_speed = _measure_stride(walk_animation)
 	_run_stride_speed = _measure_stride(run_animation)
+	_show_eyes()
+	_arm = ArmReach.new()
+	_arm.name = "ArmReach"
+	_arm.amount = reach
+	_arm.grip = hand_grip
+	skeleton.add_child(_arm)
+	_head = HeadLook.new()
+	_head.name = "HeadLook"
+	_head.amount = head_turn
+	skeleton.add_child(_head)
+	_legs = FloatingLegs.new()
+	_legs.name = "FloatingLegs"
+	_legs.amount = afloat
+	skeleton.add_child(_legs)
 	pose = Pose.IDLE
 	play(Pose.IDLE)
+	if not held_animation.is_empty():
+		hold(held_animation, held_at)
 
 
 # The head and neck of [param path]'s body, and its eyes.
@@ -501,14 +581,22 @@ func _add_head(path: String) -> void:
 # Every mesh of [param job]'s fired part onto our skeleton, drawn with its
 # fired texture. Returns whether it was there to add.
 func _add_fired(job: KilnJob) -> bool:
+	return not _fired_meshes(job).is_empty()
+
+
+# Every mesh of [param job]'s fired part onto our skeleton, drawn with its
+# fired texture. Returns them: none if it hasn't been fired.
+func _fired_meshes(job: KilnJob) -> Array[MeshInstance3D]:
+	var added: Array[MeshInstance3D] = []
 	if job == null or not job.is_fired():
-		return false
+		return added
 	var source: Node = (load(job.fired_path()) as PackedScene).instantiate()
 	FiredModel.paint(source, job)
 	for mesh: MeshInstance3D in source.find_children("*", "MeshInstance3D", true, false):
 		_move_to_skeleton(mesh)
+		added.append(mesh)
 	source.free()
-	return true
+	return added
 
 
 # Every mesh in [param path], onto our skeleton, tinted [param colour].
@@ -628,6 +716,22 @@ func _measure_stride(anim_name: StringName) -> float:
 	return swept / time_down if time_down > 0.0 and swept > 0.0 else 0.0
 
 
+# Shuts or opens the eyes: shut, the eyeballs aren't drawn, which leaves
+# the lids' own shadowed hollow. A fired head has its eyes painted in, so
+# the head fired asleep, without them, is shown in its place.
+func _show_eyes() -> void:
+	if skeleton == null:
+		return
+	if not _asleep_head.is_empty():
+		for mesh: MeshInstance3D in _awake_head:
+			mesh.visible = not eyes_shut
+		for mesh: MeshInstance3D in _asleep_head:
+			mesh.visible = eyes_shut
+		return
+	for mesh: MeshInstance3D in skeleton.find_children("Eyes", "MeshInstance3D", true, false):
+		mesh.visible = not eyes_shut
+
+
 # A dodge: plays its stretch of its animation.
 func _on_dodged(move: DodgeMove) -> void:
 	_recovery = &""
@@ -683,6 +787,11 @@ func _undress() -> void:
 	right_hand = null
 	left_hand = null
 	_animator = null
+	_arm = null
+	_awake_head.clear()
+	_asleep_head.clear()
+	_head = null
+	_legs = null
 	_act_left = 0.0
 	_recovery = &""
 

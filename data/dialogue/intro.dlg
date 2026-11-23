@@ -16,8 +16,8 @@
 #   timeline at the bottom of the editor shows them. Each moves the set's
 #   camera too, so a clip is also a shot.
 # - Sounds (@sound) are the players under SoundCues in sea.tscn. Some have
-#   no recording yet (heartbeat, flare): they're silent until one is put
-#   where the player's Recording points.
+#   no recording yet (plunge, bell, flare, deep_note, gasp):
+#   they're silent until one is put where the player's Recording points.
 # - The title is her nameboard at the stern: the letters, the hook, the
 #   lantern on it and his clips (takes_watch, hears, dives, welcome) are in
 #   scenes/prototype/intro/stern_watch.tscn.
@@ -60,31 +60,65 @@
 @who_are_you
 -> he_hears
 
-# He's heard something. The swinging stops. For a moment nothing happens at
-# all. Then he's off the hook and over the side, and her name goes dark.
+# A quiet night first. Then he's heard something. The swinging stops. He
+# leans out on his hook and looks over the water, one way and then the
+# other, and finds it. He calls it to the ship, the way a lookout does.
+# Down there, under the storm: you, eyes shut, slumped, held a moment. Back
+# up top, nobody answers. One look back at the lit windows, and he's off
+# the hook and over the side.
 ~ he_hears
 @play takes_watch
 @shot the_board cut
+@look hook_lantern tired
+@wait 1.6
 @look hook_lantern surprised
 @play hears
-@wait 1.0
-@look hook_lantern determined
-@play dives
-@wait 1.2
-@play off_watch
--> dark
-
-# The dark. You sink, and the light of the surface goes with it.
-~ dark
+@wait 0.4
+@look hook_lantern worried
+@play looks_out
+@look hook_lantern surprised
+@say lantern 2.2 Someone in the water!
+@wait 1.6
 @stage underwater
 @muffle on
 @play sinking
-@wait 1.0
+@stage off
+@muffle off
+@look hook_lantern worried
+@play glances_back
+@look hook_lantern determined
+@wait 0.2
+@start dives
+@wait 0.3
+-> plunge
+
+# The plunge. From out on the water: the storm sea, the ship's stern, and
+# one small point of light arcing out from her through the rain. It hits
+# the water, and it's gone.
+~ plunge
+@look flying_lantern determined
+@show flying_lantern
+@shot the_plunge cut
+@play off_watch
+@start flies
+@wait 1.45
+@sound plunge
+@wait 1.5
+@hide flying_lantern
+-> dark
+
+# The dark. The storm stops dead as the water closes over, and he's
+# already in it. Far above, a bell: somebody heard him.
+~ dark
+@stage underwater
+@muffle on
+@sound bell
 -> light
 
-# The light. A small warm thing comes through the surface and drives down
-# through the dark, and every push costs him: he's smaller and colder with
-# each, and reaches you nearly out.
+# The light. A small warm thing comes through the surface, a long way off,
+# and drives down through the dark in three hard pushes. Each one costs
+# him: he's smaller and colder with each, and reaches you nearly out. His
+# weak light finds dim shapes hanging all round: lanterns, like him.
 ~ light
 @stage underwater
 @muffle on
@@ -98,8 +132,10 @@
 -> reach
 
 # The reach. A flame can't reach through glass, so he opens his own door,
-# and the sea comes in. The hand forms, fails, and forms again. It waits,
-# however long, until you take it.
+# and the sea comes in. He tells you what to do. The hand forms and fails,
+# and he urges you; it fails again, he looks once at the others hanging
+# there, and he asks. After that he says nothing, and holds it out, for as
+# long as it takes. You can take it at any moment.
 ~ reach
 @stage underwater
 @muffle on
@@ -107,96 +143,135 @@
 @play opens_door
 @look sinking_lantern cracked
 @look sinking_lantern pleading
-@start offered
+@start pleads
+@queue offered
+@say lantern 2.2 Grab my hand!
+@say_in 4.3 lantern 2.2 Come on. Come on.
+@say_in 9.1 lantern 2.2 ...Please.
 @wait_for interact Take his hand
 @sound grasp
 @look sinking_lantern effort
 @play taken
 -> out
 
-# Out. He's spent. Black, and no sound at all, for one held second. One
-# heartbeat. Then your hand catches him alight again: everything draws in,
-# and blooms.
+# Out. The moment your hands close, your hand catches him alight again:
+# everything blooms, your eyes open, and for a moment his light reaches a
+# long way down. There's no bottom to see. Hanging below
+# you at every depth are more of them, fainter and fainter until the murk
+# takes them. Then he turns upward and takes your weight.
 ~ out
 @stage underwater
 @muffle on
-@fade out 0
-@hush on
-@wait 1.0
-@sound heartbeat
-@wait 0.7
-@look sinking_lantern effort
 @start flares
-@fade in 0
-@wait 0.5
-@hush off
 @sound flare
 @look sinking_lantern surprised
-@wait 4.3
+@wait 5.6
+-> haul
+
+# The haul. From above him, down the line of his arm: he drags you up in
+# hard pushes, the others falling away beneath you. Lightning lands on his
+# pushes and comes down past you in shafts. A very long way down there's
+# an outline, and it's moving. He doesn't look. He tells you not to, and
+# then there's time to look anyway, in the lightning, with nothing said.
+~ haul
+@stage underwater
+@muffle on
+@look sinking_lantern effort
+@start hauls
+@wait 0.4
+@say lantern 1.8 Hold on.
+@wait 1.4
+@hush on
+@sound deep_note
+@wait 0.4
+@lightning
+@wait 2.0
+@say lantern 2.2 Don't look down.
+@wait 2.6
+@lightning
+@wait 1.4
+@lightning
+@wait 1.8
+@hush off
 -> rising
 
-# Rest. Nothing happens: only rising, him held close and panting.
+# The last of it: two more pushes, and the surface.
 ~ rising
 @stage underwater
 @muffle on
-@look sinking_lantern tired
+@look sinking_lantern effort
 @play rising
 @fade out 0.4
 -> surface
 
-# The surface. The roles flip: he's a small ember with his door hanging open,
-# the waves want him, and you hold him up out of the water, the ship
-# towering over you both.
+# The surface. You burst up into the storm, gasping, his hand still in
+# yours. Then the roles flip: he's a small ember with his door hanging open,
+# he settles into your hand, and you hold him up out of the waves, the ship
+# towering ahead. He's done his part, and his eyes close.
 ~ surface
 @stage off
 @muffle off
 @show castaway
 @look rescued_lantern tired
-@shot from_the_water cut
-@fade in 0.4
-@wait 3.0
--> boathook
+@shot surfacing cut
+@start surfaces
+@fade in 0.15
+@sound gasp
+@wait 2.4
+@look rescued_lantern asleep
+@wait 1.4
+-> rail
 
-# The boathook. A tall thin shape at the rail against the lightning, and
-# what it finds is one point of warm light on a black sea. The hook takes
-# his ring, and you come up with him because you won't let go.
-~ boathook
+# The rail. Lightning shows a tall thin shape up there against the sky,
+# looking down at one point of warm light on a black sea: the answer to his
+# shout, a minute late. It doesn't move. Then a long fade to black. How you
+# got aboard isn't shown: the boathook leaning by the galley door,
+# afterwards, says it.
+~ rail
 @show castaway
-@look rescued_lantern worried
+@look rescued_lantern asleep
 @place heron rail
 @show heron
-@show reaching_boathook
 @shot the_rail cut
-@wait 0.7
+@wait 0.9
 @lightning
-@wait 1.6
-@sound hook
-@fade out 0.2
+@wait 1.8
+@fade out 2.5
 @hide castaway
-@hide reaching_boathook
 @hide heron
-@shot free cut
 @play off_watch
--> title
+-> asleep
 
-# Black, and where we are. The captain isn't in the bunk room yet.
-~ title
+# Black, for a while. Then, slowly, the bunk room at night, the storm
+# outside: you asleep in your bunk, and him beside you, keeping watch. The
+# captain isn't in the bunk room yet.
+~ asleep
 @hide heron
-@title Somewhere at sea
-@wait 2.5
-@fade in 2.0
+@hide player
+@show sleeping_you
+@place lantern by_your_bunk
+@shot in_your_bunk cut
+@wait 1.5
+@fade in 3.0
+@wait 0.8
 -> waking
 
-# You wake by your bunk, the lantern across the room.
+# You wake, and he's right there. When he's said his piece he floats off to
+# the middle of the room, and leaves you be.
 ~ waking
+@start wakes
 lantern: There you are.
 lantern: You were in the water. I pulled. You held on. Good holding.
 lantern: I'll get you home. I know exactly where it is. Roughly.
-@wait 0.6
+@go lantern room_middle
+@wait 1.8
 -> doorway
 
-# A tall shadow in the doorway: the captain, come to look you over.
+# A tall shadow in the doorway: the captain, come to look you over. By the
+# time we look back you're up, by your bunk.
 ~ doorway
+@hide sleeping_you
+@show player
 @place heron doorway
 @show heron
 @face heron player
@@ -211,5 +286,6 @@ heron: You've managed the first.
 ~ stove
 @shot pot_on_stove
 @home heron
+@home lantern
 @wait 2.5
 @shot free cut

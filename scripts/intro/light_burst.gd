@@ -4,6 +4,9 @@ extends MeshInstance3D
 ## the lantern flaring back alight (drawn by shaders/light_burst.gdshader
 ## on a ball). A clip moves [member spread] from 0 to 1 and this grows the
 ## ball and fades it, quick at first and slowing, the way a flash goes.
+##
+## It's always drawn, at no brightness until it begins, so the game
+## doesn't stop for a moment to prepare it when the flash comes.
 
 ## How far the burst has spread: 0 not begun (nothing shows), 1 spent.
 @export_range(0.0, 1.0) var spread: float = 0.0:
@@ -36,8 +39,12 @@ func brightness_now() -> float:
 	return brightness * pow(1.0 - spread, 1.6)
 
 
+## Whether there's any light to see: begun, and not yet spent.
+func is_showing() -> bool:
+	return spread > 0.0 and spread < 1.0
+
+
 func _apply() -> void:
-	visible = spread > 0.0 and spread < 1.0
 	scale = Vector3.ONE * maxf(size_now(), 0.01)
 	if _material != null:
 		_material.set_shader_parameter("brightness", brightness_now())

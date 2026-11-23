@@ -110,6 +110,10 @@ void fragment() {
 	float lick = noise(vec2(p.x * 6.0 - t * 2.0, p.y * 8.0 + t * 0.5)) * 0.6
 			+ noise(vec2(p.x * 13.0 - t * 3.1, p.y * 15.0 - t * 0.8)) * 0.4;
 	shape += (lick - 0.45) * mix(0.16, 0.04, form);
+	// But never through the arm: a thin core down its middle always holds,
+	// so the flicker ruffles its edge without breaking it into pieces.
+	float core = limb(q, vec2(0.0, 0.5), palm, 0.0, 0.0) - mix(0.016, 0.028, shaped);
+	shape = min(shape, core);
 	// Nothing past where it has reached, and nothing at all with no reach.
 	if (shape > 0.0 || out_now <= 0.001) {
 		discard;

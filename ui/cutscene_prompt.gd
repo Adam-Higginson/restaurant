@@ -13,6 +13,17 @@ extends CanvasLayer
 @export var fade_seconds: float = 0.8
 ## How dim the words get as they breathe: 1 doesn't dim at all.
 @export_range(0.0, 1.0) var breathe_to: float = 0.55
+## How far the words move up while [member raised], in the screen's own units.
+@export var raise_by: float = 42.0
+
+## Whether the words sit higher than usual, clear of the dialogue box:
+## somebody is speaking while the scene waits for the player.
+var raised: bool = false:
+	set(value):
+		if raised == value:
+			return
+		raised = value
+		_place()
 
 ## Whether a prompt is up (or on its way up).
 var is_prompting: bool:
@@ -24,10 +35,16 @@ var _tween: Tween = null
 ## Whose button names to show: the last device used.
 var _device: ActionPrompt.Device = ActionPrompt.Device.KEYBOARD_MOUSE
 
+## Where the words usually sit: their top and bottom edges.
+var _rest_top: float = 0.0
+var _rest_bottom: float = 0.0
+
 @onready var _label: Label = %Words
 
 
 func _ready() -> void:
+	_rest_top = _label.offset_top
+	_rest_bottom = _label.offset_bottom
 	_label.modulate.a = 0.0
 	hide()
 
@@ -73,6 +90,15 @@ static func prompt_text(words: String, names_interact: bool, on: ActionPrompt.De
 	if not names_interact:
 		return words
 	return "[%s] %s" % [ActionPrompt.button_name(&"interact", on), words]
+
+
+# Puts the words where they belong: higher while raised.
+func _place() -> void:
+	if not is_node_ready():
+		return
+	var lift: float = raise_by if raised else 0.0
+	_label.offset_top = _rest_top - lift
+	_label.offset_bottom = _rest_bottom - lift
 
 
 # Dims and brightens the words for as long as they're up.

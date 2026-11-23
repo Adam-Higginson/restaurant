@@ -42,6 +42,43 @@ func test_parts_fired_in_the_kiln_are_drawn_instead_of_the_packs() -> void:
 	assert_str(texture.resource_path).ends_with("kiln/hair.test.png")
 
 
+func test_a_fired_head_shuts_its_eyes_by_showing_the_head_fired_asleep() -> void:
+	_use_fired_stand_ins()
+	var player: Player3D = _new_dressed_player()
+	var model: CharacterModel = _model(player)
+	model.boy = _parts(true)
+	scene_runner(player.get_parent())
+	# The awake head's stand-in is a head and eyes; the sleeping one's is a
+	# head alone, hidden until the eyes shut.
+	var awake_eyes: MeshInstance3D = model.skeleton.get_node("Eyes") as MeshInstance3D
+	var hidden: Callable = func() -> int:
+		return model.skeleton.find_children("*", "MeshInstance3D", false, false) 				.filter(func(mesh: Node) -> bool: return not (mesh as MeshInstance3D).visible).size()
+
+	assert_bool(awake_eyes.visible).is_true()
+	assert_int(hidden.call()).is_equal(1)
+
+	model.eyes_shut = true
+	# Now the awake head and its eyes are hidden, and the sleeping head shows.
+	assert_bool(awake_eyes.visible).is_false()
+	assert_int(hidden.call()).is_equal(2)
+
+	model.eyes_shut = false
+	assert_bool(awake_eyes.visible).is_true()
+	assert_int(hidden.call()).is_equal(1)
+
+
+func test_a_packs_head_shuts_its_eyes_by_hiding_the_eyeballs() -> void:
+	var player: Player3D = _new_dressed_player()
+	var model: CharacterModel = _model(player)
+	scene_runner(player.get_parent())
+	var eyes: MeshInstance3D = model.skeleton.get_node("Eyes") as MeshInstance3D
+
+	model.eyes_shut = true
+	assert_bool(eyes.visible).is_false()
+	model.eyes_shut = false
+	assert_bool(eyes.visible).is_true()
+
+
 func test_with_the_kiln_turned_off_the_packs_parts_are_drawn() -> void:
 	_use_fired_stand_ins()
 	var player: Player3D = _new_dressed_player()
@@ -172,6 +209,27 @@ func test_it_stands_idle_then_walks_when_you_walk() -> void:
 
 	assert_int(model.pose).is_equal(CharacterModel.Pose.WALK)
 	runner.simulate_action_release("move_up")
+
+
+func test_given_a_pose_to_hold_it_holds_it_still_whatever_you_do() -> void:
+	var player: Player3D = _new_dressed_player()
+	var model: CharacterModel = _model(player)
+	# Someone asleep: held at the start of an animation, not idling.
+	model.held_animation = &"Walk"
+	model.held_at = 0.0
+	var runner: GdUnitSceneRunner = scene_runner(player.get_parent())
+	await physics_ticks(runner, 2)
+	var animator: AnimationPlayer = model.character.find_children("*", "AnimationPlayer",
+			true, false)[0] as AnimationPlayer
+	assert_str(animator.assigned_animation).ends_with("Walk")
+	assert_bool(animator.is_playing()).is_false()
+
+	runner.simulate_action_press("move_up")
+	await physics_ticks(runner, 6)
+	runner.simulate_action_release("move_up")
+
+	assert_float(animator.current_animation_position).is_equal(0.0)
+	assert_bool(animator.is_playing()).is_false()
 
 
 func test_quick_walking_is_a_run_and_slow_walking_a_walk() -> void:

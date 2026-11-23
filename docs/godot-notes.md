@@ -382,6 +382,40 @@ A growing glossary of the Godot concepts this project uses: what each one is, in
 
 **A node told it's been switched off.** When a node can no longer run (its `process_mode` or a parent's became Disabled) it gets `NOTIFICATION_DISABLED`, and `NOTIFICATION_ENABLED` when it can again. Catch them in `_notification(what)`. *Ours:* `OptionalSound` pauses a looping sound while its stage is put away.
 
+## The deep, the thing in the lightning, and the storyboard (#120)
+
+**Instance uniforms.** Normally every object sharing a material shares its shader values too. Mark a uniform `instance uniform` and each object can have its own value, set with `set_instance_shader_parameter("name", value)`, while they all still share one material. *Ours:* the 90 dead lanterns share one glass material, and `LanternField` gives each its `cold` (how much of the lightning shows on its glass).
+
+**Saying "deep" without a floor.** Depth is shown by things getting smaller, dimmer and bluer with distance and never ending. Three things already in the set do the dimming: the haze (volumetric fog), the lens that takes colour out of far things, and a light's own falloff with distance. *Ours:* the lanterns hang from a few metres below you to about fifty, and the furthest are barely there.
+
+**Faking shafts of light.** Real light shafts need something in the way to break the light up. A cheap stand-in is a tall see-through tube, added on top of the picture (`blend_add`), bright at the top and fading to nothing, with its sides faded out by how squarely each bit faces the camera so it never looks solid. *Ours:* `shaders/light_shaft.gdshader` on the tubes under `Shafts`, shown only while lightning flashes.
+
+**Showing something by what it hides.** The thing's body is an ordinary mesh drawn in one flat colour, the colour of the deep. It never catches light, so in the dark it can't be seen at all. In a flash, the lit haze behind it and the shafts and lanterns it covers are what give away its shape. *Ours:* `Thing/Body` in `underwater.tscn`.
+
+**Shaping a mesh in its vertex shader.** `vertex()` can move each corner of a mesh before it's drawn. A plain tube with plenty of rings along it can be squeezed here and swollen there into a body, and bent a little differently every frame so it moves, without modelling or rigging anything. *Ours:* `shaders/the_thing.gdshader` turns a cylinder into a head, a body and a swaying tail.
+
+**Groups as a broadcast.** `get_tree().call_group("name", "method", value)` calls that method on every node in the group, wherever it is in the tree. *Ours:* `Lightning` tells the group `lightning_lit` how bright each flash is, which now includes `Lanterns` and `Shafts` inside the underwater set.
+
+**Preparing an effect before it's needed.** The first time Godot draws something with a new shader it may stop for a moment to prepare it, which shows as a hitch. Hiding a thing until it's needed just moves that hitch to the worst moment. Drawing it from the start, at no brightness, gets it over with while nothing is happening. *Ours:* the burst of light, the shafts between the hands and the lightning shafts are always drawn; their brightness is what's switched.
+
+**Ragdolls (tried, and removed).** `PhysicalBoneSimulator3D` and `PhysicalBone3D` can hand a skeleton's bones to the physics engine so a body goes limp. We tried it for the unconscious castaway. Without carefully set limits on every joint the limbs flail, and it can't be checked by tests or stills, only by watching. A chosen pose and a slow drift do the job predictably.
+
+**Changing bones after the animation (`SkeletonModifier3D`).** A node under a `Skeleton3D` that gets a turn, every frame, after the animation has posed the bones and before the model is drawn. Whatever it sets replaces the animation's value for that bone only. It's how you add one thing (a look, a reach) on top of an animation without making a new animation. *Ours:* three of them sit under the character's skeleton. `scripts/art/arm_reach.gd` turns the upper arm, forearm and hand to point at his hand (`CharacterModel.reach` says how far), and curls each finger and thumb joint to hold it (`CharacterModel.hand_grip`); the fingers bend about their own Z, the thumb about its X, because it lies across the palm. `scripts/art/head_look.gd` turns the head towards him (`head_turn`), never further than a neck goes. `scripts/art/floating_legs.gd` bends the hips, knees and ankles so the legs trail and drift instead of standing (`afloat`).
+
+**Turning one direction into another (`Quaternion(from, to)`).** A quaternion is a way of storing a rotation. Built from two directions, it's the shortest turn that takes the first to the second, and `slerp` gives a share of that turn. *Ours:* how `ArmReach` works out how to swing a bone towards its target, and how the arm can be raised gradually.
+
+**Holding an animation still (`AnimationPlayer.pause`).** Play an animation, `seek()` to a moment in it with the second argument `true` (so the pose updates at once), then `pause()`: the character holds that pose. A paused player's `current_animation` is empty; `assigned_animation` still names it. *Ours:* `CharacterModel.held_animation` holds the sleeping you in your bunk on the first frame of `LayToIdle` (lying flat, before getting up).
+
+**`top_level` doesn't escape a hidden parent.** A `top_level` node ignores its parent's position, but not its visibility: hide the parent and it's hidden too. *Ours:* the lantern spirit is a child of the player (so `@hide player` hides only the player's `Model`, or he'd vanish with you).
+
+**Hiding part of a model.** A character built from several meshes can show or hide each with `visible`. *Ours:* `CharacterModel.eyes_shut` hides the eyeballs, which leaves the lids' own hollow: closed eyes, with no extra art. A head fired in the Kiln is one mesh with the eyes painted in, so there's nothing to hide; the Kiln fires the head a second time without the eyeballs (`CharacterParts.sleeping_head_job()`, its files named `.asleep`), and `eyes_shut` shows that head instead of the awake one.
+
+**Queueing an animation (`AnimationPlayer.queue`).** `play()` switches to a clip at once; `queue()` lines one up to start when the current one ends. *Ours:* the `@queue` cue: `pleads` plays once, then the `offered` loop takes over for as long as the player waits.
+
+**Lines that don't wait.** A line in the dialogue box normally waits for a button. `Conversation.say_aside()` shows one that doesn't: the box has no arrow, the script carries on, and whoever asked puts it away. *Ours:* the `@say` and `@say_in` cues (`scripts/cutscene/speech_cues.gd`), for a shout or a plea that should pass with the moment.
+
+**Giving each of many things its own pace.** A small sum that turns an index into a number between 0 and 1, always the same for that index, is enough to make a crowd look unplanned without storing anything. *Ours:* `LanternField.share_of`, which sets how fast each lantern sinks and turns.
+
 ## The Kiln (#126)
 
 **Texel density.** How many texture pixels cover a metre of surface. The N64 look is a low, even density (about 64 per metre) so every surface's pixels are the same chunky size. *Ours:* each `ArtLook`'s `pixels_per_metre`; the Kiln sizes each texture to hit it at the size the model is drawn.
