@@ -96,8 +96,10 @@ func remove_item(instance: ItemInstance) -> bool:
 ## Applies [param element]. An instant element (a cut) moves every reaction it
 ## drives forward one step and doesn't stay. A timed element (fire) stays until
 ## [method remove_element]. Returns whether it did anything: false for a cut
-## with nothing to cut, or fire that was already here.
-func add_element(element: Element) -> bool:
+## with nothing to cut, or fire that was already here. [param grade] says how
+## well an instant step was done (3 perfect, 2 good, 1 ragged; 0 ungraded):
+## each reaction it moves on remembers it (see [method ActiveReaction.method_quality]).
+func add_element(element: Element, grade: int = 0) -> bool:
 	if element.kind == Element.Kind.TIMED:
 		if _elements.has(element):
 			return false
@@ -107,6 +109,8 @@ func add_element(element: Element) -> bool:
 	for active: ActiveReaction in _active:
 		if active.reaction.driving_element() == element and _has_other_elements(active):
 			active.progress = minf(active.progress + 1.0, active.reaction.amount)
+			if grade >= 1:
+				active.step_grades.append(clampi(grade, 1, 3))
 			reaction_progressed.emit(active)
 			advanced = true
 	_react()
@@ -253,7 +257,7 @@ func _finish(active: ActiveReaction) -> void:
 	for instance: ItemInstance in active.consumed + active.required:
 		qualities.append(instance.quality)
 	var result: ItemInstance = ItemInstance.new(
-		active.reaction.result, active.reaction.result_quality(qualities)
+		active.reaction.result, active.reaction.result_quality(qualities, active.method_quality())
 	)
 	# The result takes the place of the first item it consumed.
 	var slot: int = _contents.find(active.consumed[0])

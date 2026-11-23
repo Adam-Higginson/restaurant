@@ -342,6 +342,54 @@ func test_shortcut_reaction_gives_lower_quality() -> void:
 	assert_int(pan.get_contents()[0].quality).is_equal(1)
 
 
+
+func test_perfect_cuts_cut_as_well_as_the_proper_method() -> void:
+	var board: VesselContents = _vessel(_board, 1)
+	board.add_item(_piece(_tomato, 1))
+	_graded_cuts(board, [3, 3])
+	# (1 + 3) / 2 = 2
+	assert_int(board.get_contents()[0].quality).is_equal(2)
+
+
+func test_ragged_cuts_cut_badly() -> void:
+	var board: VesselContents = _vessel(_board, 1)
+	board.add_item(_piece(_tomato, 1))
+	_graded_cuts(board, [1, 1])
+	# (1 + 1) / 2 = 1
+	assert_int(board.get_contents()[0].quality).is_equal(1)
+
+
+func test_a_cut_step_is_as_good_as_its_cuts_on_average_rounded_up() -> void:
+	var board: VesselContents = _vessel(_board, 1)
+	board.add_item(_piece(_tomato, 3))
+	# A perfect and a ragged cut average 2: (3 + 2) / 2 = 2.5, rounded up.
+	_graded_cuts(board, [3, 1])
+	assert_int(board.get_contents()[0].quality).is_equal(3)
+
+
+func test_graded_cuts_are_remembered_by_the_reaction() -> void:
+	var board: VesselContents = _vessel(_board, 1)
+	board.add_item(_piece(_tomato, 1))
+	board.add_element(_cut, 2)
+
+	var active: ActiveReaction = board.get_active_reactions()[0]
+	assert_array(active.step_grades).contains_exactly([2])
+	assert_int(active.method_quality()).is_equal(2)
+
+
+func test_cuts_never_make_a_shortcut_better_than_it_is() -> void:
+	var active: ActiveReaction = ActiveReaction.new(_rushed_soup, [], [])
+	active.step_grades = [3, 3]
+
+	assert_int(active.method_quality()).is_equal(_rushed_soup.quality)
+
+
+func test_ungraded_cuts_count_as_the_proper_method() -> void:
+	var active: ActiveReaction = ActiveReaction.new(_slice, [], [])
+
+	assert_int(active.method_quality()).is_equal(3)
+
+
 # --- Signals ------------------------------------------------------------------
 
 func test_signals_follow_a_reaction_from_start_to_finish() -> void:
@@ -392,6 +440,11 @@ func _vessel(vessel: Item, capacity: int) -> VesselContents:
 		_slice, _dice, _make_salad, _boil_water, _rushed_soup, _boil_potato,
 	]
 	return VesselContents.new(vessel, reactions, capacity)
+
+
+func _graded_cuts(vessel: VesselContents, grades: Array[int]) -> void:
+	for grade: int in grades:
+		vessel.add_element(_cut, grade)
 
 
 func _cuts(vessel: VesselContents, count: int) -> void:

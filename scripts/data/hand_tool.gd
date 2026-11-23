@@ -15,6 +15,11 @@ extends Resource
 @export var verb: String = "Use"
 ## What using the tool applies to the thing it's used on (the knife cuts).
 @export var element: Element = null
+## How forgiving the tool is on the chop meter ([ChopMeter]): how much of
+## the bar is its sweet spot for a perfect cut, and how much is at least a
+## good cut, as shares of the bar. A better knife has wider ones.
+@export_range(0.0, 1.0) var sweet_spot: float = 0.12
+@export_range(0.0, 1.0) var good_spot: float = 0.34
 ## The tool's model, shown when it's held up out of a chest: a file under
 ## res://assets/third_party/, fitted into [member model_size] standing up.
 ## Without one (or on a fresh clone) a greybox bar in [member color] shows.

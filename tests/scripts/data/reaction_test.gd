@@ -49,3 +49,13 @@ func _quality(reaction_quality: int, inputs: Array[int]) -> int:
 	var reaction: Reaction = Reaction.new()
 	reaction.quality = reaction_quality
 	return reaction.result_quality(inputs)
+
+
+func test_how_well_it_was_made_can_stand_in_for_the_method() -> void:
+	var reaction: Reaction = Reaction.new()
+	reaction.quality = 3
+	var inputs: Array[int] = [1]
+
+	# Made raggedly (1) rather than properly (3): (1 + 1) / 2 = 1.
+	assert_int(reaction.result_quality(inputs, 1)).is_equal(1)
+	assert_int(reaction.result_quality(inputs)).is_equal(2)

@@ -40,15 +40,18 @@ func is_immediate() -> bool:
 
 
 ## The quality of the result made from inputs of [param input_qualities]: the
-## average of the inputs' average and this reaction's [member quality], rounded
-## up so a near miss lands on the better star.
-func result_quality(input_qualities: Array[int]) -> int:
+## average of the inputs' average and how well it was made, rounded up so a
+## near miss lands on the better star. How well it was made is this
+## reaction's [member quality], unless [param made] (1 to 3) says otherwise:
+## how cleanly it was cut on the chop meter, say.
+func result_quality(input_qualities: Array[int], made: int = 0) -> int:
+	var method: int = made if made >= 1 else quality
 	if input_qualities.is_empty():
-		return quality
+		return method
 	var count: int = input_qualities.size()
 	var total: int = 0
 	for value: int in input_qualities:
 		total += value
-	# (total / count + quality) / 2, as one division so a whole-number answer
+	# (total / count + method) / 2, as one division so a whole-number answer
 	# stays exact and isn't nudged up by float error.
-	return ceili(float(total + quality * count) / (2 * count))
+	return ceili(float(total + method * count) / (2 * count))

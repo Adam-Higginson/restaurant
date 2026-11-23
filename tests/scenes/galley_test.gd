@@ -87,7 +87,9 @@ func test_a_garden_salad_from_start_to_finish_while_sailing() -> void:
 	assert_str(detector.interact_prompt()).is_equal("Put Lettuce on Chopping Board")
 	await press(runner, "interact")
 	assert_str(detector.tool_prompt()).is_equal("Chop")
+	# Each cut made on the chop meter's sweet spot: perfect.
 	for i: int in 3:
+		board.meter.position = board.meter.centre
 		await press(runner, "use_tool")
 	assert_str(detector.tool_prompt()).is_empty()
 	await press(runner, "interact")
@@ -103,6 +105,7 @@ func test_a_garden_salad_from_start_to_finish_while_sailing() -> void:
 	await _go_to(runner, ship, "BoardCounter")
 	await press(runner, "interact")
 	for i: int in 2:
+		board.meter.position = board.meter.centre
 		await press(runner, "use_tool")
 	await _go_to(runner, ship, "Counter")
 	assert_str(detector.interact_prompt()).is_equal("Pick up Plate")
@@ -118,7 +121,7 @@ func test_a_garden_salad_from_start_to_finish_while_sailing() -> void:
 	var food: Array[ItemInstance] = plate.contents.get_contents()
 	assert_int(food.size()).is_equal(1)
 	assert_object(food[0].item).is_same(GARDEN_SALAD)
-	# Chopped and sliced properly: ★★ each, so a ★★★ salad. See Quality in the GDD.
+	# Chopped and sliced perfectly: ★★ each, so a ★★★ salad. See Quality in the GDD.
 	assert_int(food[0].quality).is_equal(ItemInstance.MAX_QUALITY)
 	assert_array(board.slot.get_item().contents.get_contents()).is_empty()
 	assert_bool(player.arms.is_empty()).is_true()

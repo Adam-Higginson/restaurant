@@ -46,9 +46,13 @@ static func build(instance: ItemInstance) -> Node3D:
 				food[i].item.color, centre)
 		piece.name = "Food%d" % i
 		root.add_child(piece)
-	var active: Array[ActiveReaction] = instance.contents.get_active_reactions()
-	if not active.is_empty():
-		root.add_child(_progress_bar(active[0].get_fraction()))
+	# Heat's progress shows as a bar over the vessel. A cut's shows under the
+	# chop meter instead (ChopMeterBar), so it isn't drawn twice.
+	for active: ActiveReaction in instance.contents.get_active_reactions():
+		var element: Element = active.reaction.driving_element()
+		if element != null and element.kind == Element.Kind.TIMED:
+			root.add_child(_progress_bar(active.get_fraction()))
+			break
 	return root
 
 
