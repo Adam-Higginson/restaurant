@@ -12,6 +12,9 @@ extends GameTestSuite
 const SEA: String = "res://scenes/prototype/sea.tscn"
 const INTRO: StringName = &"intro"
 const NEAR: Vector3 = Vector3(0.05, 0.05, 0.05)
+## The title's menu, for a saved voyage: its choices in order.
+const CONTINUE: int = 0
+const NEW: int = 1
 
 var _sea: Node
 var _opening: Opening
@@ -377,6 +380,7 @@ func test_a_saved_voyage_carries_on_after_the_title_instead_of_the_rescue() -> v
 	assert_bool(_hook_lantern().is_visible_in_tree()).is_true()
 
 	runner.simulate_key_pressed(KEY_ENTER)
+	await _choose_voyage(runner, CONTINUE)
 	assert_bool(await _reaches(runner, &"carry_on")).is_true()
 	await physics_ticks(runner, 10)
 	# He doesn't dive: he's pleased to see you.
@@ -537,7 +541,7 @@ func test_after_the_title_a_new_voyage_asks_who_you_are() -> void:
 	assert_bool(choice.is_open()).is_false()
 
 
-func test_a_saved_voyage_isnt_asked_who_you_are() -> void:
+func test_a_continued_voyage_isnt_asked_who_you_are() -> void:
 	SaveGame.write({"version": SaveGame.VERSION, "memories": [], "day": 2,
 			"morning": true, "warmth": 1.0, "look": "girl"})
 	_build(DialogueTree.START, true)
@@ -547,11 +551,54 @@ func test_a_saved_voyage_isnt_asked_who_you_are() -> void:
 	await physics_ticks(runner, 240)
 
 	runner.simulate_key_pressed(KEY_ENTER)
+	await _choose_voyage(runner, CONTINUE)
 
 	assert_bool(await _reaches(runner, &"carry_on")).is_true()
-	await physics_ticks(runner, 30)
+	assert_bool(await wait_for_signal(_opening.finished, 20.0)).is_true()
 	assert_bool(choice.is_open()).is_false()
 	assert_int(Game.look).is_equal(PlayerLook.Body.GIRL)
+
+
+func test_a_saved_voyage_asks_to_continue_or_start_again_before_loading() -> void:
+	SaveGame.write({"version": SaveGame.VERSION, "memories": [], "day": 5,
+			"morning": true, "warmth": 0.5})
+	_build(DialogueTree.START, true)
+	var runner: GdUnitSceneRunner = scene_runner(_sea)
+	await physics_ticks(runner, 240)
+
+	runner.simulate_key_pressed(KEY_ENTER)
+
+	assert_bool(await _reaches(runner, &"voyage_menu")).is_true()
+	await physics_ticks(runner, 10)
+	assert_array(Array(_conversation.box.shown_choices())) \
+			.contains_exactly(["Continue your voyage", "Start a new voyage"])
+	# Nothing's loaded until it's chosen.
+	var time: TimeOfDay = _sea.get_node("TimeOfDay") as TimeOfDay
+	assert_int(time.day).is_not_equal(5)
+
+
+func test_a_new_voyage_asks_who_you_are_and_keeps_the_old_save() -> void:
+	SaveGame.write({"version": SaveGame.VERSION, "memories": [], "day": 5,
+			"morning": true, "warmth": 0.5, "look": "girl"})
+	_build(DialogueTree.START, true)
+	_choice_cues().ask = true
+	var choice: LookChoice = _sea.get_node("LookChoice") as LookChoice
+	var runner: GdUnitSceneRunner = scene_runner(_sea)
+	await physics_ticks(runner, 240)
+
+	runner.simulate_key_pressed(KEY_ENTER)
+	await _choose_voyage(runner, NEW)
+
+	assert_bool(await _reaches(runner, &"who_are_you")).is_true()
+	await physics_ticks(runner, 60)
+	assert_bool(choice.is_open()).is_true()
+	choice.choose(PlayerLook.Body.BOY)
+	assert_bool(await _reaches(runner, &"he_hears")).is_true()
+	# The saved voyage wasn't loaded, and is still there until you next sleep.
+	var time: TimeOfDay = _sea.get_node("TimeOfDay") as TimeOfDay
+	assert_int(time.day).is_not_equal(5)
+	assert_int(Game.look).is_equal(PlayerLook.Body.BOY)
+	assert_bool(SaveGame.exists()).is_true()
 
 
 func _choice_cues() -> ChoiceCues:
@@ -564,6 +611,14 @@ func _press() -> void:
 	if box != null and box.is_typing():
 		box.finish_typing()
 	_conversation.press()
+
+
+# Waits for the title's menu, then picks [param which] (CONTINUE or NEW).
+func _choose_voyage(runner: GdUnitSceneRunner, which: int) -> void:
+	assert_bool(await _reaches(runner, &"voyage_menu")).is_true()
+	await physics_ticks(runner, 10)
+	_conversation.move_choice(which)
+	_press()
 
 
 # Waits until the cutscene is reading [param section], and returns whether

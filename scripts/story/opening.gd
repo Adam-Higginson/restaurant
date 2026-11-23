@@ -9,9 +9,13 @@ extends Node
 ## and you wake by your bunk at night with the storm outside, the lantern
 ## across the room and the captain in the doorway. Then the ship is yours.
 ##
-## A saved voyage carries on instead, as whoever you were: after the title,
-## its day ("Day 3. Morning"), and the lantern welcomes you back. The script
-## can tell which it is by asking [constant SAVED_FACT].
+## With a saved voyage, the title asks whether to carry it on or start a new
+## one (the script can tell there's one by asking [constant SAVED_FACT]).
+## Carried on, it's as whoever you were: the lantern welcomes you back, then
+## its day ("Day 3. Morning"). The save is only loaded once that's chosen
+## ([VoyageCues] hears the script's [code]@continue_voyage[/code]), in the
+## dark after the cutscene, so a new voyage has nothing to undo. A new
+## voyage leaves the old save until you next sleep, which replaces it.
 ##
 ## Set [member skip] to start straight on deck instead (tests and tools do).
 
@@ -48,6 +52,8 @@ var is_playing: bool:
 var _playing: bool = false
 
 @onready var _fade: ScreenFade = $ScreenFade
+## Hears the title choose to carry on. Optional, like the conversation.
+@onready var _voyage: VoyageCues = get_node_or_null("VoyageCues") as VoyageCues
 
 
 func _ready() -> void:
@@ -70,15 +76,20 @@ func _play() -> void:
 	if spirit != null:
 		spirit.snap_to_player()
 	var saved: Dictionary = SaveGame.read() if load_save else {}
-	var carrying_on: bool = not saved.is_empty()
+	var has_save: bool = not saved.is_empty()
 	var time: TimeOfDay = get_tree().get_first_node_in_group(&"time_of_day") as TimeOfDay
+	Game.dialogue.set_fact(SAVED_FACT, func() -> int: return 1 if has_save else 0)
+	if _voyage != null:
+		_voyage.continued = false
+	var played: bool = await _play_cutscene()
+	# With nothing to play the title with or nothing to hear its choice (a
+	# bare test scene), a saved voyage just carries on.
+	var chose_to_continue: bool = _voyage == null or _voyage.continued
+	var carrying_on: bool = has_save and (chose_to_continue or not played)
 	if carrying_on:
-		# Before the title, so the sea behind it is as the voyage left it.
+		# In the dark, once the title has gone.
 		SaveGame.restore(saved, Game.memories, time, spirit, Game.dialogue)
 		Game.set_look(SaveGame.look_of(saved))
-	Game.dialogue.set_fact(SAVED_FACT, func() -> int: return 1 if carrying_on else 0)
-	var played: bool = await _play_cutscene()
-	if carrying_on:
 		await _carry_on(saved, time, played)
 	elif not played:
 		# Nothing to play it with (a bare test scene): just open your eyes.

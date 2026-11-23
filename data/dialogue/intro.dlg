@@ -28,9 +28,9 @@
 # the section you're in.
 
 # Her name. The lantern on his hook at the stern, swinging, lights the
-# carved board a few letters at a time. It waits for any button. A saved
-# voyage carries on from here; a new one asks who you are, then he hears
-# something.
+# carved board a few letters at a time. It waits for any button. With a
+# saved voyage it asks whether to carry it on or start a new one; a new one
+# asks who you are, then he hears something.
 ~ start
 @hide heron
 @play takes_watch
@@ -40,12 +40,19 @@
 @wait_for any Press any button
 @sound confirm
 ? saved_voyage
--> carry_on
+-> voyage_menu
 -> who_are_you
 
+# With a saved voyage: carry it on, or start again. A new voyage leaves the
+# old save until you next sleep in your bunk, which replaces it.
+~ voyage_menu
+- Continue your voyage -> carry_on
+- Start a new voyage -> who_are_you
+
 # A saved voyage: he turns from her name to the lit windows, pleased to see
-# you. Then to black, and the Opening shows which day it is.
+# you. Then to black, and the Opening loads the voyage and shows which day it is.
 ~ carry_on
+@continue_voyage
 @look hook_lantern pleased
 @play welcome
 @wait 0.8
