@@ -98,23 +98,23 @@
 @start flies
 @wait 1.45
 @sound plunge
-@wait 1.3
+@wait 1.5
 @hide flying_lantern
 -> dark
 
-# The dark. The storm stops dead as the water closes over. You sink, limp,
-# eyes shut, for longer than is comfortable. Far above, a bell: somebody
-# heard him.
+# The dark. The storm stops dead as the water closes over. You're sinking,
+# limp, eyes shut. Far above, a bell: somebody heard him. He's in the
+# water already, so it isn't long before his light shows.
 ~ dark
 @stage underwater
 @muffle on
 @hush on
 @start sinking
-@wait 2.0
+@wait 1.4
 @hush off
-@wait 4.0
+@wait 1.0
 @sound bell
-@wait 5.0
+@wait 1.4
 -> light
 
 # The light. A small warm thing comes through the surface, a long way off,

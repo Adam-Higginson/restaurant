@@ -4,9 +4,11 @@
 [ext_resource type="PackedScene" path="res://scenes/prototype/intro/castaway.tscn" id="2_qsrks"]
 [ext_resource type="PackedScene" path="res://scenes/prototype/lantern_body.tscn" id="3_rqkdy"]
 [ext_resource type="Script" path="res://scripts/companion/lantern_face.gd" id="4_nx0ag"]
+[ext_resource type="Script" path="res://scripts/intro/splash_ring.gd" id="5_ring"]
+[ext_resource type="Shader" path="res://shaders/splash_ring.gdshader" id="6_ring"]
 
 [sub_resource type="Animation" id="Animation_flies"]
-length = 2.9
+length = 3.3
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
@@ -46,26 +48,74 @@ tracks/2/keys = {
 tracks/3/type = "value"
 tracks/3/imported = false
 tracks/3/enabled = true
-tracks/3/path = NodePath("PlungeSplash:emitting")
+tracks/3/path = NodePath("Props/FlyingLantern/Body:lean")
 tracks/3/interp = 1
 tracks/3/loop_wrap = true
 tracks/3/keys = {
+"times": PackedFloat32Array(0, 0.5),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Vector3(0, 0, -1), Vector3(0, 0, -1)]
+}
+tracks/4/type = "value"
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/path = NodePath("PlungeSplash/Jet:emitting")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/keys = {
 "times": PackedFloat32Array(0, 1.45),
 "transitions": PackedFloat32Array(1, 1),
 "update": 1,
 "values": [false, true]
 }
-tracks/4/type = "value"
-tracks/4/imported = false
-tracks/4/enabled = true
-tracks/4/path = NodePath("Props/FlyingLantern/Body:lean")
-tracks/4/interp = 1
-tracks/4/loop_wrap = true
-tracks/4/keys = {
-"times": PackedFloat32Array(0, 0.5),
+tracks/5/type = "value"
+tracks/5/imported = false
+tracks/5/enabled = true
+tracks/5/path = NodePath("PlungeSplash/Crown:emitting")
+tracks/5/interp = 1
+tracks/5/loop_wrap = true
+tracks/5/keys = {
+"times": PackedFloat32Array(0, 1.45),
 "transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [false, true]
+}
+tracks/6/type = "value"
+tracks/6/imported = false
+tracks/6/enabled = true
+tracks/6/path = NodePath("PlungeSplash/Mist:emitting")
+tracks/6/interp = 1
+tracks/6/loop_wrap = true
+tracks/6/keys = {
+"times": PackedFloat32Array(0, 1.5),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [false, true]
+}
+tracks/7/type = "value"
+tracks/7/imported = false
+tracks/7/enabled = true
+tracks/7/path = NodePath("PlungeSplash/Ring:spread")
+tracks/7/interp = 1
+tracks/7/loop_wrap = true
+tracks/7/keys = {
+"times": PackedFloat32Array(0, 1.44, 1.45, 3.3),
+"transitions": PackedFloat32Array(1, 1, 0.45, 1),
 "update": 0,
-"values": [Vector3(0, 0, -1), Vector3(0, 0, -1)]
+"values": [0.0, 0.0, 0.01, 1.0]
+}
+tracks/8/type = "value"
+tracks/8/imported = false
+tracks/8/enabled = true
+tracks/8/path = NodePath("PlungeSplash/Glow:light_energy")
+tracks/8/interp = 1
+tracks/8/loop_wrap = true
+tracks/8/keys = {
+"times": PackedFloat32Array(0, 1.4, 1.52, 2.0, 2.9),
+"transitions": PackedFloat32Array(1, 1, 0.5, 1, 1),
+"update": 0,
+"values": [0.0, 0.0, 9.0, 3.0, 0.0]
 }
 
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_rescue"]
@@ -73,16 +123,57 @@ _data = {
 &"flies": SubResource("Animation_flies")
 }
 
+[sub_resource type="Gradient" id="Gradient_spray"]
+offsets = PackedFloat32Array(0, 0.65, 1)
+colors = PackedColorArray(1, 1, 1, 1, 1, 1, 1, 0.9, 1, 1, 1, 0)
+
+[sub_resource type="Gradient" id="Gradient_mist"]
+offsets = PackedFloat32Array(0, 0.25, 1)
+colors = PackedColorArray(1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 0)
+
 [sub_resource type="StandardMaterial3D" id="Material_spray"]
+transparency = 1
 shading_mode = 0
-albedo_color = Color(0.78, 0.86, 0.92, 1)
+vertex_color_use_as_albedo = true
+albedo_color = Color(0.84, 0.91, 0.96, 1)
 
 [sub_resource type="SphereMesh" id="Mesh_spray"]
 material = SubResource("Material_spray")
-radius = 0.09
-height = 0.18
+radius = 0.07
+height = 0.14
 radial_segments = 6
 rings = 3
+
+[sub_resource type="Gradient" id="Gradient_puff"]
+offsets = PackedFloat32Array(0, 0.55, 1)
+colors = PackedColorArray(1, 1, 1, 1, 1, 1, 1, 0.45, 1, 1, 1, 0)
+
+[sub_resource type="GradientTexture2D" id="Texture_puff"]
+gradient = SubResource("Gradient_puff")
+width = 64
+height = 64
+fill = 1
+fill_from = Vector2(0.5, 0.5)
+fill_to = Vector2(1, 0.5)
+
+[sub_resource type="StandardMaterial3D" id="Material_mist"]
+transparency = 1
+shading_mode = 0
+vertex_color_use_as_albedo = true
+albedo_color = Color(0.78, 0.86, 0.92, 0.13)
+albedo_texture = SubResource("Texture_puff")
+billboard_mode = 3
+billboard_keep_scale = true
+
+[sub_resource type="QuadMesh" id="Mesh_mist"]
+material = SubResource("Material_mist")
+size = Vector2(1.6, 1.6)
+
+[sub_resource type="ShaderMaterial" id="Material_ring"]
+shader = ExtResource("6_ring")
+
+[sub_resource type="QuadMesh" id="Mesh_ring"]
+size = Vector2(11, 11)
 
 [node name="RescueSet" type="Node3D" unique_id=1722548210]
 
@@ -158,25 +249,80 @@ streaked = true
 light = NodePath("../Glow")
 light_energy = 3.0
 
-[node name="PlungeSplash" type="CPUParticles3D" parent="."]
+[node name="PlungeSplash" type="Node3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.5, 0.1, 26.6)
-emitting = false
-amount = 160
-lifetime = 1.3
-one_shot = true
-explosiveness = 0.95
-mesh = SubResource("Mesh_spray")
-direction = Vector3(0, 1, 0)
-spread = 38.0
-gravity = Vector3(0, -9, 0)
-initial_velocity_min = 3.5
-initial_velocity_max = 10.0
-scale_amount_min = 0.5
-scale_amount_max = 1.7
 
 [node name="Float" type="Node" parent="PlungeSplash"]
 script = ExtResource("1_ejl8o")
-height_above = 0.1
+height_above = 0.05
+
+[node name="Jet" type="CPUParticles3D" parent="PlungeSplash"]
+emitting = false
+amount = 170
+lifetime = 1.6
+one_shot = true
+explosiveness = 0.9
+mesh = SubResource("Mesh_spray")
+emission_shape = 1
+emission_sphere_radius = 0.25
+direction = Vector3(0, 1, 0)
+spread = 11.0
+gravity = Vector3(0, -13, 0)
+initial_velocity_min = 7.0
+initial_velocity_max = 15.0
+scale_amount_min = 0.6
+scale_amount_max = 1.9
+color_ramp = SubResource("Gradient_spray")
+
+[node name="Crown" type="CPUParticles3D" parent="PlungeSplash"]
+emitting = false
+amount = 220
+lifetime = 1.2
+one_shot = true
+explosiveness = 0.96
+mesh = SubResource("Mesh_spray")
+emission_shape = 1
+emission_sphere_radius = 0.5
+direction = Vector3(0, 1, 0)
+spread = 62.0
+gravity = Vector3(0, -11, 0)
+initial_velocity_min = 3.5
+initial_velocity_max = 8.5
+scale_amount_min = 0.5
+scale_amount_max = 1.5
+color_ramp = SubResource("Gradient_spray")
+
+[node name="Mist" type="CPUParticles3D" parent="PlungeSplash"]
+emitting = false
+amount = 34
+lifetime = 2.4
+one_shot = true
+explosiveness = 0.75
+mesh = SubResource("Mesh_mist")
+emission_shape = 1
+emission_sphere_radius = 0.7
+direction = Vector3(0, 1, 0)
+spread = 50.0
+gravity = Vector3(0, -0.6, 0)
+initial_velocity_min = 0.8
+initial_velocity_max = 3.2
+scale_amount_min = 0.9
+scale_amount_max = 2.6
+color_ramp = SubResource("Gradient_mist")
+
+[node name="Ring" type="MeshInstance3D" parent="PlungeSplash"]
+transform = Transform3D(1, 0, 0, 0, -4.371139e-08, 1, 0, -1, -4.371139e-08, 0, 0.12, 0)
+material_override = SubResource("Material_ring")
+cast_shadow = 0
+mesh = SubResource("Mesh_ring")
+script = ExtResource("5_ring")
+
+[node name="Glow" type="OmniLight3D" parent="PlungeSplash"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5, 0)
+light_color = Color(1, 0.72, 0.4, 1)
+light_energy = 0.0
+omni_range = 9.0
+omni_attenuation = 1.1
 
 [node name="Clips" type="AnimationPlayer" parent="." groups=["clips"]]
 libraries/ = SubResource("AnimationLibrary_rescue")
