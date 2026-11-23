@@ -1,5 +1,6 @@
 [gd_scene format=3 uid="uid://1socrmly1d3x"]
 
+[ext_resource type="Script" path="res://scripts/art/third_party_model.gd" id="900_meshy"]
 [ext_resource type="Material" path="res://assets/placeholder/materials/red_cloth.tres" id="1_bb5ux"]
 [ext_resource type="Material" path="res://assets/placeholder/materials/dark_prop_wood.tres" id="2_vu1ys"]
 [ext_resource type="Material" path="res://assets/placeholder/materials/linen.tres" id="3_va54a"]
@@ -92,3 +93,13 @@ mesh = SubResource("BoxMesh_271y7")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.245, 0)
 material_override = ExtResource("4_b4co0")
 mesh = SubResource("BoxMesh_8chra")
+
+[node name="Meshy" type="Node3D" parent="." node_paths=PackedStringArray("stand_ins")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, -0, 0, 1, 0, 0, 0)
+script = ExtResource("900_meshy")
+path = "res://assets/third_party/meshy/accordion/model/model.glb"
+fit_size = Vector3(0.36, 0.27, 0.27)
+stand_ins = [NodePath("../EndL"), NodePath("../EndL/Trim"), NodePath("../EndR"), NodePath("../EndR/Trim"), NodePath("../Keys"), NodePath("../Fold1"), NodePath("../Fold2"), NodePath("../Fold3"), NodePath("../Fold4"), NodePath("../Fold5"), NodePath("../Strap")]
+grain = false
+detail = 1.0
+keep_as_made = true

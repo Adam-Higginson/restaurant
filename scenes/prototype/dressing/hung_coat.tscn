@@ -1,5 +1,6 @@
 [gd_scene format=3 uid="uid://2ilwmdqiebwf"]
 
+[ext_resource type="Script" path="res://scripts/art/third_party_model.gd" id="900_meshy"]
 [ext_resource type="Material" path="res://assets/placeholder/materials/iron.tres" id="1_o3l1n"]
 [ext_resource type="Material" path="res://assets/placeholder/materials/navy_wool.tres" id="2_6ytw7"]
 [ext_resource type="Material" path="res://assets/placeholder/materials/brass.tres" id="3_ym86r"]
@@ -93,3 +94,13 @@ mesh = SubResource("CylinderMesh_8hjce")
 transform = Transform3D(1, 0, 0, 0, -4.371139e-08, -1, 0, 1, -4.371139e-08, 0.03, -0.52, 0.135)
 material_override = ExtResource("3_ym86r")
 mesh = SubResource("CylinderMesh_7yjvq")
+
+[node name="Meshy" type="Node3D" parent="." node_paths=PackedStringArray("stand_ins")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, -0, 0, 1, 0, -0.95, 0.15)
+script = ExtResource("900_meshy")
+path = "res://assets/third_party/meshy/hung_coat/model/model.glb"
+fit_size = Vector3(0.8, 1, 0.31)
+stand_ins = [NodePath("../Peg"), NodePath("../Collar"), NodePath("../Body"), NodePath("../Skirt"), NodePath("../SleeveL"), NodePath("../SleeveR"), NodePath("../Button1"), NodePath("../Button2"), NodePath("../Button3")]
+grain = false
+detail = 1.0
+keep_as_made = true

@@ -1,5 +1,6 @@
 [gd_scene format=3 uid="uid://bsx5plsxdy7n1"]
 
+[ext_resource type="Script" path="res://scripts/art/third_party_model.gd" id="900_meshy"]
 [ext_resource type="Material" path="res://assets/placeholder/materials/sackcloth.tres" id="1_5ulkt"]
 [ext_resource type="Material" path="res://assets/placeholder/materials/rope.tres" id="2_qy4ef"]
 [ext_resource type="Material" path="res://assets/placeholder/materials/red_cloth.tres" id="3_cdfio"]
@@ -90,3 +91,13 @@ mesh = SubResource("BoxMesh_ufnt1")
 transform = Transform3D(0.70710677, 0.45451945, 0.5416752, 0, 0.76604444, -0.6427876, -0.70710677, 0.45451945, 0.5416752, 0.03, 0.25, 0.02)
 material_override = ExtResource("7_s4a0g")
 mesh = SubResource("BoxMesh_ee5n2")
+
+[node name="Meshy" type="Node3D" parent="." node_paths=PackedStringArray("stand_ins")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, -0, 0, 1, 0, 0, 0)
+script = ExtResource("900_meshy")
+path = "res://assets/third_party/meshy/yarn_basket/model/model.glb"
+fit_size = Vector3(0.42, 0.4, 0.42)
+stand_ins = [NodePath("../Basket"), NodePath("../Rim"), NodePath("../YarnRed"), NodePath("../YarnCream"), NodePath("../YarnMustard"), NodePath("../Knitting"), NodePath("../NeedleA"), NodePath("../NeedleB")]
+grain = false
+detail = 1.0
+keep_as_made = true
