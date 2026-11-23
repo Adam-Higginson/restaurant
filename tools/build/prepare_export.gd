@@ -14,7 +14,9 @@ const PRESETS: String = "res://export_presets.cfg"
 const ENV: String = "res://builds/build.env"
 
 
-func _init() -> void:
+# Called once the engine has started (unlike _init, which runs before it's
+# ready, and crashed on the way out).
+func _initialize() -> void:
 	quit(_prepare())
 
 
