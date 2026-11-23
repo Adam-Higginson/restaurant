@@ -108,6 +108,16 @@ static var _heads: Dictionary[String, ArrayMesh] = {}
 	set(value):
 		eyes_shut = value
 		_show_eyes()
+## Something for the left arm to reach for. Optional.
+@export var reach_for: Node3D
+## How far the left arm has lifted towards [member reach_for], leaving the
+## rest of the body as it is: 0 not at all, 1 reaching (see [ArmReach]). A
+## clip can move it.
+@export_range(0.0, 1.0) var reach: float = 0.0:
+	set(value):
+		reach = clampf(value, 0.0, 1.0)
+		if _arm != null:
+			_arm.amount = reach
 
 ## The character, or null while the greybox shows.
 var character: Node3D = null
@@ -121,6 +131,8 @@ var right_hand: BoneAttachment3D = null
 var left_hand: BoneAttachment3D = null
 
 var _animator: AnimationPlayer = null
+## What lifts the left arm when it reaches.
+var _arm: ArmReach = null
 var _duellist: Duellist = null
 ## How high a toe joint is when its boot's sole is on the floor, in metres
 ## above this node: measured from the rest pose when the character is built.
@@ -155,6 +167,8 @@ func _process(delta: float) -> void:
 		return
 	plant_feet()
 	_turn_for_flip()
+	if _arm != null and is_instance_valid(reach_for):
+		_arm.target = reach_for.global_position
 	var walking: bool = player != null and player.is_walking
 	var charging: bool = _duellist != null and _duellist.is_charging()
 	var parrying: bool = _duellist != null and _duellist.parry.is_active()
@@ -437,6 +451,10 @@ func _build(parts: CharacterParts) -> void:
 	_stride_speed = _measure_stride(walk_animation)
 	_run_stride_speed = _measure_stride(run_animation)
 	_show_eyes()
+	_arm = ArmReach.new()
+	_arm.name = "ArmReach"
+	_arm.amount = reach
+	skeleton.add_child(_arm)
 	pose = Pose.IDLE
 	play(Pose.IDLE)
 
@@ -638,6 +656,7 @@ func _undress() -> void:
 	right_hand = null
 	left_hand = null
 	_animator = null
+	_arm = null
 	_act_left = 0.0
 	_recovery = &""
 

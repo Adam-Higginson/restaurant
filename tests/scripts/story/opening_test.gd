@@ -132,6 +132,7 @@ func test_the_rescue_waits_for_you_to_take_his_hand_then_goes_to_the_surface() -
 	# You're out cold: your eyes are shut. And he's told you what to do.
 	var you: CharacterModel = _underwater_set().get_node("Castaway/Character") as CharacterModel
 	assert_bool(you.eyes_shut).is_true()
+	assert_float(you.reach).is_equal(0.0)
 	assert_bool(_conversation.is_aside_up()).is_true()
 	# What he says can be seen: the dialogue box is drawn over the water you're
 	# sinking through, and the prompt has moved up out of its way.
@@ -146,6 +147,9 @@ func test_the_rescue_waits_for_you_to_take_his_hand_then_goes_to_the_surface() -
 	assert_bool(await _reaches(runner, &"out")).is_true()
 	await physics_ticks(runner, 20)
 	assert_float(hand.grip).is_equal_approx(1.0, 0.01)
+	# Only your arm went out to him: you're where you were, as you were.
+	assert_float(you.reach).is_equal_approx(1.0, 0.01)
+	assert_str(String(you.idle_animation)).is_equal("Zombie_Idle")
 	assert_bool(_fade().is_covering()).is_true()
 	assert_bool(_ambience().hushed).is_true()
 

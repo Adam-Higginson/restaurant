@@ -384,6 +384,10 @@ A growing glossary of the Godot concepts this project uses: what each one is, in
 
 **Ragdolls (tried, and removed).** `PhysicalBoneSimulator3D` and `PhysicalBone3D` can hand a skeleton's bones to the physics engine so a body goes limp. We tried it for the unconscious castaway. Without carefully set limits on every joint the limbs flail, and it can't be checked by tests or stills, only by watching. A chosen pose and a slow drift do the job predictably.
 
+**Changing bones after the animation (`SkeletonModifier3D`).** A node under a `Skeleton3D` that gets a turn, every frame, after the animation has posed the bones and before the model is drawn. Whatever it sets replaces the animation's value for that bone only. It's how you add one thing (a look, a reach) on top of an animation without making a new animation. *Ours:* `scripts/art/arm_reach.gd` turns the upper arm and forearm to point at his hand, and `CharacterModel.reach` says how far.
+
+**Turning one direction into another (`Quaternion(from, to)`).** A quaternion is a way of storing a rotation. Built from two directions, it's the shortest turn that takes the first to the second, and `slerp` gives a share of that turn. *Ours:* how `ArmReach` works out how to swing a bone towards its target, and how the arm can be raised gradually.
+
 **Hiding part of a model.** A character built from several meshes can show or hide each with `visible`. *Ours:* `CharacterModel.eyes_shut` hides the eyeballs, which leaves the lids' own hollow: closed eyes, with no extra art.
 
 **Queueing an animation (`AnimationPlayer.queue`).** `play()` switches to a clip at once; `queue()` lines one up to start when the current one ends. *Ours:* the `@queue` cue: `pleads` plays once, then the `offered` loop takes over for as long as the player waits.
