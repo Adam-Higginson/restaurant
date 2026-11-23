@@ -1,0 +1,8 @@
+[gd_resource type="Resource" script_class="ClothRecolour" format=3]
+
+[ext_resource type="Script" path="res://scripts/art/cloth_recolour.gd" id="1_cloth"]
+
+[resource]
+script = ExtResource("1_cloth")
+upper_color = Color(0.16, 0.4, 0.8, 1)
+lower_color = Color(0.25, 0.24, 0.28, 1)

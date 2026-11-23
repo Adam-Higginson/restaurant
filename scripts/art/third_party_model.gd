@@ -85,6 +85,16 @@ const GRAIN: Texture2D = preload("res://assets/placeholder/materials/n64_grain.t
 			style.changed.connect(_restyle)
 		if is_inside_tree():
 			dress()
+## Repaints this character's near-white cloth (only with a [member style]):
+## a stand-in for outfits. Empty leaves its paint as it is.
+@export var recolour: ClothRecolour:
+	set(value):
+		if recolour != null and recolour.changed.is_connected(_restyle):
+			recolour.changed.disconnect(_restyle)
+		recolour = value
+		if recolour != null:
+			recolour.changed.connect(_restyle)
+		_restyle()
 ## Whether the model casts shadows. Off for a backdrop that would otherwise
 ## put the whole scene in its shade (an island's cliffs, with a low sun
 ## behind them).
@@ -288,6 +298,8 @@ func _material_for(source: BaseMaterial3D) -> ShaderMaterial:
 	if style == null:
 		return n64_material(source, grain_metres, tint)
 	var material: ShaderMaterial = style.make_material(source)
+	if recolour != null:
+		recolour.apply(material)
 	_styled.append(material)
 	return material
 
@@ -298,6 +310,10 @@ func _restyle() -> void:
 		return
 	for material: ShaderMaterial in _styled:
 		style.apply(material)
+		if recolour != null:
+			recolour.apply(material)
+		else:
+			ClothRecolour.clear(material)
 
 
 ## The N64 prop material for a model surface painted with [param source]:

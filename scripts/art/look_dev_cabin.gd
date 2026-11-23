@@ -41,6 +41,8 @@ const SETTLE_FRAMES: int = 45
 @export var characters: Array[ThirdPartyModel] = []
 @export var world: WorldEnvironment
 @export var sun: DirectionalLight3D
+## The soft cool fill from the room side, off in plain studio light.
+@export var fill: Light3D
 ## The golden-hour cabin's environment, and plain studio light.
 @export var golden: Environment
 @export var plain: Environment
@@ -50,8 +52,8 @@ const SETTLE_FRAMES: int = 45
 ## The lanterns' lights, out in plain studio light.
 @export var lamps: Array[Light3D] = []
 @export_group("Sun")
-@export var golden_sun_color: Color = Color(1.0, 0.82, 0.6)
-@export var golden_sun_energy: float = 3.0
+@export var golden_sun_color: Color = Color(1.0, 0.88, 0.74)
+@export var golden_sun_energy: float = 2.6
 @export var plain_sun_color: Color = Color.WHITE
 @export var plain_sun_energy: float = 1.2
 
@@ -111,6 +113,8 @@ func set_golden(on: bool) -> void:
 	if sun != null:
 		sun.light_color = golden_sun_color if on else plain_sun_color
 		sun.light_energy = golden_sun_energy if on else plain_sun_energy
+	if fill != null:
+		fill.visible = on
 	for lamp: Light3D in lamps:
 		if lamp != null:
 			lamp.visible = on

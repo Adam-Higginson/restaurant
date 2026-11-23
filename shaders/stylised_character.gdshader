@@ -28,9 +28,9 @@ uniform float lit_falloff : hint_range(0.0, 1.0) = 0.35;
 uniform int bands : hint_range(1, 4) = 1;
 // What colour the shadow side is lit with, as a share of the light: warm
 // and a little purple rather than grey.
-uniform vec4 shadow_color : source_color = vec4(0.52, 0.36, 0.38, 1.0);
+uniform vec4 shadow_color : source_color = vec4(0.46, 0.44, 0.58, 1.0);
 // How much of the world's ambient light the character takes, 0 to 1.
-uniform float ambient_strength : hint_range(0.0, 1.0) = 0.55;
+uniform float ambient_strength : hint_range(0.0, 1.0) = 0.75;
 
 // The highlight: how strong, how big (0 to 1) and how soft its edge is.
 uniform float specular_strength : hint_range(0.0, 2.0) = 0.25;
@@ -39,14 +39,49 @@ uniform float specular_softness : hint_range(0.0, 0.2) = 0.02;
 
 // The rim of light on the lit edge: strength (0 turns it off), how far in
 // from the outline it reaches (0 to 1), and its colour.
-uniform float rim_strength : hint_range(0.0, 2.0) = 0.2;
+uniform float rim_strength : hint_range(0.0, 2.0) = 0.3;
 uniform float rim_width : hint_range(0.0, 1.0) = 0.28;
 uniform vec4 rim_color : source_color = vec4(1.0, 0.86, 0.66, 1.0);
+
+// Near-white cloth repainted (ClothRecolour, scripts/art/cloth_recolour.gd):
+// 0 leaves the paint alone. Above [recolour_split] metres from the model's
+// feet it becomes [recolour_upper], below it [recolour_lower]. Only paint
+// at least [recolour_min_brightness] bright and at most
+// [recolour_max_saturation] coloured counts as cloth.
+uniform float recolour_strength : hint_range(0.0, 1.0) = 0.0;
+uniform vec4 recolour_upper : source_color = vec4(0.46, 0.6, 0.74, 1.0);
+uniform vec4 recolour_lower : source_color = vec4(0.5, 0.38, 0.28, 1.0);
+uniform float recolour_split = 0.93;
+uniform float recolour_min_brightness : hint_range(0.0, 1.0) = 0.62;
+uniform float recolour_max_saturation : hint_range(0.0, 1.0) = 0.2;
+
+// How high this point is above the model's feet, in metres.
+varying float height;
+
+
+void vertex() {
+	height = (MODEL_MATRIX * vec4(VERTEX, 1.0)).y - MODEL_MATRIX[3].y;
+}
 
 
 void fragment() {
 	vec4 painted = texture(albedo_texture, UV) * albedo_color;
-	ALBEDO = painted.rgb * base_tint.rgb;
+	vec3 paint = painted.rgb;
+	if (recolour_strength > 0.0) {
+		// Judge the paint as it looks (sRGB), not in the linear light the
+		// texture arrives in, where pale cream reads dark and coloured.
+		vec3 seen = pow(paint, vec3(1.0 / 2.2));
+		float brightest = max(seen.r, max(seen.g, seen.b));
+		float darkest = min(seen.r, min(seen.g, seen.b));
+		float saturation = (brightest - darkest) / max(brightest, 0.001);
+		float cloth = smoothstep(recolour_min_brightness - 0.08, recolour_min_brightness, brightest)
+				* (1.0 - smoothstep(recolour_max_saturation, recolour_max_saturation + 0.06, saturation));
+		vec3 dye = height > recolour_split ? recolour_upper.rgb : recolour_lower.rgb;
+		// Keep the cloth's own folds and shading: dye it, scaled by its brightness.
+		vec3 dyed = dye * clamp(brightest / 0.85, 0.0, 1.2);
+		paint = mix(paint, dyed, cloth * recolour_strength);
+	}
+	ALBEDO = paint * base_tint.rgb;
 	// No metal and no glossy reflections: the look's highlight is our own.
 	METALLIC = 0.0;
 	ROUGHNESS = 1.0;

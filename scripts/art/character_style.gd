@@ -20,15 +20,15 @@ const OUTLINE_SHADER: Shader = preload("res://shaders/outline.gdshader")
 	set(value):
 		base_tint = value
 		emit_changed()
-## The colour the shadow side is lit with, as a share of the light. Warm and
-## a little purple keeps shadows rich instead of grey.
-@export var shadow_color: Color = Color(0.52, 0.36, 0.38):
+## The colour the shadow side is lit with, as a share of the light. A cool
+## lavender keeps shadows rich and lets the warm sun read against them.
+@export var shadow_color: Color = Color(0.46, 0.44, 0.58):
 	set(value):
 		shadow_color = value
 		emit_changed()
 ## How much of the world's ambient light reaches the character, 0 to 1. Lower
 ## leans on the lamps and the sun, for stronger shapes.
-@export_range(0.0, 1.0) var ambient_strength: float = 0.55:
+@export_range(0.0, 1.0) var ambient_strength: float = 0.75:
 	set(value):
 		ambient_strength = value
 		emit_changed()
@@ -71,7 +71,7 @@ const OUTLINE_SHADER: Shader = preload("res://shaders/outline.gdshader")
 
 @export_group("Rim")
 ## How bright the rim of light on the lit edge is (0 turns it off).
-@export_range(0.0, 2.0) var rim_strength: float = 0.2:
+@export_range(0.0, 2.0) var rim_strength: float = 0.3:
 	set(value):
 		rim_strength = value
 		emit_changed()
@@ -92,7 +92,7 @@ const OUTLINE_SHADER: Shader = preload("res://shaders/outline.gdshader")
 		outline = value
 		emit_changed()
 ## Its width in pixels (at 1080p), the same near and far...
-@export_range(0.0, 8.0) var outline_thickness: float = 1.6:
+@export_range(0.0, 8.0) var outline_thickness: float = 2.0:
 	set(value):
 		outline_thickness = value
 		emit_changed()
@@ -102,7 +102,7 @@ const OUTLINE_SHADER: Shader = preload("res://shaders/outline.gdshader")
 		outline_max_width = value
 		emit_changed()
 ## Dark brown rather than black, so it reads as a painted line.
-@export var outline_color: Color = Color(0.17, 0.11, 0.08):
+@export var outline_color: Color = Color(0.14, 0.1, 0.09):
 	set(value):
 		outline_color = value
 		emit_changed()

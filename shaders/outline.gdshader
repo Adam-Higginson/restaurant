@@ -14,9 +14,9 @@ shader_type spatial;
 render_mode unshaded, cull_front, depth_draw_opaque, fog_disabled;
 
 // Dark brown, not black: it reads as a painted line, not a cut-out.
-uniform vec4 outline_color : source_color = vec4(0.17, 0.11, 0.08, 1.0);
+uniform vec4 outline_color : source_color = vec4(0.14, 0.1, 0.09, 1.0);
 // How wide, in pixels at 1080 lines tall.
-uniform float thickness : hint_range(0.0, 8.0) = 1.6;
+uniform float thickness : hint_range(0.0, 8.0) = 2.0;
 // The widest it can be, in metres, however close the camera.
 uniform float max_width : hint_range(0.0, 0.05) = 0.008;
 
