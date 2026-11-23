@@ -1,0 +1,13 @@
+[gd_resource type="Resource" script_class="ArtLook" format=3]
+
+[ext_resource type="Script" path="res://scripts/art/art_look.gd" id="1_look"]
+
+[resource]
+script = ExtResource("1_look")
+triangles = 700
+pixels_per_metre = 64.0
+max_texture = 256
+flatten_degrees = 2.0
+creases = 0.4
+symmetric = true
+faceted = false

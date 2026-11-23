@@ -3,6 +3,7 @@
 [ext_resource type="Script" path="res://scripts/combat/crab.gd" id="1_crab"]
 [ext_resource type="Script" path="res://scripts/combat/crab_sounds.gd" id="2_sounds"]
 [ext_resource type="Script" path="res://scripts/art/third_party_model.gd" id="3_model"]
+[ext_resource type="Resource" path="res://data/art/looks/creature.tres" id="3_look"]
 [ext_resource type="AudioStream" path="res://assets/audio/combat/crab_click.tres" id="10_crab_click"]
 [ext_resource type="AudioStream" path="res://assets/audio/combat/crab_lunge.tres" id="11_crab_lunge"]
 [ext_resource type="AudioStream" path="res://assets/audio/combat/hurt.tres" id="13_thud"]
@@ -104,6 +105,7 @@ path = "res://assets/third_party/oga_crab/crab.glb"
 fit_size = Vector3(3.0, 1.8, 3.0)
 stand_ins = [NodePath("../Shell"), NodePath("../ClawLeft"), NodePath("../ClawRight"), NodePath("../EyeLeft"), NodePath("../EyeRight"), NodePath("../LegsFront"), NodePath("../LegsBack")]
 grain_metres = 0.15
+look = ExtResource("3_look")
 
 [node name="Sounds" type="Node3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5, 0)

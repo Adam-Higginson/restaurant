@@ -15,9 +15,53 @@ const FIXTURES: String = "res://tests/fixtures/character/"
 func after_test() -> void:
 	CharacterModel.packs_enabled = false
 	Game.set_look(PlayerLook.Body.BOY)
+	KilnJob.out_root = KilnJob.OUT_ROOT
+	KilnJob.fired_extension = "glb"
 
 
 # --- Building it -----------------------------------------------------------------
+
+func test_parts_fired_in_the_kiln_are_drawn_instead_of_the_packs() -> void:
+	_use_fired_stand_ins()
+	var player: Player3D = _new_dressed_player()
+	var model: CharacterModel = _model(player)
+	model.boy = _parts(true)
+	scene_runner(player.get_parent())
+
+	# The body's own parts, not what its hands hold.
+	var meshes: Array[Node] = model.skeleton.find_children("*", "MeshInstance3D", false, false)
+	assert_int(meshes.size()).is_greater(2)
+	for found: Node in meshes:
+		var mesh: MeshInstance3D = found as MeshInstance3D
+		var material: ShaderMaterial = mesh.material_override as ShaderMaterial
+		assert_object(material).override_failure_message(String(mesh.name)).is_not_null()
+		assert_object(material.shader).is_same(FiredModel.SHADER)
+	var hair: MeshInstance3D = model.skeleton.get_node("Hair") as MeshInstance3D
+	var texture: Texture2D = (hair.material_override as ShaderMaterial) \
+			.get_shader_parameter(&"albedo_texture")
+	assert_str(texture.resource_path).ends_with("kiln/hair.test.png")
+
+
+func test_with_the_kiln_turned_off_the_packs_parts_are_drawn() -> void:
+	_use_fired_stand_ins()
+	var player: Player3D = _new_dressed_player()
+	var model: CharacterModel = _model(player)
+	model.boy = _parts(true)
+	model.use_kiln = false
+	scene_runner(player.get_parent())
+
+	for found: Node in model.skeleton.find_children("*", "MeshInstance3D", false, false):
+		assert_object((found as MeshInstance3D).material_override).is_null()
+
+
+func test_parts_given_to_it_win_over_who_you_are() -> void:
+	var player: Player3D = _new_dressed_player()
+	var model: CharacterModel = _model(player)
+	model.boy = null
+	model.parts_override = _parts()
+	scene_runner(player.get_parent())
+
+	assert_object(model.character).is_not_null()
 
 func test_without_the_pack_files_the_greybox_stays() -> void:
 	CharacterModel.packs_enabled = true
@@ -336,14 +380,28 @@ func _new_dressed_player() -> Player3D:
 	return player
 
 
-# The stand-in parts: every file there.
-func _parts() -> CharacterParts:
+# The stand-in parts: every file there. With [param fired_looks], each part
+# has a look named "test", like the stand-in fired files.
+func _parts(fired_looks: bool = false) -> CharacterParts:
 	var parts: CharacterParts = CharacterParts.new()
 	parts.outfit = FIXTURES + "outfit.tscn"
 	parts.head_from = FIXTURES + "head.tscn"
 	parts.hair = FIXTURES + "hair.tscn"
 	parts.eyebrows = ""
+	if fired_looks:
+		var look: ArtLook = ArtLook.new()
+		look.resource_name = "test"
+		parts.body_look = look
+		parts.head_look = look
+		parts.hair_look = look
 	return parts
+
+
+# Points the Kiln at the stand-in fired files in tests/fixtures/kiln/.
+func _use_fired_stand_ins() -> void:
+	KilnJob.out_root = "res://tests/fixtures/kiln/"
+	KilnJob.fired_extension = "tscn"
+	FiredModel.forget()
 
 
 func _model(player: Player3D) -> CharacterModel:

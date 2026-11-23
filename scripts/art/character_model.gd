@@ -44,7 +44,7 @@ enum Pose {
 ## The toe joints, which the feet are planted by.
 const TOE_BONES: PackedStringArray = ["ball_l", "ball_r"]
 ## The bones the head is cut from the base character's body by.
-const HEAD_BONES: PackedStringArray = ["Head", "neck_01"]
+const HEAD_BONES: PackedStringArray = CharacterParts.HEAD_BONES
 ## Bones whose position the animations may move (the whole body's sway and
 ## bob). Every other bone only turns, keeping our proportions.
 const MOVING_BONES: PackedStringArray = ["root", "pelvis"]
@@ -101,7 +101,14 @@ static var _heads: Dictionary[String, ArrayMesh] = {}
 ## turns these textures the wrong colours.
 @export var n64: bool = true
 ## How fine a version of the model to draw (see [member ThirdPartyModel.detail]).
+## Parts fired in the Kiln are always drawn in full.
 @export var detail: float = 0.3
+## Draw the parts the Kiln has fired (see [CharacterParts]) instead of the
+## packs' own. Off shows the packs' as they come (the Lookbook's "before").
+@export var use_kiln: bool = true
+## Parts to build instead of the player's own look ([member boy] or
+## [member girl]), e.g. to show both side by side in the Lookbook.
+@export var parts_override: CharacterParts
 
 ## The character, or null while the greybox shows.
 var character: Node3D = null
@@ -179,6 +186,8 @@ func _process(delta: float) -> void:
 func dress() -> bool:
 	_undress()
 	var parts: CharacterParts = girl if Game.look == PlayerLook.Body.GIRL else boy
+	if parts_override != null:
+		parts = parts_override
 	if not packs_enabled or parts == null or not parts.is_complete():
 		_show_stand_ins(true)
 		dressed.emit(false)
@@ -402,7 +411,13 @@ static func hip_height(skeleton: Skeleton3D) -> float:
 
 
 func _build(parts: CharacterParts) -> void:
-	character = (load(parts.outfit) as PackedScene).instantiate() as Node3D
+	# Each part is the Kiln's fired one if it's there, else the pack's own.
+	var body_job: KilnJob = parts.outfit_job() if use_kiln else null
+	var body_fired: bool = body_job != null and body_job.is_fired()
+	var body_file: String = body_job.fired_path() if body_fired else parts.outfit
+	character = (load(body_file) as PackedScene).instantiate() as Node3D
+	if body_fired:
+		FiredModel.paint(character, body_job)
 	add_child(character)
 	# The packs face +Z; our forward is -Z.
 	character.rotation.y = PI
@@ -410,12 +425,19 @@ func _build(parts: CharacterParts) -> void:
 	skeleton = character.find_children("*", "Skeleton3D", true, false)[0] as Skeleton3D
 	# Measured on the outfit alone: its boots are what stand on the floor.
 	_toe_height = _rest_toe_height()
-	_add_head(parts.head_from)
-	for extra: String in [parts.hair, parts.eyebrows]:
-		if not extra.is_empty():
-			_add_meshes(extra, parts.hair_colour)
+	var head_fired: bool = use_kiln and _add_fired(parts.head_job())
+	if not head_fired:
+		_add_head(parts.head_from)
+	if not parts.hair.is_empty() and not (use_kiln and _add_fired(parts.hair_job())):
+		_add_meshes(parts.hair, parts.hair_colour)
+	# A fired head has the eyebrows painted on.
+	if not parts.eyebrows.is_empty() and not head_fired:
+		_add_meshes(parts.eyebrows, parts.hair_colour)
 	skeleton.set_bone_pose_scale(skeleton.find_bone("Head"), Vector3.ONE * head_scale)
 	for mesh: MeshInstance3D in skeleton.find_children("*", "MeshInstance3D", true, false):
+		# Fired parts are drawn by the Kiln's own material, in full.
+		if mesh.material_override != null:
+			continue
 		mesh.lod_bias = detail
 		if n64:
 			_use_n64(mesh)
@@ -448,6 +470,19 @@ func _add_head(path: String) -> void:
 			mesh.mesh = _heads[key]
 		_move_to_skeleton(mesh)
 	source.free()
+
+
+# Every mesh of [param job]'s fired part onto our skeleton, drawn with its
+# fired texture. Returns whether it was there to add.
+func _add_fired(job: KilnJob) -> bool:
+	if job == null or not job.is_fired():
+		return false
+	var source: Node = (load(job.fired_path()) as PackedScene).instantiate()
+	FiredModel.paint(source, job)
+	for mesh: MeshInstance3D in source.find_children("*", "MeshInstance3D", true, false):
+		_move_to_skeleton(mesh)
+	source.free()
+	return true
 
 
 # Every mesh in [param path], onto our skeleton, tinted [param colour].
