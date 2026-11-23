@@ -1,0 +1,26 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://scripts/art/third_party_model.gd" id="1_model"]
+[ext_resource type="Material" path="res://assets/placeholder/materials/greybox.tres" id="3_mat"]
+
+[sub_resource type="SphereMesh" id="Mesh_stand_in"]
+radius = 1.0
+height = 1.3
+radial_segments = 8
+rings = 4
+
+[node name="Boulder" type="Node3D"]
+
+[node name="StandIn" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.65, 0)
+material_override = ExtResource("3_mat")
+mesh = SubResource("Mesh_stand_in")
+
+[node name="Model" type="Node3D" parent="." node_paths=PackedStringArray("stand_ins")]
+script = ExtResource("1_model")
+path = "res://assets/third_party/meshy/boulder/model/model.glb"
+fit_size = Vector3(40, 1.3, 40)
+stand_ins = [NodePath("../StandIn")]
+grain = false
+detail = 1.0
+keep_as_made = true
