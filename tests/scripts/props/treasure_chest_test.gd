@@ -39,6 +39,33 @@ func test_opening_it_gives_you_what_is_inside() -> void:
 	assert_bool(Game.dialogue.is_set(KNIFE.owned_flag)).is_true()
 
 
+func test_afterwards_the_camera_is_yours_again() -> void:
+	var runner: GdUnitSceneRunner = _build()
+	await physics_ticks(runner, 2)
+
+	_chest.open_for(_player)
+	await physics_ticks(runner, 120)
+	_conversation.skip()
+	await physics_ticks(runner, 5)
+
+	assert_object(_player.camera_rig.held_shot()).is_null()
+
+
+func test_a_shot_held_before_comes_back_afterwards() -> void:
+	var runner: GdUnitSceneRunner = _build()
+	var before: Marker3D = new_marker(_player.get_parent(), &"shots", "Before",
+			Transform3D(Basis.IDENTITY, Vector3(0, 2, 4)))
+	await physics_ticks(runner, 2)
+	_player.camera_rig.hold_shot(before, true)
+
+	_chest.open_for(_player)
+	await physics_ticks(runner, 120)
+	_conversation.skip()
+	await physics_ticks(runner, 5)
+
+	assert_object(_player.camera_rig.held_shot()).is_same(before)
+
+
 func test_it_opens_only_once() -> void:
 	var runner: GdUnitSceneRunner = _build()
 	await physics_ticks(runner, 2)

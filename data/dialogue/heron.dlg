@@ -20,10 +20,11 @@ heron: Bit of a rough night out there, isn't it?
 # The first meeting. At night he's by the stove with the lantern, so the
 # camera frames the two of them; in the morning he's alone at the wheel.
 ~ first
-? night
+# By the stove only if he's there: at night he may be up on deck (#176).
+? night and heron_at_post
 @shot stove_nook
 heron: So. You're the one the lamp fished out.
-? night and not lantern_low
+? night and heron_at_post and not lantern_low
 lantern: I pulled! They held on!
 heron: Hm. Can you cook?
 - A little. -> cook_little

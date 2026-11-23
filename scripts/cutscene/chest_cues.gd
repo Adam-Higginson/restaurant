@@ -30,8 +30,10 @@ const HALO_SHADER: Shader = preload("res://shaders/sparkle.gdshader")
 ## The animation of opening a chest, and how long it plays.
 @export var open_animation: StringName = &"Chest_Open"
 @export var open_animation_seconds: float = 1.4
-## How long the treasure takes to rise from the chest to over your head.
+## How long your arms take to go up with the treasure, in seconds, and how
+## long the treasure takes to pop in, in your hands.
 @export var rise_seconds: float = 0.9
+@export var pop_seconds: float = 0.3
 ## How fast the treasure turns while it's held up, in turns a second.
 @export var spin_turns: float = 0.35
 ## Where the camera stands for a gift held up without a chest: how far in
@@ -47,14 +49,15 @@ const HALO_SHADER: Shader = preload("res://shaders/sparkle.gdshader")
 var _chest: TreasureChest = null
 ## The treasure being held up, or null.
 var _treasure: Node3D = null
-## Whether the treasure has reached the hands and follows them.
-var _held: bool = false
 var _sound: AudioStreamPlayer = null
 ## The camera's mark for a gift held up without a chest, or null.
 var _gift_shot: Marker3D = null
-## The shot the camera was holding before something was held up (the
-## captain's conversation by the stove), to go back to after; or null.
+## The shot the camera was holding before the scene began (the captain's
+## conversation by the stove), to go back to after; null for the free camera.
 var _shot_before: Marker3D = null
+## Whether a scene is under way (a chest opening or a gift held up), so the
+## shot from before it is remembered once, not replaced by its own shots.
+var _staging: bool = false
 
 
 func _ready() -> void:
@@ -68,10 +71,18 @@ func _process(delta: float) -> void:
 	if not is_instance_valid(_treasure):
 		return
 	_treasure.rotate_y(TAU * spin_turns * delta)
+	# Always in your hands, from the moment it appears: it rises with them.
+	_treasure.global_position = hands_point()
+
+
+## Where the treasure is held: between your hands as they really are, or
+## over your head without a character.
+func hands_point() -> Vector3:
 	var model: CharacterModel = _character()
-	if _held and model != null:
-		_treasure.global_position = _treasure.global_position.lerp(model.held_point(),
-				minf(1.0, 12.0 * delta))
+	if model != null:
+		return model.held_point()
+	return player.global_position + Vector3.UP * 2.0 if is_instance_valid(player) \
+			else Vector3.ZERO
 
 
 func cues() -> Array[StringName]:
@@ -112,6 +123,7 @@ func _open(chest: TreasureChest) -> void:
 	player.velocity = Vector3.ZERO
 	player.face_towards(chest.global_position)
 	player.reset_physics_interpolation()
+	_begin_staging()
 	player.camera_rig.hold_shot(chest.open_shot(), true)
 	if is_skipping():
 		chest.swing_open(true)
@@ -128,13 +140,12 @@ func _open(chest: TreasureChest) -> void:
 
 
 func _hold_up(chest: TreasureChest) -> void:
-	_raise(make_treasure(chest.contents), chest.hold_shot(), chest.get_parent(),
-			chest.item_spot().global_position)
+	_raise(make_treasure(chest.contents), chest.hold_shot(), chest.get_parent())
 
 
 # Holds up [param id] (an item's or a tool's), handed over rather than found
-# in a chest: it rises from your hands, and the camera looks at you from in
-# front, a little to one side.
+# in a chest, with the camera looking at you from in front, a little to one
+# side.
 func _hold_up_gift(id: StringName) -> void:
 	var catalog: Catalog = Catalog.load_default()
 	var treasure_node: Node3D = null
@@ -155,8 +166,7 @@ func _hold_up_gift(id: StringName) -> void:
 	var at: Vector3 = clear_of_walls(head, player.global_position + round_by * gift_shot_distance
 			+ Vector3.UP * gift_shot_height)
 	_gift_shot.global_transform = Transform3D(Basis.looking_at(head - at, Vector3.UP), at)
-	_raise(treasure_node, _gift_shot, player.get_parent(),
-			player.global_position + Vector3.UP * 1.1 + player.facing * 0.3)
+	_raise(treasure_node, _gift_shot, player.get_parent())
 
 
 ## Where a camera wanting to stand at [param want] can, looking at
@@ -174,41 +184,44 @@ func clear_of_walls(from: Vector3, want: Vector3) -> Vector3:
 	return wall + (from - wall).normalized() * 0.25
 
 
-# Raises [param treasure_node] from [param from] to over your head as your
-# arms go up, with the fanfare and the camera at [param shot]. It joins
-# [param world] so it stays put in the world as it rises.
-func _raise(treasure_node: Node3D, shot: Marker3D, world: Node, from: Vector3) -> void:
+# Holds [param treasure_node] up as your arms go up, with the fanfare and the
+# camera at [param shot]: it appears in your hands, floating, popping in, and
+# rises with them (see [method hands_point]). It joins [param world].
+func _raise(treasure_node: Node3D, shot: Marker3D, world: Node) -> void:
 	var held: int = hold()
 	player.face_towards(shot.global_position)
-	var before: Marker3D = player.camera_rig.held_shot()
-	if before != _gift_shot and before != shot:
-		_shot_before = before
+	_begin_staging()
 	player.camera_rig.hold_shot(shot, true)
 	if is_instance_valid(_treasure):
 		_treasure.queue_free()
 	_treasure = treasure_node
 	world.add_child(_treasure)
-	_treasure.global_position = from
-	_held = false
+	_treasure.global_position = hands_point()
 	var model: CharacterModel = _character()
 	if is_skipping():
-		_held = true
 		if model != null:
 			model.hold_up = 1.0
 		release(held)
 		return
 	_play(fanfare)
 	var rise: Tween = create_tween().set_parallel()
-	var to: Vector3 = model.hold_up_point() if model != null \
-			else player.global_position + Vector3.UP * 2.0
-	rise.tween_property(_treasure, "global_position", to, rise_seconds) \
-			.set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_OUT)
+	_treasure.scale = Vector3.ONE * 0.01
+	rise.tween_property(_treasure, "scale", Vector3.ONE, pop_seconds) \
+			.set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_OUT)
 	if model != null:
-		rise.tween_property(model, "hold_up", 1.0, rise_seconds * 0.7) \
+		rise.tween_property(model, "hold_up", 1.0, rise_seconds) \
 				.set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_OUT)
 	await pause(rise_seconds, held)
-	_held = true
 	release(held)
+
+
+# Notes the shot the camera holds before a scene, once, so the scene's own
+# shots (the chest's, the gift's) aren't mistaken for it.
+func _begin_staging() -> void:
+	if _staging:
+		return
+	_staging = true
+	_shot_before = player.camera_rig.held_shot()
 
 
 ## The model of [param tool] to hold up: its own model when it has one,
@@ -286,7 +299,6 @@ func _put_away() -> void:
 	if is_instance_valid(_treasure):
 		_treasure.queue_free()
 	_treasure = null
-	_held = false
 	var model: CharacterModel = _character()
 	if model != null and model.hold_up > 0.0:
 		create_tween().tween_property(model, "hold_up", 0.0, 0.35)
@@ -297,6 +309,7 @@ func _put_away() -> void:
 		else:
 			player.camera_rig.release_shot(true)
 	_shot_before = null
+	_staging = false
 	if is_instance_valid(_gift_shot):
 		_gift_shot.queue_free()
 	_gift_shot = null
