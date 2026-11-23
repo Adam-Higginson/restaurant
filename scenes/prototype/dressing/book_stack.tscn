@@ -1,5 +1,6 @@
 [gd_scene format=3 uid="uid://c25vd2mxkkmx2"]
 
+[ext_resource type="Script" path="res://scripts/art/third_party_model.gd" id="900_meshy"]
 [ext_resource type="Material" path="res://assets/placeholder/materials/red_cloth.tres" id="1_l0udl"]
 [ext_resource type="Material" path="res://assets/placeholder/materials/linen.tres" id="2_0b4jc"]
 [ext_resource type="Material" path="res://assets/placeholder/materials/wool.tres" id="3_e7dvm"]
@@ -54,3 +55,13 @@ mesh = SubResource("BoxMesh_es0aq")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0.15)
 material_override = ExtResource("2_0b4jc")
 mesh = SubResource("BoxMesh_dflnn")
+
+[node name="Model" type="Node3D" parent="." node_paths=PackedStringArray("stand_ins")]
+transform = Transform3D(1, 0, -0, 0, 1, 0, 0, 0, 1, 0, 0, 0)
+script = ExtResource("900_meshy")
+path = "res://assets/third_party/kaykit_furniture/Assets/gltf/book_set.gltf"
+fit_size = Vector3(0.3, 0.2, 0.3)
+stand_ins = [NodePath("../Book1"), NodePath("../Book2"), NodePath("../Book3")]
+grain = false
+detail = 1.0
+keep_as_made = true

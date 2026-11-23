@@ -1,5 +1,6 @@
 [gd_scene format=3 uid="uid://kiiansrd48p7"]
 
+[ext_resource type="Script" path="res://scripts/art/third_party_model.gd" id="900_meshy"]
 [ext_resource type="Material" path="res://assets/placeholder/materials/stone.tres" id="1_q4301"]
 [ext_resource type="Material" path="res://assets/placeholder/materials/iron.tres" id="2_iwd8d"]
 [ext_resource type="Material" path="res://assets/placeholder/materials/brass.tres" id="3_bri8l"]
@@ -277,22 +278,22 @@ material_override = ExtResource("4_pyop5")
 mesh = SubResource("BoxMesh_k36jd")
 
 [node name="Pipe" type="MeshInstance3D" parent="." unique_id=1806460160]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.965, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.22, 1.965, -0.19)
 material_override = ExtResource("2_iwd8d")
 mesh = SubResource("CylinderMesh_q0pch")
 
 [node name="Damper" type="MeshInstance3D" parent="." unique_id=1951431557]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.6, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.22, 1.6, -0.19)
 material_override = ExtResource("2_iwd8d")
 mesh = SubResource("CylinderMesh_5wneo")
 
 [node name="DamperHandle" type="MeshInstance3D" parent="." unique_id=1434822984]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.1, 1.6, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.32, 1.6, -0.19)
 material_override = ExtResource("3_bri8l")
 mesh = SubResource("BoxMesh_wnlj6")
 
 [node name="Collar" type="MeshInstance3D" parent="." unique_id=1166945083]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.97, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.22, 2.97, -0.19)
 material_override = ExtResource("2_iwd8d")
 mesh = SubResource("CylinderMesh_xu7up")
 
@@ -410,3 +411,13 @@ omni_range = 1.6
 [node name="Shape" type="CollisionShape3D" parent="." unique_id=1741018358]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.45, 0)
 shape = SubResource("BoxShape3D_toj4x")
+
+[node name="Meshy" type="Node3D" parent="." node_paths=PackedStringArray("stand_ins")]
+transform = Transform3D(1, 0, -0, 0, 1, 0, 0, 0, 1, 0, 0, 0)
+script = ExtResource("900_meshy")
+path = "res://assets/third_party/meshy/galley_stove/model/model.glb"
+fit_size = Vector3(0.79, 1.293, 0.61)
+stand_ins = [NodePath("../LegLB"), NodePath("../LegLF"), NodePath("../LegRB"), NodePath("../LegRF"), NodePath("../Base"), NodePath("../Belly"), NodePath("../Shoulder"), NodePath("../Band"), NodePath("../Top"), NodePath("../DoorFrame"), NodePath("../Embers"), NodePath("../Fire"), NodePath("../Bar1"), NodePath("../Bar2"), NodePath("../Bar3"), NodePath("../DoorHinge/Door"), NodePath("../AshLip")]
+grain = false
+detail = 1.0
+keep_as_made = true

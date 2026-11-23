@@ -50,6 +50,10 @@ func _ready() -> void:
 		Shot.new("table_night", Vector3(0.2, 2.2, 6.4), Vector3(1.6, 1.8, 4.9), 0.0),
 		Shot.new("counters_night", Vector3(2.6, 2.5, 5.6), Vector3(-0.6, 1.6, 1.6), 0.0),
 		Shot.new("bunks_night", Vector3(2.6, 2.6, 12.6), Vector3(-1.3, 2.3, 10.15), 0.0),
+		Shot.new("bunks_port", Vector3(2.4, 2.7, 10.2), Vector3(-5.5, 2.0, 12.2), 0.0),
+		Shot.new("bunks_starboard", Vector3(-2.6, 2.7, 10.6), Vector3(5.5, 2.0, 12.4), 0.0),
+		Shot.new("nook_night", Vector3(2.2, 2.5, 14.0), Vector3(-0.6, 1.5, 11.4), 0.0),
+		Shot.new("deck_night", Vector3(3.0, 7.4, 8.0), Vector3(-0.5, 6.0, -4.0), 0.0),
 		Shot.new("deck_dawn", Vector3(3.0, 7.4, 8.0), Vector3(-0.5, 6.0, -4.0), 1.0),
 		Shot.new("galley_dawn", Vector3(-1.2, 2.5, 7.6), Vector3(2.6, 1.7, 2.6), 1.0),
 	]

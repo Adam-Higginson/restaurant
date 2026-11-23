@@ -1,5 +1,6 @@
 [gd_scene format=3 uid="uid://cfr8uqrc8r52k"]
 
+[ext_resource type="Script" path="res://scripts/art/third_party_model.gd" id="900_meshy"]
 [ext_resource type="Material" path="res://assets/placeholder/materials/dark_prop_wood.tres" id="1_7t12r"]
 [ext_resource type="Material" path="res://assets/placeholder/materials/painted_wood.tres" id="2_57nrv"]
 [ext_resource type="Material" path="res://assets/placeholder/materials/brass.tres" id="3_bbcn4"]
@@ -165,3 +166,14 @@ mesh = SubResource("BoxMesh_5170p")
 [node name="Shape" type="CollisionShape3D" parent="." unique_id=1486917477]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.515, 0.01)
 shape = SubResource("BoxShape3D_vnpkc")
+
+[node name="Model" type="Node3D" parent="." node_paths=PackedStringArray("stand_ins")]
+transform = Transform3D(1, 0, -0, 0, 1, 0, 0, 0, 1, 0, 0, 0)
+script = ExtResource("900_meshy")
+path = "res://assets/third_party/kaykit_furniture/Assets/gltf/cabinet_medium.gltf"
+fit_size = Vector3(1.04, 1.025, 0.47)
+stretch = true
+stand_ins = [NodePath("../Plinth"), NodePath("../Body"), NodePath("../Top"), NodePath("../Drawer1"), NodePath("../Drawer2"), NodePath("../Drawer3"), NodePath("../DrawerSide1"), NodePath("../DrawerSide2")]
+grain = false
+detail = 1.0
+keep_as_made = true
