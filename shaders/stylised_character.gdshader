@@ -62,10 +62,6 @@ uniform float recolour_max_saturation : hint_range(0.0, 1.0) = 0.2;
 // per mesh by ThirdPartyModel from its outfit). A point mostly weighted to
 // hidden bones isn't drawn, so the body never pokes through the cloth.
 instance uniform int hidden_bones = 0;
-// PROTOTYPE: how far this mesh's paint is flattened towards a blurred copy of
-// itself, 0 to 1. It takes out highlights and folds painted into a texture,
-// leaving flat colour for the cel shading to light.
-instance uniform float flatten = 0.0;
 // PROTOTYPE: how far the surface is lit as if it were a smooth round column
 // about the model's upright axis, 0 to 1. Lumps and folds in the mesh stop
 // breaking the light/shadow edge into patches, leaving one clean shape.
@@ -110,11 +106,7 @@ void fragment() {
 	if (covered > 0.5) {
 		discard;
 	}
-	vec4 painted = texture(albedo_texture, UV);
-	if (flatten > 0.0) {
-		painted = mix(painted, textureLod(albedo_texture, UV, 5.0), flatten);
-	}
-	painted *= albedo_color;
+	vec4 painted = texture(albedo_texture, UV) * albedo_color;
 	vec3 paint = painted.rgb;
 	if (recolour_strength > 0.0) {
 		// Judge the paint as it looks (sRGB), not in the linear light the

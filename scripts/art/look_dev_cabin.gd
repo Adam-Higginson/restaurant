@@ -39,7 +39,6 @@ const SETTLE_FRAMES: int = 45
 ## cloth stay as flat colour and don't burn out.
 const CARTOON_BRUSH: float = 3.5
 const CARTOON_CHARACTER_BRUSH: float = 0.9
-const CARTOON_CLOTH_FLATTEN: float = 0.85
 const CARTOON_ROUND_FORM: float = 0.75
 const CARTOON_LIGHT_CAP: float = 1.3
 const CARTOON_CHARACTER_TINT: Color = Color(0.95, 0.95, 0.95)
@@ -223,9 +222,9 @@ func set_cartoon(on: bool) -> void:
 	for character: ThirdPartyModel in characters:
 		if character == null:
 			continue
-		if not character.dressed.is_connected(_flatten_cloth):
-			character.dressed.connect(_flatten_cloth.bind(character))
-		_flatten_cloth(character.model != null, character)
+		if not character.dressed.is_connected(_light_as_cartoon):
+			character.dressed.connect(_light_as_cartoon.bind(character))
+		_light_as_cartoon(character.model != null, character)
 	for wood: StandardMaterial3D in _wood_colors:
 		wood.diffuse_mode = (BaseMaterial3D.DIFFUSE_TOON if on
 				else BaseMaterial3D.DIFFUSE_BURLEY)
@@ -233,23 +232,17 @@ func set_cartoon(on: bool) -> void:
 				else BaseMaterial3D.SPECULAR_SCHLICK_GGX)
 
 
-# Flattens the paint of a dressed character's clothes (the meshes of its
-# outfit, which don't hide any of themselves), leaving the body and face.
-func _flatten_cloth(shown: bool, character: ThirdPartyModel) -> void:
+# Lights a character the cartoon way: no one light burns it out, and a
+# character wearing an outfit is lit as a smooth round form.
+func _light_as_cartoon(shown: bool, character: ThirdPartyModel) -> void:
 	if not shown:
 		return
 	for found: Node in character.model.find_children("*", "MeshInstance3D", true, false):
 		var mesh_node: MeshInstance3D = found as MeshInstance3D
-		var hides: int = 0
-		if mesh_node.get_instance_shader_parameter(&"hidden_bones") != null:
-			hides = mesh_node.get_instance_shader_parameter(&"hidden_bones")
 		mesh_node.set_instance_shader_parameter(&"light_cap",
 				CARTOON_LIGHT_CAP if cartoon else 0.0)
 		if character.outfit == null:
 			continue
-		if hides == 0:
-			mesh_node.set_instance_shader_parameter(&"flatten",
-					CARTOON_CLOTH_FLATTEN if cartoon else 0.0)
 		mesh_node.set_instance_shader_parameter(&"round_form",
 				CARTOON_ROUND_FORM if cartoon else 0.0)
 
