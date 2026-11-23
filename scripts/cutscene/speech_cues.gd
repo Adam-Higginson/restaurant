@@ -16,6 +16,10 @@ extends CueHandler
 ## moment the player presses Interact, when the cutscene is skipped, and
 ## when it ends: nobody goes on pleading after they've been answered.
 
+## The prompt that shares the bottom of the screen with the dialogue box.
+## Optional: with one, it's moved up out of the way while a line is up.
+@export var prompt: CutscenePrompt
+
 ## Words waiting to be said: each is [seconds until, speaker, seconds
 ## shown, words].
 var _waiting: Array[Array] = []
@@ -30,8 +34,8 @@ func cues() -> Array[StringName]:
 func _physics_process(delta: float) -> void:
 	if _left > 0.0:
 		_left -= delta
-		if _left <= 0.0 and is_instance_valid(conversation):
-			conversation.end_aside()
+		if _left <= 0.0:
+			_put_away()
 	if _waiting.is_empty():
 		return
 	var still_waiting: Array[Array] = []
@@ -62,8 +66,7 @@ func seconds_left() -> float:
 func hush() -> void:
 	_waiting.clear()
 	_left = 0.0
-	if is_instance_valid(conversation):
-		conversation.end_aside()
+	_put_away()
 
 
 func _perform(cue: StringName, args: PackedStringArray) -> void:
@@ -93,3 +96,13 @@ func _say(speaker: StringName, words: String, seconds: float) -> void:
 		return
 	conversation.say_aside(speaker, words)
 	_left = maxf(seconds, 0.0)
+	if is_instance_valid(prompt):
+		prompt.raised = true
+
+
+# Puts the line away and lets the prompt back down.
+func _put_away() -> void:
+	if is_instance_valid(conversation):
+		conversation.end_aside()
+	if is_instance_valid(prompt):
+		prompt.raised = false

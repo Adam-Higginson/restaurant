@@ -326,8 +326,9 @@ choice = NodePath("../LookChoice")
 
 [node name="LookChoice" parent="." instance=ExtResource("90_look")]
 
-[node name="SpeechCues" type="Node" parent="."]
+[node name="SpeechCues" type="Node" parent="." node_paths=PackedStringArray("prompt")]
 script = ExtResource("319_speech")
+prompt = NodePath("../CutscenePrompt")
 
 [node name="LookCues" type="Node" parent="."]
 script = ExtResource("312_looks")

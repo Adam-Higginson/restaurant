@@ -6,6 +6,7 @@ extends GameTestSuite
 ## Interact), skipping or ending the cutscene drops whatever was to come.
 
 const BOX: PackedScene = preload("res://ui/dialogue_box.tscn")
+const PROMPT: PackedScene = preload("res://ui/cutscene_prompt.tscn")
 
 var _player: Player3D
 var _conversation: Conversation
@@ -135,6 +136,26 @@ func test_a_line_thats_read_the_usual_way_still_waits_and_shows_its_arrow() -> v
 	# The ordinary line has taken the box, and it's no longer an aside.
 	assert_str(_box.line_text()).is_equal("To be read.")
 	assert_bool(_conversation.is_aside_up()).is_false()
+
+
+func test_the_prompt_moves_up_out_of_the_way_while_a_line_is_up() -> void:
+	_build()
+	var runner: GdUnitSceneRunner = scene_runner(_player.get_parent())
+	await physics_ticks(runner, 3)
+	var prompt: CutscenePrompt = PROMPT.instantiate() as CutscenePrompt
+	_player.get_parent().add_child(prompt)
+	_speech.prompt = prompt
+	var words: Label = prompt.get_node("%Words") as Label
+	var usual: float = words.offset_top
+
+	play_cutscene(_conversation, _player, "@say lantern 0.5 Grab my hand!\n@wait 9")
+	assert_bool(prompt.raised).is_true()
+	assert_float(words.offset_top).is_equal_approx(usual - prompt.raise_by, 0.001)
+
+	# When the line's gone, it comes back down.
+	await physics_ticks(runner, 40)
+	assert_bool(prompt.raised).is_false()
+	assert_float(words.offset_top).is_equal_approx(usual, 0.001)
 
 
 func test_with_no_box_nothing_goes_wrong() -> void:

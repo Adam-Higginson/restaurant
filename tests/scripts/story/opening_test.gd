@@ -133,6 +133,13 @@ func test_the_rescue_waits_for_you_to_take_his_hand_then_goes_to_the_surface() -
 	var you: CharacterModel = _underwater_set().get_node("Castaway/Character") as CharacterModel
 	assert_bool(you.eyes_shut).is_true()
 	assert_bool(_conversation.is_aside_up()).is_true()
+	# What he says can be seen: the dialogue box is drawn over the water you're
+	# sinking through, and the prompt has moved up out of its way.
+	var box_layer: CanvasLayer = _conversation.box.get_parent() as CanvasLayer
+	assert_object(box_layer).is_not_null()
+	assert_int(box_layer.layer).is_greater(underwater.layer)
+	assert_bool(_conversation.box.is_visible_in_tree()).is_true()
+	assert_bool(prompt.raised).is_true()
 
 	# Take it: his hand closes on yours, and then black, and not a sound.
 	_conversation.press()
