@@ -61,11 +61,12 @@ func test_other_resources_have_nothing_to_fire() -> void:
 	assert_int(jobs.size()).is_equal(0)
 
 
-func test_the_game_fires_its_props_crab_and_player_each_once() -> void:
+# The crab is a Meshy model now (#168), kept as made, so it's never fired.
+func test_the_game_fires_its_props_and_player_each_once() -> void:
 	var fired: PackedStringArray = []
 	for job: KilnJob in KilnCatalog.all_jobs():
 		fired.append(job.fired_path().get_file())
-	for wanted: String in ["pot_A.prop.", "kettle.prop.", "crab.creature.", "knife.prop.",
+	for wanted: String in ["pot_A.prop.", "kettle.prop.", "knife.prop.",
 			"Male_Peasant.character_body.glb", "Superhero_Female_FullBody.character_head.glb",
 			"Hair_Buns.character_hair.glb"]:
 		var found: bool = false

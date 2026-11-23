@@ -45,6 +45,14 @@ const WALK_ANIMATION: StringName = &"walk"
 const ARM_BONES: PackedStringArray = ["left arm 1.1", "right arm 1.1"]
 ## How far the claws lift at the height of the rear-up, in radians.
 const CLAW_LIFT: float = 0.9
+## A model cut into loose parts (the Meshy crab, tools/meshy/split_crab.py)
+## has no skeleton: its legs and claws are moved here. How fast the legs
+## step as it scuttles (radians a second), how far each swings fore and aft
+## and lifts (radians), and how much of that they keep up standing still.
+const LEG_RATE: float = 16.0
+const LEG_SWING: float = 0.38
+const LEG_LIFT: float = 0.3
+const LEG_FIDGET: float = 0.18
 ## How high its model is lifted on its back, in metres, so the shell rests
 ## on the ground.
 const FLIPPED_HEIGHT: float = 0.6
@@ -122,6 +130,13 @@ var _flashing: bool = false
 ## The real model's animations and skeleton, or null on the greybox.
 var _animator: AnimationPlayer = null
 var _skeleton: Skeleton3D = null
+## The real model's loose legs and claws, if it's made of parts, and how
+## each sits at rest.
+var _legs: Array[Node3D] = []
+var _claw_parts: Array[Node3D] = []
+var _rests: Dictionary[Node3D, Transform3D] = {}
+## How far through their stepping the legs are, in radians.
+var _stride: float = 0.0
 ## Moves its animation on in steps, if its look says so.
 var _stepper: AnimationStepper = AnimationStepper.new()
 
@@ -154,6 +169,12 @@ func _ready() -> void:
 	_flash.albedo_color = Color(1.0, 1.0, 1.0, 0.85)
 	find_meshes()
 	_find_rig()
+	if _dresser != null:
+		# The model can be dressed again while the game runs (the painted
+		# look does): find its meshes, rig and parts afresh.
+		_dresser.dressed.connect(func(_shown: bool) -> void:
+			find_meshes()
+			_find_rig())
 
 
 func _physics_process(delta: float) -> void:
@@ -417,6 +438,40 @@ func _act_out() -> void:
 	_show_flash(_flash_left > 0.0)
 
 
+# Moves a model made of loose parts: its legs step in turn as it scuttles
+# (neighbours and opposite sides out of step, as a crab's do), fidget a
+# little standing still and scrabble at the air on its back; its claws lift
+# as it rears up. Dead, they stop where they are.
+func _move_parts(delta: float) -> void:
+	if _legs.is_empty() and _claw_parts.is_empty():
+		return
+	var moving: bool = Vector2(velocity.x, velocity.z).length() > 0.1
+	var busy: bool = moving or is_flipped()
+	if not is_dead():
+		_stride += delta * LEG_RATE * (FLAIL_SPEED if is_flipped() else (1.0 if moving else 0.2))
+	var amount: float = 1.0 if busy else LEG_FIDGET
+	for index: int in _legs.size():
+		var leg: Node3D = _legs[index]
+		if not is_instance_valid(leg):
+			continue
+		var rest: Transform3D = _rests[leg]
+		var side: float = 1.0 if rest.origin.x > 0.0 else -1.0
+		var phase: float = _stride + PI * float(index % 2) + (PI if side > 0.0 else 0.0)
+		var swing: float = sin(phase) * LEG_SWING * amount
+		# It lifts as it swings forward and stays down as it pushes back.
+		var lift: float = maxf(cos(phase), 0.0) * LEG_LIFT * amount * side
+		leg.transform = Transform3D(
+				Basis(Vector3.UP, swing) * Basis(Vector3.BACK, lift) * rest.basis, rest.origin)
+	for claw: Node3D in _claw_parts:
+		if not is_instance_valid(claw):
+			continue
+		var rest: Transform3D = _rests[claw]
+		var side: float = 1.0 if rest.origin.x > 0.0 else -1.0
+		# Lifted as it rears up, and spread a little wider as they rise.
+		claw.transform = Transform3D(Basis(Vector3.RIGHT, -CLAW_LIFT * 0.7 * _claws)
+				* Basis(Vector3.UP, 0.25 * _claws * side) * rest.basis, rest.origin)
+
+
 # Lays the white flash over every mesh, or takes it off.
 func _show_flash(shown: bool) -> void:
 	if shown == _flashing:
@@ -433,8 +488,17 @@ func _show_flash(shown: bool) -> void:
 func _find_rig() -> void:
 	_animator = null
 	_skeleton = null
+	_legs.clear()
+	_claw_parts.clear()
+	_rests.clear()
 	if _dresser == null or _dresser.model == null:
 		return
+	for found: Node in _dresser.model.find_children("Leg*", "Node3D", true, false):
+		_legs.append(found as Node3D)
+	for found: Node in _dresser.model.find_children("Claw*", "Node3D", true, false):
+		_claw_parts.append(found as Node3D)
+	for part: Node3D in _legs + _claw_parts:
+		_rests[part] = part.transform
 	var animators: Array[Node] = _dresser.model.find_children("*", "AnimationPlayer", true, false)
 	var skeletons: Array[Node] = _dresser.model.find_children("*", "Skeleton3D", true, false)
 	if animators.is_empty() or skeletons.is_empty():
@@ -452,7 +516,8 @@ func _find_rig() -> void:
 # Plays the real model's idle or walk, then lifts its claws. On its back its
 # legs scrabble at the air (the walk, quickly); dead, they stop.
 func _animate(delta: float) -> void:
-	if _animator == null:
+	_move_parts(delta)
+	if _animator == null or not is_instance_valid(_animator):
 		return
 	var moving: bool = Vector2(velocity.x, velocity.z).length() > 0.1
 	var wanted: StringName = animation_for(moving or is_flipped())
