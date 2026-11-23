@@ -355,6 +355,10 @@ recording = "res://assets/third_party/audio/lantern_flare.ogg"
 script = ExtResource("318_optional")
 recording = "res://assets/third_party/audio/deep_note.ogg"
 
+[node name="Plunge" type="AudioStreamPlayer" parent="SoundCues"]
+script = ExtResource("318_optional")
+recording = "res://assets/third_party/audio/plunge.ogg"
+
 [node name="Bell" type="AudioStreamPlayer" parent="SoundCues"]
 script = ExtResource("318_optional")
 recording = "res://assets/third_party/audio/bell_far.ogg"

@@ -85,8 +85,21 @@ func test_it_opens_on_her_name_and_waits_for_any_button() -> void:
 	assert_str(_conversation.box.line_text()).is_equal("Someone in the water!")
 	assert_str(_conversation.box.speaker_name()).is_equal("Lantern")
 
-	# Off the hook and over the side: her name is dark, and you're under.
+	# Off the hook and over the side. From out on the water we watch him go:
+	# a lantern in the air astern of her, where he wasn't a moment ago.
+	var flying: Node3D = _ship.get_node("RescueSet/Props/FlyingLantern") as Node3D
+	assert_bool(flying.visible).is_false()
+	var hung_at: Vector3 = flying.position
+	assert_bool(await _reaches(runner, &"plunge")).is_true()
+	await physics_ticks(runner, 45)
+	assert_bool(flying.visible).is_true()
+	assert_bool(_player.camera_rig.is_fixed).is_true()
+	assert_float(flying.position.distance_to(hung_at)).is_greater(2.0)
+	assert_bool(hook_lantern.is_visible_in_tree()).is_false()
+
+	# He hits the water, and then her name is dark, and you're under.
 	assert_bool(await _reaches(runner, &"dark")).is_true()
+	assert_bool(flying.visible).is_false()
 	assert_bool(hook_lantern.is_visible_in_tree()).is_false()
 	assert_float(carved.lamp_glow()).is_equal(0.0)
 	assert_bool(dimmer.dimmed).is_false()
