@@ -85,6 +85,16 @@ const GRAIN: Texture2D = preload("res://assets/placeholder/materials/n64_grain.t
 			style.changed.connect(_restyle)
 		if is_inside_tree():
 			dress()
+## What this character wears: pieces put on its skeleton when the model
+## loads, each following its animations. Empty wears only the model's own paint.
+@export var outfit: CharacterOutfit:
+	set(value):
+		if outfit != null and outfit.changed.is_connected(_redress):
+			outfit.changed.disconnect(_redress)
+		outfit = value
+		if outfit != null:
+			outfit.changed.connect(_redress)
+		_redress()
 ## Repaints this character's near-white cloth (only with a [member style]):
 ## a stand-in for outfits. Empty leaves its paint as it is.
 @export var recolour: ClothRecolour:
@@ -173,6 +183,7 @@ func dress() -> bool:
 		dressed.emit(false)
 		return false
 	add_child(model)
+	_wear(model)
 	_fit(model)
 	if fired:
 		FiredModel.paint(model, job, tint)
@@ -302,6 +313,63 @@ func _material_for(source: BaseMaterial3D) -> ShaderMaterial:
 		recolour.apply(material)
 	_styled.append(material)
 	return material
+
+
+# Puts each piece of the [member outfit] on the model's skeleton: the piece's
+# skinned meshes move onto it, so its bones (matched by name) move them.
+func _wear(node: Node3D) -> void:
+	if outfit == null:
+		return
+	var found: Array[Node] = node.find_children("*", "Skeleton3D", true, false)
+	if found.is_empty():
+		return
+	var skeleton: Skeleton3D = found[0] as Skeleton3D
+	var pieces: Dictionary[StringName, String] = outfit.pieces()
+	for slot: StringName in pieces:
+		var path: String = pieces[slot]
+		if not ResourceLoader.exists(path):
+			continue
+		var scene: PackedScene = load(path) as PackedScene
+		if scene == null:
+			continue
+		var piece: Node = scene.instantiate()
+		var part: int = 0
+		for mesh: Node in piece.find_children("*", "MeshInstance3D", true, false):
+			var skinned: MeshInstance3D = mesh as MeshInstance3D
+			if skinned.skin == null:
+				continue
+			skinned.get_parent().remove_child(skinned)
+			skinned.owner = null
+			skinned.name = "Outfit_%s_%d" % [slot, part]
+			part += 1
+			skeleton.add_child(skinned)
+			skinned.skeleton = NodePath("..")
+		piece.free()
+	_hide_under_outfit(skeleton)
+
+
+# Tells each of the body's own meshes (not the pieces) which of its skin's
+# bones are under clothing, as a bitmask the shaders read per mesh.
+func _hide_under_outfit(skeleton: Skeleton3D) -> void:
+	var hidden: PackedStringArray = outfit.hidden_bones()
+	for child: Node in skeleton.get_children():
+		var body: MeshInstance3D = child as MeshInstance3D
+		if body == null or body.skin == null or String(body.name).begins_with("Outfit_"):
+			continue
+		var mask: int = 0
+		for bind: int in mini(body.skin.get_bind_count(), 32):
+			var bone: String = String(body.skin.get_bind_name(bind))
+			if bone.is_empty():
+				bone = skeleton.get_bone_name(body.skin.get_bind_bone(bind))
+			if hidden.has(bone):
+				mask |= 1 << bind
+		body.set_instance_shader_parameter(&"hidden_bones", mask)
+
+
+# The outfit changed: dress the model again in it.
+func _redress() -> void:
+	if is_inside_tree():
+		dress()
 
 
 # The style's settings changed: show them on the model straight away.

@@ -19,19 +19,47 @@ uniform vec4 outline_color : source_color = vec4(0.14, 0.1, 0.09, 1.0);
 uniform float thickness : hint_range(0.0, 8.0) = 2.0;
 // The widest it can be, in metres, however close the camera.
 uniform float max_width : hint_range(0.0, 0.05) = 0.008;
+// How far back (away from the camera) the line is drawn, in metres. It
+// never wins against a surface at its own depth (a garment's lining, cloth
+// close over the body), only where there's nothing in front: the silhouette.
+uniform float depth_push : hint_range(0.0, 0.05) = 0.01;
+
+// Which of this mesh's skin bones are under clothing, one bit per bone (set
+// per mesh by ThirdPartyModel from its outfit). A point mostly weighted to
+// hidden bones isn't drawn, so the body never pokes through the cloth.
+instance uniform int hidden_bones = 0;
+
+// How much of this point is under clothing, 0 to 1.
+varying float covered;
+
+// How much of a point hangs off hidden bones, 0 to 1.
+float under_cloth(uvec4 bones, vec4 weights) {
+	float share = 0.0;
+	for (int i = 0; i < 4; i++) {
+		if (bones[i] < 32u && ((uint(hidden_bones) >> bones[i]) & 1u) == 1u) {
+			share += weights[i];
+		}
+	}
+	return share;
+}
 
 
 void vertex() {
+	covered = hidden_bones == 0 ? 0.0 : under_cloth(BONE_INDICES, BONE_WEIGHTS);
 	vec3 spot = (MODELVIEW_MATRIX * vec4(VERTEX, 1.0)).xyz;
 	vec3 out_way = normalize((MODELVIEW_MATRIX * vec4(NORMAL, 0.0)).xyz);
 	// How many metres one pixel covers at this depth, scaled to 1080p so the
 	// width doesn't change with the window's size.
 	float pixel = 2.0 * max(-spot.z, 0.01) / (PROJECTION_MATRIX[1][1] * 1080.0);
 	spot += out_way * min(thickness * pixel, max_width);
+	spot.z -= depth_push;
 	POSITION = PROJECTION_MATRIX * vec4(spot, 1.0);
 }
 
 
 void fragment() {
+	if (covered > 0.5) {
+		discard;
+	}
 	ALBEDO = outline_color.rgb;
 }
