@@ -16,8 +16,12 @@ extends Node3D
 ##
 ## Models from the packs are built at their own scale, so the model is
 ## fitted into [member fit_size] (sitting on this node's origin, centred).
-## Their smooth flat colours are given the chunky N64 grain
-## (shaders/n64_prop.gdshader).
+##
+## With a [member look], the model can be fired in the Kiln (the Fire in Kiln
+## button, or kiln.sh): crunched to a low-poly copy with a small baked
+## texture, which is then drawn instead (see [KilnJob]). Until it's fired, or
+## without a look, the pack's own model shows, its smooth flat colours given
+## the chunky N64 grain (shaders/n64_prop.gdshader).
 
 const N64_SHADER: Shader = preload("res://shaders/n64_prop.gdshader")
 ## The chunky grain laid over models: a 32 x 32 noise texture of our own.
@@ -54,39 +58,122 @@ const GRAIN: Texture2D = preload("res://assets/placeholder/materials/n64_grain.t
 ## How fine a version of the model to draw: Godot keeps simplified copies of
 ## every imported mesh (levels of detail), and low values pick the cruder,
 ## lower-poly ones, for the chunky N64 look. 1 is Godot's usual choice.
+## Fired models are always drawn in full: the Kiln made them simple already.
 @export var detail: float = 0.05
+
+@export_group("Kiln")
+## How the Kiln fires this model (a preset from data/art/looks/). Without one
+## it's never fired.
+@export var look: ArtLook:
+	set(value):
+		look = value
+		if is_inside_tree():
+			dress()
+## Fires the model in the Kiln (Blender, in the background). It changes in the
+## viewport when it's done.
+@export_tool_button("Fire in Kiln", "Bake") var fire_button: Callable = fire_in_kiln
 
 ## The loaded model, or null when its file isn't there.
 var model: Node3D = null
+## Whether the model showing is the Kiln's fired one.
+var fired: bool = false
+
+## Whether Blender is firing the model now.
+var _firing: bool = false
 
 
 func _ready() -> void:
 	dress()
 
 
-## Loads the model if its file is there, fitted and with the stand-ins hidden.
-## Returns whether the model is showing.
+func _get_property_list() -> Array[Dictionary]:
+	# A line in the Inspector saying where the Kiln stands: shown, not saved.
+	return [{
+		"name": "kiln_status",
+		"type": TYPE_STRING,
+		"usage": PROPERTY_USAGE_EDITOR | PROPERTY_USAGE_READ_ONLY,
+	}]
+
+
+func _get(property: StringName) -> Variant:
+	if property == &"kiln_status":
+		return kiln_status()
+	return null
+
+
+## Loads the model if its file is there, fitted and with the stand-ins hidden:
+## the Kiln's fired copy if there is one, otherwise the pack's own. Returns
+## whether a model is showing.
 func dress() -> bool:
 	if model != null:
 		model.queue_free()
 		model = null
+	fired = false
 	var scene: PackedScene = null
-	if not path.is_empty() and ResourceLoader.exists(path):
+	var job: KilnJob = kiln_job()
+	if job != null and job.is_fired():
+		scene = load(job.fired_path()) as PackedScene
+		fired = scene != null
+	if scene == null and not path.is_empty() and ResourceLoader.exists(path):
 		scene = load(path) as PackedScene
 	if scene == null:
 		_show_stand_ins(true)
 		return false
 	model = scene.instantiate() as Node3D
 	if model == null:
+		fired = false
 		_show_stand_ins(true)
 		return false
 	add_child(model)
 	_fit(model)
-	if grain:
-		_use_n64(model, {})
-	_set_detail(model)
+	if fired:
+		FiredModel.paint(model, job, tint)
+	else:
+		if grain:
+			_use_n64(model, {})
+		_set_detail(model)
 	_show_stand_ins(false)
 	return true
+
+
+## The Kiln job for this model, or null without a look.
+func kiln_job() -> KilnJob:
+	if look == null or path.is_empty():
+		return null
+	var job: KilnJob = KilnJob.new(path, look)
+	job.fit_size = fit_size
+	job.stretch = stretch
+	return job
+
+
+## Fires the model in the Kiln, in the background, then shows the fired model.
+## Call it with [code]await[/code]. Returns whether it came out fresh: it
+## needs a look, the pack file and Blender.
+func fire_in_kiln() -> bool:
+	var job: KilnJob = kiln_job()
+	if job == null or not job.can_fire() or not Kiln.has_blender():
+		push_warning("Can't fire %s in the Kiln: %s" % [name, kiln_status()])
+		return false
+	_firing = true
+	notify_property_list_changed()
+	var fresh: int = await Kiln.fire_in_background([job])
+	_firing = false
+	if is_inside_tree():
+		dress()
+	notify_property_list_changed()
+	return fresh == 1
+
+
+## Where the Kiln stands with this model, in a line (shown in the Inspector).
+func kiln_status() -> String:
+	if _firing:
+		return "Firing in Blender..."
+	var job: KilnJob = kiln_job()
+	if job == null:
+		return "No look: drawn as it comes, with grain"
+	if job.can_fire() and job.report().is_empty() and not Kiln.has_blender():
+		return "No Blender at %s (set BLENDER to its path)" % Kiln.blender()
+	return job.status()
 
 
 func _fit(node: Node3D) -> void:
