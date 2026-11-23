@@ -5,6 +5,10 @@
 ~ start
 ? not met_heron
 -> first
+? lantern_low and read_fire_spirits and not fetched_water
+-> hint_water
+? lantern_low
+-> still_low
 ? morning
 -> at_the_wheel
 ? talked.heron >= 4
@@ -19,7 +23,7 @@ heron: Bit of a rough night out there, isn't it?
 ? night
 @shot stove_nook
 heron: So. You're the one the lamp fished out.
-? night
+? night and not lantern_low
 lantern: I pulled! They held on!
 heron: Hm. Can you cook?
 - A little. -> cook_little
@@ -105,4 +109,17 @@ heron: I am. So make it quick.
 heron: Hm. Go on, then.
 ? else
 heron: Hm.
+-> END
+
+# The first quest (#158). While the lantern is low, the captain asks after
+# him and hints, sideways: never "the rain". Once you've read the old book
+# and still have no water, he mentions the water.
+~ still_low
+heron: Well? He's no brighter.
+heron: There's books in the galley. I don't read 'em. Somebody did, once.
+-> END
+
+~ hint_water
+heron: Soup wants water. Not seawater. You'd poison him.
+heron: Sky's been pouring all night. Some of us had the sense to catch it.
 -> END

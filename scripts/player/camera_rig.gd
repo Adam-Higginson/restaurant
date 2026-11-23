@@ -232,6 +232,11 @@ func hold_shot(shot: Marker3D, cut: bool = false) -> void:
 		_blend = 1.0
 
 
+## The shot being held now (see [method hold_shot]), or null.
+func held_shot() -> Marker3D:
+	return _held if is_instance_valid(_held) else null
+
+
 ## Lets go of a held shot: the camera glides back to the free camera, or to
 ## the shot of the zone the player is standing in. Set [param cut] to cut
 ## straight back instead (from a shot in another room, say, where a glide

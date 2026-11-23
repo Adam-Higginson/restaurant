@@ -33,12 +33,15 @@
 [ext_resource type="PackedScene" uid="uid://l1ghth0use1sl" path="res://scenes/prototype/islands/lighthouse_island.tscn" id="14_island"]
 [ext_resource type="Script" path="res://scripts/story/opening.gd" id="15_opening"]
 [ext_resource type="PackedScene" path="res://ui/screen_fade.tscn" id="16_fade"]
+[ext_resource type="Script" path="res://scripts/cutscene/voyage_cues.gd" id="93_voyage"]
 [ext_resource type="PackedScene" path="res://ui/look_choice.tscn" id="90_look"]
 [ext_resource type="Script" path="res://scripts/cutscene/choice_cues.gd" id="91_choice"]
-[ext_resource type="Script" path="res://scripts/data/hand_tool.gd" id="92_tool"]
-[ext_resource type="Script" path="res://scripts/cutscene/chest_cues.gd" id="93_chest"]
-[ext_resource type="AudioStream" path="res://assets/audio/combat/impactWood_light_002.ogg" id="94_creak"]
-[ext_resource type="AudioStream" path="res://assets/audio/combat/maximize_003.ogg" id="95_fanfare"]
+[ext_resource type="PackedScene" path="res://ui/build_tag.tscn" id="92_build_tag"]
+[ext_resource type="Script" path="res://scripts/story/first_quest.gd" id="93_first_quest"]
+[ext_resource type="Script" path="res://scripts/data/hand_tool.gd" id="152_tool"]
+[ext_resource type="Script" path="res://scripts/cutscene/chest_cues.gd" id="152_chest"]
+[ext_resource type="AudioStream" path="res://assets/audio/combat/impactWood_light_002.ogg" id="152_creak"]
+[ext_resource type="AudioStream" path="res://assets/audio/combat/maximize_003.ogg" id="152_fanfare"]
 
 [sub_resource type="FastNoiseLite" id="Noise_Cloud"]
 frequency = 0.008
@@ -259,7 +262,7 @@ loop_route = true
 [node name="Player" parent="." unique_id=1279594075 instance=ExtResource("7_p3dpl")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -23.5, 5.35, 47)
 speed = 2.0
-start_tools = Array[ExtResource("92_tool")]([])
+start_tools = Array[ExtResource("152_tool")]([])
 
 [node name="Hud3D" parent="." unique_id=793774154 node_paths=PackedStringArray("player") instance=ExtResource("8_hud")]
 player = NodePath("../Player")
@@ -296,8 +299,14 @@ ship = NodePath("../Ship")
 [node name="ScreenFade" parent="Opening" unique_id=1418227363 instance=ExtResource("16_fade")]
 layer = 20
 
+[node name="VoyageCues" type="Node" parent="Opening"]
+script = ExtResource("93_voyage")
+
 [node name="Conversation" type="Node" parent="."]
 script = ExtResource("300_talk")
+
+[node name="FirstQuest" type="Node" parent="."]
+script = ExtResource("93_first_quest")
 
 [node name="ShotCues" type="Node" parent="." node_paths=PackedStringArray("player")]
 script = ExtResource("301_shots")
@@ -307,19 +316,20 @@ player = NodePath("../Player")
 script = ExtResource("304_fades")
 fade = NodePath("../Opening/ScreenFade")
 
-[node name="WaitCues" type="Node" parent="." node_paths=PackedStringArray("prompt")]
+[node name="WaitCues" type="Node" parent="." node_paths=PackedStringArray("prompt", "build_tag")]
 script = ExtResource("305_waits")
 prompt = NodePath("../CutscenePrompt")
+build_tag = NodePath("../BuildTag")
 
 [node name="ActorCues" type="Node" parent="." node_paths=PackedStringArray("player")]
 script = ExtResource("306_actors")
 player = NodePath("../Player")
 
 [node name="ChestCues" type="Node" parent="." node_paths=PackedStringArray("player")]
-script = ExtResource("93_chest")
+script = ExtResource("152_chest")
 player = NodePath("../Player")
-creak = ExtResource("94_creak")
-fanfare = ExtResource("95_fanfare")
+creak = ExtResource("152_creak")
+fanfare = ExtResource("152_fanfare")
 
 [node name="StageCues" type="Node" parent="."]
 script = ExtResource("308_stages")
@@ -380,6 +390,8 @@ recording = "res://assets/third_party/audio/gasp.ogg"
 [node name="Underwater" parent="Stages" instance=ExtResource("313_underwater")]
 
 [node name="CutscenePrompt" parent="." instance=ExtResource("314_prompt")]
+
+[node name="BuildTag" parent="." instance=ExtResource("92_build_tag")]
 
 [node name="CutsceneKeys" type="Node" parent="."]
 script = ExtResource("307_keys")

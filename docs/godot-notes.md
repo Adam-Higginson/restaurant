@@ -466,6 +466,30 @@ A growing glossary of the Godot concepts this project uses: what each one is, in
 
 **An armature's scale and its animations' units.** A model's skeleton can sit under a scaled node: Meshy's `Armature` is scaled by 0.01, its bones and animations are in centimetres, and the mesh is in metres. It all lines up inside the file, but measuring the mesh's box through that scale reads it 100 times too small. Scale the node that holds the whole model instead. *Ours:* the heron's `Model/Meshy` node is scaled by 1.21, with `fit_size` left at zero.
 
+## Publishing builds (#143)
+
+**Exporting.** Turning the project into a game people can run without Godot: a program for each system plus a `.pck` of the game's data. *Ours:* `tools/build/export.sh` runs `godot --headless --export-release "Windows" <path>`.
+
+**Export templates.** The ready-made Godot player programs an export starts from, one per system, downloaded once per Godot version (about 1.2 GB for all of them; *Editor > Manage Export Templates*). They live in your user folder, not the project. *Ours:* the workflow keeps only the Windows and Mac ones.
+
+**Export presets (`export_presets.cfg`).** One per platform: its settings (the app's name, icon, texture formats, signing) and which files go in. *Project > Export* shows them. *Ours:* "Windows" and "macOS". Their file lists are written just before each build, by `tools/build/prepare_export.gd`.
+
+**The `.pck` file.** Every scene, script and imported asset packed into one file, which the game program reads at startup. Godot can run one directly: `godot --main-pack Game.pck`. *Ours:* the smoke test in `export.sh` runs the Windows build's `.pck` that way, headless, and fails on any error.
+
+**Which files are exported.** By default everything the project has imported. "Export selected resources" takes a list and adds whatever each one depends on (a model's textures, a scene's scripts). Files loaded by a path written in a string can't be seen that way, and plain text files like our `.dlg` scripts need the preset's non-resource filter. *Ours:* `ExportList` (`scripts/build/`).
+
+**Release and debug builds.** A release export leaves out debugging help: no console window, and `OS.is_debug_build()` is false, so our debug keys switch themselves off. *Ours:* every published build is a release build.
+
+**Texture formats (S3TC/BPTC and ETC2/ASTC).** Graphics cards read compressed textures in a few formats: PCs use S3TC/BPTC, and Apple Silicon and phones use ETC2/ASTC. *Project Settings > Rendering > Textures > VRAM Compression > Import ETC2 ASTC* makes Godot import both, so the Mac build has them. *Ours:* turned on in #143.
+
+**Ad-hoc signing (Mac).** Apple Silicon Macs only run signed apps. Ad hoc means signed without an Apple Developer account: the Mac runs it, but macOS warns the first time and asks to *Open Anyway*. *Ours:* the macOS preset's *Codesign: Built-in (ad-hoc only)*.
+
+**Stamping settings with `ProjectSettings.save()`.** A script can set any project setting, even one of our own like `application/config/build_commit`, and save it to `project.godot`. *Ours:* `BuildInfo.stamp`, run only while building; `export.sh` puts `project.godot` back afterwards.
+
+**A script run with `-s`.** `godot --headless -s res://some_script.gd` runs a script that `extends SceneTree` instead of the game: a command-line tool written in GDScript. It can't see autoloads like `Game`. *Ours:* `tools/build/prepare_export.gd`.
+
+**Deploy keys (GitHub).** A key that opens one repo only, read-only unless allowed to write. The private half is kept as an encrypted secret that workflows can use. *Ours:* `ASSETS_DEPLOY_KEY` lets the publish workflow read the private art repo.
+
 ## Books (#145)
 
 **TextureRect.** A `Control` that shows a picture. `expand_mode` *Ignore Size* lets it be any size, not the picture's own, and `stretch_mode` says how the picture fills it (*Scale* stretches it to fit; *Keep Centered* shows it at its own size in the middle). Like any `CanvasItem` it has its own `texture_filter`: *Linear* blends pixels smoothly when the picture is drawn bigger or smaller than it is. *Ours:* `ui/book_view.tscn`'s `Spread`, the painted open book.
@@ -476,7 +500,21 @@ A growing glossary of the Godot concepts this project uses: what each one is, in
 
 **One page per push of a stick.** A key sends one "pressed" event (repeats are marked as echoes and ignored by default), but a stick held over sends a stream of motion events, and each counts as "pressed". To act once per push, remember the action as held when it's pressed and forget it when `event.is_action_released(...)` comes. *Ours:* `BookView._newly_pushed`.
 
+**A resource made of resources (sub-resources).** A `.tres` file can hold small resources of its own as well as the main one: each `[sub_resource]` block is one, used inside the file with `SubResource("id")`. They live and die with the file, so they're right for parts nobody else shares. *Ours:* `data/books/fire_spirits.tres`, a `Book` whose six `BookPage`s are sub-resources; open it in the Inspector and click into Pages to edit each page.
+
 **CanvasLayer order.** Each `CanvasLayer` has a `layer` number; higher layers draw on top of lower ones, whatever their place in the tree. *Ours:* the HUD's `BookLayer` (16) covers the HUD, and the dialogue's `SpeechLayer` (17) sits above that.
+
+## Crew walking (#157)
+
+**AStar3D (shortest paths over a graph).** You give it points (an id and a position) and say which pairs are connected; `get_id_path(from, to)` returns the shortest chain of points between two, and `get_closest_point(position)` the nearest point to anywhere. It's the A* search games have long used for pathfinding. *Ours:* `Walkways` builds one from its `Waypoint` children.
+
+**Waypoints vs navigation meshes.** Godot can also bake a *navigation mesh* (`NavigationRegion3D`) from the floor and let a `NavigationAgent3D` find its own way across it. A hand-placed set of waypoints is simpler and stays put on a moving ship, and you can see exactly where people will walk. *Ours:* the ship's `Walkways`, a child of the ship, so its ways sail with her.
+
+**Moving in a parent's space.** `node.to_local(world_point)` turns a world position into a node's own coordinates, and `to_global` back. Doing the walking in the ship's coordinates means a walker keeps their place on deck while the ship heaves and turns under them. *Ours:* `CrewWalker._physics_process`.
+
+**Borrowing an animation from another file.** An `AnimationPlayer` keeps its animations in `AnimationLibrary`s. Another imported model on the same skeleton has the same bone names, so one of its animations can be copied (`duplicate()`) and added to this player's library with `add_animation(name, animation)`. *Ours:* `CrewAnimator._borrow_walk` takes the heron's walk from his rig's `walk.glb`.
+
+**Raycasts in tests.** `get_world_3d().direct_space_state.intersect_ray(query)` asks the physics engine what a line hits; `query.exclude` lists bodies to ignore. A test can use it to check level layout. *Ours:* `walkways_test.gd` makes sure no walkway runs through a wall.
 
 ## Cooking feel and the knife in the chest (#152)
 

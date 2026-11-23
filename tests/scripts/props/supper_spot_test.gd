@@ -7,6 +7,14 @@ extends GameTestSuite
 const BY_THE_TABLE: Vector3 = Vector3(-1.0, 1.05, 10.25)
 
 
+func before_test() -> void:
+	Game.dialogue.reset()
+
+
+func after_test() -> void:
+	Game.dialogue.reset()
+
+
 func test_he_fades_slowly_but_never_goes_out() -> void:
 	var rig: Array[Node3D] = new_moored_ship_with_player(BY_THE_TABLE)
 	var runner: GdUnitSceneRunner = scene_runner(rig[0].get_parent())
@@ -75,6 +83,77 @@ func test_a_better_dish_warms_him_more() -> void:
 	var fine: ItemInstance = ItemInstance.new(Catalog.load_default().find_item(&"tomato_soup"), 3)
 
 	assert_float(spot.warmth_of(fine)).is_greater(spot.warmth_of(rough))
+
+
+func test_low_he_only_stirs_for_the_remedy() -> void:
+	var rig: Array[Node3D] = new_moored_ship_with_player(BY_THE_TABLE)
+	var player: Player3D = rig[1] as Player3D
+	var runner: GdUnitSceneRunner = scene_runner(rig[0].get_parent())
+	await physics_ticks(runner, 2)
+	Game.dialogue.set_flag(LanternSpirit.LOW_FLAG)
+	var bowl: ItemInstance = _bowl_of(&"tomato_soup", 3)
+	player.toolbar.add(bowl)
+	var spot: SupperSpot = (rig[0] as Ship).get_node("BunkRoom/SupperSpot") as SupperSpot
+
+	assert_bool(spot.can_share(player.arms)).is_false()
+	assert_bool(spot.share(player)).is_false()
+	assert_int(bowl.contents.get_contents().size()).is_equal(1)
+	assert_str(spot.prompt(player.arms)).is_not_equal("Share Tomato Soup with the lantern")
+
+
+func test_the_remedy_brings_him_back_and_warms_him() -> void:
+	var rig: Array[Node3D] = new_moored_ship_with_player(BY_THE_TABLE)
+	var player: Player3D = rig[1] as Player3D
+	var runner: GdUnitSceneRunner = scene_runner(rig[0].get_parent())
+	var spirit: LanternSpirit = _spirit(rig)
+	await physics_ticks(runner, 2)
+	Game.dialogue.set_flag(LanternSpirit.LOW_FLAG)
+	await physics_ticks(runner, 3)
+	assert_float(spirit.warmth).is_equal(spirit.min_warmth)
+	var bowl: ItemInstance = _bowl_of(&"spicy_tomato_soup", 3)
+	player.toolbar.add(bowl)
+	var spot: SupperSpot = (rig[0] as Ship).get_node("BunkRoom/SupperSpot") as SupperSpot
+	assert_str(spot.prompt(player.arms)).is_equal("Share Spicy Tomato Soup with the lantern")
+
+	assert_bool(spot.share(player)).is_true()
+	# Still low while he has it...
+	assert_bool(spirit.is_low()).is_true()
+	assert_bool(await wait_for_signal(spot.mended, spot.eat_seconds + 2.0)).is_true()
+	await physics_ticks(runner, 3)
+
+	# ...and then he's back, warm, the crack gone. (No conversation here to
+	# play the cutscene in, so he simply comes back.)
+	assert_bool(spirit.is_low()).is_false()
+	assert_float(spirit.warmth).is_greater(spirit.min_warmth + 0.3)
+	assert_bool(spirit.face().cracked).is_false()
+
+
+func test_the_remedy_plays_his_first_words_and_the_captains() -> void:
+	var rig: Array[Node3D] = new_moored_ship_with_player(BY_THE_TABLE)
+	var player: Player3D = rig[1] as Player3D
+	var conversation: Conversation = new_conversation(player)
+	var runner: GdUnitSceneRunner = scene_runner(rig[0].get_parent())
+	await physics_ticks(runner, 2)
+	Game.dialogue.set_flag(LanternSpirit.LOW_FLAG)
+	player.toolbar.add(_bowl_of(&"spicy_tomato_soup", 1))
+	var spot: SupperSpot = (rig[0] as Ship).get_node("BunkRoom/SupperSpot") as SupperSpot
+	var speakers: Array[StringName] = []
+	conversation.line_said.connect(func(speaker: Person) -> void:
+		speakers.append(speaker.id if speaker != null else &""))
+
+	assert_bool(spot.share(player)).is_true()
+	assert_bool(await wait_for_signal(spot.mended, spot.eat_seconds + 2.0)).is_true()
+	assert_bool(conversation.is_active()).is_true()
+	for i: int in 10:
+		if not conversation.is_active():
+			break
+		await physics_ticks(runner, 2)
+		conversation.press()
+
+	assert_bool(conversation.is_active()).is_false()
+	assert_bool(Game.dialogue.is_set(LanternSpirit.LOW_FLAG)).is_false()
+	# His three first words, then the captain's "Hm. Soup."
+	assert_array(speakers).is_equal([&"lantern", &"lantern", &"lantern", &"heron"])
 
 
 func _spirit(rig: Array[Node3D]) -> LanternSpirit:

@@ -52,6 +52,9 @@ var _held: bool = false
 var _sound: AudioStreamPlayer = null
 ## The camera's mark for a gift held up without a chest, or null.
 var _gift_shot: Marker3D = null
+## The shot the camera was holding before something was held up (the
+## captain's conversation by the stove), to go back to after; or null.
+var _shot_before: Marker3D = null
 
 
 func _ready() -> void:
@@ -162,6 +165,9 @@ func _hold_up_gift(id: StringName) -> void:
 func _raise(treasure_node: Node3D, shot: Marker3D, world: Node, from: Vector3) -> void:
 	var held: int = hold()
 	player.face_towards(shot.global_position)
+	var before: Marker3D = player.camera_rig.held_shot()
+	if before != _gift_shot and before != shot:
+		_shot_before = before
 	player.camera_rig.hold_shot(shot, true)
 	if is_instance_valid(_treasure):
 		_treasure.queue_free()
@@ -270,7 +276,12 @@ func _put_away() -> void:
 	if model != null and model.hold_up > 0.0:
 		create_tween().tween_property(model, "hold_up", 0.0, 0.35)
 	if is_instance_valid(player):
-		player.camera_rig.release_shot(true)
+		# Back to the shot from before (the conversation's), or the free camera.
+		if is_instance_valid(_shot_before):
+			player.camera_rig.hold_shot(_shot_before, true)
+		else:
+			player.camera_rig.release_shot(true)
+	_shot_before = null
 	if is_instance_valid(_gift_shot):
 		_gift_shot.queue_free()
 	_gift_shot = null

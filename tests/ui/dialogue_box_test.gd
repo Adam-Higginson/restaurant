@@ -163,6 +163,33 @@ func test_close_puts_it_away() -> void:
 	assert_bool(box.is_typing()).is_false()
 
 
+func test_choices_with_nobody_speaking_have_no_name_plate() -> void:
+	var box: DialogueBox = _new_box()
+
+	box.show_choices(["Continue your voyage", "Start a new voyage"])
+
+	assert_str(box.speaker_name()).is_empty()
+
+
+func test_choices_after_a_line_keep_the_speakers_name() -> void:
+	var box: DialogueBox = _new_box()
+	box.show_line(_captain(), "Can you cook?")
+
+	box.show_choices(["A little.", "Who are you?"])
+
+	assert_str(box.speaker_name()).is_equal("Captain")
+
+
+func test_closing_forgets_who_was_speaking() -> void:
+	var box: DialogueBox = _new_box()
+	box.show_line(_captain(), "Hm.")
+	box.close()
+
+	box.show_choices(["Continue your voyage", "Start a new voyage"])
+
+	assert_str(box.speaker_name()).is_empty()
+
+
 func _ticks(count: int) -> void:
 	for i: int in count:
 		await get_tree().physics_frame

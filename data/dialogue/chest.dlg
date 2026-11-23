@@ -15,4 +15,6 @@ narrator: It's empty.
 set has_chefs_knife
 narrator: You got the *Cheap Chef's Knife*!
 narrator: Not much of an edge, but it's yours. It chops at the *chopping board*, and cuts ashore.
+# He's silent while he's low (the first quest).
+? not lantern_low
 lantern: A cook's first treasure! Mind your fingers.

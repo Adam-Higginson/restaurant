@@ -1,0 +1,22 @@
+# The end of the first quest (#155): the old book's remedy brings the lantern
+# back. Played by the SupperSpot (his round table) once he's had the spicy
+# tomato soup you set down by him while he was low. Placeholder writing:
+# rewrite freely.
+#
+# He drinks in its steam; amber climbs back up through the blue, the crack
+# in his glass closes, and his eyes open. Only now does he speak. The
+# captain, by his fire the whole time, says what he says.
+
+~ start
+@shot lantern_table
+@wait 1.5
+@look lantern mended
+clear lantern_low
+@wait 1.4
+@look lantern pleased
+lantern: There you are.
+lantern: You were in the water. I pulled. You held on. Good holding.
+lantern: I'll get you home. I know exactly where it is. Roughly.
+@face heron lantern
+heron: Hm. Soup.
+@shot free

@@ -21,8 +21,13 @@ var _book: Book = null
 var _left_index: int = 0
 
 
+## Opens [param open_book] at the pair of pages holding its
+## [member Book.opens_at] page (the first pair if that's past the end).
 func _init(open_book: Book) -> void:
 	_book = open_book
+	if _book != null and _book.opens_at > 0 and _book.opens_at < page_count():
+		@warning_ignore("integer_division")
+		_left_index = _book.opens_at / 2 * 2
 
 
 ## How many pages the book has.

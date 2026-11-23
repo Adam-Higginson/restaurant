@@ -81,6 +81,76 @@ func test_home_sends_someone_back_to_their_usual_spot_and_shows_them() -> void:
 	assert_bool(_heron.is_present()).is_true()
 
 
+func test_walk_waits_until_they_get_there() -> void:
+	_build()
+	_add_walkways()
+	var runner: GdUnitSceneRunner = scene_runner(_player.get_parent())
+	await physics_ticks(runner, 3)
+	var lines: Array[int] = [0]
+	_conversation.line_said.connect(func(_speaker: Person) -> void: lines[0] += 1)
+
+	play_cutscene(_conversation, _player, "@walk heron doorway\nheron: Hm.")
+	await physics_ticks(runner, 60)
+	assert_int(lines[0]).is_equal(0)
+	assert_float(_heron.global_position.distance_to(MARK.origin)).is_greater(1.0)
+
+	await physics_ticks(runner, 6 * 60)
+	assert_vector(_heron.global_position).is_equal_approx(MARK.origin, NEAR)
+	assert_int(lines[0]).is_equal(1)
+
+
+func test_send_sets_them_off_and_the_script_goes_on() -> void:
+	_build()
+	_add_walkways()
+	var runner: GdUnitSceneRunner = scene_runner(_player.get_parent())
+	await physics_ticks(runner, 3)
+	var lines: Array[int] = [0]
+	_conversation.line_said.connect(func(_speaker: Person) -> void: lines[0] += 1)
+	var walker: CrewWalker = _heron.get_node("Walker") as CrewWalker
+
+	play_cutscene(_conversation, _player, "@send heron doorway\nheron: Off I go.")
+
+	assert_int(lines[0]).is_equal(1)
+	assert_bool(walker.is_walking).is_true()
+
+
+func test_walk_home_walks_back_to_their_usual_spot() -> void:
+	_build()
+	_add_walkways()
+	var runner: GdUnitSceneRunner = scene_runner(_player.get_parent())
+	await physics_ticks(runner, 3)
+	play_cutscene(_conversation, _player, "@place heron doorway\n@walk heron home\nheron: Back.")
+
+	await physics_ticks(runner, 7 * 60)
+
+	assert_vector(_heron.global_position).is_equal_approx(AHEAD, NEAR)
+
+
+func test_skipping_a_walk_puts_them_there_at_once() -> void:
+	_build()
+	_add_walkways()
+	var runner: GdUnitSceneRunner = scene_runner(_player.get_parent())
+	await physics_ticks(runner, 3)
+
+	play_cutscene(_conversation, _player, "@walk heron doorway\nheron: Hm.")
+	_conversation.skip()
+	await physics_ticks(runner, 2)
+
+	assert_vector(_heron.global_position).is_equal_approx(MARK.origin, NEAR)
+	assert_bool(_conversation.is_active()).is_false()
+
+
+func test_someone_who_cant_walk_is_warned_about_and_stays_put() -> void:
+	_build()
+	_add_walkways()
+	var runner: GdUnitSceneRunner = scene_runner(_player.get_parent())
+	await physics_ticks(runner, 3)
+
+	play_cutscene(_conversation, _player, "@walk player doorway\nheron: Hm.")
+
+	assert_vector(_player.global_position).is_equal_approx(Vector3.ZERO, Vector3(0.1, 0.2, 0.1))
+
+
 func test_face_turns_someone_towards_someone_else() -> void:
 	_build()
 	var runner: GdUnitSceneRunner = scene_runner(_player.get_parent())
@@ -266,6 +336,21 @@ heron: Hm.")
 
 # The player, the heron ahead at their usual spot, a mark to the right, a conversation and the actor cues. Called at the start of each
 # test, so everything is made (and freed) inside it.
+# Walkways from the heron's usual spot straight to the mark, so he can walk.
+func _add_walkways() -> void:
+	var walkways: Walkways = Walkways.new()
+	var start: Waypoint = Waypoint.new()
+	start.name = "Usual"
+	start.position = AHEAD
+	start.links = [&"Mark"]
+	walkways.add_child(start)
+	var end: Waypoint = Waypoint.new()
+	end.name = "Mark"
+	end.position = MARK.origin
+	walkways.add_child(end)
+	_player.get_parent().add_child(walkways)
+
+
 func _build() -> void:
 	_player = new_player_3d_on_floor()
 	var world: Node = _player.get_parent()

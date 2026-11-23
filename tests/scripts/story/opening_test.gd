@@ -12,6 +12,9 @@ extends GameTestSuite
 const SEA: String = "res://scenes/prototype/sea.tscn"
 const INTRO: StringName = &"intro"
 const NEAR: Vector3 = Vector3(0.05, 0.05, 0.05)
+## The title's menu, for a saved voyage: its choices in order.
+const CONTINUE: int = 0
+const NEW: int = 1
 
 var _sea: Node
 var _opening: Opening
@@ -281,32 +284,29 @@ func test_you_wake_and_the_captain_appears_and_then_the_ship_is_yours() -> void:
 	var sleeping: Node3D = _ship.get_node("WakingSet/Props/SleepingYou") as Node3D
 	var you_asleep: CharacterModel = sleeping.get_node("Character") as CharacterModel
 	var spirit: LanternSpirit = _player.get_node("LanternSpirit") as LanternSpirit
-	var by_bunk: Node3D = _ship.get_node("WakingSet/Marks/ByYourBunk") as Node3D
-	var middle: Node3D = _ship.get_node("WakingSet/Marks/RoomMiddle") as Node3D
 	var your_body: Node3D = _player.get_node("Model") as Node3D
+	var quest: FirstQuest = _sea.get_node("FirstQuest") as FirstQuest
+	var walker: CrewWalker = heron.get_node("Walker") as CrewWalker
+	var said: Array[int] = [0]
+	_conversation.line_said.connect(func(_speaker: Person) -> void: said[0] += 1)
 
-	# Out of the black: you, asleep in your bunk, and him right beside you.
-	# You're not up yet.
+	# Out of the black: you, asleep in your bunk. He isn't beside you: he's
+	# home on his table, low, cracked and silent (#158).
 	assert_bool(await _reaches(runner, &"waking")).is_true()
 	assert_bool(_fade().visible).is_false()
 	assert_bool(heron.is_present()).is_false()
 	assert_bool(sleeping.visible).is_true()
 	assert_bool(your_body.visible).is_false()
-	assert_object(spirit.held).is_same(by_bunk)
-	assert_float(spirit.global_position.distance_to(by_bunk.global_position)).is_less(0.3)
+	assert_object(spirit.held).is_null()
+	assert_bool(spirit.is_low()).is_true()
+	assert_bool(spirit.face().cracked).is_true()
 	assert_bool(rig.is_fixed).is_true()
 
-	# Your eyes open as he speaks his three lines.
+	# It's the captain who wakes you, and your eyes open.
+	assert_bool(await _line_shows(runner, said, 1)).is_true()
+	_press()
 	await physics_ticks(runner, 60)
 	assert_bool(you_asleep.eyes_shut).is_false()
-	for i: int in 3:
-		assert_str(String(_conversation.section())).is_equal("waking")
-		_press()
-
-	# Then he floats off to the middle of the room.
-	await physics_ticks(runner, 60)
-	assert_object(spirit.held).is_same(middle)
-	assert_float(spirit.global_position.distance_to(middle.global_position)).is_less(1.0)
 
 	# The captain in the doorway, on a fixed shot.
 	assert_bool(await _reaches(runner, &"doorway")).is_true()
@@ -318,22 +318,29 @@ func test_you_wake_and_the_captain_appears_and_then_the_ship_is_yours() -> void:
 	# By now you're up, standing by your bunk.
 	assert_bool(sleeping.visible).is_false()
 	assert_bool(your_body.visible).is_true()
-	_press()
-	_press()
+	# Nobody drowns... / You've managed the first. / He's not said a word
+	# since. / I don't know lamps. / Hold on a bit longer.
+	for line: int in range(2, 7):
+		assert_bool(await _line_shows(runner, said, line)).is_true()
+		_press()
 
-	# The pot on the stove; the captain goes back to the fire; and it ends.
-	assert_bool(await _reaches(runner, &"stove")).is_true()
-	var night: Node3D = _ship.get_node("Crew/HeronNight") as Node3D
-	assert_vector(heron.global_position).is_equal_approx(night.global_position, NEAR)
-	assert_bool(await wait_for_signal(_opening.finished, 20.0)).is_true()
-
+	# Then the ship is yours (at once: the last line ends it), and the captain
+	# sets off for his drink.
+	for i: int in 600:
+		if not _opening.is_playing:
+			break
+		await physics_ticks(runner, 1)
 	assert_bool(_opening.is_playing).is_false()
 	assert_bool(_conversation.is_active()).is_false()
 	assert_bool(_player.controls_enabled).is_true()
 	assert_bool(rig.is_fixed).is_false()
 	assert_bool(heron.is_present()).is_true()
-	# And he's back to his usual place.
-	assert_object(spirit.held).is_null()
+	await physics_ticks(runner, 2)
+	assert_bool(quest.is_on_errand).is_true()
+	assert_bool(walker.is_walking).is_true()
+	# He's still low once it's over: tired, cracked, and silent.
+	assert_bool(spirit.is_low()).is_true()
+	assert_bool(spirit.face().cracked).is_true()
 
 
 func test_skipping_the_intro_ends_it_with_everything_put_away() -> void:
@@ -359,9 +366,11 @@ func test_skipping_the_intro_ends_it_with_everything_put_away() -> void:
 	assert_bool((_ship.get_node("WakingSet/Props/SleepingYou") as Node3D).visible).is_false()
 	assert_bool((_player.get_node("Model") as Node3D).visible).is_true()
 	assert_object((_player.get_node("LanternSpirit") as LanternSpirit).held).is_null()
-	var night: Node3D = _ship.get_node("Crew/HeronNight") as Node3D
+	# The captain is about, setting off for his drink at the water butt, and
+	# the lantern is low (#158).
 	assert_bool(heron.is_present()).is_true()
-	assert_vector(heron.global_position).is_equal_approx(night.global_position, NEAR)
+	assert_bool((_sea.get_node("FirstQuest") as FirstQuest).is_on_errand).is_true()
+	assert_bool(Game.dialogue.is_set(LanternSpirit.LOW_FLAG)).is_true()
 	var at: Vector3 = _ship.to_local(_player.global_position)
 	assert_float(at.distance_to(_opening.wake_spot)).is_less(0.6)
 
@@ -377,6 +386,7 @@ func test_a_saved_voyage_carries_on_after_the_title_instead_of_the_rescue() -> v
 	assert_bool(_hook_lantern().is_visible_in_tree()).is_true()
 
 	runner.simulate_key_pressed(KEY_ENTER)
+	await _choose_voyage(runner, CONTINUE)
 	assert_bool(await _reaches(runner, &"carry_on")).is_true()
 	await physics_ticks(runner, 10)
 	# He doesn't dive: he's pleased to see you.
@@ -537,7 +547,7 @@ func test_after_the_title_a_new_voyage_asks_who_you_are() -> void:
 	assert_bool(choice.is_open()).is_false()
 
 
-func test_a_saved_voyage_isnt_asked_who_you_are() -> void:
+func test_a_continued_voyage_isnt_asked_who_you_are() -> void:
 	SaveGame.write({"version": SaveGame.VERSION, "memories": [], "day": 2,
 			"morning": true, "warmth": 1.0, "look": "girl"})
 	_build(DialogueTree.START, true)
@@ -547,11 +557,54 @@ func test_a_saved_voyage_isnt_asked_who_you_are() -> void:
 	await physics_ticks(runner, 240)
 
 	runner.simulate_key_pressed(KEY_ENTER)
+	await _choose_voyage(runner, CONTINUE)
 
 	assert_bool(await _reaches(runner, &"carry_on")).is_true()
-	await physics_ticks(runner, 30)
+	assert_bool(await wait_for_signal(_opening.finished, 20.0)).is_true()
 	assert_bool(choice.is_open()).is_false()
 	assert_int(Game.look).is_equal(PlayerLook.Body.GIRL)
+
+
+func test_a_saved_voyage_asks_to_continue_or_start_again_before_loading() -> void:
+	SaveGame.write({"version": SaveGame.VERSION, "memories": [], "day": 5,
+			"morning": true, "warmth": 0.5})
+	_build(DialogueTree.START, true)
+	var runner: GdUnitSceneRunner = scene_runner(_sea)
+	await physics_ticks(runner, 240)
+
+	runner.simulate_key_pressed(KEY_ENTER)
+
+	assert_bool(await _reaches(runner, &"voyage_menu")).is_true()
+	await physics_ticks(runner, 10)
+	assert_array(Array(_conversation.box.shown_choices())) \
+			.contains_exactly(["Continue your voyage", "Start a new voyage"])
+	# Nothing's loaded until it's chosen.
+	var time: TimeOfDay = _sea.get_node("TimeOfDay") as TimeOfDay
+	assert_int(time.day).is_not_equal(5)
+
+
+func test_a_new_voyage_asks_who_you_are_and_keeps_the_old_save() -> void:
+	SaveGame.write({"version": SaveGame.VERSION, "memories": [], "day": 5,
+			"morning": true, "warmth": 0.5, "look": "girl"})
+	_build(DialogueTree.START, true)
+	_choice_cues().ask = true
+	var choice: LookChoice = _sea.get_node("LookChoice") as LookChoice
+	var runner: GdUnitSceneRunner = scene_runner(_sea)
+	await physics_ticks(runner, 240)
+
+	runner.simulate_key_pressed(KEY_ENTER)
+	await _choose_voyage(runner, NEW)
+
+	assert_bool(await _reaches(runner, &"who_are_you")).is_true()
+	await physics_ticks(runner, 60)
+	assert_bool(choice.is_open()).is_true()
+	choice.choose(PlayerLook.Body.BOY)
+	assert_bool(await _reaches(runner, &"he_hears")).is_true()
+	# The saved voyage wasn't loaded, and is still there until you next sleep.
+	var time: TimeOfDay = _sea.get_node("TimeOfDay") as TimeOfDay
+	assert_int(time.day).is_not_equal(5)
+	assert_int(Game.look).is_equal(PlayerLook.Body.BOY)
+	assert_bool(SaveGame.exists()).is_true()
 
 
 func _choice_cues() -> ChoiceCues:
@@ -559,11 +612,30 @@ func _choice_cues() -> ChoiceCues:
 
 
 # Presses Interact past any typing: on to the next line.
+# Waits until [param said] (a count of lines said) reaches [param line], up
+# to ten seconds of ticks. Returns whether it did.
+func _line_shows(runner: GdUnitSceneRunner, said: Array[int], line: int) -> bool:
+	for i: int in 600:
+		if said[0] >= line:
+			await physics_ticks(runner, 2)
+			return true
+		await physics_ticks(runner, 1)
+	return false
+
+
 func _press() -> void:
 	var box: DialogueBox = _conversation.box
 	if box != null and box.is_typing():
 		box.finish_typing()
 	_conversation.press()
+
+
+# Waits for the title's menu, then picks [param which] (CONTINUE or NEW).
+func _choose_voyage(runner: GdUnitSceneRunner, which: int) -> void:
+	assert_bool(await _reaches(runner, &"voyage_menu")).is_true()
+	await physics_ticks(runner, 10)
+	_conversation.move_choice(which)
+	_press()
 
 
 # Waits until the cutscene is reading [param section], and returns whether

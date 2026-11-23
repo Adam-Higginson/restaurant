@@ -2,11 +2,13 @@ extends GameTestSuite
 ## Tests for pauses in a cutscene: @wait holds the script for its seconds,
 ## @wait_for interact holds it until the button's pressed, skipping passes
 ## both, and a handler that's gone doesn't leave the script waiting for ever.
+## The title's wait for any button shows which build this is.
 
 var _player: Player3D
 var _conversation: Conversation
 var _waits: WaitCues
 var _prompt: CutscenePrompt
+var _tag: BuildTag
 ## How many lines have been said.
 var _lines: int
 
@@ -205,8 +207,48 @@ func test_skipping_takes_the_prompt_away() -> void:
 	assert_bool(Game.dialogue.is_set(&"done")).is_true()
 
 
-# The player, a conversation, the wait cues and their prompt. Called at the
-# start of each test, so everything is made (and freed) inside it.
+func test_the_title_shows_the_build_until_the_press() -> void:
+	_build()
+	var runner: GdUnitSceneRunner = scene_runner(_player.get_parent())
+	await physics_ticks(runner, 3)
+
+	play_cutscene(_conversation, _player, "@wait_for any Press any button\nheron: After.")
+	await physics_ticks(runner, 3)
+	assert_bool(_tag.is_showing).is_true()
+	assert_str(_tag.shown_text()).is_equal(BuildInfo.label())
+
+	runner.simulate_key_pressed(KEY_K)
+	await physics_ticks(runner, 3)
+	assert_bool(_tag.is_showing).is_false()
+	assert_str(_tag.shown_text()).is_empty()
+
+
+func test_a_wait_for_interact_doesnt_show_the_build() -> void:
+	_build()
+	var runner: GdUnitSceneRunner = scene_runner(_player.get_parent())
+	await physics_ticks(runner, 3)
+
+	play_cutscene(_conversation, _player, "@wait_for interact Take his hand\nheron: After.")
+	await physics_ticks(runner, 3)
+
+	assert_bool(_tag.is_showing).is_false()
+
+
+func test_skipping_the_title_takes_the_build_away() -> void:
+	_build()
+	var runner: GdUnitSceneRunner = scene_runner(_player.get_parent())
+	await physics_ticks(runner, 3)
+	play_cutscene(_conversation, _player, "@wait_for any Press any button\nset done")
+	await physics_ticks(runner, 3)
+
+	_conversation.skip()
+	await physics_ticks(runner, 3)
+
+	assert_bool(_tag.is_showing).is_false()
+
+
+# The player, a conversation, the wait cues, their prompt and the build tag.
+# Called at the start of each test, so everything is made (and freed) inside it.
 func _build() -> void:
 	_lines = 0
 	_player = new_player_3d_on_floor()
@@ -215,6 +257,9 @@ func _build() -> void:
 	_prompt = (load("res://ui/cutscene_prompt.tscn") as PackedScene).instantiate() \
 			as CutscenePrompt
 	_player.get_parent().add_child(_prompt)
+	_tag = (load("res://ui/build_tag.tscn") as PackedScene).instantiate() as BuildTag
+	_player.get_parent().add_child(_tag)
 	_waits = WaitCues.new()
 	_waits.prompt = _prompt
+	_waits.build_tag = _tag
 	_player.get_parent().add_child(_waits)

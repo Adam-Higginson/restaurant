@@ -77,6 +77,9 @@ var _time: float = 0.0
 
 func _ready() -> void:
 	mouse_filter = Control.MOUSE_FILTER_IGNORE
+	# No name until someone speaks: choices offered with nobody speaking (the
+	# title's menu) have no name plate.
+	_name.hide()
 	hide()
 
 
@@ -205,6 +208,7 @@ func finish_typing() -> void:
 ## Puts the box away.
 func close() -> void:
 	_typing = false
+	_name.hide()
 	hide()
 
 

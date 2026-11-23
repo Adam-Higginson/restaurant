@@ -1,0 +1,11 @@
+[gd_resource type="Resource" script_class="Recipe" format=3]
+
+[ext_resource type="Script" path="res://scripts/data/recipe.gd" id="1_recipe"]
+[ext_resource type="Resource" path="res://data/items/spicy_tomato_soup.tres" id="2_dish"]
+
+[resource]
+script = ExtResource("1_recipe")
+id = &"spicy_tomato_soup"
+dish = ExtResource("2_dish")
+title = "Spicy Tomato Soup"
+steps = PackedStringArray("Make a Tomato Soup and leave it on the hearth.", "Chop a chilli on the board (2 cuts) and stir it in.", "Boil (4s) and ladle it into a bowl.", "A whole chilli works, but it bites in lumps.")

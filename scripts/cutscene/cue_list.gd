@@ -22,6 +22,8 @@ const USAGE: Dictionary[StringName, String] = {
 	&"show": "@show heron",
 	&"home": "@home heron",
 	&"go": "@go lantern room_middle (the lantern floats to a mark and stays)",
+	&"walk": "@walk heron water_butt (they walk to a mark, or 'home'; the script waits)",
+	&"send": "@send heron water_butt (they set off for a mark, or 'home'; the script goes on)",
 	&"stage": "@stage underwater or @stage off",
 	&"play": "@play lantern_descends",
 	&"start": "@start drifting",
@@ -37,6 +39,7 @@ const USAGE: Dictionary[StringName, String] = {
 			+ "determined, worried, pleading, effort, tired, asleep, pleased; or for his "
 			+ "glass: fogged, clear, streaked, dry, cracked, mended)",
 	&"who_are_you": "@who_are_you (asks a boy or a girl, and waits for the answer)",
+	&"continue_voyage": "@continue_voyage (the title chose to carry on the saved voyage)",
 	&"open": "@open (the chest being opened swings open, with you stepping up to it)",
 	&"hold_up": "@hold_up (you turn round and hold up what was in the chest), or "
 			+ "@hold_up frying_pan (hold up that item or tool, no chest needed)",
@@ -72,7 +75,7 @@ static func _fits(cue: StringName, args: PackedStringArray) -> bool:
 			return args.size() == 1 and _is_seconds(args[0])
 		&"wait_for":
 			return not args.is_empty() and ["interact", "any"].has(args[0])
-		&"place", &"face", &"go":
+		&"place", &"face", &"go", &"walk", &"send":
 			return args.size() == 2
 		&"hide", &"show", &"home", &"stage", &"play", &"start", &"queue", &"sound":
 			return args.size() == 1
@@ -84,7 +87,7 @@ static func _fits(cue: StringName, args: PackedStringArray) -> bool:
 			return args.size() == 1 and ["on", "off"].has(args[0])
 		&"hold_up":
 			return args.size() <= 1
-		&"lightning", &"who_are_you", &"open", &"put_away":
+		&"lightning", &"who_are_you", &"continue_voyage", &"open", &"put_away":
 			return args.is_empty()
 		&"look":
 			return args.size() == 2 and LanternFace.knows(args[1])

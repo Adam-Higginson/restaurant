@@ -29,7 +29,7 @@ func test_catalog_has_the_mvp_items() -> void:
 		&"chopping_board", &"plate", &"herring", &"herring_fillet", &"frying_pan",
 		&"pan_fried_herring", &"saucepan", &"bowl", &"rainwater", &"boiling_water",
 		&"chopped_onion", &"mackerel", &"mackerel_fillet", &"pan_fried_mackerel",
-		&"crab_meat", &"pan_seared_crab",
+		&"crab_meat", &"pan_seared_crab", &"chilli", &"chopped_chilli", &"spicy_tomato_soup",
 	])
 
 
@@ -104,9 +104,9 @@ func test_storage_kinds_match_design_doc() -> void:
 		&"lettuce", &"tomato", &"cheese", &"chopped_lettuce", &"sliced_tomato",
 		&"diced_tomato", &"garden_salad", &"grilled_cheese", &"herring", &"herring_fillet",
 		&"pan_fried_herring", &"chopped_onion", &"mackerel", &"mackerel_fillet",
-		&"pan_fried_mackerel", &"crab_meat", &"pan_seared_crab",
+		&"pan_fried_mackerel", &"crab_meat", &"pan_seared_crab", &"chopped_chilli",
 	]
-	var cupboard: Array[StringName] = [&"onion", &"bread"]
+	var cupboard: Array[StringName] = [&"onion", &"bread", &"chilli"]
 	for item: Item in _catalog.items:
 		var expected: Item.StorageKind = Item.StorageKind.NONE
 		if item.id in fridge:
