@@ -25,9 +25,9 @@ extends Resource
 
 @export_group("Beach")
 ## Rise for each metre inland on the beach (and fall, out over the shelf).
-@export var beach_slope: float = 0.08
+@export var beach_slope: float = 0.07
 ## How wide the beach is from the waterline to the foot of the bank.
-@export var beach_width: float = 6.5
+@export var beach_width: float = 10.0
 ## How tall the beach's own soft humps and hollows are, in metres.
 @export var beach_humps: float = 0.09
 
@@ -48,7 +48,7 @@ extends Resource
 @export var inland_slope: float = 0.03
 ## How far inland the hillside begins: behind this the land climbs away
 ## towards the far hills.
-@export var hill_from: float = 30.0
+@export var hill_from: float = 34.0
 ## Rise for each metre further inland on the hillside.
 @export var hill_slope: float = 0.5
 ## How tall the bumps of the inland ground are.
