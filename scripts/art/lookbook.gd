@@ -170,7 +170,11 @@ func _fired_line(after: Node3D) -> String:
 	if model != null:
 		if not model.fired:
 			return "Not fired"
-		return model.kiln_status().replace(": ", ":\n").replace("), ", ")\n")
+		var line: String = model.kiln_status().replace(": ", ":\n").replace("), ", ")\n")
+		var problems: PackedStringArray = KilnReport.problems(model.kiln_job())
+		if not problems.is_empty():
+			line += "\n! " + ", ".join(problems)
+		return line
 	var body: CharacterModel = after as CharacterModel
 	var lines: PackedStringArray = []
 	for job: KilnJob in body.parts_override.jobs():
@@ -204,6 +208,11 @@ func _frame_all() -> void:
 
 func _capture_all() -> void:
 	DirAccess.make_dir_recursive_absolute(_capture_folder)
+	var report: FileAccess = FileAccess.open(_capture_folder.path_join("budget.md"),
+			FileAccess.WRITE)
+	if report != null:
+		report.store_string(KilnReport.table(KilnCatalog.all_jobs()))
+		report.close()
 	await _settle(10)
 	await _shoot("00_overview")
 	for index: int in exhibits.size():

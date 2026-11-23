@@ -337,7 +337,10 @@ def _unwrap(obj) -> None:
 # the density it actually gives.
 def _texture_size(obj, job: dict, scale: float) -> tuple:
     mesh = obj.data
-    surface = sum(poly.area for poly in mesh.polygons) * scale * scale
+    # Areas are in the object's own units: count its own scale too.
+    own = obj.matrix_world.to_scale()
+    own_area = abs(own.x * own.y * own.z) ** (2.0 / 3.0)
+    surface = sum(poly.area for poly in mesh.polygons) * own_area * scale * scale
     uv = mesh.uv_layers.active.data
     covered = 0.0
     for poly in mesh.polygons:
@@ -348,12 +351,9 @@ def _texture_size(obj, job: dict, scale: float) -> tuple:
     wanted = float(job["pixels_per_metre"])
     exact = wanted * math.sqrt(surface / max(covered, 1e-9))
     biggest = int(job["max_texture"])
-    size = SMALLEST
-    while size < exact and size < biggest:
-        size *= 2
-    # Round to the nearer power of two.
-    if size > SMALLEST and size / exact > 1.5:
-        size //= 2
+    # Any multiple of 8 (not only powers of two), so every model lands close
+    # to the same density: the same size of pixel everywhere.
+    size = int(min(max(round(exact / SMALLEST) * SMALLEST, SMALLEST), biggest))
     achieved = size * math.sqrt(covered / max(surface, 1e-9))
     return size, achieved
 

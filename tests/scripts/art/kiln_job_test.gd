@@ -29,6 +29,18 @@ func test_a_model_outside_the_packs_goes_by_its_file_name() -> void:
 	assert_str(job.fired_path()).is_equal("res://assets/third_party/_kiln/box_model.test.glb")
 
 
+func test_each_size_a_model_is_fitted_to_gets_its_own_fired_files() -> void:
+	var small: KilnJob = KilnJob.new(STAND_IN, _look())
+	small.fit_size = Vector3(0.3, 0.2, 0.3)
+	var big: KilnJob = KilnJob.new(STAND_IN, _look())
+	big.fit_size = Vector3(0.6, 0.4, 0.6)
+	var again: KilnJob = KilnJob.new(STAND_IN, _look())
+	again.fit_size = Vector3(0.3, 0.2, 0.3)
+	assert_str(small.fired_path()).is_not_equal(big.fired_path())
+	assert_str(small.fired_path()).is_equal(again.fired_path())
+	assert_str(small.fired_path()).starts_with("res://assets/third_party/_kiln/box_model.test.")
+
+
 func test_it_can_fire_only_with_a_look_and_every_file() -> void:
 	assert_bool(KilnJob.new(STAND_IN, null).can_fire()).is_false()
 	assert_bool(KilnJob.new("res://no_such_model.glb", _look()).can_fire()).is_false()

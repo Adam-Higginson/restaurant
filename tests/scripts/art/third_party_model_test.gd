@@ -74,7 +74,7 @@ func test_with_a_look_but_not_fired_it_shows_the_packs_model() -> void:
 
 func test_once_fired_it_shows_the_fired_model_with_its_texture() -> void:
 	_use_fired_stand_ins()
-	var rig: Array[Node3D] = _new_dresser(STAND_IN_MODEL, Vector3(2.2, 5.0, 5.0), false, _look())
+	var rig: Array[Node3D] = _new_dresser(STAND_IN_MODEL, Vector3.ZERO, false, _look())
 	var dresser: ThirdPartyModel = rig[0] as ThirdPartyModel
 	assert_bool(dresser.fired).is_true()
 	assert_bool((rig[1] as MeshInstance3D).visible).is_false()
@@ -85,8 +85,8 @@ func test_once_fired_it_shows_the_fired_model_with_its_texture() -> void:
 	assert_str(texture.resource_path).is_equal(FIRED_STAND_INS + "box_model.test.png")
 	# Drawn in full: the Kiln already made it as simple as it should be.
 	assert_float(mesh.lod_bias).is_equal(1.0)
-	# And fitted to its box like the pack's model.
-	assert_vector(dresser.model.scale).is_equal_approx(Vector3(2, 2, 2), Vector3.ONE * 0.001)
+	# Unfitted, it keeps its own size.
+	assert_vector(dresser.model.scale).is_equal_approx(Vector3.ONE, Vector3.ONE * 0.001)
 
 
 func test_fired_models_are_drawn_as_their_look_says() -> void:

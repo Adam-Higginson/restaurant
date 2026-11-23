@@ -194,4 +194,10 @@ func _stem() -> String:
 	var inside: String = source.trim_prefix(THIRD_PARTY) if source.begins_with(THIRD_PARTY) \
 			else source.get_file()
 	var tag: String = look.tag() if look != null else "none"
-	return out_root + inside.get_basename() + "." + tag
+	var stem: String = out_root + inside.get_basename() + "." + tag
+	# The same model fitted into two sizes of box is fired twice (its pixels
+	# are sized for each), so each size gets its own short code.
+	if fit_size != Vector3.ZERO:
+		var placement: String = "%s|%s|%s" % [fit_size, stretch, scale]
+		stem += "." + placement.md5_text().left(6)
+	return stem
