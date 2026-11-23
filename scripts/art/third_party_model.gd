@@ -22,6 +22,10 @@ extends Node3D
 ## texture, which is then drawn instead (see [KilnJob]). Until it's fired, or
 ## without a look, the pack's own model shows, its smooth flat colours given
 ## the chunky N64 grain (shaders/n64_prop.gdshader).
+##
+## With a [member style], the model is drawn stylised instead (#168): every
+## surface gets the soft cel-shaded character material, with its own texture,
+## and an outline. Clearing the style dresses it again exactly as it was made.
 
 ## Emitted each time [method dress] has run. [param shown] says whether the
 ## model is showing (true) or the greybox is (false), so a node that drives
@@ -69,6 +73,18 @@ const GRAIN: Texture2D = preload("res://assets/placeholder/materials/n64_grain.t
 ## lower-poly ones, for the chunky N64 look. 1 is Godot's usual choice.
 ## Fired models are always drawn in full: the Kiln made them simple already.
 @export var detail: float = 0.05
+## Draws the model stylised (cel shading, warm shadows, rim light, outline),
+## sharing this look's settings with every other model that uses it. Empty
+## draws it as it was made. Changing the look's settings shows at once.
+@export var style: CharacterStyle:
+	set(value):
+		if style != null and style.changed.is_connected(_restyle):
+			style.changed.disconnect(_restyle)
+		style = value
+		if style != null:
+			style.changed.connect(_restyle)
+		if is_inside_tree():
+			dress()
 ## Whether the model casts shadows. Off for a backdrop that would otherwise
 ## put the whole scene in its shade (an island's cliffs, with a low sun
 ## behind them).
@@ -97,6 +113,8 @@ var fired: bool = false
 
 ## Whether Blender is firing the model now.
 var _firing: bool = false
+## The stylised materials on the model now, kept to follow [member style]'s changes.
+var _styled: Array[ShaderMaterial] = []
 
 
 func _ready() -> void:
@@ -126,6 +144,7 @@ func dress() -> bool:
 		model.queue_free()
 		model = null
 	fired = false
+	_styled.clear()
 	var scene: PackedScene = null
 	var job: KilnJob = kiln_job()
 	if job != null and job.is_fired():
@@ -148,8 +167,8 @@ func dress() -> bool:
 	if fired:
 		FiredModel.paint(model, job, tint)
 	else:
-		if grain:
-			_use_n64(model, {})
+		if style != null or grain:
+			_convert(model, {})
 		_set_detail(model)
 	if not casts_shadow:
 		_cast_no_shadows(model)
@@ -235,10 +254,10 @@ func _bounds(node: Node, transform_so_far: Transform3D) -> AABB:
 	return box
 
 
-# Gives every surface the N64 prop shader, keeping its own colour and
-# texture. [param made] remembers each converted material, so surfaces that
-# shared one still do.
-func _use_n64(node: Node, made: Dictionary) -> void:
+# Gives every surface the stylised material (with a [member style]) or else
+# the N64 prop shader, keeping its own colour and texture. [param made]
+# remembers each converted material, so surfaces that shared one still do.
+func _convert(node: Node, made: Dictionary) -> void:
 	var mesh_node: MeshInstance3D = node as MeshInstance3D
 	var override: BaseMaterial3D = null
 	if mesh_node != null:
@@ -247,7 +266,7 @@ func _use_n64(node: Node, made: Dictionary) -> void:
 		# One material over the whole mesh: convert that instead.
 		var whole: ShaderMaterial = made.get(override, null)
 		if whole == null:
-			whole = n64_material(override, grain_metres, tint)
+			whole = _material_for(override)
 			made[override] = whole
 		mesh_node.material_override = whole
 	elif mesh_node != null and mesh_node.mesh != null:
@@ -257,11 +276,28 @@ func _use_n64(node: Node, made: Dictionary) -> void:
 				continue
 			var converted: ShaderMaterial = made.get(source, null)
 			if converted == null:
-				converted = n64_material(source, grain_metres, tint)
+				converted = _material_for(source)
 				made[source] = converted
 			mesh_node.set_surface_override_material(surface, converted)
 	for child: Node in node.get_children():
-		_use_n64(child, made)
+		_convert(child, made)
+
+
+# The material a surface painted with [param source] is drawn with.
+func _material_for(source: BaseMaterial3D) -> ShaderMaterial:
+	if style == null:
+		return n64_material(source, grain_metres, tint)
+	var material: ShaderMaterial = style.make_material(source)
+	_styled.append(material)
+	return material
+
+
+# The style's settings changed: show them on the model straight away.
+func _restyle() -> void:
+	if style == null:
+		return
+	for material: ShaderMaterial in _styled:
+		style.apply(material)
 
 
 ## The N64 prop material for a model surface painted with [param source]:
