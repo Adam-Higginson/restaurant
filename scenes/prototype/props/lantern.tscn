@@ -1,5 +1,7 @@
 [gd_scene format=3]
 
+[ext_resource type="Script" path="res://scripts/art/third_party_model.gd" id="900_meshy"]
+[ext_resource type="Script" path="res://scripts/art/painted_glow.gd" id="901_glow"]
 [ext_resource type="Script" path="res://scripts/props/lantern.gd" id="1_x"]
 [ext_resource type="Script" path="res://scripts/props/flicker.gd" id="4_flicker"]
 [ext_resource type="Material" path="res://assets/placeholder/materials/iron.tres" id="2_x"]
@@ -139,3 +141,19 @@ light_volumetric_fog_energy = 2.0
 shadow_enabled = true
 omni_range = 7.0
 light_size = 0.12
+
+[node name="Meshy" type="Node3D" parent="." node_paths=PackedStringArray("stand_ins")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.78, 0)
+script = ExtResource("900_meshy")
+path = "res://assets/third_party/meshy/lantern_hanging/model/model.glb"
+fit_size = Vector3(0.3, 0.5, 0.3)
+stand_ins = [NodePath("../Ring"), NodePath("../Cap"), NodePath("../Post1"), NodePath("../Post2"), NodePath("../Post3"), NodePath("../Post4"), NodePath("../Base")]
+grain = false
+detail = 1.0
+keep_as_made = true
+
+[node name="Glow" type="Node" parent="." node_paths=PackedStringArray("model")]
+script = ExtResource("901_glow")
+model = NodePath("../Meshy")
+threshold = 0.55
+energy = 1.3

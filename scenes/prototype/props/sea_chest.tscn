@@ -1,5 +1,6 @@
 [gd_scene format=3 uid="uid://c2r8rhq0mgik3"]
 
+[ext_resource type="Script" path="res://scripts/art/third_party_model.gd" id="900_meshy"]
 [ext_resource type="Material" path="res://assets/placeholder/materials/dark_prop_wood.tres" id="1_uut5v"]
 [ext_resource type="Material" path="res://assets/placeholder/materials/prop_wood.tres" id="2_tkcsn"]
 [ext_resource type="Material" path="res://assets/placeholder/materials/iron.tres" id="3_yjmwh"]
@@ -78,3 +79,12 @@ mesh = SubResource("BoxMesh_u68eo")
 [node name="Shape" type="CollisionShape3D" parent="." unique_id=268079921]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.28, 0)
 shape = SubResource("BoxShape3D_o0xbm")
+
+[node name="Meshy" type="Node3D" parent="." node_paths=PackedStringArray("stand_ins")]
+script = ExtResource("900_meshy")
+path = "res://assets/third_party/meshy/sea_chest/model/model.glb"
+fit_size = Vector3(0.88, 0.58, 0.56)
+stand_ins = [NodePath("../Body"), NodePath("../Lid"), NodePath("../LidTop"), NodePath("../Band1"), NodePath("../Band2"), NodePath("../Lock"), NodePath("../HandleL"), NodePath("../HandleR")]
+grain = false
+detail = 1.0
+keep_as_made = true

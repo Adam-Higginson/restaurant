@@ -30,6 +30,7 @@
 [ext_resource type="Shader" uid="uid://onbwj0r4wa7r" path="res://shaders/night_sky.gdshader" id="11_sky"]
 [ext_resource type="Shader" path="res://shaders/far_light.gdshader" id="12_far"]
 [ext_resource type="Script" path="res://scripts/weather/time_of_day.gd" id="13_time"]
+[ext_resource type="Script" path="res://scripts/art/painted_look.gd" id="400_painted"]
 [ext_resource type="PackedScene" uid="uid://l1ghth0use1sl" path="res://scenes/prototype/islands/lighthouse_island.tscn" id="14_island"]
 [ext_resource type="Script" path="res://scripts/story/opening.gd" id="15_opening"]
 [ext_resource type="PackedScene" path="res://ui/screen_fade.tscn" id="16_fade"]
@@ -289,6 +290,10 @@ script = ExtResource("13_time")
 world = NodePath("../WorldEnvironment")
 moon = NodePath("../Moon")
 weather = NodePath("../Weather")
+
+[node name="PaintedLook" type="Node" parent="." node_paths=PackedStringArray("world")]
+script = ExtResource("400_painted")
+world = NodePath("../WorldEnvironment")
 
 [node name="Opening" type="Node" parent="." unique_id=1418227362 node_paths=PackedStringArray("player", "ship")]
 script = ExtResource("15_opening")

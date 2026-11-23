@@ -1,5 +1,6 @@
 [gd_scene format=3 uid="uid://ij227ij8m0r0"]
 
+[ext_resource type="Script" path="res://scripts/art/third_party_model.gd" id="900_meshy"]
 [ext_resource type="Material" path="res://assets/placeholder/materials/prop_wood.tres" id="1_slr8e"]
 [ext_resource type="Material" path="res://assets/placeholder/materials/dark_prop_wood.tres" id="2_srnqh"]
 [ext_resource type="Material" path="res://assets/placeholder/materials/red_cloth.tres" id="3_4fna1"]
@@ -700,3 +701,13 @@ shape = SubResource("BoxShape3D_fteye")
 [node name="BenchAftShape" type="CollisionShape3D" parent="." unique_id=1402246226]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.25, 0.86)
 shape = SubResource("BoxShape3D_yv2rm")
+
+[node name="Meshy" type="Node3D" parent="." node_paths=PackedStringArray("stand_ins")]
+script = ExtResource("900_meshy")
+path = "res://assets/third_party/meshy/crew_table/model/model.glb"
+fit_size = Vector3(2.44, 0.824, 1.12)
+stretch = true
+stand_ins = [NodePath("../TopBoard1"), NodePath("../TopBoard2"), NodePath("../TopBoard3"), NodePath("../CleatPort"), NodePath("../ApronFore"), NodePath("../CleatStarboard"), NodePath("../ApronAft"), NodePath("../Leg1"), NodePath("../Leg2"), NodePath("../EndStretcher1"), NodePath("../Leg3"), NodePath("../Leg4"), NodePath("../EndStretcher2"), NodePath("../Stretcher")]
+grain = false
+detail = 1.0
+keep_as_made = true

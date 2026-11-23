@@ -46,6 +46,8 @@ func _glow(node: Node) -> void:
 	var whole: BaseMaterial3D = null
 	if mesh_node != null:
 		whole = mesh_node.material_override as BaseMaterial3D
+		# A lamp's own body doesn't shadow the light that sits inside it.
+		mesh_node.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
 	if whole != null:
 		# One material over the whole mesh: that's the paint.
 		mesh_node.material_override = material_for(whole)
