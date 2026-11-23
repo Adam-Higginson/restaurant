@@ -8,6 +8,9 @@
 // character_style.gd, data/art/styles/character.tres), so all characters
 // share one look and one place to tune it. docs/look.md says what each does.
 shader_type spatial;
+// Marks the stencil buffer wherever a stylised character is seen, so the
+// painted filter can treat characters differently from the room.
+stencil_mode write, compare_always, 1;
 render_mode cull_back, depth_draw_opaque;
 
 // The character's own painted texture and colour (from its imported material).
@@ -59,11 +62,26 @@ uniform float recolour_max_saturation : hint_range(0.0, 1.0) = 0.2;
 // per mesh by ThirdPartyModel from its outfit). A point mostly weighted to
 // hidden bones isn't drawn, so the body never pokes through the cloth.
 instance uniform int hidden_bones = 0;
+// PROTOTYPE: how far this mesh's paint is flattened towards a blurred copy of
+// itself, 0 to 1. It takes out highlights and folds painted into a texture,
+// leaving flat colour for the cel shading to light.
+instance uniform float flatten = 0.0;
+// PROTOTYPE: how far the surface is lit as if it were a smooth round column
+// about the model's upright axis, 0 to 1. Lumps and folds in the mesh stop
+// breaking the light/shadow edge into patches, leaving one clean shape.
+instance uniform float round_form = 0.0;
+// PROTOTYPE: the brightest any one light may be on this mesh (0 is no cap).
+// A low sun hits an upright character far harder than the floor; capped, the
+// lit side stays the character's own colour, warmed, and doesn't burn out.
+instance uniform float light_cap = 0.0;
 
 // How high this point is above the model's feet, in metres.
 varying float height;
 // How much of this point is under clothing, 0 to 1.
 varying float covered;
+// The surface's real facing, in view space, kept for the rim when the
+// shading uses a rounded one.
+varying vec3 true_normal;
 
 // How much of a point hangs off hidden bones, 0 to 1.
 float under_cloth(uvec4 bones, vec4 weights) {
@@ -80,6 +98,11 @@ float under_cloth(uvec4 bones, vec4 weights) {
 void vertex() {
 	height = (MODEL_MATRIX * vec4(VERTEX, 1.0)).y - MODEL_MATRIX[3].y;
 	covered = hidden_bones == 0 ? 0.0 : under_cloth(BONE_INDICES, BONE_WEIGHTS);
+	true_normal = MODELVIEW_NORMAL_MATRIX * NORMAL;
+	if (round_form > 0.0) {
+		vec3 outward = normalize(vec3(VERTEX.x, 0.0, VERTEX.z) + vec3(0.0, 0.0, 0.0001));
+		NORMAL = normalize(mix(NORMAL, outward, round_form));
+	}
 }
 
 
@@ -87,7 +110,11 @@ void fragment() {
 	if (covered > 0.5) {
 		discard;
 	}
-	vec4 painted = texture(albedo_texture, UV) * albedo_color;
+	vec4 painted = texture(albedo_texture, UV);
+	if (flatten > 0.0) {
+		painted = mix(painted, textureLod(albedo_texture, UV, 5.0), flatten);
+	}
+	painted *= albedo_color;
 	vec3 paint = painted.rgb;
 	if (recolour_strength > 0.0) {
 		// Judge the paint as it looks (sRGB), not in the linear light the
@@ -138,7 +165,11 @@ void light() {
 	} else {
 		reach = ATTENUATION;
 	}
-	vec3 light = LIGHT_COLOR / PI * reach;
+	vec3 light = LIGHT_COLOR / PI;
+	if (light_cap > 0.0) {
+		light /= max(1.0, max(light.r, max(light.g, light.b)) / light_cap);
+	}
+	light *= reach;
 	float form = 1.0 - lit_falloff * (1.0 - clamp(facing, 0.0, 1.0));
 	DIFFUSE_LIGHT += light * mix(shadow_color.rgb, vec3(form), lit);
 
@@ -149,7 +180,7 @@ void light() {
 	SPECULAR_LIGHT += light * shine * specular_strength * lit;
 
 	// The rim: the edge seen side-on, on the side the light reaches.
-	float edge_on = 1.0 - clamp(dot(NORMAL, VIEW), 0.0, 1.0);
+	float edge_on = 1.0 - clamp(dot(normalize(true_normal), VIEW), 0.0, 1.0);
 	float rim = smoothstep(1.0 - rim_width - 0.03, 1.0 - rim_width + 0.03, edge_on);
 	SPECULAR_LIGHT += light * rim_color.rgb * rim * rim_strength * lit;
 }

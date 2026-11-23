@@ -34,6 +34,16 @@ class Treatment:
 
 ## Frames to wait before each photograph, for the light shafts to settle.
 const SETTLE_FRAMES: int = 45
+## The cartoon finish's dials (prototype): brush widths in pixels at 1080p,
+## and how much the characters' colours are held back so sunlit skin and
+## cloth stay as flat colour and don't burn out.
+const CARTOON_BRUSH: float = 3.5
+const CARTOON_CHARACTER_BRUSH: float = 0.9
+const CARTOON_CLOTH_FLATTEN: float = 0.85
+const CARTOON_ROUND_FORM: float = 0.75
+const CARTOON_LIGHT_CAP: float = 1.3
+const CARTOON_CHARACTER_TINT: Color = Color(0.95, 0.95, 0.95)
+const PAINTED_FILTER: Shader = preload("res://shaders/painted_filter.gdshader")
 ## The painted light pass's dials (prototype).
 const PAINTED_SUN_COLOR: Color = Color(1.0, 0.76, 0.46)
 const PAINTED_SUN_ENERGY: float = 3.0
@@ -78,7 +88,12 @@ var golden_light: bool = true
 ## saturated light, bounce and glow; see [method set_painted]).
 var painted: bool = false
 
+## Whether the painted cartoon finish is on (see [method set_cartoon]).
+var cartoon: bool = false
+
 var _capture_folder: String = ""
+var _filter: MeshInstance3D
+var _style_specular: Dictionary[CharacterStyle, float] = {}
 var _only_treatment: String = ""
 var _painted_environment: Environment
 var _painted_extras: Node3D
@@ -183,6 +198,80 @@ func set_painted(on: bool) -> void:
 	if fill != null:
 		fill.light_color = Color(0.75, 0.5, 0.62)
 		fill.light_energy = 0.25
+
+
+## PROTOTYPE: the cartoon finish. A painterly filter and ink lines over the
+## whole picture (shaders/painted_filter.gdshader), and the room's wood lit
+## in two flat steps, not a smooth fade.
+func set_cartoon(on: bool) -> void:
+	cartoon = on
+	if on and _filter == null:
+		# The room gets the broad brush; characters a fine one, so faces
+		# stay readable. Characters mark the stencil buffer as they're drawn.
+		_filter = _make_filter("compare_not_equal", CARTOON_BRUSH)
+		_filter.add_child(_make_filter("compare_equal", CARTOON_CHARACTER_BRUSH))
+		_camera.add_child(_filter)
+	if _filter != null:
+		_filter.visible = on
+	if sun != null:
+		sun.shadow_normal_bias = 3.0 if on else 2.0
+	if style != null:
+		style.base_tint = CARTOON_CHARACTER_TINT if on else Color.WHITE
+		if not _style_specular.has(style):
+			_style_specular[style] = style.specular_strength
+		style.specular_strength = 0.0 if on else _style_specular[style]
+	for character: ThirdPartyModel in characters:
+		if character == null:
+			continue
+		if not character.dressed.is_connected(_flatten_cloth):
+			character.dressed.connect(_flatten_cloth.bind(character))
+		_flatten_cloth(character.model != null, character)
+	for wood: StandardMaterial3D in _wood_colors:
+		wood.diffuse_mode = (BaseMaterial3D.DIFFUSE_TOON if on
+				else BaseMaterial3D.DIFFUSE_BURLEY)
+		wood.specular_mode = (BaseMaterial3D.SPECULAR_DISABLED if on
+				else BaseMaterial3D.SPECULAR_SCHLICK_GGX)
+
+
+# Flattens the paint of a dressed character's clothes (the meshes of its
+# outfit, which don't hide any of themselves), leaving the body and face.
+func _flatten_cloth(shown: bool, character: ThirdPartyModel) -> void:
+	if not shown:
+		return
+	for found: Node in character.model.find_children("*", "MeshInstance3D", true, false):
+		var mesh_node: MeshInstance3D = found as MeshInstance3D
+		var hides: int = 0
+		if mesh_node.get_instance_shader_parameter(&"hidden_bones") != null:
+			hides = mesh_node.get_instance_shader_parameter(&"hidden_bones")
+		mesh_node.set_instance_shader_parameter(&"light_cap",
+				CARTOON_LIGHT_CAP if cartoon else 0.0)
+		if character.outfit == null:
+			continue
+		if hides == 0:
+			mesh_node.set_instance_shader_parameter(&"flatten",
+					CARTOON_CLOTH_FLATTEN if cartoon else 0.0)
+		mesh_node.set_instance_shader_parameter(&"round_form",
+				CARTOON_ROUND_FORM if cartoon else 0.0)
+
+
+func _make_filter(compare: String, brush: float) -> MeshInstance3D:
+	var quad: QuadMesh = QuadMesh.new()
+	quad.size = Vector2(2.0, 2.0)
+	var shader: Shader = Shader.new()
+	shader.code = PAINTED_FILTER.code.replace("// STENCIL",
+			"stencil_mode read, %s, 1;" % compare)
+	var material: ShaderMaterial = ShaderMaterial.new()
+	material.shader = shader
+	material.set_shader_parameter(&"brush_size", brush)
+	material.render_priority = 100
+	quad.material = material
+	var screen: MeshInstance3D = MeshInstance3D.new()
+	screen.name = "PaintedFilter"
+	screen.mesh = quad
+	screen.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
+	# Never culled: the shader puts it over the whole screen.
+	screen.extra_cull_margin = 16384.0
+	return screen
 
 
 func _make_painted_environment() -> Environment:
@@ -306,6 +395,7 @@ func _add_buttons() -> void:
 	column.add_child(_button("Outlines", outlined, set_outlined))
 	column.add_child(_button("Golden cabin light", golden_light, set_golden))
 	column.add_child(_button("Painted light (prototype)", painted, set_painted))
+	column.add_child(_button("Cartoon finish (prototype)", cartoon, set_cartoon))
 
 
 func _button(label: String, on: bool, action: Callable) -> CheckButton:
@@ -324,6 +414,7 @@ func _capture_all() -> void:
 		Treatment.new("golden_stylised", true, true, true),
 		Treatment.new("golden_no_outline", true, false, true),
 		Treatment.new("painted", true, true, true),
+		Treatment.new("cartoon", true, true, true),
 	]
 	for treatment: Treatment in treatments:
 		if not _only_treatment.is_empty() and treatment.name != _only_treatment:
@@ -331,7 +422,8 @@ func _capture_all() -> void:
 		set_stylised(treatment.stylised)
 		set_outlined(treatment.outlined)
 		set_golden(treatment.golden)
-		set_painted(treatment.name == "painted")
+		set_painted(treatment.name == "painted" or treatment.name == "cartoon")
+		set_cartoon(treatment.name == "cartoon")
 		for shot: Node in _shots.get_children():
 			var mark: Node3D = shot as Node3D
 			if mark == null:
