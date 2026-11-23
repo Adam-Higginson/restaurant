@@ -19,19 +19,14 @@
 [ext_resource type="AudioStream" path="res://assets/audio/intro/grasp.tres" id="316_grasp"]
 [ext_resource type="Script" path="res://scripts/audio/optional_sound.gd" id="318_optional"]
 [ext_resource type="Script" path="res://scripts/cutscene/speech_cues.gd" id="319_speech"]
-[ext_resource type="Material" path="res://assets/placeholder/materials/greybox_sand.tres" id="2_dlk4p"]
-[ext_resource type="Material" path="res://assets/placeholder/materials/greybox_grass.tres" id="3_nk5mb"]
-[ext_resource type="Material" path="res://assets/placeholder/materials/greybox_dark_wood.tres" id="4_8v0wy"]
 [ext_resource type="PackedScene" path="res://scenes/prototype/ship.tscn" id="5_ahqms"]
 [ext_resource type="PackedScene" path="res://scenes/prototype/player.tscn" id="7_p3dpl"]
 [ext_resource type="PackedScene" path="res://ui/hud_3d.tscn" id="8_hud"]
 [ext_resource type="PackedScene" path="res://scenes/prototype/weather/sea_surface.tscn" id="9_sea"]
 [ext_resource type="PackedScene" path="res://scenes/prototype/weather/weather.tscn" id="10_weather"]
 [ext_resource type="Shader" uid="uid://onbwj0r4wa7r" path="res://shaders/night_sky.gdshader" id="11_sky"]
-[ext_resource type="Shader" path="res://shaders/far_light.gdshader" id="12_far"]
 [ext_resource type="Script" path="res://scripts/weather/time_of_day.gd" id="13_time"]
 [ext_resource type="Script" path="res://scripts/art/painted_look.gd" id="400_painted"]
-[ext_resource type="PackedScene" uid="uid://l1ghth0use1sl" path="res://scenes/prototype/islands/lighthouse_island.tscn" id="14_island"]
 [ext_resource type="Script" path="res://scripts/story/opening.gd" id="15_opening"]
 [ext_resource type="PackedScene" path="res://ui/screen_fade.tscn" id="16_fade"]
 [ext_resource type="Script" path="res://scripts/cutscene/voyage_cues.gd" id="93_voyage"]
@@ -70,13 +65,6 @@ shader_parameter/cloud_speed = 0.006
 [sub_resource type="Sky" id="Sky_fgrll"]
 sky_material = SubResource("Material_NightSky")
 process_mode = 3
-
-[sub_resource type="ShaderMaterial" id="Material_FarLight"]
-shader = ExtResource("12_far")
-
-[sub_resource type="QuadMesh" id="Mesh_FarLight"]
-material = SubResource("Material_FarLight")
-size = Vector2(9, 9)
 
 [sub_resource type="Gradient" id="Gradient_Night"]
 offsets = PackedFloat32Array(0, 0.18, 0.55, 1)
@@ -123,60 +111,6 @@ volumetric_fog_anisotropy = 0.55
 volumetric_fog_albedo = Color(0.55, 0.6, 0.65, 1)
 volumetric_fog_length = 40.0
 
-[sub_resource type="CylinderMesh" id="CylinderMesh_oromj"]
-top_radius = 20.0
-bottom_radius = 23.0
-height = 3.0
-radial_segments = 12
-rings = 1
-
-[sub_resource type="ConvexPolygonShape3D" id="ConvexPolygonShape3D_bu1sd"]
-points = PackedVector3Array(0, -1.5, -23, -11.5, -1.5, -19.920126, -10.752545, 0, -18.623337, 0, 1.5, -20.001175, 10.748043, 0, -18.623337, 11.5, -1.5, -19.920126, -19.920126, -1.5, -11.5, -10.000587, 1.5, -17.322044, -18.623337, 0, -10.752545, 9.996082, 1.5, -17.322044, 18.618832, 0, -10.752545, 19.915623, -1.5, -11.504503, -23, -1.5, 0, -17.322044, 1.5, -10.000587, -20.001175, 1.5, 0, 17.31754, 1.5, -10.000587, 19.99667, 1.5, 0, 23, -1.5, 0, -19.920126, -1.5, 11.495495, -18.623337, 0, 10.748043, -17.322044, 1.5, 9.996082, 17.31754, 1.5, 9.996082, 18.618832, 0, 10.748043, 19.915623, -1.5, 11.5, -11.5, -1.5, 19.915623, -10.752545, 0, 18.618832, -10.000587, 1.5, 17.31754, 9.996082, 1.5, 17.31754, 10.748043, 0, 18.618832, 11.5, -1.5, 19.915623, 0, -1.5, 23, 0, 1.5, 19.99667)
-
-[sub_resource type="CylinderMesh" id="CylinderMesh_gj5sk"]
-top_radius = 5.0
-bottom_radius = 14.0
-height = 8.0
-radial_segments = 8
-rings = 1
-
-[sub_resource type="ConvexPolygonShape3D" id="ConvexPolygonShape3D_pusdg"]
-points = PackedVector3Array(0, -4, -14, -9.899765, -4, -9.899765, 0, 0, -9.50235, 9.897024, -4, -9.899765, -14, -4, 0, -9.50235, 0, 0, -5.001958, 4, 0, -3.5356302, 4, -3.5356302, 0, 4, -5.001958, 3.5328903, 4, -3.5356302, 4.999216, 4, 0, 14, -4, 0, -9.899765, -4, 9.897024, -3.5356302, 4, 3.5328903, 9.897024, -4, 9.897024, 3.5328903, 4, 3.5328903, 0, 4, 4.999216, 0, -4, 14)
-
-[sub_resource type="BoxMesh" id="BoxMesh_4e7xa"]
-size = Vector3(8, 0.3, 4)
-
-[sub_resource type="BoxShape3D" id="BoxShape3D_ir474"]
-size = Vector3(8, 0.3, 4)
-
-[sub_resource type="CylinderMesh" id="CylinderMesh_6q0t0"]
-top_radius = 0.15
-bottom_radius = 0.15
-height = 3.0
-radial_segments = 6
-rings = 1
-
-[sub_resource type="CylinderMesh" id="CylinderMesh_w0ntv"]
-top_radius = 0.15
-bottom_radius = 0.15
-height = 3.0
-radial_segments = 6
-rings = 1
-
-[sub_resource type="CylinderMesh" id="CylinderMesh_jtgdx"]
-top_radius = 0.15
-bottom_radius = 0.15
-height = 3.0
-radial_segments = 6
-rings = 1
-
-[sub_resource type="CylinderMesh" id="CylinderMesh_apsxi"]
-top_radius = 0.15
-bottom_radius = 0.15
-height = 3.0
-radial_segments = 6
-rings = 1
-
 [sub_resource type="Curve3D" id="Curve3D_ycoyo"]
 _data = {
 "points": PackedVector3Array(0, 0, 82.84, 0, 0, -82.84, -25, 0, 40, 82.84, 0, 0, -82.84, 0, 0, -175, 0, -110, 0, 0, -82.84, 0, 0, 82.84, -325, 0, 40, -82.84, 0, 0, 82.84, 0, 0, -175, 0, 190, 0, 0, 82.84, 0, 0, -82.84, -25, 0, 40),
@@ -195,62 +129,6 @@ light_color = Color(0.55, 0.65, 0.85, 1)
 light_energy = 0.6
 shadow_enabled = true
 directional_shadow_max_distance = 60.0
-
-[node name="Island" type="Node3D" parent="." unique_id=2006085588]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 30, 0, -40)
-
-[node name="Beach" type="StaticBody3D" parent="Island" unique_id=995245174]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.3, 0)
-
-[node name="Mesh" type="MeshInstance3D" parent="Island/Beach" unique_id=169728136]
-material_override = ExtResource("2_dlk4p")
-mesh = SubResource("CylinderMesh_oromj")
-
-[node name="Shape" type="CollisionShape3D" parent="Island/Beach" unique_id=1840809958]
-shape = SubResource("ConvexPolygonShape3D_bu1sd")
-
-[node name="Mound" type="StaticBody3D" parent="Island" unique_id=1181221478]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5, 5.2, -2)
-
-[node name="Mesh" type="MeshInstance3D" parent="Island/Mound" unique_id=2140367505]
-material_override = ExtResource("3_nk5mb")
-mesh = SubResource("CylinderMesh_gj5sk")
-
-[node name="Shape" type="CollisionShape3D" parent="Island/Mound" unique_id=39087648]
-shape = SubResource("ConvexPolygonShape3D_pusdg")
-
-[node name="Jetty" type="StaticBody3D" parent="Island" unique_id=178536866]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -21.75, 1.05, 0)
-
-[node name="Mesh" type="MeshInstance3D" parent="Island/Jetty" unique_id=1410648533]
-material_override = ExtResource("4_8v0wy")
-mesh = SubResource("BoxMesh_4e7xa")
-
-[node name="Shape" type="CollisionShape3D" parent="Island/Jetty" unique_id=2065856966]
-shape = SubResource("BoxShape3D_ir474")
-
-[node name="JettyPost1" type="MeshInstance3D" parent="Island" unique_id=1489364037]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -25.5, -0.3, -1.8)
-material_override = ExtResource("4_8v0wy")
-mesh = SubResource("CylinderMesh_6q0t0")
-
-[node name="JettyPost2" type="MeshInstance3D" parent="Island" unique_id=710643655]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -25.5, -0.3, 1.8)
-material_override = ExtResource("4_8v0wy")
-mesh = SubResource("CylinderMesh_w0ntv")
-
-[node name="JettyPost3" type="MeshInstance3D" parent="Island" unique_id=1333749263]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -18.5, -0.3, -1.8)
-material_override = ExtResource("4_8v0wy")
-mesh = SubResource("CylinderMesh_jtgdx")
-
-[node name="JettyPost4" type="MeshInstance3D" parent="Island" unique_id=1906831281]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -18.5, -0.3, 1.8)
-material_override = ExtResource("4_8v0wy")
-mesh = SubResource("CylinderMesh_apsxi")
-
-[node name="MooringPoint" type="Marker3D" parent="." unique_id=174792813]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -40)
 
 [node name="Route" type="Path3D" parent="." unique_id=931347176]
 curve = SubResource("Curve3D_ycoyo")
@@ -276,14 +154,6 @@ ship = NodePath("../Ship")
 sea = NodePath("../SeaSurface")
 camera = NodePath("../Player/CameraRig/Camera3D")
 ship = NodePath("../Ship")
-
-[node name="LighthouseIsland" parent="." unique_id=1418227361 instance=ExtResource("14_island")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -175, -3, 40)
-
-[node name="FarLight" type="MeshInstance3D" parent="." unique_id=1516944392]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -147, 22.7, 58)
-cast_shadow = 0
-mesh = SubResource("Mesh_FarLight")
 
 [node name="TimeOfDay" type="Node" parent="." unique_id=1418227360 node_paths=PackedStringArray("world", "moon", "weather")]
 script = ExtResource("13_time")

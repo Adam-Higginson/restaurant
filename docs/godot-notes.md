@@ -48,7 +48,7 @@ A growing glossary of the Godot concepts this project uses: what each one is, in
 
 **Path3D and Curve3D.** A `Path3D` node holds a `Curve3D`: a line through points, with handles that bend it into smooth curves. `curve.sample_baked(distance)` gives the point that many metres along it. *Ours:* the ship's `Route` in `sea.tscn`. `Ship` samples it every tick.
 
-**Marker3D.** An empty point with a little gizmo in the editor, used to mark a spot. *Ours:* `MooringPoint`, where the route ends.
+**Marker3D.** An empty point with a little gizmo in the editor, used to mark a spot. *Ours:* the `Landing` in `islands/duel_arena.tscn`, where the lantern sets you down after a defeat.
 
 **WorldEnvironment.** Sets up the whole scene's look: the sky, the ambient light, tone mapping, and fog. One per scene. *Ours:* `sea.tscn`, with a procedural sky and exponential distance fog (`fog_density`).
 
@@ -174,7 +174,7 @@ A growing glossary of the Godot concepts this project uses: what each one is, in
 
 **AudioStreamPlayer3D.** Plays a sound from a place in the world: it gets quieter with distance and pans to where it is relative to the camera. *Ours:* `SoundSpot` (`scripts/weather/sound_spot.gd`), the creaks and groans placed round the deck (#90).
 
-**Billboards and render modes.** A shader's `render_mode` line switches whole features on or off: `unshaded` skips lighting, `blend_add` adds its colour to what's behind (good for glows), `fog_disabled` ignores fog. Setting `MODELVIEW_MATRIX` from the camera's rotation makes a quad always face the camera (a *billboard*). *Ours:* `shaders/far_light.gdshader`, the faint light out in the fog (#90).
+**Billboards and render modes.** A shader's `render_mode` line switches whole features on or off: `unshaded` skips lighting, `blend_add` adds its colour to what's behind (good for glows), `fog_disabled` ignores fog. Setting `MODELVIEW_MATRIX` from the camera's rotation makes a quad always face the camera (a *billboard*). *Ours:* `shaders/sparkle.gdshader`, the treasure chest's glowing motes (#152); `fog_disabled` in `shaders/far_hills.gdshader`.
 
 **Signed distance to a shape.** A function giving how far a point is from a shape's edge: positive outside, negative inside. It makes cut-outs and bands of effect easy (inside: hide; within 1.4 m: foam). *Ours:* `hull_distance()` in `shaders/water.gdshader`, the distance to the hull's pointed outline (a polygon), which cuts the sea out of the hull and wraps foam round the bow (#90).
 
