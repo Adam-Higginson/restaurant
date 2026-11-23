@@ -572,6 +572,24 @@ A growing glossary of the Godot concepts this project uses: what each one is, in
 
 **A fixed time step for pictures.** Saving a screenshot stalls the game, and the next frame's `delta` swallows the stall, so a moment you meant to photograph is skipped. Running Godot with `--fixed-fps 60` makes every frame advance exactly 1/60 s however long it took, so a capture shows what really happens at that frame. (The tests run this way too.)
 
+## The stylised look and the look-dev cabin (#168)
+
+**A shader's `light()` function.** A spatial shader's `fragment()` says what colour a surface is; Godot then works out how each light lights it. Writing your own `light()` replaces that: it runs once per pixel *per light*, is told the surface's direction (`NORMAL`), the light's (`LIGHT`), its colour and how much reaches it (`ATTENUATION`, which includes shadows), and adds to `DIFFUSE_LIGHT` and `SPECULAR_LIGHT`. Snapping "how much it faces the light" to a few steps gives cel shading. *Ours:* `shaders/stylised_character.gdshader`.
+
+**`next_pass`: drawing a mesh twice.** Every material can name a `next_pass` material, and the mesh is drawn again with it straight after. It's the same mesh, bent by the same skeleton, so whatever the second pass draws follows every animation. *Ours:* the outline, which `CharacterStyle` puts after every stylised surface.
+
+**The inverted hull (outlines).** To outline a model, draw it a second time pushed out a little along its normals and show only its *back* faces (`cull_front`), in one dark colour. The body hides the middle, so only a rim round the silhouette shows. *Ours:* `shaders/outline.gdshader`, kept the same width on screen up to a cap in metres.
+
+**`AO` scales only the ambient light.** In a spatial shader, writing `AO` (ambient occlusion) darkens only the light from the environment, not the lamps or the sun (`AO_LIGHT_AFFECT = 0`). It's an easy "how much ambient light" knob. *Ours:* the character style's `ambient_strength`.
+
+**Screen-space indirect light (SSIL).** An `Environment` setting that lets brightly lit surfaces on screen bounce a little of their colour onto what's near them, so a sunlit floor warms the ceiling and the shadows around it. It's cheap and approximate, and only knows what's on screen. *Ours:* `data/art/environments/golden_cabin.tres`.
+
+**An `Environment` saved as its own file.** A `WorldEnvironment`'s settings (sky, ambient light, tone mapping, glow, fog) are an `Environment` resource. Saved as a `.tres`, several scenes can share it and it can be swapped at runtime by setting `world.environment`. *Ours:* `golden_cabin.tres`, which `LookDevCabin.set_golden` swaps with plain studio light.
+
+**A shared resource that tells its users it changed.** A `Resource` can call `emit_changed()` in its property setters; anything connected to its `changed` signal then updates. With `@tool` it works in the editor too, so tuning the file in the Inspector updates the viewport straight away. *Ours:* `CharacterStyle`, which `ThirdPartyModel` listens to.
+
+**Editable children of an instanced scene.** A scene placed inside another (an instance) is sealed: you can move it, but not touch the nodes inside it. Right-click it → *Editable Children* opens it up, so one inner node's property can be changed for this placement only, without touching the original scene. *Ours:* the look-dev cabin's `Heron`, whose `Model/Meshy` gets the stylised `style` there and nowhere else.
+
 ## Testing
 
 **gdUnit4.** The test framework (`addons/gdUnit4`). Suites extend our `GameTestSuite` and have `test_...` functions. `scene_runner` loads a scene and lets a test press inputs and wait physics ticks. *Ours:* `tests/`.

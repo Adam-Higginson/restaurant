@@ -1,5 +1,6 @@
 [gd_scene format=3]
 
+[ext_resource type="Script" path="res://scripts/art/third_party_model.gd" id="900_meshy"]
 [ext_resource type="Script" path="res://scripts/props/counter_3d.gd" id="1_counter"]
 [ext_resource type="Material" path="res://assets/placeholder/materials/prop_wood.tres" id="2_wood"]
 [ext_resource type="Script" path="res://scripts/interaction/interactable_3d.gd" id="3_inter"]
@@ -68,3 +69,13 @@ chime_sound = ExtResource("8_chime")
 
 [node name="ChopStand" type="Marker3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0.6)
+
+[node name="Meshy" type="Node3D" parent="." node_paths=PackedStringArray("stand_ins")]
+script = ExtResource("900_meshy")
+path = "res://assets/third_party/meshy/counter/model/model.glb"
+fit_size = Vector3(1.16, 0.91, 0.7)
+stretch = true
+stand_ins = [NodePath("../Mesh"), NodePath("../Top"), NodePath("../Plinth")]
+grain = false
+detail = 1.0
+keep_as_made = true

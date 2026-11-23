@@ -107,9 +107,13 @@ func test_a_slept_in_bed_has_its_quilt_thrown_back() -> void:
 	# The heap is the same quilt, thrown back; the mattress and pillow stay.
 	for child: Node in heap.get_children():
 		assert_object((child as MeshInstance3D).material_override).is_same(quilt)
-	assert_bool((bay.get_node("UpperMattress") as Node3D).visible).is_true()
-	# The lower bed is left as it was.
-	assert_bool((bay.get_node("LowerQuilt") as Node3D).visible).is_true()
+	# With the berth's real model showing (the art is there), the greybox
+	# mattress and quilts are its stand-ins and hidden.
+	var model: ThirdPartyModel = bay.get_node("Meshy") as ThirdPartyModel
+	if model.model == null:
+		assert_bool((bay.get_node("UpperMattress") as Node3D).visible).is_true()
+		# The lower bed is left as it was.
+		assert_bool((bay.get_node("LowerQuilt") as Node3D).visible).is_true()
 
 
 func test_you_cannot_climb_into_a_bunk_by_walking() -> void:

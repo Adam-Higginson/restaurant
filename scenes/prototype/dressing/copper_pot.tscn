@@ -1,5 +1,6 @@
 [gd_scene format=3 uid="uid://bto0lfl452f6s"]
 
+[ext_resource type="Script" path="res://scripts/art/third_party_model.gd" id="900_meshy"]
 [ext_resource type="Material" path="res://assets/placeholder/materials/copper.tres" id="1_islb2"]
 [ext_resource type="Material" path="res://assets/placeholder/materials/iron.tres" id="2_ospcb"]
 
@@ -45,3 +46,13 @@ transform = Transform3D(0.8086076, -0.5883484, 1.4901161e-08, 0.5422427, 0.74524
 material_override = ExtResource("2_ospcb")
 cast_shadow = 0
 mesh = SubResource("BoxMesh_d0vyx")
+
+[node name="Model" type="Node3D" parent="." node_paths=PackedStringArray("stand_ins")]
+transform = Transform3D(1, 0, -0, 0, 1, 0, 0, 0, 1, 0, 0, 0)
+script = ExtResource("900_meshy")
+path = "res://assets/third_party/kaykit_restaurant/Assets/gltf/pot_A.gltf"
+fit_size = Vector3(0.34, 0.22, 0.34)
+stand_ins = [NodePath("../Pot"), NodePath("../Lid"), NodePath("../Handle"), NodePath("../Ladle")]
+grain = false
+detail = 1.0
+keep_as_made = true

@@ -1,5 +1,6 @@
 [gd_scene format=3 uid="uid://dh5hunomstb4"]
 
+[ext_resource type="Script" path="res://scripts/art/third_party_model.gd" id="900_meshy"]
 [ext_resource type="Material" path="res://assets/placeholder/materials/dark_prop_wood.tres" id="1_3a23l"]
 [ext_resource type="Material" path="res://assets/placeholder/materials/prop_wood.tres" id="2_4n5ig"]
 
@@ -63,3 +64,14 @@ mesh = SubResource("CylinderMesh_8kf5g")
 [node name="Shape" type="CollisionShape3D" parent="." unique_id=1742490728]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.29, 0)
 shape = SubResource("BoxShape3D_okdu3")
+
+[node name="Model" type="Node3D" parent="." node_paths=PackedStringArray("stand_ins")]
+transform = Transform3D(1, 0, -0, 0, 1, 0, 0, 0, 1, 0, 0, 0)
+script = ExtResource("900_meshy")
+path = "res://assets/third_party/kaykit_furniture/Assets/gltf/table_small.gltf"
+fit_size = Vector3(0.92, 0.575, 0.92)
+stretch = true
+stand_ins = [NodePath("../FootA"), NodePath("../FootB"), NodePath("../Column"), NodePath("../Top"), NodePath("../Rim")]
+grain = false
+detail = 1.0
+keep_as_made = true

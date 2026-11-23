@@ -1,5 +1,6 @@
 [gd_scene format=3 uid="uid://b0pgkucp4a8ad"]
 
+[ext_resource type="Script" path="res://scripts/art/third_party_model.gd" id="900_meshy"]
 [ext_resource type="Script" path="res://scripts/props/swinging.gd" id="1_aoi3f"]
 [ext_resource type="Material" path="res://assets/placeholder/materials/dark_prop_wood.tres" id="2_i7j0x"]
 [ext_resource type="Material" path="res://assets/placeholder/materials/rope.tres" id="3_uvsk8"]
@@ -429,3 +430,14 @@ mesh = SubResource("CylinderMesh_v8k72")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.02, 1.8)
 material_override = ExtResource("4_gei5c")
 mesh = SubResource("CylinderMesh_4wafl")
+
+[node name="Meshy" type="Node3D" parent="Sling" node_paths=PackedStringArray("stand_ins")]
+transform = Transform3D(6.12323e-17, 0, 1, 0, 1, 0, -1, 0, 6.12323e-17, 0, -0.62, 0)
+script = ExtResource("900_meshy")
+path = "res://assets/third_party/meshy/hammock/model/model.glb"
+fit_size = Vector3(3.6, 0.62, 0.9)
+stretch = true
+stand_ins = [NodePath("../../Sling/SpreaderFore"), NodePath("../../Sling/ClewFore1"), NodePath("../../Sling/ClewFore2"), NodePath("../../Sling/ClewFore3"), NodePath("../../Sling/ClewFore4"), NodePath("../../Sling/ClewFore5"), NodePath("../../Sling/RingFore"), NodePath("../../Sling/SpreaderAft"), NodePath("../../Sling/ClewAft1"), NodePath("../../Sling/ClewAft2"), NodePath("../../Sling/ClewAft3"), NodePath("../../Sling/ClewAft4"), NodePath("../../Sling/ClewAft5"), NodePath("../../Sling/RingAft"), NodePath("../../Sling/Canvas1/Middle"), NodePath("../../Sling/Canvas1/SideL"), NodePath("../../Sling/Canvas1/SideR"), NodePath("../../Sling/Canvas2/Middle"), NodePath("../../Sling/Canvas2/SideL"), NodePath("../../Sling/Canvas2/SideR"), NodePath("../../Sling/Canvas3/Middle"), NodePath("../../Sling/Canvas3/SideL"), NodePath("../../Sling/Canvas3/SideR"), NodePath("../../Sling/Canvas4/Middle"), NodePath("../../Sling/Canvas4/SideL"), NodePath("../../Sling/Canvas4/SideR"), NodePath("../../Sling/Canvas5/Middle"), NodePath("../../Sling/Canvas5/SideL"), NodePath("../../Sling/Canvas5/SideR"), NodePath("../../Sling/Canvas6/Middle"), NodePath("../../Sling/Canvas6/SideL"), NodePath("../../Sling/Canvas6/SideR"), NodePath("../../Sling/Canvas7/Middle"), NodePath("../../Sling/Canvas7/SideL"), NodePath("../../Sling/Canvas7/SideR"), NodePath("../../Sling/Canvas8/Middle"), NodePath("../../Sling/Canvas8/SideL"), NodePath("../../Sling/Canvas8/SideR"), NodePath("../../Sling/Pillow/Box"), NodePath("../../Sling/Blanket"), NodePath("../../Sling/BlanketRuck"), NodePath("../../Sling/BlanketFold/BlanketDrape")]
+grain = false
+detail = 1.0
+keep_as_made = true

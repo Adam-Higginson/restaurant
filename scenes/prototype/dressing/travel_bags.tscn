@@ -1,5 +1,6 @@
 [gd_scene format=3 uid="uid://cn1xadjmxs72b"]
 
+[ext_resource type="Script" path="res://scripts/art/third_party_model.gd" id="900_meshy"]
 [ext_resource type="Material" path="res://assets/placeholder/materials/sackcloth.tres" id="1_ofhbs"]
 [ext_resource type="Material" path="res://assets/placeholder/materials/leather.tres" id="2_aaop6"]
 [ext_resource type="Material" path="res://assets/placeholder/materials/dark_prop_wood.tres" id="3_p78ia"]
@@ -66,3 +67,13 @@ mesh = SubResource("CylinderMesh_qasem")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.12, 0)
 material_override = ExtResource("2_aaop6")
 mesh = SubResource("CylinderMesh_as87q")
+
+[node name="Meshy" type="Node3D" parent="." node_paths=PackedStringArray("stand_ins")]
+transform = Transform3D(0.866025, 0, 0.5, 0, 1, 0, -0.5, 0, 0.866025, 0, 0, 0)
+script = ExtResource("900_meshy")
+path = "res://assets/third_party/meshy/kit_bags/model/model.glb"
+fit_size = Vector3(0.42, 0.66, 0.56)
+stand_ins = [NodePath("../Duffel"), NodePath("../Duffel/Strap"), NodePath("../Satchel"), NodePath("../SatchelFlap"), NodePath("../Bedroll"), NodePath("../Bedroll/Tie")]
+grain = false
+detail = 1.0
+keep_as_made = true

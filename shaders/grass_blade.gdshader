@@ -19,10 +19,11 @@ void vertex() {
 	// Gusts cross the patch as waves, so the grass moves in sweeps.
 	// (The same slow waves that bow the palms, and quicker ones on top.)
 	vec2 blowing = normalize(wind);
-	float big = smoothstep(0.1, 1.0, sin(dot(VERTEX.xz, blowing) * 0.09 - TIME * 0.7));
-	float gust = sin(TIME * 1.3 + VERTEX.x * 0.35 + VERTEX.z * 0.27) + big * 1.8;
-	float shiver = sin(TIME * 5.1 + VERTEX.x * 3.3 + VERTEX.z * 2.9);
-	VERTEX.xz += normalize(wind) * (0.3 + gust * 0.7 + shiver * 0.15) * sway * up * up;
+	// A long, gentle swell of breeze crossing the island, and each tuft's
+	// own slow sway: no gusts and no shivering.
+	float big = sin(dot(VERTEX.xz, blowing) * 0.05 - TIME * 0.25) * 0.5 + 0.5;
+	float gust = sin(TIME * 0.6 + VERTEX.x * 0.35 + VERTEX.z * 0.27) * 0.6 + big * 0.5;
+	VERTEX.xz += normalize(wind) * (0.2 + gust * 0.45) * sway * up * up;
 	// Tufts differ a little in colour, by where they stand.
 	vec3 origin = MODEL_MATRIX[3].xyz;
 	v_shade = 0.85 + 0.3 * fract(sin(origin.x * 12.9898 + origin.z * 78.233) * 43758.5453);

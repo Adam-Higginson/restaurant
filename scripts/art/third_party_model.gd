@@ -22,6 +22,10 @@ extends Node3D
 ## texture, which is then drawn instead (see [KilnJob]). Until it's fired, or
 ## without a look, the pack's own model shows, its smooth flat colours given
 ## the chunky N64 grain (shaders/n64_prop.gdshader).
+##
+## With a [member style], the model is drawn stylised instead (#168): every
+## surface gets the soft cel-shaded character material, with its own texture,
+## and an outline. Clearing the style dresses it again exactly as it was made.
 
 ## Emitted each time [method dress] has run. [param shown] says whether the
 ## model is showing (true) or the greybox is (false), so a node that drives
@@ -69,6 +73,38 @@ const GRAIN: Texture2D = preload("res://assets/placeholder/materials/n64_grain.t
 ## lower-poly ones, for the chunky N64 look. 1 is Godot's usual choice.
 ## Fired models are always drawn in full: the Kiln made them simple already.
 @export var detail: float = 0.05
+## Draws the model stylised (cel shading, warm shadows, rim light, outline),
+## sharing this look's settings with every other model that uses it. Empty
+## draws it as it was made. Changing the look's settings shows at once.
+@export var style: CharacterStyle:
+	set(value):
+		if style != null and style.changed.is_connected(_restyle):
+			style.changed.disconnect(_restyle)
+		style = value
+		if style != null:
+			style.changed.connect(_restyle)
+		if is_inside_tree():
+			dress()
+## What this character wears: pieces put on its skeleton when the model
+## loads, each following its animations. Empty wears only the model's own paint.
+@export var outfit: CharacterOutfit:
+	set(value):
+		if outfit != null and outfit.changed.is_connected(_redress):
+			outfit.changed.disconnect(_redress)
+		outfit = value
+		if outfit != null:
+			outfit.changed.connect(_redress)
+		_redress()
+## Repaints this character's near-white cloth (only with a [member style]):
+## a stand-in for outfits. Empty leaves its paint as it is.
+@export var recolour: ClothRecolour:
+	set(value):
+		if recolour != null and recolour.changed.is_connected(_restyle):
+			recolour.changed.disconnect(_restyle)
+		recolour = value
+		if recolour != null:
+			recolour.changed.connect(_restyle)
+		_restyle()
 ## Whether the model casts shadows. Off for a backdrop that would otherwise
 ## put the whole scene in its shade (an island's cliffs, with a low sun
 ## behind them).
@@ -97,6 +133,8 @@ var fired: bool = false
 
 ## Whether Blender is firing the model now.
 var _firing: bool = false
+## The stylised materials on the model now, kept to follow [member style]'s changes.
+var _styled: Array[ShaderMaterial] = []
 
 
 func _ready() -> void:
@@ -126,6 +164,7 @@ func dress() -> bool:
 		model.queue_free()
 		model = null
 	fired = false
+	_styled.clear()
 	var scene: PackedScene = null
 	var job: KilnJob = kiln_job()
 	if job != null and job.is_fired():
@@ -144,12 +183,13 @@ func dress() -> bool:
 		dressed.emit(false)
 		return false
 	add_child(model)
+	_wear(model)
 	_fit(model)
 	if fired:
 		FiredModel.paint(model, job, tint)
 	else:
-		if grain:
-			_use_n64(model, {})
+		if style != null or grain:
+			_convert(model, {})
 		_set_detail(model)
 	if not casts_shadow:
 		_cast_no_shadows(model)
@@ -235,10 +275,10 @@ func _bounds(node: Node, transform_so_far: Transform3D) -> AABB:
 	return box
 
 
-# Gives every surface the N64 prop shader, keeping its own colour and
-# texture. [param made] remembers each converted material, so surfaces that
-# shared one still do.
-func _use_n64(node: Node, made: Dictionary) -> void:
+# Gives every surface the stylised material (with a [member style]) or else
+# the N64 prop shader, keeping its own colour and texture. [param made]
+# remembers each converted material, so surfaces that shared one still do.
+func _convert(node: Node, made: Dictionary) -> void:
 	var mesh_node: MeshInstance3D = node as MeshInstance3D
 	var override: BaseMaterial3D = null
 	if mesh_node != null:
@@ -247,7 +287,7 @@ func _use_n64(node: Node, made: Dictionary) -> void:
 		# One material over the whole mesh: convert that instead.
 		var whole: ShaderMaterial = made.get(override, null)
 		if whole == null:
-			whole = n64_material(override, grain_metres, tint)
+			whole = _material_for(override)
 			made[override] = whole
 		mesh_node.material_override = whole
 	elif mesh_node != null and mesh_node.mesh != null:
@@ -257,11 +297,91 @@ func _use_n64(node: Node, made: Dictionary) -> void:
 				continue
 			var converted: ShaderMaterial = made.get(source, null)
 			if converted == null:
-				converted = n64_material(source, grain_metres, tint)
+				converted = _material_for(source)
 				made[source] = converted
 			mesh_node.set_surface_override_material(surface, converted)
 	for child: Node in node.get_children():
-		_use_n64(child, made)
+		_convert(child, made)
+
+
+# The material a surface painted with [param source] is drawn with.
+func _material_for(source: BaseMaterial3D) -> ShaderMaterial:
+	if style == null:
+		return n64_material(source, grain_metres, tint)
+	var material: ShaderMaterial = style.make_material(source)
+	if recolour != null:
+		recolour.apply(material)
+	_styled.append(material)
+	return material
+
+
+# Puts each piece of the [member outfit] on the model's skeleton: the piece's
+# skinned meshes move onto it, so its bones (matched by name) move them.
+func _wear(node: Node3D) -> void:
+	if outfit == null:
+		return
+	var found: Array[Node] = node.find_children("*", "Skeleton3D", true, false)
+	if found.is_empty():
+		return
+	var skeleton: Skeleton3D = found[0] as Skeleton3D
+	var pieces: Dictionary[StringName, String] = outfit.pieces()
+	for slot: StringName in pieces:
+		var path: String = pieces[slot]
+		if not ResourceLoader.exists(path):
+			continue
+		var scene: PackedScene = load(path) as PackedScene
+		if scene == null:
+			continue
+		var piece: Node = scene.instantiate()
+		var part: int = 0
+		for mesh: Node in piece.find_children("*", "MeshInstance3D", true, false):
+			var skinned: MeshInstance3D = mesh as MeshInstance3D
+			if skinned.skin == null:
+				continue
+			skinned.get_parent().remove_child(skinned)
+			skinned.owner = null
+			skinned.name = "Outfit_%s_%d" % [slot, part]
+			part += 1
+			skeleton.add_child(skinned)
+			skinned.skeleton = NodePath("..")
+		piece.free()
+	_hide_under_outfit(skeleton)
+
+
+# Tells each of the body's own meshes (not the pieces) which of its skin's
+# bones are under clothing, as a bitmask the shaders read per mesh.
+func _hide_under_outfit(skeleton: Skeleton3D) -> void:
+	var hidden: PackedStringArray = outfit.hidden_bones()
+	for child: Node in skeleton.get_children():
+		var body: MeshInstance3D = child as MeshInstance3D
+		if body == null or body.skin == null or String(body.name).begins_with("Outfit_"):
+			continue
+		var mask: int = 0
+		for bind: int in mini(body.skin.get_bind_count(), 32):
+			var bone: String = String(body.skin.get_bind_name(bind))
+			if bone.is_empty():
+				bone = skeleton.get_bone_name(body.skin.get_bind_bone(bind))
+			if hidden.has(bone):
+				mask |= 1 << bind
+		body.set_instance_shader_parameter(&"hidden_bones", mask)
+
+
+# The outfit changed: dress the model again in it.
+func _redress() -> void:
+	if is_inside_tree():
+		dress()
+
+
+# The style's settings changed: show them on the model straight away.
+func _restyle() -> void:
+	if style == null:
+		return
+	for material: ShaderMaterial in _styled:
+		style.apply(material)
+		if recolour != null:
+			recolour.apply(material)
+		else:
+			ClothRecolour.clear(material)
 
 
 ## The N64 prop material for a model surface painted with [param source]:

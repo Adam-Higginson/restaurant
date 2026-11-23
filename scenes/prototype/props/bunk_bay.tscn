@@ -1,5 +1,7 @@
 [gd_scene format=3 uid="uid://bk7tee6qhtm6n"]
 
+[ext_resource type="Script" path="res://scripts/art/third_party_model.gd" id="900_meshy"]
+[ext_resource type="Script" path="res://scripts/props/curtain_cloth.gd" id="910_cloth"]
 [ext_resource type="Script" path="res://scripts/props/bunk_bay.gd" id="1_frgts"]
 [ext_resource type="Material" path="res://assets/placeholder/materials/dark_prop_wood.tres" id="2_5qt6d"]
 [ext_resource type="Material" path="res://assets/placeholder/materials/prop_wood.tres" id="3_lcd5q"]
@@ -356,6 +358,8 @@ swing_degrees = 1.0
 period = 5.5
 
 [node name="Cloth" type="MeshInstance3D" parent="LowerCurtainLeft" unique_id=938941009]
+script = ExtResource("910_cloth")
+phase = 0
 transform = Transform3D(0.25, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.49, 0)
 material_override = ExtResource("10_xj6x8")
 mesh = SubResource("BoxMesh_e0bok")
@@ -368,6 +372,8 @@ period = 5.5
 phase = 0.1
 
 [node name="Cloth" type="MeshInstance3D" parent="LowerCurtainRight" unique_id=292118958]
+script = ExtResource("910_cloth")
+phase = 0.08
 transform = Transform3D(0.25, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.49, 0)
 material_override = ExtResource("10_xj6x8")
 mesh = SubResource("BoxMesh_qb1rb")
@@ -482,6 +488,8 @@ period = 6.2
 phase = 0.2
 
 [node name="Cloth" type="MeshInstance3D" parent="UpperCurtainLeft" unique_id=555524289]
+script = ExtResource("910_cloth")
+phase = 0.16
 transform = Transform3D(0.25, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.46, 0)
 material_override = ExtResource("10_xj6x8")
 mesh = SubResource("BoxMesh_ujl27")
@@ -494,6 +502,8 @@ period = 6.2
 phase = 0.30000000000000004
 
 [node name="Cloth" type="MeshInstance3D" parent="UpperCurtainRight" unique_id=2039007201]
+script = ExtResource("910_cloth")
+phase = 0.24
 transform = Transform3D(0.25, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.46, 0)
 material_override = ExtResource("10_xj6x8")
 mesh = SubResource("BoxMesh_q75kd")
@@ -566,3 +576,14 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.58, 2.315, 0.075)
 [node name="Shape" type="CollisionShape3D" parent="." unique_id=1245072727]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.475, 0.5)
 shape = SubResource("BoxShape3D_yqhgj")
+
+[node name="Meshy" type="Node3D" parent="." node_paths=PackedStringArray("stand_ins")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, -0, 0, 1, 0, 0, 0.55)
+script = ExtResource("900_meshy")
+path = "res://assets/third_party/meshy/berth/model/model.glb"
+fit_size = Vector3(2.12, 2.95, 1.12)
+stretch = true
+stand_ins = [NodePath("../EndLeft"), NodePath("../PostLeft"), NodePath("../EndRight"), NodePath("../PostRight"), NodePath("../Canopy"), NodePath("../DrawerFront"), NodePath("../DrawerLeft"), NodePath("../DrawerLeft/Handle"), NodePath("../DrawerRight"), NodePath("../DrawerRight/Handle"), NodePath("../LowerPlatform"), NodePath("../LowerMattress"), NodePath("../LowerSheet"), NodePath("../LowerPillow/Box"), NodePath("../LowerQuilt"), NodePath("../LowerQuiltFold"), NodePath("../LowerQuiltDrape"), NodePath("../LowerPillowSmall/Box"), NodePath("../LowerFootBlanket"), NodePath("../LowerQuiltHeap/Bulk"), NodePath("../LowerQuiltHeap/Ruck"), NodePath("../LowerQuiltHeap/Twist"), NodePath("../LowerQuiltHeap/Corner"), NodePath("../LowerLeeBoard"), NodePath("../LowerRail"), NodePath("../UpperPlatform"), NodePath("../UpperMattress"), NodePath("../UpperSheet"), NodePath("../UpperPillow/Box"), NodePath("../UpperQuilt"), NodePath("../UpperQuiltFold"), NodePath("../UpperQuiltDrape"), NodePath("../UpperPillowSmall/Box"), NodePath("../UpperFootBlanket"), NodePath("../UpperQuiltHeap/Bulk"), NodePath("../UpperQuiltHeap/Ruck"), NodePath("../UpperQuiltHeap/Twist"), NodePath("../UpperQuiltHeap/Corner"), NodePath("../UpperLeeBoard"), NodePath("../UpperRail"), NodePath("../LadderRail1"), NodePath("../LadderRail2"), NodePath("../Rung1"), NodePath("../Rung2"), NodePath("../Rung3"), NodePath("../Rung4"), NodePath("../Rung5"), NodePath("../Rung6")]
+grain = false
+detail = 1.0
+keep_as_made = true

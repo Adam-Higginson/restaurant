@@ -1,5 +1,6 @@
 [gd_scene format=3]
 
+[ext_resource type="Script" path="res://scripts/art/third_party_model.gd" id="900_meshy"]
 [ext_resource type="Material" path="res://assets/placeholder/materials/dark_prop_wood.tres" id="1_x"]
 [ext_resource type="Material" path="res://assets/placeholder/materials/iron.tres" id="2_x"]
 
@@ -84,3 +85,12 @@ mesh = SubResource("R6")
 [node name="Shape" type="CollisionShape3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.43, 0)
 shape = SubResource("R7")
+
+[node name="Meshy" type="Node3D" parent="." node_paths=PackedStringArray("stand_ins")]
+script = ExtResource("900_meshy")
+path = "res://assets/third_party/meshy/barrel/model/model.glb"
+fit_size = Vector3(0.64, 0.89, 0.64)
+stand_ins = [NodePath("../Staves"), NodePath("../Belly"), NodePath("../Band1"), NodePath("../Band2"), NodePath("../Band3"), NodePath("../Lid")]
+grain = false
+detail = 1.0
+keep_as_made = true

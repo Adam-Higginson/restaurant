@@ -1,5 +1,6 @@
 [gd_scene format=3 uid="uid://c4fu3w3gl7ld4"]
 
+[ext_resource type="Script" path="res://scripts/art/third_party_model.gd" id="900_meshy"]
 [ext_resource type="Material" path="res://assets/placeholder/materials/quilt_red.tres" id="1_xbqv2"]
 [ext_resource type="Material" path="res://assets/placeholder/materials/quilt_gold.tres" id="2_wblge"]
 
@@ -20,3 +21,23 @@ mesh = SubResource("BoxMesh_76yy7")
 transform = Transform3D(0.9848077, 0.05366024, -0.16514924, 0, 0.95105654, 0.309017, 0.17364818, -0.30432233, 0.93660784, 0.04, 0.2, -0.13)
 material_override = ExtResource("2_wblge")
 mesh = SubResource("BoxMesh_h75lw")
+
+[node name="Pillow1" type="Node3D" parent="." node_paths=PackedStringArray("stand_ins")]
+transform = Transform3D(1, 0, -0, 0, 1, 0, 0, 0, 1, 0, 0, 0)
+script = ExtResource("900_meshy")
+path = "res://assets/third_party/kaykit_furniture/Assets/gltf/pillow_A.gltf"
+fit_size = Vector3(0.42, 0.14, 0.42)
+stand_ins = [NodePath("../Flat")]
+grain = false
+detail = 1.0
+keep_as_made = true
+
+[node name="Pillow2" type="Node3D" parent="." node_paths=PackedStringArray("stand_ins")]
+transform = Transform3D(0.906308, 0, -0.422618, 0, 1, 0, 0.422618, 0, 0.906308, 0.03, 0.11, -0.02)
+script = ExtResource("900_meshy")
+path = "res://assets/third_party/kaykit_furniture/Assets/gltf/pillow_B.gltf"
+fit_size = Vector3(0.38, 0.14, 0.38)
+stand_ins = [NodePath("../Leaning")]
+grain = false
+detail = 1.0
+keep_as_made = true
