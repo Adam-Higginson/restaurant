@@ -1,0 +1,52 @@
+[gd_scene format=3]
+
+[ext_resource type="PackedScene" path="res://scenes/prototype/intro/castaway.tscn" id="1_ma0b6"]
+
+[sub_resource type="Animation" id="Animation_mq8rs"]
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Props/SleepingYou/Character:eyes_shut")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.5),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [true, false]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_e4ro8"]
+_data = {
+&"wakes": SubResource("Animation_mq8rs")
+}
+
+[node name="WakingSet" type="Node3D" unique_id=1352994850]
+
+[node name="Shots" type="Node3D" parent="." unique_id=489627623]
+
+[node name="InYourBunk" type="Marker3D" parent="Shots" unique_id=409966004 groups=["shots"]]
+transform = Transform3D(-0.27881008, 0.33463153, -0.90015924, 0, 0.93732774, 0.34844884, 0.9603462, 0.09715105, -0.26133645, 3.45, 2.4, 12.85)
+
+[node name="Marks" type="Node3D" parent="." unique_id=522339311]
+
+[node name="ByYourBunk" type="Marker3D" parent="Marks" unique_id=1770651431 groups=["marks"]]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4.4, 1.98, 13.62)
+
+[node name="RoomMiddle" type="Marker3D" parent="Marks" unique_id=1406862355 groups=["marks"]]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.6, 2.55, 11.8)
+
+[node name="Props" type="Node3D" parent="." unique_id=1506382072]
+
+[node name="SleepingYou" parent="Props" unique_id=1384354435 groups=["props"] instance=ExtResource("1_ma0b6")]
+transform = Transform3D(-1, 0, 2.5351817e-06, 3.5376715e-07, 0.990216, 0.13954312, -2.5103775e-06, 0.13954312, -0.990216, 5.225, 1.6819999, 13.65)
+visible = false
+
+[node name="Character" parent="Props/SleepingYou" index="5"]
+held_animation = &"LayToIdle"
+eyes_shut = true
+
+[node name="Clips" type="AnimationPlayer" parent="." unique_id=1204081331 groups=["clips"]]
+libraries/ = SubResource("AnimationLibrary_e4ro8")
+
+[editable path="Props/SleepingYou"]

@@ -96,6 +96,11 @@ static var _heads: Dictionary[String, ArrayMesh] = {}
 @export var body_scale: float = 0.85
 ## Seconds to blend from one animation into the next.
 @export var blend_seconds: float = 0.12
+## An animation to be held still on instead of idling, [member held_at]
+## seconds in: someone asleep ([code]LayToIdle[/code] at 0 is lying flat).
+## Empty to idle as usual.
+@export var held_animation: StringName = &""
+@export var held_at: float = 0.0
 ## Draw parts the Kiln hasn't fired the N64 way: softly filtered texture
 ## pixels, as the N64 drew them, and no shine. Their own materials are kept:
 ## the props' N64 shader turns these textures the wrong colours. (Fired parts
@@ -553,6 +558,8 @@ func _build(parts: CharacterParts) -> void:
 	skeleton.add_child(_legs)
 	pose = Pose.IDLE
 	play(Pose.IDLE)
+	if not held_animation.is_empty():
+		hold(held_animation, held_at)
 
 
 # The head and neck of [param path]'s body, and its eyes.

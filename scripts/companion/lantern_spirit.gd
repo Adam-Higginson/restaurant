@@ -95,6 +95,14 @@ var mood: Mood:
 ## and you go to him. Found by [constant HOME_GROUP] when the scene starts.
 var home: Node3D = null
 
+## Where a cutscene has put him, if anywhere: he stays there over anything
+## else until let go (see [method hold_at]).
+var held: Node3D:
+	get:
+		return _held if is_instance_valid(_held) else null
+
+var _held: Node3D = null
+
 var _attention: Node3D = null
 ## What he's been sent to hover over in a fight (the lock-on target), or null.
 var _watched: Node3D = null
@@ -156,11 +164,12 @@ func _physics_process(delta: float) -> void:
 	_notice(delta)
 	_cool(delta)
 	_visit_left = maxf(_visit_left - delta, 0.0)
-	# Ride along with whatever carries him (his home, or what the player
-	# stands on), then drift towards where he wants to be.
-	if is_instance_valid(home):
-		_spot += home.global_position - _home_was
-		_home_was = home.global_position
+	# Ride along with whatever carries him (where he's held, his home, or
+	# what the player stands on), then drift towards where he wants to be.
+	var carrier: Node3D = _carrier()
+	if carrier != null:
+		_spot += carrier.global_position - _home_was
+		_home_was = carrier.global_position
 	else:
 		_spot += player.get_platform_velocity() * delta
 	var goal: Vector3 = goal_spot()
@@ -186,11 +195,31 @@ func snap_to_player() -> void:
 	if not is_instance_valid(player):
 		return
 	_velocity = Vector3.ZERO
-	if is_instance_valid(home):
-		_home_was = home.global_position
+	var carrier: Node3D = _carrier()
+	if carrier != null:
+		_home_was = carrier.global_position
 	_spot = goal_spot()
 	global_position = _spot
 	reset_physics_interpolation()
+
+
+## Keeps him at [param spot] (a mark), over anything else he'd do, until
+## [method let_go]: a cutscene placing him. With [param at_once] he's simply
+## there; otherwise he floats over.
+func hold_at(spot: Node3D, at_once: bool = false) -> void:
+	_held = spot
+	if at_once:
+		snap_to_player()
+	else:
+		_home_was = spot.global_position
+
+
+## Lets him go back to where he'd be (home, or your shoulder), floating there.
+func let_go() -> void:
+	_held = null
+	var carrier: Node3D = _carrier()
+	if carrier != null:
+		_home_was = carrier.global_position
 
 
 ## Warms him back up by [param amount] (0 to 1): a meal shared with him.
@@ -340,6 +369,8 @@ func flame_strength() -> float:
 ## Where he wants to be now: at home if he has one; otherwise hovering over
 ## what he's looking at, or by the player's shoulder.
 func goal_spot() -> Vector3:
+	if held != null:
+		return held.global_position
 	if _visit_left > 0.0 and is_instance_valid(_visit):
 		return _visit.global_position + Vector3.UP * 0.45
 	if is_instance_valid(home):
@@ -413,6 +444,14 @@ func _apply_warmth() -> void:
 	# A fight's signal matters more than an excited hop's extra glow.
 	if _excited <= 0.0 or _mood != Mood.CALM:
 		_light.base_energy = bright * lerpf(0.4, 1.0, warmth)
+
+
+# What he rides along with as it moves: where he's held, or his home, or
+# null (then he rides with what the player stands on).
+func _carrier() -> Node3D:
+	if held != null:
+		return held
+	return home if is_instance_valid(home) else null
 
 
 # Finds his home, if the scene has one, and goes to where he belongs.

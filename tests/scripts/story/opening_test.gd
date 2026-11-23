@@ -238,8 +238,9 @@ func test_the_rescue_waits_for_you_to_take_his_hand_then_goes_to_the_surface() -
 	assert_bool(heron.is_present()).is_true()
 	assert_vector(heron.global_position).is_equal_approx(rail.global_position, NEAR)
 
-	# To black and the chapter card, with the rescue's pieces put away.
-	assert_bool(await _reaches(runner, &"title")).is_true()
+	# A long fade to black, no chapter card, with the rescue's pieces put
+	# away.
+	assert_bool(await _reaches(runner, &"asleep")).is_true()
 	await physics_ticks(runner, 5)
 	assert_bool(castaway.visible).is_false()
 	assert_bool(heron.is_present()).is_false()
@@ -273,18 +274,39 @@ func test_he_comes_down_strong_and_reaches_you_nearly_out() -> void:
 
 
 func test_you_wake_and_the_captain_appears_and_then_the_ship_is_yours() -> void:
-	_build(&"title")
+	_build(&"asleep")
 	var runner: GdUnitSceneRunner = scene_runner(_sea)
 	var heron: Crewmate = _ship.get_node("Crew/Heron") as Crewmate
 	var rig: CameraRig = _player.camera_rig
+	var sleeping: Node3D = _ship.get_node("WakingSet/Props/SleepingYou") as Node3D
+	var you_asleep: CharacterModel = sleeping.get_node("Character") as CharacterModel
+	var spirit: LanternSpirit = _player.get_node("LanternSpirit") as LanternSpirit
+	var by_bunk: Node3D = _ship.get_node("WakingSet/Marks/ByYourBunk") as Node3D
+	var middle: Node3D = _ship.get_node("WakingSet/Marks/RoomMiddle") as Node3D
+	var your_body: Node3D = _player.get_node("Model") as Node3D
 
-	# The lantern's three lines.
+	# Out of the black: you, asleep in your bunk, and him right beside you.
+	# You're not up yet.
 	assert_bool(await _reaches(runner, &"waking")).is_true()
 	assert_bool(_fade().visible).is_false()
 	assert_bool(heron.is_present()).is_false()
+	assert_bool(sleeping.visible).is_true()
+	assert_bool(your_body.visible).is_false()
+	assert_object(spirit.held).is_same(by_bunk)
+	assert_float(spirit.global_position.distance_to(by_bunk.global_position)).is_less(0.3)
+	assert_bool(rig.is_fixed).is_true()
+
+	# Your eyes open as he speaks his three lines.
+	await physics_ticks(runner, 60)
+	assert_bool(you_asleep.eyes_shut).is_false()
 	for i: int in 3:
 		assert_str(String(_conversation.section())).is_equal("waking")
 		_press()
+
+	# Then he floats off to the middle of the room.
+	await physics_ticks(runner, 60)
+	assert_object(spirit.held).is_same(middle)
+	assert_float(spirit.global_position.distance_to(middle.global_position)).is_less(1.0)
 
 	# The captain in the doorway, on a fixed shot.
 	assert_bool(await _reaches(runner, &"doorway")).is_true()
@@ -293,6 +315,9 @@ func test_you_wake_and_the_captain_appears_and_then_the_ship_is_yours() -> void:
 	assert_bool(heron.is_present()).is_true()
 	assert_vector(heron.global_position).is_equal_approx(doorway.global_position, NEAR)
 	assert_bool(rig.is_fixed).is_true()
+	# By now you're up, standing by your bunk.
+	assert_bool(sleeping.visible).is_false()
+	assert_bool(your_body.visible).is_true()
 	_press()
 	_press()
 
@@ -307,6 +332,8 @@ func test_you_wake_and_the_captain_appears_and_then_the_ship_is_yours() -> void:
 	assert_bool(_player.controls_enabled).is_true()
 	assert_bool(rig.is_fixed).is_false()
 	assert_bool(heron.is_present()).is_true()
+	# And he's back to his usual place.
+	assert_object(spirit.held).is_null()
 
 
 func test_skipping_the_intro_ends_it_with_everything_put_away() -> void:
@@ -328,6 +355,10 @@ func test_skipping_the_intro_ends_it_with_everything_put_away() -> void:
 	assert_bool((_ship.get_node("SternWatch/WindowDimmer") as WindowDimmer).dimmed).is_false()
 	assert_bool(_ambience().submerged).is_false()
 	assert_bool((_ship.get_node("RescueSet/Props/Castaway") as Node3D).visible).is_false()
+	# Up and about: not asleep in the bunk, and him not kept anywhere.
+	assert_bool((_ship.get_node("WakingSet/Props/SleepingYou") as Node3D).visible).is_false()
+	assert_bool((_player.get_node("Model") as Node3D).visible).is_true()
+	assert_object((_player.get_node("LanternSpirit") as LanternSpirit).held).is_null()
 	var night: Node3D = _ship.get_node("Crew/HeronNight") as Node3D
 	assert_bool(heron.is_present()).is_true()
 	assert_vector(heron.global_position).is_equal_approx(night.global_position, NEAR)

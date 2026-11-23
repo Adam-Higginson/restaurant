@@ -1,7 +1,7 @@
 extends GameTestSuite
 ## Tests for the lantern spirit: he keeps by your shoulder as you walk and as
 ## the ship sails, goes to hover over what you've stopped at, comes back, and
-## blinks. The player walks at 5 m/s, so 12 physics ticks a metre.
+## blinks. Held on a spot by a cutscene, he stays there, sailing with it. The player walks at 5 m/s, so 12 physics ticks a metre.
 
 const DECK: Vector3 = Vector3(0, 5.35, 7.5)
 
@@ -37,6 +37,28 @@ func test_he_sails_with_the_ship() -> void:
 	await physics_ticks(runner, 120)
 
 	# Two seconds at 3 m/s and he hasn't been left behind.
+	assert_float(_from_shoulder(spirit, rig)).is_less(0.3)
+
+
+func test_held_on_a_spot_he_stays_there_and_sails_with_it() -> void:
+	var rig: Array[Node3D] = new_moored_ship_with_player(DECK)
+	var ship: Ship = rig[0] as Ship
+	var runner: GdUnitSceneRunner = scene_runner(ship.get_parent())
+	var spirit: LanternSpirit = _spirit(rig)
+	var spot: Marker3D = Marker3D.new()
+	ship.add_child(spot)
+	spot.global_position = DECK + Vector3(2.5, 1.5, 0)
+	await physics_ticks(runner, 5)
+
+	spirit.hold_at(spot, true)
+	assert_float(spirit.global_position.distance_to(spot.global_position)).is_less(0.15)
+	ship.set_sail()
+	await physics_ticks(runner, 120)
+	assert_float(spirit.global_position.distance_to(spot.global_position)).is_less(0.3)
+
+	spirit.let_go()
+	await physics_ticks(runner, 60)
+	assert_object(spirit.held).is_null()
 	assert_float(_from_shoulder(spirit, rig)).is_less(0.3)
 
 

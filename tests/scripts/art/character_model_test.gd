@@ -211,6 +211,27 @@ func test_it_stands_idle_then_walks_when_you_walk() -> void:
 	runner.simulate_action_release("move_up")
 
 
+func test_given_a_pose_to_hold_it_holds_it_still_whatever_you_do() -> void:
+	var player: Player3D = _new_dressed_player()
+	var model: CharacterModel = _model(player)
+	# Someone asleep: held at the start of an animation, not idling.
+	model.held_animation = &"Walk"
+	model.held_at = 0.0
+	var runner: GdUnitSceneRunner = scene_runner(player.get_parent())
+	await physics_ticks(runner, 2)
+	var animator: AnimationPlayer = model.character.find_children("*", "AnimationPlayer",
+			true, false)[0] as AnimationPlayer
+	assert_str(animator.assigned_animation).ends_with("Walk")
+	assert_bool(animator.is_playing()).is_false()
+
+	runner.simulate_action_press("move_up")
+	await physics_ticks(runner, 6)
+	runner.simulate_action_release("move_up")
+
+	assert_float(animator.current_animation_position).is_equal(0.0)
+	assert_bool(animator.is_playing()).is_false()
+
+
 func test_quick_walking_is_a_run_and_slow_walking_a_walk() -> void:
 	var player: Player3D = _new_dressed_player()
 	var model: CharacterModel = _model(player)

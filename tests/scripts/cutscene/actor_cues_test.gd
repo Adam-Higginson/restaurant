@@ -1,6 +1,7 @@
 extends GameTestSuite
 ## Tests for putting people where a cutscene needs them: onto a mark, facing
-## someone, out of the scene and back, and home to their usual spot.
+## someone, out of the scene and back, and home to their usual spot. And the
+## lantern: put on a mark, floated to another, and let go.
 ##
 ## The player stands at the origin with the heron at their usual spot, 3 m
 ## ahead (at -Z).
@@ -159,7 +160,8 @@ func test_it_finds_people_by_name_and_marks_in_snake_case() -> void:
 
 	assert_object(_actors.find_actor("heron")).is_same(_heron)
 	assert_object(_actors.find_actor("player")).is_same(_player)
-	assert_object(_actors.find_actor("lantern")).is_null()
+	assert_object(_actors.find_actor("lantern")).is_same(_player.get_node("LanternSpirit"))
+	assert_object(_actors.find_actor("albatross")).is_null()
 	assert_object(_actors.find_mark("doorway")).is_not_null()
 	assert_object(_actors.find_mark("galley")).is_null()
 
@@ -172,6 +174,94 @@ func _ray_ahead_hits_something() -> bool:
 			Vector3(0, 1, -0.6), Vector3(0, 1, -5))
 	query.exclude = [_player.get_rid()]
 	return not space.intersect_ray(query).is_empty()
+
+
+func test_the_lantern_can_be_put_beside_you_floated_off_and_let_go() -> void:
+	_build()
+	var runner: GdUnitSceneRunner = scene_runner(_player.get_parent())
+	var spirit: LanternSpirit = _player.get_node("LanternSpirit") as LanternSpirit
+	var middle: Marker3D = new_marker(_player.get_parent(), ActorCues.GROUP, "RoomMiddle",
+			Transform3D(Basis.IDENTITY, Vector3(1, 1.5, 2)))
+	await physics_ticks(runner, 3)
+
+	# Placed, he's simply there, and stays.
+	play_cutscene(_conversation, _player,
+			"@place lantern doorway
+heron: Hm.
+@go lantern room_middle
+heron: Go on.
+"
+			+ "@home lantern
+heron: Off you go.")
+	assert_object(spirit.held).is_not_null()
+	assert_float(spirit.global_position.distance_to(MARK.origin)).is_less(0.15)
+	await physics_ticks(runner, 30)
+	assert_float(spirit.global_position.distance_to(MARK.origin)).is_less(0.15)
+
+	# Sent on, he floats there: not at once, but soon.
+	_conversation.press()
+	await physics_ticks(runner, 1)
+	assert_object(spirit.held).is_same(middle)
+	assert_float(spirit.global_position.distance_to(middle.global_position)).is_greater(2.0)
+	await physics_ticks(runner, 90)
+	assert_float(spirit.global_position.distance_to(middle.global_position)).is_less(0.2)
+
+	# Let go, he's back to your shoulder.
+	_conversation.press()
+	await physics_ticks(runner, 90)
+	assert_object(spirit.held).is_null()
+	var shoulder: Vector3 = LanternSpirit.follow_spot(_player.global_position, _player.facing,
+			spirit.follow_offset)
+	assert_float(spirit.global_position.distance_to(shoulder)).is_less(0.3)
+
+
+func test_only_the_lantern_can_be_floated_somewhere() -> void:
+	_build()
+	var runner: GdUnitSceneRunner = scene_runner(_player.get_parent())
+	await physics_ticks(runner, 3)
+	var was: Vector3 = _heron.global_position
+
+	play_cutscene(_conversation, _player, "@go heron doorway
+heron: Hm.")
+
+	assert_vector(_heron.global_position).is_equal_approx(was, NEAR)
+
+
+func test_hiding_the_player_hides_their_body_but_not_the_lantern() -> void:
+	_build()
+	var runner: GdUnitSceneRunner = scene_runner(_player.get_parent())
+	var body: Node3D = _player.get_node("Model") as Node3D
+	var spirit: LanternSpirit = _player.get_node("LanternSpirit") as LanternSpirit
+	await physics_ticks(runner, 3)
+
+	play_cutscene(_conversation, _player, "@hide player
+heron: Asleep.
+@show player
+heron: Up.")
+	await physics_ticks(runner, 3)
+	assert_bool(body.visible).is_false()
+	assert_bool(spirit.is_visible_in_tree()).is_true()
+
+	_conversation.press()
+	await physics_ticks(runner, 3)
+	assert_bool(body.visible).is_true()
+
+
+func test_when_it_ends_your_body_shows_and_the_lantern_is_let_go() -> void:
+	_build()
+	var runner: GdUnitSceneRunner = scene_runner(_player.get_parent())
+	var spirit: LanternSpirit = _player.get_node("LanternSpirit") as LanternSpirit
+	await physics_ticks(runner, 3)
+
+	play_cutscene(_conversation, _player, "@hide player
+@place lantern doorway
+heron: Hm.")
+	_conversation.press()
+	await physics_ticks(runner, 3)
+
+	assert_bool(_conversation.is_active()).is_false()
+	assert_bool((_player.get_node("Model") as Node3D).visible).is_true()
+	assert_object(spirit.held).is_null()
 
 
 # The player, the heron ahead at their usual spot, a mark to the right, a conversation and the actor cues. Called at the start of each

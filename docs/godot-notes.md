@@ -404,6 +404,10 @@ A growing glossary of the Godot concepts this project uses: what each one is, in
 
 **Turning one direction into another (`Quaternion(from, to)`).** A quaternion is a way of storing a rotation. Built from two directions, it's the shortest turn that takes the first to the second, and `slerp` gives a share of that turn. *Ours:* how `ArmReach` works out how to swing a bone towards its target, and how the arm can be raised gradually.
 
+**Holding an animation still (`AnimationPlayer.pause`).** Play an animation, `seek()` to a moment in it with the second argument `true` (so the pose updates at once), then `pause()`: the character holds that pose. A paused player's `current_animation` is empty; `assigned_animation` still names it. *Ours:* `CharacterModel.held_animation` holds the sleeping you in your bunk on the first frame of `LayToIdle` (lying flat, before getting up).
+
+**`top_level` doesn't escape a hidden parent.** A `top_level` node ignores its parent's position, but not its visibility: hide the parent and it's hidden too. *Ours:* the lantern spirit is a child of the player (so `@hide player` hides only the player's `Model`, or he'd vanish with you).
+
 **Hiding part of a model.** A character built from several meshes can show or hide each with `visible`. *Ours:* `CharacterModel.eyes_shut` hides the eyeballs, which leaves the lids' own hollow: closed eyes, with no extra art. A head fired in the Kiln is one mesh with the eyes painted in, so there's nothing to hide; the Kiln fires the head a second time without the eyeballs (`CharacterParts.sleeping_head_job()`, its files named `.asleep`), and `eyes_shut` shows that head instead of the awake one.
 
 **Queueing an animation (`AnimationPlayer.queue`).** `play()` switches to a clip at once; `queue()` lines one up to start when the current one ends. *Ours:* the `@queue` cue: `pleads` plays once, then the `offered` loop takes over for as long as the player waits.

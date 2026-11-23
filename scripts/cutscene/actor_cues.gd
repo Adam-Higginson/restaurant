@@ -1,7 +1,8 @@
 class_name ActorCues
 extends CueHandler
 ## Puts people where a cutscene needs them. Nobody walks yet, so each of
-## these happens at once: do it while the camera is looking elsewhere.
+## these happens at once: do it while the camera is looking elsewhere. Only
+## the lantern can float somewhere while you watch ([code]@go[/code]).
 ##
 ## [codeblock]
 ## @place heron doorway     stand them on the mark called Doorway
@@ -9,10 +10,14 @@ extends CueHandler
 ## @hide heron              take them out of the scene
 ## @show heron              bring them back
 ## @home heron              send them back to their usual spot
+## @go lantern room_middle  the lantern floats over to a mark, and stays
 ## [/codeblock]
 ##
-## Someone is named by their [member Person.id] ([code]heron[/code]), or
-## [code]player[/code]. A thing can be moved, hidden and shown too: a prop
+## Someone is named by their [member Person.id] ([code]heron[/code]),
+## [code]player[/code], or [code]lantern[/code] (the lantern spirit: placed on
+## a mark he stays there, over following you, until [code]@home lantern[/code]).
+## Hiding the player hides only their body, not him. A thing can be moved,
+## hidden and shown too: a prop
 ## is any [Node3D] in the group [constant PROPS], named for the cue
 ## ([code]ReachingBoathook[/code] answers [code]reaching_boathook[/code]).
 ## A mark is a [Marker3D] in the group
@@ -26,13 +31,15 @@ const GROUP: StringName = &"marks"
 const PROPS: StringName = &"props"
 ## The name for the player in a script.
 const PLAYER: String = "player"
+## The name for the lantern spirit in a script.
+const LANTERN: String = "lantern"
 
 ## The player, for [code]@place player ...[/code] and [code]@face ... player[/code].
 @export var player: Player3D
 
 
 func cues() -> Array[StringName]:
-	return [&"place", &"face", &"hide", &"show", &"home"]
+	return [&"place", &"face", &"hide", &"show", &"home", &"go"]
 
 
 ## Whoever (or whatever) is called [param who] in a script, or null: the
@@ -40,6 +47,8 @@ func cues() -> Array[StringName]:
 func find_actor(who: String) -> Node3D:
 	if who == PLAYER:
 		return player if is_instance_valid(player) else null
+	if who == LANTERN:
+		return player.get_node_or_null("LanternSpirit") as LanternSpirit 				if is_instance_valid(player) else null
 	if not is_inside_tree():
 		return null
 	for node: Node in get_tree().get_nodes_in_group(Crewmate.GROUP):
@@ -74,6 +83,8 @@ func _perform(cue: StringName, args: PackedStringArray) -> void:
 			_set_present(actor, true)
 		&"home":
 			_send_home(actor)
+		&"go":
+			_go(actor, args[1])
 
 
 func _place(actor: Node3D, mark_name: String) -> void:
@@ -82,7 +93,9 @@ func _place(actor: Node3D, mark_name: String) -> void:
 		warn("no mark called '%s' (a Marker3D in group '%s')" % [mark_name, GROUP])
 		return
 	var ahead: Vector3 = mark.global_position - mark.global_basis.z
-	if actor is Player3D:
+	if actor is LanternSpirit:
+		(actor as LanternSpirit).hold_at(mark, true)
+	elif actor is Player3D:
 		var body: Player3D = actor as Player3D
 		body.global_position = mark.global_position
 		body.velocity = Vector3.ZERO
@@ -112,7 +125,38 @@ func _face(actor: Node3D, target: String) -> void:
 		(actor as Crewmate).face_towards(point)
 
 
+# Whatever a cutscene did to the player and the lantern doesn't outlast it:
+# your body shows, and he goes back to his usual place.
+func _on_ended(_tree_id: StringName) -> void:
+	if not is_instance_valid(player):
+		return
+	_set_present(player, true)
+	var spirit: LanternSpirit = find_actor(LANTERN) as LanternSpirit
+	if spirit != null and spirit.held != null:
+		spirit.let_go()
+
+
+# Floats the lantern over to the mark called [param mark_name], to stay.
+func _go(actor: Node3D, mark_name: String) -> void:
+	var spirit: LanternSpirit = actor as LanternSpirit
+	if spirit == null:
+		warn("only the lantern can float somewhere ('@go lantern <mark>'); "
+				+ "'@place' moves anyone else at once")
+		return
+	var mark: Marker3D = find_mark(mark_name)
+	if mark == null:
+		warn("no mark called '%s' (a Marker3D in group '%s')" % [mark_name, GROUP])
+		return
+	spirit.hold_at(mark)
+
+
 func _set_present(actor: Node3D, present: bool) -> void:
+	if actor is Player3D:
+		# Just their body: the lantern is the player's too, and stays.
+		var body: Node3D = actor.get_node_or_null("Model") as Node3D
+		if body != null:
+			body.visible = present
+		return
 	if actor is Crewmate:
 		(actor as Crewmate).set_present(present)
 	else:
@@ -120,6 +164,9 @@ func _set_present(actor: Node3D, present: bool) -> void:
 
 
 func _send_home(actor: Node3D) -> void:
+	if actor is LanternSpirit:
+		(actor as LanternSpirit).let_go()
+		return
 	_set_present(actor, true)
 	if actor is Crewmate:
 		(actor as Crewmate).rest()

@@ -224,8 +224,9 @@
 
 # The rail. Lightning shows a tall thin shape up there against the sky,
 # looking down at one point of warm light on a black sea: the answer to his
-# shout, a minute late. It doesn't move. Then black. How you got aboard
-# isn't shown: the boathook leaning by the galley door, afterwards, says it.
+# shout, a minute late. It doesn't move. Then a long fade to black. How you
+# got aboard isn't shown: the boathook leaning by the galley door,
+# afterwards, says it.
 ~ rail
 @show castaway
 @look rescued_lantern asleep
@@ -235,31 +236,42 @@
 @wait 0.9
 @lightning
 @wait 1.8
-@fade out 0.3
+@fade out 2.5
 @hide castaway
 @hide heron
-@shot free cut
 @play off_watch
--> title
+-> asleep
 
-# Black, and where we are. The captain isn't in the bunk room yet.
-~ title
+# Black, for a while. Then, slowly, the bunk room at night, the storm
+# outside: you asleep in your bunk, and him beside you, keeping watch. The
+# captain isn't in the bunk room yet.
+~ asleep
 @hide heron
-@title Somewhere at sea
-@wait 2.5
-@fade in 2.0
+@hide player
+@show sleeping_you
+@place lantern by_your_bunk
+@shot in_your_bunk cut
+@wait 1.5
+@fade in 3.0
+@wait 0.8
 -> waking
 
-# You wake by your bunk, the lantern across the room.
+# You wake, and he's right there. When he's said his piece he floats off to
+# the middle of the room, and leaves you be.
 ~ waking
+@start wakes
 lantern: There you are.
 lantern: You were in the water. I pulled. You held on. Good holding.
 lantern: I'll get you home. I know exactly where it is. Roughly.
-@wait 0.6
+@go lantern room_middle
+@wait 1.8
 -> doorway
 
-# A tall shadow in the doorway: the captain, come to look you over.
+# A tall shadow in the doorway: the captain, come to look you over. By the
+# time we look back you're up, by your bunk.
 ~ doorway
+@hide sleeping_you
+@show player
 @place heron doorway
 @show heron
 @face heron player
@@ -274,5 +286,6 @@ heron: You've managed the first.
 ~ stove
 @shot pot_on_stove
 @home heron
+@home lantern
 @wait 2.5
 @shot free cut
