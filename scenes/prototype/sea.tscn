@@ -33,9 +33,9 @@
 [ext_resource type="PackedScene" uid="uid://l1ghth0use1sl" path="res://scenes/prototype/islands/lighthouse_island.tscn" id="14_island"]
 [ext_resource type="Script" path="res://scripts/story/opening.gd" id="15_opening"]
 [ext_resource type="PackedScene" path="res://ui/screen_fade.tscn" id="16_fade"]
+[ext_resource type="Script" path="res://scripts/cutscene/voyage_cues.gd" id="93_voyage"]
 [ext_resource type="PackedScene" path="res://ui/look_choice.tscn" id="90_look"]
 [ext_resource type="Script" path="res://scripts/cutscene/choice_cues.gd" id="91_choice"]
-[ext_resource type="Script" path="res://scripts/cutscene/voyage_cues.gd" id="93_voyage"]
 
 [sub_resource type="FastNoiseLite" id="Noise_Cloud"]
 frequency = 0.008
