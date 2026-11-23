@@ -37,6 +37,7 @@ const USAGE: Dictionary[StringName, String] = {
 			+ "determined, worried, pleading, effort, tired, asleep, pleased; or for his "
 			+ "glass: fogged, clear, streaked, dry, cracked, mended)",
 	&"who_are_you": "@who_are_you (asks a boy or a girl, and waits for the answer)",
+	&"continue_voyage": "@continue_voyage (the title chose to carry on the saved voyage)",
 }
 
 
@@ -78,7 +79,7 @@ static func _fits(cue: StringName, args: PackedStringArray) -> bool:
 			return args.size() >= 4 and _is_seconds(args[0]) and _is_seconds(args[2])
 		&"muffle", &"hush":
 			return args.size() == 1 and ["on", "off"].has(args[0])
-		&"lightning", &"who_are_you":
+		&"lightning", &"who_are_you", &"continue_voyage":
 			return args.is_empty()
 		&"look":
 			return args.size() == 2 and LanternFace.knows(args[1])

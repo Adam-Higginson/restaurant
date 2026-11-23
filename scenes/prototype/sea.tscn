@@ -35,6 +35,7 @@
 [ext_resource type="PackedScene" path="res://ui/screen_fade.tscn" id="16_fade"]
 [ext_resource type="PackedScene" path="res://ui/look_choice.tscn" id="90_look"]
 [ext_resource type="Script" path="res://scripts/cutscene/choice_cues.gd" id="91_choice"]
+[ext_resource type="Script" path="res://scripts/cutscene/voyage_cues.gd" id="93_voyage"]
 
 [sub_resource type="FastNoiseLite" id="Noise_Cloud"]
 frequency = 0.008
@@ -290,6 +291,9 @@ ship = NodePath("../Ship")
 
 [node name="ScreenFade" parent="Opening" unique_id=1418227363 instance=ExtResource("16_fade")]
 layer = 20
+
+[node name="VoyageCues" type="Node" parent="Opening"]
+script = ExtResource("93_voyage")
 
 [node name="Conversation" type="Node" parent="."]
 script = ExtResource("300_talk")
