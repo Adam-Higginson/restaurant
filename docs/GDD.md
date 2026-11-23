@@ -305,7 +305,9 @@ Worked example: a tomato (★) sliced properly gives (1 + 3) / 2 = ★★ sliced
 | Pan-fried Herring | Catch a herring, fillet it on the board (3 cuts), fry the fillet in the pan on the hob (6s). | A whole herring straight into the pan (9s) |
 | Pan-seared Crab | Hunt a crab ashore and pick up its meat; sear it in the pan on the hob (5s). The meat's quality is the crab's level. | None |
 
-Garden Salad, Tomato Soup, Pan-fried Herring and Pan-seared Crab work today, and the galley's **recipe book** (open on the cook's stool at the head of the table) opens to show how to make each, a page a dish (`data/recipes/`; see Books). The hearth has two hobs (a saucepan where the stew pot was, and a frying pan); bowls are stacked on the crew table. Grilled Cheese still needs butter and the sandwich step.
+Garden Salad, Tomato Soup, Spicy Tomato Soup, Pan-fried Herring and Pan-seared Crab work today, and the galley's **recipe book** (open on the cook's stool at the head of the table) opens to show how to make each, a page a dish (`data/recipes/`; see Books). The hearth has two hobs (a saucepan where the stew pot was, and a frying pan); bowls are stacked on the crew table. Grilled Cheese still needs butter and the sandwich step.
+
+**Spicy Tomato Soup (#154), the first quest's remedy:** make a Tomato Soup and leave it on the hob, chop a **chilli** on the board (2 cuts) and stir it in, and boil it 4 seconds more (★★★). A whole chilli stirred in works too, slower and lumpier (6 s, the shortcut). It's two steps rather than one pot of four because a saucepan holds three things, and it means the soup you learn first is the one you build on. The pantry keeps chillies and onions alongside the lettuce, tomatoes and crab. The recipe book's Tomato Soup page says only "Fill the saucepan with water": where the water comes from is the first quest's quiet puzzle (see Quests).
 
 **Caught, not bought:** a **herring** (at night; at dawn, a **mackerel**, which fillets and fries the same way) from the rod at the starboard rail (fish only bite while the ship is hove to: ring the bell). Fillet it on the chopping board (3 cuts) for a **herring fillet**, fried in the pan on the galley **hob** (the hearth's hot iron top, which gives fire to whatever vessel sits on it; lift the pan off and cooking pauses). The fish keep in the fridge.
 
@@ -315,7 +317,7 @@ Garden Salad, Tomato Soup, Pan-fried Herring and Pan-seared Crab work today, and
 - The galley **pantry** (and later the hold) stores ingredients. Containers have a fixed number of slots, and each item uses one.
 - Interact on a container while holding food it accepts (and there's room) puts it away. Otherwise it opens a small panel showing its contents, and picking an item puts it on your toolbar if there's a free slot. While you hold food the container accepts, Interact puts it away instead, so select an empty slot or a tool to open it.
 - Browsing a container's panel pauses the game (the ship stops and cooking waits), like OoT's item screen. Esc or Close shuts it.
-- The galley pantry holds 12 pieces and starts stocked with 3 lettuce and 3 tomatoes for now.
+- The galley pantry holds 16 pieces and starts stocked with 3 lettuce, 3 tomatoes, a crab's meat, 2 onions and 2 chillies (#154) for now. Chillies and onions keep in the cupboard; chopped, in the fridge.
 - Containers hold any **solid** food, raw or prepared, so you can prep ahead. Liquids can't be stored yet.
 - Whether chilled and dry storage stay separate aboard a ship (an ice box?) is still open.
 
