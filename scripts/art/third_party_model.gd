@@ -23,6 +23,11 @@ extends Node3D
 ## without a look, the pack's own model shows, its smooth flat colours given
 ## the chunky N64 grain (shaders/n64_prop.gdshader).
 
+## Emitted each time [method dress] has run. [param shown] says whether the
+## model is showing (true) or the greybox is (false), so a node that drives
+## the model (its animations, say) can find it.
+signal dressed(shown: bool)
+
 const N64_SHADER: Shader = preload("res://shaders/n64_prop.gdshader")
 ## The chunky grain laid over models: a 32 x 32 noise texture of our own.
 const GRAIN: Texture2D = preload("res://assets/placeholder/materials/n64_grain.tres")
@@ -34,6 +39,10 @@ const GRAIN: Texture2D = preload("res://assets/placeholder/materials/n64_grain.t
 		if is_inside_tree():
 			dress()
 ## The box the model is fitted into, in metres. Zero keeps its own size.
+## A rigged model whose armature is scaled (Meshy's are, by 0.01, with their
+## animations in centimetres) can't be measured this way: its mesh reads 100
+## times too small, so fitting blows it up and its animations fly off. Leave
+## this zero for those and scale this node instead.
 @export var fit_size: Vector3 = Vector3.ZERO:
 	set(value):
 		fit_size = value
@@ -62,6 +71,10 @@ const GRAIN: Texture2D = preload("res://assets/placeholder/materials/n64_grain.t
 @export var detail: float = 0.05
 
 @export_group("Kiln")
+## Never fire this model: it's drawn exactly as it was made, at full quality.
+## For models made for the game (the Meshy crew) rather than taken from a
+## pack, which every pack model otherwise must be (see [member look]).
+@export var keep_as_made: bool = false
 ## How the Kiln fires this model (a preset from data/art/looks/). Without one
 ## it's never fired.
 @export var look: ArtLook:
@@ -118,11 +131,13 @@ func dress() -> bool:
 		scene = load(path) as PackedScene
 	if scene == null:
 		_show_stand_ins(true)
+		dressed.emit(false)
 		return false
 	model = scene.instantiate() as Node3D
 	if model == null:
 		fired = false
 		_show_stand_ins(true)
+		dressed.emit(false)
 		return false
 	add_child(model)
 	_fit(model)
@@ -133,12 +148,13 @@ func dress() -> bool:
 			_use_n64(model, {})
 		_set_detail(model)
 	_show_stand_ins(false)
+	dressed.emit(true)
 	return true
 
 
-## The Kiln job for this model, or null without a look.
+## The Kiln job for this model, or null without a look (or when it's kept as made).
 func kiln_job() -> KilnJob:
-	if look == null or path.is_empty():
+	if keep_as_made or look == null or path.is_empty():
 		return null
 	var job: KilnJob = KilnJob.new(path, look)
 	job.fit_size = fit_size

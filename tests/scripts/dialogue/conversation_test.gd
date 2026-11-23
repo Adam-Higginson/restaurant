@@ -213,6 +213,31 @@ func test_interact_does_nothing_to_the_world_while_controls_are_off() -> void:
 	assert_bool(_conversation.is_active()).is_false()
 
 
+func test_it_knows_who_its_with_until_it_ends() -> void:
+	_build()
+	var runner: GdUnitSceneRunner = scene_runner(_player.get_parent())
+	await physics_ticks(runner, 3)
+	assert_object(_conversation.partner).is_null()
+	_begin(TWO_LINES)
+	assert_object(_conversation.partner).is_same(_heron)
+	_conversation.stop()
+	assert_object(_conversation.partner).is_null()
+
+
+func test_it_says_when_replies_are_offered() -> void:
+	_build()
+	var runner: GdUnitSceneRunner = scene_runner(_player.get_parent())
+	await physics_ticks(runner, 3)
+	var offered: Array[int] = [0]
+	_conversation.choices_offered.connect(func() -> void: offered[0] += 1)
+	_box().letters_per_second = 10000.0
+	_begin(A_CHOICE)
+	await physics_ticks(runner, 3)
+	assert_int(offered[0]).is_equal(0)
+	await press(runner, "interact")
+	assert_int(offered[0]).is_equal(1)
+
+
 func _begin(script: String, id: StringName = &"test") -> void:
 	var tree: DialogueTree = DialogueScript.parse(script, id)
 	assert_array(tree.errors).is_empty()

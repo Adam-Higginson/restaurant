@@ -26,6 +26,8 @@ signal cue(name: StringName, args: PackedStringArray)
 signal line_said(speaker: Person)
 ## Emitted when a press moves on to the next line.
 signal advanced
+## Emitted when the replies are offered, before one is picked.
+signal choices_offered
 ## Emitted when the cursor moves between choices.
 signal choice_moved
 ## Emitted when a choice is picked.
@@ -54,6 +56,11 @@ var box: DialogueBox = null
 var talking: StringName:
 	get:
 		return _tree_id if _active else &""
+## Who the conversation under way is with: the crewmate it was begun with, or
+## null (a cutscene, or nothing under way).
+var partner: Crewmate:
+	get:
+		return _speaker if _active and is_instance_valid(_speaker) else null
 
 var _runner: DialogueRunner = DialogueRunner.new()
 var _active: bool = false
@@ -385,6 +392,7 @@ func _on_choices_shown(choices: Array[DialogueStep]) -> void:
 	if _skipping:
 		_skipping = false
 		skip_ended.emit()
+	choices_offered.emit()
 	if box == null:
 		return
 	var options: PackedStringArray = PackedStringArray()

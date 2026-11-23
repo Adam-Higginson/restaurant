@@ -36,10 +36,18 @@ func test_every_pack_model_in_the_game_has_a_look() -> void:
 		var root: Node = (load(file) as PackedScene).instantiate()
 		for found: Node in root.find_children("*", "", true, false):
 			var model: ThirdPartyModel = found as ThirdPartyModel
-			if model != null:
+			if model != null and not model.keep_as_made:
 				assert_object(model.look).override_failure_message(
 						"%s in %s has no look" % [model.name, file]).is_not_null()
 		root.free()
+
+
+func test_a_model_kept_as_made_is_never_fired() -> void:
+	var heron: Node = (load("res://scenes/prototype/people/heron.tscn") as PackedScene).instantiate()
+	var model: ThirdPartyModel = heron.get_node("Model/Meshy") as ThirdPartyModel
+	assert_bool(model.keep_as_made).is_true()
+	assert_object(model.kiln_job()).is_null()
+	heron.free()
 
 
 func test_characters_parts_each_fire() -> void:

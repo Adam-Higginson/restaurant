@@ -25,6 +25,13 @@ The full design lives in `docs/GDD.md`. Read it before starting a gameplay task,
 - Pack models are fired into our N64 look by the Kiln (`./kiln.sh`, Blender 4.4; see `docs/GDD.md`). Its output goes in `assets/third_party/_kiln/` and is never committed: it's made from the packs. Check fired models by eye with `tools/kiln/capture.sh <folder>`.
 - Two exceptions are committed because the game needs them to look and sound the same for everyone, each with its licence file beside it: fonts under the SIL Open Font Licence in `assets/fonts/`, and CC0 sounds in `assets/audio/`. Anything else third-party still needs asking first.
 
+## Meshy (3D models)
+- We have a paid Meshy subscription (about 1,100 credits a month, reset monthly) for generating crew and creature models. The Meshy CLI (`meshy`, npm `meshy-cli` 0.8) is installed and signed in, and the `meshy-3d-generation` skill drives it.
+- Credits are real money: before any paid step, say what it is and what it costs (a picture 9, an edit 12, a model 15, a rig 5, an animation 3), and wait for the user's go-ahead. Show the concept picture and get it approved before making the model.
+- Generated files go in `assets/third_party/meshy/<name>/`, gitignored: never commit them. The greybox stays as the fallback.
+- Meshy models are drawn as made, at full quality: `ThirdPartyModel` with `keep_as_made`, never fired in the Kiln.
+- The recipe, the prompts that worked and the gotchas (scale the node, never `fit_size`; turn it 180 degrees) are in `docs/meshy.md`.
+
 ## Task tracking
 - The backlog is GitHub Project #1 owned by `Adam-Higginson` (kanban columns: Todo, In Progress, In Review, Done). Each task is an issue in `Adam-Higginson/restaurant` added to the board.
 - The user chooses which task to work on. If none was given, list the Todo items and ask.
