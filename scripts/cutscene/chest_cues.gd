@@ -21,6 +21,11 @@ extends CueHandler
 
 ## The soft glow behind a treasure held up: a round spot facing the camera.
 const HALO_SHADER: Shader = preload("res://shaders/sparkle.gdshader")
+## How far a tool held up (the knife) is turned from standing on end, in
+## degrees: 90 lays it flat across the hands.
+const TOOL_TURN_DEGREES: float = 90.0
+## Marks a treasure laid flat, which faces the camera rather than spinning.
+const LAID_FLAT: StringName = &"laid_flat"
 
 ## The player who opens chests.
 @export var player: Player3D
@@ -34,6 +39,8 @@ const HALO_SHADER: Shader = preload("res://shaders/sparkle.gdshader")
 ## long the treasure takes to pop in, in your hands.
 @export var rise_seconds: float = 0.9
 @export var pop_seconds: float = 0.3
+## How far above where the hands meet the treasure is held, in metres.
+@export var above_hands: float = 0.18
 ## How fast the treasure turns while it's held up, in turns a second.
 @export var spin_turns: float = 0.35
 ## Where the camera stands for a gift held up without a chest: how far in
@@ -70,17 +77,27 @@ func _ready() -> void:
 func _process(delta: float) -> void:
 	if not is_instance_valid(_treasure):
 		return
-	_treasure.rotate_y(TAU * spin_turns * delta)
+	if _treasure.has_meta(LAID_FLAT):
+		# A flat thing (the knife) faces the camera, its whole length across
+		# the hands; spinning, it would sweep round end-on like a propeller.
+		var camera: Camera3D = get_viewport().get_camera_3d()
+		if camera != null:
+			var to_camera: Vector3 = camera.global_position - _treasure.global_position
+			to_camera.y = 0.0
+			if not to_camera.is_zero_approx():
+				_treasure.global_basis = Basis.looking_at(-to_camera, Vector3.UP)
+	else:
+		_treasure.rotate_y(TAU * spin_turns * delta)
 	# Always in your hands, from the moment it appears: it rises with them.
 	_treasure.global_position = hands_point()
 
 
-## Where the treasure is held: between your hands as they really are, or
-## over your head without a character.
+## Where the treasure is held: [member above_hands] over where your hands
+## meet as they really are, or over your head without a character.
 func hands_point() -> Vector3:
 	var model: CharacterModel = _character()
 	if model != null:
-		return model.held_point()
+		return model.held_point() + Vector3.UP * above_hands
 	return player.global_position + Vector3.UP * 2.0 if is_instance_valid(player) \
 			else Vector3.ZERO
 
@@ -224,12 +241,16 @@ func _begin_staging() -> void:
 	_shot_before = player.camera_rig.held_shot()
 
 
-## The model of [param tool] to hold up: its own model when it has one,
-## otherwise a greybox bar in its colour. Freed by whoever adds it.
+## The model of [param tool] to hold up, laid flat across the hands (a knife
+## lies blade sideways between them, not on end): its own model when it has
+## one, otherwise a greybox bar in its colour. Freed by whoever adds it.
 static func make_treasure(tool: HandTool) -> Node3D:
-	if tool == null:
-		return _treasure_of("", null, Vector3(0.15, 0.6, 0.06), Color.WHITE, false)
-	return _treasure_of(tool.model_path, tool.model_look, tool.model_size, tool.color, false)
+	var treasure: Node3D = _treasure_of("", null, Vector3(0.15, 0.6, 0.06), Color.WHITE, false) \
+			if tool == null \
+			else _treasure_of(tool.model_path, tool.model_look, tool.model_size, tool.color, false)
+	(treasure.get_node("Turn") as Node3D).rotation_degrees.z = TOOL_TURN_DEGREES
+	treasure.set_meta(LAID_FLAT, true)
+	return treasure
 
 
 ## The model of [param item] to hold up (the heron's pan): its own model
