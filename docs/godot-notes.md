@@ -382,6 +382,30 @@ A growing glossary of the Godot concepts this project uses: what each one is, in
 
 **A node told it's been switched off.** When a node can no longer run (its `process_mode` or a parent's became Disabled) it gets `NOTIFICATION_DISABLED`, and `NOTIFICATION_ENABLED` when it can again. Catch them in `_notification(what)`. *Ours:* `OptionalSound` pauses a looping sound while its stage is put away.
 
+## The Kiln (#126)
+
+**Texel density.** How many texture pixels cover a metre of surface. The N64 look is a low, even density (about 64 per metre) so every surface's pixels are the same chunky size. *Ours:* each `ArtLook`'s `pixels_per_metre`; the Kiln sizes each texture to hit it at the size the model is drawn.
+
+**Decimating and baking (Blender).** *Decimating* removes triangles while keeping the shape (Blender's "collapse" merges the edges that change it least). *Baking* paints how one model looks onto another's texture: rays from the simple model find the detailed one, and copy its colour, or how shaded its creases are (ambient occlusion). *Ours:* `tools/kiln/fire.py`.
+
+**`@export_tool_button`.** Puts a button in the Inspector that runs a function in the editor, without a plugin; the script must be `@tool`. *Ours:* Fire in Kiln on `ThirdPartyModel` and `CharacterParts`.
+
+**Starting other programs (`OS.create_process`, `OS.execute`).** `create_process` starts a program and carries on (it gives back a process id to check with `OS.is_process_running`); `execute` waits for it to finish and can collect what it printed. *Ours:* `Kiln.start` (the editor buttons, so the editor doesn't freeze) and `Kiln.run` (`kiln.sh`).
+
+**Awaiting a timer (coroutines).** A function that uses `await` pauses there and carries on later, while the game (or editor) keeps running; whoever calls it can `await` it too. `get_tree().create_timer(s).timeout` is something to await for a while. *Ours:* `Kiln.fire_in_background` checks four times a second until Blender is done.
+
+**Import settings (`.import` files).** When Godot first sees a file it imports it with the settings in the `.import` file beside it, making one with defaults if there isn't one. Textures are normally compressed for the graphics card, which smudges tiny pixel textures. *Ours:* the Kiln writes `.import` files before Godot sees its output, so textures stay exact (lossless, no mipmaps) and models get no extra levels of detail.
+
+**Reaching the editor from game code.** The editor's classes (`EditorInterface`) aren't in a built game, so a script that names them fails there; `Engine.get_singleton(&"EditorInterface")` finds it by name only when it's there. `get_resource_filesystem().reimport_files()` imports new files straight away. *Ours:* `Kiln.import_in_editor`.
+
+**Inspector lines that aren't saved (`_get_property_list`).** A script can add properties to the Inspector in code, with usage flags: `PROPERTY_USAGE_EDITOR | PROPERTY_USAGE_READ_ONLY` shows a value without saving it or letting it be changed. `_get` supplies its value. *Ours:* `ThirdPartyModel`'s `kiln_status`.
+
+**Reading a scene without running it (`SceneState`).** `PackedScene.get_state()` lists a saved scene's nodes and their property values without building it. *Ours:* the Lookbook borrows the player's animation files from `player.tscn`.
+
+**Skinned meshes' boxes.** A mesh bent by a skeleton keeps the box (AABB) of its resting shape, wherever its bones move it, so don't frame a camera or measure by it while it's animated. *Ours:* the Lookbook frames exhibits by their size and position instead.
+
+**Photographing the screen.** After `await RenderingServer.frame_post_draw`, `get_viewport().get_texture().get_image()` is what was just drawn; `save_png` writes it. It needs a real window (not `--headless`). *Ours:* `tools/kiln/capture.sh`.
+
 ## Testing
 
 **gdUnit4.** The test framework (`addons/gdUnit4`). Suites extend our `GameTestSuite` and have `test_...` functions. `scene_runner` loads a scene and lets a test press inputs and wait physics ticks. *Ours:* `tests/`.
