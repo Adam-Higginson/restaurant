@@ -418,6 +418,10 @@ A growing glossary of the Godot concepts this project uses: what each one is, in
 
 **Stepped animation.** With the animation player moved on by hand (`ANIMATION_CALLBACK_MODE_PROCESS_MANUAL` and `advance()`), holding the time back and releasing it in whole steps makes a model move a few poses a second, like hand-keyed animation. *Ours:* `AnimationStepper`, used by `Crab` and `CharacterModel` when a look's `animation_steps` is set (#129).
 
+**Anti-aliasing by supersampling.** Drawing a shape at several samples per pixel and averaging them gives edge pixels in-between colours, so edges look smooth, not stepped. *Ours:* `tools/textures/paint_placeholders.py` paints our placeholder textures at 4 x 4 samples per pixel (#135). (Smoothing model edges on screen is a different thing: #134.)
+
+**`.gdignore`.** An empty file named `.gdignore` in a folder makes Godot skip that folder: nothing in it is imported or shown in the FileSystem dock. *Ours:* `tools/textures/originals/`, the pixel-art originals kept only for the painting script (#135).
+
 ## Testing
 
 **gdUnit4.** The test framework (`addons/gdUnit4`). Suites extend our `GameTestSuite` and have `test_...` functions. `scene_runner` loads a scene and lets a test press inputs and wait physics ticks. *Ours:* `tests/`.

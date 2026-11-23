@@ -21,7 +21,7 @@ The full design lives in `docs/GDD.md`. Read it before starting a gameplay task,
 
 ## Public repo
 - This repo is public. Third-party art and audio go in `assets/third_party/`, which is gitignored: never commit anything from it, and never commit keys or tokens.
-- Our own placeholder art (generated, not third-party) lives in `assets/placeholder/` and is committed.
+- Our own placeholder art (generated, not third-party) lives in `assets/placeholder/` and is committed. Its cloth, paper and painted textures are painted soft by `tools/textures/paint_placeholders.sh` from the pixel-art originals in `tools/textures/originals/` (#135): change an original or a recipe and run it again; don't hand-edit the painted PNGs.
 - Pack models are fired into our N64 look by the Kiln (`./kiln.sh`, Blender 4.4; see `docs/GDD.md`). Its output goes in `assets/third_party/_kiln/` and is never committed: it's made from the packs. Check fired models by eye with `tools/kiln/capture.sh <folder>`.
 - Two exceptions are committed because the game needs them to look and sound the same for everyone, each with its licence file beside it: fonts under the SIL Open Font Licence in `assets/fonts/`, and CC0 sounds in `assets/audio/`. Anything else third-party still needs asking first.
 
