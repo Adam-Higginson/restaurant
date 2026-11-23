@@ -50,6 +50,16 @@ extends Resource
 @export_range(0.0, 1.0) var roughness: float = 0.85
 ## How much shine highlights get: low for the N64's matte look.
 @export_range(0.0, 1.0) var specular: float = 0.2
+## Light it per corner, not per pixel (Gouraud shading, as the N64 did): a
+## lantern passing lights it in soft gradients across each triangle.
+@export var vertex_lighting: bool = false
+## Blend each texture pixel into its neighbours with the N64's own
+## three-point filter, softer than the chunky pixels (for distant cliffs or
+## foliage).
+@export var three_point_filter: bool = false
+## Poses a second its animations move in, like hand-keyed N64 creatures;
+## 0 for smooth.
+@export_range(0.0, 60.0) var animation_steps: float = 0.0
 
 
 ## The name fired files carry, so a model fired with two looks has two files:

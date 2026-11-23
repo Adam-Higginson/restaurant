@@ -137,6 +137,8 @@ var _act_left: float = 0.0
 var _act_speed: float = 1.0
 ## The recovery to play when the cut playing ends, if nothing follows it.
 var _recovery: StringName = &""
+## Moves the animations on in steps, if the body's look says so.
+var _stepper: AnimationStepper = AnimationStepper.new()
 
 
 func _ready() -> void:
@@ -154,6 +156,8 @@ func _ready() -> void:
 func _process(delta: float) -> void:
 	if _animator == null:
 		return
+	if _stepper.steps > 0.0:
+		_animator.advance(_stepper.take(delta))
 	plant_feet()
 	_turn_for_flip()
 	var walking: bool = player != null and player.is_walking
@@ -457,6 +461,13 @@ func _build(parts: CharacterParts) -> void:
 			_use_n64(mesh)
 	_animator = AnimationPlayer.new()
 	character.add_child(_animator)
+	# The body's look may move it in steps, a few poses a second: then the
+	# animations are moved on by hand, in _process.
+	var steps: float = parts.body_look.animation_steps \
+			if use_kiln and parts.body_look != null else 0.0
+	_stepper = AnimationStepper.new(steps)
+	if steps > 0.0:
+		_animator.callback_mode_process = AnimationMixer.ANIMATION_CALLBACK_MODE_PROCESS_MANUAL
 	_animator.add_animation_library(LIBRARY, _library(_animator.get_node(_animator.root_node)))
 	# The charge's stance is held as long as the button is: round and round.
 	var stance: StringName = StringName("%s/%s" % [LIBRARY, charge_animation])

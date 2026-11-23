@@ -412,6 +412,12 @@ A growing glossary of the Godot concepts this project uses: what each one is, in
 
 **The "keep" importer.** A `.import` file with `importer="keep"` tells Godot to leave a file as it is, not make a texture of it. *Ours:* the Kiln's `.raw.png` copies, kept only for making palettes (#128).
 
+**Shader includes (`.gdshaderinc`).** A file of shader code that several shaders pull in with `#include "res://..."`, so they share it. *Ours:* `n64_surface.gdshaderinc`, shared by `n64_surface` and `n64_surface_vertex` (#129).
+
+**Per-vertex lighting (`render_mode vertex_lighting`).** Lights a mesh at its corners and blends across each triangle (Gouraud shading), as N64-era hardware did, rather than for every pixel. Cheaper and softer, and it shows the triangles. *Ours:* `n64_surface_vertex.gdshader`, chosen by a look's `vertex_lighting` (#129).
+
+**Stepped animation.** With the animation player moved on by hand (`ANIMATION_CALLBACK_MODE_PROCESS_MANUAL` and `advance()`), holding the time back and releasing it in whole steps makes a model move a few poses a second, like hand-keyed animation. *Ours:* `AnimationStepper`, used by `Crab` and `CharacterModel` when a look's `animation_steps` is set (#129).
+
 ## Testing
 
 **gdUnit4.** The test framework (`addons/gdUnit4`). Suites extend our `GameTestSuite` and have `test_...` functions. `scene_runner` loads a scene and lets a test press inputs and wait physics ticks. *Ours:* `tests/`.

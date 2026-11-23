@@ -54,6 +54,33 @@ func test_with_the_kiln_turned_off_the_packs_parts_are_drawn() -> void:
 		assert_object((found as MeshInstance3D).material_override).is_null()
 
 
+func test_a_look_with_steps_moves_the_body_in_steps() -> void:
+	_use_fired_stand_ins()
+	var player: Player3D = _new_dressed_player()
+	var model: CharacterModel = _model(player)
+	var parts: CharacterParts = _parts(true)
+	parts.body_look = parts.body_look.duplicate() as ArtLook
+	parts.body_look.animation_steps = 12.0
+	model.boy = parts
+	scene_runner(player.get_parent())
+
+	var animator: AnimationPlayer = model.character.find_children("*", "AnimationPlayer",
+			true, false)[0] as AnimationPlayer
+	assert_int(animator.callback_mode_process) \
+			.is_equal(AnimationMixer.ANIMATION_CALLBACK_MODE_PROCESS_MANUAL)
+
+
+func test_without_steps_the_body_animates_as_usual() -> void:
+	var player: Player3D = _new_dressed_player()
+	var model: CharacterModel = _model(player)
+	scene_runner(player.get_parent())
+
+	var animator: AnimationPlayer = model.character.find_children("*", "AnimationPlayer",
+			true, false)[0] as AnimationPlayer
+	assert_int(animator.callback_mode_process) \
+			.is_equal(AnimationMixer.ANIMATION_CALLBACK_MODE_PROCESS_IDLE)
+
+
 func test_parts_given_to_it_win_over_who_you_are() -> void:
 	var player: Player3D = _new_dressed_player()
 	var model: CharacterModel = _model(player)
