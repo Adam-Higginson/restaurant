@@ -7,3 +7,6 @@ assets/third_party/
 # gdUnit4 test reports
 reports/
 addons/gdUnit4/GdUnitRunner.cfg
+
+# Python caches (tools/kiln, run by Blender)
+__pycache__/
