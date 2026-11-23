@@ -378,9 +378,20 @@ def _bake(low, high, size: int, job: dict, scale: float):
         # A chunky speck per final pixel, lighter or darker, the same every
         # firing: flat-coloured packs get the busy texture N64 surfaces had.
         seed = sum(ord(letter) for letter in job["out"]) % (2 ** 32)
-        specks = numpy.random.default_rng(seed).random((size, size, 1)).astype(numpy.float32)
-        specks = specks.repeat(SUPERSAMPLE, axis=0).repeat(SUPERSAMPLE, axis=1)
-        colour[..., :3] *= 1.0 + (specks - 0.5) * 2.0 * grain
+        # Specks this many texture pixels across, softened into blobs when
+        # bigger than one: painted mottling rather than per-pixel noise.
+        speck = max(1, int(job.get("grain_size", 1)))
+        count = max(1, size // speck)
+        specks = numpy.random.default_rng(seed).random((count, count)).astype(numpy.float32)
+        reach = speck * SUPERSAMPLE
+        specks = specks.repeat(reach, axis=0).repeat(reach, axis=1)
+        specks = numpy.pad(specks, ((0, big - specks.shape[0]), (0, big - specks.shape[1])),
+                mode="wrap")
+        if speck > 1:
+            specks = _soften(specks, reach)
+            # Softening flattens the blobs: stretch them back to the full range.
+            specks = (specks - specks.mean()) / max(specks.std() * 3.4, 1e-6) + 0.5
+        colour[..., :3] *= 1.0 + (specks[..., None] - 0.5) * 2.0 * grain
     # Average each block down to one pixel.
     blocks = colour.reshape(size, SUPERSAMPLE, size, SUPERSAMPLE, 4).mean(axis=(1, 3))
     blocks[..., 3] = 1.0
@@ -397,6 +408,18 @@ def _bake(low, high, size: int, job: dict, scale: float):
                 - blocks[..., :3]) * strength
     blocks[..., 3] = 1.0
     return blocks
+
+
+def _soften(values, width: int):
+    """[values] (2D) blurred by a box [width] wide, twice (nearly a Gaussian),
+    wrapping round the edges."""
+    for _ in range(2):
+        for axis in (0, 1):
+            total = numpy.zeros_like(values)
+            for offset in range(-(width // 2), width - width // 2):
+                total += numpy.roll(values, offset, axis=axis)
+            values = total / width
+    return values
 
 
 def _block_palette(big, size: int, palette):

@@ -29,6 +29,9 @@ extends Resource
 ## random: the busy grain N64 surfaces had, for packs painted in flat colour.
 ## 0 for painted textures, which have their own.
 @export_range(0.0, 0.5) var grain: float = 0.0
+## How many texture pixels across each speck of grain is: 1 is per-pixel
+## noise; bigger is softened into blobs, like painted mottling.
+@export_range(1, 16) var grain_size: int = 1
 ## The shared paintbox the texture's colours are snapped to (the Salt and
 ## Ember palette), or none to keep the original's colours.
 @export var palette: KilnPalette
@@ -82,6 +85,7 @@ func firing() -> Dictionary:
 		"flatten_degrees": flatten_degrees,
 		"creases": creases,
 		"grain": grain,
+		"grain_size": grain_size,
 		"palette": palette.to_list() if palette != null else [],
 		"palette_strength": palette_strength,
 		"symmetric": symmetric,

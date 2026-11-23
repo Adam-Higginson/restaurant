@@ -14,3 +14,4 @@ symmetric = true
 faceted = false
 palette = ExtResource("2_palette")
 animation_steps = 15.0
+three_point_filter = true

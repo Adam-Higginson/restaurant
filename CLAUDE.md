@@ -4,7 +4,7 @@
 - Godot 4.7, GDScript only (no C#).
 - Use Godot 4 APIs only: CharacterBody3D, `await`, AnimatableBody3D. Never Godot 3 APIs (KinematicBody, `yield`).
 - Typed GDScript everywhere: type every variable, parameter and return value (enforced as errors; see Code style).
-- 3D, Forward+ renderer (switched from Compatibility in #61). Low-poly models with small blocky textures and nearest-neighbour filtering, lit with modern lighting (N64/OoT style, high resolution).
+- 3D, Forward+ renderer (switched from Compatibility in #61). Low-poly models with small blocky textures (nearest-neighbour on our greybox; fired pack models use the N64's soft three-point filter, #129), lit with modern lighting (N64/OoT style, high resolution).
 - The 2D world layer (2D player, props, customers, tilemap) is legacy, being replaced by the 3D prototype in `scenes/prototype/`. Don't extend it.
 - Godot binary: `C:\Godot\godot_console.exe`
 

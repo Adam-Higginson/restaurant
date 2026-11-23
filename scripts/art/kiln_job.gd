@@ -13,7 +13,7 @@ extends RefCounted
 ##   [method fingerprint] it was fired with, which says if it's stale.
 
 ## Bump to make every fired model stale, when fire.py changes what it makes.
-const VERSION: int = 8
+const VERSION: int = 9
 ## Where the packs live.
 const THIRD_PARTY: String = "res://assets/third_party/"
 ## Where fired models go.
