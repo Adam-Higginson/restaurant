@@ -38,6 +38,9 @@ const SIGHT_EVERY: int = 6
 
 ## Who's listening, for line of sight: the player, found when first needed.
 var listener: Node3D = null
+## Whether they're keeping quiet: overheard chatter leaves them out (the
+## lantern, low and silent, #158).
+var muted: bool = false
 
 ## The line showing now, or "" when they're quiet.
 var saying: String:
