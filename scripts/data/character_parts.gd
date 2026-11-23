@@ -13,11 +13,20 @@ extends Resource
 ## the outfit, the head (cut from the body, with the eyebrows painted on as
 ## the N64 did) and the hair, each with its own [ArtLook]. Fired parts are
 ## drawn instead of the pack's, part by part, as soon as they're there.
+##
+## The head is fired twice: as it is, and asleep. A fired head is one mesh
+## with the eyes painted in, so they can't be hidden to shut them; the
+## sleeping head is fired without the eyeballs, which leaves the lids'
+## shadowed hollow, and is shown instead while the eyes are shut.
 
 ## The bones the head is cut from the base character's body by.
 const HEAD_BONES: PackedStringArray = ["Head", "neck_01"]
 ## The base characters' own eyebrows, left out: the parts bring their own.
 const BASE_EYEBROWS: String = "Eyebrows"
+## The base characters' eyeballs, left out of the sleeping head.
+const BASE_EYES: String = "Eyes"
+## The sleeping head's [member KilnJob.variant].
+const ASLEEP: String = "asleep"
 
 ## The outfit: clothes, hands and boots, rigged.
 @export_file("*.gltf", "*.glb") var outfit: String = ""
@@ -88,6 +97,17 @@ func head_job() -> KilnJob:
 	return job
 
 
+## The Kiln job for the head with its eyes shut: [method head_job] without
+## the eyeballs. Null without a look.
+func sleeping_head_job() -> KilnJob:
+	var job: KilnJob = head_job()
+	if job == null:
+		return null
+	job.drop_meshes.append(BASE_EYES)
+	job.variant = ASLEEP
+	return job
+
+
 ## The Kiln job for the hair, in [member hair_colour]. Null without hair or a
 ## look.
 func hair_job() -> KilnJob:
@@ -102,7 +122,7 @@ func hair_job() -> KilnJob:
 ## Every part's Kiln job.
 func jobs() -> Array[KilnJob]:
 	var all: Array[KilnJob] = []
-	for job: KilnJob in [outfit_job(), head_job(), hair_job()]:
+	for job: KilnJob in [outfit_job(), head_job(), sleeping_head_job(), hair_job()]:
 		if job != null:
 			all.append(job)
 	return all

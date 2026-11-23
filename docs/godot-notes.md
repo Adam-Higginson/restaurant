@@ -404,7 +404,7 @@ A growing glossary of the Godot concepts this project uses: what each one is, in
 
 **Turning one direction into another (`Quaternion(from, to)`).** A quaternion is a way of storing a rotation. Built from two directions, it's the shortest turn that takes the first to the second, and `slerp` gives a share of that turn. *Ours:* how `ArmReach` works out how to swing a bone towards its target, and how the arm can be raised gradually.
 
-**Hiding part of a model.** A character built from several meshes can show or hide each with `visible`. *Ours:* `CharacterModel.eyes_shut` hides the eyeballs, which leaves the lids' own hollow: closed eyes, with no extra art.
+**Hiding part of a model.** A character built from several meshes can show or hide each with `visible`. *Ours:* `CharacterModel.eyes_shut` hides the eyeballs, which leaves the lids' own hollow: closed eyes, with no extra art. A head fired in the Kiln is one mesh with the eyes painted in, so there's nothing to hide; the Kiln fires the head a second time without the eyeballs (`CharacterParts.sleeping_head_job()`, its files named `.asleep`), and `eyes_shut` shows that head instead of the awake one.
 
 **Queueing an animation (`AnimationPlayer.queue`).** `play()` switches to a clip at once; `queue()` lines one up to start when the current one ends. *Ours:* the `@queue` cue: `pleads` plays once, then the `offered` loop takes over for as long as the player waits.
 

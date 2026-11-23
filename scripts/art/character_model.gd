@@ -158,6 +158,10 @@ var left_hand: BoneAttachment3D = null
 var _animator: AnimationPlayer = null
 ## What lifts the left arm when it reaches.
 var _arm: ArmReach = null
+## The fired head's meshes, awake and asleep: shown by [member eyes_shut].
+## Empty unless both have been fired.
+var _awake_head: Array[MeshInstance3D] = []
+var _asleep_head: Array[MeshInstance3D] = []
 ## What turns the head when it watches something.
 var _head: HeadLook = null
 ## What lets the legs hang when afloat.
@@ -487,8 +491,13 @@ func _build(parts: CharacterParts) -> void:
 	skeleton = character.find_children("*", "Skeleton3D", true, false)[0] as Skeleton3D
 	# Measured on the outfit alone: its boots are what stand on the floor.
 	_toe_height = _rest_toe_height()
-	var head_fired: bool = use_kiln and _add_fired(parts.head_job())
-	if not head_fired:
+	_awake_head = _fired_meshes(parts.head_job()) if use_kiln else ([] as Array[MeshInstance3D])
+	var head_fired: bool = not _awake_head.is_empty()
+	if head_fired:
+		_asleep_head = _fired_meshes(parts.sleeping_head_job())
+		if _asleep_head.is_empty():
+			_awake_head.clear()
+	else:
 		_add_head(parts.head_from)
 	if not parts.hair.is_empty() and not (use_kiln and _add_fired(parts.hair_job())):
 		_add_meshes(parts.hair, parts.hair_colour)
@@ -557,14 +566,22 @@ func _add_head(path: String) -> void:
 # Every mesh of [param job]'s fired part onto our skeleton, drawn with its
 # fired texture. Returns whether it was there to add.
 func _add_fired(job: KilnJob) -> bool:
+	return not _fired_meshes(job).is_empty()
+
+
+# Every mesh of [param job]'s fired part onto our skeleton, drawn with its
+# fired texture. Returns them: none if it hasn't been fired.
+func _fired_meshes(job: KilnJob) -> Array[MeshInstance3D]:
+	var added: Array[MeshInstance3D] = []
 	if job == null or not job.is_fired():
-		return false
+		return added
 	var source: Node = (load(job.fired_path()) as PackedScene).instantiate()
 	FiredModel.paint(source, job)
 	for mesh: MeshInstance3D in source.find_children("*", "MeshInstance3D", true, false):
 		_move_to_skeleton(mesh)
+		added.append(mesh)
 	source.free()
-	return true
+	return added
 
 
 # Every mesh in [param path], onto our skeleton, tinted [param colour].
@@ -685,9 +702,16 @@ func _measure_stride(anim_name: StringName) -> float:
 
 
 # Shuts or opens the eyes: shut, the eyeballs aren't drawn, which leaves
-# the lids' own shadowed hollow.
+# the lids' own shadowed hollow. A fired head has its eyes painted in, so
+# the head fired asleep, without them, is shown in its place.
 func _show_eyes() -> void:
 	if skeleton == null:
+		return
+	if not _asleep_head.is_empty():
+		for mesh: MeshInstance3D in _awake_head:
+			mesh.visible = not eyes_shut
+		for mesh: MeshInstance3D in _asleep_head:
+			mesh.visible = eyes_shut
 		return
 	for mesh: MeshInstance3D in skeleton.find_children("Eyes", "MeshInstance3D", true, false):
 		mesh.visible = not eyes_shut
@@ -749,6 +773,8 @@ func _undress() -> void:
 	left_hand = null
 	_animator = null
 	_arm = null
+	_awake_head.clear()
+	_asleep_head.clear()
 	_head = null
 	_legs = null
 	_act_left = 0.0
