@@ -1,0 +1,18 @@
+# Opening a treasure chest (#152): the cutscene every TreasureChest plays,
+# from the section named for what's inside it (the tool's id). @open swings
+# the chest open with you stepping up to it; @hold_up has you turn round and
+# hold the treasure up. The section's `set` gives it to you, and the lines
+# are read while it's held up. Placeholder writing: rewrite freely.
+
+# A chest with nothing written for what's in it.
+~ start
+@open
+narrator: It's empty.
+
+~ chefs_knife
+@open
+@hold_up
+set has_chefs_knife
+narrator: You got the *Cheap Chef's Knife*!
+narrator: Not much of an edge, but it's yours. It chops at the *chopping board*, and cuts ashore.
+lantern: A cook's first treasure! Mind your fingers.

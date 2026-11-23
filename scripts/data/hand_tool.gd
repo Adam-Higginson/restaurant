@@ -15,3 +15,18 @@ extends Resource
 @export var verb: String = "Use"
 ## What using the tool applies to the thing it's used on (the knife cuts).
 @export var element: Element = null
+## The tool's model, shown when it's held up out of a chest: a file under
+## res://assets/third_party/, fitted into [member model_size] standing up.
+## Without one (or on a fresh clone) a greybox bar in [member color] shows.
+@export_file("*.gltf", "*.glb") var model_path: String = ""
+## How the Kiln fires [member model_path] (see [ThirdPartyModel.look]).
+@export var model_look: ArtLook = null
+@export var model_size: Vector3 = Vector3(0.15, 0.6, 0.06)
+
+## The conversation flag that says the player owns this tool
+## ([code]has_chefs_knife[/code]). Flags are saved with the voyage, so a tool
+## found in a chest stays found; a script can also give one with
+## [code]set has_chefs_knife[/code].
+var owned_flag: StringName:
+	get:
+		return StringName("has_%s" % id)

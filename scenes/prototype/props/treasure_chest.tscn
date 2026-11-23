@@ -1,0 +1,229 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://scripts/props/treasure_chest.gd" id="0_chest"]
+[ext_resource type="Shader" path="res://shaders/chest_glow.gdshader" id="1_g0eeg"]
+[ext_resource type="Shader" path="res://shaders/chest_beam.gdshader" id="2_dycq5"]
+[ext_resource type="Script" path="res://scripts/art/third_party_model.gd" id="3_ifvip"]
+[ext_resource type="Shader" path="res://shaders/sparkle.gdshader" id="4_fodny"]
+[ext_resource type="Script" path="res://scripts/interaction/interactable_3d.gd" id="5_1v76v"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_emneu"]
+albedo_color = Color(0.36, 0.22, 0.13, 1)
+roughness = 0.9
+
+[sub_resource type="BoxMesh" id="BoxMesh_b3l0f"]
+size = Vector3(0.9, 0.395, 0.7)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_0atxq"]
+albedo_color = Color(0.85, 0.66, 0.24, 1)
+metallic = 0.6
+roughness = 0.45
+
+[sub_resource type="BoxMesh" id="BoxMesh_cwjgw"]
+size = Vector3(0.92, 0.06, 0.72)
+
+[sub_resource type="BoxMesh" id="BoxMesh_wq883"]
+size = Vector3(0.16, 0.18, 0.03)
+
+[sub_resource type="BoxMesh" id="BoxMesh_66njk"]
+size = Vector3(0.9, 0.3, 0.7)
+
+[sub_resource type="BoxMesh" id="BoxMesh_mx5dp"]
+size = Vector3(0.92, 0.05, 0.72)
+
+[sub_resource type="BoxMesh" id="BoxMesh_882uq"]
+size = Vector3(0.1, 0.32, 0.73)
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_ws37g"]
+render_priority = 0
+shader = ExtResource("1_g0eeg")
+shader_parameter/colour = null
+shader_parameter/dark = null
+shader_parameter/energy = null
+shader_parameter/brightness = null
+
+[sub_resource type="PlaneMesh" id="PlaneMesh_tcb3e"]
+size = Vector2(0.81, 0.61)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_455qe"]
+cull_mode = 2
+albedo_color = Color(0.2, 0.12, 0.07, 1)
+
+[sub_resource type="BoxMesh" id="BoxMesh_vkhxw"]
+size = Vector3(0.81, 0.275, 0.01)
+
+[sub_resource type="BoxMesh" id="BoxMesh_iovq5"]
+size = Vector3(0.81, 0.275, 0.01)
+
+[sub_resource type="BoxMesh" id="BoxMesh_4oxo6"]
+size = Vector3(0.01, 0.275, 0.61)
+
+[sub_resource type="BoxMesh" id="BoxMesh_7fhng"]
+size = Vector3(0.01, 0.275, 0.61)
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_laxmv"]
+render_priority = 0
+shader = ExtResource("2_dycq5")
+shader_parameter/colour = null
+shader_parameter/energy = null
+shader_parameter/brightness = null
+shader_parameter/fade = null
+shader_parameter/spokes = null
+shader_parameter/spin = null
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_etitg"]
+top_radius = 0.75
+bottom_radius = 0.32
+height = 2.6
+radial_segments = 24
+rings = 1
+cap_top = false
+cap_bottom = false
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_wfchj"]
+render_priority = 0
+shader = ExtResource("4_fodny")
+shader_parameter/colour = null
+shader_parameter/energy = null
+
+[sub_resource type="QuadMesh" id="QuadMesh_vrpl2"]
+material = SubResource("ShaderMaterial_wfchj")
+size = Vector2(0.05, 0.05)
+
+[sub_resource type="Gradient" id="Gradient_as4h0"]
+colors = PackedColorArray(1, 1, 1, 1, 1, 1, 1, 0)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_k4rsk"]
+size = Vector3(0.9, 0.8, 0.7)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_whemc"]
+size = Vector3(1.3, 1, 1.1)
+
+[node name="TreasureChest" type="Node3D" unique_id=1484401123]
+script = ExtResource("0_chest")
+
+[node name="Body" type="MeshInstance3D" parent="." unique_id=337797148]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.1975, 0)
+material_override = SubResource("StandardMaterial3D_emneu")
+mesh = SubResource("BoxMesh_b3l0f")
+
+[node name="BodyBand" type="MeshInstance3D" parent="." unique_id=297838063]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.355, 0)
+material_override = SubResource("StandardMaterial3D_0atxq")
+mesh = SubResource("BoxMesh_cwjgw")
+
+[node name="Lock" type="MeshInstance3D" parent="." unique_id=1776309731]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.315, -0.365)
+material_override = SubResource("StandardMaterial3D_0atxq")
+mesh = SubResource("BoxMesh_wq883")
+
+[node name="LidHinge" type="Node3D" parent="." unique_id=1405609195]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.395, 0.343)
+
+[node name="LidBox" type="MeshInstance3D" parent="LidHinge" unique_id=1762504870]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.15, -0.343)
+material_override = SubResource("StandardMaterial3D_emneu")
+mesh = SubResource("BoxMesh_66njk")
+
+[node name="LidBand" type="MeshInstance3D" parent="LidHinge" unique_id=822689340]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.03, -0.343)
+material_override = SubResource("StandardMaterial3D_0atxq")
+mesh = SubResource("BoxMesh_mx5dp")
+
+[node name="LidStrap" type="MeshInstance3D" parent="LidHinge" unique_id=1232315034]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.15, -0.343)
+material_override = SubResource("StandardMaterial3D_0atxq")
+mesh = SubResource("BoxMesh_882uq")
+
+[node name="InnerFloor" type="MeshInstance3D" parent="." unique_id=16411602]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.12, 0)
+material_override = SubResource("ShaderMaterial_ws37g")
+cast_shadow = 0
+mesh = SubResource("PlaneMesh_tcb3e")
+
+[node name="LiningFront" type="MeshInstance3D" parent="." unique_id=1397591089]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.2575, -0.305)
+material_override = SubResource("StandardMaterial3D_455qe")
+mesh = SubResource("BoxMesh_vkhxw")
+
+[node name="LiningBack" type="MeshInstance3D" parent="." unique_id=283084496]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.2575, 0.305)
+material_override = SubResource("StandardMaterial3D_455qe")
+mesh = SubResource("BoxMesh_iovq5")
+
+[node name="LiningLeft" type="MeshInstance3D" parent="." unique_id=1141133077]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.405, 0.2575, 0)
+material_override = SubResource("StandardMaterial3D_455qe")
+mesh = SubResource("BoxMesh_4oxo6")
+
+[node name="LiningRight" type="MeshInstance3D" parent="." unique_id=1684467748]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.405, 0.2575, 0)
+material_override = SubResource("StandardMaterial3D_455qe")
+mesh = SubResource("BoxMesh_7fhng")
+
+[node name="Beam" type="MeshInstance3D" parent="." unique_id=1742040126]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.6, 0)
+visible = false
+material_override = SubResource("ShaderMaterial_laxmv")
+cast_shadow = 0
+mesh = SubResource("CylinderMesh_etitg")
+
+[node name="Model" type="Node3D" parent="." unique_id=1214863331 node_paths=PackedStringArray("stand_ins")]
+transform = Transform3D(-1, 0, -8.742278e-08, 0, 1, 0, 8.742278e-08, 0, -1, 0, 0, 0)
+script = ExtResource("3_ifvip")
+path = "res://assets/third_party/meshy/chest_big/chest_big.glb"
+fit_size = Vector3(0.9, 0.9, 0.9)
+stand_ins = [NodePath("../Body"), NodePath("../BodyBand"), NodePath("../Lock")]
+grain = false
+detail = 1.0
+keep_as_made = true
+
+[node name="Glow" type="OmniLight3D" parent="." unique_id=829583998]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.45, 0)
+light_color = Color(1, 0.78, 0.4, 1)
+light_energy = 0.0
+light_volumetric_fog_energy = 1.5
+omni_range = 2.0
+
+[node name="Sparkles" type="CPUParticles3D" parent="." unique_id=1820305769]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.3, 0)
+emitting = false
+amount = 40
+lifetime = 2.2
+mesh = SubResource("QuadMesh_vrpl2")
+emission_shape = 3
+emission_box_extents = Vector3(0.3, 0.02, 0.2)
+direction = Vector3(0, 1, 0)
+spread = 15.0
+gravity = Vector3(0, 0, 0)
+initial_velocity_min = 0.25
+initial_velocity_max = 0.55
+scale_amount_min = 0.6
+color_ramp = SubResource("Gradient_as4h0")
+
+[node name="Solid" type="StaticBody3D" parent="." unique_id=1327612139]
+
+[node name="Shape" type="CollisionShape3D" parent="Solid" unique_id=495480504]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.4, 0)
+shape = SubResource("BoxShape3D_k4rsk")
+
+[node name="Reach" type="Area3D" parent="." unique_id=1995244830]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5, 0)
+script = ExtResource("5_1v76v")
+enabled = true
+focus_height = 1.3
+
+[node name="Shape" type="CollisionShape3D" parent="Reach" unique_id=1959316694]
+shape = SubResource("BoxShape3D_whemc")
+
+[node name="ItemSpot" type="Marker3D" parent="." unique_id=631928892]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.35, 0)
+
+[node name="Stand" type="Marker3D" parent="." unique_id=1701113808]
+transform = Transform3D(-1, 0, 0, 0, 1, 0, 0, 0, -1, 0, 0, -0.85)
+
+[node name="OpenShot" type="Marker3D" parent="." unique_id=867736489]
+transform = Transform3D(-0.9403762, 0.15697214, -0.30174875, 0, 0.8871412, 0.46149805, 0.34013608, 0.4339818, -0.8342465, -0.85, 1.75, -2.35)
+
+[node name="HoldShot" type="Marker3D" parent="." unique_id=1265972505]
+transform = Transform3D(-0.9805807, 0.040156424, 0.19196095, 0, 0.9788126, -0.20475838, -0.19611615, -0.2007821, -0.95980465, 0.3, 1.3, -2.35)

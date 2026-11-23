@@ -164,3 +164,29 @@ func test_has_item_finds_a_kind_of_item_in_any_slot() -> void:
 	assert_bool(_toolbar.has_item(&"tomato")).is_true()
 	assert_bool(_toolbar.has_item(&"lettuce")).is_true()
 	assert_bool(_toolbar.has_item(&"frying_pan")).is_false()
+
+
+func test_add_tool_puts_a_tool_in_the_first_free_slot_and_selects_it() -> void:
+	_toolbar.set_tool(0, null)
+	_toolbar.add(ItemInstance.new(TOMATO))
+
+	assert_bool(_toolbar.add_tool(KNIFE)).is_true()
+
+	assert_object(_toolbar.get_tool(1)).is_same(KNIFE)
+	assert_int(_toolbar.selected_index).is_equal(1)
+	assert_bool(_toolbar.has_tool(&"chefs_knife")).is_true()
+
+
+func test_add_tool_never_adds_the_same_tool_twice() -> void:
+	assert_bool(_toolbar.add_tool(KNIFE)).is_true()
+
+	assert_array(_toolbar.get_tools()).has_size(1)
+
+
+func test_add_tool_fails_when_every_slot_is_taken() -> void:
+	_toolbar.set_tool(0, null)
+	for i: int in Toolbar.SLOT_COUNT:
+		_toolbar.add(ItemInstance.new(TOMATO))
+
+	assert_bool(_toolbar.add_tool(KNIFE)).is_false()
+	assert_bool(_toolbar.has_tool(&"chefs_knife")).is_false()

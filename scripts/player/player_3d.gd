@@ -111,6 +111,10 @@ func _ready() -> void:
 	add_to_group(GROUP)
 	for i: int in mini(start_tools.size(), Toolbar.SLOT_COUNT):
 		toolbar.set_tool(i, start_tools[i])
+	# Tools you've found are kept as flags, so they come back with a saved
+	# voyage (restored after we're ready) and arrive the moment one is set.
+	give_owned_tools()
+	Game.dialogue.flag_changed.connect(_on_flag_changed)
 
 
 func _physics_process(delta: float) -> void:
@@ -159,6 +163,16 @@ func _unhandled_input(event: InputEvent) -> void:
 ## Throws the player along [param push], a flat velocity in metres per second
 ## that dies away (see [member knockback_fade]), and has them stumble, deaf to
 ## the stick, for [param stumble_seconds]. A zero push stops any knock back.
+## Puts every tool the voyage owns (see [member HandTool.owned_flag]) on the
+## toolbar, if it isn't there already. The selected slot doesn't change.
+func give_owned_tools() -> void:
+	var selected: int = toolbar.selected_index
+	for tool: HandTool in Catalog.load_default().tools:
+		if Game.dialogue.is_set(tool.owned_flag):
+			toolbar.add_tool(tool)
+	toolbar.select(selected)
+
+
 func knock_back(push: Vector3, stumble_seconds: float) -> void:
 	_push = Vector3(push.x, 0.0, push.z)
 	_stumble_left = stumble_seconds
@@ -267,3 +281,8 @@ func _movement_yaw(input: Vector2) -> float:
 func _face(direction: Vector3, _delta: float) -> void:
 	# The yaw that turns the model's forward (-Z) to point along direction.
 	_model.rotation.y = atan2(-direction.x, -direction.z)
+
+
+func _on_flag_changed(flag: StringName, value: int) -> void:
+	if value > 0 and String(flag).begins_with("has_"):
+		give_owned_tools()

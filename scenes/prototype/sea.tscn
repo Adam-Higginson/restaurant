@@ -35,6 +35,10 @@
 [ext_resource type="PackedScene" path="res://ui/screen_fade.tscn" id="16_fade"]
 [ext_resource type="PackedScene" path="res://ui/look_choice.tscn" id="90_look"]
 [ext_resource type="Script" path="res://scripts/cutscene/choice_cues.gd" id="91_choice"]
+[ext_resource type="Script" path="res://scripts/data/hand_tool.gd" id="92_tool"]
+[ext_resource type="Script" path="res://scripts/cutscene/chest_cues.gd" id="93_chest"]
+[ext_resource type="AudioStream" path="res://assets/audio/combat/impactWood_light_002.ogg" id="94_creak"]
+[ext_resource type="AudioStream" path="res://assets/audio/combat/maximize_003.ogg" id="95_fanfare"]
 
 [sub_resource type="FastNoiseLite" id="Noise_Cloud"]
 frequency = 0.008
@@ -255,6 +259,7 @@ loop_route = true
 [node name="Player" parent="." unique_id=1279594075 instance=ExtResource("7_p3dpl")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -23.5, 5.35, 47)
 speed = 2.0
+start_tools = Array[ExtResource("92_tool")]([])
 
 [node name="Hud3D" parent="." unique_id=793774154 node_paths=PackedStringArray("player") instance=ExtResource("8_hud")]
 player = NodePath("../Player")
@@ -309,6 +314,12 @@ prompt = NodePath("../CutscenePrompt")
 [node name="ActorCues" type="Node" parent="." node_paths=PackedStringArray("player")]
 script = ExtResource("306_actors")
 player = NodePath("../Player")
+
+[node name="ChestCues" type="Node" parent="." node_paths=PackedStringArray("player")]
+script = ExtResource("93_chest")
+player = NodePath("../Player")
+creak = ExtResource("94_creak")
+fanfare = ExtResource("95_fanfare")
 
 [node name="StageCues" type="Node" parent="."]
 script = ExtResource("308_stages")

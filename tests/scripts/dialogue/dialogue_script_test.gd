@@ -233,3 +233,12 @@ func test_a_conversation_cant_have_remark_tags_or_section_guards() -> void:
 
 	assert_str(", ".join(tagged.errors)).contains("only a file of remarks")
 	assert_str(", ".join(guarded.errors)).contains("nothing after it to guard")
+
+
+func test_a_narrator_line_has_no_speaker() -> void:
+	var tree: DialogueTree = DialogueScript.parse("~ start\nnarrator: You got the *Knife*!")
+
+	assert_array(tree.errors).is_empty()
+	assert_str(String(tree.steps[0].speaker)).is_empty()
+	assert_str(tree.steps[0].text).is_equal("You got the *Knife*!")
+	assert_array(tree.speakers()).is_empty()

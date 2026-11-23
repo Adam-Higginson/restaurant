@@ -224,6 +224,8 @@
 [ext_resource type="PackedScene" path="res://scenes/prototype/intro/rescue_set.tscn" id="311_rescue"]
 [ext_resource type="PackedScene" path="res://scenes/prototype/intro/waking_set.tscn" id="312_waking"]
 [ext_resource type="PackedScene" path="res://scenes/prototype/intro/stern_watch.tscn" id="312_stern"]
+[ext_resource type="PackedScene" path="res://scenes/prototype/props/treasure_chest.tscn" id="320_chest"]
+[ext_resource type="Resource" path="res://data/tools/chefs_knife.tres" id="321_knife"]
 
 [sub_resource type="BoxMesh" id="Mesh_Hull"]
 size = Vector3(12, 2.5, 30)
@@ -967,7 +969,7 @@ mesh = SubResource("Cosy_22")
 script = ExtResource("56_rock")
 
 [node name="Sack1" type="MeshInstance3D" parent="Visuals" unique_id=1969830551]
-transform = Transform3D(0.9562657, 0, 0.29235974, 0, 1, 0, -0.29235974, 0, 0.9562657, -2.72, 1.2, 2.82)
+transform = Transform3D(0.9562657, 0, 0.29235974, 0, 1, 0, -0.29235974, 0, 0.9562657, -2.72, 1.2, 2.42)
 material_override = ExtResource("30_sack")
 mesh = SubResource("Cosy_24")
 
@@ -1461,6 +1463,11 @@ transform = Transform3D(-0.8569, 0, 0.5155, 0, 1, 0, -0.5155, 0, -0.8569, 4.55, 
 
 [node name="Barrel4" parent="Galley" unique_id=1328805726 instance=ExtResource("25_barrel")]
 transform = Transform3D(-0.7259, 0, -0.6878, 0, 1, 0, 0.6878, 0, -0.7259, -2.85, 1, 1.75)
+
+[node name="GalleyChest" parent="Galley" instance=ExtResource("320_chest")]
+transform = Transform3D(0, 0, -1, 0, 1, 0, 1, 0, 0, -2.65, 1, 3.2)
+contents = ExtResource("321_knife")
+flag = &"opened_galley_chest"
 
 [node name="Motes" type="GPUParticles3D" parent="Galley" unique_id=2009697152]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.6, 2.3, 4.8)
