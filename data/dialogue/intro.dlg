@@ -84,7 +84,7 @@
 @look hook_lantern determined
 @wait 0.2
 @start dives
-@wait 0.5
+@wait 0.3
 -> plunge
 
 # The plunge. From out on the water: the storm sea, the ship's stern, and
