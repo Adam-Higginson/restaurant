@@ -10,3 +10,6 @@ addons/gdUnit4/GdUnitRunner.cfg
 
 # Python caches (tools/kiln, run by Blender)
 __pycache__/
+
+# Exported builds (tools/build/export.sh)
+/builds/

@@ -1,0 +1,171 @@
+name: Publish build
+
+# Builds the game for Windows and macOS and publishes it as a GitHub Release,
+# so anyone can download the latest. It only publishes when started by hand:
+# Actions > Publish build > Run workflow (on main).
+#
+# A pull request that changes how builds are made does a dry run: the same
+# build, kept as a download on the workflow run instead of being published.
+on:
+  workflow_dispatch:
+  pull_request:
+    paths:
+      - .github/workflows/publish.yml
+      - export_presets.cfg
+      - project.godot
+      - scripts/build/**
+      - tools/build/**
+      - CREDITS.txt
+
+permissions:
+  contents: write
+
+# One build at a time on a branch; a second waits rather than racing it.
+concurrency:
+  group: publish-${{ github.ref }}
+
+env:
+  GODOT_VERSION: '4.7.2-stable'
+  GODOT: /home/runner/godot/godot
+  TEMPLATES: /home/runner/.local/share/godot/export_templates/4.7.2.stable
+
+jobs:
+  build:
+    name: Build
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    # Forks can't read the art (the deploy key is a secret), so their pull
+    # requests skip this.
+    if: github.event_name == 'workflow_dispatch' || github.event.pull_request.head.repo.full_name == github.repository
+    steps:
+      - name: Publish only from main
+        if: github.event_name == 'workflow_dispatch' && github.ref != 'refs/heads/main'
+        run: |
+          echo "::error::Publish from main: only merged code goes out to players."
+          exit 1
+
+      # All of history, to find the last release for the notes.
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      # The art lives in a private repo (see CLAUDE.md). The deploy key can
+      # only read it.
+      - name: Check out the art
+        uses: actions/checkout@v4
+        with:
+          repository: Adam-Higginson/restaurant-assets
+          ssh-key: ${{ secrets.ASSETS_DEPLOY_KEY }}
+          path: assets/third_party
+
+      - name: Cache Godot
+        id: cache-godot
+        uses: actions/cache@v4
+        with:
+          path: /home/runner/godot
+          key: godot-${{ env.GODOT_VERSION }}-linux
+
+      - name: Install Godot ${{ env.GODOT_VERSION }}
+        if: steps.cache-godot.outputs.cache-hit != 'true'
+        run: |
+          mkdir -p /home/runner/godot
+          package=Godot_v${GODOT_VERSION}_linux.x86_64
+          wget -q https://github.com/godotengine/godot-builds/releases/download/${GODOT_VERSION}/${package}.zip
+          unzip -q ${package}.zip -d /home/runner/godot
+          mv /home/runner/godot/${package} "$GODOT"
+          chmod u+x "$GODOT"
+
+      # The templates are what Godot builds each platform's game from. The
+      # download holds every platform (1.2 GB); only the two we need are kept.
+      - name: Cache the export templates
+        id: cache-templates
+        uses: actions/cache@v4
+        with:
+          path: ${{ env.TEMPLATES }}
+          key: godot-templates-${{ env.GODOT_VERSION }}-windows-macos
+
+      - name: Install the export templates
+        if: steps.cache-templates.outputs.cache-hit != 'true'
+        run: |
+          mkdir -p "$TEMPLATES"
+          wget -q -O templates.tpz https://github.com/godotengine/godot-builds/releases/download/${GODOT_VERSION}/Godot_v${GODOT_VERSION}_export_templates.tpz
+          unzip -q -j -o templates.tpz templates/version.txt templates/macos.zip \
+              templates/windows_release_x86_64.exe templates/windows_release_x86_64_console.exe \
+              -d "$TEMPLATES"
+          rm templates.tpz
+          ls -la "$TEMPLATES"
+
+      - name: Export the builds
+        run: tools/build/export.sh
+
+      # Each zip opens to a folder named after the game, with the credits and
+      # the fonts' licences beside it.
+      - name: Zip the builds
+        run: |
+          cd builds
+          source build.env
+          mv windows "Salt and Ember"
+          zip -q -r "$WINDOWS_ZIP" "Salt and Ember"
+          mv macos/SaltAndEmber.zip "$MACOS_ZIP"
+          (cd extras && zip -q -r "../$MACOS_ZIP" .)
+          ls -la *.zip
+          # Hand the names to the steps below.
+          for name in VERSION COMMIT LABEL TAG WINDOWS_ZIP MACOS_ZIP; do
+            echo "$name=${!name}" >> "$GITHUB_ENV"
+          done
+
+      - name: Keep the builds (dry run)
+        if: github.event_name == 'pull_request'
+        uses: actions/upload-artifact@v4
+        with:
+          name: builds-${{ env.VERSION }}-${{ env.COMMIT }}
+          path: builds/*.zip
+          retention-days: 7
+          compression-level: 0
+
+      - name: Publish the release
+        if: github.event_name == 'workflow_dispatch'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          if gh release view "$TAG" > /dev/null 2>&1; then
+            echo "::error::$TAG is already published: this commit was built today already."
+            exit 1
+          fi
+          # The notes list the pull requests merged since the last build.
+          previous=$(git tag --list 'build-*' --sort=-creatordate | head -n 1)
+          since=()
+          if [ -n "$previous" ]; then
+            since=(--notes-start-tag "$previous")
+          fi
+          cat > notes.md <<EOF
+          Build **$LABEL**: the day it was built and the commit it was built from. It's shown on the title, so say which build you played when you report something.
+
+          ### Windows
+          Download **$WINDOWS_ZIP**, unzip it and run **SaltAndEmber.exe**. Windows may say it "protected your PC", because the game isn't signed: choose **More info**, then **Run anyway**.
+
+          ### Mac (untested)
+          Download **$MACOS_ZIP** and unzip it. The game isn't signed by Apple, so the first time you open it, macOS stops it. Open **System Settings > Privacy & Security**, scroll down and choose **Open Anyway**. If macOS says the app is damaged, run this in Terminal (drag the app in for its path), then open it again:
+          \`\`\`
+          xattr -cr /path/to/the.app
+          \`\`\`
+          No one has played a Mac build yet: say if it works.
+
+          ### Saves
+          A newer build may not read an older build's save.
+          EOF
+          gh release create "$TAG" "builds/$WINDOWS_ZIP" "builds/$MACOS_ZIP" \
+              --target "$GITHUB_SHA" \
+              --title "Salt and Ember $LABEL" \
+              --notes-file notes.md \
+              --generate-notes "${since[@]}"
+          echo "Published $(gh release view "$TAG" --json url --jq .url)"
+
+      - name: Keep the logs when something went wrong
+        if: ${{ failure() }}
+        uses: actions/upload-artifact@v4
+        with:
+          name: build-logs
+          path: |
+            builds/*.log
+            builds/build.env

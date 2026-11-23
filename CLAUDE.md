@@ -21,6 +21,10 @@ The full design lives in `docs/GDD.md`. Read it before starting a gameplay task,
 
 ## Public repo
 - This repo is public. Third-party art and audio go in `assets/third_party/`, which is gitignored: never commit anything from it, and never commit keys or tokens.
+- **The art is backed up in a private repo (#142).** `assets/third_party/` is its own git repo, a clone of the private `Adam-Higginson/restaurant-assets` (the packs, the Kiln output, Meshy models and ambient sounds, `.import` files included). Its `.gitattributes` turns off line-ending conversion so it's a byte-for-byte copy.
+  - **Back up** after adding a pack, firing the Kiln or making a Meshy model: in `assets/third_party/`, `git add -A`, commit with the issue in the message (`Adam-Higginson/restaurant#<n>`), and push. Say when a task changed the art, so the user knows to back it up.
+  - **New PC or worktree:** `git clone https://github.com/Adam-Higginson/restaurant-assets.git assets/third_party`, then import (`godot_console.exe --headless --path . --import`). Clone, don't copy, so the copy is a working backup too.
+  - It stays private: it holds the raw packs, which we ship inside builds but don't re-host.
 - Our own placeholder art (generated, not third-party) lives in `assets/placeholder/` and is committed. Its cloth, paper and painted textures are painted soft by `tools/textures/paint_placeholders.sh` from the pixel-art originals in `tools/textures/originals/` (#135): change an original or a recipe and run it again; don't hand-edit the painted PNGs.
 - Pack models are fired into our N64 look by the Kiln (`./kiln.sh`, Blender 4.4; see `docs/GDD.md`). Its output goes in `assets/third_party/_kiln/` and is never committed: it's made from the packs. Check fired models by eye with `tools/kiln/capture.sh <folder>`.
 - Two exceptions are committed because the game needs them to look and sound the same for everyone, each with its licence file beside it: fonts under the SIL Open Font Licence in `assets/fonts/`, and CC0 sounds in `assets/audio/`. Anything else third-party still needs asking first.
@@ -86,6 +90,13 @@ Claude writes the code, all of it: nothing is left as an exercise. The user is l
   - Reports go to `reports/`, which is gitignored.
 - CI (`.github/workflows/tests.yml`) runs the tests on every PR and on pushes to `main`. A PR is only ready for review when the tests pass both locally and in CI.
   - The workflow installs Godot and runs gdUnit's command itself (not through gdUnit4-action). If Godot hangs, which it now and then has on the Linux runner after every test passed, it's stopped after 4 minutes: gdb prints every thread's stack, then SIGSEGV makes Godot's crash handler print its backtrace (if it's still on); the log and reports are kept as the `godot-log` artifact. If CI fails with "Godot hung", read the backtrace before re-running.
+
+## Builds
+- Players download builds from the repo's Releases page (#143). The user publishes one by hand (*Actions > Publish build > Run workflow* on `main`); never start a publish run yourself unless asked. How it works is in `docs/GDD.md` under *Publishing builds*.
+- Every file the game loads by a path in a string is found by `ExportList` (`scripts/build/`) as long as the full `res://assets/third_party/...` path is written in a scene, resource, script or `.dlg` file. A path built up in code (joined from pieces) isn't seen: add it to `ExportList` or the build won't have it.
+- A new kind of plain-text (non-resource) file the game reads, like `.dlg`, must be added to both presets' `include_filter` in `export_presets.cfg`.
+- To try a build locally: `tools/build/export.sh` in Git Bash (needs the art and the 4.7.2 export templates). A PR that touches `export_presets.cfg`, `project.godot`, `scripts/build/`, `tools/build/`, `CREDITS.txt` or the publish workflow does a dry-run build in CI, kept as a download on the run.
+- Add a credit to `CREDITS.txt` whenever a new pack, font or sound comes in.
 
 ## Code style
 Follow the official GDScript style guide. Godot enforces some of it: in project settings, missing types and unsafe calls/casts are **errors**, and unused or shadowed variables are warnings. `tests/code_standards_test.gd` loads every script under `scripts/`, `ui/` and `tests/`, so CI fails if any script breaks these rules.
