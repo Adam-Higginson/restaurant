@@ -490,6 +490,18 @@ A growing glossary of the Godot concepts this project uses: what each one is, in
 
 **Deploy keys (GitHub).** A key that opens one repo only, read-only unless allowed to write. The private half is kept as an encrypted secret that workflows can use. *Ours:* `ASSETS_DEPLOY_KEY` lets the publish workflow read the private art repo.
 
+## Books (#145)
+
+**TextureRect.** A `Control` that shows a picture. `expand_mode` *Ignore Size* lets it be any size, not the picture's own, and `stretch_mode` says how the picture fills it (*Scale* stretches it to fit; *Keep Centered* shows it at its own size in the middle). Like any `CanvasItem` it has its own `texture_filter`: *Linear* blends pixels smoothly when the picture is drawn bigger or smaller than it is. *Ours:* `ui/book_view.tscn`'s `Spread`, the painted open book.
+
+**Measuring text before it's drawn.** `font.get_multiline_string_size(text, alignment, width, size)` says how tall a piece of text would stand if wrapped to `width` at font size `size`, without making a label. *Ours:* `BookView.page_height` measures a page at each size and `body_size_for` picks the largest that fits the paper.
+
+**Theme overrides in code.** A control's look comes from its theme, and any part can be replaced on one control: `add_theme_font_override("font", f)`, `add_theme_font_size_override("font_size", 11)`, `add_theme_color_override("font_color", c)`. They're the same as the *Theme Overrides* section in the Inspector. *Ours:* `BookView` sets the ink, the face and the sizes on each label it makes.
+
+**One page per push of a stick.** A key sends one "pressed" event (repeats are marked as echoes and ignored by default), but a stick held over sends a stream of motion events, and each counts as "pressed". To act once per push, remember the action as held when it's pressed and forget it when `event.is_action_released(...)` comes. *Ours:* `BookView._newly_pushed`.
+
+**CanvasLayer order.** Each `CanvasLayer` has a `layer` number; higher layers draw on top of lower ones, whatever their place in the tree. *Ours:* the HUD's `BookLayer` (16) covers the HUD, and the dialogue's `SpeechLayer` (17) sits above that.
+
 ## Testing
 
 **gdUnit4.** The test framework (`addons/gdUnit4`). Suites extend our `GameTestSuite` and have `test_...` functions. `scene_runner` loads a scene and lets a test press inputs and wait physics ticks. *Ours:* `tests/`.

@@ -21,6 +21,10 @@ The full design lives in `docs/GDD.md`. Read it before starting a gameplay task,
 
 ## Public repo
 - This repo is public. Third-party art and audio go in `assets/third_party/`, which is gitignored: never commit anything from it, and never commit keys or tokens.
+- **The art is backed up in a private repo (#142).** `assets/third_party/` is its own git repo, a clone of the private `Adam-Higginson/restaurant-assets` (the packs, the Kiln output, Meshy models and ambient sounds, `.import` files included). Its `.gitattributes` turns off line-ending conversion so it's a byte-for-byte copy.
+  - **Back up** after adding a pack, firing the Kiln or making a Meshy model: in `assets/third_party/`, `git add -A`, commit with the issue in the message (`Adam-Higginson/restaurant#<n>`), and push. Say when a task changed the art, so the user knows to back it up.
+  - **New PC or worktree:** `git clone https://github.com/Adam-Higginson/restaurant-assets.git assets/third_party`, then import (`godot_console.exe --headless --path . --import`). Clone, don't copy, so the copy is a working backup too.
+  - It stays private: it holds the raw packs, which we ship inside builds but don't re-host.
 - Our own placeholder art (generated, not third-party) lives in `assets/placeholder/` and is committed. Its cloth, paper and painted textures are painted soft by `tools/textures/paint_placeholders.sh` from the pixel-art originals in `tools/textures/originals/` (#135): change an original or a recipe and run it again; don't hand-edit the painted PNGs.
 - Pack models are fired into our N64 look by the Kiln (`./kiln.sh`, Blender 4.4; see `docs/GDD.md`). Its output goes in `assets/third_party/_kiln/` and is never committed: it's made from the packs. Check fired models by eye with `tools/kiln/capture.sh <folder>`.
 - Two exceptions are committed because the game needs them to look and sound the same for everyone, each with its licence file beside it: fonts under the SIL Open Font Licence in `assets/fonts/`, and CC0 sounds in `assets/audio/`. Anything else third-party still needs asking first.
