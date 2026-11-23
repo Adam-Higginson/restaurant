@@ -237,3 +237,32 @@ func test_up_on_deck_you_cant_overhear_them_through_the_deck() -> void:
 	await physics_ticks(runner, 5)
 
 	assert_array(chatter.audible().keys()).is_empty()
+
+
+func test_scripts_can_ask_whether_the_captain_is_at_his_post() -> void:
+	var rig: Array[Node3D] = new_moored_ship_with_player(BY_THE_STOVE)
+	var ship: Ship = rig[0] as Ship
+	var world: Node = ship.get_parent()
+	var time: TimeOfDay = TimeOfDay.new()
+	world.add_child(time)
+	var facts: DialogueFacts = DialogueFacts.new()
+	facts.ship = ship
+	world.add_child(facts)
+	var runner: GdUnitSceneRunner = scene_runner(world)
+	await physics_ticks(runner, 3)
+	var heron: Crewmate = _heron(ship)
+
+	# Where he belongs at night: by the stove.
+	assert_bool(Game.dialogue.is_set(&"heron_at_post")).is_true()
+
+	# Off up on deck (for a drink, say), he isn't.
+	heron.global_position += Vector3(0, 0, -6)
+	assert_bool(Game.dialogue.is_set(&"heron_at_post")).is_false()
+
+
+func _heron(ship: Ship) -> Crewmate:
+	for node: Node in ship.get_tree().get_nodes_in_group(Crewmate.GROUP):
+		var crewmate: Crewmate = node as Crewmate
+		if crewmate != null and crewmate.person != null and crewmate.person.id == &"heron":
+			return crewmate
+	return null
