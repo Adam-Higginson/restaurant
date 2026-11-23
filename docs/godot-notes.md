@@ -458,6 +458,14 @@ A growing glossary of the Godot concepts this project uses: what each one is, in
 
 **`.gdignore`.** An empty file named `.gdignore` in a folder makes Godot skip that folder: nothing in it is imported or shown in the FileSystem dock. *Ours:* `tools/textures/originals/`, the pixel-art originals kept only for the painting script (#135).
 
+## The Meshy heron captain (#139)
+
+**Blending between animations.** `AnimationPlayer.play(name, custom_blend)` fades from whatever was playing into the new animation over that many seconds, so a character eases from listening into talking instead of snapping. *Ours:* `CrewAnimator` blends over 0.3 s.
+
+**Loop modes.** Each `Animation` has a `loop_mode`: none (plays once and stops on its last frame), linear (starts again from the top) or ping-pong (back and forth). Imported animations usually come without a loop, so we set it in code. *Ours:* `CrewAnimator` sets its idle, talking and listening animations to loop when the model loads.
+
+**An armature's scale and its animations' units.** A model's skeleton can sit under a scaled node: Meshy's `Armature` is scaled by 0.01, its bones and animations are in centimetres, and the mesh is in metres. It all lines up inside the file, but measuring the mesh's box through that scale reads it 100 times too small. Scale the node that holds the whole model instead. *Ours:* the heron's `Model/Meshy` node is scaled by 1.21, with `fit_size` left at zero.
+
 ## Testing
 
 **gdUnit4.** The test framework (`addons/gdUnit4`). Suites extend our `GameTestSuite` and have `test_...` functions. `scene_runner` loads a scene and lets a test press inputs and wait physics ticks. *Ours:* `tests/`.
