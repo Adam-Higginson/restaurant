@@ -39,6 +39,10 @@ const GRAIN: Texture2D = preload("res://assets/placeholder/materials/n64_grain.t
 		if is_inside_tree():
 			dress()
 ## The box the model is fitted into, in metres. Zero keeps its own size.
+## A rigged model whose armature is scaled (Meshy's are, by 0.01, with their
+## animations in centimetres) can't be measured this way: its mesh reads 100
+## times too small, so fitting blows it up and its animations fly off. Leave
+## this zero for those and scale this node instead.
 @export var fit_size: Vector3 = Vector3.ZERO:
 	set(value):
 		fit_size = value

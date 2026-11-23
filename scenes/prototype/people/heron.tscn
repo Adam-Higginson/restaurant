@@ -178,10 +178,9 @@ material_override = ExtResource("4_oilskin")
 mesh = SubResource("Crown")
 
 [node name="Meshy" type="Node3D" parent="Model" node_paths=PackedStringArray("stand_ins")]
-transform = Transform3D(-1, 0, 0, 0, 1, 0, 0, 0, -1, 0, 0, 0)
+transform = Transform3D(-1.2105, 0, 0, 0, 1.2105, 0, 0, 0, -1.2105, 0, 0, 0)
 script = ExtResource("10_model")
 path = "res://assets/third_party/meshy/heron/heron.glb"
-fit_size = Vector3(4, 2.3, 4)
 stand_ins = [NodePath("../LegLeft"), NodePath("../LegRight"), NodePath("../FootLeft"), NodePath("../FootRight"), NodePath("../Coat"), NodePath("../Collar"), NodePath("../Tail"), NodePath("../Neck"), NodePath("../Head"), NodePath("../Beak"), NodePath("../EyeLeft"), NodePath("../EyeRight"), NodePath("../Crest"), NodePath("../Brim"), NodePath("../Crown")]
 grain = false
 detail = 1.0
