@@ -391,7 +391,8 @@ func animation_for(of: Pose) -> StringName:
 	match of:
 		Pose.WALK:
 			# A quick walk is a run, if there's a run to play.
-			if is_running() and _animator != null 					and _animator.has_animation("%s/%s" % [LIBRARY, run_animation]):
+			if is_running() and _animator != null \
+					and _animator.has_animation("%s/%s" % [LIBRARY, run_animation]):
 				return run_animation
 			return walk_animation
 		Pose.STRIKE:

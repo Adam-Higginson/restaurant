@@ -31,6 +31,9 @@ enum VesselShape { FLAT, BOWL, PAN, POT }
 @export var storage: StorageKind = StorageKind.NONE
 ## For vessels, how it's drawn (see [ItemModel]).
 @export var vessel_shape: VesselShape = VesselShape.FLAT
+## For cookware: how long food's golden moment lasts in it, in seconds
+## (see [GoldenMoment]). A better pan gives you longer to catch it.
+@export var golden_window: float = 1.5
 
 
 ## Whether food can go in it. Vessels never go inside other vessels.

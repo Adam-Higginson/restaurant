@@ -89,7 +89,8 @@ func _land(player: Player3D, grade: int) -> void:
 	var perfect: bool = grade == ChopMeter.Grade.PERFECT
 	var ragged: bool = grade == ChopMeter.Grade.RAGGED
 	var ticks: int = perfect_ticks if perfect else (0 if ragged else good_ticks)
-	var stop: HitStop = player.get_node_or_null("HitStop") as HitStop 			if is_instance_valid(player) else null
+	var stop: HitStop = player.get_node_or_null("HitStop") as HitStop \
+			if is_instance_valid(player) else null
 	if stop != null and ticks > 0:
 		stop.freeze(ticks)
 	if not ragged:

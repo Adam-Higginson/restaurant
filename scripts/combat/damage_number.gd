@@ -64,7 +64,8 @@ static func spawn_words(parent: Node, at: Vector3, said: String, colour: Color,
 # where it starts as it becomes ready.
 static func _place(label: DamageNumber, parent: Node, at: Vector3) -> void:
 	var space: Node3D = parent as Node3D
-	label.position = space.global_transform.affine_inverse() * at 			if space != null and space.is_inside_tree() else at
+	label.position = space.global_transform.affine_inverse() * at \
+			if space != null and space.is_inside_tree() else at
 	parent.add_child(label)
 
 

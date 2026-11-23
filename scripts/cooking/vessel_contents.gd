@@ -27,9 +27,17 @@ signal reaction_progressed(active: ActiveReaction)
 ## a bigger reaction took its items.
 signal reaction_cancelled(active: ActiveReaction)
 signal reaction_finished(active: ActiveReaction, result: ItemInstance)
+## Emitted when food reaches its golden moment (see [GoldenMoment]), when it's
+## caught in time, and when the moment passes.
+signal golden_opened(moment: GoldenMoment)
+signal golden_caught(moment: GoldenMoment)
+signal golden_missed(moment: GoldenMoment)
 
 # Stops bad data (reactions that turn items back and forth) from looping forever.
 const _MAX_CHAIN: int = 100
+## How well food with a golden moment is made when the moment's missed: done,
+## a star short of the best (see [member Reaction.golden_moment]).
+const MISSED_QUALITY: int = 2
 
 var _vessel: Item
 var _capacity: int
@@ -40,6 +48,8 @@ var _contents: Array[ItemInstance] = []
 var _elements: Array[Element] = []
 var _active: Array[ActiveReaction] = []
 var _contents_dirty: bool = false
+# Food at its golden moment right now.
+var _golden: Array[GoldenMoment] = []
 
 
 ## [param vessel] is the item this is the inside of (e.g. the chopping board).
@@ -88,6 +98,9 @@ func add_item(instance: ItemInstance) -> bool:
 func remove_item(instance: ItemInstance) -> bool:
 	if not _contents.has(instance):
 		return false
+	for moment: GoldenMoment in _golden.duplicate():
+		if moment.result == instance:
+			_catch(moment)
 	_take_out(instance)
 	_react()
 	return true
@@ -123,6 +136,10 @@ func remove_element(element: Element) -> bool:
 	if not _elements.has(element):
 		return false
 	_elements.erase(element)
+	# Off the heat inside the window: caught.
+	for moment: GoldenMoment in _golden.duplicate():
+		if moment.reaction.driving_element() == element:
+			_catch(moment)
 	return true
 
 
@@ -131,8 +148,16 @@ func has_element(element: Element) -> bool:
 	return _elements.has(element)
 
 
-## Moves reactions driven by a present timed element forward by [param seconds].
+## Moves reactions driven by a present timed element forward by [param seconds],
+## and golden moments on towards passing.
 func tick(seconds: float) -> void:
+	for moment: GoldenMoment in _golden.duplicate():
+		if not _elements.has(moment.reaction.driving_element()):
+			continue
+		moment.seconds_left -= seconds
+		if moment.seconds_left <= 0.0:
+			_golden.erase(moment)
+			golden_missed.emit(moment)
 	for active: ActiveReaction in _active:
 		var driver: Element = active.reaction.driving_element()
 		if driver == null or driver.kind != Element.Kind.TIMED or not _elements.has(driver):
@@ -152,6 +177,11 @@ func get_contents() -> Array[ItemInstance]:
 ## The reactions in progress. A copy, like [method get_contents].
 func get_active_reactions() -> Array[ActiveReaction]:
 	return _active.duplicate()
+
+
+## Food in here at its golden moment right now (see [GoldenMoment]).
+func get_golden_moments() -> Array[GoldenMoment]:
+	return _golden.duplicate()
 
 
 # --- The engine ---------------------------------------------------------------
@@ -256,8 +286,13 @@ func _finish(active: ActiveReaction) -> void:
 	var qualities: Array[int] = []
 	for instance: ItemInstance in active.consumed + active.required:
 		qualities.append(instance.quality)
+	var golden: bool = active.reaction.golden_moment
+	# Food with a golden moment starts out merely done, and gets its best if
+	# it's caught (see _catch).
+	var made: int = mini(MISSED_QUALITY, active.method_quality()) if golden \
+			else active.method_quality()
 	var result: ItemInstance = ItemInstance.new(
-		active.reaction.result, active.reaction.result_quality(qualities, active.method_quality())
+		active.reaction.result, active.reaction.result_quality(qualities, made)
 	)
 	# The result takes the place of the first item it consumed.
 	var slot: int = _contents.find(active.consumed[0])
@@ -265,6 +300,20 @@ func _finish(active: ActiveReaction) -> void:
 		_take_out(instance)
 	_contents.insert(mini(slot, _contents.size()), result)
 	reaction_finished.emit(active, result)
+	if golden:
+		var moment: GoldenMoment = GoldenMoment.new(result, active.reaction, qualities,
+				_vessel.golden_window)
+		_golden.append(moment)
+		golden_opened.emit(moment)
+
+
+# Food taken off the heat at its golden moment: made at its best.
+func _catch(moment: GoldenMoment) -> void:
+	_golden.erase(moment)
+	moment.result.quality = moment.reaction.result_quality(moment.input_qualities,
+			moment.reaction.quality)
+	golden_caught.emit(moment)
+	contents_changed.emit()
 
 
 # Removes an item and cancels every other reaction that used it.

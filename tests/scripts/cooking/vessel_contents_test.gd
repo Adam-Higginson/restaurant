@@ -390,6 +390,85 @@ func test_ungraded_cuts_count_as_the_proper_method() -> void:
 	assert_int(active.method_quality()).is_equal(3)
 
 
+
+# --- The golden moment ----------------------------------------------------------
+
+func test_a_golden_dish_starts_out_merely_done() -> void:
+	var pan: VesselContents = _frying_pan()
+	pan.add_item(_piece(_potato, 2))
+	pan.add_element(_fire)
+	pan.tick(2.0)
+
+	assert_array(pan.get_golden_moments()).has_size(1)
+	# ★★ in, made well (missed so far): ★★.
+	assert_int(pan.get_contents()[0].quality).is_equal(2)
+
+
+func test_taking_the_heat_away_in_time_catches_it() -> void:
+	var pan: VesselContents = _frying_pan()
+	var caught: Array[GoldenMoment] = []
+	pan.golden_caught.connect(func(moment: GoldenMoment) -> void: caught.append(moment))
+	pan.add_item(_piece(_potato, 2))
+	pan.add_element(_fire)
+	pan.tick(2.0)
+
+	pan.remove_element(_fire)
+
+	assert_array(caught).has_size(1)
+	assert_array(pan.get_golden_moments()).is_empty()
+	# Caught at its best: a star up.
+	assert_int(pan.get_contents()[0].quality).is_equal(3)
+
+
+func test_taking_the_food_out_in_time_catches_it() -> void:
+	var pan: VesselContents = _frying_pan()
+	pan.add_item(_piece(_potato, 2))
+	pan.add_element(_fire)
+	pan.tick(2.0)
+	var food: ItemInstance = pan.get_contents()[0]
+
+	pan.remove_item(food)
+
+	assert_int(food.quality).is_equal(3)
+
+
+func test_left_on_the_heat_the_moment_passes() -> void:
+	var pan: VesselContents = _frying_pan()
+	var missed: Array[GoldenMoment] = []
+	pan.golden_missed.connect(func(moment: GoldenMoment) -> void: missed.append(moment))
+	pan.add_item(_piece(_potato, 2))
+	pan.add_element(_fire)
+	pan.tick(2.0)
+
+	pan.tick(_pan.golden_window + 0.1)
+	pan.remove_element(_fire)
+
+	assert_array(missed).has_size(1)
+	assert_int(pan.get_contents()[0].quality).is_equal(2)
+
+
+func test_a_better_pan_gives_longer_to_catch_it() -> void:
+	_pan.golden_window = 3.0
+	var pan: VesselContents = _frying_pan()
+	pan.add_item(_piece(_potato, 2))
+	pan.add_element(_fire)
+	pan.tick(2.0)
+
+	pan.tick(2.0)
+
+	assert_array(pan.get_golden_moments()).has_size(1)
+	assert_float(pan.get_golden_moments()[0].fraction_left()).is_equal_approx(1.0 / 3.0, 0.001)
+
+
+func test_a_dish_without_a_golden_moment_has_none() -> void:
+	var pan: VesselContents = _vessel(_pan, 3)
+	pan.add_item(_piece(_water))
+	pan.add_element(_fire)
+	pan.tick(4.0)
+
+	assert_array(pan.get_golden_moments()).is_empty()
+
+
 # --- Signals ------------------------------------------------------------------
 
 func test_signals_follow_a_reaction_from_start_to_finish() -> void:
@@ -440,6 +519,14 @@ func _vessel(vessel: Item, capacity: int) -> VesselContents:
 		_slice, _dice, _make_salad, _boil_water, _rushed_soup, _boil_potato,
 	]
 	return VesselContents.new(vessel, reactions, capacity)
+
+
+# A pan where a potato fries (2 s of fire) into a dish with a golden moment.
+func _frying_pan() -> VesselContents:
+	var fry: Reaction = _reaction([_potato], [_pan], [_fire], 2, _boiled_potato, 3)
+	fry.golden_moment = true
+	var reactions: Array[Reaction] = [fry]
+	return VesselContents.new(_pan, reactions, 3)
 
 
 func _graded_cuts(vessel: VesselContents, grades: Array[int]) -> void:

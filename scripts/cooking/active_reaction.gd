@@ -38,7 +38,7 @@ func is_complete() -> bool:
 
 
 ## How well it's been made, as a reaction's quality (1 to 3): the average
-## of its [member step_grades], rounded up, but never better than the
+## of its [member step_grades], rounded to the nearest, but never better than the
 ## reaction's own [member Reaction.quality] (a shortcut stays a shortcut).
 ## Without graded steps, just the reaction's quality.
 func method_quality() -> int:
@@ -47,7 +47,9 @@ func method_quality() -> int:
 	var total: int = 0
 	for grade: int in step_grades:
 		total += grade
-	return mini(ceili(float(total) / step_grades.size()), reaction.quality)
+	# Rounded to the nearest, a half up, kept exact.
+	var average: int = floori(float(2 * total + step_grades.size()) / (2 * step_grades.size()))
+	return mini(average, reaction.quality)
 
 
 ## Whether it uses [param instance], consumed or required.

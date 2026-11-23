@@ -53,6 +53,9 @@ func test_soup_done_properly_is_three_stars() -> void:
 	pan.add_item(ItemInstance.new(_item(&"diced_tomato"), 2))
 	pan.add_item(ItemInstance.new(_item(&"chopped_onion"), 2))
 	await physics_ticks(runner, 8 * 60 + 5)
+	# Off the heat at its golden moment, the moment it's done.
+	assert_array(pan.get_golden_moments()).has_size(1)
+	pan.remove_element(_fire())
 
 	var food: Array[ItemInstance] = pan.get_contents()
 	assert_int(food.size()).is_equal(1)
@@ -115,3 +118,7 @@ func _soup_pan(ship: Ship) -> VesselContents:
 
 func _item(id: StringName) -> Item:
 	return Catalog.load_default().find_item(id)
+
+
+func _fire() -> Element:
+	return Catalog.load_default().find_element(&"fire")
