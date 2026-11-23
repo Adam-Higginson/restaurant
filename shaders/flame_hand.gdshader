@@ -1,4 +1,4 @@
-// The lantern spirit's hand: the same chunky pixel fire as his flame
+// The lantern spirit's hand: the same soft N64 fire as his flame
 // (shaders/lantern_glass.gdshader), poured into the outline of an arm and a
 // hand. The outline is worked out with distances rather than drawn: for
 // every texel we ask how far it is from the nearest part of the hand (the
@@ -38,6 +38,9 @@ uniform float form = 1.0;
 uniform float grip = 0.0;
 // How long the sheet is against how wide it is.
 uniform float aspect = 1.6;
+// Draw the hand smoothly, as N64 fire was filtered; off snaps it to chunky
+// texel squares.
+uniform bool soft = true;
 
 float hash(vec2 p) {
 	return fract(sin(dot(p, vec2(127.1, 311.7))) * 43758.5453);
@@ -66,8 +69,9 @@ float melt(float a, float b, float k) {
 }
 
 void fragment() {
-	// Snap to the texel grid, so the hand is drawn in chunky squares.
-	vec2 uv = (floor(UV * texels) + 0.5) / texels;
+	// Soft, the hand is drawn smoothly, as N64 fire was filtered; otherwise
+	// snapped to the texel grid, in chunky squares.
+	vec2 uv = soft ? UV : (floor(UV * texels) + 0.5) / texels;
 	// Along the arm from the wrist (0) and up across it (0 to 1).
 	vec2 p = vec2((1.0 - uv.x) * aspect, 1.0 - uv.y);
 	float t = TIME * speed + seed * 17.0;
@@ -112,8 +116,11 @@ void fragment() {
 	}
 
 	// Hottest in the middle, in a few bands, like a small palette.
-	float heat = clamp(-shape / 0.1, 0.0, 1.0) * 0.75 + lick * 0.45;
-	heat = floor(clamp(heat, 0.0, 1.0) * 5.0) / 5.0;
+	float heat = clamp(clamp(-shape / 0.1, 0.0, 1.0) * 0.75 + lick * 0.45, 0.0, 1.0);
+	float banded = heat * 5.0;
+	// Soft, the bands' edges blend; otherwise they're hard steps.
+	heat = soft ? (floor(banded) + smoothstep(0.25, 0.75, fract(banded))) / 5.0
+			: floor(banded) / 5.0;
 	float cool = 1.0 - smoothstep(0.08, 0.55, strength);
 	vec3 hot_now = mix(hot.rgb, cold_hot.rgb, cool);
 	vec3 warm_now = mix(warm.rgb, cold_warm.rgb, cool);

@@ -181,9 +181,9 @@ func _soft_material(color: Color) -> StandardMaterial3D:
 	disc.fill = GradientTexture2D.FILL_RADIAL
 	disc.fill_from = Vector2(0.5, 0.5)
 	disc.fill_to = Vector2(1.0, 0.5)
-	disc.width = 8
-	disc.height = 8
-	material.texture_filter = BaseMaterial3D.TEXTURE_FILTER_NEAREST
+	disc.width = 16
+	disc.height = 16
+	material.texture_filter = BaseMaterial3D.TEXTURE_FILTER_LINEAR
 	material.albedo_texture = disc
 	return material
 

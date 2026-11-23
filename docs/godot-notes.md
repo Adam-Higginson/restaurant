@@ -420,6 +420,8 @@ A growing glossary of the Godot concepts this project uses: what each one is, in
 
 **Anti-aliasing by supersampling.** Drawing a shape at several samples per pixel and averaging them gives edge pixels in-between colours, so edges look smooth, not stepped. *Ours:* `tools/textures/paint_placeholders.py` paints our placeholder textures at 4 x 4 samples per pixel (#135). (Smoothing model edges on screen is a different thing: #134.)
 
+**Filtering by hand in a shader.** A shader that makes its own low-resolution picture (fire from noise, worked out per texel) can still look filtered: work out the four texels around a point and blend them by how far the point is between them, as a filtered texture does. *Ours:* the `soft` switch in `pixel_fire`, `lantern_glass` and `flame_hand` (#137).
+
 **`.gdignore`.** An empty file named `.gdignore` in a folder makes Godot skip that folder: nothing in it is imported or shown in the FileSystem dock. *Ours:* `tools/textures/originals/`, the pixel-art originals kept only for the painting script (#135).
 
 ## Testing

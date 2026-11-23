@@ -42,8 +42,8 @@ func _ready() -> void:
 	material.emission_enabled = true
 	material.emission = Color(1.0, 0.7, 0.3)
 	material.emission_energy_multiplier = 4.0
-	# A tiny pixel glow: a few square texels, bright in the middle, drawn
-	# sharp (nearest filtering) to match the chunky textures.
+	# A tiny soft glow, bright in the middle, filtered smoothly as N64 sprites
+	# were, so each mote is a round speck of light, not a square (#137).
 	var soft: Gradient = Gradient.new()
 	soft.offsets = PackedFloat32Array([0.0, 0.25, 1.0])
 	soft.colors = PackedColorArray([Color(1, 1, 1, 1), Color(1, 1, 1, 0.6), Color(1, 1, 1, 0)])
@@ -52,9 +52,9 @@ func _ready() -> void:
 	disc.fill = GradientTexture2D.FILL_RADIAL
 	disc.fill_from = Vector2(0.5, 0.5)
 	disc.fill_to = Vector2(1.0, 0.5)
-	disc.width = 5
-	disc.height = 5
-	material.texture_filter = BaseMaterial3D.TEXTURE_FILTER_NEAREST
+	disc.width = 16
+	disc.height = 16
+	material.texture_filter = BaseMaterial3D.TEXTURE_FILTER_LINEAR
 	material.albedo_texture = disc
 	material.emission_texture = disc
 	var mesh: QuadMesh = QuadMesh.new()
