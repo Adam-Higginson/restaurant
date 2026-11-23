@@ -1,6 +1,6 @@
 # Game Design Document
 
-Working title: **Salt and Ember** (the sea and the flame: you and the lantern). The repo is still called `restaurant`.
+Working title: **Salt and Ember** (the sea and the flame: you and the lantern). The project, the game's window and the Mac app have been called that since #143; the repo is still called `restaurant`.
 
 ## Pitch
 A cosy 3D adventure in the spirit of Ocarina of Time. You're pulled from the sea by a lantern spirit who promises to take you home, and you join the crew of a ship sailing between fog-wrapped islands. You remember home only as tastes and sounds, so you search for it by cooking and humming. Ashore, you explore, gather, solve puzzles and hunt wild creatures for the pot. Aboard, the ship's galley is the warm heart of it all, where the crew you gather eat together every evening.
