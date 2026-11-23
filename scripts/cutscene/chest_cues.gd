@@ -152,11 +152,26 @@ func _hold_up_gift(id: StringName) -> void:
 	player.add_child(_gift_shot)
 	var round_by: Vector3 = player.facing.rotated(Vector3.UP, deg_to_rad(gift_shot_angle))
 	var head: Vector3 = player.global_position + Vector3.UP * 1.75
-	var at: Vector3 = player.global_position + round_by * gift_shot_distance \
-			+ Vector3.UP * gift_shot_height
+	var at: Vector3 = clear_of_walls(head, player.global_position + round_by * gift_shot_distance
+			+ Vector3.UP * gift_shot_height)
 	_gift_shot.global_transform = Transform3D(Basis.looking_at(head - at, Vector3.UP), at)
 	_raise(treasure_node, _gift_shot, player.get_parent(),
 			player.global_position + Vector3.UP * 1.1 + player.facing * 0.3)
+
+
+## Where a camera wanting to stand at [param want] can, looking at
+## [param from]: there, or pulled in short of the first wall between them,
+## like a spring arm, so it never ends up outside the room.
+func clear_of_walls(from: Vector3, want: Vector3) -> Vector3:
+	if not is_inside_tree() or not is_instance_valid(player):
+		return want
+	var query: PhysicsRayQueryParameters3D = PhysicsRayQueryParameters3D.create(from, want)
+	query.exclude = [player.get_rid()]
+	var hit: Dictionary = player.get_world_3d().direct_space_state.intersect_ray(query)
+	if hit.is_empty():
+		return want
+	var wall: Vector3 = hit["position"]
+	return wall + (from - wall).normalized() * 0.25
 
 
 # Raises [param treasure_node] from [param from] to over your head as your
