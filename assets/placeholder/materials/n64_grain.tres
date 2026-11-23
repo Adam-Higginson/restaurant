@@ -2,11 +2,15 @@
 
 [sub_resource type="FastNoiseLite" id="Noise_Grain"]
 noise_type = 3
-frequency = 0.12
+frequency = 0.06
 fractal_octaves = 2
+
+[sub_resource type="Gradient" id="Gradient_Soft"]
+colors = PackedColorArray(0.72, 0.72, 0.72, 1, 1, 1, 1, 1)
 
 [resource]
 width = 32
 height = 32
 noise = SubResource("Noise_Grain")
+color_ramp = SubResource("Gradient_Soft")
 seamless = true

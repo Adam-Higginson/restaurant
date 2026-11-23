@@ -15,6 +15,8 @@
 [ext_resource type="PackedScene" path="res://scenes/prototype/props/lantern.tscn" id="13_kea4x"]
 [ext_resource type="Material" path="res://assets/placeholder/materials/leather.tres" id="14_6bqnt"]
 [ext_resource type="PackedScene" path="res://scenes/prototype/dressing/candle.tscn" id="15_g20dw"]
+[ext_resource type="Script" path="res://scripts/art/third_party_model.gd" id="kiln_model"]
+[ext_resource type="Resource" path="res://data/art/looks/prop.tres" id="kiln_prop"]
 
 [sub_resource type="BoxMesh" id="BoxMesh_j7brd"]
 size = Vector3(0.06, 2.95, 1)
@@ -260,10 +262,22 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.626, 0.475)
 material_override = ExtResource("6_lkcy7")
 mesh = SubResource("BoxMesh_5dusr")
 
-[node name="LowerPillow" type="MeshInstance3D" parent="." unique_id=1402664768]
+[node name="LowerPillow" type="Node3D" parent="." unique_id=1402664768]
 transform = Transform3D(0.99254614, 0.12186935, 0, -0.12186935, 0.99254614, 0, 0, 0, 1, -0.73, 0.702, 0.475)
+
+[node name="Box" type="MeshInstance3D" parent="LowerPillow"]
 material_override = ExtResource("6_lkcy7")
 mesh = SubResource("BoxMesh_ycbqk")
+
+[node name="Pack" type="Node3D" parent="LowerPillow" node_paths=PackedStringArray("stand_ins")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.075, 0)
+script = ExtResource("kiln_model")
+path = "res://assets/third_party/kaykit_furniture/Assets/gltf/pillow_A.gltf"
+fit_size = Vector3(0.38, 0.15, 0.6)
+stretch = true
+stand_ins = [NodePath("../Box")]
+tint = Color(1.04, 1.28, 1.75, 1)
+look = ExtResource("kiln_prop")
 
 [node name="LowerQuilt" type="MeshInstance3D" parent="." unique_id=354320288]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.295, 0.657, 0.475)
@@ -280,10 +294,22 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.295, 0.597, 0.935)
 material_override = ExtResource("7_mjn4b")
 mesh = SubResource("BoxMesh_ssgx3")
 
-[node name="LowerPillowSmall" type="MeshInstance3D" parent="." unique_id=1576133598]
+[node name="LowerPillowSmall" type="Node3D" parent="." unique_id=1576133598]
 transform = Transform3D(0.96498036, 0.24059664, 0.104528464, -0.2419219, 0.9702957, 0, -0.101423524, -0.025287725, 0.9945219, -0.6, 0.762, 0.515)
+
+[node name="Box" type="MeshInstance3D" parent="LowerPillowSmall"]
 material_override = ExtResource("6_lkcy7")
 mesh = SubResource("BoxMesh_tpfig")
+
+[node name="Pack" type="Node3D" parent="LowerPillowSmall" node_paths=PackedStringArray("stand_ins")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.05, 0)
+script = ExtResource("kiln_model")
+path = "res://assets/third_party/kaykit_furniture/Assets/gltf/pillow_A.gltf"
+fit_size = Vector3(0.3, 0.1, 0.46)
+stretch = true
+stand_ins = [NodePath("../Box")]
+tint = Color(1.04, 1.28, 1.75, 1)
+look = ExtResource("kiln_prop")
 
 [node name="LowerFootBlanket" type="MeshInstance3D" parent="." unique_id=905325509]
 transform = Transform3D(0.9975641, 0, 0.06975647, 0, 1, 0, -0.06975647, 0, 0.9975641, 0.73, 0.727, 0.475)
@@ -361,10 +387,22 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.916, 0.475)
 material_override = ExtResource("6_lkcy7")
 mesh = SubResource("BoxMesh_ui6tg")
 
-[node name="UpperPillow" type="MeshInstance3D" parent="." unique_id=77045649]
+[node name="UpperPillow" type="Node3D" parent="." unique_id=77045649]
 transform = Transform3D(0.99254614, 0.12186935, 0, -0.12186935, 0.99254614, 0, 0, 0, 1, -0.73, 1.992, 0.475)
+
+[node name="Box" type="MeshInstance3D" parent="UpperPillow"]
 material_override = ExtResource("6_lkcy7")
 mesh = SubResource("BoxMesh_ue704")
+
+[node name="Pack" type="Node3D" parent="UpperPillow" node_paths=PackedStringArray("stand_ins")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.075, 0)
+script = ExtResource("kiln_model")
+path = "res://assets/third_party/kaykit_furniture/Assets/gltf/pillow_A.gltf"
+fit_size = Vector3(0.38, 0.15, 0.6)
+stretch = true
+stand_ins = [NodePath("../Box")]
+tint = Color(1.04, 1.28, 1.75, 1)
+look = ExtResource("kiln_prop")
 
 [node name="UpperQuilt" type="MeshInstance3D" parent="." unique_id=910099644]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.295, 1.947, 0.475)
@@ -381,10 +419,22 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.295, 1.887, 0.935)
 material_override = ExtResource("11_ekewx")
 mesh = SubResource("BoxMesh_0ltrk")
 
-[node name="UpperPillowSmall" type="MeshInstance3D" parent="." unique_id=1454390526]
+[node name="UpperPillowSmall" type="Node3D" parent="." unique_id=1454390526]
 transform = Transform3D(0.96498036, 0.24059664, 0.104528464, -0.2419219, 0.9702957, 0, -0.101423524, -0.025287725, 0.9945219, -0.6, 2.052, 0.515)
+
+[node name="Box" type="MeshInstance3D" parent="UpperPillowSmall"]
 material_override = ExtResource("6_lkcy7")
 mesh = SubResource("BoxMesh_6kk0l")
+
+[node name="Pack" type="Node3D" parent="UpperPillowSmall" node_paths=PackedStringArray("stand_ins")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.05, 0)
+script = ExtResource("kiln_model")
+path = "res://assets/third_party/kaykit_furniture/Assets/gltf/pillow_A.gltf"
+fit_size = Vector3(0.3, 0.1, 0.46)
+stretch = true
+stand_ins = [NodePath("../Box")]
+tint = Color(1.04, 1.28, 1.75, 1)
+look = ExtResource("kiln_prop")
 
 [node name="UpperFootBlanket" type="MeshInstance3D" parent="." unique_id=1738223221]
 transform = Transform3D(0.9975641, 0, 0.06975647, 0, 1, 0, -0.06975647, 0, 0.9975641, 0.73, 2.017, 0.475)

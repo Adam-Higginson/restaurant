@@ -204,7 +204,7 @@ A growing glossary of the Godot concepts this project uses: what each one is, in
 
 **State machine.** A thing that is always in exactly one of a few named states, with rules for when it moves to the next. In GDScript it's an `enum` for the states, a variable holding the current one, and a `match` that says what each state does. It keeps "what is it doing now?" in one place instead of a tangle of flags. *Ours:* `CrabCycle` (`scripts/combat/crab_cycle.gd`): idle, windup, attack, opening, staggered, cleared.
 
-**Stepping logic with `delta`.** `_physics_process(delta)` is told how many seconds have passed since the last tick (1/60). Logic that only ever adds up `delta` doesn't care who is calling it, so a test can hand it any amount of time and check exactly what happened. *Ours:* `CrabCycle.tick(delta)` and `ParryWindow.tick(delta)`; `FogCrab` and `Duellist` call them every physics tick, and the tests call them with whole seconds.
+**Stepping logic with `delta`.** `_physics_process(delta)` is told how many seconds have passed since the last tick (1/60). Logic that only ever adds up `delta` doesn't care who is calling it, so a test can hand it any amount of time and check exactly what happened. *Ours:* `CrabCycle.tick(delta)` and `ParryWindow.tick(delta)`; `Crab` and `Duellist` call them every physics tick, and the tests call them with whole seconds.
 
 **Groups, for finding many nodes.** As well as finding "the" one of something, `get_tree().get_nodes_in_group(name)` gives every node in a group, and `remove_from_group` takes a node out again. *Ours:* everything in `lock_on_target` can be locked on to and struck; a fog-crab leaves it when its fog clears. The player's `Duellist` is in `duellist`, and the place a defeat puts you is in `landing`.
 
@@ -218,7 +218,7 @@ A growing glossary of the Godot concepts this project uses: what each one is, in
 
 **Angles between directions (`angle_to`).** `a.angle_to(b)` on two `Vector2`s gives the angle from one to the other. Comparing it with half an arc says whether something is "in front". *Ours:* `Duellist.in_reach()`: the knife hits what's within 2 m and inside a 120° arc ahead.
 
-**Signals between plain objects.** Signals aren't only for nodes: a `RefCounted` can declare and emit them too. *Ours:* `Hearts.changed` redraws the `HeartsBar`; `CrabCycle.attacked` tells the `FogCrab` to land its hit; `CrabCycle.state_changed` sets the lantern's light.
+**Signals between plain objects.** Signals aren't only for nodes: a `RefCounted` can declare and emit them too. *Ours:* `Hearts.changed` redraws the `HeartsBar`; `CrabCycle.attacked` tells the `Crab` to land its hit; `CrabCycle.state_changed` sets the lantern's light.
 
 **Input Map actions for triggers.** A controller's triggers are *axes* (how far they're pulled), not buttons: bind them as "Joypad Axis 4" (left) and "5" (right). The action's *deadzone* is how far they must be pulled to count as pressed. *Ours:* `lock_on` and `parry` in Project Settings > Input Map, with a deadzone of 0.5.
 
@@ -226,7 +226,7 @@ A growing glossary of the Godot concepts this project uses: what each one is, in
 
 **Sound files and AudioStreamPlayer.** Drop an `.ogg` or `.wav` into the project and Godot imports it as an `AudioStream` (the `.import` file beside it records how). An `AudioStreamPlayer` node plays whatever is in its `stream`, at its `volume_db`, heard the same wherever you are. *Ours:* the six players under `DuelSounds` in `player.tscn` (swing, slice, tink, pan up, clang, hurt).
 
-**AudioStreamPlayer3D.** The same, but the sound comes from the node's place in the world: quieter with distance, and from the left or right of the camera. *Ours:* the three players under `Sounds` in `fog_crab.tscn`, so the far crab's ticking stays far away.
+**AudioStreamPlayer3D.** The same, but the sound comes from the node's place in the world: quieter with distance, and from the left or right of the camera. *Ours:* the three players under `Sounds` in `crab.tscn`, so the far crab's ticking stays far away.
 
 **AudioStreamRandomizer.** A resource that holds several recordings and plays one at random each time, never the same twice running, at a slightly different pitch (`random_pitch`). A sound heard over and over stops feeling stamped out. Give it to a player as its `stream`. *Ours:* one `.tres` per sound in `assets/audio/combat/` (`clang.tres`, `swing.tres`, `crab_click.tres`...). Open one in the Inspector to see its recordings and press play on each.
 
@@ -272,7 +272,7 @@ A growing glossary of the Godot concepts this project uses: what each one is, in
 
 **`CPUParticles3D` one-shot bursts.** A particle emitter whose particles are meshes. With `one_shot` and `explosiveness` 1 it throws all its particles at once; `restart()` throws another burst. CPU particles need no shader compiled the first time they fire, so there's no stutter on the first hit. *Ours:* the crab's `Chips` and `Wisps`, the pan's `Sparks`.
 
-**`material_overlay`.** A second material drawn over a mesh on top of its own, without replacing it. *Ours:* `FogCrab` lays a white unshaded one over every mesh of its model for the flash when struck.
+**`material_overlay`.** A second material drawn over a mesh on top of its own, without replacing it. *Ours:* `Crab` lays a white unshaded one over every mesh of its model for the flash when struck.
 
 **`ImmediateMesh`.** A mesh you rebuild in code every frame: `clear_surfaces()`, then `surface_begin`, a colour and a point per vertex, `surface_end`. *Ours:* `KnifeTrail`, a ribbon through where the blade has been.
 
@@ -280,13 +280,13 @@ A growing glossary of the Godot concepts this project uses: what each one is, in
 
 **Audio bus effects.** Every sound goes through a bus (`Master`, `Ambience`), and a bus can have effects such as a low-pass filter. Its settings can change while the game runs: `AudioServer.get_bus_effect` gives you the effect, and `set_bus_effect_enabled` turns it on and off. *Ours:* the `Muffle` low-pass on Master (`default_bus_layout.tres`), swept down by `HitFeel` when you're hurt.
 
-**Skeletons and bones (`Skeleton3D`).** An animated model is a mesh "skinned" to a skeleton: each vertex follows a few bones by weight, so turning a bone bends the mesh. Bones are named and posed in code with `set_bone_pose_rotation` and `set_bone_pose_scale`. *Ours:* `CharacterModel` puts every part on one skeleton and scales the head bone; `FogCrab` lifts the claws through the arm bones.
+**Skeletons and bones (`Skeleton3D`).** An animated model is a mesh "skinned" to a skeleton: each vertex follows a few bones by weight, so turning a bone bends the mesh. Bones are named and posed in code with `set_bone_pose_rotation` and `set_bone_pose_scale`. *Ours:* `CharacterModel` puts every part on one skeleton and scales the head bone; `Crab` lifts the claws through the arm bones.
 
 **`BoneAttachment3D`.** A node that follows one bone of a skeleton, so anything under it moves with that bone. *Ours:* `CharacterModel.right_hand` and `left_hand`, which hold the knife and pan.
 
 **`AnimationPlayer` and `AnimationLibrary`.** Animations live in libraries on a player, named `library/animation`. Each track moves one thing, for a bone written `path/to/Skeleton3D:bone`, so changing the path points an animation at another skeleton with the same bone names. Godot drops a `_Loop` ending from imported names and makes those animations loop. *Ours:* `CharacterModel.retarget` copies the Universal Animation Library's animations onto our skeleton, keeping only rotations.
 
-**Advancing an animation by hand.** With `callback_mode_process` set to Manual, an `AnimationPlayer` only moves on when you call `advance(delta)`. You can then adjust its bones after it, in the same frame. *Ours:* `FogCrab._animate` plays the crab's walk, then lifts its claws on top.
+**Advancing an animation by hand.** With `callback_mode_process` set to Manual, an `AnimationPlayer` only moves on when you call `advance(delta)`. You can then adjust its bones after it, in the same frame. *Ours:* `Crab._animate` plays the crab's walk, then lifts its claws on top.
 
 **Mesh arrays (`ArrayMesh`).** `surface_get_arrays` gives a mesh's raw data (positions, bone indices and weights, and the index list of triangles), and `add_surface_from_arrays` builds a mesh from data. *Ours:* `CharacterModel.cut_out` keeps only the triangles the head and neck bones move, to take a head off a whole body.
 
@@ -311,6 +311,22 @@ A growing glossary of the Godot concepts this project uses: what each one is, in
 **Turning about a point that isn't the origin.** A node turns about its own origin, which for a character is its feet. To turn it about its hips instead, turn it and then move it by the difference: `position = hips - rotated(hips)`. *Ours:* `CharacterModel._turn_for_flip`, so the backflip goes head over heels round the waist instead of swinging the head through the ground.
 
 **Single-precision angles.** Vectors store their numbers as 32-bit floats, so an angle worked out from them can come out a hair off: straight behind is pi, but in 32 bits it rounds just above the 64-bit `PI`. Compare angles with a little room, or special-case the edges. *Ours:* `Duellist.in_reach` treats an arc of 360 degrees as reaching everything, or the fillet missed a crab directly behind.
+
+## Hunting crabs (#109)
+
+**`Label3D`.** Text placed in the 3D world, like a sign, rather than on the screen. It has its own font, size (`font_size` × `pixel_size` metres per pixel), colour (`modulate`) and outline. *Ours:* the "Lv 1" over each crab (`LevelLabel` in `crab.tscn`) and every `DamageNumber`.
+
+**Billboarding and `no_depth_test`.** A billboard turns to face the camera every frame, so text and sprites never show edge-on. Turning off the depth test draws it over whatever is in front of it, so a wall or the crab itself can't hide it; `render_priority` then says what's drawn on top of what. *Ours:* `DamageNumber` and the level label have both.
+
+**Nodes that free themselves.** Something short-lived (a number, a puff) can count its own time in `_process` and call `queue_free()` when it's done, so whoever made it never has to tidy up. Add it to the world, not to the thing it's about, so it stays put if that moves or is freed first. *Ours:* `DamageNumber.spawn` adds the number to the crab's parent; a dead `Crab` frees itself once it has sunk.
+
+**Static functions for formulas.** A `static func` belongs to the class, not to one node, so it can be called and tested without making a scene. Good for rules like "health from level". *Ours:* `Crab.health_for(level)` and `Crab.meat_quality_for(level)`.
+
+**Turning a body's collision off.** A `CollisionShape3D` with `disabled` on stops blocking anything, so the player walks over a dead crab. Change it with `set_deferred("disabled", true)` when it happens during physics (as a strike landing does), or Godot complains about changing shapes mid-step. A body with no shape mustn't keep moving under gravity, or it falls through the floor. *Ours:* `Crab._on_died`.
+
+**`set_deferred` and `call_deferred`.** Set a property, or call a function, at the end of the current frame instead of now: the safe way to change physics or the scene tree from inside a physics callback. *Ours:* turning off a dead crab's shape.
+
+**A scene a script loads, not preloads.** `preload` reads a file when the script is compiled; if that file is a scene using the same script, it's a loop. `load()` at the moment it's needed avoids it. *Ours:* `Pickup3D.spawn` loads `scenes/props/pickup.tscn`, whose root uses `pickup_3d.gd`.
 
 ## The intro's water half (#102)
 
@@ -395,6 +411,48 @@ A growing glossary of the Godot concepts this project uses: what each one is, in
 **Lines that don't wait.** A line in the dialogue box normally waits for a button. `Conversation.say_aside()` shows one that doesn't: the box has no arrow, the script carries on, and whoever asked puts it away. *Ours:* the `@say` and `@say_in` cues (`scripts/cutscene/speech_cues.gd`), for a shout or a plea that should pass with the moment.
 
 **Giving each of many things its own pace.** A small sum that turns an index into a number between 0 and 1, always the same for that index, is enough to make a crowd look unplanned without storing anything. *Ours:* `LanternField.share_of`, which sets how fast each lantern sinks and turns.
+
+## The Kiln (#126)
+
+**Texel density.** How many texture pixels cover a metre of surface. The N64 look is a low, even density (about 64 per metre) so every surface's pixels are the same chunky size. *Ours:* each `ArtLook`'s `pixels_per_metre`; the Kiln sizes each texture to hit it at the size the model is drawn.
+
+**Decimating and baking (Blender).** *Decimating* removes triangles while keeping the shape (Blender's "collapse" merges the edges that change it least). *Baking* paints how one model looks onto another's texture: rays from the simple model find the detailed one, and copy its colour, or how shaded its creases are (ambient occlusion). *Ours:* `tools/kiln/fire.py`.
+
+**`@export_tool_button`.** Puts a button in the Inspector that runs a function in the editor, without a plugin; the script must be `@tool`. *Ours:* Fire in Kiln on `ThirdPartyModel` and `CharacterParts`.
+
+**Starting other programs (`OS.create_process`, `OS.execute`).** `create_process` starts a program and carries on (it gives back a process id to check with `OS.is_process_running`); `execute` waits for it to finish and can collect what it printed. *Ours:* `Kiln.start` (the editor buttons, so the editor doesn't freeze) and `Kiln.run` (`kiln.sh`).
+
+**Awaiting a timer (coroutines).** A function that uses `await` pauses there and carries on later, while the game (or editor) keeps running; whoever calls it can `await` it too. `get_tree().create_timer(s).timeout` is something to await for a while. *Ours:* `Kiln.fire_in_background` checks four times a second until Blender is done.
+
+**Import settings (`.import` files).** When Godot first sees a file it imports it with the settings in the `.import` file beside it, making one with defaults if there isn't one. Textures are normally compressed for the graphics card, which smudges tiny pixel textures. *Ours:* the Kiln writes `.import` files before Godot sees its output, so textures stay exact (lossless, no mipmaps) and models get no extra levels of detail.
+
+**Reaching the editor from game code.** The editor's classes (`EditorInterface`) aren't in a built game, so a script that names them fails there; `Engine.get_singleton(&"EditorInterface")` finds it by name only when it's there. `get_resource_filesystem().reimport_files()` imports new files straight away. *Ours:* `Kiln.import_in_editor`.
+
+**Inspector lines that aren't saved (`_get_property_list`).** A script can add properties to the Inspector in code, with usage flags: `PROPERTY_USAGE_EDITOR | PROPERTY_USAGE_READ_ONLY` shows a value without saving it or letting it be changed. `_get` supplies its value. *Ours:* `ThirdPartyModel`'s `kiln_status`.
+
+**Reading a scene without running it (`SceneState`).** `PackedScene.get_state()` lists a saved scene's nodes and their property values without building it. *Ours:* the Lookbook borrows the player's animation files from `player.tscn`.
+
+**Skinned meshes' boxes.** A mesh bent by a skeleton keeps the box (AABB) of its resting shape, wherever its bones move it, so don't frame a camera or measure by it while it's animated. *Ours:* the Lookbook frames exhibits by their size and position instead.
+
+**Photographing the screen.** After `await RenderingServer.frame_post_draw`, `get_viewport().get_texture().get_image()` is what was just drawn; `save_png` writes it. It needs a real window (not `--headless`). *Ours:* `tools/kiln/capture.sh`.
+
+**OKLab.** A colour space where equal distances look equally different to the eye (plain RGB doesn't: a step in green looks bigger than the same step in blue). One axis is lightness, two are colour. *Ours:* `KilnPalette.nearest` and the Kiln's palette snap compare colours in OKLab (#128).
+
+**k-means clustering.** Finds a few colours that best stand for many: start with some, give every pixel to its nearest, move each colour to the average of its pixels, repeat. *Ours:* `tools/kiln/make_palette.py` makes the 64-colour Salt and Ember palette this way (#128).
+
+**The "keep" importer.** A `.import` file with `importer="keep"` tells Godot to leave a file as it is, not make a texture of it. *Ours:* the Kiln's `.raw.png` copies, kept only for making palettes (#128).
+
+**Shader includes (`.gdshaderinc`).** A file of shader code that several shaders pull in with `#include "res://..."`, so they share it. *Ours:* `n64_surface.gdshaderinc`, shared by `n64_surface` and `n64_surface_vertex` (#129).
+
+**Per-vertex lighting (`render_mode vertex_lighting`).** Lights a mesh at its corners and blends across each triangle (Gouraud shading), as N64-era hardware did, rather than for every pixel. Cheaper and softer, and it shows the triangles. *Ours:* `n64_surface_vertex.gdshader`, chosen by a look's `vertex_lighting` (#129).
+
+**Stepped animation.** With the animation player moved on by hand (`ANIMATION_CALLBACK_MODE_PROCESS_MANUAL` and `advance()`), holding the time back and releasing it in whole steps makes a model move a few poses a second, like hand-keyed animation. *Ours:* `AnimationStepper`, used by `Crab` and `CharacterModel` when a look's `animation_steps` is set (#129).
+
+**Anti-aliasing by supersampling.** Drawing a shape at several samples per pixel and averaging them gives edge pixels in-between colours, so edges look smooth, not stepped. *Ours:* `tools/textures/paint_placeholders.py` paints our placeholder textures at 4 x 4 samples per pixel (#135). (Smoothing model edges on screen is a different thing: #134.)
+
+**Filtering by hand in a shader.** A shader that makes its own low-resolution picture (fire from noise, worked out per texel) can still look filtered: work out the four texels around a point and blend them by how far the point is between them, as a filtered texture does. *Ours:* the `soft` switch in `pixel_fire`, `lantern_glass` and `flame_hand` (#137).
+
+**`.gdignore`.** An empty file named `.gdignore` in a folder makes Godot skip that folder: nothing in it is imported or shown in the FileSystem dock. *Ours:* `tools/textures/originals/`, the pixel-art originals kept only for the painting script (#135).
 
 ## Testing
 

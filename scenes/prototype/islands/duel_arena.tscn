@@ -3,7 +3,7 @@
 [ext_resource type="Script" path="res://scripts/combat/duel_arena.gd" id="1_arena"]
 [ext_resource type="PackedScene" path="res://scenes/prototype/player.tscn" id="2_player"]
 [ext_resource type="PackedScene" path="res://ui/hud_3d.tscn" id="3_hud"]
-[ext_resource type="PackedScene" path="res://scenes/prototype/creatures/fog_crab.tscn" id="4_crab"]
+[ext_resource type="PackedScene" path="res://scenes/prototype/creatures/crab.tscn" id="4_crab"]
 [ext_resource type="Material" path="res://assets/placeholder/materials/greybox_sand.tres" id="5_sand"]
 [ext_resource type="Material" path="res://assets/placeholder/materials/greybox_grass.tres" id="6_grass"]
 [ext_resource type="Material" path="res://assets/placeholder/materials/greybox_wood.tres" id="7_wood"]
@@ -125,7 +125,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.5, 0.5, 2)
 material_override = ExtResource("7_wood")
 mesh = SubResource("BoxMesh_post")
 
-[node name="FogCrab" parent="." instance=ExtResource("4_crab")]
+[node name="NearCrab" parent="." instance=ExtResource("4_crab")]
 
 [node name="FarCrab" parent="." instance=ExtResource("4_crab")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 18, 0, -8)

@@ -8,4 +8,4 @@ alpha_scissor_threshold = 0.5
 alpha_antialiasing_mode = 0
 albedo_texture = ExtResource("1_0wnte")
 metallic_specular = 0.08
-texture_filter = 0
+texture_filter = 3

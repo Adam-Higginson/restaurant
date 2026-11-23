@@ -7,4 +7,4 @@ albedo_texture = ExtResource("1_artrr")
 metallic_specular = 0.1
 uv1_scale = Vector3(1.6, 1.6, 1.6)
 uv1_triplanar = true
-texture_filter = 0
+texture_filter = 3

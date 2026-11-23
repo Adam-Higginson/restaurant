@@ -4,7 +4,7 @@
 - Godot 4.7, GDScript only (no C#).
 - Use Godot 4 APIs only: CharacterBody3D, `await`, AnimatableBody3D. Never Godot 3 APIs (KinematicBody, `yield`).
 - Typed GDScript everywhere: type every variable, parameter and return value (enforced as errors; see Code style).
-- 3D, Forward+ renderer (switched from Compatibility in #61). Low-poly models with small blocky textures and nearest-neighbour filtering, lit with modern lighting (N64/OoT style, high resolution).
+- 3D, Forward+ renderer (switched from Compatibility in #61). Low-poly models with small low-resolution textures, softly filtered as the N64 did (bilinear on our greybox, the N64's three-point filter on fired pack models; #129), not crisp pixels, lit with modern lighting (N64/OoT style, high resolution).
 - The 2D world layer (2D player, props, customers, tilemap) is legacy, being replaced by the 3D prototype in `scenes/prototype/`. Don't extend it.
 - Godot binary: `C:\Godot\godot_console.exe`
 
@@ -21,7 +21,8 @@ The full design lives in `docs/GDD.md`. Read it before starting a gameplay task,
 
 ## Public repo
 - This repo is public. Third-party art and audio go in `assets/third_party/`, which is gitignored: never commit anything from it, and never commit keys or tokens.
-- Our own placeholder art (generated, not third-party) lives in `assets/placeholder/` and is committed.
+- Our own placeholder art (generated, not third-party) lives in `assets/placeholder/` and is committed. Its cloth, paper and painted textures are painted soft by `tools/textures/paint_placeholders.sh` from the pixel-art originals in `tools/textures/originals/` (#135): change an original or a recipe and run it again; don't hand-edit the painted PNGs.
+- Pack models are fired into our N64 look by the Kiln (`./kiln.sh`, Blender 4.4; see `docs/GDD.md`). Its output goes in `assets/third_party/_kiln/` and is never committed: it's made from the packs. Check fired models by eye with `tools/kiln/capture.sh <folder>`.
 - Two exceptions are committed because the game needs them to look and sound the same for everyone, each with its licence file beside it: fonts under the SIL Open Font Licence in `assets/fonts/`, and CC0 sounds in `assets/audio/`. Anything else third-party still needs asking first.
 
 ## Task tracking

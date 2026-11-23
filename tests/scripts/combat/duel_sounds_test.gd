@@ -9,7 +9,7 @@ extends GameTestSuite
 const PAN: Item = preload("res://data/items/frying_pan.tres")
 const SOUND_DIR: String = "res://assets/audio/combat/"
 const SOUND_SETS: Array[String] = ["swing", "slice", "tink", "pan_up", "clang", "hurt",
-		"crab_click", "crab_lunge", "fog_clear", "heartbeat", "spin", "charge", "charged", "dodge",
+		"crab_click", "crab_lunge", "heartbeat", "spin", "charge", "charged", "dodge",
 		"land"]
 const CLOSE: Vector3 = Vector3(0, 0, -1.3)
 const FIRST_HIT: int = 56
@@ -42,7 +42,7 @@ func test_the_recordings_come_with_their_licences() -> void:
 
 func test_every_sound_node_has_its_stream() -> void:
 	var player: Player3D = new_player_3d_on_floor()
-	var crab: FogCrab = new_fog_crab(player, Vector3(0, 0, -20))
+	var crab: Crab = new_crab(player, Vector3(0, 0, -20))
 	scene_runner(player.get_parent())
 
 	for sound: StringName in [DuelSounds.SWING, DuelSounds.SLICE, DuelSounds.TINK,
@@ -53,7 +53,7 @@ func test_every_sound_node_has_its_stream() -> void:
 				as AudioStreamPlayer
 		assert_object(node.stream).override_failure_message("%s has no stream" % sound) \
 				.is_not_null()
-	for sound: StringName in [CrabSounds.CLICK, CrabSounds.LUNGE, CrabSounds.CLEAR,
+	for sound: StringName in [CrabSounds.CLICK, CrabSounds.LUNGE, CrabSounds.CRACK,
 			CrabSounds.FLIP] as Array[StringName]:
 		var node: AudioStreamPlayer3D = _crab_sounds(crab).get_node(NodePath(sound)) \
 				as AudioStreamPlayer3D
@@ -78,7 +78,7 @@ func test_a_swing_at_nothing_whooshes_and_no_more() -> void:
 func test_a_strike_that_counts_slices() -> void:
 	var player: Player3D = new_player_3d_on_floor()
 	stand_firm(player)
-	new_fog_crab(player, CLOSE)
+	new_crab(player, CLOSE)
 	var runner: GdUnitSceneRunner = scene_runner(player.get_parent())
 	await physics_ticks(runner, FIRST_OPENING)
 
@@ -91,7 +91,7 @@ func test_a_strike_that_counts_slices() -> void:
 
 func test_a_strike_on_a_crab_that_isnt_open_tinks() -> void:
 	var player: Player3D = new_player_3d_on_floor()
-	new_fog_crab(player, CLOSE)
+	new_crab(player, CLOSE)
 	var runner: GdUnitSceneRunner = scene_runner(player.get_parent())
 	await physics_ticks(runner, 20)
 
@@ -104,7 +104,7 @@ func test_a_strike_on_a_crab_that_isnt_open_tinks() -> void:
 
 func test_a_hit_that_lands_thumps_and_doesnt_clang() -> void:
 	var player: Player3D = new_player_3d_on_floor()
-	new_fog_crab(player, CLOSE)
+	new_crab(player, CLOSE)
 	var runner: GdUnitSceneRunner = scene_runner(player.get_parent())
 
 	await physics_ticks(runner, FIRST_HIT)
@@ -116,7 +116,7 @@ func test_a_hit_that_lands_thumps_and_doesnt_clang() -> void:
 
 func test_a_parry_that_lands_clangs_and_doesnt_thump() -> void:
 	var player: Player3D = new_player_3d_on_floor()
-	new_fog_crab(player, CLOSE)
+	new_crab(player, CLOSE)
 	var runner: GdUnitSceneRunner = scene_runner(player.get_parent())
 	player.toolbar.add(ItemInstance.new(PAN))
 	# The crab's first hit lands at 0.8 s: raise the pan at 0.67 s.
@@ -158,7 +158,7 @@ func test_without_a_pan_the_parry_button_is_silent() -> void:
 
 func test_the_crabs_claws_rattle_faster_as_it_rears_up() -> void:
 	var player: Player3D = new_player_3d_on_floor()
-	var crab: FogCrab = new_fog_crab(player, CLOSE)
+	var crab: Crab = new_crab(player, CLOSE)
 	var runner: GdUnitSceneRunner = scene_runner(player.get_parent())
 
 	# The first half of the windup, then the second.
@@ -174,7 +174,7 @@ func test_the_crabs_claws_rattle_faster_as_it_rears_up() -> void:
 
 func test_the_rattle_stops_when_it_lunges_and_the_lunge_is_heard() -> void:
 	var player: Player3D = new_player_3d_on_floor()
-	var crab: FogCrab = new_fog_crab(player, CLOSE)
+	var crab: Crab = new_crab(player, CLOSE)
 	var runner: GdUnitSceneRunner = scene_runner(player.get_parent())
 	await physics_ticks(runner, 47)
 	assert_int(_crab_sounds(crab).times_played(CrabSounds.LUNGE)).is_equal(0)
@@ -191,7 +191,7 @@ func test_the_rattle_stops_when_it_lunges_and_the_lunge_is_heard() -> void:
 
 func test_a_far_off_crab_is_silent() -> void:
 	var player: Player3D = new_player_3d_on_floor()
-	var crab: FogCrab = new_fog_crab(player, Vector3(0, 0, -20))
+	var crab: Crab = new_crab(player, Vector3(0, 0, -20))
 	var runner: GdUnitSceneRunner = scene_runner(player.get_parent())
 
 	await physics_ticks(runner, 120)
@@ -200,39 +200,21 @@ func test_a_far_off_crab_is_silent() -> void:
 	assert_int(_crab_sounds(crab).times_played(CrabSounds.LUNGE)).is_equal(0)
 
 
-func test_clearing_the_fog_chimes_once_and_it_ticks_away() -> void:
+func test_a_kill_cracks_its_shell_once_and_then_it_is_quiet() -> void:
 	var player: Player3D = new_player_3d_on_floor()
 	stand_firm(player)
-	var crab: FogCrab = new_fog_crab(player, CLOSE)
-	crab.fog = 1
+	var crab: Crab = new_crab(player, CLOSE)
+	crab.health_override = 1
 	var runner: GdUnitSceneRunner = scene_runner(player.get_parent())
 	await physics_ticks(runner, FIRST_OPENING)
 
 	await strike_and_land(runner, player)
 	var clicks: int = _crab_sounds(crab).times_played(CrabSounds.CLICK)
-	# It shakes itself off for a second, then wanders.
-	await physics_ticks(runner, 180)
+	await physics_ticks(runner, 120)
 
-	assert_bool(crab.is_cleared()).is_true()
-	assert_int(_crab_sounds(crab).times_played(CrabSounds.CLEAR)).is_equal(1)
-	assert_int(_crab_sounds(crab).times_played(CrabSounds.CLICK)).is_greater(clicks)
-
-
-func test_the_wandering_tick_is_quieter_than_the_rattle() -> void:
-	var player: Player3D = new_player_3d_on_floor()
-	stand_firm(player)
-	var crab: FogCrab = new_fog_crab(player, CLOSE)
-	crab.fog = 1
-	var click: AudioStreamPlayer3D = _crab_sounds(crab).get_node("Click") as AudioStreamPlayer3D
-	var runner: GdUnitSceneRunner = scene_runner(player.get_parent())
-	await physics_ticks(runner, 40)
-	var rattle_db: float = click.volume_db
-	await physics_ticks(runner, FIRST_OPENING - 40)
-
-	await strike_and_land(runner, player)
-	await physics_ticks(runner, 180)
-
-	assert_float(click.volume_db).is_less(rattle_db)
+	assert_bool(crab.is_dead()).is_true()
+	assert_int(_crab_sounds(crab).times_played(CrabSounds.CRACK)).is_equal(1)
+	assert_int(_crab_sounds(crab).times_played(CrabSounds.CLICK)).is_equal(clicks)
 
 
 func test_on_the_last_heart_the_heart_thumps_lub_dub() -> void:
@@ -325,7 +307,7 @@ func test_a_dodge_takes_off_and_lands() -> void:
 func test_a_flipped_crab_thuds_and_its_legs_clatter() -> void:
 	var player: Player3D = new_player_3d_on_floor()
 	stand_firm(player)
-	var crab: FogCrab = new_fog_crab(player, CLOSE)
+	var crab: Crab = new_crab(player, CLOSE)
 	var runner: GdUnitSceneRunner = scene_runner(player.get_parent())
 	await physics_ticks(runner, 49 + HitStop.HURT_TICKS)
 
@@ -342,5 +324,5 @@ func _sounds(player: Player3D) -> DuelSounds:
 	return player.get_node("DuelSounds") as DuelSounds
 
 
-func _crab_sounds(crab: FogCrab) -> CrabSounds:
+func _crab_sounds(crab: Crab) -> CrabSounds:
 	return crab.get_node("Sounds") as CrabSounds

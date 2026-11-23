@@ -10,6 +10,8 @@
 [ext_resource type="Material" path="res://assets/placeholder/materials/linen.tres" id="8_hyrfo"]
 [ext_resource type="Material" path="res://assets/placeholder/materials/quilt_green.tres" id="9_l46ux"]
 [ext_resource type="Material" path="res://assets/placeholder/materials/wool.tres" id="10_x6scj"]
+[ext_resource type="Script" path="res://scripts/art/third_party_model.gd" id="kiln_model"]
+[ext_resource type="Resource" path="res://data/art/looks/prop.tres" id="kiln_prop"]
 
 [sub_resource type="BoxMesh" id="BoxMesh_0shfc"]
 size = Vector3(0.84, 0.04, 0.04)
@@ -402,10 +404,22 @@ transform = Transform3D(0.93638533, -0.35097358, 0, 0.35097358, 0.93638533, 0, 0
 material_override = ExtResource("5_tbgmf")
 mesh = SubResource("BoxMesh_o5s61")
 
-[node name="Pillow" type="MeshInstance3D" parent="Sling" unique_id=207532177]
+[node name="Pillow" type="Node3D" parent="Sling" unique_id=207532177]
 transform = Transform3D(1, 0, 0, 0, 0.9781476, 0.2079117, 0, -0.2079117, 0.9781476, 0, -0.32468, -0.682)
+
+[node name="Box" type="MeshInstance3D" parent="Sling/Pillow"]
 material_override = ExtResource("6_3d7wn")
 mesh = SubResource("BoxMesh_ya865")
+
+[node name="Pack" type="Node3D" parent="Sling/Pillow" node_paths=PackedStringArray("stand_ins")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.05, 0)
+script = ExtResource("kiln_model")
+path = "res://assets/third_party/kaykit_furniture/Assets/gltf/pillow_A.gltf"
+fit_size = Vector3(0.36, 0.1, 0.24)
+stretch = true
+stand_ins = [NodePath("../Box")]
+tint = Color(1.04, 1.28, 1.75, 1)
+look = ExtResource("kiln_prop")
 
 [node name="Hat" type="MeshInstance3D" parent="Sling" unique_id=1670189505]
 transform = Transform3D(1, 0, 0, 0, 0.34202015, 0.9396926, 0, -0.9396926, 0.34202015, 0.02, -0.20468, -0.622)

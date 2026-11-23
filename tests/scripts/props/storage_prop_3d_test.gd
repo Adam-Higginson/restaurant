@@ -17,10 +17,13 @@ func after_test() -> void:
 	get_tree().paused = false
 
 
-func test_starts_with_lettuce_and_tomatoes_in_twelve_slots() -> void:
+func test_starts_with_lettuce_tomatoes_and_crab_meat_in_twelve_slots() -> void:
 	var pantry: StorageProp3D = _new_pantry()
 	assert_int(pantry.contents.count(LETTUCE, ItemInstance.MIN_QUALITY)).is_equal(3)
 	assert_int(pantry.contents.count(TOMATO, ItemInstance.MIN_QUALITY)).is_equal(3)
+	# Until islands join the ship (#67), as if brought back from the shore.
+	var crab_meat: Item = load("res://data/items/crab_meat.tres") as Item
+	assert_int(pantry.contents.count(crab_meat, ItemInstance.MIN_QUALITY)).is_equal(1)
 	assert_int(pantry.contents.capacity).is_equal(12)
 	assert_int(pantry.contents.kind).is_equal(Item.StorageKind.PANTRY)
 
@@ -58,7 +61,7 @@ func test_holding_a_plate_opens_the_panel_and_keeps_the_plate() -> void:
 
 	assert_bool(_panel(pantry).is_open()).is_true()
 	assert_int(arms.size()).is_equal(1)
-	assert_int(pantry.contents.size()).is_equal(6)
+	assert_int(pantry.contents.size()).is_equal(7)
 
 
 func test_a_full_pantry_opens_the_panel() -> void:

@@ -1,6 +1,6 @@
 class_name DuelArena
 extends Node3D
-## The greybox duel arena: a patch of island with a landing, two fog-crabs
+## The greybox duel arena: a patch of island with a landing, two crabs
 ## and nothing else, for trying duels until an island can be sailed to
 ## (#67). Open [code]scenes/prototype/islands/duel_arena.tscn[/code] and
 ## press F6.

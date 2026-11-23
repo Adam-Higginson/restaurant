@@ -1,5 +1,5 @@
 extends GameTestSuite
-## Tests for CrabCycle: a fog-crab's fight as a state machine. Time is moved
+## Tests for CrabCycle: a crab's fight as a state machine. Time is moved
 ## on by hand with tick(), so every change of state is exact.
 
 var _cycle: CrabCycle
@@ -86,23 +86,22 @@ func test_an_idle_crab_cant_be_struck() -> void:
 	assert_int(_cycle.damage_taken).is_equal(0)
 
 
-func test_enough_damage_clears_its_fog() -> void:
-	var cleared: Array[int] = [0]
-	_cycle.cleared.connect(func() -> void: cleared[0] += 1)
+func test_enough_damage_kills_it() -> void:
+	var deaths: Array[int] = [0]
+	_cycle.died.connect(func() -> void: deaths[0] += 1)
 	_cycle.engage()
 	_cycle.tick(_cycle.windup_seconds + _cycle.attack_seconds)
 
-	for i: int in _cycle.fog - 1:
-		_cycle.take_strike()
+	_cycle.take_strike(_cycle.health - 1)
 	assert_int(_cycle.state).is_equal(CrabCycle.State.OPENING)
 	_cycle.take_strike()
 
-	assert_int(_cycle.state).is_equal(CrabCycle.State.CLEARED)
-	assert_int(cleared[0]).is_equal(1)
+	assert_int(_cycle.state).is_equal(CrabCycle.State.DEAD)
+	assert_int(deaths[0]).is_equal(1)
 
 
-func test_a_cleared_crab_never_fights_again() -> void:
-	_cycle.fog = 1
+func test_a_dead_crab_never_fights_again() -> void:
+	_cycle.health = 1
 	_cycle.engage()
 	_cycle.tick(_cycle.windup_seconds + _cycle.attack_seconds)
 	_cycle.take_strike()
@@ -111,7 +110,7 @@ func test_a_cleared_crab_never_fights_again() -> void:
 	_cycle.tick(30.0)
 	_cycle.reset()
 
-	assert_int(_cycle.state).is_equal(CrabCycle.State.CLEARED)
+	assert_int(_cycle.state).is_equal(CrabCycle.State.DEAD)
 	assert_bool(_cycle.take_strike()).is_false()
 
 
@@ -175,16 +174,16 @@ func test_a_strike_does_its_damage() -> void:
 	assert_int(_cycle.damage_taken).is_equal(2)
 
 
-func test_its_fog_is_eight() -> void:
-	assert_int(_cycle.fog).is_equal(8)
+func test_its_health_is_eighty() -> void:
+	assert_int(_cycle.health).is_equal(80)
 
 
 func test_a_big_enough_blow_clears_it_at_once() -> void:
 	_open()
 
-	_cycle.take_strike(_cycle.fog)
+	_cycle.take_strike(_cycle.health)
 
-	assert_int(_cycle.state).is_equal(CrabCycle.State.CLEARED)
+	assert_int(_cycle.state).is_equal(CrabCycle.State.DEAD)
 
 
 func test_it_commits_for_the_end_of_its_windup() -> void:

@@ -192,7 +192,7 @@ func test_a_dodge_breaks_off_the_knifes_chain() -> void:
 
 func test_a_sidehop_as_the_crab_commits_dodges_its_lunge() -> void:
 	var player: Player3D = new_player_3d_on_floor()
-	var crab: FogCrab = new_fog_crab(player, Vector3(0, 0, -1.3))
+	var crab: Crab = new_crab(player, Vector3(0, 0, -1.3))
 	crab.scuttle_speed = 0.0
 	var runner: GdUnitSceneRunner = scene_runner(player.get_parent())
 	await hold(runner, "lock_on")
@@ -212,7 +212,7 @@ func test_a_sidehop_as_the_crab_commits_dodges_its_lunge() -> void:
 
 func test_standing_still_as_it_commits_you_are_hit() -> void:
 	var player: Player3D = new_player_3d_on_floor()
-	var crab: FogCrab = new_fog_crab(player, Vector3(0, 0, -1.3))
+	var crab: Crab = new_crab(player, Vector3(0, 0, -1.3))
 	crab.scuttle_speed = 0.0
 	var runner: GdUnitSceneRunner = scene_runner(player.get_parent())
 	await hold(runner, "lock_on")
