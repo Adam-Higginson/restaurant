@@ -31,3 +31,4 @@ script = ExtResource("2_sway")
 model = NodePath("../Model")
 sway = 0.035
 flutter = 0.012
+tint = Color(0.78, 0.82, 0.68, 1)

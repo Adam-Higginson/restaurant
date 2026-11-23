@@ -7,40 +7,47 @@ extends Resource
 ##
 ## The land is a cove. The sea is towards +Z and the land towards -Z; the
 ## waterline bites inland in the middle and comes out to a headland at each
-## end. Going inland from the water: a gently sloping beach, a dune, then
-## bumpy higher ground for the palms. Sea level is height 0.
+## end. Going inland from the water: a narrow sloping beach, a bank, then
+## bumpy higher ground for the jungle. Going out: a shallow shelf, then the
+## bottom drops away. Sea level is height 0.
 
 ## How far the ground reaches along X and Z, in metres, centred on the origin.
 @export var size: Vector2 = Vector2(180.0, 130.0)
 ## Where the waterline is (its Z) at the middle of the cove.
 @export var shore_z: float = 6.0
 ## How much further out to sea the waterline is at the headlands.
-@export var cove_depth: float = 16.0
+@export var cove_depth: float = 22.0
 ## How wide the cove is: the distance from its middle to where the headlands
 ## are halfway out.
-@export var cove_width: float = 42.0
+@export var cove_width: float = 34.0
 ## How far the waterline wanders in and out along the beach, in metres.
-@export var shore_wander: float = 1.6
+@export var shore_wander: float = 2.6
 
 @export_group("Beach")
-## Rise for each metre inland on the beach (and fall, just into the water).
-@export var beach_slope: float = 0.065
-## How wide the beach is from the waterline to the foot of the dune.
-@export var beach_width: float = 13.0
-## How much steeper the seabed gets with each metre out.
-@export var seabed_steepening: float = 0.006
+## Rise for each metre inland on the beach (and fall, out over the shelf).
+@export var beach_slope: float = 0.08
+## How wide the beach is from the waterline to the foot of the bank.
+@export var beach_width: float = 6.5
+## How tall the beach's own soft humps and hollows are, in metres.
+@export var beach_humps: float = 0.09
+
+@export_group("Seabed")
+## How far out the shallow shelf reaches before the bottom drops away.
+@export var shelf_width: float = 5.0
+## Fall for each metre out, past the shelf: the drop-off.
+@export var drop_slope: float = 0.42
 ## The deepest the seabed goes.
-@export var seabed_floor: float = -9.0
+@export var seabed_floor: float = -7.5
 
 @export_group("Inland")
-## How high the dune stands above the top of the beach.
-@export var dune_height: float = 2.4
-## How far the dune takes to rise.
-@export var dune_width: float = 11.0
-## Rise for each metre further inland behind the dune.
+## How high the bank stands above the top of the beach.
+@export var dune_height: float = 1.5
+## How far the bank takes to rise.
+@export var dune_width: float = 7.0
+## Rise for each metre further inland behind the bank.
 @export var inland_slope: float = 0.03
 ## How tall the bumps of the inland ground are.
-@export var bumps: float = 0.9
+@export var bumps: float = 1.3
 ## How far apart the bumps are, in metres.
 @export var bump_spacing: float = 14.0
 ## Which bumps you get.
@@ -65,13 +72,15 @@ func inland(x: float, z: float) -> float:
 func height_at(x: float, z: float) -> float:
 	var s: float = inland(x, z)
 	if s <= 0.0:
-		var out: float = -s
-		return maxf(seabed_floor, -(beach_slope * out + seabed_steepening * out * out))
+		return _seabed(-s)
 	var height: float = beach_slope * minf(s, beach_width)
 	var past_beach: float = maxf(0.0, s - beach_width)
 	height += dune_height * smoothstep(0.0, dune_width, past_beach)
 	height += inland_slope * past_beach
-	# The beach is smooth; the bumps grow in over the dune.
+	# The beach has soft humps (none at the waterline, so the edge stays
+	# clean); the big bumps grow in over the bank.
+	var humpy: float = smoothstep(0.5, 3.0, s)
+	height += _bump(x * 4.0, z * 4.0) * beach_humps * humpy
 	var bumpy: float = smoothstep(beach_width * 0.5, beach_width + dune_width, s)
 	height += _bump(x, z) * bumps * bumpy
 	return height
@@ -94,6 +103,19 @@ func normal_at(x: float, z: float) -> Vector3:
 ## Whether a spot is on this island's patch of ground at all.
 func covers(x: float, z: float) -> bool:
 	return absf(x) <= size.x / 2.0 and absf(z) <= size.y / 2.0
+
+
+# The seabed's height [param out] metres from the waterline: the beach's
+# slope carries on over the shelf, then turns down into the drop-off (the
+# turn is rounded over a couple of metres, not a crease).
+func _seabed(out: float) -> float:
+	var past_shelf: float = out - shelf_width
+	var dropped: float = 0.0
+	if past_shelf >= 1.0:
+		dropped = past_shelf
+	elif past_shelf > -1.0:
+		dropped = (past_shelf + 1.0) * (past_shelf + 1.0) / 4.0
+	return maxf(seabed_floor, -(beach_slope * out + (drop_slope - beach_slope) * dropped))
 
 
 func _bump(x: float, z: float) -> float:

@@ -4,13 +4,13 @@
 shader_type spatial;
 render_mode cull_disabled, world_vertex_coords;
 
-uniform vec4 root_color : source_color = vec4(0.16, 0.28, 0.08, 1.0);
-uniform vec4 tip_color : source_color = vec4(0.62, 0.72, 0.26, 1.0);
+uniform vec4 root_color : source_color = vec4(0.06, 0.13, 0.03, 1.0);
+uniform vec4 tip_color : source_color = vec4(0.27, 0.42, 0.1, 1.0);
 // How far a tip swings, in metres.
 uniform float sway = 0.12;
 // The way the wind blows (x, z).
 uniform vec2 wind = vec2(0.8, 0.6);
-uniform float glow_through = 0.5;
+uniform float glow_through = 0.35;
 
 varying float v_shade;
 

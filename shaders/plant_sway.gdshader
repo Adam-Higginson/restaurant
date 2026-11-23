@@ -19,6 +19,8 @@ uniform float still_below = 0.1;
 uniform float glow_through = 0.6;
 // The way the wind blows (x, z).
 uniform vec2 wind = vec2(0.8, 0.6);
+// Multiplies the painted colours: below 1 darkens the plant.
+uniform vec4 tint : source_color = vec4(1.0);
 
 void vertex() {
 	// With world_vertex_coords, VERTEX is already in the world. The model's
@@ -40,7 +42,7 @@ void vertex() {
 
 void fragment() {
 	vec3 colour = texture(albedo_texture, UV).rgb;
-	ALBEDO = colour;
+	ALBEDO = colour * tint.rgb;
 	ROUGHNESS = 0.8;
 	SPECULAR = 0.2;
 	// Leaves let light through; bark doesn't. A leaf is whatever is painted

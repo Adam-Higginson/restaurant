@@ -45,6 +45,18 @@ extends MultiMeshInstance3D
 	set(value):
 		blade_height = value
 		_refresh()
+## How wide a blade is at its root, in metres. Wide blades make leafy
+## undergrowth rather than grass.
+@export var blade_width: float = 0.022:
+	set(value):
+		blade_width = value
+		_refresh()
+## How far a blade reaches outwards, as a part of its height: from so far
+## to so far. More makes a low spreading plant.
+@export var reach: Vector2 = Vector2(0.25, 0.6):
+	set(value):
+		reach = value
+		_refresh()
 ## Blades in a tuft.
 @export var blades: int = 7:
 	set(value):
@@ -112,14 +124,14 @@ func _tuft_mesh() -> ArrayMesh:
 		var out: Vector3 = Vector3(cos(turn), 0.0, sin(turn))
 		var side: Vector3 = Vector3(-out.z, 0.0, out.x)
 		var tall: float = blade_height * random.randf_range(0.6, 1.0)
-		var reach: float = tall * random.randf_range(0.25, 0.6)
-		var width: float = 0.05
+		var out_by: float = tall * random.randf_range(reach.x, reach.y)
+		var width: float = blade_width
 		var root: Vector3 = out * 0.04
-		var middle: Vector3 = root + out * reach * 0.35 + Vector3.UP * tall * 0.6
-		var tip: Vector3 = root + out * reach + Vector3.UP * tall
+		var middle: Vector3 = root + out * out_by * 0.35 + Vector3.UP * tall * 0.6
+		var tip: Vector3 = root + out * out_by + Vector3.UP * tall
 		var corners: Array[Vector3] = [
 			root - side * width, root + side * width,
-			middle - side * width * 0.6, middle + side * width * 0.6,
+			middle - side * width * 0.8, middle + side * width * 0.8,
 			tip,
 		]
 		var heights: Array[float] = [0.0, 0.0, 0.6, 0.6, 1.0]

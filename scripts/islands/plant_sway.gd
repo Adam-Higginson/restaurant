@@ -21,6 +21,8 @@ const SHADER: Shader = preload("res://shaders/plant_sway.gdshader")
 @export var still_below: float = 0.1
 ## How much sunlight comes through the leaves from behind.
 @export var glow_through: float = 0.6
+## Multiplies the model's colours: below 1 darkens it.
+@export var tint: Color = Color.WHITE
 
 # The swapped material for each of a model's own, by its settings too.
 static var _made: Dictionary[String, ShaderMaterial] = {}
@@ -52,8 +54,8 @@ func _swap(node: Node) -> void:
 
 
 func _material_for(source: BaseMaterial3D) -> ShaderMaterial:
-	var key: String = "%d %f %f %f %f" % [
-		source.get_instance_id(), sway, flutter, still_below, glow_through,
+	var key: String = "%d %f %f %f %f %s" % [
+		source.get_instance_id(), sway, flutter, still_below, glow_through, tint.to_html(),
 	]
 	var made: ShaderMaterial = _made.get(key, null)
 	if made != null:
@@ -65,5 +67,6 @@ func _material_for(source: BaseMaterial3D) -> ShaderMaterial:
 	made.set_shader_parameter(&"flutter", flutter)
 	made.set_shader_parameter(&"still_below", still_below)
 	made.set_shader_parameter(&"glow_through", glow_through)
+	made.set_shader_parameter(&"tint", tint)
 	_made[key] = made
 	return made

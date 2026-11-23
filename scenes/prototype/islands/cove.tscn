@@ -18,15 +18,31 @@
 [ext_resource type="PackedScene" path="res://scenes/prototype/islands/props/driftwood.tscn" id="16_driftwood"]
 [ext_resource type="PackedScene" path="res://scenes/prototype/islands/props/rowing_boat.tscn" id="17_boat"]
 [ext_resource type="PackedScene" path="res://scenes/prototype/islands/props/anchored_ship.tscn" id="18_ship"]
+[ext_resource type="Shader" path="res://shaders/island_sky.gdshader" id="19_sky"]
+[ext_resource type="Shader" path="res://shaders/sun_shaft.gdshader" id="20_shaft"]
+[ext_resource type="Script" path="res://scripts/islands/sun_shafts.gd" id="21_shafts"]
+[ext_resource type="Shader" path="res://shaders/fog_bank.gdshader" id="22_bank"]
+[ext_resource type="Script" path="res://scripts/weather/sound_spot.gd" id="23_sound"]
+[ext_resource type="Script" path="res://scripts/art/third_party_texture.gd" id="24_texture"]
+[ext_resource type="Script" path="res://scripts/islands/fish_shoal.gd" id="25_fish"]
+[ext_resource type="Shader" path="res://shaders/fish.gdshader" id="26_fish"]
+[ext_resource type="Script" path="res://scripts/islands/island.gd" id="27_island"]
 
-[sub_resource type="ProceduralSkyMaterial" id="Sky_material"]
-sky_top_color = Color(0.5, 0.66, 0.82, 1)
-sky_horizon_color = Color(1, 0.88, 0.7, 1)
-sky_curve = 0.2
-ground_bottom_color = Color(0.55, 0.6, 0.62, 1)
-ground_horizon_color = Color(1, 0.88, 0.7, 1)
-sun_angle_max = 12.0
-sun_curve = 0.08
+[sub_resource type="FastNoiseLite" id="Noise_cloud"]
+noise_type = 3
+seed = 31
+frequency = 0.012
+fractal_octaves = 4
+
+[sub_resource type="NoiseTexture2D" id="Texture_cloud"]
+width = 512
+height = 512
+seamless = true
+noise = SubResource("Noise_cloud")
+
+[sub_resource type="ShaderMaterial" id="Sky_material"]
+shader = ExtResource("19_sky")
+shader_parameter/cloud_noise = SubResource("Texture_cloud")
 
 [sub_resource type="Sky" id="Sky_cove"]
 sky_material = SubResource("Sky_material")
@@ -35,7 +51,7 @@ sky_material = SubResource("Sky_material")
 background_mode = 2
 sky = SubResource("Sky_cove")
 ambient_light_source = 3
-ambient_light_energy = 0.9
+ambient_light_energy = 0.45
 reflected_light_source = 2
 tonemap_mode = 3
 tonemap_white = 6.0
@@ -45,27 +61,29 @@ ssao_intensity = 2.5
 sdfgi_enabled = true
 sdfgi_cascades = 4
 sdfgi_max_distance = 204.8
-sdfgi_energy = 1.2
+sdfgi_energy = 1.0
 glow_enabled = true
 glow_intensity = 0.5
 glow_bloom = 0.12
 glow_blend_mode = 1
-glow_hdr_threshold = 1.1
+glow_hdr_threshold = 1.25
 fog_enabled = true
 fog_light_color = Color(0.86, 0.84, 0.8, 1)
 fog_light_energy = 1.0
 fog_sun_scatter = 0.15
-fog_density = 0.0012
+fog_density = 0.0008
 fog_aerial_perspective = 0.3
-fog_sky_affect = 0.25
+fog_sky_affect = 0.0
 volumetric_fog_enabled = true
-volumetric_fog_density = 0.0035
+volumetric_fog_density = 0.0012
 volumetric_fog_albedo = Color(1, 0.96, 0.9, 1)
-volumetric_fog_anisotropy = 0.6
+volumetric_fog_anisotropy = 0.7
 volumetric_fog_length = 140.0
 volumetric_fog_ambient_inject = 0.3
+volumetric_fog_sky_affect = 0.25
 adjustment_enabled = true
-adjustment_saturation = 1.08
+adjustment_contrast = 1.14
+adjustment_saturation = 1.18
 
 [sub_resource type="FastNoiseLite" id="Noise_grain"]
 noise_type = 3
@@ -126,9 +144,9 @@ bump_strength = 5.0
 noise = SubResource("Noise_water_b")
 
 [sub_resource type="FastNoiseLite" id="Noise_foam"]
-noise_type = 2
+noise_type = 3
 seed = 9
-frequency = 0.04
+frequency = 0.03
 fractal_octaves = 3
 
 [sub_resource type="NoiseTexture2D" id="Texture_foam"]
@@ -144,70 +162,206 @@ shader_parameter/detail_b = SubResource("Texture_water_b")
 shader_parameter/foam_noise = SubResource("Texture_foam")
 
 [sub_resource type="PlaneMesh" id="Mesh_water"]
-size = Vector2(520, 380)
-subdivide_width = 208
-subdivide_depth = 152
+size = Vector2(200, 70)
+subdivide_width = 560
+subdivide_depth = 196
+
+[sub_resource type="PlaneMesh" id="Mesh_far_water"]
+size = Vector2(560, 300)
+subdivide_width = 112
+subdivide_depth = 60
+
+[sub_resource type="ShaderMaterial" id="Material_leaf"]
+shader = ExtResource("8_blade")
+shader_parameter/root_color = Color(0.03, 0.08, 0.02, 1)
+shader_parameter/tip_color = Color(0.2, 0.36, 0.08, 1)
+shader_parameter/sway = 0.08
 
 [sub_resource type="ShaderMaterial" id="Material_blade"]
 shader = ExtResource("8_blade")
 
-[sub_resource type="FogMaterial" id="Fog_wall"]
-density = 0.09
-albedo = Color(0.8, 0.82, 0.84, 1)
-edge_fade = 0.6
+[sub_resource type="ShaderMaterial" id="Material_shaft"]
+shader = ExtResource("20_shaft")
+
+[sub_resource type="ShaderMaterial" id="Material_bank"]
+render_priority = -1
+shader = ExtResource("22_bank")
+shader_parameter/billows = SubResource("Texture_cloud")
+
+[sub_resource type="ShaderMaterial" id="Material_veil"]
+shader = ExtResource("22_bank")
+shader_parameter/thickness = 0.45
+shader_parameter/billows = SubResource("Texture_cloud")
+
+[sub_resource type="QuadMesh" id="Mesh_bank"]
+size = Vector2(900, 70)
+
+[sub_resource type="BoxShape3D" id="Shape_side"]
+size = Vector3(2, 30, 140)
+
+[sub_resource type="BoxShape3D" id="Shape_end"]
+size = Vector3(180, 30, 2)
+
+[sub_resource type="ShaderMaterial" id="Material_fish"]
+shader = ExtResource("26_fish")
+
+[sub_resource type="FogMaterial" id="Fog_mist"]
+density = 0.022
+albedo = Color(1, 0.94, 0.82, 1)
+edge_fade = 0.5
 
 [sub_resource type="StandardMaterial3D" id="Material_mote"]
 transparency = 1
 blend_mode = 1
 shading_mode = 0
-albedo_color = Color(1, 0.9, 0.65, 0.55)
+albedo_color = Color(1, 0.9, 0.65, 0.4)
 billboard_mode = 1
 
 [sub_resource type="QuadMesh" id="Mesh_mote"]
 material = SubResource("Material_mote")
-size = Vector2(0.035, 0.035)
+size = Vector2(0.02, 0.02)
 
 [node name="Cove" type="Node3D"]
+script = ExtResource("27_island")
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="."]
 environment = SubResource("Environment_cove")
 
 [node name="Sun" type="DirectionalLight3D" parent="."]
-transform = Transform3D(-0.3702, -0.3010, 0.8788, 0, 0.9460, 0.3240, -0.9290, 0.1200, -0.3502, 0, 0, 0)
+transform = Transform3D(-0.846, -0.1876, 0.4989, 0, 0.936, 0.352, -0.533, 0.2978, -0.7919, 0, 0, 0)
 light_color = Color(1, 0.84, 0.62, 1)
 light_energy = 2.4
-light_angular_distance = 1.2
-light_volumetric_fog_energy = 1.6
+shadow_blur = 1.6
+light_volumetric_fog_energy = 1.0
 shadow_enabled = true
-directional_shadow_max_distance = 130.0
+shadow_bias = 0.08
+shadow_normal_bias = 3.0
+directional_shadow_max_distance = 90.0
 
 [node name="Ground" type="StaticBody3D" parent="."]
 script = ExtResource("1_ground")
 shape = ExtResource("5_shape")
 material = SubResource("Material_sand")
 
+[node name="SandDetail" type="Node" parent="Ground"]
+script = ExtResource("24_texture")
+material = SubResource("Material_sand")
+path = "res://assets/third_party/polyhaven_sand/coast_sand_04_diff_1k.jpg"
+parameter = &"detail"
+mipmaps = true
+
+[node name="SandBumps" type="Node" parent="Ground"]
+script = ExtResource("24_texture")
+material = SubResource("Material_sand")
+path = "res://assets/third_party/polyhaven_sand/coast_sand_04_nor_gl_1k.jpg"
+parameter = &"detail_bumps"
+mipmaps = true
+
 [node name="Water" type="MeshInstance3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 150)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 20)
 material_override = SubResource("Material_water")
 cast_shadow = 0
 mesh = SubResource("Mesh_water")
+
+[node name="FarWater" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 204.5)
+material_override = SubResource("Material_water")
+cast_shadow = 0
+mesh = SubResource("Mesh_far_water")
 
 [node name="Shore" type="Node" parent="." node_paths=PackedStringArray("ground", "water")]
 script = ExtResource("2_shore")
 ground = NodePath("../Ground")
 water = NodePath("../Water")
+swash_period = 5.0
 
-[node name="FogWall" type="FogVolume" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 20, 250)
-size = Vector3(700, 80, 260)
-material = SubResource("Fog_wall")
+[node name="FogWall" type="MeshInstance3D" parent="."]
+transform = Transform3D(-1, 0, 0, 0, 1, 0, 0, 0, -1, 0, 33, 175)
+material_override = SubResource("Material_bank")
+cast_shadow = 0
+mesh = SubResource("Mesh_bank")
+
+[node name="FogVeil" type="MeshInstance3D" parent="."]
+transform = Transform3D(-1, 0, 0, 0, 0.5, 0, 0, 0, -1, 40, 16, 96)
+material_override = SubResource("Material_veil")
+cast_shadow = 0
+mesh = SubResource("Mesh_bank")
+
+[node name="JungleMist" type="FogVolume" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 7, -32)
+size = Vector3(200, 18, 44)
+material = SubResource("Fog_mist")
 
 [node name="AnchoredShip" parent="." instance=ExtResource("18_ship")]
-transform = Transform3D(0.94, 0, 0.342, 0, 1, 0, -0.342, 0, 0.94, 22, 0, 105)
+transform = Transform3D(0.643, 0, 0.766, 0, 1, 0, -0.766, 0, 0.643, 22, 0, 105)
+
+[node name="Bounds" type="StaticBody3D" parent="."]
+
+[node name="West" type="CollisionShape3D" parent="Bounds"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -80, 10, 0)
+shape = SubResource("Shape_side")
+
+[node name="East" type="CollisionShape3D" parent="Bounds"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 80, 10, 0)
+shape = SubResource("Shape_side")
+
+[node name="Inland" type="CollisionShape3D" parent="Bounds"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 10, -56)
+shape = SubResource("Shape_end")
+
+[node name="Sea" type="CollisionShape3D" parent="Bounds"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 10, 30)
+shape = SubResource("Shape_end")
+
+[node name="SurfWest" type="AudioStreamPlayer3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -22, 0.5, 9)
+volume_db = -6.0
+unit_size = 14.0
+max_distance = 90.0
+script = ExtResource("23_sound")
+recordings = Array[String](["res://assets/third_party/audio/waves_shore.ogg"])
+loop = true
+
+[node name="SurfEast" type="AudioStreamPlayer3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 24, 0.5, 11)
+volume_db = -6.0
+unit_size = 14.0
+max_distance = 90.0
+script = ExtResource("23_sound")
+recordings = Array[String](["res://assets/third_party/audio/waves_shore.ogg"])
+loop = true
+
+[node name="ShoalWest" type="MultiMeshInstance3D" parent="." node_paths=PackedStringArray("wary_of")]
+material_override = SubResource("Material_fish")
+cast_shadow = 0
+script = ExtResource("25_fish")
+shape = ExtResource("5_shape")
+home_x = -14.0
+wary_of = NodePath("../Player")
+
+[node name="ShoalMiddle" type="MultiMeshInstance3D" parent="." node_paths=PackedStringArray("wary_of")]
+material_override = SubResource("Material_fish")
+cast_shadow = 0
+script = ExtResource("25_fish")
+shape = ExtResource("5_shape")
+home_x = 4.0
+count = 34
+shoal_seed = 5
+wary_of = NodePath("../Player")
+
+[node name="ShoalEast" type="MultiMeshInstance3D" parent="." node_paths=PackedStringArray("wary_of")]
+material_override = SubResource("Material_fish")
+cast_shadow = 0
+script = ExtResource("25_fish")
+shape = ExtResource("5_shape")
+home_x = 22.0
+count = 18
+shoal_seed = 9
+wary_of = NodePath("../Player")
 
 [node name="Motes" type="CPUParticles3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.5, -4)
-amount = 260
+amount = 160
 lifetime = 10.0
 preprocess = 10.0
 mesh = SubResource("Mesh_mote")
@@ -221,77 +375,156 @@ initial_velocity_max = 0.25
 scale_amount_min = 0.5
 scale_amount_max = 1.6
 
+[node name="SunShafts" type="MultiMeshInstance3D" parent="." node_paths=PackedStringArray("sun")]
+material_override = SubResource("Material_shaft")
+cast_shadow = 0
+script = ExtResource("21_shafts")
+sun = NodePath("../Sun")
+shape = ExtResource("5_shape")
+count = 90
+inland = Vector2(2, 22)
+length = Vector2(14, 26)
+width = Vector2(1, 3.6)
+
 [node name="Grass" type="MultiMeshInstance3D" parent="."]
 material_override = SubResource("Material_blade")
 cast_shadow = 0
 script = ExtResource("4_grass")
 shape = ExtResource("5_shape")
-count = 9000
+count = 70000
+inland = Vector2(5, 52)
+fray = 3.0
+blade_height = 0.34
+
+[node name="BeachGrass" type="MultiMeshInstance3D" parent="."]
+material_override = SubResource("Material_blade")
+cast_shadow = 0
+script = ExtResource("4_grass")
+shape = ExtResource("5_shape")
+count = 1400
+grass_seed = 17
+inland = Vector2(2.5, 7)
+fray = 6.0
+blade_height = 0.36
+blades = 9
+
+[node name="Undergrowth" type="MultiMeshInstance3D" parent="."]
+material_override = SubResource("Material_leaf")
+script = ExtResource("4_grass")
+shape = ExtResource("5_shape")
+count = 16000
+grass_seed = 23
+inland = Vector2(7.5, 54)
+fray = 2.5
+blade_height = 0.6
+blade_width = 0.07
+reach = Vector2(0.5, 1.0)
+blades = 9
 
 [node name="Palms" type="Node3D" parent="."]
 script = ExtResource("3_scatter")
 shape = ExtResource("5_shape")
 prop = ExtResource("11_palm")
-count = 26
+count = 55
 scatter_seed = 4
-along = Vector2(-75, 75)
-inland = Vector2(15, 40)
-spacing = 4.5
-size_range = Vector2(0.8, 1.35)
+along = Vector2(-78, 78)
+inland = Vector2(8, 54)
+spacing = 4.0
+size_range = Vector2(1.4, 2.2)
 lean_degrees = 6.0
-sink = 0.25
+sink = 0.7
 
 [node name="BeachPalms" type="Node3D" parent="."]
 script = ExtResource("3_scatter")
 shape = ExtResource("5_shape")
 prop = ExtResource("11_palm")
-count = 5
+count = 7
 scatter_seed = 12
-along = Vector2(-30, 45)
-inland = Vector2(9, 14)
+along = Vector2(-40, 50)
+inland = Vector2(5.5, 8.5)
+spacing = 7.0
+size_range = Vector2(1.5, 2.1)
+lean_degrees = 10.0
+sink = 0.7
+
+[node name="ShorePalms" type="Node3D" parent="."]
+script = ExtResource("3_scatter")
+shape = ExtResource("5_shape")
+prop = ExtResource("11_palm")
+count = 4
+scatter_seed = 21
+along = Vector2(4, 46)
+inland = Vector2(3.5, 5.5)
 spacing = 8.0
-size_range = Vector2(0.9, 1.2)
-lean_degrees = 5.0
-sink = 0.25
+size_range = Vector2(1.4, 1.9)
+lean_degrees = 16.0
+sink = 0.7
 
 [node name="StoutPalms" type="Node3D" parent="."]
 script = ExtResource("3_scatter")
 shape = ExtResource("5_shape")
 prop = ExtResource("12_stout")
-count = 22
+count = 60
 scatter_seed = 8
 along = Vector2(-80, 80)
-inland = Vector2(20, 52)
-spacing = 4.5
-size_range = Vector2(0.8, 1.5)
+inland = Vector2(8, 56)
+spacing = 3.6
+size_range = Vector2(1.2, 2.3)
 lean_degrees = 5.0
-sink = 0.1
+sink = 0.15
+
+[node name="EdgeBushes" type="Node3D" parent="."]
+script = ExtResource("3_scatter")
+shape = ExtResource("5_shape")
+prop = ExtResource("13_bush")
+count = 110
+scatter_seed = 9
+along = Vector2(-80, 80)
+inland = Vector2(5.5, 10)
+spacing = 1.1
+size_range = Vector2(0.8, 2.0)
+lean_degrees = 10.0
+sink = 0.08
 
 [node name="Bushes" type="Node3D" parent="."]
 script = ExtResource("3_scatter")
 shape = ExtResource("5_shape")
 prop = ExtResource("13_bush")
-count = 70
+count = 330
 scatter_seed = 5
 along = Vector2(-80, 80)
-inland = Vector2(13, 48)
-spacing = 1.6
-size_range = Vector2(0.7, 1.7)
+inland = Vector2(9, 56)
+spacing = 1.4
+size_range = Vector2(1.0, 3.0)
 lean_degrees = 8.0
-sink = 0.05
+sink = 0.08
 
 [node name="Boulders" type="Node3D" parent="."]
 script = ExtResource("3_scatter")
 shape = ExtResource("5_shape")
 prop = ExtResource("14_boulder")
-count = 9
+count = 18
 scatter_seed = 6
-along = Vector2(-50, 50)
-inland = Vector2(-3, 10)
-spacing = 4.0
-size_range = Vector2(0.4, 1.3)
-lean_degrees = 12.0
-sink = 0.3
+along = Vector2(-55, 55)
+inland = Vector2(-1.5, 6)
+spacing = 2.2
+size_range = Vector2(0.25, 1.0)
+lean_degrees = 14.0
+sink = 0.25
+max_slope = 1.0
+
+[node name="ShallowRocks" type="Node3D" parent="."]
+script = ExtResource("3_scatter")
+shape = ExtResource("5_shape")
+prop = ExtResource("14_boulder")
+count = 16
+scatter_seed = 16
+along = Vector2(-55, 60)
+inland = Vector2(-9, -1.5)
+spacing = 3.2
+size_range = Vector2(0.6, 1.9)
+lean_degrees = 15.0
+sink = 0.35
 max_slope = 1.0
 
 [node name="WestPoint" type="Node3D" parent="."]
@@ -314,8 +547,8 @@ shape = ExtResource("5_shape")
 prop = ExtResource("15_outcrop")
 count = 1
 scatter_seed = 1
-along = Vector2(52, 52.1)
-inland = Vector2(3, 3.1)
+along = Vector2(40, 40.1)
+inland = Vector2(2, 2.1)
 size_range = Vector2(1.3, 1.3)
 turn_degrees = Vector2(200, 200)
 lean_degrees = 0.0
@@ -326,12 +559,12 @@ max_slope = 2.0
 script = ExtResource("3_scatter")
 shape = ExtResource("5_shape")
 prop = ExtResource("16_driftwood")
-count = 3
+count = 6
 scatter_seed = 3
-along = Vector2(-25, 30)
-inland = Vector2(3, 9)
-spacing = 9.0
-size_range = Vector2(0.8, 1.2)
+along = Vector2(-40, 40)
+inland = Vector2(2, 6)
+spacing = 7.0
+size_range = Vector2(0.7, 1.2)
 lean_degrees = 3.0
 sink = 0.12
 
@@ -341,15 +574,15 @@ shape = ExtResource("5_shape")
 prop = ExtResource("17_boat")
 count = 1
 scatter_seed = 1
-along = Vector2(6, 6.1)
-inland = Vector2(1.6, 1.7)
+along = Vector2(-22, -21.9)
+inland = Vector2(1.2, 1.3)
 size_range = Vector2(1.0, 1.0)
 turn_degrees = Vector2(75, 75)
 lean_degrees = 0.0
 sink = 0.08
 
 [node name="Player" parent="." instance=ExtResource("9_player")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -8, 0.9, 0.5)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -10, 0.9, 4.2)
 
 [node name="Hud3D" parent="." node_paths=PackedStringArray("player") instance=ExtResource("10_hud")]
 player = NodePath("../Player")

@@ -67,7 +67,7 @@ func build() -> void:
 	var normals: PackedVector3Array = PackedVector3Array()
 	var uvs: PackedVector2Array = PackedVector2Array()
 	var floor_heights: PackedFloat32Array = PackedFloat32Array()
-	var picture: Image = Image.create_empty(across, deep, false, Image.FORMAT_RF)
+	var picture: Image = Image.create_empty(across, deep, false, Image.FORMAT_RGF)
 	points.resize(across * deep)
 	normals.resize(across * deep)
 	uvs.resize(across * deep)
@@ -82,7 +82,7 @@ func build() -> void:
 			normals[index] = shape.normal_at(x, z)
 			uvs[index] = Vector2(x, z)
 			floor_heights[index] = maxf(height, -wade_depth)
-			picture.set_pixel(column, row, Color(height, 0.0, 0.0))
+			picture.set_pixel(column, row, Color(height, shape.inland(x, z), 0.0))
 
 	var indices: PackedInt32Array = PackedInt32Array()
 	indices.resize((across - 1) * (deep - 1) * 6)
@@ -124,8 +124,10 @@ func build() -> void:
 	built.emit()
 
 
-## The ground's heights as a picture, one pixel a metre, for shaders (the
-## shore water reads how deep it is from this). Null before it's built.
+## The ground as a picture, one pixel a metre, for shaders: red is the
+## height and green is how far inland of the waterline the spot is
+## (negative out at sea). The shore water reads how deep it is, and how
+## far out, from this. Null before it's built.
 func height_texture() -> ImageTexture:
 	return _heights
 

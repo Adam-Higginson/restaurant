@@ -17,6 +17,9 @@ extends Node
 ## Shrink the texture to this many pixels across (and down) as it loads, for
 ## the chunky N64 look; 0 keeps it as it is.
 @export var pixels: int = 0
+## Make mipmaps for it as it loads: smaller copies Godot draws far away, so
+## a finely detailed texture on the ground doesn't shimmer in the distance.
+@export var mipmaps: bool = false
 
 
 func _ready() -> void:
@@ -32,6 +35,8 @@ func apply() -> bool:
 		return false
 	if pixels > 0:
 		texture = shrunk(texture, pixels)
+	if mipmaps:
+		texture = with_mipmaps(texture)
 	material.set_shader_parameter(parameter, texture)
 	return true
 
@@ -43,4 +48,14 @@ static func shrunk(texture: Texture2D, size: int) -> ImageTexture:
 	if image.is_compressed():
 		image.decompress()
 	image.resize(size, size, Image.INTERPOLATE_BILINEAR)
+	return ImageTexture.create_from_image(image)
+
+
+## A copy of [param texture] with mipmaps: the smaller copies Godot draws
+## when it's far away.
+static func with_mipmaps(texture: Texture2D) -> ImageTexture:
+	var image: Image = texture.get_image()
+	if image.is_compressed():
+		image.decompress()
+	image.generate_mipmaps()
 	return ImageTexture.create_from_image(image)
