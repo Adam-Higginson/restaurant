@@ -534,6 +534,8 @@ A growing glossary of the Godot concepts this project uses: what each one is, in
 
 **Awaiting a fade.** A function that uses `await` pauses there until the thing it waits for is done, and the game carries on meanwhile. *Ours:* `JollyBoat.cross` (`scripts/islands/jolly_boat.gd`) awaits the screen fading out, moves you, then awaits it fading back in, with your controls off in between.
 
+**`RigidBody3D`, impulses and physics layers.** A rigid body is moved by the physics engine itself: it falls, rolls and comes to rest. An *impulse* is a sudden push given to one. Every body is on some physics *layers* and collides with the layers in its *mask*, which is how two things can be made to ignore each other. *Ours:* a `Coconut` (`scripts/islands/coconut.gd`) is a rigid body on a layer of its own, so it rests on the ground but never blocks you; when you walk into it, it gives itself an impulse the way you were going.
+
 **MSAA (antialiasing).** Smooths the stair-stepped edges of models by sampling each pixel several times along edges. It's a setting of the viewport. *Ours:* `Island` (`scripts/islands/island.gd`) turns 4x MSAA on while an island is showing and puts it back after.
 
 **Mipmaps.** Smaller copies of a texture that Godot draws when the texture is far away; without them fine detail shimmers in the distance. *Ours:* `ThirdPartyTexture` can make them as it loads (its `mipmaps` setting), used for the photographed sand and forest floor.

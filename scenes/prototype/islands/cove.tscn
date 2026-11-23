@@ -42,6 +42,10 @@
 [ext_resource type="Resource" path="res://data/items/lettuce.tres" id="42_lettuce"]
 [ext_resource type="Shader" path="res://shaders/far_canopy.gdshader" id="43_canopy"]
 [ext_resource type="Script" path="res://scripts/islands/near_mist.gd" id="44_mist"]
+[ext_resource type="Script" path="res://scripts/islands/gull_flock.gd" id="45_gulls"]
+[ext_resource type="Shader" path="res://shaders/gull.gdshader" id="46_gull"]
+[ext_resource type="PackedScene" path="res://scenes/prototype/islands/props/coconut.tscn" id="47_coconut"]
+[ext_resource type="Shader" path="res://shaders/blown_leaf.gdshader" id="48_leaf"]
 
 [sub_resource type="FastNoiseLite" id="Noise_cloud"]
 noise_type = 3
@@ -227,6 +231,9 @@ shader_parameter/treetops = SubResource("Texture_cloud")
 [sub_resource type="ShaderMaterial" id="Material_canopy"]
 shader = ExtResource("43_canopy")
 
+[sub_resource type="ShaderMaterial" id="Material_gull"]
+shader = ExtResource("46_gull")
+
 [sub_resource type="FogMaterial" id="Fog_mist"]
 density = 0.03
 albedo = Color(1, 0.94, 0.82, 1)
@@ -240,16 +247,12 @@ shading_mode = 0
 albedo_color = Color(1, 0.9, 0.65, 0.4)
 billboard_mode = 1
 
-[sub_resource type="StandardMaterial3D" id="Material_blown_leaf"]
-cull_mode = 2
-albedo_color = Color(0.3, 0.42, 0.12, 1)
-roughness = 0.8
-backlight_enabled = true
-backlight = Color(0.4, 0.5, 0.1, 1)
+[sub_resource type="ShaderMaterial" id="Material_blown_leaf"]
+shader = ExtResource("48_leaf")
 
 [sub_resource type="QuadMesh" id="Mesh_blown_leaf"]
 material = SubResource("Material_blown_leaf")
-size = Vector2(0.16, 0.07)
+size = Vector2(0.2, 0.09)
 
 [sub_resource type="QuadMesh" id="Mesh_mote"]
 material = SubResource("Material_mote")
@@ -450,21 +453,28 @@ count = 18
 shoal_seed = 9
 wary_of = NodePath("../Player")
 
+[node name="Gulls" type="MultiMeshInstance3D" parent="."]
+material_override = SubResource("Material_gull")
+cast_shadow = 0
+script = ExtResource("45_gulls")
+count = 14
+height = Vector2(8, 22)
+
 [node name="BlownLeaves" type="CPUParticles3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -30, 5, -14)
-amount = 46
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -22, 4, -3)
+amount = 130
 lifetime = 11.0
 preprocess = 11.0
 randomness = 0.6
 mesh = SubResource("Mesh_blown_leaf")
 emission_shape = 3
-emission_box_extents = Vector3(40, 4, 12)
+emission_box_extents = Vector3(55, 3.5, 14)
 particle_flag_rotate_y = true
 direction = Vector3(0.8, -0.05, 0.6)
 spread = 14.0
 gravity = Vector3(0, -0.25, 0)
-initial_velocity_min = 3.0
-initial_velocity_max = 6.5
+initial_velocity_min = 2.0
+initial_velocity_max = 5.0
 angular_velocity_min = -260.0
 angular_velocity_max = 260.0
 angle_min = -180.0
@@ -729,6 +739,20 @@ turn_degrees = Vector2(200, 200)
 lean_degrees = 0.0
 sink = 0.6
 max_slope = 2.0
+
+[node name="Coconuts" type="Node3D" parent="."]
+script = ExtResource("3_scatter")
+shape = ExtResource("5_shape")
+prop = ExtResource("47_coconut")
+count = 11
+scatter_seed = 7
+along = Vector2(-34, 44)
+inland = Vector2(2.5, 10)
+spacing = 2.0
+size_range = Vector2(1.0, 1.0)
+lean_degrees = 0.0
+sink = -0.25
+max_slope = 1.2
 
 [node name="Driftwood" type="Node3D" parent="."]
 script = ExtResource("3_scatter")
