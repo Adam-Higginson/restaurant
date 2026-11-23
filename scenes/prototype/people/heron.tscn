@@ -11,6 +11,7 @@
 [ext_resource type="Script" path="res://scripts/dialogue/speaker.gd" id="9_speaker"]
 [ext_resource type="Script" path="res://scripts/art/third_party_model.gd" id="10_model"]
 [ext_resource type="Script" path="res://scripts/people/crew_animator.gd" id="11_animator"]
+[ext_resource type="Script" path="res://scripts/people/crew_walker.gd" id="12_walker"]
 
 [sub_resource type="BoxShape3D" id="Reach"]
 size = Vector3(1.3, 1.8, 1.3)
@@ -191,10 +192,16 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.45, -0.1)
 script = ExtResource("9_speaker")
 who = &"heron"
 
-[node name="Animator" type="Node" parent="." node_paths=PackedStringArray("crewmate", "model")]
+[node name="Walker" type="Node" parent="."]
+script = ExtResource("12_walker")
+
+[node name="Animator" type="Node" parent="." node_paths=PackedStringArray("crewmate", "model", "walker")]
 script = ExtResource("11_animator")
 crewmate = NodePath("..")
 model = NodePath("../Model/Meshy")
 idle_animation = &"Long_Breathe_and_Look_Around"
 talk_animations = Array[StringName]([&"Talk_with_Left_Hand_on_Hip", &"Talk_with_Hands_Open"])
 listen_animation = &"Listening_Gesture"
+walker = NodePath("../Walker")
+walk_animation = &"walk"
+walk_animation_from = "res://assets/third_party/meshy/heron/rig/walk.glb"

@@ -13,6 +13,7 @@ const IDLE: StringName = &"idle"
 const TALK_A: StringName = &"talk_a"
 const TALK_B: StringName = &"talk_b"
 const LISTEN: StringName = &"listen"
+const WALK: StringName = &"walk"
 
 
 func before_test() -> void:
@@ -125,6 +126,42 @@ func test_the_heron_talks_in_a_running_conversation_and_idles_after() -> void:
 
 	conversation.stop()
 	assert_int(animator.mood).is_equal(CrewAnimator.Mood.IDLE)
+
+
+func test_walks_while_their_walker_moves_them() -> void:
+	var animator: CrewAnimator = _animator()
+	animator.walk_animation = WALK
+
+	animator.hear_walking(true)
+	assert_int(animator.mood).is_equal(CrewAnimator.Mood.WALK)
+	assert_str(animator.animation).is_equal(WALK)
+
+	animator.hear_walking(false)
+	assert_int(animator.mood).is_equal(CrewAnimator.Mood.IDLE)
+
+
+func test_a_line_said_on_the_move_is_walked_and_talked_once_they_stop() -> void:
+	var animator: CrewAnimator = _animator()
+	animator.walk_animation = WALK
+	animator.hear_walking(true)
+
+	animator.hear_line(HERON_PERSON)
+	assert_int(animator.mood).is_equal(CrewAnimator.Mood.WALK)
+	animator.hear_walking(false)
+	assert_int(animator.mood).is_equal(CrewAnimator.Mood.TALK)
+
+	animator.hear_end()
+	animator.hear_walking(true)
+	assert_int(animator.mood).is_equal(CrewAnimator.Mood.WALK)
+
+
+func test_borrows_a_walk_from_a_file_missing_does_nothing() -> void:
+	var animator: CrewAnimator = _animator()
+	animator.walk_animation = WALK
+	animator.walk_animation_from = "res://not/a/file.glb"
+	var player: AnimationPlayer = _dress_with_stand_in(animator)
+
+	assert_bool(player.has_animation(WALK)).is_false()
 
 
 # An animator for the heron with stand-in animation names and no model yet.
