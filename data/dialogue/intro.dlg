@@ -102,17 +102,16 @@
 @hide flying_lantern
 -> dark
 
-# The dark. The storm stops dead as the water closes over. You're sinking,
-# limp, eyes shut. Far above, a bell: somebody heard him. He's in the
-# water already, so it isn't long before his light shows.
+# The dark. The storm stops dead as the water closes over. Your face,
+# close: eyes shut, slumped, going down. Far above, a bell: somebody heard
+# him. Then straight to him.
 ~ dark
 @stage underwater
 @muffle on
 @hush on
 @start sinking
-@wait 1.4
+@wait 1.2
 @hush off
-@wait 1.0
 @sound bell
 @wait 1.4
 -> light

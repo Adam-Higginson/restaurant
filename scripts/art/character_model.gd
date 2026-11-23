@@ -108,19 +108,6 @@ static var _heads: Dictionary[String, ArrayMesh] = {}
 	set(value):
 		eyes_shut = value
 		_show_eyes()
-## Whether the body is limp: its arms, legs and neck hang and trail under
-## physics instead of being posed (see [Ragdoll]). The hips and chest still
-## go wherever the character is taken. A clip can move it.
-@export var limp: bool = false:
-	set(value):
-		limp = value
-		_go_limp()
-## While limp, whether the left arm stays posed: it's holding on to
-## something.
-@export var holding_on: bool = false:
-	set(value):
-		holding_on = value
-		_go_limp()
 
 ## The character, or null while the greybox shows.
 var character: Node3D = null
@@ -134,8 +121,6 @@ var right_hand: BoneAttachment3D = null
 var left_hand: BoneAttachment3D = null
 
 var _animator: AnimationPlayer = null
-## The physics for going limp, made the first time it's needed.
-var _ragdoll: PhysicalBoneSimulator3D = null
 var _duellist: Duellist = null
 ## How high a toe joint is when its boot's sole is on the floor, in metres
 ## above this node: measured from the rest pose when the character is built.
@@ -168,9 +153,7 @@ func _ready() -> void:
 func _process(delta: float) -> void:
 	if _animator == null:
 		return
-	# A limp body isn't standing on anything.
-	if not limp:
-		plant_feet()
+	plant_feet()
 	_turn_for_flip()
 	var walking: bool = player != null and player.is_walking
 	var charging: bool = _duellist != null and _duellist.is_charging()
@@ -456,7 +439,6 @@ func _build(parts: CharacterParts) -> void:
 	_show_eyes()
 	pose = Pose.IDLE
 	play(Pose.IDLE)
-	_go_limp()
 
 
 # The head and neck of [param path]'s body, and its eyes.
@@ -592,26 +574,6 @@ func _measure_stride(anim_name: StringName) -> float:
 	return swept / time_down if time_down > 0.0 and swept > 0.0 else 0.0
 
 
-## Whether the body's physics are running right now.
-func is_limp() -> bool:
-	return _ragdoll != null and _ragdoll.is_simulating_physics()
-
-
-# Hands the limbs to physics, or back to the animation.
-func _go_limp() -> void:
-	if skeleton == null:
-		return
-	if not limp:
-		if _ragdoll != null:
-			_ragdoll.physical_bones_stop_simulation()
-		return
-	if _ragdoll == null:
-		_ragdoll = Ragdoll.build(skeleton)
-	# Started afresh, so a change in which arm is posed takes hold.
-	_ragdoll.physical_bones_stop_simulation()
-	_ragdoll.physical_bones_start_simulation(Ragdoll.limp_bones(holding_on))
-
-
 # Shuts or opens the eyes: shut, the eyeballs aren't drawn, which leaves
 # the lids' own shadowed hollow.
 func _show_eyes() -> void:
@@ -676,7 +638,6 @@ func _undress() -> void:
 	right_hand = null
 	left_hand = null
 	_animator = null
-	_ragdoll = null
 	_act_left = 0.0
 	_recovery = &""
 

@@ -88,10 +88,13 @@ func test_shafts_of_light_fan_out_only_once_it_closes_on_yours() -> void:
 	hand.rays = rays
 	hand.rays_brightness = 2.0
 
-	# Held out but not taken: no shafts.
+	# Held out but not taken: no shafts. (The sheet is drawn, dark, so
+	# nothing has to be prepared when the hands meet.)
 	hand.reach = 1.0
-	assert_bool(rays.visible).is_false()
+	assert_bool(rays.visible).is_true()
 	assert_float(hand.rays_now()).is_equal(0.0)
+	var before: float = fan.get_shader_parameter("brightness")
+	assert_float(before).is_equal(0.0)
 
 	# Closed on yours: they fan out from the palm, at their brightest
 	# when he's strong.

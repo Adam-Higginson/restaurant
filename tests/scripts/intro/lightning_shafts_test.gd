@@ -9,8 +9,8 @@ const SHADER: Shader = preload("res://shaders/light_shaft.gdshader")
 func test_between_flashes_theres_nothing_there() -> void:
 	var shafts: LightningShafts = _new_shafts(2)
 
-	assert_bool(shafts.visible).is_false()
 	assert_float(shafts.flash).is_equal(0.0)
+	assert_float(_flash_sent(shafts)).is_equal(0.0)
 	assert_bool(shafts.is_in_group(Lightning.LIT_GROUP)).is_true()
 
 
@@ -19,7 +19,6 @@ func test_in_a_flash_every_shaft_is_as_bright_as_the_flash() -> void:
 
 	shafts.set_lightning(0.75)
 
-	assert_bool(shafts.visible).is_true()
 	for child: Node in shafts.get_children():
 		var material: ShaderMaterial = (child as MeshInstance3D).material_override as ShaderMaterial
 		var sent: float = material.get_shader_parameter("flash")
@@ -32,7 +31,9 @@ func test_when_the_flash_is_over_theyre_gone_again() -> void:
 
 	shafts.set_lightning(0.0)
 
-	assert_bool(shafts.visible).is_false()
+	assert_float(_flash_sent(shafts)).is_equal(0.0)
+	# Still drawn, dark, so nothing has to be prepared at the next flash.
+	assert_bool(shafts.visible).is_true()
 
 
 func test_a_flash_is_never_brighter_than_the_brightest() -> void:
@@ -41,6 +42,14 @@ func test_a_flash_is_never_brighter_than_the_brightest() -> void:
 	shafts.set_lightning(4.0)
 
 	assert_float(shafts.flash).is_equal(1.0)
+
+
+# How bright the first shaft's shader has been told the flash is.
+func _flash_sent(shafts: LightningShafts) -> float:
+	var material: ShaderMaterial = (shafts.get_child(0) as MeshInstance3D).material_override \
+			as ShaderMaterial
+	var sent: float = material.get_shader_parameter("flash")
+	return sent
 
 
 func _new_shafts(count: int) -> LightningShafts:

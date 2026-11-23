@@ -97,7 +97,9 @@ func _apply() -> void:
 		light.light_energy = glow_now()
 	if is_instance_valid(rays):
 		rays.position = position + basis * palm_position()
-		rays.visible = rays_now() > 0.001
+		# Drawn from the start, at no brightness, so nothing has to be made
+		# ready at the moment the hands meet.
+		rays.visible = true
 		var fan: ShaderMaterial = rays.material_override as ShaderMaterial
 		if fan != null:
 			fan.set_shader_parameter("brightness", rays_now())

@@ -4,7 +4,8 @@ extends Node3D
 ## Its children are the shafts: tall tubes that all share one material
 ## (shaders/light_shaft.gdshader). It joins the group [Lightning] tells
 ## about every flash and makes them as bright as the flash is, so between
-## flashes there's nothing there.
+## flashes there's nothing to see. (They're still drawn, at no brightness,
+## so the game doesn't stop for a moment to prepare them at the first flash.)
 
 ## How bright the lightning is right now, 0 to 1.
 var flash: float:
@@ -22,7 +23,6 @@ func _ready() -> void:
 ## How bright the lightning is now: 0 dark, 1 the brightest moment.
 func set_lightning(brightness: float) -> void:
 	_flash = clampf(brightness, 0.0, 1.0)
-	visible = _flash > 0.001
 	for child: Node in get_children():
 		var shaft: GeometryInstance3D = child as GeometryInstance3D
 		if shaft == null:
