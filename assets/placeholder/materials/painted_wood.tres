@@ -8,4 +8,4 @@ metallic_specular = 0.3
 roughness = 0.85
 uv1_scale = Vector3(4, 4, 4)
 uv1_triplanar = true
-texture_filter = 0
+texture_filter = 3

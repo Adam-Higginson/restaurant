@@ -24,7 +24,7 @@ group_uniforms look;
 uniform vec4 albedo : source_color = vec4(0.66, 0.48, 0.32, 1.0);
 // The grain. Mapped in the surface space from whichever side a face looks out of,
 // so boxes never stretch it.
-uniform sampler2D albedo_texture : source_color, filter_nearest_mipmap, repeat_enable, hint_default_white;
+uniform sampler2D albedo_texture : source_color, filter_linear_mipmap, repeat_enable, hint_default_white;
 // One copy of the texture covers this many metres.
 uniform float texture_metres = 1.0;
 uniform float dry_roughness : hint_range(0.0, 1.0) = 0.85;

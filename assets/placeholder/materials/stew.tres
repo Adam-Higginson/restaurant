@@ -8,4 +8,4 @@ albedo_texture = ExtResource("1_grain")
 roughness = 0.3
 uv1_scale = Vector3(10, 10, 10)
 uv1_triplanar = true
-texture_filter = 0
+texture_filter = 3

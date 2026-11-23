@@ -1,7 +1,7 @@
-// The N64 look for small third-party props (pots, crocks, bread). The packs
-// paint their models in smooth flat colour, which reads as a modern toy. This
-// keeps each model's own colour and lays a chunky, low-resolution grain over
-// it, the way every N64 surface had a small stretched texture.
+// The N64 look for third-party props the Kiln has not fired yet (pots, crocks,
+// bread). The packs paint their models in smooth flat colour, which reads as a
+// modern toy. This keeps each model's own colour and lays a soft, mottled
+// low-resolution grain over it, softly filtered as N64 textures were.
 //
 // The grain is placed in the object's own space (scaled to metres), so it
 // sits still on the prop wherever the prop moves, on a sailing ship too.
@@ -9,10 +9,10 @@ shader_type spatial;
 render_mode diffuse_burley, specular_schlick_ggx;
 
 // The model's own colour: its texture (the packs use a small palette) and tint.
-uniform sampler2D albedo_texture : source_color, filter_nearest_mipmap, hint_default_white;
+uniform sampler2D albedo_texture : source_color, filter_linear_mipmap, hint_default_white;
 uniform vec4 albedo_color : source_color = vec4(1.0);
 // The chunky grain laid over it: light and dark pixels around mid grey.
-uniform sampler2D grain : filter_nearest, repeat_enable, hint_default_white;
+uniform sampler2D grain : filter_linear, repeat_enable, hint_default_white;
 // One copy of the grain covers this many metres.
 uniform float grain_metres = 0.2;
 // How strongly the grain shows.

@@ -7,4 +7,4 @@ albedo_color = Color(0.4, 0.28, 0.19, 1)
 albedo_texture = ExtResource("1_75hl2")
 roughness = 0.9
 uv1_triplanar = true
-texture_filter = 2
+texture_filter = 3

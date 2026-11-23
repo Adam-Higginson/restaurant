@@ -8,4 +8,4 @@ albedo_texture = ExtResource("1_jtoi6")
 roughness = 0.95
 uv1_scale = Vector3(4, 4, 4)
 uv1_triplanar = true
-texture_filter = 0
+texture_filter = 3
