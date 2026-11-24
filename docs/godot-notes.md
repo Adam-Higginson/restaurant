@@ -726,6 +726,10 @@ A growing glossary of the Godot concepts this project uses: what each one is, in
 
 **A tool script's resources must be tools too.** In the editor, a `@tool` script calling a `Resource`'s functions fails ("placeholder instance") unless that resource's script is `@tool` too. *Ours:* `HullOutline`, used by `DeckEdge`.
 
+**A setting just for builds (feature overrides).** A project setting with `.release` (or `.debug`, `.windows`, ...) on the end of its name wins only where that feature tag is on: `display/window/size/mode.release=3` makes exported release builds start fullscreen while the game run from the editor (a debug run) keeps its window. In the Project Settings window, a setting's Add button offers these overrides. *Ours:* the window mode in `project.godot`.
+
+**Fullscreen, and switching it.** `DisplayServer.window_set_mode(...)` changes the game's window: `WINDOW_MODE_FULLSCREEN` is a borderless window covering the screen (quick to alt-tab), `WINDOW_MODE_EXCLUSIVE_FULLSCREEN` takes over the display. *Ours:* `WindowToggle` (`scripts/app/`, the autoload `FullscreenToggle`) switches on Alt+Enter or F11. An autoload's name and a `class_name` mustn't be the same, so this one's registered as `FullscreenToggle`.
+
 ## Glass lanterns with a flame inside (#199)
 
 **Raymarching.** Instead of painting a picture onto a surface, a shader can follow your line of sight *into* the object from each pixel and step along it, asking "what's here?" at each step. Whatever it finds is drawn at its real depth, so it shifts behind the surface as you move. *Ours:* `lantern_flame.gdshader` steps through the thin cylinder round the wick (20 steps) to find the flame, then works out where the ray leaves the box to draw the floor plate, the roof or the far pane's grille.
