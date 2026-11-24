@@ -524,3 +524,22 @@ func test_the_boy_has_a_clip_for_every_move_the_player_makes() -> void:
 		assert_bool(boy.whole_clips.has(move)).override_failure_message(String(move)).is_true()
 	for named: StringName in boy.whole_clip_names:
 		assert_bool(boy.whole_clips.has(named)).override_failure_message(String(named)).is_true()
+
+
+func test_a_whole_character_wears_its_outfit_unless_undressed() -> void:
+	var boy: CharacterParts = load("res://data/characters/boy.tres") as CharacterParts
+
+	assert_object(CharacterModel.outfit_for(boy, false)).is_same(boy.whole_outfit)
+	assert_object(CharacterModel.outfit_for(boy, true)).is_null()
+
+
+func test_the_castaway_pulled_from_the_sea_is_in_his_underwear() -> void:
+	# The real scenes: in the water he wears only what his model was made in.
+	for path: String in ["res://scenes/prototype/intro/underwater.tscn",
+			"res://scenes/prototype/intro/grave.tscn"]:
+		var scene: Node = (load(path) as PackedScene).instantiate()
+		auto_free(scene)
+		var found: Array[Node] = scene.find_children("*", "CharacterModel", true, false)
+		assert_array(found).override_failure_message(path).is_not_empty()
+		for model: Node in found:
+			assert_bool((model as CharacterModel).undressed).override_failure_message(path).is_true()

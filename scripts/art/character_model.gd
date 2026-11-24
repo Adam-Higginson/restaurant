@@ -203,6 +203,9 @@ const CHOP_CONTACT: float = 0.62
 ## Parts to build instead of the player's own look ([member boy] or
 ## [member girl]), e.g. to show both side by side in the Lookbook.
 @export var parts_override: CharacterParts
+## Leave a whole character's clothes off, so it shows in what its model
+## was made in (the boy's underwear): the castaway, pulled from the sea.
+@export var undressed: bool = false
 
 ## The character, or null while the greybox shows.
 var character: Node3D = null
@@ -596,6 +599,12 @@ static func whole_bone(pack_name: String) -> String:
 	return pack_name
 
 
+## What a whole character built from [param parts] wears: its outfit, or
+## nothing over what its model was made in when [param bare].
+static func outfit_for(parts: CharacterParts, bare: bool) -> CharacterOutfit:
+	return null if bare else parts.whole_outfit
+
+
 ## Whether a whole character's clip for the animation [param anim_name] plays
 ## once (a strike or a tumble) and doesn't loop.
 static func plays_once(anim_name: StringName) -> bool:
@@ -730,7 +739,7 @@ func _build_whole(parts: CharacterParts) -> void:
 	dresser.keep_as_made = true
 	dresser.grain = false
 	dresser.detail = 1.0
-	dresser.outfit = parts.whole_outfit
+	dresser.outfit = outfit_for(parts, undressed)
 	# Always stylised: the body under the clothes is only left undrawn by the
 	# stylised look's shader, so drawn as made its feet show through its boots.
 	dresser.style = WHOLE_STYLE
@@ -792,6 +801,8 @@ func _hook_whole() -> void:
 	_arm.upper_bone = StringName(_bone("upperarm_l"))
 	_arm.lower_bone = StringName(_bone("lowerarm_l"))
 	_arm.hand_bone = StringName(_bone("hand_l"))
+	# The shoulder rises into a reach, as a real one does.
+	_arm.shoulder_bone = StringName(_bone("clavicle_l"))
 	_arm.amount = reach
 	_arm.grip = hand_grip
 	skeleton.add_child(_arm)

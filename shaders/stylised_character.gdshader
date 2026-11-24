@@ -167,8 +167,8 @@ void fragment() {
 	if (eyes_shut > 0.0) {
 		// Judged as it looks (sRGB): near white, or bluer than it is red or green.
 		vec3 looks = pow(clamp(paint, 0.0, 1.0), vec3(1.0 / 2.2));
-		float white = smoothstep(0.74, 0.88, min(looks.r, min(looks.g, looks.b)));
-		float blue = smoothstep(0.02, 0.1, looks.b - max(looks.r, looks.g));
+		float white = smoothstep(0.6, 0.75, min(looks.r, min(looks.g, looks.b)));
+		float blue = smoothstep(0.0, 0.05, looks.b - max(looks.r, looks.g));
 		paint = mix(paint, eyelid_color.rgb, clamp(white + blue, 0.0, 1.0) * eyes_shut);
 	}
 	if (shell > 0.0) {
