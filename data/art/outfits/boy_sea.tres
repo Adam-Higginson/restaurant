@@ -4,6 +4,6 @@
 
 [resource]
 script = ExtResource("1_outfit")
-top = "res://assets/third_party/meshy/boy/layers/start_top.glb"
-legs = "res://assets/third_party/meshy/boy/layers/start_legs.glb"
-feet = "res://assets/third_party/meshy/boy/layers/sea_feet.glb"
+top = "res://assets/third_party/meshy/boy_stern/layers/start_top.glb"
+legs = "res://assets/third_party/meshy/boy_stern/layers/start_legs.glb"
+feet = "res://assets/third_party/meshy/boy_stern/layers/sea_feet.glb"

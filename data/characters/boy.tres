@@ -4,6 +4,7 @@
 [ext_resource type="Resource" path="res://data/art/looks/character_body.tres" id="2_body"]
 [ext_resource type="Resource" path="res://data/art/looks/character_head.tres" id="3_head"]
 [ext_resource type="Resource" path="res://data/art/looks/character_hair.tres" id="4_hair"]
+[ext_resource type="Resource" path="res://data/art/outfits/boy_sea.tres" id="5_outfit"]
 
 [resource]
 script = ExtResource("1")
@@ -16,6 +17,7 @@ body_look = ExtResource("2_body")
 head_look = ExtResource("3_head")
 hair_look = ExtResource("4_hair")
 whole = "res://assets/third_party/meshy/boy_stern/anim/animation_glb.glb"
+whole_outfit = ExtResource("5_outfit")
 whole_clips = Dictionary[StringName, String]({
 &"Idle": "res://assets/third_party/meshy/boy_stern/anim/animation_glb.glb",
 &"Walk": "res://assets/third_party/meshy/boy_stern/rig/walking_glb.glb",
