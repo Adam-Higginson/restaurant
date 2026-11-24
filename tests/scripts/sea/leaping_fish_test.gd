@@ -49,9 +49,12 @@ func test_each_flies_nose_first() -> void:
 	var body: Node3D = fish.get_node("Fish0") as Node3D
 
 	var moved: Vector3 = body.position - before
-	# Forward is her -Z, and the fish's own -Z leads.
+	# Forward is her -Z. The herring's model has its nose along its own +Z,
+	# so that's the way that must lead.
+	var model: Node3D = body.get_child(0) as Node3D
+	var nose: Vector3 = (body.basis * model.basis).z.normalized()
 	assert_float(moved.z).is_less(0.0)
-	assert_float((-body.basis.z).dot(moved.normalized())).is_greater(0.8)
+	assert_float(nose.dot(moved.normalized())).is_greater(0.8)
 
 
 func test_turned_off_the_ones_in_the_air_land_and_no_more_leap() -> void:
