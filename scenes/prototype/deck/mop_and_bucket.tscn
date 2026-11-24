@@ -1,5 +1,6 @@
 [gd_scene format=3 uid="uid://dmwsmhjke2aft"]
 
+[ext_resource type="Script" path="res://scripts/art/third_party_model.gd" id="900_meshy"]
 [ext_resource type="Material" uid="uid://pmxhjggurfpb" path="res://assets/placeholder/materials/wet_prop_wood.tres" id="1_xhaxv"]
 [ext_resource type="Material" path="res://assets/placeholder/materials/iron.tres" id="2_a16o1"]
 [ext_resource type="Material" path="res://assets/placeholder/materials/water.tres" id="3_pp7g7"]
@@ -127,3 +128,12 @@ mesh = SubResource("BoxMesh_7")
 [node name="Shape" type="CollisionShape3D" parent="." unique_id=1462882373]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.17, 0)
 shape = SubResource("BoxShape3D_8")
+
+[node name="Meshy" type="Node3D" parent="." node_paths=PackedStringArray("stand_ins")]
+script = ExtResource("900_meshy")
+path = "res://assets/third_party/meshy/mop_and_bucket/model/model.glb"
+fit_size = Vector3(0.75, 1.3, 0.75)
+stand_ins = [NodePath("../Bucket"), NodePath("../BandLow"), NodePath("../BandHigh"), NodePath("../Water"), NodePath("../Bail")]
+grain = false
+detail = 1.0
+keep_as_made = true
