@@ -69,6 +69,9 @@ const SURFACE: Dictionary[StringName, Variant] = {
 @export_range(0.0, 8.0) var scenery_strokes: float = 3.0
 @export var stroke_size: float = 0.15
 @export_range(1.0, 8.0) var stroke_stretch: float = 4.0
+## What the scenery's strokes are pinned to: the ship, so they ride with
+## it as it sails and rocks. None pins them to the world.
+@export var stroke_anchor: Node3D
 ## How far the brush follows the picture's edges: 0 paints square dabs,
 ## up to 1 lays each dab along the edge it's on, as an oval up to twice
 ## as long as it's wide, so strokes follow the forms.
@@ -86,6 +89,8 @@ const SURFACE: Dictionary[StringName, Variant] = {
 @export_range(0.0, 4.0) var light_cap: float = 0.85
 
 var _filter: MeshInstance3D
+## The scenery copy's material, told where [member stroke_anchor] is.
+var _scenery_material: ShaderMaterial
 var _style: CharacterStyle
 # The look for shelled creatures: two steps of shade, a wet shine, a firmer line.
 var _shell_style: CharacterStyle
@@ -132,6 +137,9 @@ func _ready() -> void:
 
 
 func _process(_delta: float) -> void:
+	if _scenery_material != null and is_instance_valid(stroke_anchor):
+		_scenery_material.set_shader_parameter(&"stroke_space",
+				Projection(stroke_anchor.get_global_transform_interpolated().affine_inverse()))
 	# The filter rides on whichever camera is in use (cutscenes change it).
 	var camera: Camera3D = get_viewport().get_camera_3d()
 	if _filter != null and camera != null and _filter.get_parent() != camera:
@@ -192,6 +200,7 @@ func _apply() -> void:
 			material.set_shader_parameter(&"brush_flow", brush_flow)
 		# Brushed edges only on the scenery's copy.
 		var scenery: ShaderMaterial = screens[0].mesh.surface_get_material(0) as ShaderMaterial
+		_scenery_material = scenery
 		scenery.set_shader_parameter(&"stroke_jitter", scenery_strokes)
 		scenery.set_shader_parameter(&"stroke_size", stroke_size)
 		scenery.set_shader_parameter(&"stroke_stretch", stroke_stretch)

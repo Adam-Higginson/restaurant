@@ -65,6 +65,10 @@ uniform vec4 rim_tint : source_color = vec4(1.0, 0.85, 0.62, 1.0);
 uniform float stroke_jitter : hint_range(0.0, 8.0) = 0.0;
 uniform float stroke_size = 0.15;
 uniform float stroke_stretch = 4.0;
+// The space the strokes are pinned in, from the world's: the ship's, so
+// they ride with it as it sails and rocks (otherwise the ship moves
+// through them and they crawl across it).
+uniform mat4 stroke_space = mat4(1.0);
 // How far the brush follows the picture's edges (#172): 0 paints square
 // dabs; above that each dab is turned to lie along the edge it's on and
 // stretched into an oval up to (1 + [brush_flow]) times longer, the way
@@ -191,8 +195,8 @@ void fragment() {
 	vec2 brush_at = SCREEN_UV;
 	// Not on the sky, which is endlessly far.
 	if (stroke_jitter > 0.0 && -seen.z < far_end * 20.0) {
-		vec3 world = (INV_VIEW_MATRIX * vec4(seen, 1.0)).xyz;
-		vec3 facing = (INV_VIEW_MATRIX * vec4(view_normal(SCREEN_UV), 0.0)).xyz;
+		vec3 world = (stroke_space * INV_VIEW_MATRIX * vec4(seen, 1.0)).xyz;
+		vec3 facing = (stroke_space * INV_VIEW_MATRIX * vec4(view_normal(SCREEN_UV), 0.0)).xyz;
 		brush_at += stroke_offset(world, facing) * 2.0 * pixel * scale * stroke_jitter;
 	}
 	if (brush_size > 0.0) {
