@@ -23,6 +23,37 @@ func test_a_narrator_has_no_name_plate() -> void:
 	assert_str(box.speaker_name()).is_empty()
 
 
+func test_someone_with_no_name_yet_has_no_name_plate() -> void:
+	var box: DialogueBox = _new_box()
+	var nameless: Person = Person.new()
+	nameless.id = &"hero"
+
+	box.show_line(nameless, "...")
+
+	assert_str(box.speaker_name()).is_empty()
+
+
+func test_replies_dont_keep_the_name_of_whoever_spoke_last() -> void:
+	var box: DialogueBox = _new_box()
+	box.show_line(_captain(), "Do you remember anything?")
+
+	box.show_choices(PackedStringArray(["(Shake your head)"]))
+
+	assert_str(box.speaker_name()).is_empty()
+
+
+func test_replies_show_the_name_of_the_hero_who_says_them() -> void:
+	var box: DialogueBox = _new_box()
+	var hero: Person = Person.new()
+	hero.id = &"hero"
+	hero.display_name = "Kai"
+	box.show_line(_captain(), "Your name?")
+
+	box.show_choices(PackedStringArray(["Kai."]), hero)
+
+	assert_str(box.speaker_name()).is_equal("Kai")
+
+
 func test_words_type_out_over_time() -> void:
 	var box: DialogueBox = _new_box()
 	box.letters_per_second = 20.0
@@ -169,15 +200,6 @@ func test_choices_with_nobody_speaking_have_no_name_plate() -> void:
 	box.show_choices(["Continue your voyage", "Start a new voyage"])
 
 	assert_str(box.speaker_name()).is_empty()
-
-
-func test_choices_after_a_line_keep_the_speakers_name() -> void:
-	var box: DialogueBox = _new_box()
-	box.show_line(_captain(), "Can you cook?")
-
-	box.show_choices(["A little.", "Who are you?"])
-
-	assert_str(box.speaker_name()).is_equal("Captain")
 
 
 func test_closing_forgets_who_was_speaking() -> void:

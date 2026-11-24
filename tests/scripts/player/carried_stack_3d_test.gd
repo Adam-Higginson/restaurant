@@ -1,6 +1,6 @@
 extends GameTestSuite
 ## Tests for CarriedStack3D: a model of the carried item, rebuilt when the
-## arms change, and bobbing only while walking.
+## arms change, held in the hand and never floated over the head (#206).
 
 const TOMATO: Item = preload("res://data/items/tomato.tres")
 const PLATE: Item = preload("res://data/items/plate.tres")
@@ -44,34 +44,17 @@ func test_a_carried_plate_shows_its_food() -> void:
 	assert_object(model.find_child("Food0", true, false)).is_not_null()
 
 
-func test_bob_starts_at_rest_and_peaks_a_quarter_bob_in() -> void:
-	assert_float(CarriedStack3D.bob_offset(0.0, 0.04, 3.0)).is_equal_approx(0.0, 0.0001)
-	# At 3 bobs per second, a quarter of a bob is 1/12 s.
-	assert_float(CarriedStack3D.bob_offset(1.0 / 12.0, 0.04, 3.0)).is_equal_approx(0.04, 0.0001)
-
-
-func test_stays_still_while_standing() -> void:
+func test_nothing_floats_over_the_head() -> void:
+	# The greybox body has no hands to hold it: the item isn't shown at all,
+	# rather than hovering over the hero's head as it used to (#206).
 	var player: Player3D = new_player_3d_on_floor()
 	var runner: GdUnitSceneRunner = scene_runner(player.get_parent())
-	var rest: float = _stack(player).position.y
+	player.arms.add(ItemInstance.new(TOMATO))
 
-	await physics_ticks(runner, 20)
+	await physics_ticks(runner, 3)
 
-	assert_float(_stack(player).position.y).is_equal_approx(rest, 0.0001)
-
-
-func test_bobs_while_walking() -> void:
-	var player: Player3D = new_player_3d_on_floor()
-	var runner: GdUnitSceneRunner = scene_runner(player.get_parent())
-	var rest: float = _stack(player).position.y
-	await physics_ticks(runner, 5)
-	runner.simulate_action_press("move_up")
-
-	# A twelfth of a second in, at the top of a bob.
-	await physics_ticks(runner, 5)
-
-	assert_float(_stack(player).position.y).is_greater(rest + 0.01)
-	runner.simulate_action_release("move_up")
+	assert_object(_stack(player).held_in()).is_null()
+	assert_bool(_stack(player).visible).is_false()
 
 
 func _stack(player: Player3D) -> CarriedStack3D:

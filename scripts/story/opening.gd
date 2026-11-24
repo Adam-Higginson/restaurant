@@ -45,7 +45,7 @@ const ISLAND_SCENE: String = "res://scenes/prototype/islands/cove.tscn"
 ## The ship they wake aboard.
 @export var ship: Ship
 ## Where they wake, in the ship's space: by their bunk.
-@export var wake_spot: Vector3 = Vector3(3.3, 1.05, 12.0)
+@export var wake_spot: Vector3 = Vector3(3.6, 1.05, 13.45)
 ## The cutscene the game opens with: a file in data/dialogue.
 @export var cutscene: StringName = &"intro"
 ## The section of the cutscene to begin at. Set it to a later section's

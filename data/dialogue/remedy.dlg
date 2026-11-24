@@ -9,6 +9,9 @@
 
 ~ start
 @place player supper_seat
+# He lives by your bunk (#206) and, low, can't float over by himself: he's
+# at the table when the scene opens (a stand-in until the dinner bell).
+@place lantern lantern_at_table
 @shot supper_wide cut
 @look lantern surprised
 lantern: Oh! What's that?

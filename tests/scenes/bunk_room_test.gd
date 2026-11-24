@@ -190,6 +190,10 @@ func test_you_sleep_at_the_foot_of_your_bunk() -> void:
 	var player: Player3D = rig[1] as Player3D
 	var runner: GdUnitSceneRunner = scene_runner(rig[0].get_parent())
 	await physics_ticks(runner, 2)
+	# The recipe book waits on the crate at the bunk's foot (#206): taken
+	# first, as it is in play, it no longer comes before the bed.
+	Game.dialogue.set_flag(RecipeBook.OWNED_FLAG)
+	await physics_ticks(runner, 2)
 
 	await walk(runner, "move_right", 2)
 	await physics_ticks(runner, 2)
@@ -198,6 +202,7 @@ func test_you_sleep_at_the_foot_of_your_bunk() -> void:
 			as InteractionDetector3D
 	assert_object(detector.focused).is_not_null()
 	assert_str(detector.focused.interact_prompt(player)).is_equal("Sleep until morning")
+	Game.dialogue.clear(RecipeBook.OWNED_FLAG)
 
 
 func test_you_can_walk_from_the_ramp_foot_to_your_bunk() -> void:

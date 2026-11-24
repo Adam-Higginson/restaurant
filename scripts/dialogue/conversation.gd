@@ -294,6 +294,12 @@ func say_aside(speaker_id: StringName, text: String) -> void:
 		box.show_line(_people.find_person(speaker_id), text, true, false)
 
 
+## The hero (the player) as a [Person], for the name on what he says, or
+## null while the story hasn't given him a name (see [constant DialogueStep.HERO]).
+func hero() -> Person:
+	return _people.find_person(DialogueStep.HERO)
+
+
 ## Puts away what was said in passing, if it's still up.
 func end_aside() -> void:
 	if not _aside:
@@ -404,7 +410,8 @@ func _on_choices_shown(choices: Array[DialogueStep]) -> void:
 	var options: PackedStringArray = PackedStringArray()
 	for choice: DialogueStep in choices:
 		options.append(choice.text)
-	box.show_choices(options)
+	# The replies are the hero's to say: his name, or none while he has none.
+	box.show_choices(options, hero())
 
 
 func _on_finished() -> void:

@@ -744,6 +744,20 @@ A growing glossary of the Godot concepts this project uses: what each one is, in
 
 **Shadow bias.** A light's `shadow_bias` pushes shadows slightly away to stop surfaces shadowing themselves (speckled "acne"). Too much, and an occluder very close to the light lets light leak past it. *Ours:* the lantern lights use 0.02 rather than 0.1, so no light pours out under a lantern's solid base.
 
+## The wake-up, the toolbar's pictures and the rain (#206)
+
+**Taking a picture with a SubViewport (icons).** A `SubViewport` with its own world, a camera and a lamp is a little photo studio: put a model in, let it draw, and `get_texture().get_image()` gives you the picture as an `Image`, which `ImageTexture.create_from_image()` turns back into a texture to draw anywhere. `render_target_update_mode` says when it draws: `UPDATE_DISABLED` (never, so it costs nothing), `UPDATE_ONCE`, or `UPDATE_ALWAYS`. A material drawn for the first time can take a frame or two to be ready, so draw a few frames before keeping the picture. *Ours:* `ItemIcons` (`scripts/visuals/item_icons.gd`) photographs each item and tool once, keeps the picture, and `ToolbarBar` draws it in the slot.
+
+**An orthographic camera.** `Camera3D.projection = PROJECTION_ORTHOGONAL` has no perspective: things don't shrink with distance, and `size` says how many metres the picture is across. That makes it easy to fit a model to a picture: measure it, set `size` to match. *Ours:* `ItemIcons._frame()`.
+
+**Mipmaps and texture filtering on a Control.** Drawing a big picture small with the default (nearest) filter makes it crunchy. `CanvasItem.texture_filter = TEXTURE_FILTER_LINEAR_WITH_MIPMAPS` smooths it, using the smaller copies `Image.generate_mipmaps()` made. *Ours:* `ToolbarBar` (the rest of the HUD stays crisp).
+
+**Blurring what's behind with mipmaps.** A screen texture read with `filter_linear_mipmap` can be sampled at a higher mipmap level (`textureLod(screen, uv, 2.5)`) to get a cheap blur: frosted glass. *Ours:* the misted glass in `shaders/rain_glass.gdshader`; each raindrop instead reads the screen sharp and shifted, so it works as a little lens.
+
+**Following a bone.** A character's hand is a node that moves with its bone (`CharacterModel.left_hand`); anything that copies its `global_position` each frame (in `_process`, with physics interpolation off, since it's placed by hand) goes where the hand goes. *Ours:* `CarriedStack3D` puts the held item in the hero's left palm.
+
+**Groups as a lookup.** `get_first_node_in_group(&"lantern_home")` finds whatever node is in that group, wherever it is in the tree, so moving where the lantern lives is a matter of which marker is in the group. *Ours:* the `Perch` in `scenes/prototype/props/lantern_perch.tscn` (it used to be the round table's).
+
 ## Below-deck snags (#204)
 
 **Z-fighting.** When two surfaces sit in (almost) the same place, the depth buffer can't tell which is in front, so they flicker in stripes as the camera moves. Fix it by moving one a few centimetres, never by hoping. *Ours:* a bunk's two curtains, bunched together at the head of the bed, hang 2.5 cm apart (`BunkBay.OPEN_STAGGER`).

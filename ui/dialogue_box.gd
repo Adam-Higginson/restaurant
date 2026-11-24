@@ -103,16 +103,15 @@ func _draw() -> void:
 		_draw_arrow()
 
 
-## Types out [param text] as said by [param person]. With no person there's
-## no name (a narrator). [param is_last] says nothing follows, so the arrow
-## shows a square instead. With [param waits] false the line isn't waiting
-## to be read (it will go by itself), so there's no arrow at all.
+## Types out [param text] as said by [param person]. With no person, or one
+## with no name yet, there's no name (a narrator). [param is_last] says
+## nothing follows, so the arrow shows a square instead. With [param waits]
+## false the line isn't waiting to be read (it will go by itself), so there's
+## no arrow at all.
 func show_line(person: Person, text: String, is_last: bool = false, waits: bool = true) -> void:
 	_choices.hide()
 	_text.show()
-	_name.visible = person != null
-	if person != null:
-		_name.text = person.display_name
+	_show_name(person)
 	_set_height(HEIGHT)
 	_text.text = to_bbcode(text)
 	_text.visible_characters = 0
@@ -127,8 +126,10 @@ func show_line(person: Person, text: String, is_last: bool = false, waits: bool 
 
 ## Lists [param options] to pick from, the cursor on the first. The box
 ## grows to fit up to [constant MOST_CHOICES_SHOWN]; a longer list scrolls as
-## the cursor moves.
-func show_choices(options: PackedStringArray) -> void:
+## the cursor moves. The replies are [param person]'s to say (the hero's), so
+## the name plate shows their name, or none while they have none (#206).
+func show_choices(options: PackedStringArray, person: Person = null) -> void:
+	_show_name(person)
 	_options = options
 	_first_shown = 0
 	_typing = false
@@ -316,6 +317,14 @@ func _draw_cursor() -> void:
 	if _first_shown + shown_count() < _options.size():
 		for step: int in 4:
 			draw_rect(Rect2(right + step, size.y - 12 + step, 7 - step * 2, 1), AMBER)
+
+
+# The name plate for [param person]: their name, or no plate for nobody or
+# someone with no name yet.
+func _show_name(person: Person) -> void:
+	_name.visible = person != null and not person.display_name.is_empty()
+	if _name.visible:
+		_name.text = person.display_name
 
 
 # Shows the choices in view, the chosen one brightest.

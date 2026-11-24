@@ -1,16 +1,15 @@
-# Picking up the recipe book by your pillow (#184, the Prologue's Scene 2).
-# Played by the RecipeBook prop. You hold it up and it's yours (on your
-# toolbar: select it and Use it to read it anywhere); it opens; and when you
-# close it, the lantern, low on his table across the room, asks about it.
-# The captain calls from up on deck.
+# Picking up the recipe book from the lantern's table by your bunk (#184,
+# the Prologue's Scene 2; #206). Played by the RecipeBook prop. You hold it
+# up and it's yours: it goes on your toolbar, to read later (select it and
+# Use it, wherever you are). It doesn't open here. The lantern, right
+# beside it, asks about it. The captain calls from up on deck.
 
 ~ start
 @hold_up recipe_book
 set has_recipe_book
 narrator: You got the *Recipe Book*! Small, battered, the corners frayed. Select it on your toolbar and *Use* it to read it, wherever you are.
 @put_away
-@read recipe_book
-@shot stove_nook
+@shot by_the_lantern
 lantern: What's that?
 - (Show him the book) -> shown
 

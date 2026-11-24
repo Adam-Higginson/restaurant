@@ -168,6 +168,40 @@ func test_the_hud_steps_aside_while_you_talk() -> void:
 	assert_bool(_hud.shows_play_parts()).is_true()
 
 
+func test_the_toolbar_stays_hidden_when_a_book_closes_mid_talk() -> void:
+	_build()
+	var runner: GdUnitSceneRunner = scene_runner(_player.get_parent())
+	await physics_ticks(runner, 3)
+	var book_view: BookView = _hud.get_node("%BookView") as BookView
+	_begin(TWO_LINES)
+
+	assert_bool(book_view.open(RecipeBook.make_book(Catalog.load_default().recipes))).is_true()
+	book_view.close()
+	await physics_ticks(runner, 2)
+
+	assert_bool(_hud.shows_play_parts()).is_false()
+	_conversation.stop()
+	await physics_ticks(runner, 2)
+	assert_bool(_hud.shows_play_parts()).is_true()
+
+
+func test_the_toolbar_hides_for_a_talk_begun_before_the_hud_heard_of_it() -> void:
+	_player = new_player_3d_on_floor()
+	_heron = HERON.instantiate() as Crewmate
+	_heron.position = AHEAD
+	_player.get_parent().add_child(_heron)
+	_conversation = Conversation.new()
+	_player.get_parent().add_child(_conversation)
+	var runner: GdUnitSceneRunner = scene_runner(_player.get_parent())
+	await physics_ticks(runner, 3)
+	_begin(TWO_LINES)
+
+	_hud = new_hud_3d(_player)
+	await physics_ticks(runner, 3)
+
+	assert_bool(_hud.shows_play_parts()).is_false()
+
+
 func test_each_talk_finished_is_counted() -> void:
 	_build()
 	var runner: GdUnitSceneRunner = scene_runner(_player.get_parent())
@@ -236,6 +270,23 @@ func test_it_says_when_replies_are_offered() -> void:
 	assert_int(offered[0]).is_equal(0)
 	await press(runner, "interact")
 	assert_int(offered[0]).is_equal(1)
+
+
+func test_the_replies_are_the_heros_not_whoever_he_is_talking_to() -> void:
+	_build()
+	var runner: GdUnitSceneRunner = scene_runner(_player.get_parent())
+	await physics_ticks(runner, 3)
+	_box().letters_per_second = 10000.0
+	_begin(A_CHOICE)
+	await physics_ticks(runner, 3)
+	assert_str(_box().speaker_name()).is_equal("Captain")
+
+	await press(runner, "interact")
+
+	# He has no name yet in the story, so his replies have no name plate.
+	assert_object(_conversation.hero()).is_null()
+	assert_array(Array(_box().shown_choices())).is_not_empty()
+	assert_str(_box().speaker_name()).is_empty()
 
 
 func _begin(script: String, id: StringName = &"test") -> void:

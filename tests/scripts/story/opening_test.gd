@@ -302,10 +302,11 @@ func test_you_wake_the_captain_and_the_weak_lantern_talk_and_then_the_ship_is_yo
 	_conversation.choice_made.connect(func() -> void:
 		replies.append(_conversation.box.shown_choices()[_conversation.selected_choice()]))
 
-	# Out of the black: you, asleep in your bunk, and the captain at its foot,
-	# watching over you. The lantern isn't beside you: he's home on his
-	# table, low (#158), his glass whole (#183).
+	# Out of the black: you, asleep in your bunk, and the captain by its
+	# head, watching over you. The lantern is beside you, home on the little
+	# table by your bunk (#206), low (#158), his glass whole (#183).
 	var bedside: Node3D = _mark("bedside")
+	var perch: Node3D = _ship.get_node("BunkRoom/LanternPerch/Perch") as Node3D
 	assert_bool(await _reaches(runner, &"waking")).is_true()
 	assert_bool(_fade().visible).is_false()
 	assert_bool(heron.is_present()).is_true()
@@ -313,6 +314,8 @@ func test_you_wake_the_captain_and_the_weak_lantern_talk_and_then_the_ship_is_yo
 	assert_bool(sleeping.visible).is_true()
 	assert_bool(your_body.visible).is_false()
 	assert_object(spirit.held).is_null()
+	assert_object(spirit.home).is_same(perch)
+	assert_float(perch.global_position.distance_to(sleeping.global_position)).is_less(1.6)
 	assert_bool(spirit.is_low()).is_true()
 	assert_bool(spirit.face().cracked).is_false()
 	assert_bool(rig.is_fixed).is_true()
@@ -322,22 +325,40 @@ func test_you_wake_the_captain_and_the_weak_lantern_talk_and_then_the_ship_is_yo
 	assert_bool(you_asleep.eyes_shut).is_false()
 	assert_int(said[0]).is_equal(0)
 
+	# Still lying down, on a shot of you in your bunk, the captain speaks
+	# first (#206).
+	assert_bool(await _reaches(runner, &"you_look_up")).is_true()
+	assert_bool(await _line_shows(runner, said, 1)).is_true()
+	assert_str(lines[0]).is_equal("Ah. You're awake.")
+	assert_object(rig.held_shot()).is_same(_shot("you_lying_down"))
+	assert_bool(sleeping.visible).is_true()
+	assert_bool(your_body.visible).is_false()
+
 	# You're up, and he's still there by your bunk, facing you, on a fixed
 	# shot: no calling across the room.
-	assert_bool(await _reaches(runner, &"by_your_bunk")).is_true()
-	assert_bool(await _line_shows(runner, said, 1)).is_true()
+	assert_bool(await _read_on_until(runner, said, &"by_your_bunk", 0)).is_true()
 	assert_bool(heron.is_present()).is_true()
 	assert_vector(heron.global_position).is_equal_approx(bedside.global_position, NEAR)
 	assert_float(heron.global_position.distance_to(_player.global_position)).is_less(3.0)
 	assert_bool(sleeping.visible).is_false()
 	assert_bool(your_body.visible).is_true()
-	assert_str(lines[0]).is_equal("Ah. You're awake.")
 
 	# Read on, answering when asked. Low as he is, the lantern talks; he
 	# tries to float over to you and sinks back home.
 	var floated: bool = false
-	var pressed: int = 0
+	var pressed: int = said[0]
 	var answered_after: int = -1
+	var facing_him: Marker3D = _shot("facing_him")
+	var asked_facing: Array[bool] = [false]
+	_conversation.choices_offered.connect(func() -> void:
+		# When he asks what you remember, you face him, and the shot sees
+		# your face, not the back of your head (#206).
+		var to_camera: Vector3 = facing_him.global_position - _player.global_position
+		to_camera.y = 0.0
+		var to_heron: Vector3 = heron.global_position - _player.global_position
+		to_heron.y = 0.0
+		asked_facing[0] = _player.facing.dot(to_camera.normalized()) > 0.0 \
+				and _player.facing.dot(to_heron.normalized()) > 0.8)
 	for i: int in 3600:
 		if not _opening.is_playing:
 			break
@@ -355,13 +376,15 @@ func test_you_wake_the_captain_and_the_weak_lantern_talk_and_then_the_ship_is_yo
 			_press()
 		await physics_ticks(runner, 1)
 	assert_bool(floated).is_true()
+	assert_bool(asked_facing[0]).is_true()
 	assert_object(spirit.held).is_null()
 	assert_bool(speakers.has("lantern")).is_true()
 	assert_bool(lines.has("Oh. That's not ideal.")).is_true()
 	# You've nothing to tell him: the replies are things you do.
 	assert_array(Array(replies)).is_equal(["(Shake your head)", "(Say nothing)", "(Say nothing)",
 			"(Look down)"])
-	assert_str(lines[lines.size() - 1]).is_equal("He's always like that.")
+	# Last, the lantern points you to your book, on his table (#206).
+	assert_str(lines[lines.size() - 1]).contains("your book")
 
 	# Then the ship is yours, and the captain sets off up to the helm (#186).
 	assert_bool(_opening.is_playing).is_false()
@@ -698,6 +721,10 @@ func _heron() -> Crewmate:
 
 func _mark(mark_name: String) -> Marker3D:
 	return (_sea.get_node("Story/ActorCues") as ActorCues).find_mark(mark_name)
+
+
+func _shot(shot_name: String) -> Marker3D:
+	return (_sea.get_node("Story/ShotCues") as ShotCues).find_shot(shot_name)
 
 
 func _sea_surface() -> Sea:

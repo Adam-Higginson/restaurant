@@ -48,6 +48,7 @@
 [ext_resource type="PackedScene" uid="uid://cp7jmlvmrpdhw" path="res://scenes/prototype/props/supper_spot.tscn" id="96_supper"]
 [ext_resource type="PackedScene" uid="uid://bwpkc5mofrie7" path="res://scenes/prototype/props/recipe_book.tscn" id="97_recipes"]
 [ext_resource type="PackedScene" path="res://scenes/prototype/props/boathook.tscn" id="310_boathook"]
+[ext_resource type="PackedScene" uid="uid://b206lanternperch" path="res://scenes/prototype/props/lantern_perch.tscn" id="206_perch"]
 
 [sub_resource type="BoxMesh" id="BoxMesh_0hebc"]
 size = Vector3(10.34, 0.3, 0.28)
@@ -261,8 +262,14 @@ lamp_lit = true
 [node name="Bedside" parent="." unique_id=1903317741 instance=ExtResource("92_bedside")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4.55, 1, 13.45)
 
+[node name="BedsideCrate" parent="." instance=ExtResource("64_578ro")]
+transform = Transform3D(0.9945218, 0, -0.10452845, 0, 1, 0, 0.10452845, 0, 0.9945218, 4.35, 1, 14.12)
+
+[node name="LanternPerch" parent="." instance=ExtResource("206_perch")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4.42, 1.6, 14.24)
+
 [node name="RecipeBook" parent="." unique_id=1784302214 instance=ExtResource("97_recipes")]
-transform = Transform3D(1.3156, 0, 0.4788, 0, 1.4, 0, -0.4788, 0, 1.3156, 5.15, 1.80, 13.3)
+transform = Transform3D(1.3156, 0, 0.4788, 0, 1.4, 0, -0.4788, 0, 1.3156, 4.24, 1.6, 13.96)
 
 [node name="SupperSpot" parent="." unique_id=1188350220 instance=ExtResource("96_supper")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1, 1.575, 11.2)
