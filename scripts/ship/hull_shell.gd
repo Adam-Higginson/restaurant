@@ -26,6 +26,8 @@ extends Node3D
 ## Emitted after [method dress]: [param shown] is true if the hull is showing.
 signal dressed(shown: bool)
 
+## Every hull joins this group, so a new opening can ask it to cut its hole.
+const GROUP: StringName = &"hull_shells"
 ## Openings beyond this many aren't cut (the shader's array size).
 const MAX_OPENINGS: int = 32
 const SHADER: Shader = preload("res://shaders/hull_shell.gdshader")
@@ -119,6 +121,7 @@ var model: MeshInstance3D = null
 
 
 func _ready() -> void:
+	add_to_group(GROUP)
 	dress()
 
 
