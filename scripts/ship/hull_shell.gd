@@ -30,6 +30,8 @@ signal dressed(shown: bool)
 const GROUP: StringName = &"hull_shells"
 ## Openings beyond this many aren't cut (the shader's array size).
 const MAX_OPENINGS: int = 32
+## Boxes in [member clear_boxes] beyond this many aren't cleared.
+const MAX_CLEAR_BOXES: int = 8
 const SHADER: Shader = preload("res://shaders/hull_shell.gdshader")
 ## The model is measured in a grid of this many slices along its length...
 const SLICES: int = 64
@@ -118,6 +120,17 @@ static var _fitted: Dictionary[String, ArrayMesh] = {}
 ## Pieces that only belong with the hull, shown only while it shows: the
 ## boards patching the few holes in its planking (#205).
 @export var with_hull: Array[Node3D] = []
+
+## Boxes (in this node's space, the ship's) where none of the hull is drawn:
+## the insides of the rooms below deck, inside their own walls, floor and
+## ceiling. The hull's bottom sweeps up at the stern into the bunk room, and
+## bits of its frames poke into the galley; nothing of the outside belongs in
+## a room (#204). Walking and collision never used the hull, so only its look
+## changes.
+@export var clear_boxes: Array[AABB] = []:
+	set(value):
+		clear_boxes = value
+		refresh_openings()
 
 ## The fitted hull, while it's showing.
 var model: MeshInstance3D = null
@@ -402,6 +415,24 @@ func refresh_openings() -> void:
 		var material: ShaderMaterial = model.get_surface_override_material(surface) as ShaderMaterial
 		material.set_shader_parameter("opening_count", found.size())
 		material.set_shader_parameter("openings", unit)
+	_clear_rooms()
+
+
+## Gives the shader the [member clear_boxes], as their corners.
+func _clear_rooms() -> void:
+	var lows: PackedVector3Array = PackedVector3Array()
+	var highs: PackedVector3Array = PackedVector3Array()
+	for box: AABB in clear_boxes.slice(0, MAX_CLEAR_BOXES):
+		lows.append(box.position)
+		highs.append(box.end)
+	var count: int = lows.size()
+	lows.resize(MAX_CLEAR_BOXES)
+	highs.resize(MAX_CLEAR_BOXES)
+	for surface: int in model.mesh.get_surface_count():
+		var material: ShaderMaterial = model.get_surface_override_material(surface) as ShaderMaterial
+		material.set_shader_parameter("clear_count", count)
+		material.set_shader_parameter("clear_low", lows)
+		material.set_shader_parameter("clear_high", highs)
 
 
 ## Measures the fitted hull every [param step] metres along the ship: its top

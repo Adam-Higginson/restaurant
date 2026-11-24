@@ -7,10 +7,7 @@
 [ext_resource type="Material" path="res://assets/placeholder/materials/iron.tres" id="4_fob1t"]
 [ext_resource type="Material" path="res://assets/placeholder/materials/canvas.tres" id="5_tbgmf"]
 [ext_resource type="Material" path="res://assets/placeholder/materials/bedlinen.tres" id="6_3d7wn"]
-[ext_resource type="Material" path="res://assets/placeholder/materials/red_cloth.tres" id="7_dnthf"]
-[ext_resource type="Material" path="res://assets/placeholder/materials/linen.tres" id="8_hyrfo"]
 [ext_resource type="Material" path="res://assets/placeholder/materials/quilt_green.tres" id="9_l46ux"]
-[ext_resource type="Material" path="res://assets/placeholder/materials/wool.tres" id="10_x6scj"]
 [ext_resource type="Script" path="res://scripts/art/third_party_model.gd" id="kiln_model"]
 [ext_resource type="Resource" path="res://data/art/looks/prop.tres" id="kiln_prop"]
 
@@ -139,33 +136,8 @@ size = Vector3(0.22, 0.025, 0.31971553)
 [sub_resource type="BoxMesh" id="BoxMesh_ya865"]
 size = Vector3(0.36, 0.1, 0.24)
 
-[sub_resource type="CylinderMesh" id="CylinderMesh_3yx5m"]
-top_radius = 0.06
-bottom_radius = 0.09
-height = 0.12
-radial_segments = 7
-rings = 1
-
-[sub_resource type="SphereMesh" id="SphereMesh_1r464"]
-radius = 0.04
-height = 0.08
-radial_segments = 6
-rings = 3
-
-[sub_resource type="BoxMesh" id="BoxMesh_u8rjm"]
-size = Vector3(0.46, 0.2, 0.5)
-
-[sub_resource type="BoxMesh" id="BoxMesh_5rqeq"]
-size = Vector3(0.42, 0.16, 0.48)
-
-[sub_resource type="BoxMesh" id="BoxMesh_aiyjn"]
-size = Vector3(0.36, 0.13, 0.45)
-
 [sub_resource type="BoxMesh" id="BoxMesh_xy2f8"]
 size = Vector3(0.04, 0.3, 0.7)
-
-[sub_resource type="BoxMesh" id="BoxMesh_7q0yr"]
-size = Vector3(0.09, 0.08, 0.16)
 
 [sub_resource type="CylinderMesh" id="CylinderMesh_xld7u"]
 top_radius = 0.02
@@ -422,31 +394,6 @@ stand_ins = [NodePath("../Box")]
 tint = Color(1.04, 1.28, 1.75, 1)
 look = ExtResource("kiln_prop")
 
-[node name="Hat" type="MeshInstance3D" parent="Sling" unique_id=1670189505]
-transform = Transform3D(1, 0, 0, 0, 0.34202015, 0.9396926, 0, -0.9396926, 0.34202015, 0.02, -0.20468, -0.622)
-material_override = ExtResource("7_dnthf")
-mesh = SubResource("CylinderMesh_3yx5m")
-
-[node name="Bobble" type="MeshInstance3D" parent="Sling" unique_id=1368070669]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.02, -0.18468, -0.712)
-material_override = ExtResource("8_hyrfo")
-mesh = SubResource("SphereMesh_1r464")
-
-[node name="Blanket1" type="MeshInstance3D" parent="Sling" unique_id=732666831]
-transform = Transform3D(0.9975641, -0.010932025, -0.06889453, 0, 0.98764354, -0.156717, 0.06975647, 0.15633525, 0.9852377, -0.02, -0.38461158, -0.32)
-material_override = ExtResource("9_l46ux")
-mesh = SubResource("BoxMesh_u8rjm")
-
-[node name="Blanket2" type="MeshInstance3D" parent="Sling" unique_id=925619566]
-transform = Transform3D(1, 0, 0, 0, 0.99823433, 0.05939907, 0, -0.05939907, 0.99823433, 0, -0.42642975, 0.12)
-material_override = ExtResource("9_l46ux")
-mesh = SubResource("BoxMesh_5rqeq")
-
-[node name="Blanket3" type="MeshInstance3D" parent="Sling" unique_id=448785584]
-transform = Transform3D(0.9975641, -0.018042948, 0.06738262, 0, 0.96596944, 0.25865626, -0.06975647, -0.25802618, 0.96361643, 0.02, -0.37270248, 0.54)
-material_override = ExtResource("9_l46ux")
-mesh = SubResource("BoxMesh_aiyjn")
-
 [node name="BlanketFold" type="Node3D" parent="Sling" unique_id=2125770340]
 transform = Transform3D(0.9945219, 0.104528464, 0, -0.104528464, 0.9945219, 0, 0, 0, 1, 0.36, -0.35, 0.1)
 script = ExtResource("1_gqu6k")
@@ -458,11 +405,6 @@ phase = 0.6
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.15, 0)
 material_override = ExtResource("9_l46ux")
 mesh = SubResource("BoxMesh_xy2f8")
-
-[node name="Foot" type="MeshInstance3D" parent="Sling" unique_id=1181839159]
-transform = Transform3D(1, 0, 0, 0, 0.9396926, 0.34202012, 0, -0.34202012, 0.9396926, 0.08, -0.21828, 0.902)
-material_override = ExtResource("10_x6scj")
-mesh = SubResource("BoxMesh_7q0yr")
 
 [node name="HookFore" type="MeshInstance3D" parent="." unique_id=88072422]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.02, -1.8)

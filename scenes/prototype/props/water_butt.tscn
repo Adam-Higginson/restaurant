@@ -3,7 +3,7 @@
 [ext_resource type="Script" path="res://scripts/props/water_butt.gd" id="1_butt"]
 [ext_resource type="Resource" path="res://data/items/rainwater.tres" id="2_rain"]
 [ext_resource type="Script" path="res://scripts/interaction/interactable_3d.gd" id="3_reach"]
-[ext_resource type="Material" path="res://assets/placeholder/materials/water.tres" id="4_water"]
+[ext_resource type="Material" path="res://assets/placeholder/materials/still_water.tres" id="4_water"]
 
 [sub_resource type="CylinderMesh" id="Surface"]
 top_radius = 0.36

@@ -744,6 +744,16 @@ A growing glossary of the Godot concepts this project uses: what each one is, in
 
 **Shadow bias.** A light's `shadow_bias` pushes shadows slightly away to stop surfaces shadowing themselves (speckled "acne"). Too much, and an occluder very close to the light lets light leak past it. *Ours:* the lantern lights use 0.02 rather than 0.1, so no light pours out under a lantern's solid base.
 
+## Below-deck snags (#204)
+
+**Z-fighting.** When two surfaces sit in (almost) the same place, the depth buffer can't tell which is in front, so they flicker in stripes as the camera moves. Fix it by moving one a few centimetres, never by hoping. *Ours:* a bunk's two curtains, bunched together at the head of the bed, hang 2.5 cm apart (`BunkBay.OPEN_STAGGER`).
+
+**Drawn one way, walked another.** What you see and what you collide with are separate: a `MeshInstance3D` is only a look, a `CollisionShape3D` is only a shape. Stairs walked on as stairs catch the player's capsule on every step edge, so games lay a smooth slope under them. *Ours:* `Stairs` (`scripts/ship/stairs.gd`) builds the hatch steps from boxes; you walk on the old ramp's `RampShape` beneath them, each tread's middle on its slope.
+
+**Clearing a box in a shader.** A shader can `discard` every pixel whose position falls inside a box (passed in as its two corners), carving a model without editing it. *Ours:* `HullShell.clear_boxes` keeps the Meshy hull out of the galley and the bunk room, where its bottom rose through the ceiling.
+
+**Particles that change colour as they age.** A `ParticleProcessMaterial`'s `color_ramp` is a gradient each particle runs along from birth to death, and `scale_curve` does the same for its size. *Ours:* the hearth's flames (`GalleyStove._make_flames`) are born yellow and broad at the logs and die small, red and see-through as they rise.
+
 ## Testing
 
 **gdUnit4.** The test framework (`addons/gdUnit4`). Suites extend our `GameTestSuite` and have `test_...` functions. `scene_runner` loads a scene and lets a test press inputs and wait physics ticks. *Ours:* `tests/`.

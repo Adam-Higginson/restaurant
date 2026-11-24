@@ -15,6 +15,12 @@ render_mode cull_disabled;
 const int MAX_OPENINGS = 32;
 uniform int opening_count = 0;
 uniform mat4 openings[MAX_OPENINGS];
+// Boxes (corners in this mesh's space) where nothing of the hull is drawn:
+// the rooms' insides, where the hull pokes through (#204).
+const int MAX_CLEAR_BOXES = 8;
+uniform int clear_count = 0;
+uniform vec3 clear_low[MAX_CLEAR_BOXES];
+uniform vec3 clear_high[MAX_CLEAR_BOXES];
 
 uniform sampler2D albedo_texture : source_color, filter_linear_mipmap_anisotropic;
 uniform sampler2D normal_texture : hint_normal, filter_linear_mipmap_anisotropic;
@@ -54,6 +60,12 @@ float hash(float n) {
 
 
 void fragment() {
+	for (int i = 0; i < clear_count; i++) {
+		if (all(greaterThan(model_position, clear_low[i]))
+				&& all(lessThan(model_position, clear_high[i]))) {
+			discard;
+		}
+	}
 	for (int i = 0; i < opening_count; i++) {
 		vec3 inside = (openings[i] * vec4(model_position, 1.0)).xyz;
 		if (dot(inside.xy, inside.xy) < 1.0 && abs(inside.z) < 1.0) {
