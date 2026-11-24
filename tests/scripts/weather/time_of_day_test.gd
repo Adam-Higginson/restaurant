@@ -33,7 +33,7 @@ func test_halfway_is_halfway() -> void:
 
 	time.dawn = 0.5
 
-	assert_float(time.world.environment.fog_depth_end).is_equal_approx(62.5, 0.001)
+	assert_float(time.world.environment.fog_depth_end).is_equal_approx(41.5, 0.001)
 	var sky: ShaderMaterial = time.world.environment.sky.sky_material as ShaderMaterial
 	var top: Color = sky.get_shader_parameter("top_color")
 	assert_float(top.r).is_equal_approx(0.16, 0.001)

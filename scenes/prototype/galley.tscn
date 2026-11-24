@@ -654,7 +654,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.55, 1, 4.95)
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.4, 1, 1.75)
 
 [node name="Hob" parent="." unique_id=1784302211 instance=ExtResource("91_hob")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.72, 1.97, 2.2)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.67, 1.97, 1.95)
 start_item = null
 
 [node name="SoupHob" parent="." unique_id=1784302212 groups=["lantern_longs_for"] instance=ExtResource("91_hob")]
@@ -824,3 +824,43 @@ keep_as_made = true
 
 [node name="SupperTable" parent="." instance=ExtResource("207_supper")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1, 1.82, 5.3)
+
+[node name="KnifeMeshy1" type="Node3D" parent="." node_paths=PackedStringArray("stand_ins")]
+transform = Transform3D(0, -1, 0, 1, 0, 0, 0, 0, 1, 0.44, 2.37, 1.25)
+script = ExtResource("196_meshy")
+path = "res://assets/third_party/meshy/kitchen_knife/model/model.glb"
+fit_size = Vector3(0.42, 10, 10)
+stand_ins = [NodePath("../Knife1"), NodePath("../KnifeHandle1")]
+grain = false
+detail = 1.0
+keep_as_made = true
+
+[node name="KnifeMeshy2" type="Node3D" parent="." node_paths=PackedStringArray("stand_ins")]
+transform = Transform3D(0, -1, 0, 1, 0, 0, 0, 0, 1, 0.62, 2.37, 1.25)
+script = ExtResource("196_meshy")
+path = "res://assets/third_party/meshy/kitchen_knife/model/model.glb"
+fit_size = Vector3(0.42, 10, 10)
+stand_ins = [NodePath("../Knife2"), NodePath("../KnifeHandle2")]
+grain = false
+detail = 1.0
+keep_as_made = true
+
+[node name="KnifeMeshy3" type="Node3D" parent="." node_paths=PackedStringArray("stand_ins")]
+transform = Transform3D(0, -1, 0, 1, 0, 0, 0, 0, 1, 0.8, 2.37, 1.25)
+script = ExtResource("196_meshy")
+path = "res://assets/third_party/meshy/kitchen_knife/model/model.glb"
+fit_size = Vector3(0.42, 10, 10)
+stand_ins = [NodePath("../Knife3"), NodePath("../KnifeHandle3")]
+grain = false
+detail = 1.0
+keep_as_made = true
+
+[node name="PanMeshy" type="Node3D" parent="PanHook" node_paths=PackedStringArray("stand_ins")]
+transform = Transform3D(0, -1, 0, 1, 0, 0, 0, 0, 1, 0.05, -0.5, 0)
+script = ExtResource("196_meshy")
+path = "res://assets/third_party/meshy/frying_pan/model/model.glb"
+fit_size = Vector3(10, 10, 0.3)
+stand_ins = [NodePath("../Pan")]
+grain = false
+detail = 1.0
+keep_as_made = true

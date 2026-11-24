@@ -547,3 +547,41 @@ func test_interact_picks_up_whatever_you_hold() -> void:
 
 	assert_object(hand.top().item).is_same(TOMATO)
 	assert_int(hand.get_items().size()).is_equal(2)
+
+
+# --- The pot (#207 follow-up) ----------------------------------------------------
+
+func test_water_in_a_pot_cant_be_taken_by_hand() -> void:
+	var hand: Toolbar = Toolbar.new()
+	var counter: CounterSlot = CounterSlot.new(preload("res://data/items/saucepan.tres"))
+	counter.get_item().contents.add_item(ItemInstance.new(preload("res://data/items/rainwater.tres")))
+
+	# Interact picks up the whole pot, water and all, rather than the water.
+	assert_int(counter.take_action(hand)).is_equal(CounterSlot.Action.PICK_UP)
+	assert_str(counter.take_prompt(hand)).is_equal("Pick up Cooking Pot")
+
+
+func test_once_food_is_in_the_water_it_stays_in() -> void:
+	var hand: Toolbar = Toolbar.new()
+	var counter: CounterSlot = CounterSlot.new(preload("res://data/items/saucepan.tres"))
+	counter.get_item().contents.add_item(ItemInstance.new(preload("res://data/items/rainwater.tres")))
+	counter.get_item().contents.add_item(ItemInstance.new(TOMATO))
+
+	assert_str(counter.take_prompt(hand)).is_equal("Pick up Cooking Pot")
+
+
+func test_food_comes_out_of_a_dry_pan() -> void:
+	var hand: Toolbar = Toolbar.new()
+	var counter: CounterSlot = CounterSlot.new(preload("res://data/items/frying_pan.tres"))
+	counter.get_item().contents.add_item(ItemInstance.new(TOMATO))
+
+	assert_str(counter.take_prompt(hand)).is_equal("Take Tomato")
+
+
+func test_food_goes_in_a_pot_and_on_a_board() -> void:
+	var hand: Toolbar = Toolbar.new()
+	hand.add(ItemInstance.new(DICED_TOMATO))
+
+	assert_str(CounterSlot.new(preload("res://data/items/saucepan.tres")).use_prompt(hand)) \
+			.is_equal("Put Diced Tomato in Cooking Pot")
+	assert_str(CounterSlot.new(BOARD).use_prompt(hand)).is_equal("Put Diced Tomato on Chopping Board")

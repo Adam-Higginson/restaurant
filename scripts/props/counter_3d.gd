@@ -27,6 +27,8 @@ const CUT: Element = preload("res://data/elements/cut.tres")
 const FLASH_SECONDS: float = 0.3
 ## How fast you step up to the board, in metres a second.
 const STEP_SPEED: float = 4.0
+## The longest stepping up to the board takes, in seconds.
+const STEP_SECONDS: float = 0.6
 ## How long chop mode lingers after the last cut, so it's seen to land.
 const FINISH_SECONDS: float = 0.5
 
@@ -35,6 +37,9 @@ const FINISH_SECONDS: float = 0.5
 @export var start_item: Item = null
 ## Lean the camera in over the board while chopping.
 @export var lean_in: bool = true
+## How far the character is drawn forward over the board while chopping, in
+## metres: the counter keeps the body this far short of reaching it.
+@export var chop_lean_in: float = 0.28
 
 ## What's on the counter. Created when the counter is ready, never replaced.
 var slot: CounterSlot:
@@ -50,6 +55,13 @@ var flash_left: float = 0.0
 
 var _slot: CounterSlot = null
 var _needs_knife: bool = false
+## Seconds left of stepping up to the board, and how far off it was last.
+var _step_left: float = 0.0
+var _last_gap: float = INF
+## What the model shows, and the food that was inside it, to tell cooking on
+## (refresh the model) from food going in or out (build it again).
+var _shown: ItemInstance = null
+var _shown_inside: Array[ItemInstance] = []
 ## Whoever is chopping here (chop mode, #207), or null; and their knife.
 var _chopping: Player3D = null
 var _tool: HandTool = null
@@ -160,6 +172,7 @@ func start_chopping(player: Player3D, tool: HandTool) -> bool:
 	var detector: InteractionDetector3D = _detector_of(player)
 	if detector != null:
 		detector.set_busy("Stop chopping", "Cut")
+	_set_stance(player, true)
 	if lean_in and _chop_shot != null:
 		_leaning = player
 		player.camera_rig.hold_shot(_chop_shot)
@@ -177,6 +190,7 @@ func stop_chopping() -> void:
 	_stepping = null
 	if is_instance_valid(player):
 		player.controls_enabled = true
+		_set_stance(player, false)
 		var detector: InteractionDetector3D = _detector_of(player)
 		if detector != null:
 			detector.clear_busy()
@@ -223,12 +237,23 @@ func cut_with(player: Player3D, tool: HandTool) -> bool:
 
 # Swaps the old model for one of what's here now.
 func _show_item() -> void:
+	var item: ItemInstance = _slot.get_item()
+	var inside: Array[ItemInstance] = []
+	if item != null and item.is_vessel():
+		inside = item.contents.get_contents()
+	# Still the same thing with the same food in it, only cooking on: update
+	# the model in place rather than building it again every tick (#207).
+	if item != null and item == _shown and inside == _shown_inside \
+			and _item_spot.get_child_count() == 1:
+		ItemModel.refresh(_item_spot.get_child(0) as Node3D, item)
+		return
+	_shown = item
+	_shown_inside = inside
 	for child: Node in _item_spot.get_children():
 		# Out of the tree now, not at the end of the frame, so there's never
 		# an old and a new model at once.
 		_item_spot.remove_child(child)
 		child.queue_free()
-	var item: ItemInstance = _slot.get_item()
 	if item != null:
 		_item_spot.add_child(ItemModel.build(item))
 
@@ -252,6 +277,8 @@ func _chopper() -> Player3D:
 func _step_up(player: Player3D) -> void:
 	if get_node_or_null("ChopStand") != null:
 		_stepping = player
+		_step_left = STEP_SECONDS
+		_last_gap = INF
 		player.face_towards(_item_spot.global_position)
 
 
@@ -266,9 +293,14 @@ func _step(facing: Player3D, delta: float) -> void:
 	var stand: Marker3D = get_node("ChopStand") as Marker3D
 	var gap: Vector3 = stand.global_position - _stepping.global_position
 	gap.y = 0.0
-	if gap.length() < 0.02:
+	_step_left -= delta
+	# Done when there, out of time, or no nearer than last time: the mark can
+	# sit just inside the counter, and pushing on into it while the physics
+	# pushed back shook the hero all through chopping (#207).
+	if gap.length() < 0.02 or _step_left <= 0.0 or gap.length() >= _last_gap - 0.001:
 		_stepping = null
 		return
+	_last_gap = gap.length()
 	_stepping.global_position += gap.limit_length(STEP_SPEED * delta)
 
 
@@ -294,6 +326,17 @@ func _keep_chopping(delta: float) -> void:
 		_finish_left -= delta
 		if _finish_left < 0.0:
 			stop_chopping()
+
+
+# Puts [param player]'s character into its chopping stance at the board, or
+# back out of it (#207).
+func _set_stance(player: Player3D, on: bool) -> void:
+	var model: CharacterModel = player.get_node_or_null("Model/Character") as CharacterModel
+	if model != null:
+		model.chopping = on
+		# The counter stops the body short of the board: the character leans
+		# in over it (only how it's drawn moves; the body stays put).
+		model.position = Vector3.FORWARD * chop_lean_in if on else Vector3.ZERO
 
 
 func _detector_of(player: Player3D) -> InteractionDetector3D:

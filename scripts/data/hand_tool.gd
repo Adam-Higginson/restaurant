@@ -33,6 +33,10 @@ extends Resource
 ## Whether this is the recipe book (#184): not used on anything, but read.
 ## Selected and Used, it opens wherever you are, whatever's in reach.
 @export var is_recipe_book: bool = false
+## How far its model is turned about its forward axis when it's held up as
+## a treasure, to stand it up, in degrees: our knife lies along X, point at
+## -X, so -90 stands it point up (#207).
+@export var hold_up_turn_degrees: float = -90.0
 
 ## The conversation flag that says the player owns this tool
 ## ([code]has_chefs_knife[/code]). Flags are saved with the voyage, so a tool

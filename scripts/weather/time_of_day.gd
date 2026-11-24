@@ -128,13 +128,15 @@ func _apply() -> void:
 		env.tonemap_exposure = number_of(1.25, 1.0, 1.0)
 		env.fog_light_color = colour_of(Color(0.13, 0.155, 0.18), Color(0.56, 0.56, 0.6),
 				Color(0.5, 0.7, 0.86))
-		env.fog_depth_end = number_of(45.0, 80.0, 220.0)
+		# Close round the ship at night and in the misty dawn, so the sea never
+		# shows an edge (#207); far off once it clears.
+		env.fog_depth_end = number_of(28.0, 55.0, 220.0)
 		env.volumetric_fog_albedo = colour_of(Color(0.55, 0.6, 0.65), Color(0.85, 0.82, 0.8),
 				Color(0.92, 0.95, 0.97))
 		# Clear air: thinner fog, and none of it over the sky.
 		env.fog_density = number_of(1.0, 1.0, 0.3)
-		env.fog_sky_affect = number_of(0.5, 0.5, 0.05)
-		env.volumetric_fog_density = number_of(0.03, 0.03, 0.006)
+		env.fog_sky_affect = number_of(1.0, 0.85, 0.05)
+		env.volumetric_fog_density = number_of(0.045, 0.035, 0.006)
 		_grade(env)
 		var sky: ShaderMaterial = env.sky.sky_material as ShaderMaterial if env.sky != null else null
 		if sky != null:

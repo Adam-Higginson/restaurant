@@ -195,6 +195,11 @@ const CHOP_CONTACT: float = 0.62
 ## character's "Cheer with Both Hands"), how far into it, in seconds,
 ## and how long the arms take to go up into it and come down from it.
 @export var hold_up_animation: StringName = &"Hold_Up"
+## The stance at a chopping board (#207): leaning in over it, head down, the
+## left hand steadying the food, small cuts going on. Played round and round
+## in place of the idle while [member chopping]; a Meshy text-to-motion clip
+## on the whole character, so the greybox and packs keep their idle.
+@export var chop_animation: StringName = &"Chop"
 @export var hold_up_at: float = 0.3
 @export var hold_up_blend: float = 0.6
 ## Something for the head to turn towards. Optional.
@@ -224,6 +229,9 @@ const CHOP_CONTACT: float = 0.62
 ## was made in (the boy's underwear): the castaway, pulled from the sea.
 @export var undressed: bool = false
 
+## Whether the character stands at a chopping board, chopping: the idle
+## becomes the [member chop_animation]. Set by the board ([Counter3D]).
+var chopping: bool = false
 ## The character, or null while the greybox shows.
 var character: Node3D = null
 ## The character's skeleton, or null.
@@ -401,6 +409,8 @@ func play(next: Pose) -> void:
 	if next == pose and _animator.current_animation == String(full):
 		return
 	pose = next
+	if anim == chop_animation:
+		_animator.get_animation(full).loop_mode = Animation.LOOP_LINEAR
 	_animator.play(full, blend_seconds)
 
 
@@ -517,6 +527,9 @@ func animation_for(of: Pose) -> StringName:
 			return parry_animation
 		Pose.CHARGE:
 			return charge_animation
+	if chopping and _animator != null \
+			and _animator.has_animation("%s/%s" % [LIBRARY, chop_animation]):
+		return chop_animation
 	return idle_animation
 
 

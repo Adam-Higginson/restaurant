@@ -29,7 +29,8 @@ whole_clips = Dictionary[StringName, String]({
 &"Sword_Regular_C": "res://assets/third_party/meshy/boy_stern/anim/animation_glb.glb",
 &"Sword_Heavy_Combo": "res://assets/third_party/meshy/boy_stern/anim/animation_glb.glb",
 &"Idle_Shield": "res://assets/third_party/meshy/boy_stern/anim/animation_glb.glb",
-&"Hold_Up": "res://assets/third_party/meshy/boy_stern/anim/cheer_both_hands.glb"
+&"Hold_Up": "res://assets/third_party/meshy/boy_stern/anim/cheer_both_hands.glb",
+&"Chop": "res://assets/third_party/meshy/boy_stern/chop/animation_glb.glb"
 })
 whole_clip_names = Dictionary[StringName, String]({
 &"Idle": "Long_Breathe_and_Look_Around",
@@ -38,7 +39,8 @@ whole_clip_names = Dictionary[StringName, String]({
 &"Sword_Regular_B": "Right_Hand_Sword_Slash",
 &"Sword_Regular_C": "Right_Hand_Sword_Slash",
 &"Sword_Heavy_Combo": "Right_Hand_Sword_Slash",
-&"Idle_Shield": "Sword_Parry"
+&"Idle_Shield": "Sword_Parry",
+&"Chop": "retarget_clip"
 })
 whole_arm_scale = 0.9
 whole_hand_scale = 0.85

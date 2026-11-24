@@ -305,3 +305,14 @@ func _add_counter(player: Player3D, start_item: Item) -> Counter3D:
 	counter.position = AHEAD
 	player.get_parent().add_child(counter)
 	return counter
+
+
+func test_chopping_puts_the_character_in_its_chopping_stance() -> void:
+	var setup: Array = await _board_with_tomato()
+	var counter: Counter3D = setup[0]
+	var player: Player3D = setup[1]
+	var model: CharacterModel = player.get_node("Model/Character") as CharacterModel
+
+	assert_bool(model.chopping).is_true()
+	counter.stop_chopping()
+	assert_bool(model.chopping).is_false()

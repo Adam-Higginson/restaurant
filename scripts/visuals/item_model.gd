@@ -12,6 +12,8 @@ extends RefCounted
 const FOOD_SIZE: float = 0.2
 ## Food sitting on a vessel is smaller, so up to three fit.
 const FOOD_ON_VESSEL_SIZE: float = 0.13
+## How much of a piece of food is under the surface of water or soup.
+const SUNK_SHARE: float = 0.35
 ## A chopping board (a vessel taken apart, not whole).
 const BOARD_SIZE: Vector3 = Vector3(0.5, 0.06, 0.34)
 ## A plate or bowl (a vessel carried whole).
@@ -45,15 +47,53 @@ static func build(instance: ItemInstance) -> Node3D:
 			pieces.append(piece)
 	if liquid != null:
 		root.add_child(liquid_surface(instance.item, liquid))
-		# Food in water or soup floats in it.
-		base = liquid_level(instance.item)
+		_tint_liquid(root, instance)
+		# Food in water or soup sits down in it, just its top showing.
+		base = liquid_level(instance.item) - FOOD_ON_VESSEL_SIZE * SUNK_SHARE
 	for i: int in pieces.size():
 		var spot: Vector2 = _food_spot(i, pieces.size())
 		var piece: Node3D = food(pieces[i].item, FOOD_ON_VESSEL_SIZE)
-		piece.position = Vector3(spot.x, base, spot.y)
+		piece.position = Vector3(spot.x, maxf(base, floor_height(instance.item)), spot.y)
 		piece.name = "Food%d" % i
+		piece.scale = Vector3.ONE * VesselLook.piece_scale(instance.contents, pieces[i])
 		root.add_child(piece)
 	return root
+
+
+## Updates a model [method build] made of [param instance] as it cooks,
+## without building it again: the liquid's colour and how far each piece has
+## melted (see [VesselLook]). Only right while the same pieces are inside;
+## when food goes in or out, build a new model.
+static func refresh(root: Node3D, instance: ItemInstance) -> void:
+	if not instance.is_vessel():
+		return
+	_tint_liquid(root, instance)
+	var i: int = 0
+	for piece: ItemInstance in solids_in(instance):
+		var node: Node3D = root.get_node_or_null("Food%d" % i) as Node3D
+		if node != null:
+			node.scale = Vector3.ONE * VesselLook.piece_scale(instance.contents, piece)
+		i += 1
+
+
+## The pieces of food in [param vessel] drawn as pieces, in the order
+## [method build] places them: everything but a liquid it can hold.
+static func solids_in(vessel: ItemInstance) -> Array[ItemInstance]:
+	var pieces: Array[ItemInstance] = []
+	for piece: ItemInstance in vessel.contents.get_contents():
+		if not (piece.item.liquid and can_hold_liquid(vessel.item)):
+			pieces.append(piece)
+	return pieces
+
+
+# Colours the liquid's surface by what it's becoming.
+static func _tint_liquid(root: Node3D, instance: ItemInstance) -> void:
+	var surface: MeshInstance3D = root.get_node_or_null("Liquid") as MeshInstance3D
+	if surface == null:
+		return
+	var material: ShaderMaterial = surface.material_override as ShaderMaterial
+	if material != null:
+		material.set_shader_parameter(&"colour", VesselLook.liquid_colour(instance.contents))
 
 
 ## Whether [param vessel] holds liquid as liquid, filling it: a pot, a pan or
@@ -98,6 +138,34 @@ static func liquid_surface(vessel: Item, liquid: Item) -> MeshInstance3D:
 	surface.material_override = material
 	surface.position = Vector3.UP * liquid_level(vessel)
 	return surface
+
+
+## A model of [param tool] standing on its base at the origin (the recipe book
+## in your hand, #207): its own model fitted into its
+## [member HandTool.model_size], over a greybox block in its colour.
+static func tool_model(tool: HandTool) -> Node3D:
+	var root: Node3D = Node3D.new()
+	root.name = "Tool"
+	var block: MeshInstance3D = _box(tool.model_size, tool.color, Vector3.UP * tool.model_size.y / 2.0)
+	block.name = "Greybox"
+	root.add_child(block)
+	if tool.model_path.is_empty() or not ResourceLoader.exists(tool.model_path):
+		return root
+	var model: ThirdPartyModel = ThirdPartyModel.new()
+	model.name = "Model"
+	model.look = tool.model_look
+	model.keep_as_made = tool.model_look == null
+	model.grain = false
+	model.detail = 1.0
+	model.fit_size = tool.model_size
+	model.stand_ins = [block]
+	if model.keep_as_made:
+		model.dressed.connect(func(shown: bool) -> void:
+			if shown:
+				_as_made(model.model, Color.WHITE))
+	model.path = tool.model_path
+	root.add_child(model)
+	return root
 
 
 ## A piece of [param item] about [param size] metres across, standing on its
@@ -159,17 +227,22 @@ static func _as_made(node: Node, tint: Color) -> void:
 		_as_made(child, tint)
 
 
-## How tall the vessel [param item] is without its food.
+## How high food sits in or on the vessel [param item]: on the floor of the
+## open Meshy pot and pan (#207), on top of the greybox bowl, board or plate.
 static func vessel_height(item: Item) -> float:
 	match item.vessel_shape:
-		# Food sits on top: the greybox bowls and pans are solid.
 		Item.VesselShape.BOWL:
 			return 0.09
 		Item.VesselShape.PAN:
-			return 0.05
+			return 0.025
 		Item.VesselShape.POT:
-			return 0.1
+			return 0.03
 	return PLATE_HEIGHT if item.carried_whole else BOARD_SIZE.y
+
+
+## The lowest food can sit in [param item]: its floor.
+static func floor_height(item: Item) -> float:
+	return vessel_height(item)
 
 
 # The vessel itself, by its shape: a board or plate, a bowl, a pan with a

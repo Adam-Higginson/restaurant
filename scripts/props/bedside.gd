@@ -10,6 +10,9 @@ extends Node3D
 ## the screen goes dark, it's morning, and [member voyage_scene] plays, the
 ## passage out of the strange waters that ends at the island.
 
+## Not while the lantern's low (#207): the first quest, warming him, comes
+## before any sleep, so the bunk offers nothing until he's had his soup.
+
 ## Emitted after you wake, with whether it's morning now.
 signal woke(morning: bool)
 ## Emitted when you sleep and the voyage to the island begins.
@@ -44,7 +47,7 @@ func _ready() -> void:
 
 ## What Interact would do now, for the HUD.
 func prompt() -> String:
-	if _sleeping:
+	if _sleeping or not can_sleep():
 		return ""
 	if is_bound_for_land():
 		return "Sleep until we make land"
@@ -52,6 +55,11 @@ func prompt() -> String:
 	if time != null and time.is_morning():
 		return "Rest until nightfall"
 	return "Sleep until morning"
+
+
+## Whether you can sleep now: not while the lantern's low, before his soup.
+func can_sleep() -> bool:
+	return not Game.dialogue.is_set(LanternSpirit.LOW_FLAG)
 
 
 ## Whether sleeping now sails on to the island: after the deck talk, before
@@ -62,7 +70,7 @@ func is_bound_for_land() -> bool:
 
 ## Sleeps, moving the time on, while [param player] can't move.
 func sleep(player: Player3D) -> void:
-	if _sleeping:
+	if _sleeping or not can_sleep():
 		return
 	if is_bound_for_land():
 		_sail_on(player)

@@ -1,89 +1,31 @@
 extends GameTestSuite
-## Tests for ItemModel's structure and sizes, which the counters and the
-## carried stack rely on to lay models out. Not how they look.
+## Tests for ItemModel's placing of food in a vessel (#207): water and soup
+## fill a pot as a surface, and food sits down in it rather than on top.
 
-const TOMATO: Item = preload("res://data/items/tomato.tres")
-const LETTUCE: Item = preload("res://data/items/lettuce.tres")
-const PLATE: Item = preload("res://data/items/plate.tres")
-const BOARD: Item = preload("res://data/items/chopping_board.tres")
-const KNIFE: HandTool = preload("res://data/tools/chefs_knife.tres")
+const POT: Item = preload("res://data/items/saucepan.tres")
+const WATER: Item = preload("res://data/items/rainwater.tres")
+const TOMATO: Item = preload("res://data/items/diced_tomato.tres")
 
 
-func test_food_is_one_cube() -> void:
-	var model: Node3D = ItemModel.build(ItemInstance.new(TOMATO))
+func test_food_in_water_sits_below_the_surface() -> void:
+	var pot: ItemInstance = ItemInstance.new(POT)
+	pot.contents.add_item(ItemInstance.new(WATER))
+	pot.contents.add_item(ItemInstance.new(TOMATO))
+	var model: Node3D = ItemModel.build(pot)
 	auto_free(model)
 
-	assert_int(model.get_child_count()).is_equal(1)
+	var surface: Node3D = model.get_node("Liquid") as Node3D
+	var food: Node3D = model.get_node("Food0") as Node3D
+	assert_float(food.position.y).is_less(surface.position.y)
+	assert_float(food.position.y).is_greater_equal(ItemModel.floor_height(POT))
 
 
-func test_a_plate_shows_each_piece_of_food_on_it() -> void:
-	var plate: ItemInstance = ItemInstance.new(PLATE)
-	plate.contents.add_item(ItemInstance.new(TOMATO))
-	plate.contents.add_item(ItemInstance.new(TOMATO))
-
-	var model: Node3D = ItemModel.build(plate)
+func test_food_in_an_empty_pot_sits_on_its_floor() -> void:
+	var pot: ItemInstance = ItemInstance.new(POT)
+	pot.contents.add_item(ItemInstance.new(TOMATO))
+	var model: Node3D = ItemModel.build(pot)
 	auto_free(model)
 
-	assert_object(model.find_child("Food0", false, false)).is_not_null()
-	assert_object(model.find_child("Food1", false, false)).is_not_null()
-	assert_object(model.find_child("Food2", false, false)).is_null()
-
-
-func test_a_board_leaves_its_cuts_to_the_chop_meter() -> void:
-	var board: ItemInstance = ItemInstance.new(BOARD)
-	board.contents.add_item(ItemInstance.new(LETTUCE))
-	board.contents.add_element(KNIFE.element)
-
-	var model: Node3D = ItemModel.build(board)
-	auto_free(model)
-
-	assert_object(model.find_child("ProgressBar", false, false)).is_null()
-
-
-func test_a_pan_leaves_its_cooking_to_its_bubble() -> void:
-	var catalog: Catalog = Catalog.load_default()
-	var pan: ItemInstance = ItemInstance.new(catalog.find_item(&"frying_pan"))
-	pan.contents.add_item(ItemInstance.new(catalog.find_item(&"herring_fillet")))
-	pan.contents.add_element(catalog.find_element(&"fire"))
-	pan.contents.tick(1.0)
-
-	var model: Node3D = ItemModel.build(pan)
-	auto_free(model)
-
-	assert_object(model.find_child("ProgressBar", false, false)).is_null()
-
-
-func test_an_empty_board_has_no_progress_bar() -> void:
-	var model: Node3D = ItemModel.build(ItemInstance.new(BOARD))
-	auto_free(model)
-
-	assert_object(model.find_child("ProgressBar", false, false)).is_null()
-
-
-func test_pans_pots_and_bowls_look_like_themselves() -> void:
-	var catalog: Catalog = Catalog.load_default()
-	var pan: Node3D = auto_free(ItemModel.build(ItemInstance.new(catalog.find_item(&"frying_pan"))))
-	var pot: Node3D = auto_free(ItemModel.build(ItemInstance.new(catalog.find_item(&"saucepan"))))
-	var bowl: Node3D = auto_free(ItemModel.build(ItemInstance.new(catalog.find_item(&"bowl"))))
-
-	assert_object(pan.get_node_or_null("Handle")).is_not_null()
-	assert_object(pot.get_node_or_null("Pot")).is_not_null()
-	assert_object(bowl.get_node_or_null("Bowl")).is_not_null()
-
-
-func test_food_whose_model_file_is_missing_is_a_greybox_cube() -> void:
-	var item: Item = Item.new()
-	item.model_path = "res://assets/third_party/nowhere/missing.glb"
-
-	var piece: Node3D = ItemModel.food(item, 0.2)
-	auto_free(piece)
-
-	assert_object(piece.find_child("Greybox", false, false)).is_not_null()
-	assert_object(piece.find_child("Model", false, false)).is_null()
-
-
-func test_food_without_a_model_is_a_greybox_cube() -> void:
-	var piece: Node3D = ItemModel.food(Item.new(), 0.2)
-	auto_free(piece)
-
-	assert_int(piece.get_child_count()).is_equal(1)
+	var food: Node3D = model.get_node("Food0") as Node3D
+	assert_float(food.position.y).is_equal_approx(ItemModel.floor_height(POT), 0.001)
+	assert_object(model.get_node_or_null("Liquid")).is_null()

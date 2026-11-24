@@ -59,9 +59,21 @@ func _process(_delta: float) -> void:
 	var carried: Vector3 = carrier.velocity if is_instance_valid(carrier) else Vector3.ZERO
 	(_streaks.process_material as ShaderMaterial).set_shader_parameter(
 			&"carrier_velocity", carried)
-	if is_instance_valid(camera):
-		_streaks.global_position = camera.global_position + Vector3.UP * STREAK_HEIGHT
-		_splashes.global_position = camera.global_position
+	# Round whichever camera is drawing: a cutscene's shot out over the water
+	# had no rain near it while the rain stayed round the player (#207).
+	var around: Node3D = followed()
+	if around != null:
+		_streaks.global_position = around.global_position + Vector3.UP * STREAK_HEIGHT
+		_splashes.global_position = around.global_position
+
+
+## What the rain falls round: the camera that's drawing, or failing that the
+## [member camera] it was given.
+func followed() -> Node3D:
+	var drawing: Camera3D = get_viewport().get_camera_3d() if is_inside_tree() else null
+	if drawing != null:
+		return drawing
+	return camera if is_instance_valid(camera) else null
 
 
 ## Whether streaks are falling right now.

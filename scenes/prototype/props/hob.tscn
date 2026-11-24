@@ -9,6 +9,13 @@
 [ext_resource type="Script" path="res://scripts/visuals/pan_feel.gd" id="7_feel"]
 [ext_resource type="AudioStream" path="res://assets/audio/combat/charged.tres" id="8_chime"]
 
+[sub_resource type="CylinderMesh" id="Plate"]
+top_radius = 0.25
+bottom_radius = 0.25
+height = 0.1
+radial_segments = 16
+rings = 1
+
 [sub_resource type="TorusMesh" id="Trivet"]
 inner_radius = 0.19
 outer_radius = 0.23
@@ -29,6 +36,11 @@ size = Vector3(0.6, 0.5, 0.6)
 script = ExtResource("1_hob")
 heat = ExtResource("3_fire")
 start_item = ExtResource("2_pan")
+
+[node name="Plate" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.049, 0)
+material_override = ExtResource("5_iron")
+mesh = SubResource("Plate")
 
 [node name="Trivet" type="MeshInstance3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.01, 0)
