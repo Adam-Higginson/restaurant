@@ -71,3 +71,14 @@ What they cost: the chests (two pictures, 18; two models, 30) and the food (thre
 - **The porthole** model wasn't used: its glass is painted solid blue, and our portholes are see-through now.
 
 What it cost: 444 credits in all, including the pictures and models that weren't used (the first hull concepts, the bow view, the porthole, the life ring's picture).
+
+## Tucking one layer into another (#206)
+
+Layers fitted by `tools/meshy/fit_layer.py` each sit 12 mm off the body, so where two overlap neither is inside the other: the shirt's back hung over the trousers, and the slimmed boots let the trouser legs poke through. `tools/meshy/tuck_layer.py` pulls the inner layer in wherever the outer one covers it, until it's just inside (6 mm), and leaves the outer one alone. It measures the outer layer in slices (by height, and by angle round the body's middle, or round each leg's for boots), so it follows the waistband and the boot tops. Run it after fitting, inner first, then outer:
+
+    "C:/Program Files/Blender Foundation/Blender 4.4/blender.exe" -b -P tools/meshy/tuck_layer.py -- \
+        start_top.glb start_legs.glb start_top.glb waist
+    "C:/Program Files/Blender Foundation/Blender 4.4/blender.exe" -b -P tools/meshy/tuck_layer.py -- \
+        start_legs.glb sea_feet.glb start_legs.glb legs
+
+The hero's own (`meshy/boy_stern/layers/`) were tucked this way: shirt into trousers, trousers into the sea boots. A layer refitted with `fit_layer.py` comes out untucked again, so tuck it again after.
