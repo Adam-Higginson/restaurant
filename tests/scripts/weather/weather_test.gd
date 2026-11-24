@@ -144,3 +144,22 @@ func _new_weather() -> Weather:
 	add_child(weather)
 	auto_free(weather)
 	return weather
+
+
+func test_the_rain_falls_round_the_camera_that_is_drawing() -> void:
+	# A cutscene's shot out over the water had no rain near it while the rain
+	# stayed round the player (#207).
+	var world: Node3D = Node3D.new()
+	add_child(world)
+	auto_free(world)
+	var player_camera: Node3D = Node3D.new()
+	world.add_child(player_camera)
+	var shot: Camera3D = Camera3D.new()
+	shot.position = Vector3(40, 6, -30)
+	world.add_child(shot)
+	shot.make_current()
+	var rain: RainEffect = RainEffect.new()
+	rain.camera = player_camera
+	world.add_child(rain)
+
+	assert_object(rain.followed()).is_same(shot)
