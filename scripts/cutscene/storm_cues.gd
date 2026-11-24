@@ -52,7 +52,8 @@ func _rain_to(amount: float, seconds: float) -> void:
 	if seconds <= 0.0:
 		weather.intensity = amount
 		return
-	create_tween().tween_property(weather, "intensity", amount, seconds) 			.set_trans(Tween.TRANS_SINE)
+	create_tween().tween_property(weather, "intensity", amount, seconds) \
+			.set_trans(Tween.TRANS_SINE)
 
 
 func _set_submerged(submerged: bool) -> void:
