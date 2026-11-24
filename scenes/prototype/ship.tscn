@@ -200,9 +200,6 @@ radius = 0.38
 height = 3
 radius = 0.28
 
-[sub_resource type="BoxShape3D" id="Deck_FlagLockerShape"]
-size = Vector3(1.14, 0.64, 0.64)
-
 [sub_resource type="BoxShape3D" id="Deck_BelfryPortShape"]
 size = Vector3(0.22, 2.9, 0.22)
 
@@ -213,6 +210,9 @@ size = Vector3(0.22, 2.9, 0.22)
 
 [sub_resource type="BoxShape3D" id="Shape_DeckTalk"]
 size = Vector3(2.4, 2, 1.4)
+
+[sub_resource type="BoxShape3D" id="Deck_StairWallShape"]
+size = Vector3(0.08, 2, 3)
 
 [node name="Ship" type="AnimatableBody3D" unique_id=200548129]
 script = ExtResource("1_7ykrf")
@@ -356,11 +356,12 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6.54, 5.875, -1.85)
 material_override = ExtResource("90_propwood")
 mesh = SubResource("Mesh_BulwarkPatch")
 
-[node name="HullShell" type="Node3D" parent="Visuals" node_paths=PackedStringArray("stand_ins")]
+[node name="HullShell" type="Node3D" parent="Visuals" node_paths=PackedStringArray("stand_ins", "with_hull")]
 script = ExtResource("196_hull_shell")
 path = "res://assets/third_party/meshy/ship_hull_open2/model/model.glb"
 stand_ins = [NodePath("../Hull"), NodePath("../UpperDeck/Structure/HullSkin"), NodePath("../UpperDeck/Structure/Bow"), NodePath("../UpperDeck/Structure/SternGallery"), NodePath("../UpperDeck/Structure/SternTransom"), NodePath("../UpperDeck/Structure/SternWale"), NodePath("../UpperDeck/Structure/TaffrailCarving"), NodePath("../UpperDeck/Structure/BulwarkPort"), NodePath("../UpperDeck/Structure/BulwarkStarboard")]
 clear_boxes = Array[AABB]([AABB(-5.7, 1, 1.15, 11.4, 2.6, 6.75), AABB(-5.7, 1, 7.9, 11.4, 3, 6.8)])
+with_hull = [NodePath("../UpperDeck/Structure/HullPatches")]
 
 [node name="DeckEdge" type="Node3D" parent="." node_paths=PackedStringArray("retired")]
 script = ExtResource("196_deck_edge")
@@ -607,6 +608,14 @@ shape = SubResource("Deck_StairsStarboardShape")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4.5, 7.8, 11.725)
 shape = SubResource("Deck_StairwellRailStarboardShape")
 
+[node name="StairWallPortShape" type="CollisionShape3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -5.85, 6.3, 11.8)
+shape = SubResource("Deck_StairWallShape")
+
+[node name="StairWallStarboardShape" type="CollisionShape3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5.85, 6.3, 11.8)
+shape = SubResource("Deck_StairWallShape")
+
 [node name="QuarterdeckFrontRailShape" type="CollisionShape3D" parent="." unique_id=1274326520]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 7.8, 10.38)
 shape = SubResource("Deck_QuarterdeckFrontRailShape")
@@ -650,10 +659,6 @@ shape = SubResource("Deck_MainMastShape")
 [node name="MizzenShape" type="CollisionShape3D" parent="." unique_id=1087285134]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8.8, 14)
 shape = SubResource("Deck_MizzenShape")
-
-[node name="FlagLockerShape" type="CollisionShape3D" parent="." unique_id=1837518826]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.9, 7.62, 11.6)
-shape = SubResource("Deck_FlagLockerShape")
 
 [node name="BelfryPortShape" type="CollisionShape3D" parent="." unique_id=327537956]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.32, 7.65, -11.15)

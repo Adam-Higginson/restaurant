@@ -117,6 +117,10 @@ static var _fitted: Dictionary[String, ArrayMesh] = {}
 		_redress()
 ## Greybox to hide while the hull shows.
 @export var stand_ins: Array[Node3D] = []
+## Pieces that only belong with the hull, shown only while it shows: the
+## boards patching the few holes in its planking (#205).
+@export var with_hull: Array[Node3D] = []
+
 ## Boxes (in this node's space, the ship's) where none of the hull is drawn:
 ## the insides of the rooms below deck, inside their own walls, floor and
 ## ceiling. The hull's bottom sweeps up at the stern into the bunk room, and
@@ -600,6 +604,9 @@ func _show_stand_ins(show_them: bool) -> void:
 	for node: Node3D in stand_ins:
 		if node != null:
 			node.visible = show_them
+	for node: Node3D in with_hull:
+		if node != null:
+			node.visible = not show_them
 
 
 func _redress() -> void:
