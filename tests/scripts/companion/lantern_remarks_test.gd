@@ -62,7 +62,7 @@ func test_the_lines_of_a_remark_come_one_after_another() -> void:
 func test_he_cheers_when_you_land_a_fish() -> void:
 	var rig: Array[Node3D] = new_moored_ship_with_player(Vector3(4.6, 5.35, 4.3))
 	var runner: GdUnitSceneRunner = scene_runner(rig[0].get_parent())
-	var spot: FishingSpot = rig[0].get_node("Visuals/UpperDeck/Dressing/FishingSpot") as FishingSpot
+	var spot: FishingSpot = add_rod(rig[0] as Ship)
 	spot.line.min_wait = 0.1
 	spot.line.max_wait = 0.1
 	var spirit: LanternSpirit = lantern_at_shoulder(rig[1])

@@ -155,6 +155,16 @@ func new_player_3d_on_floor() -> Player3D:
 	return player
 
 
+## Puts a fishing rod on [param ship]'s starboard rail, where it stood before
+## it came off the deck (#207), and returns it. Fishing is kept for later.
+func add_rod(ship: Ship) -> FishingSpot:
+	var rod: FishingSpot = (load("res://scenes/prototype/props/fishing_spot.tscn") \
+			as PackedScene).instantiate() as FishingSpot
+	rod.position = Vector3(5.62, 5.3, 4.3)
+	ship.get_node("Visuals/UpperDeck/Dressing").add_child(rod)
+	return rod
+
+
 ## A moored ship at the origin facing -Z (so ship space is world space here),
 ## with the 3D player at [param pos], in a world that's freed after the test.
 ## Returns [ship, player]. Hand the ship's parent to scene_runner to start it;

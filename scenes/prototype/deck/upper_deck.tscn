@@ -29,9 +29,6 @@
 [ext_resource type="PackedScene" path="res://scenes/prototype/props/water_butt.tscn" id="27_lbw8e"]
 [ext_resource type="Script" path="res://scripts/props/water_butt.gd" id="28_sv7ji"]
 [ext_resource type="Resource" path="res://data/items/rainwater.tres" id="29_v8w0a"]
-[ext_resource type="PackedScene" path="res://scenes/prototype/props/fishing_spot.tscn" id="32_ddph0"]
-[ext_resource type="Script" path="res://scripts/fishing/fishing_spot.gd" id="33_pkgkr"]
-[ext_resource type="Resource" path="res://data/items/herring.tres" id="34_rtfdt"]
 [ext_resource type="PackedScene" uid="uid://dmwsmhjke2aft" path="res://scenes/prototype/deck/mop_and_bucket.tscn" id="35_1phk1"]
 [ext_resource type="PackedScene" uid="uid://hza45obeaciaw" path="res://scenes/prototype/deck/ships_wheel.tscn" id="36_17mwb"]
 [ext_resource type="PackedScene" uid="uid://h6ph4i432h4dh" path="res://scenes/prototype/deck/binnacle.tscn" id="37_apos4"]
@@ -5184,11 +5181,6 @@ water = ExtResource("29_v8w0a")
 
 [node name="Surface" parent="Dressing/Rainwater"]
 transform = Transform3D(1.08, 0, 0, 0, 1, 0, 0, 0, 1.08, -0.067, 0.85, 0)
-
-[node name="FishingSpot" type="Node3D" parent="Dressing" unique_id=1852587873 instance=ExtResource("32_ddph0")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5.62, 5.3, 4.3)
-script = ExtResource("33_pkgkr")
-catch = ExtResource("34_rtfdt")
 
 [node name="MopAndBucket" type="StaticBody3D" parent="Dressing" unique_id=1541042090 instance=ExtResource("35_1phk1")]
 transform = Transform3D(0.8660254, 0, 0.5, 0, 1, 0, -0.5, 0, 0.8660254, -2.75, 5.3, 0.25)
