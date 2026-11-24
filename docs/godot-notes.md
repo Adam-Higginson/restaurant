@@ -630,6 +630,18 @@ A growing glossary of the Godot concepts this project uses: what each one is, in
 
 **Something you only look at.** `Inspectable` (`scripts/props/`) is a prop with a `Reach`: Interact says "Look at the chart" and plays a section of `data/dialogue/look.dlg`. Writing what a thing looks like is writing a few lines there.
 
+## The pot, the herbs and the first meal (#186)
+
+**Growing the walkway network.** The crew find their way with Godot's A* search (`AStar3D`) over `Waypoint` markers joined by their `links`; a route runs from the waypoint nearest where they are to the one nearest where they're going. Adding a way somewhere new is adding waypoints and naming the links: Godot joins them both ways. *Ours:* `HatchStarboard`, `PortWaist`, `AftOfHatch`, `PortStairFoot`, `PortStairTop` and `Helm` under `Walkways` in `ship.tscn` take the captain up to the wheel, and `walkways_test.gd` casts a ray along every link to prove nothing solid is in the way (it caught the first try clipping the hatch).
+
+**An overheard line.** A crewmate's `head` is a `Speaker`: `head.say("Could do with a drink.")` shows a bubble over them, heard by anyone near, without starting a conversation. *Ours:* `FirstQuest` when the captain sets off for a drink.
+
+**A method, not a lambda, on an autoload's signal.** `Game.dialogue` lives for the whole game, but the props listening to it come and go. Connect a method (`Game.dialogue.flag_changed.connect(_on_flag_changed)`) and Godot drops the connection when the prop is freed; a lambda that captures things can outlive them and complain ("Lambda capture ... was freed"). *Ours:* `SupperSpot._on_flag_changed` clears the first meal's bowl when the lantern's well.
+
+**`@export_range`.** `@export_range(1, 3) var quality: int` shows a slider in the Inspector that only allows 1 to 3. *Ours:* `Dispenser3D.quality`: the herb planter's is 2.
+
+**How names become cue words.** A cue finds a mark by its node name in snake case, and Godot's `to_snake_case()` splits numbers off: `LanternCircle1` is `lantern_circle_1`, not `lantern_circle1`. *Ours:* `remedy.dlg`; `supper_spot_test.gd` checks every mark and shot it names is really in the ship.
+
 ## Testing
 
 **gdUnit4.** The test framework (`addons/gdUnit4`). Suites extend our `GameTestSuite` and have `test_...` functions. `scene_runner` loads a scene and lets a test press inputs and wait physics ticks. *Ours:* `tests/`.

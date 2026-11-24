@@ -73,36 +73,77 @@ func test_fed_and_well_again_the_lean_goes() -> void:
 	assert_bool((spirit.get_node("Voice") as Speaker).muted).is_false()
 
 
-func test_the_captain_goes_up_for_a_drink_and_back_to_his_fire() -> void:
+func test_the_captain_goes_up_to_the_helm() -> void:
+	var rig: Array[Node3D] = new_moored_ship_with_player(Vector3(2, 1.05, 4))
+	var ship: Ship = rig[0] as Ship
+	var quest: FirstQuest = FirstQuest.new()
+	ship.get_parent().add_child(quest)
+	var runner: GdUnitSceneRunner = scene_runner(ship.get_parent())
+	await physics_ticks(runner, 3)
+	var heron: Crewmate = ship.get_node("Crew/Heron") as Crewmate
+	var wheel: Node3D = ship.get_node("SternWatch/Marks/Wheel") as Node3D
+
+	assert_bool(quest.go_to_helm()).is_true()
+	assert_bool(quest.is_heading_to_helm).is_true()
+	# Up the hatch ramp, along the deck and up the quarterdeck stairs.
+	for i: int in 60 * 60:
+		await physics_ticks(runner, 1)
+		if quest.is_at_helm:
+			break
+
+	assert_bool(quest.is_at_helm).is_true()
+	assert_bool(quest.is_heading_to_helm).is_false()
+	assert_vector(heron.global_position).is_equal_approx(wheel.global_position,
+			Vector3(0.02, 0.02, 0.02))
+
+
+func test_every_so_often_he_goes_for_a_drink_and_back_to_the_wheel() -> void:
+	Game.dialogue.set_flag(LanternSpirit.LOW_FLAG)
 	var rig: Array[Node3D] = new_moored_ship_with_player(Vector3(2, 1.05, 4))
 	var ship: Ship = rig[0] as Ship
 	var quest: FirstQuest = FirstQuest.new()
 	quest.linger_seconds = 0.5
+	quest.drink_every = 1.0
 	ship.get_parent().add_child(quest)
 	var runner: GdUnitSceneRunner = scene_runner(ship.get_parent())
 	await physics_ticks(runner, 3)
 	var heron: Crewmate = ship.get_node("Crew/Heron") as Crewmate
 	var butt: Node3D = ship.get_node("Marks/WaterButt") as Node3D
-	var fire: Node3D = ship.get_node("Crew/HeronNight") as Node3D
+	var wheel: Node3D = ship.get_node("SternWatch/Marks/Wheel") as Node3D
 	var done: Array[int] = [0]
 	quest.errand_done.connect(func() -> void: done[0] += 1)
+	var said: Array[String] = []
+	heron.head.said.connect(func(words: String) -> void: said.append(words))
 
-	assert_bool(quest.start_errand()).is_true()
-	assert_bool(quest.start_errand()).is_false()
+	assert_bool(quest.go_to_helm()).is_true()
 	var reached_butt: bool = false
-	# About 14 s each way, and the drink between.
-	for i: int in 45 * 60:
+	for i: int in 120 * 60:
 		await physics_ticks(runner, 1)
 		if heron.global_position.distance_to(butt.global_position) < 0.05:
 			reached_butt = true
 		if done[0] > 0:
 			break
 
+	# He said he was thirsty, went to the butt, drank, and came back up.
+	assert_bool(said.size() > 0 and quest.thirsty_lines.has(said[0])).is_true()
 	assert_bool(reached_butt).is_true()
 	assert_int(done[0]).is_equal(1)
 	assert_bool(quest.is_on_errand).is_false()
-	assert_vector(heron.global_position).is_equal_approx(fire.global_position,
+	assert_bool(quest.is_at_helm).is_true()
+	assert_vector(heron.global_position).is_equal_approx(wheel.global_position,
 			Vector3(0.02, 0.02, 0.02))
+
+
+func test_once_hes_well_again_no_more_drinks() -> void:
+	var quest: FirstQuest = FirstQuest.new()
+	quest.drink_every = 0.1
+	add_child(quest)
+	auto_free(quest)
+	# At the helm, but the lantern isn't low: he stays put.
+	quest.set("_at_helm", true)
+	await get_tree().create_timer(0.3).timeout
+
+	assert_bool(quest.is_on_errand).is_false()
 
 
 func test_filling_a_pan_at_the_butt_remembers_you_fetched_water() -> void:

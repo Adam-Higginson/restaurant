@@ -79,6 +79,15 @@ func test_dumping_it_all_in_cold_is_the_rough_shortcut() -> void:
 	assert_int(food[0].quality).is_equal(1)
 
 
+func test_the_soup_hob_starts_empty_for_the_captains_pot() -> void:
+	var ship: Node = (load("res://scenes/prototype/ship.tscn") as PackedScene).instantiate()
+	auto_free(ship)
+	var hob: Hob = ship.get_node("Galley/SoupHob") as Hob
+
+	# The captain gives you the pot at the helm (#186).
+	assert_object(hob.start_item).is_null()
+
+
 func test_soup_ladles_into_a_bowl_from_the_stack() -> void:
 	var rig: Array[Node3D] = new_moored_ship_with_player(Vector3(0, 1.05, 6))
 	var ship: Ship = rig[0] as Ship
@@ -86,7 +95,7 @@ func test_soup_ladles_into_a_bowl_from_the_stack() -> void:
 	var runner: GdUnitSceneRunner = scene_runner(ship.get_parent())
 	await physics_ticks(runner, 2)
 	var hob: Hob = ship.get_node("Galley/SoupHob") as Hob
-	hob.heated.contents.add_item(ItemInstance.new(_item(&"tomato_soup")))
+	_soup_pan(ship).add_item(ItemInstance.new(_item(&"tomato_soup")))
 	var bowls: Dispenser3D = ship.get_node("Galley/BowlStack") as Dispenser3D
 
 	assert_bool(bowls.dispense(player.arms)).is_true()
@@ -112,8 +121,13 @@ func test_your_first_soup_brings_back_rain_on_the_roof() -> void:
 	assert_bool(Game.memories.has(&"rain_on_the_roof")).is_true()
 
 
+# The pot on the soup hob. The captain gives it to you now (#186), so the hob
+# starts empty: set one down there first.
 func _soup_pan(ship: Ship) -> VesselContents:
-	return (ship.get_node("Galley/SoupHob") as Hob).heated.contents
+	var hob: Hob = ship.get_node("Galley/SoupHob") as Hob
+	if hob.heated == null:
+		hob.slot.place(ItemInstance.new(_item(&"saucepan")))
+	return hob.heated.contents
 
 
 func _item(id: StringName) -> Item:

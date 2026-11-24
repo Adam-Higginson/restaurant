@@ -11,7 +11,8 @@ This is the script the opening is being rebuilt to (#181). The GDD's *The openin
 - **The player never speaks.** Where the script says the player nods, shakes their head or asks something, that's a reply you choose in the conversation box.
 - **You wake in your own bunk** in the bunk room, not a cabin, with the captain standing over you at its foot (not calling from the doorway), and the lantern lies on his round table by the stove.
 - **The navigation room** is a new room in the empty bow half below deck, through a door at the forward end of the hatch ramp's corridor. The captain's cabin stays shut for now.
-- **The captain gives you the cooking pot.** The frying pan, your shield in a fight, is the first thing you find ashore.
+- **The captain gives you the cooking pot** at the helm, where he stays while the lantern is low, going for a drink at the water butt now and then. The frying pan, your shield in a fight, is the first thing you find ashore.
+- **The water comes from the water butt** on deck, not a stream off the rigging, and the soup is made in two steps (a Tomato Soup, then the chilli and herbs stirred in), as the recipe book has it (#186).
 - **The rescue ends in white.** The haul up through the dead lanterns, the storm surface and the heron at the rail are gone; how you came aboard isn't shown.
 - **The arrival is the cove** (#163): the ship anchors off the beach and you row ashore. The harbour, the settlement and the old structures belong to Chapter 1.
 
@@ -451,9 +452,9 @@ If they haven't read it, he doesn't give the clue away.
 
 **ITEM ACQUIRED: DRIED CHILLI.** **ITEM ACQUIRED: FRESH HERBS.**
 
-**Puzzle 3: Collect the rainwater.** The player has the cooking pot and has to work out that it can be filled with rainwater. Water is collecting in several places on the upper deck, but in one spot a steady stream falls from the rigging. The player sets the pot underneath it, and it fills gradually. **ITEM ACQUIRED: POT OF RAINWATER**
+**Puzzle 3: Collect the rainwater.** *As built (#186): the water butt on deck, as before, rather than a stream off the rigging (decided 2026-11-24). The captain, at the helm, goes for a drink at the butt every so often, which shows where the water is.* The player has the cooking pot and has to work out that it can be filled with rainwater. Water is collecting in several places on the upper deck, but in one spot a steady stream falls from the rigging. The player sets the pot underneath it, and it fills gradually. **ITEM ACQUIRED: POT OF RAINWATER**
 
-**Puzzle 4: Make the soup.** Back in the galley, the stove is ready.
+**Puzzle 4: Make the soup.** Back in the galley, the stove is ready. *As built (#186): two steps, as the recipe book has it. A Tomato Soup first (rainwater boiled in the pot, then diced tomato and chopped onion), then a chopped chilli stirred in with the herbs and boiled again. The pot holds three things, and the soup you learn first is the one you build on. The chilli is the pantry's (fresh, not dried); the herbs grow in a planter against the starboard rail.*
 
 1. Put the pot on the stove.
 2. Add the rainwater.

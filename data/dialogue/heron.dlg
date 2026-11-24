@@ -17,49 +17,50 @@ heron: You again. Sit, if you're stopping.
 heron: Bit of a rough night out there, isn't it?
 -> ask
 
-# The first meeting. At night he's by the stove with the lantern, so the
-# camera frames the two of them; in the morning he's alone at the wheel.
+# The first meeting, the Prologue's Scene 4 (#186): after the waking he goes
+# up to the helm (FirstQuest walks him there), and that's where you find him.
+# Your side is the replies you pick. He ends by giving you the ship's old
+# cooking pot (the frying pan is found ashore, #187).
 ~ first
-# By the stove only if he's there: at night he may be up on deck (#176).
-? night and heron_at_post
-@shot stove_nook
-heron: So. You're the one the lamp fished out.
-? night and heron_at_post and not lantern_low
-lantern: I pulled! They held on!
-heron: Hm. Can you cook?
-- A little. -> cook_little
-- I remember tastes. Not much else. -> cook_tastes
-- Who are you? -> who
+heron: Settling in?
+- (Nod) -> settling
 
-~ cook_little
-heron: A little is more than the rest of us.
--> the_pan
+~ settling
+heron: Good.
+heron: This is the *Salt and Ember*. She's seen better days, but she'll get us where we need to go.
+heron: We've been following an old trail. It hasn't been easy to find.
+heron: We were hoping to find something at the end of it.
+- (Ask what) -> ask_what
 
-~ cook_tastes
-heron: Tastes. Hm. That's a start. Better than a name, some would say.
--> the_pan
+~ ask_what
+@wait 0.8
+heron: Something we've been looking for a long time.
+heron: Perhaps we'll have better luck once we reach land.
+- (Ask about the lantern) -> the_lantern
 
-~ who
-heron: Captain. That'll do for now.
--> the_pan
+~ the_lantern
+heron: He's still recovering.
+heron: I've never seen him use so much of his light.
+@wait 0.8
+heron: I wouldn't worry too much. He's tougher than he looks.
+- (Gesture towards the galley) -> to_cook
 
-# The ship needs a cook, so he hands you the last cook's pan (#152), and you
-# take it as if it were treasure.
-~ the_pan
-heron: You'll be cooking for us, then. You'll want this.
-heron: The last cook's pan. It's seen some service.
-set has_frying_pan
-@hold_up frying_pan
-narrator: You got the *Frying Pan*! Put it on the *hob* to cook, and raise it to fend off a blow.
+~ to_cook
+heron: Looking to cook something?
+- (Nod) -> the_pot
+
+~ the_pot
+heron: Here. This might help.
+set has_saucepan
+@hold_up saucepan
+narrator: You got the *Cooking Pot*! Set it on the *hob* to cook in it.
 @put_away
-heron: ...That was a strange way to take a frying pan.
-heron: And how in the blazes did you make it float over your head?
-heron: Anyway. The *galley*'s forward, through the door. We eat at eight bells.
+heron: It's not much, but it'll do.
+heron: Try not to burn the ship down.
 -> met
 
 ~ met
 set met_heron
-heron: Mind the *wet planks* by the hatch.
 @shot free
 -> END
 

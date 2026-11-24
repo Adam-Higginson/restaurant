@@ -126,6 +126,27 @@ func test_walk_home_walks_back_to_their_usual_spot() -> void:
 	assert_vector(_heron.global_position).is_equal_approx(AHEAD, NEAR)
 
 
+func test_placing_someone_who_was_walking_stops_their_walk() -> void:
+	_build()
+	_add_walkways()
+	var stage: Vector3 = Vector3(-3, 0, 0)
+	new_marker(_player.get_parent(), ActorCues.GROUP, "Stage", Transform3D(Basis(), stage))
+	var runner: GdUnitSceneRunner = scene_runner(_player.get_parent())
+	await physics_ticks(runner, 3)
+	var walker: CrewWalker = _heron.get_node("Walker") as CrewWalker
+
+	# On his way to the door when the cutscene wants him elsewhere.
+	play_cutscene(_conversation, _player,
+			"@send heron doorway
+@wait 0.3
+@place heron stage
+heron: Here.")
+	await physics_ticks(runner, 90)
+
+	assert_bool(walker.is_walking).is_false()
+	assert_vector(_heron.global_position).is_equal_approx(stage, NEAR)
+
+
 func test_skipping_a_walk_puts_them_there_at_once() -> void:
 	_build()
 	_add_walkways()

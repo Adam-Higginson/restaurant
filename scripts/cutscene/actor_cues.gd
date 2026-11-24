@@ -116,6 +116,10 @@ func _place(actor: Node3D, mark_name: String) -> void:
 		body.velocity = Vector3.ZERO
 		body.face_towards(ahead)
 	else:
+		# Put somewhere, they stop wherever they were walking to.
+		var walker: CrewWalker = actor.get_node_or_null("Walker") as CrewWalker
+		if walker != null:
+			walker.stop()
 		actor.global_transform = mark.global_transform
 		if actor is Crewmate:
 			(actor as Crewmate).rest()

@@ -1,14 +1,17 @@
 class_name Dispenser3D
 extends StaticBody3D
 ## Gives the player a fresh item on Interact, without limit: the galley's
-## plate rack. A model of what it gives sits on top, at its
+## plate rack, and the herb planter on deck (#186). A model of what it gives sits on top, at its
 ## [code]ItemSpot[/code] marker.
 
 ## Emitted when an item is handed over.
 signal dispensed(item: ItemInstance)
 
-## What it gives out, at normal quality.
+## What it gives out.
 @export var item: Item = null
+## How good what it gives is, in stars: 1 is normal, as from the pantry.
+## Herbs picked fresh from the planter are better.
+@export_range(1, 3) var quality: int = ItemInstance.MIN_QUALITY
 
 @onready var _interactable: Interactable3D = $Interactable
 @onready var _item_spot: Node3D = $ItemSpot
@@ -27,7 +30,7 @@ func _ready() -> void:
 func dispense(arms: Arms) -> bool:
 	if item == null or arms.is_full():
 		return false
-	var instance: ItemInstance = ItemInstance.new(item)
+	var instance: ItemInstance = ItemInstance.new(item, quality)
 	arms.add(instance)
 	dispensed.emit(instance)
 	return true

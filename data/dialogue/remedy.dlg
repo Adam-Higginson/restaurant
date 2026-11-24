@@ -1,22 +1,69 @@
-# The end of the first quest (#155): the old book's remedy brings the lantern
-# back. Played by the SupperSpot (his round table) once he's had the spicy
-# tomato soup you set down by him while he was low. Placeholder writing:
-# rewrite freely.
+# The first meal, the Prologue's Scene 5 (#186): the end of the first quest.
+# Played by the SupperSpot (his round table) the moment you set the spicy
+# tomato soup down by him while he's low. Your side is the replies you pick.
 #
-# He drinks in its steam; amber climbs back up through the blue, the crack
-# in his glass closes, and his eyes open. Only now does he speak. The
-# captain, by his fire the whole time, says what he says.
+# He asks what it is, takes it in (clearing his low flag, which clears the
+# bowl), lights up, rises and circles you. The captain, called down from the
+# helm, looks in at the bunk room door, then goes back to his usual place.
 
 ~ start
+@place player supper_seat
+@shot supper_wide cut
+@look lantern surprised
+lantern: Oh! What's that?
+@wait 0.6
+lantern: Is that... for me?
+- (Nod) -> you_made_it
+
+~ you_made_it
+lantern: You made that?
+- (Nod again) -> never_had
+
+~ never_had
+@look lantern tired
+lantern: Well, I...
+@wait 1.0
+lantern: I've never had soup before.
 @shot lantern_table
-@wait 1.5
+@go lantern supper_bowl
+@wait 1.8
 @look lantern mended
 clear lantern_low
-@wait 1.4
+@wait 0.6
 @look lantern pleased
-lantern: There you are.
-lantern: You were in the water. I pulled. You held on. Good holding.
-lantern: I'll get you home. I know exactly where it is. Roughly.
+lantern: Oh!
+@shot supper_wide
+@go lantern lantern_rises
+@wait 1.0
+lantern: Oh, that's much better!
+@go lantern lantern_circle_1
+@wait 0.6
+@go lantern lantern_circle_2
+@wait 0.6
+@go lantern lantern_circle_3
+@wait 0.6
+@go lantern lantern_circle_4
+@wait 0.6
+@go lantern lantern_thanks
+lantern: I feel wonderful!
+@place heron doorway
+@show heron
 @face heron lantern
-heron: Hm. Soup.
+@shot doorway cut
+@wait 0.6
+heron: Well, I'll be.
+@shot supper_wide
+lantern: Look! Look at me!
+heron: I can see.
+lantern: They made me soup!
+heron: Yes. I gathered that.
+@face heron player
+@send heron home
+@wait 0.8
+lantern: Thank you.
+@wait 1.0
+lantern: I remember you reaching for me.
+lantern: I'm glad you did.
+@home lantern
 @shot free
+-> END
