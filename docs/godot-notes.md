@@ -612,12 +612,6 @@ A growing glossary of the Godot concepts this project uses: what each one is, in
 
 **Moving loose parts in code.** A model with no skeleton can still move if it's cut into parts whose origins are their joints: turning a part's `transform` swings it from that joint. *Ours:* the crab's legs and claws (`Crab._move_parts`), cut by `tools/meshy/split_crab.py`.
 
-**A bone's own space.** Every bone has its own little coordinate system that moves with it; a `Skin`'s bind pose turns a point of the mesh at rest into that bone's space. Measured there, a spot on the face stays put however the head turns. *Ours:* the boy's mouth and brows are measured in his head bone's space (`data/characters/boy_face.tres`), and `CharacterModel._place_hands` tells the shader each frame where the head bone is.
-
-**Repainting a face in the shader.** The painted face can't be redrawn in its texture (it's cut into scattered pieces), so the shader works out where each point is on the face and paints over it there: skin over the old mouth and brows, then new ones drawn as lines. Setting `NORMAL` in `fragment()` also changes how ambient light and SSAO fall, which hides a mouth sculpted into the mesh. *Ours:* `FaceRepaint` (`scripts/art/face_repaint.gd`) and `repaint_brows` in `shaders/stylised_character.gdshader`.
-
-**A bone's length and thickness, apart.** A bone's size is its parent's times its own, and it runs along its own Y. So scaling only X and Z thickens it, and moving its child joint along Y (a position track) lengthens it, each without the other. *Ours:* `CharacterModel.body_sizes` and `_proportion` give the boy longer upper arms, shorter, fuller forearms and smaller hands.
-
 ## Testing
 
 **gdUnit4.** The test framework (`addons/gdUnit4`). Suites extend our `GameTestSuite` and have `test_...` functions. `scene_runner` loads a scene and lets a test press inputs and wait physics ticks. *Ours:* `tests/`.

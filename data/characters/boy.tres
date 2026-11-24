@@ -5,7 +5,6 @@
 [ext_resource type="Resource" path="res://data/art/looks/character_head.tres" id="3_head"]
 [ext_resource type="Resource" path="res://data/art/looks/character_hair.tres" id="4_hair"]
 [ext_resource type="Resource" path="res://data/art/outfits/boy_sea.tres" id="5_outfit"]
-[ext_resource type="Resource" path="res://data/characters/boy_face.tres" id="6_face"]
 
 [resource]
 script = ExtResource("1")
@@ -39,13 +38,4 @@ whole_clip_names = Dictionary[StringName, String]({
 &"Idle_Shield": "Sword_Parry"
 })
 whole_arm_scale = 0.9
-whole_hand_scale = 0.76
-whole_upper_arm_length = 1.08
-whole_forearm_length = 0.86
-whole_forearm_thickness = 1.12
-whole_head_scale = 1.08
-whole_width = 1.1
-whole_arm_drop = 16.0
-whole_elbow_out = 10.0
-whole_forearm_twist = -55.0
-whole_face = ExtResource("6_face")
+whole_hand_scale = 0.82

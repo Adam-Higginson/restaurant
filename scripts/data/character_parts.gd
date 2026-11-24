@@ -60,35 +60,6 @@ const ASLEEP: String = "asleep"
 ## long and its hands too big.
 @export_range(0.5, 1.5) var whole_arm_scale: float = 1.0
 @export_range(0.5, 1.5) var whole_hand_scale: float = 1.0
-## How long its upper arms and forearms are, against its file, on top of
-## [member whole_arm_scale]: a model's forearms can come out longer than its
-## upper arms, which reads as spindly. Their thickness is left alone.
-@export_range(0.5, 1.5) var whole_upper_arm_length: float = 1.0
-@export_range(0.5, 1.5) var whole_forearm_length: float = 1.0
-## How thick its upper arms and forearms are, against its file, on top of
-## [member whole_arm_scale]. Its hands stay [member whole_hand_scale].
-@export_range(0.5, 1.5) var whole_upper_arm_thickness: float = 1.0
-@export_range(0.5, 1.5) var whole_forearm_thickness: float = 1.0
-## How big its head is, against its file: above 1 reads younger.
-@export_range(0.5, 1.5) var whole_head_scale: float = 1.0
-## How wide and deep its whole body is, against its file, its height left
-## alone: above 1 is stockier.
-@export_range(0.5, 1.5) var whole_width: float = 1.0
-## How far its arms are brought in towards its body while it stands, walks
-## and runs, in degrees: a model's clips can hold them out.
-@export_range(0.0, 45.0) var whole_arm_drop: float = 0.0
-## How far its forearms swing out from its body at the elbow while it
-## stands, walks and runs, in degrees: with the arms brought in, its hands
-## hang by its thighs, not in front of them.
-@export_range(0.0, 45.0) var whole_elbow_out: float = 0.0
-## How far its forearms turn about their own length while it stands, walks
-## and runs, in degrees: positive turns its palms in towards its thighs, the
-## way relaxed arms hang, from a clip that holds them facing forwards.
-@export_range(-90.0, 90.0) var whole_forearm_twist: float = 0.0
-## A calmer face painted over the one its file was made with (a grin, say):
-## a plain mouth and new brows, measured on its face. None leaves its face
-## as made.
-@export var whole_face: FaceRepaint = null
 
 @export_group("Kiln")
 ## How the outfit is fired.

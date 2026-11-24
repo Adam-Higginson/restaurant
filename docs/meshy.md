@@ -29,8 +29,6 @@ Wait on each task with `meshy <kind> wait ID`, then fetch it with `meshy <kind> 
 - **Its size:** Meshy's armature is scaled by 0.01 and its animations move bones in centimetres, so the model can't be fitted by `fit_size` (it reads 100 times too small, gets blown up, and its animations fly off). Leave `fit_size` at zero and scale the `ThirdPartyModel` node instead (the heron: 2.3 / 1.9 = 1.21).
 - **Which way it faces:** Meshy models face +Z; our crew face -Z, so turn the node 180 degrees.
 - **Its animations:** a `CrewAnimator` plays them from the conversation (idle, talking, listening), by the names in the file.
-- **Its face is stuck with the picture's expression (#172):** the expression is painted into the texture and partly sculpted into the mesh, with no face bones. Ask for a calm face in the concept picture. Otherwise a `FaceRepaint` on the character's parts covers the mouth and brows in the shader and draws plain ones. Measure them in the head bone's space: flatten the face's paint into that space (looking at the face), with the skin under the fringe shown apart from the hair in front of it, and read the coordinates off a centimetre grid. Check from the game camera's height, not only straight on. The face curves back, so from above a level line reads as a smile and gently arched brows as a scowl.
-- **Its arms can come out spindly:** the boy's forearms were longer than his upper arms and his palms hung facing forwards. `CharacterParts` sets each arm bone's length and thickness apart (`whole_upper_arm_length`, `whole_forearm_thickness`, ...), and for standing, walking and running brings the arms in, swings the forearms out at the elbow and turns the palms towards the thighs.
 
 ## What the heron cost
 

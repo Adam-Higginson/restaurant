@@ -224,10 +224,6 @@ var _whole_moves: AnimationLibrary = null
 ## How each of a whole character's hand nodes is turned from its hand bone.
 var _hand_fixes: Dictionary[Node3D, Basis] = {}
 var _hand_bones: Dictionary[Node3D, int] = {}
-## The whole character's meshes its face is repainted on, and its head
-## bone: the face is painted in the head bone's space.
-var _whole_bodies: Array[MeshInstance3D] = []
-var _whole_head: int = -1
 ## A whole character's meshes and its hips bone, for the rounded shading's
 ## line (which follows the body as it lies down or bends).
 var _whole_meshes: Array[MeshInstance3D] = []
@@ -615,63 +611,6 @@ static func hip_height(skeleton: Skeleton3D) -> float:
 	return skeleton.get_bone_global_rest(hips).origin.y if hips >= 0 else 0.0
 
 
-## How big a whole character's arm bones and head are against its file, by
-## the packs' names for them, from [param parts]. A bone's size is its
-## parent's times its own, and a bone runs along its Y, so each arm bone's
-## length (Y) and thickness (X, Z) are set apart: the upper arm's thickness,
-## then the forearm's against it, then the hand's against that, so the hand
-## ends up evenly the size asked for.
-static func body_sizes(parts: CharacterParts) -> Dictionary[String, Vector3]:
-	var arm: float = parts.whole_arm_scale
-	var upper: float = parts.whole_upper_arm_thickness
-	var fore: float = parts.whole_forearm_thickness
-	var hand: float = parts.whole_hand_scale
-	var sizes: Dictionary[String, Vector3] = {"Head": Vector3.ONE * parts.whole_head_scale}
-	for side: String in ["_l", "_r"]:
-		sizes["upperarm" + side] = Vector3(arm * upper, arm, arm * upper)
-		sizes["lowerarm" + side] = Vector3(fore / upper, 1.0, fore / upper)
-		sizes["hand" + side] = Vector3(hand / fore, hand, hand / fore)
-	return sizes
-
-
-## Turns [param clip]'s forearms (the bones named in [param forearms], left
-## then right) about their own length by [param degrees], the right one the
-## mirror of the left, so the hands turn with them: every key of each.
-static func twist_forearms(clip: Animation, forearms: Array[String], degrees: float) -> void:
-	for index: int in forearms.size():
-		var track: int = _rotation_track(clip, forearms[index])
-		if track < 0:
-			continue
-		var twist: Quaternion = Quaternion(Vector3.UP,
-				deg_to_rad(degrees * (1.0 if index == 0 else -1.0)))
-		for key: int in clip.track_get_key_count(track):
-			var was: Quaternion = clip.track_get_key_value(track, key)
-			clip.track_set_key_value(track, key, was * twist)
-
-
-## Paints [param face] on the body meshes among [param meshes] (not the
-## clothes, whose names start "Outfit_"), or takes it off with none. Returns
-## the meshes it's painted on, which need telling where the head is.
-static func paint_face(meshes: Array[MeshInstance3D], face: FaceRepaint) -> Array[MeshInstance3D]:
-	var painted: Array[MeshInstance3D] = []
-	for mesh_node: MeshInstance3D in meshes:
-		if String(mesh_node.name).begins_with("Outfit_") or mesh_node.mesh == null:
-			continue
-		var on: bool = false
-		for surface: int in mesh_node.mesh.get_surface_count():
-			var material: ShaderMaterial = mesh_node.get_active_material(surface) as ShaderMaterial
-			if material == null:
-				continue
-			if face != null:
-				face.apply(material)
-				on = true
-			else:
-				FaceRepaint.clear(material)
-		if on:
-			painted.append(mesh_node)
-	return painted
-
-
 func _build(parts: CharacterParts) -> void:
 	if parts.is_whole():
 		_build_whole(parts)
@@ -797,7 +736,7 @@ func _build_whole(parts: CharacterParts) -> void:
 	dresser.style = WHOLE_STYLE
 	# Meshy models face +Z; our forward is -Z.
 	dresser.rotation.y = PI
-	dresser.scale = Vector3(parts.whole_width, 1.0, parts.whole_width) * parts.whole_scale
+	dresser.scale = Vector3.ONE * parts.whole_scale
 	character = dresser
 	add_child(dresser)
 	right_hand = _whole_hand("HandR")
@@ -891,16 +830,11 @@ func _hook_whole() -> void:
 	# with no one light burning it out.
 	_whole_meshes.clear()
 	_whole_hips = skeleton.find_bone(_bone("pelvis"))
-	_whole_head = skeleton.find_bone(_bone("Head"))
 	for found: Node in dresser.model.find_children("*", "MeshInstance3D", true, false):
 		var mesh_node: MeshInstance3D = found as MeshInstance3D
 		mesh_node.set_instance_shader_parameter(&"round_form", 0.75)
 		mesh_node.set_instance_shader_parameter(&"light_cap", 0.85)
 		_whole_meshes.append(mesh_node)
-	# A calmer face over the one it was made with, painted where the head is
-	# (so not without a head bone).
-	_whole_bodies = paint_face(_whole_meshes,
-			_whole_parts.whole_face if _whole_head >= 0 else null)
 	# Pick up whatever was playing on the new animator.
 	var was: Pose = pose
 	pose = Pose.IDLE
@@ -933,17 +867,6 @@ func _place_hands() -> void:
 		var at: Transform3D = skeleton.global_transform * skeleton.get_bone_global_pose(bone)
 		hand.global_transform = Transform3D(
 				at.basis.orthonormalized() * _hand_fixes[hand], at.origin)
-	# Where the head is, for the face's repainting: a point less the head's
-	# place, measured along each of these, is that point in the head's space.
-	if _whole_head >= 0 and not _whole_bodies.is_empty():
-		var head: Transform3D = skeleton.get_bone_global_pose(_whole_head)
-		for body: MeshInstance3D in _whole_bodies:
-			if not is_instance_valid(body):
-				continue
-			body.set_instance_shader_parameter(&"head_origin", head.origin)
-			body.set_instance_shader_parameter(&"head_x", head.basis.x / head.basis.x.length_squared())
-			body.set_instance_shader_parameter(&"head_y", head.basis.y / head.basis.y.length_squared())
-			body.set_instance_shader_parameter(&"head_z", head.basis.z / head.basis.z.length_squared())
 	# The rounded shading's line runs through the hips, the way the body does.
 	if _whole_hips >= 0:
 		var hips: Transform3D = skeleton.get_bone_global_pose(_whole_hips)
@@ -1018,74 +941,7 @@ func _whole_library(parts: CharacterParts) -> AnimationLibrary:
 			library.add_animation(anim_name, lying)
 	for anim_name: StringName in library.get_animation_list():
 		_proportion(library.get_animation(anim_name), parts)
-	# Standing, walking and running, its arms hang closer to its body.
-	for anim_name: StringName in [idle_animation, walk_animation, run_animation]:
-		if library.has_animation(anim_name) and parts.whole_arm_drop > 0.0:
-			_drop_arms(library.get_animation(anim_name), parts.whole_arm_drop)
-		if library.has_animation(anim_name) and parts.whole_elbow_out > 0.0:
-			_straighten_elbows(library.get_animation(anim_name), parts.whole_elbow_out)
-		if library.has_animation(anim_name) and not is_zero_approx(parts.whole_forearm_twist):
-			twist_forearms(library.get_animation(anim_name),
-					[_bone("lowerarm_l"), _bone("lowerarm_r")], parts.whole_forearm_twist)
 	return library
-
-
-# Swings a clip's forearms out from the body by [param degrees] at the
-# elbow: every key of each forearm is turned about the skeleton's
-# front-to-back line, through the upper arm as the clip has it then.
-func _straighten_elbows(clip: Animation, degrees: float) -> void:
-	for side: String in ["_l", "_r"]:
-		var arm: int = skeleton.find_bone(_bone("upperarm" + side))
-		var shoulder: int = skeleton.get_bone_parent(arm) if arm >= 0 else -1
-		if shoulder < 0:
-			continue
-		var shoulder_at: Basis = skeleton.get_bone_global_rest(shoulder).basis.orthonormalized()
-		var arm_track: int = _rotation_track(clip, _bone("upperarm" + side))
-		var fore_track: int = _rotation_track(clip, _bone("lowerarm" + side))
-		if arm_track < 0 or fore_track < 0:
-			continue
-		# The left arm is on +X: turning its forearm about +Z by a positive
-		# angle swings the hand out; the right one the other way.
-		var swing: Basis = Basis(Vector3.BACK, deg_to_rad(degrees * (1.0 if side == "_l" else -1.0)))
-		for key: int in clip.track_get_key_count(fore_track):
-			var time: float = clip.track_get_key_time(fore_track, key)
-			var upper: Basis = shoulder_at * Basis(clip.rotation_track_interpolate(arm_track, time))
-			var turn: Quaternion = (upper.inverse() * swing * upper).get_rotation_quaternion()
-			var was: Quaternion = clip.track_get_key_value(fore_track, key)
-			clip.track_set_key_value(fore_track, key, turn * was)
-
-
-# The track turning [param bone] in [param clip], or -1.
-static func _rotation_track(clip: Animation, bone: String) -> int:
-	for track: int in clip.get_track_count():
-		if clip.track_get_type(track) == Animation.TYPE_ROTATION_3D \
-				and String(clip.track_get_path(track).get_concatenated_subnames()) == bone:
-			return track
-	return -1
-
-
-# Brings a clip's arms in towards the body by [param degrees]: every key of
-# each upper arm is turned about the skeleton's front-to-back line.
-func _drop_arms(clip: Animation, degrees: float) -> void:
-	for side: String in ["_l", "_r"]:
-		var arm: int = skeleton.find_bone(_bone("upperarm" + side))
-		if arm < 0:
-			continue
-		var parent: int = skeleton.get_bone_parent(arm)
-		var above: Basis = skeleton.get_bone_global_rest(parent).basis.orthonormalized() \
-				if parent >= 0 else Basis.IDENTITY
-		# The left arm is on +X: turning it about +Z by a negative angle
-		# brings it down towards the body; the right arm the other way.
-		var way: float = -1.0 if side == "_l" else 1.0
-		var turn: Quaternion = (above.inverse() * Basis(Vector3.BACK, deg_to_rad(degrees * way))
-				* above).get_rotation_quaternion()
-		for track: int in clip.get_track_count():
-			var bone: String = String(clip.track_get_path(track).get_concatenated_subnames())
-			if bone != _bone("upperarm" + side) or clip.track_get_type(track) != Animation.TYPE_ROTATION_3D:
-				continue
-			for key: int in clip.track_get_key_count(track):
-				var was: Quaternion = clip.track_get_key_value(track, key)
-				clip.track_set_key_value(track, key, turn * was)
 
 
 # A still pose as a clip: the skeleton at rest, with the bones in
@@ -1134,37 +990,22 @@ func _pose_clip(turns: Dictionary, lay: float, hips_at: Vector3) -> Animation:
 # Gives a clip the look's proportions: every key of its arms and hands is
 # the size the parts ask for, whatever size the clip had them.
 func _proportion(clip: Animation, parts: CharacterParts) -> void:
-	var to_skeleton: String = String(_animator.get_node(_animator.root_node).get_path_to(skeleton))
-	var sizes: Dictionary[String, Vector3] = body_sizes(parts)
-	# Each joint below the shoulder moves along its parent, which is how long
-	# that parent is.
-	var lengths: Dictionary[String, float] = {}
-	for side: String in ["_l", "_r"]:
-		lengths["lowerarm" + side] = parts.whole_upper_arm_length
-		lengths["hand" + side] = parts.whole_forearm_length
-	var moved: Array[String] = []
-	for pack_name: String in lengths:
-		if not is_equal_approx(lengths[pack_name], 1.0):
-			moved.append(_bone(pack_name))
+	if is_equal_approx(parts.whole_arm_scale, 1.0) and is_equal_approx(parts.whole_hand_scale, 1.0):
+		return
 	for track: int in range(clip.get_track_count() - 1, -1, -1):
-		var bone: String = String(clip.track_get_path(track).get_concatenated_subnames())
-		var type: Animation.TrackType = clip.track_get_type(track)
-		if type == Animation.TYPE_SCALE_3D or (type == Animation.TYPE_POSITION_3D and bone in moved):
+		if clip.track_get_type(track) == Animation.TYPE_SCALE_3D:
 			clip.remove_track(track)
+	var to_skeleton: String = String(_animator.get_node(_animator.root_node).get_path_to(skeleton))
+	var sizes: Dictionary[String, float] = {
+		"upperarm_l": parts.whole_arm_scale, "upperarm_r": parts.whole_arm_scale,
+		"hand_l": parts.whole_hand_scale, "hand_r": parts.whole_hand_scale,
+	}
 	for pack_name: String in sizes:
 		if skeleton.find_bone(_bone(pack_name)) < 0:
 			continue
 		var track: int = clip.add_track(Animation.TYPE_SCALE_3D)
 		clip.track_set_path(track, NodePath("%s:%s" % [to_skeleton, _bone(pack_name)]))
-		clip.scale_track_insert_key(track, 0.0, sizes[pack_name])
-	for pack_name: String in lengths:
-		var bone: int = skeleton.find_bone(_bone(pack_name))
-		if bone < 0 or not _bone(pack_name) in moved:
-			continue
-		var track: int = clip.add_track(Animation.TYPE_POSITION_3D)
-		clip.track_set_path(track, NodePath("%s:%s" % [to_skeleton, _bone(pack_name)]))
-		clip.position_track_insert_key(track, 0.0,
-				skeleton.get_bone_rest(bone).origin * lengths[pack_name])
+		clip.scale_track_insert_key(track, 0.0, Vector3.ONE * sizes[pack_name])
 
 
 # The head and neck of [param path]'s body, and its eyes.
@@ -1400,9 +1241,7 @@ func _undress() -> void:
 	_hand_fixes.clear()
 	_hand_bones.clear()
 	_whole_meshes.clear()
-	_whole_bodies.clear()
 	_whole_hips = -1
-	_whole_head = -1
 	_whole = false
 	_whole_parts = null
 	_whole_moves = null

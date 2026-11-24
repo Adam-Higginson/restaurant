@@ -49,7 +49,6 @@ func _ready() -> void:
 		# Shots named "player" are measured from where the player stands.
 		Shot.new("player_dawn", Vector3(1.0, 1.3, -2.8), Vector3(0.0, 0.95, 0.0), 1.0),
 		Shot.new("player_close_dawn", Vector3(0.45, 1.3, -1.35), Vector3(0.0, 1.15, 0.0), 1.0),
-		Shot.new("player_face_dawn", Vector3(0.18, 1.5, -0.6), Vector3(0.0, 1.47, 0.0), 1.0),
 		Shot.new("player_side_dawn", Vector3(2.6, 1.2, -0.4), Vector3(0.0, 0.95, 0.0), 1.0),
 		Shot.new("galley_night", Vector3(-1.2, 2.5, 7.6), Vector3(2.6, 1.7, 2.6), 0.0),
 		Shot.new("table_night", Vector3(0.2, 2.2, 6.4), Vector3(1.6, 1.8, 4.9), 0.0),
