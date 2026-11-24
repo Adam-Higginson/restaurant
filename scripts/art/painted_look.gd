@@ -41,9 +41,10 @@ const SURFACE: Dictionary[StringName, Variant] = {
 ## Brush widths in pixels at 1080p: the scenery's, and the characters'.
 @export_range(0.0, 8.0) var brush: float = 2.3
 @export_range(0.0, 8.0) var character_brush: float = 0.9
-## Ink line width in pixels at 1080p, and how dark the line is.
+## Ink line width in pixels at 1080p, and how dark the line is: 0 draws
+## none, the look we chose (#172), shapes told apart by light and colour.
 @export_range(0.0, 4.0) var line_width: float = 1.0
-@export_range(0.0, 1.0) var line_strength: float = 0.6
+@export_range(0.0, 1.0) var line_strength: float = 0.0
 @export_group("Surfaces")
 ## How much richer and darker a planked surface's own colour is made, now
 ## that no grain picture colours it.
@@ -92,6 +93,8 @@ func _ready() -> void:
 	_shell_style.outline_thickness = 2.6
 	_shell_style.outline_max_width = 0.02
 	_shell_style.outline_color = Color(0.3, 0.06, 0.07)
+	# No outlines in the painted look (#172), shells included.
+	_shell_style.outline = false
 	if world == null:
 		var found: Array[Node] = get_tree().root.find_children("*", "WorldEnvironment", true, false)
 		if not found.is_empty():
