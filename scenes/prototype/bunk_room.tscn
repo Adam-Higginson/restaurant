@@ -1,0 +1,562 @@
+[gd_scene format=3]
+
+[ext_resource type="Material" path="res://assets/placeholder/materials/galley_floor.tres" id="17_floor"]
+[ext_resource type="Material" path="res://assets/placeholder/materials/braided_rug.tres" id="21_hn0g1"]
+[ext_resource type="Material" path="res://assets/placeholder/materials/rag_runner.tres" id="22_hn0g1"]
+[ext_resource type="PackedScene" path="res://scenes/prototype/props/lantern.tscn" id="23_lantern"]
+[ext_resource type="PackedScene" path="res://scenes/prototype/props/porthole.tscn" id="24_porthole"]
+[ext_resource type="PackedScene" path="res://scenes/prototype/props/barrel.tscn" id="25_barrel"]
+[ext_resource type="Script" path="res://scripts/props/motes.gd" id="26_motes"]
+[ext_resource type="Material" path="res://assets/placeholder/materials/prop_wood.tres" id="27_propwood"]
+[ext_resource type="Material" path="res://assets/placeholder/materials/dark_prop_wood.tres" id="28_darkwood"]
+[ext_resource type="PackedScene" path="res://scenes/prototype/dressing/stool.tscn" id="46_stool"]
+[ext_resource type="PackedScene" path="res://scenes/prototype/dressing/coat_hooks.tscn" id="48_p2e1w"]
+[ext_resource type="PackedScene" path="res://scenes/prototype/dressing/mug.tscn" id="50_mug"]
+[ext_resource type="PackedScene" path="res://scenes/prototype/dressing/ship_in_bottle.tscn" id="55_s5wn3"]
+[ext_resource type="PackedScene" path="res://scenes/prototype/props/bunk_bay.tscn" id="57_1yecb"]
+[ext_resource type="Material" path="res://assets/placeholder/materials/quilt_red.tres" id="58_alpw3"]
+[ext_resource type="Material" path="res://assets/placeholder/materials/quilt_blue.tres" id="59_dlopa"]
+[ext_resource type="Material" path="res://assets/placeholder/materials/quilt_green.tres" id="60_f3yei"]
+[ext_resource type="Material" path="res://assets/placeholder/materials/curtain.tres" id="60_q7k3o"]
+[ext_resource type="Material" path="res://assets/placeholder/materials/quilt_gold.tres" id="61_kupa5"]
+[ext_resource type="PackedScene" path="res://scenes/prototype/dressing/hammock.tscn" id="62_f40ia"]
+[ext_resource type="Material" path="res://assets/placeholder/materials/curtain_mustard.tres" id="62_wb018"]
+[ext_resource type="PackedScene" path="res://scenes/prototype/dressing/hammock_blanket.tscn" id="63_eqhox"]
+[ext_resource type="PackedScene" path="res://scenes/prototype/props/crate.tscn" id="64_578ro"]
+[ext_resource type="Material" path="res://assets/placeholder/materials/curtain_rust.tres" id="64_lpcyg"]
+[ext_resource type="PackedScene" path="res://scenes/prototype/props/sea_chest.tscn" id="65_53i4f"]
+[ext_resource type="PackedScene" path="res://scenes/prototype/dressing/book_stack.tscn" id="66_s26w3"]
+[ext_resource type="PackedScene" path="res://scenes/prototype/dressing/fiddle.tscn" id="67_dwq2y"]
+[ext_resource type="PackedScene" path="res://scenes/prototype/dressing/sketchbook.tscn" id="68_dcd13"]
+[ext_resource type="PackedScene" path="res://scenes/prototype/dressing/fishing_tackle.tscn" id="69_q7k3o"]
+[ext_resource type="PackedScene" path="res://scenes/prototype/dressing/kit_bag.tscn" id="70_wb018"]
+[ext_resource type="PackedScene" path="res://scenes/prototype/dressing/your_things.tscn" id="71_lpcyg"]
+[ext_resource type="PackedScene" path="res://scenes/prototype/dressing/sock_line.tscn" id="72_wwen8"]
+[ext_resource type="PackedScene" path="res://scenes/prototype/dressing/boots.tscn" id="73_m4wtu"]
+[ext_resource type="PackedScene" path="res://scenes/prototype/props/bunk_stove.tscn" id="77_wwen8"]
+[ext_resource type="PackedScene" path="res://scenes/prototype/dressing/candle.tscn" id="78_m4wtu"]
+[ext_resource type="PackedScene" path="res://scenes/prototype/dressing/playing_cards.tscn" id="79_0hebc"]
+[ext_resource type="PackedScene" path="res://scenes/prototype/dressing/yarn_basket.tscn" id="80_e2kx3"]
+[ext_resource type="PackedScene" path="res://scenes/prototype/dressing/pinned_drawing.tscn" id="81_j4fk0"]
+[ext_resource type="PackedScene" path="res://scenes/prototype/dressing/pinned_letter.tscn" id="82_2b58a"]
+[ext_resource type="PackedScene" path="res://scenes/prototype/dressing/pressed_flower.tscn" id="83_xvtya"]
+[ext_resource type="PackedScene" path="res://scenes/prototype/dressing/sheepskin.tscn" id="84_03mpn"]
+[ext_resource type="PackedScene" path="res://scenes/prototype/dressing/folded_blankets.tscn" id="85_kgj3w"]
+[ext_resource type="PackedScene" path="res://scenes/prototype/dressing/navigator_things.tscn" id="88_1bt7x"]
+[ext_resource type="PackedScene" path="res://scenes/prototype/dressing/pinned_map.tscn" id="89_g41xf"]
+[ext_resource type="PackedScene" path="res://scenes/prototype/dressing/lure_line.tscn" id="90_03byx"]
+[ext_resource type="PackedScene" path="res://scenes/prototype/dressing/travel_bags.tscn" id="91_xpcgn"]
+[ext_resource type="PackedScene" path="res://scenes/prototype/dressing/half_read_book.tscn" id="92_ppwwk"]
+[ext_resource type="PackedScene" path="res://scenes/prototype/dressing/keepsakes.tscn" id="93_a6oxs"]
+[ext_resource type="PackedScene" path="res://scenes/prototype/dressing/draped_shirt.tscn" id="94_t8n68"]
+[ext_resource type="PackedScene" path="res://scenes/prototype/dressing/hung_coat.tscn" id="95_5640u"]
+[ext_resource type="PackedScene" path="res://scenes/prototype/props/chest_of_drawers.tscn" id="96_3t2l2"]
+[ext_resource type="PackedScene" path="res://scenes/prototype/props/coat_rack.tscn" id="97_mg3c3"]
+[ext_resource type="PackedScene" path="res://scenes/prototype/dressing/hanging_net.tscn" id="98_kqcv6"]
+[ext_resource type="PackedScene" path="res://scenes/prototype/props/box_stack.tscn" id="99_yrujx"]
+[ext_resource type="PackedScene" path="res://scenes/prototype/dressing/rope_coil.tscn" id="100_crers"]
+[ext_resource type="PackedScene" path="res://scenes/prototype/props/round_table.tscn" id="101_wor5e"]
+[ext_resource type="PackedScene" path="res://scenes/prototype/dressing/cushions.tscn" id="102_gpim1"]
+[ext_resource type="PackedScene" path="res://scenes/prototype/dressing/accordion.tscn" id="103_s5b5q"]
+[ext_resource type="PackedScene" path="res://scenes/prototype/dressing/copper_pot.tscn" id="104_m27ys"]
+[ext_resource type="PackedScene" uid="uid://bedsideyourbk" path="res://scenes/prototype/props/bedside.tscn" id="92_bedside"]
+[ext_resource type="PackedScene" uid="uid://se20svw4sdii" path="res://scenes/prototype/props/memory_note.tscn" id="93_note"]
+[ext_resource type="PackedScene" uid="uid://cp7jmlvmrpdhw" path="res://scenes/prototype/props/supper_spot.tscn" id="96_supper"]
+[ext_resource type="PackedScene" uid="uid://bwpkc5mofrie7" path="res://scenes/prototype/props/recipe_book.tscn" id="97_recipes"]
+[ext_resource type="PackedScene" path="res://scenes/prototype/props/boathook.tscn" id="310_boathook"]
+
+[sub_resource type="BoxMesh" id="BoxMesh_0hebc"]
+size = Vector3(10.34, 0.3, 0.28)
+
+[sub_resource type="BoxMesh" id="BoxMesh_e2kx3"]
+size = Vector3(9.06, 0.3, 0.28)
+
+[sub_resource type="BoxMesh" id="BoxMesh_j4fk0"]
+size = Vector3(9.06, 0.3, 0.28)
+
+[sub_resource type="PlaneMesh" id="PlaneMesh_2b58a"]
+size = Vector2(3.3, 2.7)
+
+[sub_resource type="BoxMesh" id="BoxMesh_xvtya"]
+size = Vector3(1.6, 0.05, 0.3)
+
+[sub_resource type="BoxMesh" id="BoxMesh_03mpn"]
+size = Vector3(1, 2.4, 0.7)
+
+[sub_resource type="BoxMesh" id="BoxMesh_kgj3w"]
+size = Vector3(0.42, 2.1, 0.03)
+
+[sub_resource type="BoxMesh" id="BoxMesh_absnv"]
+size = Vector3(0.42, 2.1, 0.03)
+
+[sub_resource type="BoxMesh" id="BoxMesh_5tfg4"]
+size = Vector3(11.4, 0.1, 5.7)
+
+[sub_resource type="BoxMesh" id="BoxMesh_drnti"]
+size = Vector3(9.1, 0.1, 1.12)
+
+[sub_resource type="BoxMesh" id="BoxMesh_p385s"]
+size = Vector3(0.28, 0.3, 6.82)
+
+[sub_resource type="BoxMesh" id="BoxMesh_35knl"]
+size = Vector3(0.28, 0.3, 5.7)
+
+[sub_resource type="BoxMesh" id="BoxMesh_hn0g1"]
+size = Vector3(9.06, 0.3, 0.28)
+
+[sub_resource type="PlaneMesh" id="PlaneMesh_1bt7x"]
+size = Vector2(5.8, 0.8)
+
+[sub_resource type="BoxMesh" id="BoxMesh_g41xf"]
+size = Vector3(1.1, 0.04, 0.22)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_5tfg4"]
+size = Vector3(1, 2.4, 0.7)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_03byx"]
+size = Vector3(11.4, 0.1, 5.7)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_xpcgn"]
+size = Vector3(9.1, 0.1, 1.12)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_j4fk0"]
+size = Vector3(10.34, 0.3, 0.28)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_2b58a"]
+size = Vector3(9.06, 0.3, 0.28)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_xvtya"]
+size = Vector3(9.06, 0.3, 0.28)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_03mpn"]
+size = Vector3(9.06, 0.3, 0.28)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_kgj3w"]
+size = Vector3(0.28, 0.3, 5.7)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_absnv"]
+size = Vector3(0.28, 0.3, 6.82)
+
+[node name="BunkRoom" type="StaticBody3D" unique_id=76019696]
+
+[node name="BunkLantern" parent="." unique_id=563678933 instance=ExtResource("23_lantern")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2, 3.7, 10.7)
+light_energy = 0.75
+light_range = 4.2
+swing_degrees = 3.0
+period = 4.2
+phase = 0.1
+
+[node name="PortholeBunks" parent="." unique_id=202977618 instance=ExtResource("24_porthole")]
+transform = Transform3D(0, 0, -1, 0, 1, 0, 1, 0, 0, 5.7, 2.3, 11)
+
+[node name="BunkBeam1" type="MeshInstance3D" parent="." unique_id=259794004]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.53, 3.85, 9)
+material_override = ExtResource("28_darkwood")
+mesh = SubResource("BoxMesh_0hebc")
+
+[node name="BunkBeam2" type="MeshInstance3D" parent="." unique_id=1594600351]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3.85, 10.7)
+material_override = ExtResource("28_darkwood")
+mesh = SubResource("BoxMesh_e2kx3")
+
+[node name="BunkBeam3" type="MeshInstance3D" parent="." unique_id=778536714]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3.85, 12.4)
+material_override = ExtResource("28_darkwood")
+mesh = SubResource("BoxMesh_j4fk0")
+
+[node name="BunkRug" type="MeshInstance3D" parent="." unique_id=2131719522]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.55, 1.024, 11.8)
+material_override = ExtResource("21_hn0g1")
+mesh = SubResource("PlaneMesh_2b58a")
+
+[node name="PortholeSternPort" parent="." unique_id=724771063 instance=ExtResource("24_porthole")]
+transform = Transform3D(1.2, 0, 0, 0, 1.2, 0, 0, 0, 1.2, -1.6, 2.6, 14.7)
+
+[node name="Moonlight" parent="PortholeSternPort" index="14"]
+light_energy = 4.3
+
+[node name="PortholeSternStarboard" parent="." unique_id=34770125 instance=ExtResource("24_porthole")]
+transform = Transform3D(1.2, 0, 0, 0, 1.2, 0, 0, 0, 1.2, 1.6, 2.6, 14.7)
+
+[node name="Moonlight" parent="PortholeSternStarboard" index="14"]
+light_energy = 4.3
+
+[node name="SternShelf" type="MeshInstance3D" parent="." unique_id=462394048]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.2, 14.55)
+material_override = ExtResource("28_darkwood")
+mesh = SubResource("BoxMesh_xvtya")
+
+[node name="Locker" type="MeshInstance3D" parent="." unique_id=1621268958]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -5.2, 2.2, 14.35)
+material_override = ExtResource("28_darkwood")
+mesh = SubResource("BoxMesh_03mpn")
+
+[node name="LockerDoor" type="MeshInstance3D" parent="." unique_id=1165697933]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4.95, 2.2, 13.99)
+material_override = ExtResource("27_propwood")
+mesh = SubResource("BoxMesh_kgj3w")
+
+[node name="LockerDoor2" type="MeshInstance3D" parent="." unique_id=1747282659]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -5.45, 2.2, 13.99)
+material_override = ExtResource("27_propwood")
+mesh = SubResource("BoxMesh_absnv")
+
+[node name="BunkLanternAft" parent="." unique_id=1702864721 instance=ExtResource("23_lantern")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.3, 3.7, 12.4)
+light_energy = 0.7
+light_range = 3.2
+casts_shadows = false
+phase = 0.55
+
+[node name="BunkProbe" type="ReflectionProbe" parent="." unique_id=1527300800]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.5, 11.3)
+intensity = 0.5
+blend_distance = 0.3
+size = Vector3(11.5, 3.1, 6.9)
+box_projection = true
+interior = true
+ambient_mode = 2
+ambient_color = Color(0.3, 0.19, 0.12, 1)
+ambient_color_energy = 0.3
+
+[node name="BunkCeiling" type="MeshInstance3D" parent="." unique_id=1588990463]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 4.05, 11.85)
+material_override = ExtResource("17_floor")
+mesh = SubResource("BoxMesh_5tfg4")
+
+[node name="BunkCeilingFore" type="MeshInstance3D" parent="." unique_id=952883056]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.15, 4.05, 8.44)
+material_override = ExtResource("17_floor")
+mesh = SubResource("BoxMesh_drnti")
+
+[node name="BunkHeaderStarboard" type="MeshInstance3D" parent="." unique_id=2018247633]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4.6, 3.85, 11.29)
+material_override = ExtResource("28_darkwood")
+mesh = SubResource("BoxMesh_p385s")
+
+[node name="BunkHeaderPort" type="MeshInstance3D" parent="." unique_id=1347805102]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4.6, 3.85, 11.85)
+material_override = ExtResource("28_darkwood")
+mesh = SubResource("BoxMesh_35knl")
+
+[node name="BunkBeam4" type="MeshInstance3D" parent="." unique_id=1135565794]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3.85, 14)
+material_override = ExtResource("28_darkwood")
+mesh = SubResource("BoxMesh_hn0g1")
+
+[node name="BunkRunner" type="MeshInstance3D" parent="." unique_id=1018821072]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.7, 1.022, 9.35)
+material_override = ExtResource("22_hn0g1")
+mesh = SubResource("PlaneMesh_1bt7x")
+
+[node name="PartitionShelf" type="MeshInstance3D" parent="." unique_id=1606085955]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.7, 2.55, 7.99)
+material_override = ExtResource("28_darkwood")
+mesh = SubResource("BoxMesh_g41xf")
+
+[node name="StarboardBay1" parent="." unique_id=1493438848 instance=ExtResource("57_1yecb")]
+transform = Transform3D(-4.371139e-08, 0, -1, 0, 1, 0, 1, 0, -4.371139e-08, 5.7, 1, 9.05)
+lower_quilt = ExtResource("58_alpw3")
+upper_quilt = ExtResource("59_dlopa")
+lower_bedding = 1
+curtain_cloth = ExtResource("60_q7k3o")
+lamp_lit = true
+upper_lamp_lit = true
+
+[node name="StarboardBay2" parent="." unique_id=1621438252 instance=ExtResource("57_1yecb")]
+transform = Transform3D(-4.371139e-08, 0, -1, 0, 1, 0, 1, 0, -4.371139e-08, 5.7, 1, 11.25)
+lower_quilt = ExtResource("60_f3yei")
+upper_quilt = ExtResource("58_alpw3")
+lower_bedding = 1
+curtain_cloth = ExtResource("62_wb018")
+lamp_lit = true
+upper_lamp_lit = true
+
+[node name="YourBunk" parent="." unique_id=637154212 instance=ExtResource("57_1yecb")]
+transform = Transform3D(-4.371139e-08, 0, -1, 0, 1, 0, 1, 0, -4.371139e-08, 5.7, 1, 13.45)
+lower_quilt = ExtResource("61_kupa5")
+upper_quilt = ExtResource("60_f3yei")
+curtain_cloth = ExtResource("60_q7k3o")
+lamp_lit = true
+
+[node name="Bedside" parent="." unique_id=1903317741 instance=ExtResource("92_bedside")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4.55, 1, 13.45)
+
+[node name="RecipeBook" parent="." unique_id=1784302214 instance=ExtResource("97_recipes")]
+transform = Transform3D(1.3156, 0, 0.4788, 0, 1.4, 0, -0.4788, 0, 1.3156, 5.15, 1.80, 13.3)
+
+[node name="MemoryNote" parent="." unique_id=1188350219 instance=ExtResource("93_note")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4.7, 1.5, 12.85)
+
+[node name="SupperSpot" parent="." unique_id=1188350220 instance=ExtResource("96_supper")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1, 1.575, 11.2)
+
+[node name="PortBay1" parent="." unique_id=752909106 instance=ExtResource("57_1yecb")]
+transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, -5.7, 1, 10.6)
+lower_quilt = ExtResource("59_dlopa")
+upper_quilt = ExtResource("60_f3yei")
+lower_bedding = 1
+upper_bedding = 1
+curtain_cloth = ExtResource("64_lpcyg")
+upper_curtains_closed = true
+lamp_lit = true
+upper_lamp_lit = true
+
+[node name="PortBay2" parent="." unique_id=1714420396 instance=ExtResource("57_1yecb")]
+transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, -5.7, 1, 12.8)
+lower_quilt = ExtResource("58_alpw3")
+upper_quilt = ExtResource("59_dlopa")
+lower_bedding = 1
+curtain_cloth = ExtResource("62_wb018")
+lower_curtains_closed = true
+upper_lamp_lit = true
+
+[node name="HammockPort" parent="." unique_id=1923203812 instance=ExtResource("62_f40ia")]
+transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, -2.6, 3.7, 14)
+
+[node name="HammockStarboard" parent="." unique_id=423136997 instance=ExtResource("63_eqhox")]
+transform = Transform3D(-4.371139e-08, 0, -1, 0, 1, 0, 1, 0, -4.371139e-08, 2.6, 3.7, 14)
+
+[node name="Crate1" parent="." unique_id=228142780 instance=ExtResource("64_578ro")]
+transform = Transform3D(0.9945218, 0, 0.10452845, 0, 1, 0, -0.10452845, 0, 0.9945218, 3.45, 1, 8.2)
+
+[node name="Crate2" parent="." unique_id=1770081867 instance=ExtResource("64_578ro")]
+transform = Transform3D(0.9902679, 0, -0.13917308, 0, 1, 0, 0.13917308, 0, 0.9902679, 4.1, 1, 8.3)
+
+[node name="Crate3" parent="." unique_id=2094557015 instance=ExtResource("64_578ro")]
+transform = Transform3D(0.92718375, 0, 0.37460655, 0, 1, 0, -0.37460655, 0, 0.92718375, 4.05, 1.6, 8.3)
+
+[node name="SeaChest1" parent="." unique_id=1150501973 instance=ExtResource("65_53i4f")]
+transform = Transform3D(0.61566144, 0, -0.7880106, 0, 1, 0, 0.7880106, 0, 0.61566144, -0.25, 1, 12.4)
+
+[node name="Barrel" parent="." unique_id=2088194177 instance=ExtResource("25_barrel")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.4, 1, 8.3)
+
+[node name="SternBooks" parent="." unique_id=350227956 instance=ExtResource("66_s26w3")]
+transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, -0.4, 2.225, 14.55)
+
+[node name="SternBottle" parent="." unique_id=380193948 instance=ExtResource("55_s5wn3")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.35, 2.225, 14.55)
+
+[node name="SeaChest2" parent="." unique_id=559302274 instance=ExtResource("65_53i4f")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3.05, 1, 14.3)
+
+[node name="SeaChest3" parent="." unique_id=924273532 instance=ExtResource("65_53i4f")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3, 1, 14.3)
+
+[node name="Fiddle" parent="." unique_id=1055618255 instance=ExtResource("67_dwq2y")]
+transform = Transform3D(0.34202015, 0, -0.9396926, 0, 1, 0, 0.9396926, 0, 0.34202015, 5.15, 1.64, 8.85)
+
+[node name="Sketchbook" parent="." unique_id=1682722775 instance=ExtResource("68_dcd13")]
+transform = Transform3D(-0.17364813, 0, -0.9848074, 0, 1, 0, 0.9848074, 0, -0.17364813, 5.1, 1.64, 10.95)
+
+[node name="FishingTackle" parent="." unique_id=1056964099 instance=ExtResource("69_q7k3o")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4.92, 2.975, 11.35)
+
+[node name="KitBag" parent="." unique_id=2012068729 instance=ExtResource("70_wb018")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5.2, 2.975, 13.9)
+
+[node name="BunkBooks" parent="." unique_id=52628745 instance=ExtResource("66_s26w3")]
+transform = Transform3D(0.76604414, 0, 0.64278734, 0, 1, 0, -0.64278734, 0, 0.76604414, -5.2, 1.64, 11)
+
+[node name="YourThings" parent="." unique_id=1530363745 instance=ExtResource("71_lpcyg")]
+transform = Transform3D(-4.371139e-08, 0, -1, 0, 1, 0, 1, 0, -4.371139e-08, 4.95, 1.68, 13.05)
+
+[node name="SockLine" parent="." unique_id=281545127 instance=ExtResource("72_wwen8")]
+transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, 1.6, 3.69, 11.55)
+
+[node name="Boots1" parent="." unique_id=1741344763 instance=ExtResource("73_m4wtu")]
+transform = Transform3D(-0.8660254, 0, -0.50000006, 0, 1, 0, 0.50000006, 0, -0.8660254, 0.25, 1, 10.85)
+
+[node name="Boots2" parent="." unique_id=1327476476 instance=ExtResource("73_m4wtu")]
+transform = Transform3D(0.34202015, 0, 0.9396926, 0, 1, 0, -0.9396926, 0, 0.34202015, -4.35, 1, 13.55)
+
+[node name="Motes" type="GPUParticles3D" parent="." unique_id=609505840]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.6, 2.4, 11.7)
+script = ExtResource("26_motes")
+extents = Vector3(2.4, 0.8, 2)
+
+[node name="Stove" parent="." unique_id=1650650223 instance=ExtResource("77_wwen8")]
+transform = Transform3D(-0.84804803, 0, -0.5299193, 0, 1, 0, 0.5299193, 0, -0.84804803, 0.6, 1, 11.8)
+
+[node name="NookStool1" parent="." unique_id=1958512828 instance=ExtResource("46_stool")]
+transform = Transform3D(0.93969256, 0, 0.3420201, 0, 1, 0, -0.3420201, 0, 0.93969256, 1.45, 1, 11.05)
+
+[node name="NookStool2" parent="." unique_id=266380254 instance=ExtResource("46_stool")]
+transform = Transform3D(0.98480767, 0, -0.17364816, 0, 1, 0, 0.17364816, 0, 0.98480767, 1.55, 1, 12.6)
+
+[node name="NookCandle" parent="." unique_id=1599568112 instance=ExtResource("78_m4wtu")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.15, 1.575, 11.05)
+
+[node name="PlayingCards" parent="." unique_id=1616050962 instance=ExtResource("79_0hebc")]
+transform = Transform3D(0.93969256, 0, 0.3420201, 0, 1, 0, -0.3420201, 0, 0.93969256, -0.95, 1.575, 11.3)
+
+[node name="NookMug" parent="." unique_id=1608033833 instance=ExtResource("50_mug")]
+transform = Transform3D(0.49999997, 0, 0.86602545, 0, 1, 0, -0.86602545, 0, 0.49999997, -0.75, 1.575, 11.05)
+
+[node name="YarnBasket" parent="." unique_id=846965033 instance=ExtResource("80_e2kx3")]
+transform = Transform3D(0.8660254, 0, 0.5, 0, 1, 0, -0.5, 0, 0.8660254, -0.75, 1, 12.95)
+
+[node name="StarboardPinLower1" parent="." unique_id=94167988 instance=ExtResource("81_j4fk0")]
+transform = Transform3D(-4.371139e-08, 0, -1, 0, 1, 0, 1, 0, -4.371139e-08, 5.69, 2.15, 9.55)
+
+[node name="StarboardPinUpper1" parent="." unique_id=18120452 instance=ExtResource("82_2b58a")]
+transform = Transform3D(-4.371139e-08, 0, -1, 0, 1, 0, 1, 0, -4.371139e-08, 5.69, 3.4, 8.7)
+
+[node name="StarboardPinUpper2" parent="." unique_id=777997416 instance=ExtResource("83_xvtya")]
+transform = Transform3D(-4.371139e-08, 0, -1, 0, 1, 0, 1, 0, -4.371139e-08, 5.69, 3.4, 11.75)
+
+[node name="StarboardPinUpper3" parent="." unique_id=302029057 instance=ExtResource("82_2b58a")]
+transform = Transform3D(-4.371139e-08, 0, -1, 0, 1, 0, 1, 0, -4.371139e-08, 5.69, 3.42, 13.95)
+
+[node name="PortPinLower1" parent="." unique_id=2142347209 instance=ExtResource("82_2b58a")]
+transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, -5.69, 2.15, 11)
+
+[node name="PortPinUpper1" parent="." unique_id=1123015117 instance=ExtResource("81_j4fk0")]
+transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, -5.69, 3.4, 11.2)
+
+[node name="PortPinUpper2" parent="." unique_id=1844287417 instance=ExtResource("83_xvtya")]
+transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, -5.69, 3.4, 13.3)
+
+[node name="Sheepskin" parent="." unique_id=138094486 instance=ExtResource("84_03mpn")]
+transform = Transform3D(0.990268, 0, 0.13917309, 0, 1, 0, -0.13917309, 0, 0.990268, 4.15, 1.004, 13.45)
+
+[node name="FoldedBlankets" parent="." unique_id=339562853 instance=ExtResource("85_kgj3w")]
+transform = Transform3D(0.9975641, 0, 0.06975647, 0, 1, 0, -0.06975647, 0, 0.9975641, -3.05, 1.56, 14.3)
+
+[node name="BunkCoatHooks" parent="." unique_id=986047007 instance=ExtResource("48_p2e1w")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.3, 3, 7.9)
+
+[node name="PartitionBooks" parent="." unique_id=33378407 instance=ExtResource("66_s26w3")]
+transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, 2.45, 2.57, 7.99)
+
+[node name="PartitionMug" parent="." unique_id=1702834716 instance=ExtResource("50_mug")]
+transform = Transform3D(0.93969256, 0, 0.3420201, 0, 1, 0, -0.3420201, 0, 0.93969256, 3, 2.57, 8)
+
+[node name="SternCandle1" parent="." unique_id=1658483965 instance=ExtResource("78_m4wtu")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.68, 2.225, 14.6)
+
+[node name="SternCandle2" parent="." unique_id=1834902539 instance=ExtResource("78_m4wtu")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.7, 2.225, 14.6)
+
+[node name="NavigatorThings" parent="." unique_id=476225832 instance=ExtResource("88_1bt7x")]
+transform = Transform3D(0.17364818, 0, -0.9848075, 0, 1, 0, 0.9848075, 0, 0.17364818, 5.2, 2.975, 9.25)
+
+[node name="NavigatorMap" parent="." unique_id=851025564 instance=ExtResource("89_g41xf")]
+transform = Transform3D(-4.371139e-08, 0, -1, 0, 1, 0, 1, 0, -4.371139e-08, 5.69, 3.42, 9.6)
+
+[node name="ArtistPin1" parent="." unique_id=49687037 instance=ExtResource("81_j4fk0")]
+transform = Transform3D(-4.371139e-08, 0, -1, 0, 1, 0, 1, 0, -4.371139e-08, 5.69, 2.12, 11.75)
+
+[node name="ArtistPin2" parent="." unique_id=1383869948 instance=ExtResource("81_j4fk0")]
+transform = Transform3D(-4.371139e-08, 0, -1, 0, 1, 0, 1, 0, -4.371139e-08, 5.69, 2.24, 12.05)
+
+[node name="LureLine" parent="." unique_id=1275565973 instance=ExtResource("90_03byx")]
+transform = Transform3D(-4.371139e-08, 0, -1, 0, 1, 0, 1, 0, -4.371139e-08, 5.62, 3.62, 11.25)
+
+[node name="SpareBags" parent="." unique_id=1061909044 instance=ExtResource("91_xpcgn")]
+transform = Transform3D(0.17364818, 0, -0.9848075, 0, 1, 0, 0.9848075, 0, 0.17364818, 5.2, 2.975, 13.2)
+
+[node name="HalfReadBook" parent="." unique_id=230768967 instance=ExtResource("92_ppwwk")]
+transform = Transform3D(0.8660254, 0, 0.5, 0, 1, 0, -0.5, 0, 0.8660254, -4.98, 1.64, 10.78)
+
+[node name="CollectorKeepsakes" parent="." unique_id=1416618971 instance=ExtResource("93_a6oxs")]
+transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, -5.2, 2.975, 12.45)
+
+[node name="DrapedShirt" parent="." unique_id=880653101 instance=ExtResource("94_t8n68")]
+transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, -4.63, 2.2, 9.9)
+
+[node name="BosunCoat" parent="." unique_id=982154316 instance=ExtResource("95_5640u")]
+transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, -4.68, 3.15, 13.79)
+
+[node name="Boots3" parent="." unique_id=1070198248 instance=ExtResource("73_m4wtu")]
+transform = Transform3D(0.0435779, -0.49809733, -0.86602545, 0.9961947, 0.087155804, 0, 0.07547914, -0.86272997, 0.49999997, 4.5, 1.06, 11.95)
+
+[node name="Boots4" parent="." unique_id=2142317016 instance=ExtResource("73_m4wtu")]
+transform = Transform3D(0.17364818, 0, 0.9848075, 0, 1, 0, -0.9848075, 0, 0.17364818, -4.45, 1, 10.25)
+
+[node name="ChestOfDrawers" parent="." unique_id=581257953 instance=ExtResource("96_3t2l2")]
+transform = Transform3D(-1, 0, -8.742278e-08, 0, 1, 0, 8.742278e-08, 0, -1, -4.05, 1, 14.47)
+
+[node name="DrawerKeepsakes" parent="." unique_id=1205282703 instance=ExtResource("93_a6oxs")]
+transform = Transform3D(-1, 0, -8.742278e-08, 0, 1, 0, 8.742278e-08, 0, -1, -4, 2.025, 14.5)
+
+[node name="SternMap" parent="." unique_id=1630253388 instance=ExtResource("89_g41xf")]
+transform = Transform3D(-1, 0, -8.742278e-08, 0, 1, 0, 8.742278e-08, 0, -1, -4.05, 2.62, 14.69)
+
+[node name="CoatRack" parent="." unique_id=519279124 instance=ExtResource("97_mg3c3")]
+transform = Transform3D(-0.9396926, 0, -0.34202015, 0, 1, 0, 0.34202015, 0, -0.9396926, -2.25, 1, 14.38)
+
+[node name="HangingNet" parent="." unique_id=1486193487 instance=ExtResource("98_kqcv6")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4.3, 3.98, 13.4)
+
+[node name="LockerBags" parent="." unique_id=866319073 instance=ExtResource("91_xpcgn")]
+transform = Transform3D(-0.17364815, 0, 0.9848075, 0, 1, 0, -0.9848075, 0, -0.17364815, -5.2, 3.4, 14.35)
+
+[node name="BoxStack" parent="." unique_id=1946040101 instance=ExtResource("99_yrujx")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.75, 1, 8.12)
+
+[node name="RopeCoil" parent="." unique_id=580482803 instance=ExtResource("100_crers")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.95, 2.75, 7.9)
+
+[node name="RoundTable" parent="." unique_id=944516352 instance=ExtResource("101_wor5e")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1, 1, 11.2)
+
+[node name="NookMug2" parent="." unique_id=1777232281 instance=ExtResource("50_mug")]
+transform = Transform3D(0.8660254, 0, -0.5, 0, 1, 0, 0.5, 0, 0.8660254, -1.25, 1.575, 11.4)
+
+[node name="Cushions" parent="." unique_id=59444267 instance=ExtResource("102_gpim1")]
+transform = Transform3D(0.6156615, 0, -0.7880107, 0, 1, 0, 0.7880107, 0, 0.6156615, -0.25, 1.565, 12.4)
+
+[node name="Accordion" parent="." unique_id=1699840431 instance=ExtResource("103_s5b5q")]
+transform = Transform3D(0.8660254, 0, -0.5, 0, 1, 0, 0.5, 0, 0.8660254, 1.55, 1.28, 12.6)
+
+[node name="CopperPot" parent="." unique_id=446833367 instance=ExtResource("104_m27ys")]
+transform = Transform3D(0.93969256, 0, 0.3420201, 0, 1, 0, -0.3420201, 0, 0.93969256, 1.1, 1.06, 11.45)
+
+[node name="DrawerCandle" parent="." unique_id=1383662254 instance=ExtResource("78_m4wtu")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4.45, 2.025, 14.5)
+
+[node name="LockerShape" type="CollisionShape3D" parent="." unique_id=326152585]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -5.2, 2.2, 14.35)
+shape = SubResource("BoxShape3D_5tfg4")
+
+[node name="BunkCeilingShape" type="CollisionShape3D" parent="." unique_id=343482419]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 4.05, 11.85)
+shape = SubResource("BoxShape3D_03byx")
+
+[node name="BunkCeilingForeShape" type="CollisionShape3D" parent="." unique_id=2108093651]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.15, 4.05, 8.44)
+shape = SubResource("BoxShape3D_xpcgn")
+
+[node name="BunkBeam1Shape" type="CollisionShape3D" parent="." unique_id=105799344]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.53, 3.85, 9)
+shape = SubResource("BoxShape3D_j4fk0")
+
+[node name="BunkBeam2Shape" type="CollisionShape3D" parent="." unique_id=546900450]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3.85, 10.7)
+shape = SubResource("BoxShape3D_2b58a")
+
+[node name="BunkBeam3Shape" type="CollisionShape3D" parent="." unique_id=555509062]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3.85, 12.4)
+shape = SubResource("BoxShape3D_xvtya")
+
+[node name="BunkBeam4Shape" type="CollisionShape3D" parent="." unique_id=434234182]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3.85, 14)
+shape = SubResource("BoxShape3D_03mpn")
+
+[node name="BunkHeaderPortShape" type="CollisionShape3D" parent="." unique_id=1293391110]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4.6, 3.85, 11.85)
+shape = SubResource("BoxShape3D_kgj3w")
+
+[node name="BunkHeaderStarboardShape" type="CollisionShape3D" parent="." unique_id=827518501]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4.6, 3.85, 11.29)
+shape = SubResource("BoxShape3D_absnv")
+
+[node name="Boathook" parent="." instance=ExtResource("310_boathook")]
+transform = Transform3D(1, 0, 0, 0, 0.99, 0.139, 0, -0.139, 0.99, -1.8, 1, 8.2)
+
+[editable path="PortholeSternPort"]
+
+[editable path="PortholeSternStarboard"]

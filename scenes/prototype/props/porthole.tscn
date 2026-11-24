@@ -3,6 +3,8 @@
 [ext_resource type="Material" path="res://assets/placeholder/materials/brass.tres" id="1_x"]
 [ext_resource type="Shader" path="res://shaders/rain_glass.gdshader" id="2_x"]
 [ext_resource type="Script" path="res://scripts/props/porthole.gd" id="3_x"]
+[ext_resource type="Script" path="res://scripts/ship/hull_opening.gd" id="196_opening"]
+[ext_resource type="Resource" path="res://data/ship/hull_outline.tres" id="196_outline"]
 
 [sub_resource type="TorusMesh" id="R1"]
 inner_radius = 0.27
@@ -111,3 +113,8 @@ light_energy = 3.5
 spot_range = 7.0
 spot_angle = 30.0
 spot_attenuation = 0.8
+
+[node name="HullOpening" type="Node3D" parent="."]
+script = ExtResource("196_opening")
+radius = 0.27
+outline = ExtResource("196_outline")

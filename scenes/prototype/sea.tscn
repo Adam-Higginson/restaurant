@@ -1,5 +1,6 @@
 [gd_scene format=3 uid="uid://ctpgvenmhd26t"]
 
+[ext_resource type="Resource" path="res://data/ship/hull_outline.tres" id="196_outline"]
 [ext_resource type="PackedScene" path="res://scenes/prototype/story.tscn" id="320_story"]
 [ext_resource type="Script" path="res://scripts/cutscene/stage_cues.gd" id="308_stages"]
 [ext_resource type="Script" path="res://scripts/cutscene/storm_cues.gd" id="310_storm"]
@@ -127,6 +128,7 @@ loop_route = true
 
 [node name="LeapingFish" type="Node3D" parent="Ship"]
 script = ExtResource("197_fish")
+outline = ExtResource("196_outline")
 
 [node name="Player" parent="." unique_id=1279594075 instance=ExtResource("7_p3dpl")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -23.5, 5.35, 47)

@@ -27,7 +27,7 @@ func test_turned_on_they_jump_beside_her_and_forward_over_the_sea() -> void:
 			seen += 1
 			highest = maxf(highest, at.y)
 			# Out from her side, never under her.
-			assert_float(absf(at.x)).is_greater(fish.out_from.x - 2.0)
+			assert_float(absf(at.x)).is_greater(LeapingFish.SIDE + fish.out_from.x - 0.6)
 			assert_float(at.y).is_greater_equal(fish.sea_level - 0.001)
 
 	assert_int(seen).is_greater(0)
@@ -72,6 +72,26 @@ func test_turned_off_the_ones_in_the_air_land_and_no_more_leap() -> void:
 	assert_int(fish.in_the_air()).is_equal(0)
 	await physics_ticks(runner, 120)
 	assert_int(fish.in_the_air()).is_equal(0)
+
+
+func test_with_her_hulls_shape_none_leap_from_inside_it() -> void:
+	# The hull is wider than the old box near the sea, most of all aft (#196).
+	var fish: LeapingFish = _fish()
+	fish.outline = load("res://data/ship/hull_outline.tres") as HullOutline
+	var runner: GdUnitSceneRunner = scene_runner(fish.get_parent())
+	await physics_ticks(runner, 2)
+
+	fish.leaping = true
+	var seen: int = 0
+	for i: int in 180:
+		await physics_ticks(runner, 1)
+		for at: Vector3 in fish.fish_positions():
+			seen += 1
+			var hull: float = fish.outline.half_width_at(at.z, at.y)
+			assert_float(absf(at.x)).override_failure_message("A fish in the hull at %s" % at) \
+					.is_greater(hull)
+
+	assert_int(seen).is_greater(0)
 
 
 func _fish() -> LeapingFish:

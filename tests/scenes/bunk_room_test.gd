@@ -58,7 +58,7 @@ func test_the_stern_has_two_windows_through_it() -> void:
 			holes += 1
 	assert_int(holes).is_equal(2)
 	for side: String in ["Port", "Starboard"]:
-		assert_object(ship.get_node("Visuals/PortholeStern" + side) as Porthole).is_not_null()
+		assert_object(ship.get_node("BunkRoom/PortholeStern" + side) as Porthole).is_not_null()
 
 
 func test_only_the_stove_and_one_lantern_cast_shadows() -> void:
@@ -74,7 +74,7 @@ func test_only_the_stove_and_one_lantern_cast_shadows() -> void:
 			shadowed.append(str(ship.get_path_to(light)))
 	assert_array(shadowed).override_failure_message(
 			"Lights casting shadows in the bunk room: %s" % [shadowed]) \
-			.contains_exactly_in_any_order(["BunkRoom/Stove/FireLight", "Visuals/BunkLantern/Light"])
+			.contains_exactly_in_any_order(["BunkRoom/Stove/FireLight", "BunkRoom/BunkLantern/Light"])
 
 
 func test_a_low_ceiling_closes_the_room_except_over_the_ramp() -> void:
@@ -104,7 +104,7 @@ func test_the_stove_warms_the_middle_of_the_room() -> void:
 
 func test_the_bunk_room_has_its_own_dim_ambient_light() -> void:
 	var ship: Ship = new_moored_ship_with_player(Vector3(0, 1.05, 11))[0] as Ship
-	var probe: ReflectionProbe = ship.get_node("Visuals/BunkProbe") as ReflectionProbe
+	var probe: ReflectionProbe = ship.get_node("BunkRoom/BunkProbe") as ReflectionProbe
 	assert_bool(probe.interior).is_true()
 	assert_int(probe.ambient_mode).is_equal(ReflectionProbe.AMBIENT_COLOR)
 

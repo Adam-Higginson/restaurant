@@ -1,5 +1,6 @@
 [gd_scene format=3 uid="uid://b1ta0w2reu1xn"]
 
+[ext_resource type="Script" path="res://scripts/art/third_party_model.gd" id="196_meshy"]
 [ext_resource type="Script" path="res://scripts/props/galley_stove.gd" id="1_8xfak"]
 [ext_resource type="Material" path="res://assets/placeholder/materials/stone.tres" id="2_nemon"]
 [ext_resource type="Material" path="res://assets/placeholder/materials/soot.tres" id="3_bxpp2"]
@@ -328,3 +329,14 @@ shape = SubResource("BoxShape3D_mdfui")
 [node name="ChimneyShape" type="CollisionShape3D" parent="." unique_id=1158850892]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.42, 3.9, -0.15)
 shape = SubResource("CylinderShape3D_krnr7")
+
+[node name="Meshy" type="Node3D" parent="." node_paths=PackedStringArray("stand_ins")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0.17)
+script = ExtResource("196_meshy")
+path = "res://assets/third_party/meshy/galley_hearth/model/model.glb"
+fit_size = Vector3(1.62, 1.8, 1.15)
+stretch = true
+stand_ins = [NodePath("../Plinth"), NodePath("../Back"), NodePath("../PierLeft"), NodePath("../PierRight"), NodePath("../Lintel"), NodePath("../Sill"), NodePath("../SootBack"), NodePath("../SootLeft"), NodePath("../SootRight"), NodePath("../SootTop"), NodePath("../EmberBed"), NodePath("../LogBack"), NodePath("../LogFront"), NodePath("../Fire"), NodePath("../ArchStone1"), NodePath("../ArchStone2"), NodePath("../ArchStone3"), NodePath("../ArchStone4"), NodePath("../ArchStone5"), NodePath("../Quoin1"), NodePath("../Quoin2"), NodePath("../Quoin3"), NodePath("../Quoin4"), NodePath("../Top"), NodePath("../Rail"), NodePath("../RailBracket1"), NodePath("../RailBracket2"), NodePath("../Flue"), NodePath("../FlueCollar")]
+grain = false
+detail = 1.0
+keep_as_made = true

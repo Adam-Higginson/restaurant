@@ -706,6 +706,30 @@ A growing glossary of the Godot concepts this project uses: what each one is, in
 
 **Recording the game (Movie Maker).** `godot_console.exe --path . --write-movie out.avi --fixed-fps 30 <scene>` runs the scene and saves every frame and its sound to a video, at a steady 30 frames a second however slow the machine is. *Ours:* how the montage was recorded to send round.
 
+## The ship made (#196)
+
+**Moving a mesh's points.** `mesh.surface_get_arrays(0)` gives a surface's points, normals, texture coordinates and triangles as arrays you can change and build a new mesh from (`SurfaceTool.create_from_arrays`, then `commit()`). Stretch a model unevenly and its normals must be divided by the stretch, not multiplied. *Ours:* `HullShell.fit_mesh` fits the Meshy hull to the ship as it loads.
+
+**Leaving pixels undrawn (`discard`).** In a shader, `discard;` drops the pixel: nothing is drawn there, as if the surface had a hole. It drops it from the shadows too, so light comes through. *Ours:* `hull_shell.gdshader` leaves a hole wherever a `HullOpening` is.
+
+**Which side of a face you're seeing.** In a shader, `FRONT_FACING` is true when you see a triangle from its front. Godot draws a triangle's front where its corners run clockwise. *Ours:* the hull's planks go on its inside skin seen from the front, and on its outer skin seen from behind (through a hole in the inside).
+
+**Data in a vertex's colour.** A mesh's vertex colour (`COLOR` in a shader) can carry any number a shader needs, not only a colour. *Ours:* `HullShell.outer_skin` marks each of the hull's triangles white (outside) or black (inside).
+
+**A per-copy shader setting (`instance uniform`).** One material shared by many meshes, each with its own value: `mesh.set_instance_shader_parameter(&"cover", colour)`. *Ours:* every `ShelfBook` shares one material and sets its own cover colour.
+
+**Collision given to a body.** A physics body only feels `CollisionShape3D`s that are its direct children, or shapes handed to it in code: `create_shape_owner(self)` then `shape_owner_add_shape(id, shape)`. *Ours:* `DeckEdge` gives the ship its decks' edges and walls.
+
+**When a loaded resource is freed.** `load()` keeps a resource only while something holds it. Free the last scene using a model and the model goes; the next `load()` reads it from disk again. A `static var` (one shared by every copy of a script, for the whole run) can hold on to it. *Ours:* `ThirdPartyModel._loaded`, `HullShell._fitted`.
+
+**Children that aren't saved.** `add_child(node, false, Node.INTERNAL_MODE_BACK)` adds an internal child: it's drawn, but it isn't in the Scene dock and isn't saved with the scene. *Ours:* the hull, the decks' edges, the books in a row, a porthole's sleeve.
+
+**A tool script's resources must be tools too.** In the editor, a `@tool` script calling a `Resource`'s functions fails ("placeholder instance") unless that resource's script is `@tool` too. *Ours:* `HullOutline`, used by `DeckEdge`.
+
+**A setting just for builds (feature overrides).** A project setting with `.release` (or `.debug`, `.windows`, ...) on the end of its name wins only where that feature tag is on: `display/window/size/mode.release=3` makes exported release builds start fullscreen while the game run from the editor (a debug run) keeps its window. In the Project Settings window, a setting's Add button offers these overrides. *Ours:* the window mode in `project.godot`.
+
+**Fullscreen, and switching it.** `DisplayServer.window_set_mode(...)` changes the game's window: `WINDOW_MODE_FULLSCREEN` is a borderless window covering the screen (quick to alt-tab), `WINDOW_MODE_EXCLUSIVE_FULLSCREEN` takes over the display. *Ours:* `WindowToggle` (`scripts/app/`, the autoload `FullscreenToggle`) switches on Alt+Enter or F11. An autoload's name and a `class_name` mustn't be the same, so this one's registered as `FullscreenToggle`.
+
 ## Glass lanterns with a flame inside (#199)
 
 **Raymarching.** Instead of painting a picture onto a surface, a shader can follow your line of sight *into* the object from each pixel and step along it, asking "what's here?" at each step. Whatever it finds is drawn at its real depth, so it shifts behind the surface as you move. *Ours:* `lantern_flame.gdshader` steps through the thin cylinder round the wick (20 steps) to find the flame, then works out where the ray leaves the box to draw the floor plate, the roof or the far pane's grille.

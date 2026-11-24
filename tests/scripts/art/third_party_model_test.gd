@@ -222,3 +222,11 @@ func _new_dresser(path: String, fit: Vector3 = Vector3.ZERO,
 	add_child(holder)
 	var rig: Array[Node3D] = [dresser, greybox]
 	return rig
+
+
+func test_a_model_is_loaded_once_and_kept() -> void:
+	# Making the ship again (as every test does) mustn't load its models from
+	# disk again (#196).
+	var first: PackedScene = ThirdPartyModel._load_model(STAND_IN_MODEL)
+	assert_object(first).is_not_null()
+	assert_object(ThirdPartyModel._load_model(STAND_IN_MODEL)).is_same(first)

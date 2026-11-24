@@ -143,7 +143,8 @@ func test_a_chest_can_hold_an_item_and_gives_it_to_you() -> void:
 
 
 func test_the_galley_chest_holds_the_knife() -> void:
-	var state: SceneState = (load("res://scenes/prototype/ship.tscn") as PackedScene).get_state()
+	# The galley is a scene of its own, placed in the ship (#196).
+	var state: SceneState = (load("res://scenes/prototype/galley.tscn") as PackedScene).get_state()
 	var contents: HandTool = null
 	var flag: StringName = &""
 	for node: int in state.get_node_count():

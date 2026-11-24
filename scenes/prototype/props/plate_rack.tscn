@@ -1,5 +1,6 @@
 [gd_scene format=3]
 
+[ext_resource type="Script" path="res://scripts/art/third_party_model.gd" id="196_meshy"]
 [ext_resource type="Script" path="res://scripts/props/dispenser_3d.gd" id="1_62wl1"]
 [ext_resource type="Resource" path="res://data/items/plate.tres" id="2_30d5p"]
 [ext_resource type="Material" path="res://assets/placeholder/materials/prop_wood.tres" id="3_8ouqk"]
@@ -133,3 +134,14 @@ shape = SubResource("BoxShape3D_updgk")
 
 [node name="ItemSpot" type="Node3D" parent="." unique_id=2133066957]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.9, 0)
+
+[node name="Meshy" type="Node3D" parent="." node_paths=PackedStringArray("stand_ins")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, -0, 0, 1, 0, 0, 0)
+script = ExtResource("196_meshy")
+path = "res://assets/third_party/meshy/plate_rack/model/model.glb"
+fit_size = Vector3(1.1, 1.55, 0.6)
+stretch = true
+stand_ins = [NodePath("../Mesh"), NodePath("../Back"), NodePath("../Plate1"), NodePath("../Plate2"), NodePath("../Plate3"), NodePath("../Plate4"), NodePath("../Plate5"), NodePath("../Plate6"), NodePath("../PlateRail")]
+grain = false
+detail = 1.0
+keep_as_made = true

@@ -139,7 +139,7 @@ mesh = SubResource("Mesh_Roll")
 transform = Transform3D(0, 0, 1, 0, 1, 0, -1, 0, 0, -5.45, 1, -1.8)
 
 [node name="OldBook" parent="." instance=ExtResource("7_book")]
-transform = Transform3D(0.1736, 0, -0.9848, 0, 1, 0, 0.9848, 0, 0.1736, -5.43, 1.97, -2.18)
+transform = Transform3D(0.1736, 0, -0.9848, 0, 1, 0, 0.9848, 0, 0.1736, -5.43, 2.09, -2.18)
 
 [node name="WallChart1" type="MeshInstance3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4.3, 2.4, -3.59)
