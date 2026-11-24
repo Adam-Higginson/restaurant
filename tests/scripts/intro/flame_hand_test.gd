@@ -47,9 +47,21 @@ func test_the_palm_rides_out_along_the_arm_as_it_reaches() -> void:
 	hand.reach = 1.0
 	var far: float = hand.palm_position().x
 
-	# The sheet is 1.6 long, running along -X from the wrist.
-	assert_float(far).is_equal_approx(-1.6 * FlameHand.PALM_AT_FULL_REACH, 0.001)
+	# The sheet is 1 high, running along -X from the wrist: the palm goes
+	# out by sheet heights, the same as the shader draws it.
+	assert_float(far).is_equal_approx(-1.0 * FlameHand.PALM_AT_FULL_REACH, 0.001)
 	assert_float(far).is_less(near)
+
+
+func test_the_shader_draws_the_hand_in_proportion_to_its_sheet() -> void:
+	# A longer sheet than the hand needs, so its fingertips aren't cut off
+	# at the end (#203).
+	var hand: FlameHand = _new_hand()
+	(hand.mesh as QuadMesh).size = Vector2(1.9, 1.0)
+
+	hand.reach = 1.0
+
+	assert_float(_number(hand, "aspect")).is_equal_approx(1.9, 0.001)
 
 
 func test_the_light_in_its_palm_goes_out_with_it_and_dims_with_it() -> void:
