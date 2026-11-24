@@ -140,13 +140,14 @@ func test_the_ships_lanterns_are_out_by_day() -> void:
 		var lantern: Lantern = node as Lantern
 		assert_bool(lantern.lit).is_false()
 		assert_bool((lantern.get_node("Light") as Light3D).visible).is_false()
+		assert_float(lantern.flame_burning()).is_equal(0.0)
 	for node: Node in runner.scene().get_tree().get_nodes_in_group(Island.NIGHT_GLOW_GROUP):
 		assert_bool((node as Node3D).visible).is_false()
 	# And they can be lit again.
 	var island: Island = runner.scene() as Island
 	island.light_lanterns(true)
 	assert_bool((lanterns[0] as Lantern).lit).is_true()
-	assert_bool(((lanterns[0] as Lantern).get_node("Pane1") as Node3D).visible).is_true()
+	assert_float((lanterns[0] as Lantern).flame_burning()).is_equal(1.0)
 
 
 func test_falling_out_of_the_world_puts_you_back_on_deck() -> void:

@@ -1,9 +1,10 @@
 class_name Lantern
 extends Swinging
 ## A ship's lantern hanging from its hook: an iron frame and cap around
-## glowing panes, with a warm light inside. It swings like any [Swinging]
-## thing. One scene (lantern.tscn) is used for every lantern aboard; each
-## sets how bright and how far its light reaches.
+## clear glass with a flame burning inside (lantern_flame.gdshader, #199),
+## and a warm light. It swings like any [Swinging] thing. One scene
+## (lantern.tscn) is used for every lantern aboard; each sets how bright and
+## how far its light reaches, and flickers its own way.
 
 ## The group every lantern is in, so a scene in daylight can put them all
 ## out (see [Island]).
@@ -27,11 +28,14 @@ const GROUP: StringName = &"lanterns"
 @export_range(0.0, 0.5) var flicker: float = 0.08
 
 @onready var _light: Flicker = $Light
+@onready var _glass: GeometryInstance3D = $Glass
 
 
 func _ready() -> void:
 	super()
 	add_to_group(GROUP)
+	# Every lantern shares one glass material; each gets its own flicker.
+	_glass.set_instance_shader_parameter(&"own_seed", randf() * 10.0)
 	_light.base_energy = light_energy
 	_light.amount = flicker
 	_light.speed = 2.5
@@ -46,9 +50,13 @@ func set_lit(burning: bool) -> void:
 	lit = burning
 
 
+## How much the flame behind the glass is burning: 1 lit, 0 out (the glass
+## still shows, with an empty lantern and a dark wick behind it).
+func flame_burning() -> float:
+	var burning: float = _glass.get_instance_shader_parameter(&"burning")
+	return burning
+
+
 func _show_flame() -> void:
 	_light.visible = lit
-	for pane: String in ["Pane1", "Pane2", "Pane3", "Pane4"]:
-		var glass: Node3D = get_node_or_null(pane) as Node3D
-		if glass != null:
-			glass.visible = lit
+	_glass.set_instance_shader_parameter(&"burning", 1.0 if lit else 0.0)
