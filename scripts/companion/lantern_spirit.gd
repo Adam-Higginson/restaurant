@@ -34,8 +34,8 @@ const HOME_GROUP: StringName = &"lantern_home"
 ## The file of his reactions to things you do, in [code]data/dialogue[/code]:
 ## each section is tagged with the moment it's for, like [code][on caught][/code].
 const MOMENTS: StringName = &"moments"
-## The story flag that says he's gone low (#158): home from the sea small,
-## blue and cracked, and silent until he's fed (#155). Set by the intro,
+## The story flag that says he's gone low (#158): home from the sea small
+## and blue, and silent until he's fed (#155). Set by the intro,
 ## cleared by the remedy, saved with the voyage.
 const LOW_FLAG: StringName = &"lantern_low"
 ## While he's low his flame leans, barely, toward a node in this group: the
@@ -575,7 +575,8 @@ func _express(delta: float) -> void:
 	if _body.directed:
 		return
 	_body.expression = everyday_expression()
-	_body.cracked = is_low()
+	# Since #183 the sea leaves him dim, never cracked: his glass stays whole.
+	_body.cracked = false
 	_body.lean = longing_lean() if is_low() else Vector3.ZERO
 	_body.streaked = in_rain
 	_body.fogged = _fogged_left > 0.0

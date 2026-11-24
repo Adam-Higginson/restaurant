@@ -1,6 +1,6 @@
 extends GameTestSuite
 ## Tests for the first quest's opening half (#158): the lantern home from the
-## sea low, cracked and silent, his flame leaning toward the galley; the
+## sea low and silent (his glass whole), his flame leaning toward the galley; the
 ## captain going up for a drink at the water butt and back to his fire; the
 ## water butt remembering you've fetched water; and the captain's hints,
 ## which never say "the rain".
@@ -14,7 +14,7 @@ func after_test() -> void:
 	Game.dialogue.reset()
 
 
-func test_low_he_is_dim_tired_cracked_and_silent() -> void:
+func test_low_he_is_dim_tired_and_silent_with_his_glass_whole() -> void:
 	var rig: Array[Node3D] = new_moored_ship_with_player(Vector3(0, 1.05, 6))
 	var player: Player3D = rig[1] as Player3D
 	var runner: GdUnitSceneRunner = scene_runner(rig[0].get_parent())
@@ -25,7 +25,7 @@ func test_low_he_is_dim_tired_cracked_and_silent() -> void:
 
 	assert_bool(spirit.is_low()).is_true()
 	assert_int(spirit.everyday_expression()).is_equal(LanternFace.Look.TIRED)
-	assert_bool(spirit.face().cracked).is_true()
+	assert_bool(spirit.face().cracked).is_false()
 	assert_float(spirit.warmth).is_equal(spirit.min_warmth)
 	assert_bool(spirit.tell(&"caught", &"news_fish")).is_false()
 	assert_bool(Game.dialogue.is_set(&"news_fish")).is_false()
@@ -56,14 +56,14 @@ func test_low_his_flame_leans_toward_the_galley() -> void:
 	assert_float(toward.normalized().dot(to_hob.normalized())).is_greater(0.95)
 
 
-func test_fed_and_well_again_the_crack_and_the_lean_go() -> void:
+func test_fed_and_well_again_the_lean_goes() -> void:
 	var rig: Array[Node3D] = new_moored_ship_with_player(Vector3(0, 1.05, 6))
 	var player: Player3D = rig[1] as Player3D
 	var runner: GdUnitSceneRunner = scene_runner(rig[0].get_parent())
 	Game.dialogue.set_flag(LanternSpirit.LOW_FLAG)
 	await physics_ticks(runner, 3)
 	var spirit: LanternSpirit = player.get_node("LanternSpirit") as LanternSpirit
-	assert_bool(spirit.face().cracked).is_true()
+	assert_vector(spirit.face().lean).is_not_equal(Vector3.ZERO)
 
 	Game.dialogue.set_flag(LanternSpirit.LOW_FLAG, 0)
 	await physics_ticks(runner, 3)

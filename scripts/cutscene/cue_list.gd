@@ -11,7 +11,7 @@ extends RefCounted
 ## How each cue is written, by name. Shown when a script gets one wrong.
 const USAGE: Dictionary[StringName, String] = {
 	&"shot": "@shot stove_nook or @shot free, with 'cut' after to cut instead of glide",
-	&"fade": "@fade out or @fade in, with seconds after if you like: @fade in 2.0",
+	&"fade": "@fade out, @fade in or @fade white, with seconds after if you like: @fade in 2.0",
 	&"title": "@title Somewhere at sea",
 	&"wait": "@wait 1.5",
 	&"wait_for": "@wait_for interact or @wait_for any, with a prompt after if you like: "
@@ -34,6 +34,7 @@ const USAGE: Dictionary[StringName, String] = {
 	&"sound": "@sound splash",
 	&"muffle": "@muffle on or @muffle off",
 	&"hush": "@hush on or @hush off",
+	&"grave": "@grave on or @grave off (the Grave of the Lanterns' faint lights far below the sea)",
 	&"lightning": "@lightning",
 	&"look": "@look hook_lantern determined (a look for his eyes: calm, surprised, "
 			+ "determined, worried, pleading, effort, tired, asleep, pleased; or for his "
@@ -66,7 +67,7 @@ static func _fits(cue: StringName, args: PackedStringArray) -> bool:
 		&"shot":
 			return args.size() == 1 or (args.size() == 2 and args[1] == "cut")
 		&"fade":
-			if args.is_empty() or args.size() > 2 or not ["in", "out"].has(args[0]):
+			if args.is_empty() or args.size() > 2 or not ["in", "out", "white"].has(args[0]):
 				return false
 			return args.size() == 1 or _is_seconds(args[1])
 		&"title":
@@ -83,7 +84,7 @@ static func _fits(cue: StringName, args: PackedStringArray) -> bool:
 			return args.size() >= 3 and _is_seconds(args[1])
 		&"say_in":
 			return args.size() >= 4 and _is_seconds(args[0]) and _is_seconds(args[2])
-		&"muffle", &"hush":
+		&"muffle", &"hush", &"grave":
 			return args.size() == 1 and ["on", "off"].has(args[0])
 		&"hold_up":
 			return args.size() <= 1

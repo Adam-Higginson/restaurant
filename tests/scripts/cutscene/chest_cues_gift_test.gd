@@ -62,6 +62,23 @@ func test_nothing_in_the_way_leaves_the_camera_where_it_wants() -> void:
 	assert_object(at).is_equal(Vector3(0, 1.75, -3))
 
 
+func test_the_gift_appears_in_your_hands() -> void:
+	var setup: Array = _build()
+	var player: Player3D = setup[0]
+	var conversation: Conversation = setup[1]
+	var cues: ChestCues = setup[2]
+	var runner: GdUnitSceneRunner = setup[3]
+	await physics_ticks(runner, 2)
+
+	play_cutscene(conversation, player, "~ start\n@hold_up frying_pan\nnarrator: You got it!")
+	await physics_ticks(runner, 2)
+
+	# Straight in the hands from the start: never flying in from elsewhere.
+	assert_object(cues.treasure()).is_not_null()
+	assert_float(cues.treasure().global_position.distance_to(cues.hands_point())) \
+			.is_less(0.05)
+
+
 # A player on a floor with a conversation and the chest cues. Returns
 # [player, conversation, cues, runner].
 func _build() -> Array:

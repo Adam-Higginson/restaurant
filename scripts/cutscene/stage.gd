@@ -20,7 +20,9 @@ const GROUP: StringName = &"stages"
 ## How long it takes to fade up and away, in seconds. 0 is at once.
 @export var fade_seconds: float = 0.0
 ## Whether it hides the whole game behind it. If so the game's own 3D world
-## isn't drawn while it's up, so the picture isn't paid for twice.
+## isn't drawn while it's up, so the picture isn't paid for twice. A stage
+## that fades up over the game (the Grave of the Lanterns) lets the game go
+## on being drawn until it's all the way up, so one dissolves into the other.
 @export var covers_world: bool = false
 
 ## Whether the stage is up.
@@ -51,15 +53,15 @@ func open(at_once: bool = false) -> void:
 	_open = true
 	show()
 	process_mode = Node.PROCESS_MODE_INHERIT
-	if covers_world:
-		get_viewport().disable_3d = true
 	_kill_tween()
 	if at_once or fade_seconds <= 0.0:
 		_content.modulate.a = 1.0
+		_cover_world()
 	else:
 		_content.modulate.a = 0.0
 		_tween = create_tween()
 		_tween.tween_property(_content, "modulate:a", 1.0, fade_seconds)
+		_tween.tween_callback(_cover_world)
 	opened.emit()
 
 
@@ -78,6 +80,12 @@ func close(at_once: bool = false) -> void:
 		_tween.tween_property(_content, "modulate:a", 0.0, fade_seconds)
 		_tween.tween_callback(_put_away)
 	closed.emit()
+
+
+# Once it's all the way up, the game behind it needn't be drawn.
+func _cover_world() -> void:
+	if _open and covers_world:
+		get_viewport().disable_3d = true
 
 
 func _put_away() -> void:

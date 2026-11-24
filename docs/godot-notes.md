@@ -48,7 +48,7 @@ A growing glossary of the Godot concepts this project uses: what each one is, in
 
 **Path3D and Curve3D.** A `Path3D` node holds a `Curve3D`: a line through points, with handles that bend it into smooth curves. `curve.sample_baked(distance)` gives the point that many metres along it. *Ours:* the ship's `Route` in `sea.tscn`. `Ship` samples it every tick.
 
-**Marker3D.** An empty point with a little gizmo in the editor, used to mark a spot. *Ours:* `MooringPoint`, where the route ends.
+**Marker3D.** An empty point with a little gizmo in the editor, used to mark a spot. *Ours:* the `Landing` in `islands/duel_arena.tscn`, where the lantern sets you down after a defeat.
 
 **WorldEnvironment.** Sets up the whole scene's look: the sky, the ambient light, tone mapping, and fog. One per scene. *Ours:* `sea.tscn`, with a procedural sky and exponential distance fog (`fog_density`).
 
@@ -174,7 +174,7 @@ A growing glossary of the Godot concepts this project uses: what each one is, in
 
 **AudioStreamPlayer3D.** Plays a sound from a place in the world: it gets quieter with distance and pans to where it is relative to the camera. *Ours:* `SoundSpot` (`scripts/weather/sound_spot.gd`), the creaks and groans placed round the deck (#90).
 
-**Billboards and render modes.** A shader's `render_mode` line switches whole features on or off: `unshaded` skips lighting, `blend_add` adds its colour to what's behind (good for glows), `fog_disabled` ignores fog. Setting `MODELVIEW_MATRIX` from the camera's rotation makes a quad always face the camera (a *billboard*). *Ours:* `shaders/far_light.gdshader`, the faint light out in the fog (#90).
+**Billboards and render modes.** A shader's `render_mode` line switches whole features on or off: `unshaded` skips lighting, `blend_add` adds its colour to what's behind (good for glows), `fog_disabled` ignores fog. Setting `MODELVIEW_MATRIX` from the camera's rotation makes a quad always face the camera (a *billboard*). *Ours:* `shaders/sparkle.gdshader`, the treasure chest's glowing motes (#152); `fog_disabled` in `shaders/far_hills.gdshader`.
 
 **Signed distance to a shape.** A function giving how far a point is from a shape's edge: positive outside, negative inside. It makes cut-outs and bands of effect easy (inside: hide; within 1.4 m: foam). *Ours:* `hull_distance()` in `shaders/water.gdshader`, the distance to the hull's pointed outline (a polygon), which cuts the sea out of the hull and wraps foam round the bow (#90).
 
@@ -611,6 +611,26 @@ A growing glossary of the Godot concepts this project uses: what each one is, in
 **Following a bone without being its child.** A `BoneAttachment3D` follows a bone but lives under the skeleton, so it dies when the model is reloaded. A plain node can follow a bone instead by copying the bone's pose each time the skeleton emits `skeleton_updated`. *Ours:* the boy's hand nodes (`CharacterModel._place_hands`), so the knife he holds outlives his model being dressed again.
 
 **Moving loose parts in code.** A model with no skeleton can still move if it's cut into parts whose origins are their joints: turning a part's `transform` swings it from that joint. *Ours:* the crab's legs and claws (`Crab._move_parts`), cut by `tools/meshy/split_crab.py`.
+
+## The talk at the rail and the Grave of the Lanterns (#182)
+
+**Lights deep under a surface you can't see through.** The open sea is drawn solid, so nothing placed under it would show. To show faint lights far below anyway, its shader follows each pixel's line of sight (from `CAMERA_POSITION_WORLD` to the surface point) on down through the water to a chosen depth, and asks whether a light hangs there. Because the line carries on at its own angle, the lights stay put under the water and slide past each other as the camera moves, the way deep things do. *Ours:* `grave_lights()` in `shaders/water.gdshader`, three depths of seeded lights, faded in by the Sea's `grave` (the `@grave on` cue).
+
+**Volumetric fog needs something behind it.** Volumetric fog is added to whatever a pixel's ray hits, by how much fog it passes through on the way. A plain clear colour isn't hit by anything, so it gets none, and things in the fog come out *brighter* than the empty water around them: the wrong way round. A big dark sphere round the set (faces turned inwards) gives every ray something to end on, so the fog builds up behind things and they stand dark against it. *Ours:* `Deep` in `scenes/prototype/intro/grave.tscn`, with the fog itself a `FogVolume` box that stops at the surface (`UnderTheSurface`).
+
+**A camera moved by a clip, and physics interpolation.** With physics interpolation on, Godot smooths things moved in the physics step between ticks. A camera moved by an `AnimationPlayer` on rendered frames instead makes it warn ("triggered from outside physics process"). Setting the camera's `physics_interpolation_mode` to Off says "draw me exactly where the clip puts me". *Ours:* the grave set's `Camera`.
+
+**A MultiMesh's copies live in the renderer.** `set_instance_transform` hands each copy's place to the rendering server, and a headless run's stand-in server doesn't keep them, so reading one back in a test gives nothing. Test the numbers the copies are placed from instead. *Ours:* `HangingChain.point_at()`, tested in `tests/scripts/intro/grave_test.gd`.
+
+## The rescue as his sacrifice, to white (#183)
+
+**Clips that each set the whole scene.** Every clip in the underwater set keys every moving thing (the camera, him, you, his hand, the lights, the shape), even what it leaves still. So whichever clip plays, or wherever a skip jumps to, everything is where that moment wants it, and one clip can follow any other. The cost: a new moving thing needs a track in every clip. *Ours:* `scenes/prototype/intro/underwater.tscn`'s `Clips`; #183 added four tracks to all of them (`Flow:flow`, `Flow:filled`, `Lanterns:flicker`, `Lantern/Body:rotation`).
+
+**Turning a child, not the parent.** A child moves with its parent, so turning the parent swings everything hung off it. To turn only part of something, turn that part. *Ours:* his flame hand hangs off `Lantern`, so when he looks down or back at you it's `Lantern/Body` (his glass and face) that turns, and the hand stays on yours.
+
+**Fading CPU particles.** `GPUParticles3D` has `amount_ratio` to thin a stream without restarting it; `CPUParticles3D` doesn't. Its `color` tints every particle instead, if the particle's material has *Vertex Color > Use as Albedo* ticked, so the alpha in that colour fades them all. (Changing a particle node's `amount` or `lifetime` restarts the stream, so set those once.) *Ours:* `LightFlow`'s `Motes`, the gold running along your arm.
+
+**Tweening two things at once.** A `Tween` runs its steps one after another unless you call `set_parallel()`, after which they run together. *Ours:* `ScreenFade.fade_to_white()` brings the cover up and turns its colour white in the same moment, and `fade_out()` from white turns it to black while staying covered.
 
 ## Testing
 

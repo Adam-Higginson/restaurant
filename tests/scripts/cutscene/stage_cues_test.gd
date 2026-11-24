@@ -73,6 +73,22 @@ func test_a_stage_that_covers_the_world_stops_it_being_drawn_behind() -> void:
 	assert_bool(get_viewport().disable_3d).is_false()
 
 
+func test_a_covering_stage_that_fades_keeps_the_world_drawn_until_its_up() -> void:
+	_build()
+	_underwater.fade_seconds = 0.5
+	var runner: GdUnitSceneRunner = scene_runner(_player.get_parent())
+	await physics_ticks(runner, 3)
+
+	_underwater.open()
+	await physics_ticks(runner, 12)
+	assert_bool(get_viewport().disable_3d).is_false()
+	await physics_ticks(runner, 30)
+	assert_bool(get_viewport().disable_3d).is_true()
+
+	_underwater.close()
+	assert_bool(get_viewport().disable_3d).is_false()
+
+
 func test_a_stage_fades_up_and_away_over_its_seconds() -> void:
 	_build()
 	_title.fade_seconds = 0.5

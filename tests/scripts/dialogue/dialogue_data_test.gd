@@ -5,7 +5,7 @@ extends GameTestSuite
 
 ## Every moment the game asks the lantern to react to.
 const MOMENTS: Array[StringName] = [&"returned", &"remembered", &"caught",
-		&"morning", &"hove_to", &"supper", &"dim", &"far_light", &"island", &"pulled_out",
+		&"morning", &"hove_to", &"supper", &"dim", &"pulled_out",
 		&"crab_killed"]
 
 

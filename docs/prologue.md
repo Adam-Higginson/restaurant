@@ -1,0 +1,670 @@
+# Prologue: The Grave of the Lanterns
+
+**Location:** the Salt and Ember, and the Grave of the Lanterns
+**Estimated playtime:** 30–45 minutes
+**Purpose:** introduce the world, establish the relationship between the player and the lantern, teach exploration and cooking through the first puzzle, and bring the player to the first island.
+
+This is the script the opening is being rebuilt to (#181). The GDD's *The opening as intended* and *MVP: the Prologue* summarise it; the scene-by-scene words are here. Each scene says which issue builds it.
+
+**How it was fitted to the game (decided 2026-11-24):**
+- **The ship is the Salt and Ember**, not the Wayward, and the title screen stays her carved nameboard. The rail scene begins on your press.
+- **The player never speaks.** Where the script says the player nods, shakes their head or asks something, that's a reply you choose in the conversation box.
+- **You wake in your own bunk** in the bunk room, not a cabin, and the lantern lies on his round table by the stove.
+- **The navigation room** is a new room in the empty bow half below deck, through a door in the galley's forward wall. The captain's cabin stays shut for now.
+- **The captain gives you the cooking pot.** The frying pan, your shield in a fight, is the first thing you find ashore.
+- **The rescue ends in white.** The haul up through the dead lanterns, the storm surface and the heron at the rail are gone; how you came aboard isn't shown.
+- **The arrival is the cove** (#163): the ship anchors off the beach and you row ashore. The harbour, the settlement and the old structures belong to Chapter 1.
+
+---
+
+## Scene 0: The title screen (#182)
+
+BLACK SCREEN.
+
+The sound of waves. A distant gull. The gentle creaking of old timber.
+
+A small golden light appears.
+
+A lantern swings slowly on a hook at the ship's stern. As it swings, its warm light slides across the carved letters of her name on the nameboard, a few at a time. Beyond the ship, the ocean is almost completely black.
+
+The lantern swings.
+
+TITLE: SALT AND EMBER
+
+PRESS ANY BUTTON TO BEGIN.
+
+The player presses Start.
+
+The swinging stops. The camera pulls back from the board, revealing the stern of a sailing ship moving slowly through a vast, dark ocean.
+
+Faint lights shimmer beneath the surface.
+
+The lantern notices them.
+
+**LANTERN:** "There you are…"
+
+He leans out over the rail.
+
+**LANTERN:** "I knew I hadn't imagined it."
+
+He looks towards the wheel, where the heron captain stands.
+
+**LANTERN:** "Captain? I think I've found something."
+
+**HERON:** "Something, or another one of your little lights?"
+
+**LANTERN:** "I know the difference!"
+
+**HERON:** "Do you?"
+
+The lantern turns back towards the ocean.
+
+**LANTERN:** "Look."
+
+The camera moves past him and out over the water.
+
+Thousands of lanterns lie beneath the surface. Some are broken. Others are tangled in enormous chains. A few still glow faintly, like dying stars.
+
+The ship is passing through the Grave of the Lanterns.
+
+**LANTERN:** "There must be hundreds of them."
+
+**HERON:** "Thousands, most likely."
+
+**LANTERN:** "I wonder how long they've been down there."
+
+**HERON:** "Longer than either of us."
+
+The lantern notices a faint light further ahead.
+
+**LANTERN:** "Wait. That one…"
+
+He moves closer to the rail.
+
+**LANTERN:** "Captain, I think there's something down there."
+
+**HERON:** "Don't lean too far over."
+
+**LANTERN:** "I'm not!"
+
+The lantern leans further.
+
+A faint metallic ringing echoes from beneath the water.
+
+The lantern goes quiet.
+
+**LANTERN:** "That's strange."
+
+Something moves beneath the ship.
+
+**HERON:** "Back away from the rail."
+
+**LANTERN:** "I think I saw—"
+
+A shape passes beneath the surface.
+
+The lantern notices something drifting amongst the dead lights. At first it looks like another broken lantern.
+
+Then we see a hand.
+
+**LANTERN:** "…"
+
+He moves closer.
+
+**LANTERN:** "Captain?"
+
+**HERON:** "What is it?"
+
+**LANTERN:** "There's somebody in the water."
+
+**HERON:** "What?"
+
+**LANTERN:** "Somebody overboard!"
+
+The heron turns sharply.
+
+**HERON:** "Don't you dare—"
+
+The lantern is already gone, off his hook and over the side.
+
+---
+
+## Scene 1: The rescue (#183)
+
+**Location:** the Grave of the Lanterns, underwater.
+
+The camera plunges beneath the surface. The sound of the ship disappears.
+
+The player is sinking slowly through dark water. All around them are the remains of countless lanterns. Some are completely extinguished. Others give a faint, dying glow.
+
+The lantern approaches.
+
+**LANTERN:** "Hello?"
+
+No response.
+
+**LANTERN:** "Can you hear me?"
+
+He circles the player.
+
+**LANTERN:** "Oh, you're in a bad way…"
+
+He tries to lift the player, but struggles.
+
+**LANTERN:** "Come on. Come on!"
+
+The player keeps sinking.
+
+The lantern looks towards the surface, then back at the player.
+
+**LANTERN:** "Hold on. I've got you."
+
+He moves closer and reaches out his little hand.
+
+**LANTERN:** "Here. Take my hand."
+
+**GAMEPLAY: REACH OUT.** The player slowly raises their hand. For a moment the two hands almost touch. The lantern reaches a little further. The player takes his hand.
+
+A strange sound resonates through the water.
+
+The lantern freezes. His flame suddenly grows brighter.
+
+**LANTERN:** "Oh…"
+
+A golden light begins to travel from the lantern into the player's hand. The player's body begins to glow.
+
+**LANTERN:** "Wait. What's happening?"
+
+The light keeps flowing. The lantern tries to pull away, but the connection holds. His flame begins to shrink.
+
+**LANTERN:** "No, no, no. Stop…"
+
+The lanterns all around begin to flicker. A deep rumble rolls through the ocean.
+
+The lantern looks down. Something enormous shifts in the darkness below them: only a vast silhouette, passing beneath the chains.
+
+The lantern looks back at the player. His flame is almost out.
+
+**LANTERN:** "I don't know who you are…"
+
+A pause.
+
+**LANTERN:** "But I can't let you go."
+
+He releases the last of his light.
+
+A huge burst of golden light fills the screen.
+
+WHITEOUT.
+
+Silence.
+
+---
+
+## Chapter 1: The Salt and Ember
+
+### Scene 2: Waking up (#184)
+
+**Location:** the Salt and Ember, the bunk room.
+
+The sound of waves. A gull cries in the distance.
+
+The player slowly opens their eyes. They're lying in their bunk in the ship's bunk room: low beams, the crew's bunks down both sides, a small stove, a round porthole.
+
+Rainwater drips from somewhere above.
+
+The heron captain stands in the doorway.
+
+**HERON:** "Ah. You're awake."
+
+A pause.
+
+**HERON:** "Good. I was beginning to wonder whether we'd rescued you or merely inconvenienced a corpse."
+
+The lantern sits on his little round table by the stove. His flame is barely visible.
+
+**LANTERN:** "I told you they'd wake up!"
+
+**HERON:** "You also told me you were perfectly capable of swimming."
+
+**LANTERN:** "I am!"
+
+His flame flickers.
+
+**HERON:** "Clearly."
+
+The lantern turns towards the player.
+
+**LANTERN:** "Oh! Hello!"
+
+He tries to float towards the player, but his light flickers and he sinks a little.
+
+**LANTERN:** "Oh. That's not ideal."
+
+**HERON:** "You've used nearly all your light."
+
+**LANTERN:** "I know."
+
+**HERON:** "You could have left them."
+
+The lantern goes quiet.
+
+**LANTERN:** "I know."
+
+The heron looks towards the player.
+
+**HERON:** "Do you remember anything?"
+
+*(Reply: shake your head.)*
+
+**HERON:** "Your name?"
+
+*(Reply: nothing.)*
+
+**HERON:** "Where you came from?"
+
+*(Reply: nothing.)*
+
+**HERON:** "How you ended up in the water?"
+
+*(Reply: look down.)*
+
+**HERON:** "I see."
+
+He looks towards the lantern.
+
+**HERON:** "Well, whatever happened out there, you're fortunate he's as stubborn as he is."
+
+**LANTERN:** "You're welcome."
+
+**HERON:** "I wasn't thanking you."
+
+The heron turns towards the door.
+
+**HERON:** "Come along. You should have a look around."
+
+He pauses.
+
+**HERON:** "And try not to fall overboard again."
+
+The heron leaves.
+
+**LANTERN:** "Don't mind him."
+
+A pause.
+
+**LANTERN:** "He's always like that."
+
+The player looks around. By their pillow is a small, battered book. They pick it up.
+
+It's a recipe book. The cover is worn and the corners are frayed. Several recipes are written inside, some with little illustrations and handwritten notes. The player turns the pages. They seem to know what they're looking at.
+
+**LANTERN:** "What's that?"
+
+The player shows him the book.
+
+**LANTERN:** "A recipe book!"
+
+A pause.
+
+**LANTERN:** "Are you a cook?"
+
+*(Reply: hesitate, then nod.)*
+
+**LANTERN:** "Oh!"
+
+He floats a little higher.
+
+**LANTERN:** "Well, that's something!"
+
+**HERON (off):** "Come up on deck when you're ready."
+
+**ITEM ACQUIRED: RECIPE BOOK**
+
+GAMEPLAY BEGINS.
+
+### Scene 3: Exploring the Salt and Ember (#185)
+
+The player is free to explore the ship. It should feel like a small, self-contained world: old, lived-in and full of things to investigate. There are three main places: the galley, the upper deck and the navigation room.
+
+**The galley.** A cosy, well-used space, with a stove, shelves, hanging pans and storage crates. There's no cooking pot on the stove.
+
+- **The empty stove:** "An old stove. It looks like it's been used quite a bit."
+- **The shelves:** "Rows of jars, spices and ingredients. Some are empty."
+- **The storage crate:** "Food supplies. There are a few ripe tomatoes." **ITEM ACQUIRED: TOMATOES**
+- **A small wooden chest** in the corner holds an old cooking knife. **ITEM ACQUIRED: COOKING KNIFE.** "An old kitchen knife. Well used, but still sharp."
+
+**The upper deck.** It's raining lightly. Water drips from the rigging and runs along the deck. There are barrels, ropes and other equipment.
+
+- **Rainwater:** "Fresh rainwater is collecting along the edge of the deck." The player has no pot yet, so there's nothing to do with it.
+
+**The navigation room.** Through a door at the front of the galley: a small room full of maps and books. Old charts cover the walls, some with strange markings.
+
+- **The navigation chart:** one chart has a hand-drawn route through a stretch of ocean marked with a faded warning, THE GRAVE OF THE LANTERNS. A destination is marked beyond it, but the island's name is lost to age and water damage. "An old chart. Someone has marked a route through the Grave of the Lanterns. The destination appears to be an island somewhere beyond the fog."
+- **The old book:** on a shelf, an old leather-bound volume with a faded lantern on its cover. "An old book about the creatures and spirits of the sea." Its yellowed pages have drawings of little lantern creatures, and a passage:
+
+  > The little lights of the deep are creatures of warmth. Their flames are sustained by the heat of living things, and they are particularly fond of strong spices.
+  >
+  > When a lantern's flame grows faint, a hot broth of ripe tomatoes, red chilli and wild herbs may restore its warmth.
+
+  The player pauses. This seems relevant. **CLUE DISCOVERED: LANTERN WARMTH**
+
+### Scene 4: The captain (#186)
+
+The heron stands at the helm.
+
+**HERON:** "Settling in?"
+
+*(Reply: nod.)*
+
+**HERON:** "Good."
+
+He gestures about the ship.
+
+**HERON:** "This is the Salt and Ember. She's seen better days, but she'll get us where we need to go."
+
+The player looks out at the ocean.
+
+**HERON:** "We've been following an old trail. It hasn't been easy to find."
+
+He glances at the chart.
+
+**HERON:** "We were hoping to find something at the end of it."
+
+*(Reply: ask what.)*
+
+The heron pauses.
+
+**HERON:** "Something we've been looking for a long time."
+
+He turns back to the water.
+
+**HERON:** "Perhaps we'll have better luck once we reach land."
+
+*(Reply: ask about the lantern.)*
+
+**HERON:** "He's still recovering."
+
+**HERON:** "I've never seen him use so much of his light."
+
+A pause.
+
+**HERON:** "I wouldn't worry too much. He's tougher than he looks."
+
+*(Reply: gesture towards the galley.)*
+
+**HERON:** "Looking to cook something?"
+
+*(Reply: nod.)*
+
+The heron opens a storage locker nearby and takes out an old cooking pot.
+
+**HERON:** "Here. This might help."
+
+**ITEM ACQUIRED: COOKING POT**
+
+**HERON:** "It's not much, but it'll do."
+
+The player looks at the pot.
+
+**HERON:** "Try not to burn the ship down."
+
+### Quest 1: A little warmth (#186)
+
+> The lantern gave nearly all of his light to save you. He's barely able to float, let alone light the way. Perhaps there's something you can do to help.
+
+**Objective:** find a way to restore the lantern's warmth.
+
+The quest doesn't tell the player what to do. They work it out from the books and things aboard the ship.
+
+**Puzzle 1: Discover the clue.** The player has a recipe book with a handful of starter recipes, an old book saying that lanterns like spicy food, a cooking pot, a knife and some tomatoes.
+
+If the player talks to the lantern:
+
+**LANTERN:** "Oh, hello again!"
+
+**LANTERN:** "I'm feeling a little better. I think."
+
+His flame flickers.
+
+**LANTERN:** "Well, perhaps not."
+
+If the player has read the old book:
+
+**LANTERN:** "Spicy food?"
+
+A pause.
+
+**LANTERN:** "I do like spicy food."
+
+**LANTERN:** "I don't think I've ever had any, though."
+
+If they haven't read it, he doesn't give the clue away.
+
+**Puzzle 2: Find the ingredients.**
+
+| Ingredient | Where |
+|---|---|
+| Tomatoes | The storage crate in the galley |
+| Dried chilli | The pantry cupboard |
+| Fresh herbs | A little pot of herbs growing by the rail on the upper deck |
+
+**ITEM ACQUIRED: DRIED CHILLI.** **ITEM ACQUIRED: FRESH HERBS.**
+
+**Puzzle 3: Collect the rainwater.** The player has the cooking pot and has to work out that it can be filled with rainwater. Water is collecting in several places on the upper deck, but in one spot a steady stream falls from the rigging. The player sets the pot underneath it, and it fills gradually. **ITEM ACQUIRED: POT OF RAINWATER**
+
+**Puzzle 4: Make the soup.** Back in the galley, the stove is ready.
+
+1. Put the pot on the stove.
+2. Add the rainwater.
+3. Chop the tomatoes with the knife.
+4. Add the tomatoes.
+5. Add the dried chilli.
+6. Add the fresh herbs.
+7. Bring the soup to the boil.
+
+The player can read the recipe book if they need help. The soup begins bubbling, a little steam rises, and the smell fills the galley.
+
+### Scene 5: The first meal (#186)
+
+The player takes the soup to the lantern at his round table.
+
+**LANTERN:** "Oh! What's that?"
+
+The player shows him the soup.
+
+**LANTERN:** "Is that… for me?"
+
+*(Reply: nod.)*
+
+**LANTERN:** "You made that?"
+
+*(Reply: nod again.)*
+
+**LANTERN:** "Well, I…"
+
+A pause.
+
+**LANTERN:** "I've never had soup before."
+
+The player offers him the bowl. The lantern leans towards it.
+
+The soup begins to glow. A warm golden light spreads through the lantern's glass. His flame grows brighter.
+
+**LANTERN:** "Oh!"
+
+His light grows stronger. He floats upwards, spinning a little.
+
+**LANTERN:** "Oh, that's much better!"
+
+He circles the player.
+
+**LANTERN:** "I feel wonderful!"
+
+The heron appears in the doorway.
+
+**HERON:** "Well, I'll be."
+
+**LANTERN:** "Look! Look at me!"
+
+**HERON:** "I can see."
+
+**LANTERN:** "They made me soup!"
+
+**HERON:** "Yes. I gathered that."
+
+The lantern floats over to the player.
+
+**LANTERN:** "Thank you."
+
+A pause.
+
+**LANTERN:** "I remember you reaching for me."
+
+He looks at the player.
+
+**LANTERN:** "I'm glad you did."
+
+The music softens.
+
+**QUEST COMPLETE: A LITTLE WARMTH**
+
+### Scene 6: The journey continues (#187)
+
+**Location:** the Salt and Ember, on deck.
+
+The player steps out onto the deck. The weather has begun to clear: the rain is easing, and a little sunlight breaks through the clouds.
+
+The heron stands at the helm, looking towards the horizon. The lantern floats beside him.
+
+**LANTERN:** "Much better, isn't it?"
+
+**HERON:** "Yes. Much."
+
+**LANTERN:** "I was beginning to think I'd never feel warm again."
+
+**HERON:** "Let's hope you don't make a habit of nearly putting yourself out."
+
+**LANTERN:** "I'll try."
+
+The player comes up.
+
+**HERON:** "We've lost a little time, but we haven't lost our way."
+
+He looks towards the chart.
+
+**HERON:** "We're still heading for the island."
+
+**LANTERN:** "Oh! I do like that island."
+
+**HERON:** "You've never been there."
+
+**LANTERN:** "I like the look of it."
+
+The player looks between them.
+
+**HERON:** "It's the last mark on the old chart. Whatever we're looking for, there's a good chance we'll find a clue there."
+
+The lantern looks towards the horizon.
+
+**LANTERN:** "I wonder what it'll be like."
+
+**HERON:** "Probably wet."
+
+**LANTERN:** "Everything's wet!"
+
+The heron sends the player to bed: we'll make land by morning. (Lines to be written; the lantern says the same if you go and talk to him.)
+
+The player can now explore the ship freely. Sleeping in their bunk takes them to the next morning.
+
+### Scene 7: Passage of time (#187)
+
+**Location:** the Salt and Ember, at sea.
+
+A short atmospheric montage as the ship sails on:
+
+- The clouds slowly clear.
+- Rainwater drips from the rigging.
+- The ocean changes from dark blue to a brighter turquoise.
+- Flying fish leap out of the water.
+- The lantern floats about the deck, noticeably brighter than before.
+- The heron studies the old chart.
+- The Grave of the Lanterns slowly disappears behind the ship.
+
+There's no dialogue through most of it. The music and the changing world say that time has passed and the ship is leaving the strange waters behind.
+
+At last the lantern notices something in the distance.
+
+**LANTERN:** "Captain?"
+
+**HERON:** "Hm?"
+
+**LANTERN:** "Look!"
+
+### Scene 8: The first shore (#187)
+
+**Location:** approaching the island.
+
+The camera moves out over the ocean. The mist has lifted. The sea is a brilliant turquoise, sunlight glistening across the waves. Birds fly overhead.
+
+In the distance, a lush island emerges: palm trees above a pale beach, jungle behind it, and green hills climbing beyond.
+
+The Salt and Ember sails towards it.
+
+**LANTERN:** "Oh!"
+
+He floats closer to the rail.
+
+**LANTERN:** "Isn't it lovely?"
+
+**HERON:** "Land at last."
+
+**LANTERN:** "Do you think they have any tomatoes?"
+
+**HERON:** "You had soup yesterday."
+
+**LANTERN:** "I liked the soup."
+
+The heron studies the island. He takes out the old chart.
+
+**HERON:** "This is it."
+
+**LANTERN:** "The island?"
+
+**HERON:** "The last mark on the chart."
+
+A pause.
+
+**HERON:** "We've finally found it."
+
+The lantern looks towards the island.
+
+**LANTERN:** "So… what are we looking for?"
+
+The heron folds the chart.
+
+**HERON:** "That's what we're here to find out."
+
+The player looks towards the island. The camera moves ahead of the ship, showing the whole cove. The Salt and Ember comes into the cove and drops anchor off the beach.
+
+**HERON:** "Come along. We've got a lot to do."
+
+**LANTERN:** "Adventure!"
+
+**HERON:** "Supplies."
+
+**LANTERN:** "Adventure and supplies!"
+
+The camera pulls back from the ship at anchor.
+
+FADE TO BLACK.
+
+END OF PROLOGUE.
+
+---
+
+## Chapter 1: The first shore
+
+You wake on deck at anchor in the cove, with the jolly boat by the rail. Row ashore. The first thing you find on the beach is a **frying pan** (an item-get), your shield for the crabs along the sand.
+
+Still to come in Chapter 1: the harbour, the small coastal settlement, the jungle mountain and the strange old structures along the coast.

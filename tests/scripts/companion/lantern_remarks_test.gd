@@ -2,11 +2,7 @@ extends GameTestSuite
 ## Tests for what the lantern says when things happen (his lines are in
 ## data/dialogue/moments.dlg): he never repeats himself twice running, says
 ## a few lines in turn, and speaks up when a memory comes back, when you land
-## a fish, when you stop the ship, and when you look out from the bow (at the
-## light at night, the island at dawn; not every time).
-
-## Out on the bow, past the windlass.
-const ON_THE_BOW: Vector3 = Vector3(0, 6.25, -16.2)
+## a fish and when you stop the ship.
 
 
 func before_test() -> void:
@@ -98,46 +94,6 @@ func test_he_cheers_when_you_land_a_fish() -> void:
 	await press(runner, "interact")
 
 	assert_bool(spirit.saying() in moment_lines(&"caught")).is_true()
-
-
-func test_he_notices_the_far_light_from_the_bow_at_night() -> void:
-	var rig: Array[Node3D] = new_moored_ship_with_player(Vector3(0, 6.25, -11.8))
-	var runner: GdUnitSceneRunner = scene_runner(rig[0].get_parent())
-	var spirit: LanternSpirit = lantern_at_shoulder(rig[1])
-	await physics_ticks(runner, 5)
-
-	place_player_3d(runner, (rig[0] as Ship).to_global(ON_THE_BOW))
-	await physics_ticks(runner, 5)
-
-	assert_bool(spirit.saying() in moment_lines(&"far_light")).is_true()
-
-
-func test_at_dawn_he_spots_the_island_instead() -> void:
-	var rig: Array[Node3D] = new_moored_ship_with_player(Vector3(0, 6.25, -11.8))
-	var time: TimeOfDay = TimeOfDay.new()
-	rig[0].get_parent().add_child(time)
-	time.dawn = 1.0
-	var runner: GdUnitSceneRunner = scene_runner(rig[0].get_parent())
-	var spirit: LanternSpirit = lantern_at_shoulder(rig[1])
-	await physics_ticks(runner, 5)
-
-	place_player_3d(runner, (rig[0] as Ship).to_global(ON_THE_BOW))
-	await physics_ticks(runner, 5)
-
-	assert_bool(spirit.saying() in moment_lines(&"island")).is_true()
-
-
-func test_he_has_a_think_between_guesses() -> void:
-	var rig: Array[Node3D] = new_moored_ship_with_player(Vector3(0, 6.25, -11.8))
-	var runner: GdUnitSceneRunner = scene_runner(rig[0].get_parent())
-	var lookout: Lookout = rig[0].get_node("Visuals/UpperDeck/Dressing/Lookout") as Lookout
-	await physics_ticks(runner, 5)
-	assert_bool(lookout.would_speak()).is_true()
-
-	place_player_3d(runner, (rig[0] as Ship).to_global(ON_THE_BOW))
-	await physics_ticks(runner, 5)
-
-	assert_bool(lookout.would_speak()).is_false()
 
 
 func test_he_is_glad_when_you_stop_the_ship() -> void:
