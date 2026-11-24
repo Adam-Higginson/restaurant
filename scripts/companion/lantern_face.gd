@@ -6,8 +6,8 @@ extends Node3D
 ## - His [b]eyes[/b] change shape with [member expression]: round for
 ##   surprise, slanted in for determined, slanted out for worried, flat for
 ##   tired, thin lines for asleep.
-## - His [b]flame[/b], drawn on his panes as pixel fire like every other
-##   lantern aboard, follows [member strength] (lower, flickering harder
+## - His [b]flame[/b], burning behind his glass like every other lantern
+##   aboard (lantern_flame.gdshader), follows [member strength] (lower, flickering harder
 ##   and cooling from amber to blue as he weakens), tips towards
 ##   [member lean], and stands taller or shrinks back with [member swell].
 ## - His [b]glass[/b] shows what he's been through: [member fogged],

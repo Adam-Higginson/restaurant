@@ -3,20 +3,23 @@
 [ext_resource type="Script" path="res://scripts/companion/lantern_face.gd" id="1_face"]
 [ext_resource type="Material" path="res://assets/placeholder/materials/iron.tres" id="2_iron"]
 [ext_resource type="Material" path="res://assets/placeholder/materials/hold_dark.tres" id="3_dark"]
-[ext_resource type="Shader" path="res://shaders/lantern_glass.gdshader" id="4_glass"]
+[ext_resource type="Shader" path="res://shaders/lantern_flame.gdshader" id="4_glass"]
 
 [sub_resource type="ShaderMaterial" id="Material_Glass"]
+render_priority = 1
 shader = ExtResource("4_glass")
-shader_parameter/texels = 7.0
-shader_parameter/glow = 1.9
+shader_parameter/box_half = Vector3(0.085, 0.1, 0.085)
+shader_parameter/wick = Vector3(0, -0.075, 0)
+shader_parameter/flame_height = 0.135
+shader_parameter/flame_width = 0.032
+shader_parameter/glow = 1.6
 shader_parameter/strength = 1.0
 shader_parameter/lean = Vector3(0, 0, 0)
 shader_parameter/swell = 1.0
-shader_parameter/backing = 0.55
+shader_parameter/backing = 0.25
 shader_parameter/fog = 0.0
 shader_parameter/streaks = 0.0
 shader_parameter/crack = 0.0
-shader_parameter/half_size = Vector2(0.085, 0.1)
 
 [sub_resource type="BoxMesh" id="Glass"]
 size = Vector3(0.17, 0.2, 0.17)

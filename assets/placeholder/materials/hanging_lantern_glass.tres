@@ -1,0 +1,12 @@
+[gd_resource type="ShaderMaterial" format=3 uid="uid://48na8akd4pov"]
+
+[ext_resource type="Shader" path="res://shaders/lantern_flame.gdshader" id="1_flame"]
+
+[resource]
+render_priority = 1
+shader = ExtResource("1_flame")
+shader_parameter/box_half = Vector3(0.075, 0.085, 0.075)
+shader_parameter/wick = Vector3(0, -0.055, 0)
+shader_parameter/flame_height = 0.1
+shader_parameter/flame_width = 0.022
+shader_parameter/lattice = 1.0
