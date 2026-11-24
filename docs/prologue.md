@@ -587,7 +587,7 @@ The player can now explore the ship freely. Sleeping in their bunk takes them to
 
 ### Scene 7: Passage of time (#187)
 
-*As built (#187), a short version: the dawn over the stern with the Grave's last lights falling behind, the lantern flitting about the deck, the captain at the chart, and the lantern at the bow. The clear turquoise sea and the flying fish are to come.*
+*As built (#187, the full montage #197): about a minute, as written below. The flying fish became fish simply leaping from the water: wings made in code looked cheap. The rainwater dripping from the rigging is the last of the night's rain running off it, before the clouds part.*
 
 **Location:** the Salt and Ember, at sea.
 
