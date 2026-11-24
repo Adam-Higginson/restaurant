@@ -11,9 +11,12 @@
 [ext_resource type="Script" path="res://scripts/cutscene/stage_cues.gd" id="308_stages"]
 [ext_resource type="Script" path="res://scripts/cutscene/clip_cues.gd" id="309_clips"]
 [ext_resource type="Script" path="res://scripts/cutscene/storm_cues.gd" id="310_storm"]
+[ext_resource type="Script" path="res://scripts/cutscene/sea_cues.gd" id="310_sea_cues"]
+[ext_resource type="AudioStream" path="res://assets/audio/intro/impactBell_heavy_001.ogg" id="315_ring"]
 [ext_resource type="Script" path="res://scripts/cutscene/sound_cues.gd" id="311_sounds"]
 [ext_resource type="Script" path="res://scripts/cutscene/look_cues.gd" id="312_looks"]
 [ext_resource type="PackedScene" path="res://scenes/prototype/intro/underwater_stage.tscn" id="313_underwater"]
+[ext_resource type="PackedScene" path="res://scenes/prototype/intro/grave_stage.tscn" id="313_grave"]
 [ext_resource type="PackedScene" path="res://ui/cutscene_prompt.tscn" id="314_prompt"]
 [ext_resource type="AudioStream" path="res://assets/audio/ui/confirmation_001.wav" id="315_confirm"]
 [ext_resource type="AudioStream" path="res://assets/audio/intro/grasp.tres" id="316_grasp"]
@@ -216,6 +219,10 @@ script = ExtResource("309_clips")
 script = ExtResource("310_storm")
 weather = NodePath("../Weather")
 
+[node name="SeaCues" type="Node" parent="." node_paths=PackedStringArray("sea")]
+script = ExtResource("310_sea_cues")
+sea = NodePath("../SeaSurface")
+
 [node name="ChoiceCues" type="Node" parent="." node_paths=PackedStringArray("choice")]
 script = ExtResource("91_choice")
 choice = NodePath("../LookChoice")
@@ -256,6 +263,11 @@ recording = "res://assets/third_party/audio/plunge.ogg"
 script = ExtResource("318_optional")
 recording = "res://assets/third_party/audio/bell_far.ogg"
 
+[node name="Ring" type="AudioStreamPlayer" parent="SoundCues"]
+stream = ExtResource("315_ring")
+volume_db = -10.0
+pitch_scale = 0.62
+
 [node name="Gasp" type="AudioStreamPlayer" parent="SoundCues"]
 script = ExtResource("318_optional")
 recording = "res://assets/third_party/audio/gasp.ogg"
@@ -263,6 +275,8 @@ recording = "res://assets/third_party/audio/gasp.ogg"
 [node name="Stages" type="Node" parent="."]
 
 [node name="Underwater" parent="Stages" instance=ExtResource("313_underwater")]
+
+[node name="Grave" parent="Stages" instance=ExtResource("313_grave")]
 
 [node name="CutscenePrompt" parent="." instance=ExtResource("314_prompt")]
 
