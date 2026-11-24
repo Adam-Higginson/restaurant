@@ -1,0 +1,35 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://scripts/cutscene/stage.gd" id="1_stage"]
+[ext_resource type="Script" path="res://scripts/cutscene/stage_view.gd" id="2_view"]
+[ext_resource type="PackedScene" path="res://scenes/prototype/intro/grave.tscn" id="3_set"]
+
+[node name="Grave" type="CanvasLayer"]
+layer = 15
+script = ExtResource("1_stage")
+fade_seconds = 1.2
+covers_world = true
+
+[node name="View" type="Control" parent="."]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+mouse_filter = 2
+script = ExtResource("2_view")
+
+[node name="Picture" type="TextureRect" parent="View"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+mouse_filter = 2
+expand_mode = 1
+
+[node name="World" type="SubViewport" parent="View"]
+own_world_3d = true
+handle_input_locally = false
+size = Vector2i(1440, 810)
+render_target_update_mode = 0
+
+[node name="Set" parent="View/World" instance=ExtResource("3_set")]
