@@ -5167,6 +5167,9 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4.9, 5.3, -1.2)
 [node name="WaterButt" type="StaticBody3D" parent="Dressing" unique_id=260946632 instance=ExtResource("23_leehl")]
 transform = Transform3D(1.35, 0, 0, 0, 1.35, 0, 0, 0, 1.35, -5, 5.3, -1.6)
 
+[node name="Meshy" parent="Dressing/WaterButt"]
+path = ""
+
 [node name="Ladle" type="MeshInstance3D" parent="Dressing" unique_id=533575010]
 transform = Transform3D(0.9396926, 0.17101006, 0.2961981, 0, 0.8660254, -0.5, -0.34202012, 0.4698463, 0.81379765, -4.85, 6.5, -1.5)
 material_override = ExtResource("11_nfyf8")
