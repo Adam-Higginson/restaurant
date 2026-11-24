@@ -1,0 +1,11 @@
+# Things you can look at (Inspectable, #185). Each section is one thing,
+# named by the Inspectable's Lines. Interact plays it; nothing else happens.
+
+~ start
+narrator: Nothing much to see.
+
+# The navigation room's chart, on the chart table (#185). A world map that
+# opens drawn, like a book, is #192.
+~ grave_chart
+narrator: An old chart. Someone has marked a route through the *Grave of the Lanterns*.
+narrator: The destination appears to be an island somewhere beyond the fog. Its name is lost to age and damp: you can't make it out.

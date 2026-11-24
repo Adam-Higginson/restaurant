@@ -228,6 +228,7 @@
 [ext_resource type="Script" path="res://scripts/people/waypoint.gd" id="401_waypoint"]
 [ext_resource type="PackedScene" path="res://scenes/prototype/props/treasure_chest.tscn" id="320_chest"]
 [ext_resource type="Resource" path="res://data/tools/chefs_knife.tres" id="321_knife"]
+[ext_resource type="PackedScene" path="res://scenes/prototype/navigation_room.tscn" id="185_nav"]
 
 [sub_resource type="BoxMesh" id="Mesh_Hull"]
 size = Vector3(12, 2.5, 30)
@@ -241,8 +242,23 @@ size = Vector3(0.3, 4, 30)
 [sub_resource type="BoxMesh" id="Mesh_WallBow"]
 size = Vector3(11.4, 4, 0.3)
 
-[sub_resource type="BoxMesh" id="Mesh_Bulkhead"]
-size = Vector3(11.4, 4, 0.3)
+[sub_resource type="BoxMesh" id="Mesh_BulkheadPort"]
+size = Vector3(0.55, 4, 0.3)
+
+[sub_resource type="BoxShape3D" id="Shape_BulkheadPort"]
+size = Vector3(0.55, 4, 0.3)
+
+[sub_resource type="BoxMesh" id="Mesh_BulkheadStarboard"]
+size = Vector3(9.65, 4, 0.3)
+
+[sub_resource type="BoxShape3D" id="Shape_BulkheadStarboard"]
+size = Vector3(9.65, 4, 0.3)
+
+[sub_resource type="BoxMesh" id="Mesh_BulkheadLintel"]
+size = Vector3(1.2, 1.8, 0.3)
+
+[sub_resource type="BoxShape3D" id="Shape_BulkheadLintel"]
+size = Vector3(1.2, 1.8, 0.3)
 
 [sub_resource type="BoxMesh" id="Mesh_DeckFore"]
 size = Vector3(12, 0.3, 16.15)
@@ -537,9 +553,6 @@ size = Vector3(11.4, 4, 0.3)
 [sub_resource type="BoxShape3D" id="Shape_WallStern"]
 size = Vector3(11.4, 4, 0.3)
 
-[sub_resource type="BoxShape3D" id="Shape_Bulkhead"]
-size = Vector3(11.4, 4, 0.3)
-
 [sub_resource type="BoxShape3D" id="Shape_DeckFore"]
 size = Vector3(12, 0.3, 16.15)
 
@@ -806,10 +819,20 @@ radius = 0.34
 height = 0.6
 sides = 16
 
-[node name="Bulkhead" type="MeshInstance3D" parent="Visuals" unique_id=1690833931]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3, 1)
+[node name="BulkheadPort" type="MeshInstance3D" parent="Visuals"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -5.425, 3, 1)
 material_override = ExtResource("2_nifss")
-mesh = SubResource("Mesh_Bulkhead")
+mesh = SubResource("Mesh_BulkheadPort")
+
+[node name="BulkheadStarboard" type="MeshInstance3D" parent="Visuals"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.875, 3, 1)
+material_override = ExtResource("2_nifss")
+mesh = SubResource("Mesh_BulkheadStarboard")
+
+[node name="BulkheadLintel" type="MeshInstance3D" parent="Visuals"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4.55, 4.1, 1)
+material_override = ExtResource("2_nifss")
+mesh = SubResource("Mesh_BulkheadLintel")
 
 [node name="DeckFore" type="MeshInstance3D" parent="Visuals" unique_id=345099613]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 5.15, -6.925)
@@ -1396,9 +1419,17 @@ shape = SubResource("Shape_WallBow")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3, 14.85)
 shape = SubResource("Shape_WallStern")
 
-[node name="BulkheadShape" type="CollisionShape3D" parent="." unique_id=211773771]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3, 1)
-shape = SubResource("Shape_Bulkhead")
+[node name="BulkheadPortShape" type="CollisionShape3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -5.425, 3, 1)
+shape = SubResource("Shape_BulkheadPort")
+
+[node name="BulkheadStarboardShape" type="CollisionShape3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.875, 3, 1)
+shape = SubResource("Shape_BulkheadStarboard")
+
+[node name="BulkheadLintelShape" type="CollisionShape3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4.55, 4.1, 1)
+shape = SubResource("Shape_BulkheadLintel")
 
 [node name="DeckForeShape" type="CollisionShape3D" parent="." unique_id=1481181920]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 5.15, -6.925)
@@ -1675,6 +1706,8 @@ shape = SubResource("BoxShape3D_p2e1w")
 [node name="CorridorPost2Shape" type="CollisionShape3D" parent="." unique_id=1327834301]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3.27, 2.3, 7.35)
 shape = SubResource("BoxShape3D_bbi6x")
+
+[node name="NavigationRoom" parent="." instance=ExtResource("185_nav")]
 
 [node name="BunkRoom" type="Node3D" parent="." unique_id=76019696]
 

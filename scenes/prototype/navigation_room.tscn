@@ -1,0 +1,169 @@
+[gd_scene format=3]
+
+[ext_resource type="Material" path="res://assets/placeholder/materials/galley_wood.tres" id="1_wood"]
+[ext_resource type="Material" path="res://assets/placeholder/materials/galley_floor.tres" id="2_floor"]
+[ext_resource type="Material" path="res://assets/placeholder/materials/chart.tres" id="3_chart"]
+[ext_resource type="Material" path="res://assets/placeholder/materials/dark_prop_wood.tres" id="4_dark"]
+[ext_resource type="PackedScene" path="res://scenes/prototype/deck/chart_table.tscn" id="5_table"]
+[ext_resource type="PackedScene" path="res://scenes/prototype/dressing/bookshelf.tscn" id="6_shelf"]
+[ext_resource type="PackedScene" path="res://scenes/prototype/props/old_book.tscn" id="7_book"]
+[ext_resource type="PackedScene" path="res://scenes/prototype/props/lantern.tscn" id="8_lantern"]
+[ext_resource type="Script" path="res://scripts/props/inspectable.gd" id="9_look"]
+[ext_resource type="Script" path="res://scripts/interaction/interactable_3d.gd" id="10_reach"]
+[ext_resource type="Material" path="res://assets/placeholder/materials/linen.tres" id="11_paper"]
+
+[sub_resource type="BoxMesh" id="Mesh_Forward"]
+size = Vector3(5.9, 2.6, 0.2)
+
+[sub_resource type="BoxShape3D" id="Shape_Forward"]
+size = Vector3(5.9, 2.6, 0.2)
+
+[sub_resource type="BoxMesh" id="Mesh_Starboard"]
+size = Vector3(0.2, 2.6, 4.65)
+
+[sub_resource type="BoxShape3D" id="Shape_Starboard"]
+size = Vector3(0.2, 2.6, 4.65)
+
+[sub_resource type="BoxMesh" id="Mesh_Ceiling"]
+size = Vector3(6.1, 0.1, 4.65)
+
+[sub_resource type="BoxShape3D" id="Shape_Ceiling"]
+size = Vector3(6.1, 0.1, 4.65)
+
+[sub_resource type="BoxMesh" id="Mesh_Floor"]
+size = Vector3(5.7, 0.02, 4.45)
+
+[sub_resource type="BoxMesh" id="Mesh_Post"]
+size = Vector3(0.14, 2.2, 0.36)
+
+[sub_resource type="BoxMesh" id="Mesh_Head"]
+size = Vector3(1.48, 0.16, 0.36)
+
+[sub_resource type="QuadMesh" id="Mesh_WallChart"]
+size = Vector2(0.8, 0.58)
+
+[sub_resource type="QuadMesh" id="Mesh_SmallChart"]
+size = Vector2(0.5, 0.42)
+
+[sub_resource type="CylinderMesh" id="Mesh_Roll"]
+top_radius = 0.035
+bottom_radius = 0.035
+height = 0.6
+radial_segments = 8
+rings = 1
+
+[sub_resource type="BoxShape3D" id="Shape_Reach"]
+size = Vector3(1.6, 1.0, 1.2)
+
+[node name="NavigationRoom" type="StaticBody3D"]
+
+[node name="Forward" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.85, 2.3, -3.7)
+material_override = ExtResource("1_wood")
+mesh = SubResource("Mesh_Forward")
+
+[node name="ForwardShape" type="CollisionShape3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.85, 2.3, -3.7)
+shape = SubResource("Shape_Forward")
+
+[node name="Starboard" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.1, 2.3, -1.375)
+material_override = ExtResource("1_wood")
+mesh = SubResource("Mesh_Starboard")
+
+[node name="StarboardShape" type="CollisionShape3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.1, 2.3, -1.375)
+shape = SubResource("Shape_Starboard")
+
+[node name="Ceiling" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.85, 3.65, -1.375)
+material_override = ExtResource("1_wood")
+mesh = SubResource("Mesh_Ceiling")
+
+[node name="CeilingShape" type="CollisionShape3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.85, 3.65, -1.375)
+shape = SubResource("Shape_Ceiling")
+
+[node name="Floor" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.85, 1.01, -1.375)
+material_override = ExtResource("2_floor")
+mesh = SubResource("Mesh_Floor")
+
+[node name="DoorPostPort" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -5.22, 2.1, 1)
+material_override = ExtResource("4_dark")
+mesh = SubResource("Mesh_Post")
+
+[node name="DoorPostStarboard" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3.88, 2.1, 1)
+material_override = ExtResource("4_dark")
+mesh = SubResource("Mesh_Post")
+
+[node name="DoorHead" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4.55, 3.28, 1)
+material_override = ExtResource("4_dark")
+mesh = SubResource("Mesh_Head")
+
+[node name="ChartTable" parent="." instance=ExtResource("5_table")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.5, 1, -1.45)
+
+[node name="GraveChart" type="Node3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.5, 1.95, -1.45)
+script = ExtResource("9_look")
+what = "the chart"
+lines = &"grave_chart"
+
+[node name="Reach" type="Area3D" parent="GraveChart"]
+script = ExtResource("10_reach")
+focus_height = 0.4
+
+[node name="Shape" type="CollisionShape3D" parent="GraveChart/Reach"]
+shape = SubResource("Shape_Reach")
+
+[node name="RolledChart1" type="MeshInstance3D" parent="."]
+transform = Transform3D(0, -1, 0, 1, 0, 0, 0, 0, 1, -2.75, 1.32, -1.55)
+material_override = ExtResource("11_paper")
+mesh = SubResource("Mesh_Roll")
+
+[node name="RolledChart2" type="MeshInstance3D" parent="."]
+transform = Transform3D(0, -1, 0, 1, 0, 0, 0, 0, 1, -2.45, 1.32, -1.33)
+material_override = ExtResource("11_paper")
+mesh = SubResource("Mesh_Roll")
+
+[node name="RolledChart3" type="MeshInstance3D" parent="."]
+transform = Transform3D(0, -1, 0, 1, 0, 0, 0, 0, 1, -2.2, 1.32, -1.5)
+material_override = ExtResource("11_paper")
+mesh = SubResource("Mesh_Roll")
+
+[node name="Bookshelf" parent="." instance=ExtResource("6_shelf")]
+transform = Transform3D(0, 0, 1, 0, 1, 0, -1, 0, 0, -5.45, 1, -1.8)
+
+[node name="OldBook" parent="." instance=ExtResource("7_book")]
+transform = Transform3D(0.1736, 0, -0.9848, 0, 1, 0, 0.9848, 0, 0.1736, -5.43, 1.97, -2.18)
+
+[node name="WallChart1" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4.3, 2.4, -3.59)
+material_override = ExtResource("3_chart")
+mesh = SubResource("Mesh_WallChart")
+
+[node name="WallChart2" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.3, 2.55, -3.59)
+material_override = ExtResource("3_chart")
+mesh = SubResource("Mesh_WallChart")
+
+[node name="WallChart3" type="MeshInstance3D" parent="."]
+transform = Transform3D(0, 0, -1, 0, 1, 0, 1, 0, 0, -0.01, 2.35, -0.6)
+material_override = ExtResource("3_chart")
+mesh = SubResource("Mesh_SmallChart")
+
+[node name="WallChart4" type="MeshInstance3D" parent="."]
+transform = Transform3D(0, 0, -1, 0, 1, 0, 1, 0, 0, -0.01, 2.6, -2.4)
+material_override = ExtResource("3_chart")
+mesh = SubResource("Mesh_WallChart")
+
+[node name="Lantern" parent="." instance=ExtResource("8_lantern")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.5, 3.25, -1.25)
+light_energy = 1.7
+light_range = 4.5
+swing_degrees = 3.0
+period = 4.6
