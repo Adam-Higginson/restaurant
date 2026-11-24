@@ -324,10 +324,13 @@ lantern: But I can't let you go.
 
 # The white goes to black, and stays black for a while: how you came aboard
 # isn't shown. Then, slowly, the bunk room at night, the storm outside: you
-# asleep in your bunk. He isn't beside you: he's on his round table by the
-# stove, small and blue, his light nearly all gone (#158).
+# asleep in your bunk, and the captain standing at its foot, watching over
+# you. The lantern isn't beside you: he's on his round table by the stove,
+# small and blue, his light nearly all gone (#158).
 ~ asleep
-@hide heron
+@place heron bedside
+@show heron
+@face heron player
 @hide player
 @show sleeping_you
 @home lantern
@@ -341,24 +344,22 @@ set lantern_low
 @wait 0.8
 -> waking
 
-# You wake on your own, and the captain is in the doorway, come to look
-# you over (the Prologue's Scene 2, #184).
+# You wake on your own, with the captain standing over you at the foot of
+# your bunk (the Prologue's Scene 2, #184).
 ~ waking
 @start wakes
 @wait 1.6
--> doorway
+-> by_your_bunk
 
-# The captain in the doorway; the lantern on his round table, barely lit,
-# but talking. He tries to float over to you and can't. The captain asks
-# what you remember, and you've nothing to tell him. (Your answers are
-# the replies you pick.)
-~ doorway
+# By the time we look round you're up, and he's there by your bunk; the
+# lantern on his round table, barely lit, but talking. He tries to float
+# over to you and can't. The captain asks what you remember, and you've
+# nothing to tell him. (Your answers are the replies you pick.)
+~ by_your_bunk
 @hide sleeping_you
 @show player
-@place heron doorway
-@show heron
 @face heron player
-@shot doorway cut
+@shot beside_your_bunk cut
 @wait 0.8
 heron: Ah. You're awake.
 heron: Good. I was beginning to wonder whether we'd rescued you or merely inconvenienced a corpse.
@@ -386,7 +387,7 @@ heron: You could have left them.
 @wait 1.0
 lantern: I know.
 @face heron player
-@shot doorway
+@shot beside_your_bunk
 heron: Do you remember anything?
 - (Shake your head) -> your_name
 

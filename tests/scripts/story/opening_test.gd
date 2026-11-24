@@ -265,9 +265,10 @@ func test_his_light_pours_into_you_the_deep_stirs_and_he_lets_go_to_white() -> v
 	assert_bool(_ambience().hushed).is_true()
 	assert_float(flow.filled).is_equal_approx(1.0, 0.01)
 
-	# No surface and no rail: from the white to black, and the bunk room.
+	# No surface and no rail: from the white to black, and the bunk room,
+	# where the captain stands at the foot of your bunk.
 	assert_bool(underwater.is_open).is_false()
-	assert_bool(heron.is_present()).is_false()
+	assert_vector(heron.global_position).is_equal_approx(_mark("bedside").global_position, NEAR)
 	for i: int in 240:
 		if _fade().is_covering() and not _fade().is_white():
 			break
@@ -301,11 +302,14 @@ func test_you_wake_the_captain_and_the_weak_lantern_talk_and_then_the_ship_is_yo
 	_conversation.choice_made.connect(func() -> void:
 		replies.append(_conversation.box.shown_choices()[_conversation.selected_choice()]))
 
-	# Out of the black: you, asleep in your bunk. He isn't beside you: he's
-	# home on his table, low (#158), his glass whole (#183).
+	# Out of the black: you, asleep in your bunk, and the captain at its foot,
+	# watching over you. The lantern isn't beside you: he's home on his
+	# table, low (#158), his glass whole (#183).
+	var bedside: Node3D = _mark("bedside")
 	assert_bool(await _reaches(runner, &"waking")).is_true()
 	assert_bool(_fade().visible).is_false()
-	assert_bool(heron.is_present()).is_false()
+	assert_bool(heron.is_present()).is_true()
+	assert_vector(heron.global_position).is_equal_approx(bedside.global_position, NEAR)
 	assert_bool(sleeping.visible).is_true()
 	assert_bool(your_body.visible).is_false()
 	assert_object(spirit.held).is_null()
@@ -318,12 +322,13 @@ func test_you_wake_the_captain_and_the_weak_lantern_talk_and_then_the_ship_is_yo
 	assert_bool(you_asleep.eyes_shut).is_false()
 	assert_int(said[0]).is_equal(0)
 
-	# The captain in the doorway, on a fixed shot, and you're up.
-	assert_bool(await _reaches(runner, &"doorway")).is_true()
+	# You're up, and he's still there by your bunk, facing you, on a fixed
+	# shot: no calling across the room.
+	assert_bool(await _reaches(runner, &"by_your_bunk")).is_true()
 	assert_bool(await _line_shows(runner, said, 1)).is_true()
-	var doorway: Node3D = _ship.get_node("Marks/Doorway") as Node3D
 	assert_bool(heron.is_present()).is_true()
-	assert_vector(heron.global_position).is_equal_approx(doorway.global_position, NEAR)
+	assert_vector(heron.global_position).is_equal_approx(bedside.global_position, NEAR)
+	assert_float(heron.global_position.distance_to(_player.global_position)).is_less(3.0)
 	assert_bool(sleeping.visible).is_false()
 	assert_bool(your_body.visible).is_true()
 	assert_str(lines[0]).is_equal("Ah. You're awake.")
@@ -490,11 +495,11 @@ func test_everything_the_intro_asks_for_is_in_the_scene() -> void:
 
 
 func test_it_can_open_on_a_later_beat_with_no_black_screen() -> void:
-	_build(&"doorway")
+	_build(&"by_your_bunk")
 	var runner: GdUnitSceneRunner = scene_runner(_sea)
 	await physics_ticks(runner, 5)
 
-	assert_str(String(_conversation.section())).is_equal("doorway")
+	assert_str(String(_conversation.section())).is_equal("by_your_bunk")
 	assert_bool(_fade().visible).is_false()
 	assert_bool(_opening.is_playing).is_true()
 

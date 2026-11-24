@@ -2178,6 +2178,9 @@ transform = Transform3D(0.8872, 0.0961, -0.4512, -0.0000, 0.9781, 0.2083, 0.4614
 [node name="StoveNook" type="Marker3D" parent="Shots" groups=["shots"]]
 transform = Transform3D(-0.837, -0.104, 0.537, 0, 0.982, 0.19, -0.547, 0.159, -0.822, 0.3, 2.6, 8.4)
 
+[node name="BesideYourBunk" type="Marker3D" parent="Shots" groups=["shots"]]
+transform = Transform3D(-0.7714, 0.1435, -0.62, 0, 0.9743, 0.2255, 0.6364, 0.1739, -0.7515, 2.1, 2.6, 11.4)
+
 [node name="Doorway" type="Marker3D" parent="Shots" groups=["shots"]]
 transform = Transform3D(0.9975, -0.0148, -0.069, 0, 0.9777, -0.2101, 0.0706, 0.2095, 0.9753, -2.95, 2.3, 11.2)
 
@@ -2237,6 +2240,9 @@ transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, 0.3,
 
 [node name="LanternSinks" type="Marker3D" parent="Marks" groups=["marks"]]
 transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, 0.05, 1.8, 11.55)
+
+[node name="Bedside" type="Marker3D" parent="Marks" groups=["marks"]]
+transform = Transform3D(0.9138, 0, 0.4061, 0, 1, 0, -0.4061, 0, 0.9138, 4.1, 1, 13.8)
 
 [node name="Doorway" type="Marker3D" parent="Marks" groups=["marks"]]
 transform = Transform3D(-0.5582, 0, -0.8297, 0, 1, 0, 0.8297, 0, -0.5582, -2.72, 1, 7.95)
