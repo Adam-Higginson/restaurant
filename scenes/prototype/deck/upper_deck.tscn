@@ -25,18 +25,15 @@
 [ext_resource type="PackedScene" uid="uid://h16f2bkjvagk6" path="res://scenes/prototype/deck/deck_barrel.tscn" id="23_leehl"]
 [ext_resource type="PackedScene" uid="uid://5lohgj4wazmk4" path="res://scenes/prototype/deck/fife_rail.tscn" id="24_l4210"]
 [ext_resource type="PackedScene" uid="uid://aupp776zkv43p" path="res://scenes/prototype/deck/pin_rail.tscn" id="25_qve44"]
-[ext_resource type="PackedScene" uid="uid://4ap25epwewwug" path="res://scenes/prototype/deck/net_mending.tscn" id="26_l4ab3"]
 [ext_resource type="PackedScene" path="res://scenes/prototype/props/water_butt.tscn" id="27_lbw8e"]
 [ext_resource type="Script" path="res://scripts/props/water_butt.gd" id="28_sv7ji"]
 [ext_resource type="Resource" path="res://data/items/rainwater.tres" id="29_v8w0a"]
 [ext_resource type="PackedScene" path="res://scenes/prototype/props/fishing_spot.tscn" id="32_ddph0"]
 [ext_resource type="Script" path="res://scripts/fishing/fishing_spot.gd" id="33_pkgkr"]
 [ext_resource type="Resource" path="res://data/items/herring.tres" id="34_rtfdt"]
-[ext_resource type="PackedScene" uid="uid://dmwsmhjke2aft" path="res://scenes/prototype/deck/mop_and_bucket.tscn" id="35_1phk1"]
 [ext_resource type="PackedScene" uid="uid://hza45obeaciaw" path="res://scenes/prototype/deck/ships_wheel.tscn" id="36_17mwb"]
 [ext_resource type="PackedScene" uid="uid://h6ph4i432h4dh" path="res://scenes/prototype/deck/binnacle.tscn" id="37_apos4"]
 [ext_resource type="PackedScene" uid="uid://tfxgvnx8564as" path="res://scenes/prototype/deck/chart_table.tscn" id="38_r44kn"]
-[ext_resource type="Material" path="res://assets/placeholder/materials/linen.tres" id="39_fs2am"]
 [ext_resource type="Material" path="res://assets/placeholder/materials/oilskin.tres" id="40_771yo"]
 [ext_resource type="PackedScene" uid="uid://em48q1c6ltb6c" path="res://scenes/prototype/deck/lantern_post.tscn" id="41_hqm6b"]
 [ext_resource type="PackedScene" path="res://scenes/prototype/props/lantern.tscn" id="42_16o8s"]
@@ -45,11 +42,6 @@
 [ext_resource type="Script" path="res://scripts/ship/ships_bell.gd" id="45_0586u"]
 [ext_resource type="Script" path="res://scripts/interaction/interactable_3d.gd" id="46_qvvwh"]
 [ext_resource type="Script" path="res://scripts/weather/sound_spot.gd" id="47_f0l7j"]
-[ext_resource type="Material" uid="uid://b1x2mq8vujj71" path="res://assets/placeholder/materials/cat_fur.tres" id="48_kxxmk"]
-[ext_resource type="Material" uid="uid://bbxyumxxl5qqr" path="res://assets/placeholder/materials/gull_feathers.tres" id="49_ihf6j"]
-[ext_resource type="Material" uid="uid://cqu2uhnobpsxi" path="res://assets/placeholder/materials/gull_beak.tres" id="50_tnt63"]
-[ext_resource type="Material" uid="uid://k0gwlwawbo4j" path="res://assets/placeholder/materials/gull_wing.tres" id="51_gmqr5"]
-
 [sub_resource type="BoxMesh" id="BoxMesh_1"]
 size = Vector3(0.18, 1.355, 1.065)
 
@@ -670,18 +662,6 @@ size = Vector3(0.9, 0.24, 0.24)
 [sub_resource type="BoxMesh" id="BoxMesh_168"]
 size = Vector3(0.04, 0.04, 0.5)
 
-[sub_resource type="BoxMesh" id="BoxMesh_169"]
-size = Vector3(1.1, 0.55, 0.6)
-
-[sub_resource type="BoxMesh" id="BoxMesh_170"]
-size = Vector3(1.14, 0.06, 0.64)
-
-[sub_resource type="BoxMesh" id="BoxMesh_171"]
-size = Vector3(0.5, 0.12, 0.36)
-
-[sub_resource type="BoxMesh" id="BoxMesh_172"]
-size = Vector3(0.4, 0.08, 0.3)
-
 [sub_resource type="BoxMesh" id="BoxMesh_173"]
 size = Vector3(0.36, 0.8, 0.1)
 
@@ -749,50 +729,17 @@ rings = 4
 [sub_resource type="BoxShape3D" id="BoxShape3D_188"]
 size = Vector3(1.2, 1.6, 1)
 
-[sub_resource type="SphereMesh" id="SphereMesh_189"]
-radius = 0.2
-height = 0.4
-radial_segments = 8
-rings = 4
+[sub_resource type="BoxMesh" id="BoxMesh_StairWall"]
+size = Vector3(0.08, 2, 3)
 
-[sub_resource type="SphereMesh" id="SphereMesh_190"]
-radius = 0.1
-height = 0.2
-radial_segments = 8
-rings = 4
+[sub_resource type="BoxMesh" id="BoxMesh_PatchWaist"]
+size = Vector3(0.05, 1.15, 2.9)
 
-[sub_resource type="BoxMesh" id="BoxMesh_191"]
-size = Vector3(0.05, 0.06, 0.03)
+[sub_resource type="BoxMesh" id="BoxMesh_PatchQuarter"]
+size = Vector3(0.05, 0.8, 1.5)
 
-[sub_resource type="TorusMesh" id="TorusMesh_192"]
-inner_radius = 0.17
-outer_radius = 0.23
-rings = 14
-ring_segments = 5
-
-[sub_resource type="BoxMesh" id="BoxMesh_193"]
-size = Vector3(0.03, 0.025, 0.02)
-
-[sub_resource type="SphereMesh" id="SphereMesh_194"]
-radius = 0.12
-height = 0.24
-radial_segments = 8
-rings = 4
-
-[sub_resource type="SphereMesh" id="SphereMesh_195"]
-radius = 0.075
-height = 0.15
-radial_segments = 8
-rings = 4
-
-[sub_resource type="BoxMesh" id="BoxMesh_196"]
-size = Vector3(0.025, 0.025, 0.08)
-
-[sub_resource type="BoxMesh" id="BoxMesh_197"]
-size = Vector3(0.03, 0.1, 0.26)
-
-[sub_resource type="BoxMesh" id="BoxMesh_198"]
-size = Vector3(0.1, 0.03, 0.1)
+[sub_resource type="BoxMesh" id="BoxMesh_PatchStern"]
+size = Vector3(0.05, 0.6, 0.6)
 
 [node name="UpperDeck" type="Node3D" unique_id=1977730867]
 
@@ -2404,6 +2351,11 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -5.21, 7.275, 12.955)
 material_override = ExtResource("2_3xgj1")
 mesh = SubResource("BoxMesh_95")
 
+[node name="StairWallPort" type="MeshInstance3D" parent="Structure/Quarterdeck"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -5.85, 6.3, 11.8)
+material_override = ExtResource("1_5e6l4")
+mesh = SubResource("BoxMesh_StairWall")
+
 [node name="StairwellRailPort" type="Node3D" parent="Structure/Quarterdeck" unique_id=1830973074]
 
 [node name="TopRail" type="MeshInstance3D" parent="Structure/Quarterdeck/StairwellRailPort" unique_id=35889992]
@@ -2535,6 +2487,11 @@ mesh = SubResource("BoxMesh_102")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5.21, 7.275, 12.955)
 material_override = ExtResource("2_3xgj1")
 mesh = SubResource("BoxMesh_95")
+
+[node name="StairWallStarboard" type="MeshInstance3D" parent="Structure/Quarterdeck"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5.85, 6.3, 11.8)
+material_override = ExtResource("1_5e6l4")
+mesh = SubResource("BoxMesh_StairWall")
 
 [node name="StairwellRailStarboard" type="Node3D" parent="Structure/Quarterdeck" unique_id=1055360698]
 
@@ -3007,6 +2964,38 @@ light_color = Color(1, 0.6, 0.3, 1)
 light_energy = 0.5
 omni_range = 2.2
 
+[node name="HullPatches" type="Node3D" parent="Structure"]
+
+[node name="WaistStarboard" type="MeshInstance3D" parent="Structure/HullPatches"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6.28, 5.925, -1.95)
+material_override = ExtResource("1_5e6l4")
+mesh = SubResource("BoxMesh_PatchWaist")
+
+[node name="QuarterdeckStarboard" type="MeshInstance3D" parent="Structure/HullPatches"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6.1, 7.7, 12.3)
+material_override = ExtResource("1_5e6l4")
+mesh = SubResource("BoxMesh_PatchQuarter")
+
+[node name="SternStarboard" type="MeshInstance3D" parent="Structure/HullPatches"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6, 7.85, 14)
+material_override = ExtResource("1_5e6l4")
+mesh = SubResource("BoxMesh_PatchStern")
+
+[node name="WaistPort" type="MeshInstance3D" parent="Structure/HullPatches"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -6.28, 5.925, -1.95)
+material_override = ExtResource("1_5e6l4")
+mesh = SubResource("BoxMesh_PatchWaist")
+
+[node name="QuarterdeckPort" type="MeshInstance3D" parent="Structure/HullPatches"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -6.1, 7.7, 12.3)
+material_override = ExtResource("1_5e6l4")
+mesh = SubResource("BoxMesh_PatchQuarter")
+
+[node name="SternPort" type="MeshInstance3D" parent="Structure/HullPatches"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -6, 7.85, 14)
+material_override = ExtResource("1_5e6l4")
+mesh = SubResource("BoxMesh_PatchStern")
+
 [node name="Masts" type="Node3D" parent="." unique_id=308790890]
 
 [node name="MainMast" type="Node3D" parent="Masts" unique_id=63663652]
@@ -3123,7 +3112,7 @@ mesh = SubResource("CylinderMesh_147")
 [node name="Bowsprit" type="Node3D" parent="Masts" unique_id=707973204]
 
 [node name="Spar" type="MeshInstance3D" parent="Masts/Bowsprit" unique_id=1726287150]
-transform = Transform3D(0, 0, 0.42, -0.41086844, 2.65, 0, -0.08710411, -12.5, 0, 0, 7.9750004, -20.25)
+transform = Transform3D(0, 0, 0.42, -0.387232, 4.947984, 0, -0.162638, -11.780915, 0, 0, 9.123992, -19.890457)
 material_override = ExtResource("2_3xgj1")
 mesh = SubResource("CylinderMesh_34")
 
@@ -3138,7 +3127,7 @@ material_override = ExtResource("2_3xgj1")
 mesh = SubResource("BoxMesh_148")
 
 [node name="Gammoning" type="MeshInstance3D" parent="Masts/Bowsprit" unique_id=426415549]
-transform = Transform3D(1, 0, 0, 0, 0.29237166, 0.9563048, 0, -0.9563048, 0.29237166, 0, 7.1800003, -16.5)
+transform = Transform3D(1, 0, 0, 0, 0.466586, 0.884476, 0, -0.884476, 0.466586, 0, 7.639597, -16.356183)
 material_override = ExtResource("13_ddrw7")
 mesh = SubResource("CylinderMesh_149")
 
@@ -3202,341 +3191,341 @@ mesh = SubResource("CylinderMesh_34")
 [node name="Rigging" type="Node3D" parent="." unique_id=1129413221]
 
 [node name="ChannelPort" type="MeshInstance3D" parent="Rigging" unique_id=360035111]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -6.2, 6.05, -2.9)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -6.86, 6.05, -2.9)
 material_override = ExtResource("2_3xgj1")
 mesh = SubResource("BoxMesh_154")
 
 [node name="MainShroudsPort" type="Node3D" parent="Rigging" unique_id=1008296425]
 
 [node name="Shroud1" type="MeshInstance3D" parent="Rigging/MainShroudsPort" unique_id=477906585]
-transform = Transform3D(0, 5.07, 0.04673894, 0.0016821991, 8.17, -0.028977325, -0.05497427, 0.25, -0.00088669907, -3.715, 10.865, -4.375)
+transform = Transform3D(0, 5.73, 0.045036, 0.001682, 8.17, -0.031556, -0.054974, 0.25, -0.000966, -4.045, 10.865, -4.375)
 material_override = ExtResource("16_8fstm")
 mesh = SubResource("CylinderMesh_34")
 
 [node name="DeadeyeUpper1" type="MeshInstance3D" parent="Rigging/MainShroudsPort" unique_id=1050319101]
-transform = Transform3D(-4.371139e-08, -1, 0, 1, -4.371139e-08, 0, 0, 0, 1, -6.25, 6.78, -4.5)
+transform = Transform3D(0, -1, 0, 1, 0, 0, 0, 0, 1, -6.91, 6.78, -4.5)
 material_override = ExtResource("2_3xgj1")
 mesh = SubResource("CylinderMesh_155")
 
 [node name="DeadeyeLower1" type="MeshInstance3D" parent="Rigging/MainShroudsPort" unique_id=1380874509]
-transform = Transform3D(-4.371139e-08, -1, 0, 1, -4.371139e-08, 0, 0, 0, 1, -6.25, 6.38, -4.5)
+transform = Transform3D(0, -1, 0, 1, 0, 0, 0, 0, 1, -6.91, 6.38, -4.5)
 material_override = ExtResource("2_3xgj1")
 mesh = SubResource("CylinderMesh_155")
 
 [node name="Lanyard1_1" type="MeshInstance3D" parent="Rigging/MainShroudsPort" unique_id=577137775]
-transform = Transform3D(0, 0, 0.018, 0, -0.2999997, 0, 0.018, 0, 0, -6.25, 6.58, -4.56)
+transform = Transform3D(0, 0, 0.018, 0, -0.3, 0, 0.018, 0, 0, -6.91, 6.58, -4.56)
 material_override = ExtResource("13_ddrw7")
 cast_shadow = 0
 mesh = SubResource("CylinderMesh_34")
 
 [node name="Lanyard1_2" type="MeshInstance3D" parent="Rigging/MainShroudsPort" unique_id=553005426]
-transform = Transform3D(0, 0, 0.018, 0, -0.2999997, 0, 0.018, 0, 0, -6.25, 6.58, -4.5)
+transform = Transform3D(0, 0, 0.018, 0, -0.3, 0, 0.018, 0, 0, -6.91, 6.58, -4.5)
 material_override = ExtResource("13_ddrw7")
 cast_shadow = 0
 mesh = SubResource("CylinderMesh_34")
 
 [node name="Lanyard1_3" type="MeshInstance3D" parent="Rigging/MainShroudsPort" unique_id=1407883320]
-transform = Transform3D(0, 0, 0.018, 0, -0.2999997, 0, 0.018, 0, 0, -6.25, 6.58, -4.44)
+transform = Transform3D(0, 0, 0.018, 0, -0.3, 0, 0.018, 0, 0, -6.91, 6.58, -4.44)
 material_override = ExtResource("13_ddrw7")
 cast_shadow = 0
 mesh = SubResource("CylinderMesh_34")
 
 [node name="Chain1" type="MeshInstance3D" parent="Rigging/MainShroudsPort" unique_id=2136669399]
-transform = Transform3D(0, 0, 0.04, 0, -0.6500001, 0, 0.04, 0, 0, -6.25, 6.0550003, -4.5)
+transform = Transform3D(0, 0, 0.04, 0, -0.65, 0, 0.04, 0, 0, -6.91, 6.055, -4.5)
 material_override = ExtResource("6_iav1l")
 cast_shadow = 0
 mesh = SubResource("CylinderMesh_34")
 
 [node name="Shroud2" type="MeshInstance3D" parent="Rigging/MainShroudsPort" unique_id=728066559]
-transform = Transform3D(0, 5.07, 0.046762194, -0.0036942088, 8.17, -0.028887974, -0.054875795, -0.54999995, 0.0019447228, -3.715, 10.865, -3.6750002)
+transform = Transform3D(0, 5.73, 0.045063, -0.003694, 8.17, -0.031462, -0.054876, -0.55, 0.002118, -4.045, 10.865, -3.675)
 material_override = ExtResource("16_8fstm")
 mesh = SubResource("CylinderMesh_34")
 
 [node name="DeadeyeUpper2" type="MeshInstance3D" parent="Rigging/MainShroudsPort" unique_id=1769328093]
-transform = Transform3D(-4.371139e-08, -1, 0, 1, -4.371139e-08, 0, 0, 0, 1, -6.25, 6.78, -3.4)
+transform = Transform3D(0, -1, 0, 1, 0, 0, 0, 0, 1, -6.91, 6.78, -3.4)
 material_override = ExtResource("2_3xgj1")
 mesh = SubResource("CylinderMesh_155")
 
 [node name="DeadeyeLower2" type="MeshInstance3D" parent="Rigging/MainShroudsPort" unique_id=224560537]
-transform = Transform3D(-4.371139e-08, -1, 0, 1, -4.371139e-08, 0, 0, 0, 1, -6.25, 6.38, -3.4)
+transform = Transform3D(0, -1, 0, 1, 0, 0, 0, 0, 1, -6.91, 6.38, -3.4)
 material_override = ExtResource("2_3xgj1")
 mesh = SubResource("CylinderMesh_155")
 
 [node name="Lanyard2_1" type="MeshInstance3D" parent="Rigging/MainShroudsPort" unique_id=857909164]
-transform = Transform3D(0, 0, 0.018, 0, -0.2999997, 0, 0.018, 0, 0, -6.25, 6.58, -3.46)
+transform = Transform3D(0, 0, 0.018, 0, -0.3, 0, 0.018, 0, 0, -6.91, 6.58, -3.46)
 material_override = ExtResource("13_ddrw7")
 cast_shadow = 0
 mesh = SubResource("CylinderMesh_34")
 
 [node name="Lanyard2_2" type="MeshInstance3D" parent="Rigging/MainShroudsPort" unique_id=1065600919]
-transform = Transform3D(0, 0, 0.018, 0, -0.2999997, 0, 0.018, 0, 0, -6.25, 6.58, -3.4)
+transform = Transform3D(0, 0, 0.018, 0, -0.3, 0, 0.018, 0, 0, -6.91, 6.58, -3.4)
 material_override = ExtResource("13_ddrw7")
 cast_shadow = 0
 mesh = SubResource("CylinderMesh_34")
 
 [node name="Lanyard2_3" type="MeshInstance3D" parent="Rigging/MainShroudsPort" unique_id=33470647]
-transform = Transform3D(0, 0, 0.018, 0, -0.2999997, 0, 0.018, 0, 0, -6.25, 6.58, -3.3400002)
+transform = Transform3D(0, 0, 0.018, 0, -0.3, 0, 0.018, 0, 0, -6.91, 6.58, -3.34)
 material_override = ExtResource("13_ddrw7")
 cast_shadow = 0
 mesh = SubResource("CylinderMesh_34")
 
 [node name="Chain2" type="MeshInstance3D" parent="Rigging/MainShroudsPort" unique_id=988875966]
-transform = Transform3D(0, 0, 0.04, 0, -0.6500001, 0, 0.04, 0, 0, -6.25, 6.0550003, -3.4)
+transform = Transform3D(0, 0, 0.04, 0, -0.65, 0, 0.04, 0, 0, -6.91, 6.055, -3.4)
 material_override = ExtResource("6_iav1l")
 cast_shadow = 0
 mesh = SubResource("CylinderMesh_34")
 
 [node name="Shroud3" type="MeshInstance3D" parent="Rigging/MainShroudsPort" unique_id=987193574]
-transform = Transform3D(0, 5.07, 0.04690649, -0.008966542, 8.17, -0.028334785, -0.054264177, -1.3500001, 0.0046820026, -3.715, 10.865, -2.975)
+transform = Transform3D(0, 5.73, 0.045228, -0.008967, 8.17, -0.030877, -0.054264, -1.35, 0.005102, -4.045, 10.865, -2.975)
 material_override = ExtResource("16_8fstm")
 mesh = SubResource("CylinderMesh_34")
 
 [node name="DeadeyeUpper3" type="MeshInstance3D" parent="Rigging/MainShroudsPort" unique_id=1906510581]
-transform = Transform3D(-4.371139e-08, -1, 0, 1, -4.371139e-08, 0, 0, 0, 1, -6.25, 6.78, -2.3)
+transform = Transform3D(0, -1, 0, 1, 0, 0, 0, 0, 1, -6.91, 6.78, -2.3)
 material_override = ExtResource("2_3xgj1")
 mesh = SubResource("CylinderMesh_155")
 
 [node name="DeadeyeLower3" type="MeshInstance3D" parent="Rigging/MainShroudsPort" unique_id=1639081833]
-transform = Transform3D(-4.371139e-08, -1, 0, 1, -4.371139e-08, 0, 0, 0, 1, -6.25, 6.38, -2.3)
+transform = Transform3D(0, -1, 0, 1, 0, 0, 0, 0, 1, -6.91, 6.38, -2.3)
 material_override = ExtResource("2_3xgj1")
 mesh = SubResource("CylinderMesh_155")
 
 [node name="Lanyard3_1" type="MeshInstance3D" parent="Rigging/MainShroudsPort" unique_id=1779832564]
-transform = Transform3D(0, 0, 0.018, 0, -0.2999997, 0, 0.018, 0, 0, -6.25, 6.58, -2.36)
+transform = Transform3D(0, 0, 0.018, 0, -0.3, 0, 0.018, 0, 0, -6.91, 6.58, -2.36)
 material_override = ExtResource("13_ddrw7")
 cast_shadow = 0
 mesh = SubResource("CylinderMesh_34")
 
 [node name="Lanyard3_2" type="MeshInstance3D" parent="Rigging/MainShroudsPort" unique_id=1261980189]
-transform = Transform3D(0, 0, 0.018, 0, -0.2999997, 0, 0.018, 0, 0, -6.25, 6.58, -2.3)
+transform = Transform3D(0, 0, 0.018, 0, -0.3, 0, 0.018, 0, 0, -6.91, 6.58, -2.3)
 material_override = ExtResource("13_ddrw7")
 cast_shadow = 0
 mesh = SubResource("CylinderMesh_34")
 
 [node name="Lanyard3_3" type="MeshInstance3D" parent="Rigging/MainShroudsPort" unique_id=99565922]
-transform = Transform3D(0, 0, 0.018, 0, -0.2999997, 0, 0.018, 0, 0, -6.25, 6.58, -2.24)
+transform = Transform3D(0, 0, 0.018, 0, -0.3, 0, 0.018, 0, 0, -6.91, 6.58, -2.24)
 material_override = ExtResource("13_ddrw7")
 cast_shadow = 0
 mesh = SubResource("CylinderMesh_34")
 
 [node name="Chain3" type="MeshInstance3D" parent="Rigging/MainShroudsPort" unique_id=1475823148]
-transform = Transform3D(0, 0, 0.04, 0, -0.6500001, 0, 0.04, 0, 0, -6.25, 6.0550003, -2.3)
+transform = Transform3D(0, 0, 0.04, 0, -0.65, 0, 0.04, 0, 0, -6.91, 6.055, -2.3)
 material_override = ExtResource("6_iav1l")
 cast_shadow = 0
 mesh = SubResource("CylinderMesh_34")
 
 [node name="Ratline1_1" type="MeshInstance3D" parent="Rigging/MainShroudsPort" unique_id=1550440572]
-transform = Transform3D(0, 0, 0.028, 0.028, 0, 0, 0, 1.0559361, 0, -5.9707465, 7.23, -3.958262)
+transform = Transform3D(0, 0, 0.028, 0.028, 0, 0, 0, 1.055936, 0, -6.594394, 7.23, -3.958262)
 material_override = ExtResource("16_8fstm")
 cast_shadow = 0
 mesh = SubResource("CylinderMesh_34")
 
 [node name="Ratline1_2" type="MeshInstance3D" parent="Rigging/MainShroudsPort" unique_id=930200767]
-transform = Transform3D(0, 0, 0.028, 0.028, 0, 0, 0, 1.0559363, 0, -5.9707465, 7.23, -2.9023256)
+transform = Transform3D(0, 0, 0.028, 0.028, 0, 0, 0, 1.055936, 0, -6.594394, 7.23, -2.902326)
 material_override = ExtResource("16_8fstm")
 cast_shadow = 0
 mesh = SubResource("CylinderMesh_34")
 
 [node name="Ratline2_1" type="MeshInstance3D" parent="Rigging/MainShroudsPort" unique_id=170935864]
-transform = Transform3D(0, 0, 0.028, 0.028, 0, 0, 0, 1.0167687, 0, -5.7225213, 7.63, -3.9656062)
+transform = Transform3D(0, 0, 0.028, 0.028, 0, 0, 0, 1.016769, 0, -6.313855, 7.63, -3.965606)
 material_override = ExtResource("16_8fstm")
 cast_shadow = 0
 mesh = SubResource("CylinderMesh_34")
 
 [node name="Ratline2_2" type="MeshInstance3D" parent="Rigging/MainShroudsPort" unique_id=1364954290]
-transform = Transform3D(0, 0, 0.028, 0.028, 0, 0, 0, 1.0167689, 0, -5.7225213, 7.63, -2.9488373)
+transform = Transform3D(0, 0, 0.028, 0.028, 0, 0, 0, 1.016769, 0, -6.313855, 7.63, -2.948837)
 material_override = ExtResource("16_8fstm")
 cast_shadow = 0
 mesh = SubResource("CylinderMesh_34")
 
 [node name="Ratline3_1" type="MeshInstance3D" parent="Rigging/MainShroudsPort" unique_id=613694909]
-transform = Transform3D(0, 0, 0.028, 0.028, 0, 0, 0, 0.97760105, 0, -5.474296, 8.030001, -3.97295)
+transform = Transform3D(0, 0, 0.028, 0.028, 0, 0, 0, 0.977601, 0, -6.033317, 8.030001, -3.97295)
 material_override = ExtResource("16_8fstm")
 cast_shadow = 0
 mesh = SubResource("CylinderMesh_34")
 
 [node name="Ratline3_2" type="MeshInstance3D" parent="Rigging/MainShroudsPort" unique_id=1852975015]
-transform = Transform3D(0, 0, 0.028, 0.028, 0, 0, 0, 0.97760105, 0, -5.474296, 8.030001, -2.995349)
+transform = Transform3D(0, 0, 0.028, 0.028, 0, 0, 0, 0.977601, 0, -6.033317, 8.030001, -2.995349)
 material_override = ExtResource("16_8fstm")
 cast_shadow = 0
 mesh = SubResource("CylinderMesh_34")
 
 [node name="Ratline4_1" type="MeshInstance3D" parent="Rigging/MainShroudsPort" unique_id=843372026]
-transform = Transform3D(0, 0, 0.028, 0.028, 0, 0, 0, 0.9384334, 0, -5.226071, 8.43, -3.9802938)
+transform = Transform3D(0, 0, 0.028, 0.028, 0, 0, 0, 0.938433, 0, -5.752778, 8.43, -3.980294)
 material_override = ExtResource("16_8fstm")
 cast_shadow = 0
 mesh = SubResource("CylinderMesh_34")
 
 [node name="Ratline4_2" type="MeshInstance3D" parent="Rigging/MainShroudsPort" unique_id=1375347504]
-transform = Transform3D(0, 0, 0.028, 0.028, 0, 0, 0, 0.9384334, 0, -5.226071, 8.43, -3.0418606)
+transform = Transform3D(0, 0, 0.028, 0.028, 0, 0, 0, 0.938433, 0, -5.752778, 8.43, -3.041861)
 material_override = ExtResource("16_8fstm")
 cast_shadow = 0
 mesh = SubResource("CylinderMesh_34")
 
 [node name="Ratline5_1" type="MeshInstance3D" parent="Rigging/MainShroudsPort" unique_id=938466299]
-transform = Transform3D(0, 0, 0.028, 0.028, 0, 0, 0, 0.89926577, 0, -4.9778457, 8.83, -3.9876378)
+transform = Transform3D(0, 0, 0.028, 0.028, 0, 0, 0, 0.899266, 0, -5.47224, 8.83, -3.987638)
 material_override = ExtResource("16_8fstm")
 cast_shadow = 0
 mesh = SubResource("CylinderMesh_34")
 
 [node name="Ratline5_2" type="MeshInstance3D" parent="Rigging/MainShroudsPort" unique_id=713498872]
-transform = Transform3D(0, 0, 0.028, 0.028, 0, 0, 0, 0.8992655, 0, -4.9778457, 8.83, -3.0883722)
+transform = Transform3D(0, 0, 0.028, 0.028, 0, 0, 0, 0.899266, 0, -5.47224, 8.83, -3.088372)
 material_override = ExtResource("16_8fstm")
 cast_shadow = 0
 mesh = SubResource("CylinderMesh_34")
 
 [node name="Ratline6_1" type="MeshInstance3D" parent="Rigging/MainShroudsPort" unique_id=1479731526]
-transform = Transform3D(0, 0, 0.028, 0.028, 0, 0, 0, 0.8600979, 0, -4.7296205, 9.2300005, -3.9949818)
+transform = Transform3D(0, 0, 0.028, 0.028, 0, 0, 0, 0.860098, 0, -5.191701, 9.23, -3.994982)
 material_override = ExtResource("16_8fstm")
 cast_shadow = 0
 mesh = SubResource("CylinderMesh_34")
 
 [node name="Ratline6_2" type="MeshInstance3D" parent="Rigging/MainShroudsPort" unique_id=1718455491]
-transform = Transform3D(0, 0, 0.028, 0.028, 0, 0, 0, 0.8600981, 0, -4.7296205, 9.2300005, -3.1348839)
+transform = Transform3D(0, 0, 0.028, 0.028, 0, 0, 0, 0.860098, 0, -5.191701, 9.23, -3.134884)
 material_override = ExtResource("16_8fstm")
 cast_shadow = 0
 mesh = SubResource("CylinderMesh_34")
 
 [node name="Ratline7_1" type="MeshInstance3D" parent="Rigging/MainShroudsPort" unique_id=437197468]
-transform = Transform3D(0, 0, 0.028, 0.028, 0, 0, 0, 0.82093024, 0, -4.4813952, 9.63, -4.0023255)
+transform = Transform3D(0, 0, 0.028, 0.028, 0, 0, 0, 0.82093, 0, -4.911163, 9.63, -4.002326)
 material_override = ExtResource("16_8fstm")
 cast_shadow = 0
 mesh = SubResource("CylinderMesh_34")
 
 [node name="Ratline7_2" type="MeshInstance3D" parent="Rigging/MainShroudsPort" unique_id=1093946294]
-transform = Transform3D(0, 0, 0.028, 0.028, 0, 0, 0, 0.82093024, 0, -4.4813952, 9.63, -3.1813955)
+transform = Transform3D(0, 0, 0.028, 0.028, 0, 0, 0, 0.82093, 0, -4.911163, 9.63, -3.181395)
 material_override = ExtResource("16_8fstm")
 cast_shadow = 0
 mesh = SubResource("CylinderMesh_34")
 
 [node name="Ratline8_1" type="MeshInstance3D" parent="Rigging/MainShroudsPort" unique_id=1187083822]
-transform = Transform3D(0, 0, 0.028, 0.028, 0, 0, 0, 0.7817626, 0, -4.23317, 10.030001, -4.0096693)
+transform = Transform3D(0, 0, 0.028, 0.028, 0, 0, 0, 0.781763, 0, -4.630624, 10.030001, -4.009669)
 material_override = ExtResource("16_8fstm")
 cast_shadow = 0
 mesh = SubResource("CylinderMesh_34")
 
 [node name="Ratline8_2" type="MeshInstance3D" parent="Rigging/MainShroudsPort" unique_id=426843109]
-transform = Transform3D(0, 0, 0.028, 0.028, 0, 0, 0, 0.7817626, 0, -4.23317, 10.030001, -3.227907)
+transform = Transform3D(0, 0, 0.028, 0.028, 0, 0, 0, 0.781763, 0, -4.630624, 10.030001, -3.227907)
 material_override = ExtResource("16_8fstm")
 cast_shadow = 0
 mesh = SubResource("CylinderMesh_34")
 
 [node name="Ratline9_1" type="MeshInstance3D" parent="Rigging/MainShroudsPort" unique_id=367772201]
-transform = Transform3D(0, 0, 0.028, 0.028, 0, 0, 0, 0.7425947, 0, -3.9849448, 10.43, -4.0170135)
+transform = Transform3D(0, 0, 0.028, 0.028, 0, 0, 0, 0.742595, 0, -4.350086, 10.43, -4.017014)
 material_override = ExtResource("16_8fstm")
 cast_shadow = 0
 mesh = SubResource("CylinderMesh_34")
 
 [node name="Ratline9_2" type="MeshInstance3D" parent="Rigging/MainShroudsPort" unique_id=1059506493]
-transform = Transform3D(0, 0, 0.028, 0.028, 0, 0, 0, 0.74259496, 0, -3.9849448, 10.43, -3.2744188)
+transform = Transform3D(0, 0, 0.028, 0.028, 0, 0, 0, 0.742595, 0, -4.350086, 10.43, -3.274419)
 material_override = ExtResource("16_8fstm")
 cast_shadow = 0
 mesh = SubResource("CylinderMesh_34")
 
 [node name="Ratline10_1" type="MeshInstance3D" parent="Rigging/MainShroudsPort" unique_id=2062477514]
-transform = Transform3D(0, 0, 0.028, 0.028, 0, 0, 0, 0.7034271, 0, -3.7367194, 10.83, -4.0243573)
+transform = Transform3D(0, 0, 0.028, 0.028, 0, 0, 0, 0.703427, 0, -4.069547, 10.83, -4.024357)
 material_override = ExtResource("16_8fstm")
 cast_shadow = 0
 mesh = SubResource("CylinderMesh_34")
 
 [node name="Ratline10_2" type="MeshInstance3D" parent="Rigging/MainShroudsPort" unique_id=1514571970]
-transform = Transform3D(0, 0, 0.028, 0.028, 0, 0, 0, 0.7034271, 0, -3.7367194, 10.83, -3.3209305)
+transform = Transform3D(0, 0, 0.028, 0.028, 0, 0, 0, 0.703427, 0, -4.069547, 10.83, -3.32093)
 material_override = ExtResource("16_8fstm")
 cast_shadow = 0
 mesh = SubResource("CylinderMesh_34")
 
 [node name="Ratline11_1" type="MeshInstance3D" parent="Rigging/MainShroudsPort" unique_id=1293962646]
-transform = Transform3D(0, 0, 0.028, 0.028, 0, 0, 0, 0.66425943, 0, -3.4884944, 11.2300005, -4.031701)
+transform = Transform3D(0, 0, 0.028, 0.028, 0, 0, 0, 0.664259, 0, -3.789008, 11.23, -4.031701)
 material_override = ExtResource("16_8fstm")
 cast_shadow = 0
 mesh = SubResource("CylinderMesh_34")
 
 [node name="Ratline11_2" type="MeshInstance3D" parent="Rigging/MainShroudsPort" unique_id=1448017785]
-transform = Transform3D(0, 0, 0.028, 0.028, 0, 0, 0, 0.66425943, 0, -3.4884944, 11.2300005, -3.367442)
+transform = Transform3D(0, 0, 0.028, 0.028, 0, 0, 0, 0.664259, 0, -3.789008, 11.23, -3.367442)
 material_override = ExtResource("16_8fstm")
 cast_shadow = 0
 mesh = SubResource("CylinderMesh_34")
 
 [node name="Ratline12_1" type="MeshInstance3D" parent="Rigging/MainShroudsPort" unique_id=225411520]
-transform = Transform3D(0, 0, 0.028, 0.028, 0, 0, 0, 0.62509155, 0, -3.2402692, 11.63, -4.0390453)
+transform = Transform3D(0, 0, 0.028, 0.028, 0, 0, 0, 0.625092, 0, -3.50847, 11.63, -4.039045)
 material_override = ExtResource("16_8fstm")
 cast_shadow = 0
 mesh = SubResource("CylinderMesh_34")
 
 [node name="Ratline12_2" type="MeshInstance3D" parent="Rigging/MainShroudsPort" unique_id=1786581861]
-transform = Transform3D(0, 0, 0.028, 0.028, 0, 0, 0, 0.625092, 0, -3.2402692, 11.63, -3.4139535)
+transform = Transform3D(0, 0, 0.028, 0.028, 0, 0, 0, 0.625092, 0, -3.50847, 11.63, -3.413953)
 material_override = ExtResource("16_8fstm")
 cast_shadow = 0
 mesh = SubResource("CylinderMesh_34")
 
 [node name="Ratline13_1" type="MeshInstance3D" parent="Rigging/MainShroudsPort" unique_id=175325694]
-transform = Transform3D(0, 0, 0.028, 0.028, 0, 0, 0, 0.5859239, 0, -2.992044, 12.030001, -4.046389)
+transform = Transform3D(0, 0, 0.028, 0.028, 0, 0, 0, 0.585924, 0, -3.227931, 12.030001, -4.046389)
 material_override = ExtResource("16_8fstm")
 cast_shadow = 0
 mesh = SubResource("CylinderMesh_34")
 
 [node name="Ratline13_2" type="MeshInstance3D" parent="Rigging/MainShroudsPort" unique_id=614393618]
-transform = Transform3D(0, 0, 0.028, 0.028, 0, 0, 0, 0.58592415, 0, -2.992044, 12.030001, -3.4604652)
+transform = Transform3D(0, 0, 0.028, 0.028, 0, 0, 0, 0.585924, 0, -3.227931, 12.030001, -3.460465)
 material_override = ExtResource("16_8fstm")
 cast_shadow = 0
 mesh = SubResource("CylinderMesh_34")
 
 [node name="Ratline14_1" type="MeshInstance3D" parent="Rigging/MainShroudsPort" unique_id=24946221]
-transform = Transform3D(0, 0, 0.028, 0.028, 0, 0, 0, 0.54675627, 0, -2.7438185, 12.43, -4.053733)
+transform = Transform3D(0, 0, 0.028, 0.028, 0, 0, 0, 0.546756, 0, -2.947393, 12.43, -4.053733)
 material_override = ExtResource("16_8fstm")
 cast_shadow = 0
 mesh = SubResource("CylinderMesh_34")
 
 [node name="Ratline14_2" type="MeshInstance3D" parent="Rigging/MainShroudsPort" unique_id=1291568568]
-transform = Transform3D(0, 0, 0.028, 0.028, 0, 0, 0, 0.54675627, 0, -2.7438185, 12.43, -3.5069768)
+transform = Transform3D(0, 0, 0.028, 0.028, 0, 0, 0, 0.546756, 0, -2.947393, 12.43, -3.506977)
 material_override = ExtResource("16_8fstm")
 cast_shadow = 0
 mesh = SubResource("CylinderMesh_34")
 
 [node name="Ratline15_1" type="MeshInstance3D" parent="Rigging/MainShroudsPort" unique_id=1066886069]
-transform = Transform3D(0, 0, 0.028, 0.028, 0, 0, 0, 0.5075884, 0, -2.4955933, 12.83, -4.061077)
+transform = Transform3D(0, 0, 0.028, 0.028, 0, 0, 0, 0.507588, 0, -2.666854, 12.83, -4.061077)
 material_override = ExtResource("16_8fstm")
 cast_shadow = 0
 mesh = SubResource("CylinderMesh_34")
 
 [node name="Ratline15_2" type="MeshInstance3D" parent="Rigging/MainShroudsPort" unique_id=991396588]
-transform = Transform3D(0, 0, 0.028, 0.028, 0, 0, 0, 0.50758886, 0, -2.4955933, 12.83, -3.5534885)
+transform = Transform3D(0, 0, 0.028, 0.028, 0, 0, 0, 0.507589, 0, -2.666854, 12.83, -3.553488)
 material_override = ExtResource("16_8fstm")
 cast_shadow = 0
 mesh = SubResource("CylinderMesh_34")
 
 [node name="Ratline16_1" type="MeshInstance3D" parent="Rigging/MainShroudsPort" unique_id=849342173]
-transform = Transform3D(0, 0, 0.028, 0.028, 0, 0, 0, 0.46842074, 0, -2.2473683, 13.2300005, -4.068421)
+transform = Transform3D(0, 0, 0.028, 0.028, 0, 0, 0, 0.468421, 0, -2.386316, 13.23, -4.068421)
 material_override = ExtResource("16_8fstm")
 cast_shadow = 0
 mesh = SubResource("CylinderMesh_34")
 
 [node name="Ratline16_2" type="MeshInstance3D" parent="Rigging/MainShroudsPort" unique_id=2038172542]
-transform = Transform3D(0, 0, 0.028, 0.028, 0, 0, 0, 0.46842122, 0, -2.2473683, 13.2300005, -3.6)
+transform = Transform3D(0, 0, 0.028, 0.028, 0, 0, 0, 0.468421, 0, -2.386316, 13.23, -3.6)
 material_override = ExtResource("16_8fstm")
 cast_shadow = 0
 mesh = SubResource("CylinderMesh_34")
 
 [node name="Ratline17_1" type="MeshInstance3D" parent="Rigging/MainShroudsPort" unique_id=1190232995]
-transform = Transform3D(0, 0, 0.028, 0.028, 0, 0, 0, 0.4292531, 0, -1.9991431, 13.630001, -4.0757647)
+transform = Transform3D(0, 0, 0.028, 0.028, 0, 0, 0, 0.429253, 0, -2.105777, 13.630001, -4.075765)
 material_override = ExtResource("16_8fstm")
 cast_shadow = 0
 mesh = SubResource("CylinderMesh_34")
 
 [node name="Ratline17_2" type="MeshInstance3D" parent="Rigging/MainShroudsPort" unique_id=1223507407]
-transform = Transform3D(0, 0, 0.028, 0.028, 0, 0, 0, 0.42925334, 0, -1.9991431, 13.630001, -3.6465116)
+transform = Transform3D(0, 0, 0.028, 0.028, 0, 0, 0, 0.429253, 0, -2.105777, 13.630001, -3.646512)
 material_override = ExtResource("16_8fstm")
 cast_shadow = 0
 mesh = SubResource("CylinderMesh_34")
 
 [node name="Ratline18_1" type="MeshInstance3D" parent="Rigging/MainShroudsPort" unique_id=1530616533]
-transform = Transform3D(0, 0, 0.028, 0.028, 0, 0, 0, 0.3900857, 0, -1.7509174, 14.030001, -4.083109)
+transform = Transform3D(0, 0, 0.028, 0.028, 0, 0, 0, 0.390086, 0, -1.825238, 14.030001, -4.083109)
 material_override = ExtResource("16_8fstm")
 cast_shadow = 0
 mesh = SubResource("CylinderMesh_34")
 
 [node name="Ratline18_2" type="MeshInstance3D" parent="Rigging/MainShroudsPort" unique_id=791415820]
-transform = Transform3D(0, 0, 0.028, 0.028, 0, 0, 0, 0.3900857, 0, -1.7509174, 14.030001, -3.6930234)
+transform = Transform3D(0, 0, 0.028, 0.028, 0, 0, 0, 0.390086, 0, -1.825238, 14.030001, -3.693023)
 material_override = ExtResource("16_8fstm")
 cast_shadow = 0
 mesh = SubResource("CylinderMesh_34")
@@ -3564,133 +3553,133 @@ material_override = ExtResource("16_8fstm")
 mesh = SubResource("CylinderMesh_34")
 
 [node name="BackstayChannelPort" type="MeshInstance3D" parent="Rigging" unique_id=1335378626]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -6.18, 6.05, 1.8)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -6.98, 6.05, 1.8)
 material_override = ExtResource("2_3xgj1")
 mesh = SubResource("BoxMesh_156")
 
 [node name="BackstayPort" type="Node3D" parent="Rigging" unique_id=996505169]
 
 [node name="Piece1" type="MeshInstance3D" parent="Rigging/BackstayPort" unique_id=1809547559]
-transform = Transform3D(0, -0.75875, 0.04712352, 0.01504679, -2.039999, -0.015939673, 0.047682222, 0.6437502, 0.0050299866, -0.55937505, 21.18, -4.078125)
+transform = Transform3D(0, -0.863231, 0.046367, 0.015047, -2.039999, -0.017843, 0.047682, 0.64375, 0.005631, -0.611616, 21.18, -4.078125)
 material_override = ExtResource("16_8fstm")
 mesh = SubResource("CylinderMesh_34")
 
 [node name="Piece2" type="MeshInstance3D" parent="Rigging/BackstayPort" unique_id=1243137109]
-transform = Transform3D(0, -0.75874996, 0.047093477, 0.016013978, -2.0150013, -0.015914036, 0.047366153, 0.68124986, 0.0053803613, -1.318125, 19.1525, -3.415625)
+transform = Transform3D(0, -0.861951, 0.04634, 0.016014, -2.015001, -0.017789, 0.047366, 0.68125, 0.006014, -1.474207, 19.1525, -3.415625)
 material_override = ExtResource("16_8fstm")
 mesh = SubResource("CylinderMesh_34")
 
 [node name="Piece3" type="MeshInstance3D" parent="Rigging/BackstayPort" unique_id=1829864929]
-transform = Transform3D(0, -0.7587502, 0.04706522, 0.016985124, -1.9899998, -0.015874276, 0.04702665, 0.71874976, 0.005733484, -2.0768752, 17.150002, -2.7156253)
+transform = Transform3D(0, -0.860671, 0.046315, 0.016985, -1.99, -0.01772, 0.047027, 0.71875, 0.0064, -2.335518, 17.150002, -2.715625)
 material_override = ExtResource("16_8fstm")
 mesh = SubResource("CylinderMesh_34")
 
 [node name="Piece4" type="MeshInstance3D" parent="Rigging/BackstayPort" unique_id=524704681]
-transform = Transform3D(0, -0.75874996, 0.047038894, 0.0179589, -1.9650002, -0.015820017, 0.046663452, 0.75625014, 0.006088493, -2.8356252, 15.172501, -1.9781252)
+transform = Transform3D(0, -0.85939, 0.046292, 0.017959, -1.965, -0.017634, 0.046663, 0.75625, 0.006787, -3.195548, 15.172501, -1.978125)
 material_override = ExtResource("16_8fstm")
 mesh = SubResource("CylinderMesh_34")
 
 [node name="Piece5" type="MeshInstance3D" parent="Rigging/BackstayPort" unique_id=1074079470]
-transform = Transform3D(0, -0.75874996, 0.047014613, 0.018933963, -1.9400005, -0.015751023, 0.0462764, 0.79375005, 0.006444522, -3.5943751, 13.22, -1.2031251)
+transform = Transform3D(0, -0.85811, 0.046273, 0.018934, -1.940001, -0.017533, 0.046276, 0.79375, 0.007173, -4.054298, 13.22, -1.203125)
 material_override = ExtResource("16_8fstm")
 mesh = SubResource("CylinderMesh_34")
 
 [node name="Piece6" type="MeshInstance3D" parent="Rigging/BackstayPort" unique_id=1122176424]
-transform = Transform3D(0, -0.75874996, 0.046992477, 0.019908935, -1.914999, -0.015667101, 0.045865394, 0.8312496, 0.006800668, -4.353125, 11.2925005, -0.3906253)
+transform = Transform3D(0, -0.856829, 0.046256, 0.019909, -1.914999, -0.017415, 0.045865, 0.83125, 0.007559, -4.911768, 11.2925, -0.390625)
 material_override = ExtResource("16_8fstm")
 mesh = SubResource("CylinderMesh_34")
 
 [node name="Piece7" type="MeshInstance3D" parent="Rigging/BackstayPort" unique_id=952219970]
-transform = Transform3D(0, -0.75874996, 0.046972614, 0.020882383, -1.8900003, -0.0155681, 0.04543045, 0.8687501, 0.007155972, -5.111875, 9.390001, 0.45937455)
+transform = Transform3D(0, -0.855549, 0.046241, 0.020882, -1.89, -0.017281, 0.04543, 0.86875, 0.007943, -5.767957, 9.390001, 0.459375)
 material_override = ExtResource("16_8fstm")
 mesh = SubResource("CylinderMesh_34")
 
 [node name="Piece8" type="MeshInstance3D" parent="Rigging/BackstayPort" unique_id=1067070329]
-transform = Transform3D(0, -0.75874996, 0.046955105, 0.02185286, -1.8650007, -0.015453997, 0.04497169, 0.9062501, 0.007509481, -5.870625, 7.5125003, 1.3468747)
+transform = Transform3D(0, -0.854269, 0.04623, 0.021853, -1.865001, -0.017131, 0.044972, 0.90625, 0.008324, -6.622866, 7.5125, 1.346875)
 material_override = ExtResource("16_8fstm")
 mesh = SubResource("CylinderMesh_34")
 
 [node name="MizzenChannelPort" type="MeshInstance3D" parent="Rigging" unique_id=446943991]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -6.18, 7.35, 13.55)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -6.7, 7.35, 13.55)
 material_override = ExtResource("2_3xgj1")
 mesh = SubResource("BoxMesh_157")
 
 [node name="MizzenShroudsPort" type="Node3D" parent="Rigging" unique_id=517138398]
 
 [node name="Shroud1" type="MeshInstance3D" parent="Rigging/MizzenShroudsPort" unique_id=1517513716]
-transform = Transform3D(0, 5.97, 0.04290415, 0.005911496, 7.3999996, -0.034213353, -0.05468139, 0.79999924, -0.0036987371, -3.265, 11.8, 13.5)
+transform = Transform3D(0, 6.49, 0.041454, 0.005911, 7.4, -0.035937, -0.054681, 0.799999, -0.003885, -3.525, 11.8, 13.5)
 material_override = ExtResource("16_8fstm")
 mesh = SubResource("CylinderMesh_34")
 
 [node name="DeadeyeUpper1" type="MeshInstance3D" parent="Rigging/MizzenShroudsPort" unique_id=1206971979]
-transform = Transform3D(-4.371139e-08, -1, 0, 1, -4.371139e-08, 0, 0, 0, 1, -6.25, 8.1, 13.1)
+transform = Transform3D(0, -1, 0, 1, 0, 0, 0, 0, 1, -6.77, 8.1, 13.1)
 material_override = ExtResource("2_3xgj1")
 mesh = SubResource("CylinderMesh_155")
 
 [node name="DeadeyeLower1" type="MeshInstance3D" parent="Rigging/MizzenShroudsPort" unique_id=1464047232]
-transform = Transform3D(-4.371139e-08, -1, 0, 1, -4.371139e-08, 0, 0, 0, 1, -6.25, 7.7, 13.1)
+transform = Transform3D(0, -1, 0, 1, 0, 0, 0, 0, 1, -6.77, 7.7, 13.1)
 material_override = ExtResource("2_3xgj1")
 mesh = SubResource("CylinderMesh_155")
 
 [node name="Lanyard1_1" type="MeshInstance3D" parent="Rigging/MizzenShroudsPort" unique_id=351536883]
-transform = Transform3D(0, 0, 0.018, 0, -0.3000002, 0, 0.018, 0, 0, -6.25, 7.9, 13.04)
+transform = Transform3D(0, 0, 0.018, 0, -0.3, 0, 0.018, 0, 0, -6.77, 7.9, 13.04)
 material_override = ExtResource("13_ddrw7")
 cast_shadow = 0
 mesh = SubResource("CylinderMesh_34")
 
 [node name="Lanyard1_2" type="MeshInstance3D" parent="Rigging/MizzenShroudsPort" unique_id=474093773]
-transform = Transform3D(0, 0, 0.018, 0, -0.3000002, 0, 0.018, 0, 0, -6.25, 7.9, 13.1)
+transform = Transform3D(0, 0, 0.018, 0, -0.3, 0, 0.018, 0, 0, -6.77, 7.9, 13.1)
 material_override = ExtResource("13_ddrw7")
 cast_shadow = 0
 mesh = SubResource("CylinderMesh_34")
 
 [node name="Lanyard1_3" type="MeshInstance3D" parent="Rigging/MizzenShroudsPort" unique_id=1666457493]
-transform = Transform3D(0, 0, 0.018, 0, -0.3000002, 0, 0.018, 0, 0, -6.25, 7.9, 13.160001)
+transform = Transform3D(0, 0, 0.018, 0, -0.3, 0, 0.018, 0, 0, -6.77, 7.9, 13.160001)
 material_override = ExtResource("13_ddrw7")
 cast_shadow = 0
 mesh = SubResource("CylinderMesh_34")
 
 [node name="Chain1" type="MeshInstance3D" parent="Rigging/MizzenShroudsPort" unique_id=1628739850]
-transform = Transform3D(0, 0, 0.04, 0, -0.6500001, 0, 0.04, 0, 0, -6.25, 7.375, 13.1)
+transform = Transform3D(0, 0, 0.04, 0, -0.65, 0, 0.04, 0, 0, -6.77, 7.375, 13.1)
 material_override = ExtResource("6_iav1l")
 cast_shadow = 0
 mesh = SubResource("CylinderMesh_34")
 
 [node name="Shroud2" type="MeshInstance3D" parent="Rigging/MizzenShroudsPort" unique_id=1466243034]
-transform = Transform3D(0, 5.97, 0.042807873, 0.00074317824, 7.3999996, -0.034529235, -0.054994978, 0.10000038, -0.0004666131, -3.265, 11.8, 14.05)
+transform = Transform3D(0, 6.49, 0.041352, 0.000743, 7.4, -0.03626, -0.054995, 0.1, -0.00049, -3.525, 11.8, 14.05)
 material_override = ExtResource("16_8fstm")
 mesh = SubResource("CylinderMesh_34")
 
 [node name="DeadeyeUpper2" type="MeshInstance3D" parent="Rigging/MizzenShroudsPort" unique_id=2065778889]
-transform = Transform3D(-4.371139e-08, -1, 0, 1, -4.371139e-08, 0, 0, 0, 1, -6.25, 8.1, 14)
+transform = Transform3D(0, -1, 0, 1, 0, 0, 0, 0, 1, -6.77, 8.1, 14)
 material_override = ExtResource("2_3xgj1")
 mesh = SubResource("CylinderMesh_155")
 
 [node name="DeadeyeLower2" type="MeshInstance3D" parent="Rigging/MizzenShroudsPort" unique_id=390209762]
-transform = Transform3D(-4.371139e-08, -1, 0, 1, -4.371139e-08, 0, 0, 0, 1, -6.25, 7.7, 14)
+transform = Transform3D(0, -1, 0, 1, 0, 0, 0, 0, 1, -6.77, 7.7, 14)
 material_override = ExtResource("2_3xgj1")
 mesh = SubResource("CylinderMesh_155")
 
 [node name="Lanyard2_1" type="MeshInstance3D" parent="Rigging/MizzenShroudsPort" unique_id=281664787]
-transform = Transform3D(0, 0, 0.018, 0, -0.3000002, 0, 0.018, 0, 0, -6.25, 7.9, 13.94)
+transform = Transform3D(0, 0, 0.018, 0, -0.3, 0, 0.018, 0, 0, -6.77, 7.9, 13.94)
 material_override = ExtResource("13_ddrw7")
 cast_shadow = 0
 mesh = SubResource("CylinderMesh_34")
 
 [node name="Lanyard2_2" type="MeshInstance3D" parent="Rigging/MizzenShroudsPort" unique_id=988177240]
-transform = Transform3D(0, 0, 0.018, 0, -0.3000002, 0, 0.018, 0, 0, -6.25, 7.9, 14)
+transform = Transform3D(0, 0, 0.018, 0, -0.3, 0, 0.018, 0, 0, -6.77, 7.9, 14)
 material_override = ExtResource("13_ddrw7")
 cast_shadow = 0
 mesh = SubResource("CylinderMesh_34")
 
 [node name="Lanyard2_3" type="MeshInstance3D" parent="Rigging/MizzenShroudsPort" unique_id=161213564]
-transform = Transform3D(0, 0, 0.018, 0, -0.3000002, 0, 0.018, 0, 0, -6.25, 7.9, 14.06)
+transform = Transform3D(0, 0, 0.018, 0, -0.3, 0, 0.018, 0, 0, -6.77, 7.9, 14.06)
 material_override = ExtResource("13_ddrw7")
 cast_shadow = 0
 mesh = SubResource("CylinderMesh_34")
 
 [node name="Chain2" type="MeshInstance3D" parent="Rigging/MizzenShroudsPort" unique_id=581285632]
-transform = Transform3D(0, 0, 0.04, 0, -0.6500001, 0, 0.04, 0, 0, -6.25, 7.375, 14)
+transform = Transform3D(0, 0, 0.04, 0, -0.65, 0, 0.04, 0, 0, -6.77, 7.375, 14)
 material_override = ExtResource("6_iav1l")
 cast_shadow = 0
 mesh = SubResource("CylinderMesh_34")
@@ -3957,341 +3946,341 @@ material_override = ExtResource("2_3xgj1")
 mesh = SubResource("CylinderMesh_158")
 
 [node name="ChannelStarboard" type="MeshInstance3D" parent="Rigging" unique_id=871394105]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6.2, 6.05, -2.9)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6.86, 6.05, -2.9)
 material_override = ExtResource("2_3xgj1")
 mesh = SubResource("BoxMesh_154")
 
 [node name="MainShroudsStarboard" type="Node3D" parent="Rigging" unique_id=76720495]
 
 [node name="Shroud1" type="MeshInstance3D" parent="Rigging/MainShroudsStarboard" unique_id=405414352]
-transform = Transform3D(0, -5.07, 0.04673894, 0.0016821991, 8.17, 0.028977325, -0.05497427, 0.25, 0.00088669907, 3.715, 10.865, -4.375)
+transform = Transform3D(0, -5.73, 0.045036, 0.001682, 8.17, 0.031556, -0.054974, 0.25, 0.000966, 4.045, 10.865, -4.375)
 material_override = ExtResource("16_8fstm")
 mesh = SubResource("CylinderMesh_34")
 
 [node name="DeadeyeUpper1" type="MeshInstance3D" parent="Rigging/MainShroudsStarboard" unique_id=1555459734]
-transform = Transform3D(-4.371139e-08, -1, 0, 1, -4.371139e-08, 0, 0, 0, 1, 6.25, 6.78, -4.5)
+transform = Transform3D(0, -1, 0, 1, 0, 0, 0, 0, 1, 6.91, 6.78, -4.5)
 material_override = ExtResource("2_3xgj1")
 mesh = SubResource("CylinderMesh_155")
 
 [node name="DeadeyeLower1" type="MeshInstance3D" parent="Rigging/MainShroudsStarboard" unique_id=139146467]
-transform = Transform3D(-4.371139e-08, -1, 0, 1, -4.371139e-08, 0, 0, 0, 1, 6.25, 6.38, -4.5)
+transform = Transform3D(0, -1, 0, 1, 0, 0, 0, 0, 1, 6.91, 6.38, -4.5)
 material_override = ExtResource("2_3xgj1")
 mesh = SubResource("CylinderMesh_155")
 
 [node name="Lanyard1_1" type="MeshInstance3D" parent="Rigging/MainShroudsStarboard" unique_id=1217903089]
-transform = Transform3D(0, 0, 0.018, 0, -0.2999997, 0, 0.018, 0, 0, 6.25, 6.58, -4.56)
+transform = Transform3D(0, 0, 0.018, 0, -0.3, 0, 0.018, 0, 0, 6.91, 6.58, -4.56)
 material_override = ExtResource("13_ddrw7")
 cast_shadow = 0
 mesh = SubResource("CylinderMesh_34")
 
 [node name="Lanyard1_2" type="MeshInstance3D" parent="Rigging/MainShroudsStarboard" unique_id=1098327954]
-transform = Transform3D(0, 0, 0.018, 0, -0.2999997, 0, 0.018, 0, 0, 6.25, 6.58, -4.5)
+transform = Transform3D(0, 0, 0.018, 0, -0.3, 0, 0.018, 0, 0, 6.91, 6.58, -4.5)
 material_override = ExtResource("13_ddrw7")
 cast_shadow = 0
 mesh = SubResource("CylinderMesh_34")
 
 [node name="Lanyard1_3" type="MeshInstance3D" parent="Rigging/MainShroudsStarboard" unique_id=1976861545]
-transform = Transform3D(0, 0, 0.018, 0, -0.2999997, 0, 0.018, 0, 0, 6.25, 6.58, -4.44)
+transform = Transform3D(0, 0, 0.018, 0, -0.3, 0, 0.018, 0, 0, 6.91, 6.58, -4.44)
 material_override = ExtResource("13_ddrw7")
 cast_shadow = 0
 mesh = SubResource("CylinderMesh_34")
 
 [node name="Chain1" type="MeshInstance3D" parent="Rigging/MainShroudsStarboard" unique_id=76241825]
-transform = Transform3D(0, 0, 0.04, 0, -0.6500001, 0, 0.04, 0, 0, 6.25, 6.0550003, -4.5)
+transform = Transform3D(0, 0, 0.04, 0, -0.65, 0, 0.04, 0, 0, 6.91, 6.055, -4.5)
 material_override = ExtResource("6_iav1l")
 cast_shadow = 0
 mesh = SubResource("CylinderMesh_34")
 
 [node name="Shroud2" type="MeshInstance3D" parent="Rigging/MainShroudsStarboard" unique_id=819734115]
-transform = Transform3D(0, -5.07, 0.046762194, -0.0036942088, 8.17, 0.028887974, -0.054875795, -0.54999995, -0.0019447228, 3.715, 10.865, -3.6750002)
+transform = Transform3D(0, -5.73, 0.045063, -0.003694, 8.17, 0.031462, -0.054876, -0.55, -0.002118, 4.045, 10.865, -3.675)
 material_override = ExtResource("16_8fstm")
 mesh = SubResource("CylinderMesh_34")
 
 [node name="DeadeyeUpper2" type="MeshInstance3D" parent="Rigging/MainShroudsStarboard" unique_id=1053336359]
-transform = Transform3D(-4.371139e-08, -1, 0, 1, -4.371139e-08, 0, 0, 0, 1, 6.25, 6.78, -3.4)
+transform = Transform3D(0, -1, 0, 1, 0, 0, 0, 0, 1, 6.91, 6.78, -3.4)
 material_override = ExtResource("2_3xgj1")
 mesh = SubResource("CylinderMesh_155")
 
 [node name="DeadeyeLower2" type="MeshInstance3D" parent="Rigging/MainShroudsStarboard" unique_id=1628554356]
-transform = Transform3D(-4.371139e-08, -1, 0, 1, -4.371139e-08, 0, 0, 0, 1, 6.25, 6.38, -3.4)
+transform = Transform3D(0, -1, 0, 1, 0, 0, 0, 0, 1, 6.91, 6.38, -3.4)
 material_override = ExtResource("2_3xgj1")
 mesh = SubResource("CylinderMesh_155")
 
 [node name="Lanyard2_1" type="MeshInstance3D" parent="Rigging/MainShroudsStarboard" unique_id=1325050782]
-transform = Transform3D(0, 0, 0.018, 0, -0.2999997, 0, 0.018, 0, 0, 6.25, 6.58, -3.46)
+transform = Transform3D(0, 0, 0.018, 0, -0.3, 0, 0.018, 0, 0, 6.91, 6.58, -3.46)
 material_override = ExtResource("13_ddrw7")
 cast_shadow = 0
 mesh = SubResource("CylinderMesh_34")
 
 [node name="Lanyard2_2" type="MeshInstance3D" parent="Rigging/MainShroudsStarboard" unique_id=1541570102]
-transform = Transform3D(0, 0, 0.018, 0, -0.2999997, 0, 0.018, 0, 0, 6.25, 6.58, -3.4)
+transform = Transform3D(0, 0, 0.018, 0, -0.3, 0, 0.018, 0, 0, 6.91, 6.58, -3.4)
 material_override = ExtResource("13_ddrw7")
 cast_shadow = 0
 mesh = SubResource("CylinderMesh_34")
 
 [node name="Lanyard2_3" type="MeshInstance3D" parent="Rigging/MainShroudsStarboard" unique_id=30039225]
-transform = Transform3D(0, 0, 0.018, 0, -0.2999997, 0, 0.018, 0, 0, 6.25, 6.58, -3.3400002)
+transform = Transform3D(0, 0, 0.018, 0, -0.3, 0, 0.018, 0, 0, 6.91, 6.58, -3.34)
 material_override = ExtResource("13_ddrw7")
 cast_shadow = 0
 mesh = SubResource("CylinderMesh_34")
 
 [node name="Chain2" type="MeshInstance3D" parent="Rigging/MainShroudsStarboard" unique_id=174924212]
-transform = Transform3D(0, 0, 0.04, 0, -0.6500001, 0, 0.04, 0, 0, 6.25, 6.0550003, -3.4)
+transform = Transform3D(0, 0, 0.04, 0, -0.65, 0, 0.04, 0, 0, 6.91, 6.055, -3.4)
 material_override = ExtResource("6_iav1l")
 cast_shadow = 0
 mesh = SubResource("CylinderMesh_34")
 
 [node name="Shroud3" type="MeshInstance3D" parent="Rigging/MainShroudsStarboard" unique_id=479543127]
-transform = Transform3D(0, -5.07, 0.04690649, -0.008966542, 8.17, 0.028334785, -0.054264177, -1.3500001, -0.0046820026, 3.715, 10.865, -2.975)
+transform = Transform3D(0, -5.73, 0.045228, -0.008967, 8.17, 0.030877, -0.054264, -1.35, -0.005102, 4.045, 10.865, -2.975)
 material_override = ExtResource("16_8fstm")
 mesh = SubResource("CylinderMesh_34")
 
 [node name="DeadeyeUpper3" type="MeshInstance3D" parent="Rigging/MainShroudsStarboard" unique_id=161373711]
-transform = Transform3D(-4.371139e-08, -1, 0, 1, -4.371139e-08, 0, 0, 0, 1, 6.25, 6.78, -2.3)
+transform = Transform3D(0, -1, 0, 1, 0, 0, 0, 0, 1, 6.91, 6.78, -2.3)
 material_override = ExtResource("2_3xgj1")
 mesh = SubResource("CylinderMesh_155")
 
 [node name="DeadeyeLower3" type="MeshInstance3D" parent="Rigging/MainShroudsStarboard" unique_id=253421854]
-transform = Transform3D(-4.371139e-08, -1, 0, 1, -4.371139e-08, 0, 0, 0, 1, 6.25, 6.38, -2.3)
+transform = Transform3D(0, -1, 0, 1, 0, 0, 0, 0, 1, 6.91, 6.38, -2.3)
 material_override = ExtResource("2_3xgj1")
 mesh = SubResource("CylinderMesh_155")
 
 [node name="Lanyard3_1" type="MeshInstance3D" parent="Rigging/MainShroudsStarboard" unique_id=1967078332]
-transform = Transform3D(0, 0, 0.018, 0, -0.2999997, 0, 0.018, 0, 0, 6.25, 6.58, -2.36)
+transform = Transform3D(0, 0, 0.018, 0, -0.3, 0, 0.018, 0, 0, 6.91, 6.58, -2.36)
 material_override = ExtResource("13_ddrw7")
 cast_shadow = 0
 mesh = SubResource("CylinderMesh_34")
 
 [node name="Lanyard3_2" type="MeshInstance3D" parent="Rigging/MainShroudsStarboard" unique_id=2055267904]
-transform = Transform3D(0, 0, 0.018, 0, -0.2999997, 0, 0.018, 0, 0, 6.25, 6.58, -2.3)
+transform = Transform3D(0, 0, 0.018, 0, -0.3, 0, 0.018, 0, 0, 6.91, 6.58, -2.3)
 material_override = ExtResource("13_ddrw7")
 cast_shadow = 0
 mesh = SubResource("CylinderMesh_34")
 
 [node name="Lanyard3_3" type="MeshInstance3D" parent="Rigging/MainShroudsStarboard" unique_id=167764327]
-transform = Transform3D(0, 0, 0.018, 0, -0.2999997, 0, 0.018, 0, 0, 6.25, 6.58, -2.24)
+transform = Transform3D(0, 0, 0.018, 0, -0.3, 0, 0.018, 0, 0, 6.91, 6.58, -2.24)
 material_override = ExtResource("13_ddrw7")
 cast_shadow = 0
 mesh = SubResource("CylinderMesh_34")
 
 [node name="Chain3" type="MeshInstance3D" parent="Rigging/MainShroudsStarboard" unique_id=99542424]
-transform = Transform3D(0, 0, 0.04, 0, -0.6500001, 0, 0.04, 0, 0, 6.25, 6.0550003, -2.3)
+transform = Transform3D(0, 0, 0.04, 0, -0.65, 0, 0.04, 0, 0, 6.91, 6.055, -2.3)
 material_override = ExtResource("6_iav1l")
 cast_shadow = 0
 mesh = SubResource("CylinderMesh_34")
 
 [node name="Ratline1_1" type="MeshInstance3D" parent="Rigging/MainShroudsStarboard" unique_id=1545082801]
-transform = Transform3D(0, 0, 0.028, 0.028, 0, 0, 0, 1.0559361, 0, 5.9707465, 7.23, -3.958262)
+transform = Transform3D(0, 0, 0.028, 0.028, 0, 0, 0, 1.055936, 0, 6.594394, 7.23, -3.958262)
 material_override = ExtResource("16_8fstm")
 cast_shadow = 0
 mesh = SubResource("CylinderMesh_34")
 
 [node name="Ratline1_2" type="MeshInstance3D" parent="Rigging/MainShroudsStarboard" unique_id=427012191]
-transform = Transform3D(0, 0, 0.028, 0.028, 0, 0, 0, 1.0559363, 0, 5.9707465, 7.23, -2.9023256)
+transform = Transform3D(0, 0, 0.028, 0.028, 0, 0, 0, 1.055936, 0, 6.594394, 7.23, -2.902326)
 material_override = ExtResource("16_8fstm")
 cast_shadow = 0
 mesh = SubResource("CylinderMesh_34")
 
 [node name="Ratline2_1" type="MeshInstance3D" parent="Rigging/MainShroudsStarboard" unique_id=1083383828]
-transform = Transform3D(0, 0, 0.028, 0.028, 0, 0, 0, 1.0167687, 0, 5.7225213, 7.63, -3.9656062)
+transform = Transform3D(0, 0, 0.028, 0.028, 0, 0, 0, 1.016769, 0, 6.313855, 7.63, -3.965606)
 material_override = ExtResource("16_8fstm")
 cast_shadow = 0
 mesh = SubResource("CylinderMesh_34")
 
 [node name="Ratline2_2" type="MeshInstance3D" parent="Rigging/MainShroudsStarboard" unique_id=1479731152]
-transform = Transform3D(0, 0, 0.028, 0.028, 0, 0, 0, 1.0167689, 0, 5.7225213, 7.63, -2.9488373)
+transform = Transform3D(0, 0, 0.028, 0.028, 0, 0, 0, 1.016769, 0, 6.313855, 7.63, -2.948837)
 material_override = ExtResource("16_8fstm")
 cast_shadow = 0
 mesh = SubResource("CylinderMesh_34")
 
 [node name="Ratline3_1" type="MeshInstance3D" parent="Rigging/MainShroudsStarboard" unique_id=205455229]
-transform = Transform3D(0, 0, 0.028, 0.028, 0, 0, 0, 0.97760105, 0, 5.474296, 8.030001, -3.97295)
+transform = Transform3D(0, 0, 0.028, 0.028, 0, 0, 0, 0.977601, 0, 6.033317, 8.030001, -3.97295)
 material_override = ExtResource("16_8fstm")
 cast_shadow = 0
 mesh = SubResource("CylinderMesh_34")
 
 [node name="Ratline3_2" type="MeshInstance3D" parent="Rigging/MainShroudsStarboard" unique_id=1191650051]
-transform = Transform3D(0, 0, 0.028, 0.028, 0, 0, 0, 0.97760105, 0, 5.474296, 8.030001, -2.995349)
+transform = Transform3D(0, 0, 0.028, 0.028, 0, 0, 0, 0.977601, 0, 6.033317, 8.030001, -2.995349)
 material_override = ExtResource("16_8fstm")
 cast_shadow = 0
 mesh = SubResource("CylinderMesh_34")
 
 [node name="Ratline4_1" type="MeshInstance3D" parent="Rigging/MainShroudsStarboard" unique_id=1124642133]
-transform = Transform3D(0, 0, 0.028, 0.028, 0, 0, 0, 0.9384334, 0, 5.226071, 8.43, -3.9802938)
+transform = Transform3D(0, 0, 0.028, 0.028, 0, 0, 0, 0.938433, 0, 5.752778, 8.43, -3.980294)
 material_override = ExtResource("16_8fstm")
 cast_shadow = 0
 mesh = SubResource("CylinderMesh_34")
 
 [node name="Ratline4_2" type="MeshInstance3D" parent="Rigging/MainShroudsStarboard" unique_id=99294761]
-transform = Transform3D(0, 0, 0.028, 0.028, 0, 0, 0, 0.9384334, 0, 5.226071, 8.43, -3.0418606)
+transform = Transform3D(0, 0, 0.028, 0.028, 0, 0, 0, 0.938433, 0, 5.752778, 8.43, -3.041861)
 material_override = ExtResource("16_8fstm")
 cast_shadow = 0
 mesh = SubResource("CylinderMesh_34")
 
 [node name="Ratline5_1" type="MeshInstance3D" parent="Rigging/MainShroudsStarboard" unique_id=1240607127]
-transform = Transform3D(0, 0, 0.028, 0.028, 0, 0, 0, 0.89926577, 0, 4.9778457, 8.83, -3.9876378)
+transform = Transform3D(0, 0, 0.028, 0.028, 0, 0, 0, 0.899266, 0, 5.47224, 8.83, -3.987638)
 material_override = ExtResource("16_8fstm")
 cast_shadow = 0
 mesh = SubResource("CylinderMesh_34")
 
 [node name="Ratline5_2" type="MeshInstance3D" parent="Rigging/MainShroudsStarboard" unique_id=1296577455]
-transform = Transform3D(0, 0, 0.028, 0.028, 0, 0, 0, 0.8992655, 0, 4.9778457, 8.83, -3.0883722)
+transform = Transform3D(0, 0, 0.028, 0.028, 0, 0, 0, 0.899266, 0, 5.47224, 8.83, -3.088372)
 material_override = ExtResource("16_8fstm")
 cast_shadow = 0
 mesh = SubResource("CylinderMesh_34")
 
 [node name="Ratline6_1" type="MeshInstance3D" parent="Rigging/MainShroudsStarboard" unique_id=190256292]
-transform = Transform3D(0, 0, 0.028, 0.028, 0, 0, 0, 0.8600979, 0, 4.7296205, 9.2300005, -3.9949818)
+transform = Transform3D(0, 0, 0.028, 0.028, 0, 0, 0, 0.860098, 0, 5.191701, 9.23, -3.994982)
 material_override = ExtResource("16_8fstm")
 cast_shadow = 0
 mesh = SubResource("CylinderMesh_34")
 
 [node name="Ratline6_2" type="MeshInstance3D" parent="Rigging/MainShroudsStarboard" unique_id=1309465193]
-transform = Transform3D(0, 0, 0.028, 0.028, 0, 0, 0, 0.8600981, 0, 4.7296205, 9.2300005, -3.1348839)
+transform = Transform3D(0, 0, 0.028, 0.028, 0, 0, 0, 0.860098, 0, 5.191701, 9.23, -3.134884)
 material_override = ExtResource("16_8fstm")
 cast_shadow = 0
 mesh = SubResource("CylinderMesh_34")
 
 [node name="Ratline7_1" type="MeshInstance3D" parent="Rigging/MainShroudsStarboard" unique_id=1221064431]
-transform = Transform3D(0, 0, 0.028, 0.028, 0, 0, 0, 0.82093024, 0, 4.4813952, 9.63, -4.0023255)
+transform = Transform3D(0, 0, 0.028, 0.028, 0, 0, 0, 0.82093, 0, 4.911163, 9.63, -4.002326)
 material_override = ExtResource("16_8fstm")
 cast_shadow = 0
 mesh = SubResource("CylinderMesh_34")
 
 [node name="Ratline7_2" type="MeshInstance3D" parent="Rigging/MainShroudsStarboard" unique_id=1872536293]
-transform = Transform3D(0, 0, 0.028, 0.028, 0, 0, 0, 0.82093024, 0, 4.4813952, 9.63, -3.1813955)
+transform = Transform3D(0, 0, 0.028, 0.028, 0, 0, 0, 0.82093, 0, 4.911163, 9.63, -3.181395)
 material_override = ExtResource("16_8fstm")
 cast_shadow = 0
 mesh = SubResource("CylinderMesh_34")
 
 [node name="Ratline8_1" type="MeshInstance3D" parent="Rigging/MainShroudsStarboard" unique_id=674699414]
-transform = Transform3D(0, 0, 0.028, 0.028, 0, 0, 0, 0.7817626, 0, 4.23317, 10.030001, -4.0096693)
+transform = Transform3D(0, 0, 0.028, 0.028, 0, 0, 0, 0.781763, 0, 4.630624, 10.030001, -4.009669)
 material_override = ExtResource("16_8fstm")
 cast_shadow = 0
 mesh = SubResource("CylinderMesh_34")
 
 [node name="Ratline8_2" type="MeshInstance3D" parent="Rigging/MainShroudsStarboard" unique_id=1282612222]
-transform = Transform3D(0, 0, 0.028, 0.028, 0, 0, 0, 0.7817626, 0, 4.23317, 10.030001, -3.227907)
+transform = Transform3D(0, 0, 0.028, 0.028, 0, 0, 0, 0.781763, 0, 4.630624, 10.030001, -3.227907)
 material_override = ExtResource("16_8fstm")
 cast_shadow = 0
 mesh = SubResource("CylinderMesh_34")
 
 [node name="Ratline9_1" type="MeshInstance3D" parent="Rigging/MainShroudsStarboard" unique_id=1085224564]
-transform = Transform3D(0, 0, 0.028, 0.028, 0, 0, 0, 0.7425947, 0, 3.9849448, 10.43, -4.0170135)
+transform = Transform3D(0, 0, 0.028, 0.028, 0, 0, 0, 0.742595, 0, 4.350086, 10.43, -4.017014)
 material_override = ExtResource("16_8fstm")
 cast_shadow = 0
 mesh = SubResource("CylinderMesh_34")
 
 [node name="Ratline9_2" type="MeshInstance3D" parent="Rigging/MainShroudsStarboard" unique_id=1264008309]
-transform = Transform3D(0, 0, 0.028, 0.028, 0, 0, 0, 0.74259496, 0, 3.9849448, 10.43, -3.2744188)
+transform = Transform3D(0, 0, 0.028, 0.028, 0, 0, 0, 0.742595, 0, 4.350086, 10.43, -3.274419)
 material_override = ExtResource("16_8fstm")
 cast_shadow = 0
 mesh = SubResource("CylinderMesh_34")
 
 [node name="Ratline10_1" type="MeshInstance3D" parent="Rigging/MainShroudsStarboard" unique_id=1059241709]
-transform = Transform3D(0, 0, 0.028, 0.028, 0, 0, 0, 0.7034271, 0, 3.7367194, 10.83, -4.0243573)
+transform = Transform3D(0, 0, 0.028, 0.028, 0, 0, 0, 0.703427, 0, 4.069547, 10.83, -4.024357)
 material_override = ExtResource("16_8fstm")
 cast_shadow = 0
 mesh = SubResource("CylinderMesh_34")
 
 [node name="Ratline10_2" type="MeshInstance3D" parent="Rigging/MainShroudsStarboard" unique_id=2041863102]
-transform = Transform3D(0, 0, 0.028, 0.028, 0, 0, 0, 0.7034271, 0, 3.7367194, 10.83, -3.3209305)
+transform = Transform3D(0, 0, 0.028, 0.028, 0, 0, 0, 0.703427, 0, 4.069547, 10.83, -3.32093)
 material_override = ExtResource("16_8fstm")
 cast_shadow = 0
 mesh = SubResource("CylinderMesh_34")
 
 [node name="Ratline11_1" type="MeshInstance3D" parent="Rigging/MainShroudsStarboard" unique_id=203587995]
-transform = Transform3D(0, 0, 0.028, 0.028, 0, 0, 0, 0.66425943, 0, 3.4884944, 11.2300005, -4.031701)
+transform = Transform3D(0, 0, 0.028, 0.028, 0, 0, 0, 0.664259, 0, 3.789008, 11.23, -4.031701)
 material_override = ExtResource("16_8fstm")
 cast_shadow = 0
 mesh = SubResource("CylinderMesh_34")
 
 [node name="Ratline11_2" type="MeshInstance3D" parent="Rigging/MainShroudsStarboard" unique_id=191520292]
-transform = Transform3D(0, 0, 0.028, 0.028, 0, 0, 0, 0.66425943, 0, 3.4884944, 11.2300005, -3.367442)
+transform = Transform3D(0, 0, 0.028, 0.028, 0, 0, 0, 0.664259, 0, 3.789008, 11.23, -3.367442)
 material_override = ExtResource("16_8fstm")
 cast_shadow = 0
 mesh = SubResource("CylinderMesh_34")
 
 [node name="Ratline12_1" type="MeshInstance3D" parent="Rigging/MainShroudsStarboard" unique_id=91018791]
-transform = Transform3D(0, 0, 0.028, 0.028, 0, 0, 0, 0.62509155, 0, 3.2402692, 11.63, -4.0390453)
+transform = Transform3D(0, 0, 0.028, 0.028, 0, 0, 0, 0.625092, 0, 3.50847, 11.63, -4.039045)
 material_override = ExtResource("16_8fstm")
 cast_shadow = 0
 mesh = SubResource("CylinderMesh_34")
 
 [node name="Ratline12_2" type="MeshInstance3D" parent="Rigging/MainShroudsStarboard" unique_id=665330117]
-transform = Transform3D(0, 0, 0.028, 0.028, 0, 0, 0, 0.625092, 0, 3.2402692, 11.63, -3.4139535)
+transform = Transform3D(0, 0, 0.028, 0.028, 0, 0, 0, 0.625092, 0, 3.50847, 11.63, -3.413953)
 material_override = ExtResource("16_8fstm")
 cast_shadow = 0
 mesh = SubResource("CylinderMesh_34")
 
 [node name="Ratline13_1" type="MeshInstance3D" parent="Rigging/MainShroudsStarboard" unique_id=1540895839]
-transform = Transform3D(0, 0, 0.028, 0.028, 0, 0, 0, 0.5859239, 0, 2.992044, 12.030001, -4.046389)
+transform = Transform3D(0, 0, 0.028, 0.028, 0, 0, 0, 0.585924, 0, 3.227931, 12.030001, -4.046389)
 material_override = ExtResource("16_8fstm")
 cast_shadow = 0
 mesh = SubResource("CylinderMesh_34")
 
 [node name="Ratline13_2" type="MeshInstance3D" parent="Rigging/MainShroudsStarboard" unique_id=1017104754]
-transform = Transform3D(0, 0, 0.028, 0.028, 0, 0, 0, 0.58592415, 0, 2.992044, 12.030001, -3.4604652)
+transform = Transform3D(0, 0, 0.028, 0.028, 0, 0, 0, 0.585924, 0, 3.227931, 12.030001, -3.460465)
 material_override = ExtResource("16_8fstm")
 cast_shadow = 0
 mesh = SubResource("CylinderMesh_34")
 
 [node name="Ratline14_1" type="MeshInstance3D" parent="Rigging/MainShroudsStarboard" unique_id=110743385]
-transform = Transform3D(0, 0, 0.028, 0.028, 0, 0, 0, 0.54675627, 0, 2.7438185, 12.43, -4.053733)
+transform = Transform3D(0, 0, 0.028, 0.028, 0, 0, 0, 0.546756, 0, 2.947393, 12.43, -4.053733)
 material_override = ExtResource("16_8fstm")
 cast_shadow = 0
 mesh = SubResource("CylinderMesh_34")
 
 [node name="Ratline14_2" type="MeshInstance3D" parent="Rigging/MainShroudsStarboard" unique_id=1614831751]
-transform = Transform3D(0, 0, 0.028, 0.028, 0, 0, 0, 0.54675627, 0, 2.7438185, 12.43, -3.5069768)
+transform = Transform3D(0, 0, 0.028, 0.028, 0, 0, 0, 0.546756, 0, 2.947393, 12.43, -3.506977)
 material_override = ExtResource("16_8fstm")
 cast_shadow = 0
 mesh = SubResource("CylinderMesh_34")
 
 [node name="Ratline15_1" type="MeshInstance3D" parent="Rigging/MainShroudsStarboard" unique_id=1046524265]
-transform = Transform3D(0, 0, 0.028, 0.028, 0, 0, 0, 0.5075884, 0, 2.4955933, 12.83, -4.061077)
+transform = Transform3D(0, 0, 0.028, 0.028, 0, 0, 0, 0.507588, 0, 2.666854, 12.83, -4.061077)
 material_override = ExtResource("16_8fstm")
 cast_shadow = 0
 mesh = SubResource("CylinderMesh_34")
 
 [node name="Ratline15_2" type="MeshInstance3D" parent="Rigging/MainShroudsStarboard" unique_id=1706479273]
-transform = Transform3D(0, 0, 0.028, 0.028, 0, 0, 0, 0.50758886, 0, 2.4955933, 12.83, -3.5534885)
+transform = Transform3D(0, 0, 0.028, 0.028, 0, 0, 0, 0.507589, 0, 2.666854, 12.83, -3.553488)
 material_override = ExtResource("16_8fstm")
 cast_shadow = 0
 mesh = SubResource("CylinderMesh_34")
 
 [node name="Ratline16_1" type="MeshInstance3D" parent="Rigging/MainShroudsStarboard" unique_id=520291770]
-transform = Transform3D(0, 0, 0.028, 0.028, 0, 0, 0, 0.46842074, 0, 2.2473683, 13.2300005, -4.068421)
+transform = Transform3D(0, 0, 0.028, 0.028, 0, 0, 0, 0.468421, 0, 2.386316, 13.23, -4.068421)
 material_override = ExtResource("16_8fstm")
 cast_shadow = 0
 mesh = SubResource("CylinderMesh_34")
 
 [node name="Ratline16_2" type="MeshInstance3D" parent="Rigging/MainShroudsStarboard" unique_id=468824135]
-transform = Transform3D(0, 0, 0.028, 0.028, 0, 0, 0, 0.46842122, 0, 2.2473683, 13.2300005, -3.6)
+transform = Transform3D(0, 0, 0.028, 0.028, 0, 0, 0, 0.468421, 0, 2.386316, 13.23, -3.6)
 material_override = ExtResource("16_8fstm")
 cast_shadow = 0
 mesh = SubResource("CylinderMesh_34")
 
 [node name="Ratline17_1" type="MeshInstance3D" parent="Rigging/MainShroudsStarboard" unique_id=185880483]
-transform = Transform3D(0, 0, 0.028, 0.028, 0, 0, 0, 0.4292531, 0, 1.9991431, 13.630001, -4.0757647)
+transform = Transform3D(0, 0, 0.028, 0.028, 0, 0, 0, 0.429253, 0, 2.105777, 13.630001, -4.075765)
 material_override = ExtResource("16_8fstm")
 cast_shadow = 0
 mesh = SubResource("CylinderMesh_34")
 
 [node name="Ratline17_2" type="MeshInstance3D" parent="Rigging/MainShroudsStarboard" unique_id=1362877778]
-transform = Transform3D(0, 0, 0.028, 0.028, 0, 0, 0, 0.42925334, 0, 1.9991431, 13.630001, -3.6465116)
+transform = Transform3D(0, 0, 0.028, 0.028, 0, 0, 0, 0.429253, 0, 2.105777, 13.630001, -3.646512)
 material_override = ExtResource("16_8fstm")
 cast_shadow = 0
 mesh = SubResource("CylinderMesh_34")
 
 [node name="Ratline18_1" type="MeshInstance3D" parent="Rigging/MainShroudsStarboard" unique_id=1689002838]
-transform = Transform3D(0, 0, 0.028, 0.028, 0, 0, 0, 0.3900857, 0, 1.7509174, 14.030001, -4.083109)
+transform = Transform3D(0, 0, 0.028, 0.028, 0, 0, 0, 0.390086, 0, 1.825238, 14.030001, -4.083109)
 material_override = ExtResource("16_8fstm")
 cast_shadow = 0
 mesh = SubResource("CylinderMesh_34")
 
 [node name="Ratline18_2" type="MeshInstance3D" parent="Rigging/MainShroudsStarboard" unique_id=1178766567]
-transform = Transform3D(0, 0, 0.028, 0.028, 0, 0, 0, 0.3900857, 0, 1.7509174, 14.030001, -3.6930234)
+transform = Transform3D(0, 0, 0.028, 0.028, 0, 0, 0, 0.390086, 0, 1.825238, 14.030001, -3.693023)
 material_override = ExtResource("16_8fstm")
 cast_shadow = 0
 mesh = SubResource("CylinderMesh_34")
@@ -4319,133 +4308,133 @@ material_override = ExtResource("16_8fstm")
 mesh = SubResource("CylinderMesh_34")
 
 [node name="BackstayChannelStarboard" type="MeshInstance3D" parent="Rigging" unique_id=1304874735]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6.18, 6.05, 1.8)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6.98, 6.05, 1.8)
 material_override = ExtResource("2_3xgj1")
 mesh = SubResource("BoxMesh_156")
 
 [node name="BackstayStarboard" type="Node3D" parent="Rigging" unique_id=712515490]
 
 [node name="Piece1" type="MeshInstance3D" parent="Rigging/BackstayStarboard" unique_id=60365073]
-transform = Transform3D(0, 0.75875, 0.04712352, 0.01504679, -2.039999, 0.015939673, 0.047682222, 0.6437502, -0.0050299866, 0.55937505, 21.18, -4.078125)
+transform = Transform3D(0, 0.863231, 0.046367, 0.015047, -2.039999, 0.017843, 0.047682, 0.64375, -0.005631, 0.611616, 21.18, -4.078125)
 material_override = ExtResource("16_8fstm")
 mesh = SubResource("CylinderMesh_34")
 
 [node name="Piece2" type="MeshInstance3D" parent="Rigging/BackstayStarboard" unique_id=1643638242]
-transform = Transform3D(0, 0.75874996, 0.047093477, 0.016013978, -2.0150013, 0.015914036, 0.047366153, 0.68124986, -0.0053803613, 1.318125, 19.1525, -3.415625)
+transform = Transform3D(0, 0.861951, 0.04634, 0.016014, -2.015001, 0.017789, 0.047366, 0.68125, -0.006014, 1.474207, 19.1525, -3.415625)
 material_override = ExtResource("16_8fstm")
 mesh = SubResource("CylinderMesh_34")
 
 [node name="Piece3" type="MeshInstance3D" parent="Rigging/BackstayStarboard" unique_id=274807777]
-transform = Transform3D(0, 0.7587502, 0.04706522, 0.016985124, -1.9899998, 0.015874276, 0.04702665, 0.71874976, -0.005733484, 2.0768752, 17.150002, -2.7156253)
+transform = Transform3D(0, 0.860671, 0.046315, 0.016985, -1.99, 0.01772, 0.047027, 0.71875, -0.0064, 2.335518, 17.150002, -2.715625)
 material_override = ExtResource("16_8fstm")
 mesh = SubResource("CylinderMesh_34")
 
 [node name="Piece4" type="MeshInstance3D" parent="Rigging/BackstayStarboard" unique_id=912993011]
-transform = Transform3D(0, 0.75874996, 0.047038894, 0.0179589, -1.9650002, 0.015820017, 0.046663452, 0.75625014, -0.006088493, 2.8356252, 15.172501, -1.9781252)
+transform = Transform3D(0, 0.85939, 0.046292, 0.017959, -1.965, 0.017634, 0.046663, 0.75625, -0.006787, 3.195548, 15.172501, -1.978125)
 material_override = ExtResource("16_8fstm")
 mesh = SubResource("CylinderMesh_34")
 
 [node name="Piece5" type="MeshInstance3D" parent="Rigging/BackstayStarboard" unique_id=966592297]
-transform = Transform3D(0, 0.75874996, 0.047014613, 0.018933963, -1.9400005, 0.015751023, 0.0462764, 0.79375005, -0.006444522, 3.5943751, 13.22, -1.2031251)
+transform = Transform3D(0, 0.85811, 0.046273, 0.018934, -1.940001, 0.017533, 0.046276, 0.79375, -0.007173, 4.054298, 13.22, -1.203125)
 material_override = ExtResource("16_8fstm")
 mesh = SubResource("CylinderMesh_34")
 
 [node name="Piece6" type="MeshInstance3D" parent="Rigging/BackstayStarboard" unique_id=968334683]
-transform = Transform3D(0, 0.75874996, 0.046992477, 0.019908935, -1.914999, 0.015667101, 0.045865394, 0.8312496, -0.006800668, 4.353125, 11.2925005, -0.3906253)
+transform = Transform3D(0, 0.856829, 0.046256, 0.019909, -1.914999, 0.017415, 0.045865, 0.83125, -0.007559, 4.911768, 11.2925, -0.390625)
 material_override = ExtResource("16_8fstm")
 mesh = SubResource("CylinderMesh_34")
 
 [node name="Piece7" type="MeshInstance3D" parent="Rigging/BackstayStarboard" unique_id=704098330]
-transform = Transform3D(0, 0.75874996, 0.046972614, 0.020882383, -1.8900003, 0.0155681, 0.04543045, 0.8687501, -0.007155972, 5.111875, 9.390001, 0.45937455)
+transform = Transform3D(0, 0.855549, 0.046241, 0.020882, -1.89, 0.017281, 0.04543, 0.86875, -0.007943, 5.767957, 9.390001, 0.459375)
 material_override = ExtResource("16_8fstm")
 mesh = SubResource("CylinderMesh_34")
 
 [node name="Piece8" type="MeshInstance3D" parent="Rigging/BackstayStarboard" unique_id=160559887]
-transform = Transform3D(0, 0.75874996, 0.046955105, 0.02185286, -1.8650007, 0.015453997, 0.04497169, 0.9062501, -0.007509481, 5.870625, 7.5125003, 1.3468747)
+transform = Transform3D(0, 0.854269, 0.04623, 0.021853, -1.865001, 0.017131, 0.044972, 0.90625, -0.008324, 6.622866, 7.5125, 1.346875)
 material_override = ExtResource("16_8fstm")
 mesh = SubResource("CylinderMesh_34")
 
 [node name="MizzenChannelStarboard" type="MeshInstance3D" parent="Rigging" unique_id=1758801179]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6.18, 7.35, 13.55)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6.7, 7.35, 13.55)
 material_override = ExtResource("2_3xgj1")
 mesh = SubResource("BoxMesh_157")
 
 [node name="MizzenShroudsStarboard" type="Node3D" parent="Rigging" unique_id=872039674]
 
 [node name="Shroud1" type="MeshInstance3D" parent="Rigging/MizzenShroudsStarboard" unique_id=1877024202]
-transform = Transform3D(0, -5.97, 0.04290415, 0.005911496, 7.3999996, 0.034213353, -0.05468139, 0.79999924, 0.0036987371, 3.265, 11.8, 13.5)
+transform = Transform3D(0, -6.49, 0.041454, 0.005911, 7.4, 0.035937, -0.054681, 0.799999, 0.003885, 3.525, 11.8, 13.5)
 material_override = ExtResource("16_8fstm")
 mesh = SubResource("CylinderMesh_34")
 
 [node name="DeadeyeUpper1" type="MeshInstance3D" parent="Rigging/MizzenShroudsStarboard" unique_id=1209791314]
-transform = Transform3D(-4.371139e-08, -1, 0, 1, -4.371139e-08, 0, 0, 0, 1, 6.25, 8.1, 13.1)
+transform = Transform3D(0, -1, 0, 1, 0, 0, 0, 0, 1, 6.77, 8.1, 13.1)
 material_override = ExtResource("2_3xgj1")
 mesh = SubResource("CylinderMesh_155")
 
 [node name="DeadeyeLower1" type="MeshInstance3D" parent="Rigging/MizzenShroudsStarboard" unique_id=543947230]
-transform = Transform3D(-4.371139e-08, -1, 0, 1, -4.371139e-08, 0, 0, 0, 1, 6.25, 7.7, 13.1)
+transform = Transform3D(0, -1, 0, 1, 0, 0, 0, 0, 1, 6.77, 7.7, 13.1)
 material_override = ExtResource("2_3xgj1")
 mesh = SubResource("CylinderMesh_155")
 
 [node name="Lanyard1_1" type="MeshInstance3D" parent="Rigging/MizzenShroudsStarboard" unique_id=455472436]
-transform = Transform3D(0, 0, 0.018, 0, -0.3000002, 0, 0.018, 0, 0, 6.25, 7.9, 13.04)
+transform = Transform3D(0, 0, 0.018, 0, -0.3, 0, 0.018, 0, 0, 6.77, 7.9, 13.04)
 material_override = ExtResource("13_ddrw7")
 cast_shadow = 0
 mesh = SubResource("CylinderMesh_34")
 
 [node name="Lanyard1_2" type="MeshInstance3D" parent="Rigging/MizzenShroudsStarboard" unique_id=1565256874]
-transform = Transform3D(0, 0, 0.018, 0, -0.3000002, 0, 0.018, 0, 0, 6.25, 7.9, 13.1)
+transform = Transform3D(0, 0, 0.018, 0, -0.3, 0, 0.018, 0, 0, 6.77, 7.9, 13.1)
 material_override = ExtResource("13_ddrw7")
 cast_shadow = 0
 mesh = SubResource("CylinderMesh_34")
 
 [node name="Lanyard1_3" type="MeshInstance3D" parent="Rigging/MizzenShroudsStarboard" unique_id=2108114150]
-transform = Transform3D(0, 0, 0.018, 0, -0.3000002, 0, 0.018, 0, 0, 6.25, 7.9, 13.160001)
+transform = Transform3D(0, 0, 0.018, 0, -0.3, 0, 0.018, 0, 0, 6.77, 7.9, 13.160001)
 material_override = ExtResource("13_ddrw7")
 cast_shadow = 0
 mesh = SubResource("CylinderMesh_34")
 
 [node name="Chain1" type="MeshInstance3D" parent="Rigging/MizzenShroudsStarboard" unique_id=1415856022]
-transform = Transform3D(0, 0, 0.04, 0, -0.6500001, 0, 0.04, 0, 0, 6.25, 7.375, 13.1)
+transform = Transform3D(0, 0, 0.04, 0, -0.65, 0, 0.04, 0, 0, 6.77, 7.375, 13.1)
 material_override = ExtResource("6_iav1l")
 cast_shadow = 0
 mesh = SubResource("CylinderMesh_34")
 
 [node name="Shroud2" type="MeshInstance3D" parent="Rigging/MizzenShroudsStarboard" unique_id=1810423977]
-transform = Transform3D(0, -5.97, 0.042807873, 0.00074317824, 7.3999996, 0.034529235, -0.054994978, 0.10000038, 0.0004666131, 3.265, 11.8, 14.05)
+transform = Transform3D(0, -6.49, 0.041352, 0.000743, 7.4, 0.03626, -0.054995, 0.1, 0.00049, 3.525, 11.8, 14.05)
 material_override = ExtResource("16_8fstm")
 mesh = SubResource("CylinderMesh_34")
 
 [node name="DeadeyeUpper2" type="MeshInstance3D" parent="Rigging/MizzenShroudsStarboard" unique_id=1337037281]
-transform = Transform3D(-4.371139e-08, -1, 0, 1, -4.371139e-08, 0, 0, 0, 1, 6.25, 8.1, 14)
+transform = Transform3D(0, -1, 0, 1, 0, 0, 0, 0, 1, 6.77, 8.1, 14)
 material_override = ExtResource("2_3xgj1")
 mesh = SubResource("CylinderMesh_155")
 
 [node name="DeadeyeLower2" type="MeshInstance3D" parent="Rigging/MizzenShroudsStarboard" unique_id=1968077612]
-transform = Transform3D(-4.371139e-08, -1, 0, 1, -4.371139e-08, 0, 0, 0, 1, 6.25, 7.7, 14)
+transform = Transform3D(0, -1, 0, 1, 0, 0, 0, 0, 1, 6.77, 7.7, 14)
 material_override = ExtResource("2_3xgj1")
 mesh = SubResource("CylinderMesh_155")
 
 [node name="Lanyard2_1" type="MeshInstance3D" parent="Rigging/MizzenShroudsStarboard" unique_id=1331075544]
-transform = Transform3D(0, 0, 0.018, 0, -0.3000002, 0, 0.018, 0, 0, 6.25, 7.9, 13.94)
+transform = Transform3D(0, 0, 0.018, 0, -0.3, 0, 0.018, 0, 0, 6.77, 7.9, 13.94)
 material_override = ExtResource("13_ddrw7")
 cast_shadow = 0
 mesh = SubResource("CylinderMesh_34")
 
 [node name="Lanyard2_2" type="MeshInstance3D" parent="Rigging/MizzenShroudsStarboard" unique_id=528402266]
-transform = Transform3D(0, 0, 0.018, 0, -0.3000002, 0, 0.018, 0, 0, 6.25, 7.9, 14)
+transform = Transform3D(0, 0, 0.018, 0, -0.3, 0, 0.018, 0, 0, 6.77, 7.9, 14)
 material_override = ExtResource("13_ddrw7")
 cast_shadow = 0
 mesh = SubResource("CylinderMesh_34")
 
 [node name="Lanyard2_3" type="MeshInstance3D" parent="Rigging/MizzenShroudsStarboard" unique_id=1243985546]
-transform = Transform3D(0, 0, 0.018, 0, -0.3000002, 0, 0.018, 0, 0, 6.25, 7.9, 14.06)
+transform = Transform3D(0, 0, 0.018, 0, -0.3, 0, 0.018, 0, 0, 6.77, 7.9, 14.06)
 material_override = ExtResource("13_ddrw7")
 cast_shadow = 0
 mesh = SubResource("CylinderMesh_34")
 
 [node name="Chain2" type="MeshInstance3D" parent="Rigging/MizzenShroudsStarboard" unique_id=1020777688]
-transform = Transform3D(0, 0, 0.04, 0, -0.6500001, 0, 0.04, 0, 0, 6.25, 7.375, 14)
+transform = Transform3D(0, 0, 0.04, 0, -0.65, 0, 0.04, 0, 0, 6.77, 7.375, 14)
 material_override = ExtResource("6_iav1l")
 cast_shadow = 0
 mesh = SubResource("CylinderMesh_34")
@@ -4714,47 +4703,47 @@ mesh = SubResource("CylinderMesh_158")
 [node name="Forestay" type="Node3D" parent="Rigging" unique_id=1124870914]
 
 [node name="Piece1" type="MeshInstance3D" parent="Rigging/Forestay" unique_id=1471068371]
-transform = Transform3D(0, 0, 0.07, -0.06098955, -1.0790625, 0, 0.034355123, -1.9156251, 0, 0, 15.060469, -5.2578125)
+transform = Transform3D(0, 0, 0.07, -0.062481, -0.946697, 0, 0.031561, -1.874205, 0, 0, 15.126652, -5.237103)
 material_override = ExtResource("16_8fstm")
 mesh = SubResource("CylinderMesh_34")
 
 [node name="Piece2" type="MeshInstance3D" parent="Rigging/Forestay" unique_id=62982768]
-transform = Transform3D(0, 0, 0.07, -0.06141321, -1.0478125, 0, 0.033591922, -1.9156251, 0, 0, 13.997032, -7.173438)
+transform = Transform3D(0, 0, 0.07, -0.062888, -0.916365, 0, 0.030743, -1.874492, 0, 0, 14.195122, -7.111452)
 material_override = ExtResource("16_8fstm")
 mesh = SubResource("CylinderMesh_34")
 
 [node name="Piece3" type="MeshInstance3D" parent="Rigging/Forestay" unique_id=156577174]
-transform = Transform3D(0, 0, 0.07, -0.061832983, -1.0165625, 0, 0.03281284, -1.9156246, 0, 0, 12.964844, -9.089063)
+transform = Transform3D(0, 0, 0.07, -0.063288, -0.886018, 0, 0.02991, -1.874775, 0, 0, 13.29393, -8.986085)
 material_override = ExtResource("16_8fstm")
 mesh = SubResource("CylinderMesh_34")
 
 [node name="Piece4" type="MeshInstance3D" parent="Rigging/Forestay" unique_id=865492440]
-transform = Transform3D(0, 0, 0.07, -0.06224838, -0.98531246, 0, 0.03201781, -1.9156246, 0, 0, 11.963907, -11.004687)
+transform = Transform3D(0, 0, 0.07, -0.063683, -0.855655, 0, 0.029061, -1.875052, 0, 0, 12.423094, -10.860998)
 material_override = ExtResource("16_8fstm")
 mesh = SubResource("CylinderMesh_34")
 
 [node name="Piece5" type="MeshInstance3D" parent="Rigging/Forestay" unique_id=1432780571]
-transform = Transform3D(0, 0, 0.07, -0.06265888, -0.9540634, 0, 0.031206802, -1.9156256, 0, 0, 10.994219, -12.920313)
+transform = Transform3D(0, 0, 0.07, -0.06407, -0.825277, 0, 0.028196, -1.875326, 0, 0, 11.582628, -12.736188)
 material_override = ExtResource("16_8fstm")
 mesh = SubResource("CylinderMesh_34")
 
 [node name="Piece6" type="MeshInstance3D" parent="Rigging/Forestay" unique_id=48737482]
-transform = Transform3D(0, 0, 0.07, -0.06306402, -0.9228115, 0, 0.030379754, -1.9156246, 0, 0, 10.055781, -14.8359375)
+transform = Transform3D(0, 0, 0.07, -0.064451, -0.794881, 0, 0.027314, -1.875593, 0, 0, 10.772548, -14.611647)
 material_override = ExtResource("16_8fstm")
 mesh = SubResource("CylinderMesh_34")
 
 [node name="Piece7" type="MeshInstance3D" parent="Rigging/Forestay" unique_id=1366396661]
-transform = Transform3D(0, 0, 0.07, -0.063463196, -0.8915634, 0, 0.029536808, -1.9156256, 0, 0, 9.148594, -16.751562)
+transform = Transform3D(0, 0, 0.07, -0.064824, -0.764472, 0, 0.026418, -1.875856, 0, 0, 9.992872, -16.48737)
 material_override = ExtResource("16_8fstm")
 mesh = SubResource("CylinderMesh_34")
 
 [node name="Piece8" type="MeshInstance3D" parent="Rigging/Forestay" unique_id=828696319]
-transform = Transform3D(0, 0, 0.07, -0.06385593, -0.860312, 0, 0.028677866, -1.9156246, 0, 0, 8.272656, -18.667187)
+transform = Transform3D(0, 0, 0.07, -0.065188, -0.734043, 0, 0.025505, -1.876113, 0, 0, 9.243614, -18.363355)
 material_override = ExtResource("16_8fstm")
 mesh = SubResource("CylinderMesh_34")
 
 [node name="TopmastStay" type="MeshInstance3D" parent="Rigging" unique_id=1678447132]
-transform = Transform3D(0, 0, 0.05, -0.042960558, -13.099999, 0, 0.02558106, -22, 0, 0, 15.85, -15.5)
+transform = Transform3D(0, 0, 0.05, -0.044585, -10.802015, 0, 0.022631, -21.280915, 0, 0, 16.998992, -15.140457)
 material_override = ExtResource("16_8fstm")
 mesh = SubResource("CylinderMesh_34")
 
@@ -4826,7 +4815,7 @@ cast_shadow = 0
 mesh = SubResource("CylinderMesh_34")
 
 [node name="Bobstay" type="MeshInstance3D" parent="Rigging" unique_id=2000732101]
-transform = Transform3D(0, 0, 0.05, 0.032738164, -8.599999, 0, 0.037791703, 7.450001, 0, 0, 4.9, -22.375)
+transform = Transform3D(0, 0, 0.05, 0.026476, -10.824718, 0, 0.042415, 6.756778, 0, 0, 6.012359, -22.028389)
 material_override = ExtResource("16_8fstm")
 mesh = SubResource("CylinderMesh_34")
 
@@ -5052,9 +5041,6 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4.4, 6.2, -12)
 [node name="CableCoil" type="Node3D" parent="Dressing/MooringGear" unique_id=324642996 instance=ExtResource("21_2iegs")]
 transform = Transform3D(0.95755553, 0, 0.80348444, 0, 1.25, 0, -0.80348444, 0, 0.95755553, 3.3, 6.2, -13.7)
 
-[node name="HawserCoil" type="Node3D" parent="Dressing/MooringGear" unique_id=1645190106 instance=ExtResource("21_2iegs")]
-transform = Transform3D(0.37622216, 0, -1.0336618, 0, 1.1, 0, 1.0336618, 0, 0.37622216, -3.4, 6.2, -13.8)
-
 [node name="Cable" type="MeshInstance3D" parent="Dressing/MooringGear" unique_id=435648487]
 transform = Transform3D(0, -2.35, 0.06438513, -0.069896095, -0.3000002, -0.0014960953, 0.0038125163, -5.500001, -0.027428398, -1.675, 6.65, -15.450001)
 material_override = ExtResource("16_8fstm")
@@ -5141,28 +5127,19 @@ transform = Transform3D(0.7070664, 0, 0.8426489, 0, 1.1, 0, -0.8426489, 0, 0.707
 [node name="Keg" type="StaticBody3D" parent="Dressing/Stores" unique_id=816257018 instance=ExtResource("23_leehl")]
 transform = Transform3D(0.6105808, 0, 0.10766187, 0, 0.62, 0, -0.10766187, 0, 0.6105808, -4.3, 5.3, -8.15)
 
-[node name="SpareCoil" type="Node3D" parent="Dressing/Stores" unique_id=117321419 instance=ExtResource("21_2iegs")]
-transform = Transform3D(-0.50000006, 0, 0.8660254, 0, 1, 0, -0.8660254, 0, -0.50000006, -3.2, 5.3, -9.5)
-
 [node name="AtTheMast" type="Node3D" parent="Dressing" unique_id=1791524615]
 
 [node name="FifeRail" type="StaticBody3D" parent="Dressing/AtTheMast" unique_id=1311662938 instance=ExtResource("24_l4210")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 5.3, -4)
 
 [node name="PinRailStarboard" type="StaticBody3D" parent="Dressing/AtTheMast" unique_id=490339229 instance=ExtResource("25_qve44")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5.6, 5.3, -3.5)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6.18, 5.3, -3.5)
 
 [node name="PinRailPort" type="StaticBody3D" parent="Dressing/AtTheMast" unique_id=670648102 instance=ExtResource("25_qve44")]
-transform = Transform3D(-1, 0, -8.742278e-08, 0, 1, 0, 8.742278e-08, 0, -1, -5.6, 5.3, -3.5)
+transform = Transform3D(-1, 0, -8.742278e-08, 0, 1, 0, 8.742278e-08, 0, -1, -6.18, 5.3, -3.5)
 
 [node name="Coil1" type="Node3D" parent="Dressing/AtTheMast" unique_id=1817026660 instance=ExtResource("21_2iegs")]
 transform = Transform3D(0.8693332, 0, 0.23293713, 0, 0.9, 0, -0.23293713, 0, 0.8693332, 1.3, 5.3, -5.2)
-
-[node name="Coil2" type="Node3D" parent="Dressing/AtTheMast" unique_id=381176453 instance=ExtResource("21_2iegs")]
-transform = Transform3D(-0.7517541, 0, -0.27361614, 0, 0.8, 0, 0.27361614, 0, -0.7517541, -1.25, 5.3, -2.75)
-
-[node name="NetMending" type="Node3D" parent="Dressing" unique_id=1310163037 instance=ExtResource("26_l4ab3")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4.9, 5.3, -1.2)
 
 [node name="WaterButt" type="StaticBody3D" parent="Dressing" unique_id=260946632 instance=ExtResource("23_leehl")]
 transform = Transform3D(1.35, 0, 0, 0, 1.35, 0, 0, 0, 1.35, -5, 5.3, -1.6)
@@ -5190,9 +5167,6 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5.62, 5.3, 4.3)
 script = ExtResource("33_pkgkr")
 catch = ExtResource("34_rtfdt")
 
-[node name="MopAndBucket" type="StaticBody3D" parent="Dressing" unique_id=1541042090 instance=ExtResource("35_1phk1")]
-transform = Transform3D(0.8660254, 0, 0.5, 0, 1, 0, -0.5, 0, 0.8660254, -2.75, 5.3, 0.25)
-
 [node name="Supplies" type="Node3D" parent="Dressing" unique_id=1056934047]
 
 [node name="Barrel1" type="StaticBody3D" parent="Dressing/Supplies" unique_id=1073371507 instance=ExtResource("23_leehl")]
@@ -5207,9 +5181,6 @@ transform = Transform3D(0.99026805, 0, 0.1391731, 0, 1, 0, -0.1391731, 0, 0.9902
 [node name="Crate2" type="StaticBody3D" parent="Dressing/Supplies" unique_id=1704474455 instance=ExtResource("22_0mf1s")]
 transform = Transform3D(0.84534365, 0, -0.088849194, 0, 0.85, 0, 0.088849194, 0, 0.84534365, 3.55, 5.9, 8.95)
 
-[node name="DroppedCoil" type="Node3D" parent="Dressing/Supplies" unique_id=1391779941 instance=ExtResource("21_2iegs")]
-transform = Transform3D(0.23293716, 0, 0.8693332, 0, 0.9, 0, -0.8693332, 0, 0.23293716, 1.9, 5.3, 7.4)
-
 [node name="Helm" type="Node3D" parent="Dressing" unique_id=371354891]
 
 [node name="Wheel" type="StaticBody3D" parent="Dressing/Helm" unique_id=988716889 instance=ExtResource("36_17mwb")]
@@ -5220,35 +5191,6 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 7.3, 11)
 
 [node name="ChartTable" type="StaticBody3D" parent="Dressing/Helm" unique_id=446897291 instance=ExtResource("38_r44kn")]
 transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, 2.9, 7.3, 11.7)
-
-[node name="FlagLocker" type="Node3D" parent="Dressing/Helm" unique_id=2131251125]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.9, 7.3, 11.6)
-
-[node name="Chest" type="MeshInstance3D" parent="Dressing/Helm/FlagLocker" unique_id=90144184]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.275, 0)
-material_override = ExtResource("11_nfyf8")
-mesh = SubResource("BoxMesh_169")
-
-[node name="Lid" type="MeshInstance3D" parent="Dressing/Helm/FlagLocker" unique_id=1966167250]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.58, 0)
-material_override = ExtResource("2_3xgj1")
-mesh = SubResource("BoxMesh_170")
-
-[node name="Flags" type="MeshInstance3D" parent="Dressing/Helm/FlagLocker" unique_id=1462396590]
-transform = Transform3D(0.9848077, 0, 0.17364818, 0, 1, 0, -0.17364818, 0, 0.9848077, -0.2, 0.67, 0)
-material_override = ExtResource("18_tg3mm")
-mesh = SubResource("BoxMesh_171")
-
-[node name="FlagsBlue" type="MeshInstance3D" parent="Dressing/Helm/FlagLocker" unique_id=2015650983]
-transform = Transform3D(0.99026805, 0, -0.1391731, 0, 1, 0, 0.1391731, 0, 0.99026805, 0.25, 0.65, 0.05)
-material_override = ExtResource("39_fs2am")
-mesh = SubResource("BoxMesh_172")
-
-[node name="MizzenCoil" type="Node3D" parent="Dressing/Helm" unique_id=1033108586 instance=ExtResource("21_2iegs")]
-transform = Transform3D(0.649519, 0, 0.375, 0, 0.75, 0, -0.375, 0, 0.649519, 1, 7.3, 14.2)
-
-[node name="Bucket" type="StaticBody3D" parent="Dressing/Helm" unique_id=1859160222 instance=ExtResource("35_1phk1")]
-transform = Transform3D(-0.9396926, 0, -0.34202015, 0, 1, 0, 0.34202015, 0, -0.9396926, -4.6, 7.3, 14.3)
 
 [node name="Oilskin" type="MeshInstance3D" parent="Dressing" unique_id=1762661328]
 transform = Transform3D(0.9975641, -0.06975647, 0, 0.06975647, 0.9975641, 0, 0, 0, 1, -4.5, 6.6, 10.18)
@@ -5266,7 +5208,7 @@ mesh = SubResource("CylinderMesh_174")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -5.4, 6.2, -11.25)
 
 [node name="BowLantern" type="Node3D" parent="Lights" unique_id=1616231698 instance=ExtResource("42_16o8s")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4.33, 7.95, -11.25)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4.492, 8.01, -11.253)
 script = ExtResource("43_dro8j")
 light_energy = 1.0
 light_range = 5.0
@@ -5277,7 +5219,7 @@ phase = 0.15
 transform = Transform3D(-1, 0, -8.742278e-08, 0, 1, 0, 8.742278e-08, 0, -1, 5.45, 5.3, 0.4)
 
 [node name="NetLantern" type="Node3D" parent="Lights" unique_id=656915140 instance=ExtResource("42_16o8s")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4.38, 7.05, 0.4)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4.542, 7.11, 0.403)
 script = ExtResource("43_dro8j")
 light_energy = 1.1
 light_range = 5.0
@@ -5288,7 +5230,7 @@ phase = 0.55
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -5.45, 7.42, 14.45)
 
 [node name="QuarterPortLantern" type="Node3D" parent="Lights" unique_id=1906627720 instance=ExtResource("42_16o8s")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4.38, 9.17, 14.45)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4.542, 9.23, 14.447)
 script = ExtResource("43_dro8j")
 light_energy = 0.95
 light_range = 5.0
@@ -5299,7 +5241,7 @@ phase = 0.8
 transform = Transform3D(-1, 0, -8.742278e-08, 0, 1, 0, 8.742278e-08, 0, -1, 5.45, 7.42, 14.45)
 
 [node name="QuarterStarboardLantern" type="Node3D" parent="Lights" unique_id=56486248 instance=ExtResource("42_16o8s")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4.38, 9.17, 14.45)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4.542, 9.23, 14.453)
 script = ExtResource("43_dro8j")
 light_energy = 0.95
 light_range = 5.0
@@ -5337,23 +5279,23 @@ casts_shadows = false
 phase = 0.5
 
 [node name="SternBracket" type="MeshInstance3D" parent="Lights" unique_id=1286985259]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 9.05, 15.35)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 9.05, 15.56)
 material_override = ExtResource("6_iav1l")
 mesh = SubResource("BoxMesh_177")
 
 [node name="SternBracketStay" type="MeshInstance3D" parent="Lights" unique_id=1224233420]
-transform = Transform3D(1, 0, 0, 0, 0.76604444, -0.6427876, 0, 0.6427876, 0.76604444, 0, 8.65, 15.2)
+transform = Transform3D(1, 0, 0, 0, 0.76604444, -0.6427876, 0, 0.6427876, 0.76604444, 0, 8.7, 15.72)
 material_override = ExtResource("6_iav1l")
 mesh = SubResource("BoxMesh_178")
 
 [node name="SternLantern" type="Node3D" parent="Lights" unique_id=198966340 instance=ExtResource("42_16o8s")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 9, 15.85)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 9, 15.1)
 script = ExtResource("43_dro8j")
 light_energy = 1.6
 phase = 0.37
 
 [node name="BowspritLantern" type="Node3D" parent="Lights" unique_id=1479310234 instance=ExtResource("42_16o8s")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8.2755, -22.375)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 9.817813, -21.921353)
 script = ExtResource("43_dro8j")
 light_energy = 1.0
 light_range = 4.5
@@ -5515,7 +5457,7 @@ length = 0.3
 rate = 14.0
 
 [node name="Bowsprit" type="GPUParticles3D" parent="RunningWater" unique_id=160640262]
-transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, 0, 7.99, -21.5)
+transform = Transform3D(0, 0, 1, 0, 1, 0, -1, 0, 0, 0, 9.373229, -21.11545)
 script = ExtResource("44_eq5as")
 length = 1.5
 rate = 10.0
@@ -5603,174 +5545,6 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8.6, -11.15)
 script = ExtResource("47_f0l7j")
 recordings = Array[String](["res://assets/third_party/audio/ship/bell_ring.ogg"])
 automatic = false
-
-[node name="Life" type="Node3D" parent="." unique_id=1688928388]
-
-[node name="Cat" type="Node3D" parent="Life" unique_id=28263931]
-transform = Transform3D(0.8660254, 0, 0.5, 0, 1, 0, -0.5, 0, 0.8660254, 0.32, 5.38, 10.14)
-
-[node name="Body" type="MeshInstance3D" parent="Life/Cat" unique_id=1839847954]
-transform = Transform3D(1.15, 0, 0, 0, 0.55, 0, 0, 0, 0.9, 0, 0.1, 0)
-material_override = ExtResource("48_kxxmk")
-mesh = SubResource("SphereMesh_189")
-
-[node name="Head" type="MeshInstance3D" parent="Life/Cat" unique_id=692724098]
-transform = Transform3D(1, 0, 0, 0, 0.85, 0, 0, 0, 1, 0.17, 0.12, -0.08)
-material_override = ExtResource("48_kxxmk")
-mesh = SubResource("SphereMesh_190")
-
-[node name="Ear-1" type="MeshInstance3D" parent="Life/Cat" unique_id=1428435501]
-transform = Transform3D(0.9396926, 0.34202012, 0, -0.34202012, 0.9396926, 0, 0, 0, 1, 0.16, 0.21, -0.1)
-material_override = ExtResource("48_kxxmk")
-mesh = SubResource("BoxMesh_191")
-
-[node name="Ear1" type="MeshInstance3D" parent="Life/Cat" unique_id=455149721]
-transform = Transform3D(0.9396926, -0.34202012, 0, 0.34202012, 0.9396926, 0, 0, 0, 1, 0.24, 0.21, -0.1)
-material_override = ExtResource("48_kxxmk")
-mesh = SubResource("BoxMesh_191")
-
-[node name="Tail" type="MeshInstance3D" parent="Life/Cat" unique_id=1153226173]
-transform = Transform3D(1.1, 0, 0, 0, 0.8, 0, 0, 0, 1, 0, 0.05, 0.02)
-material_override = ExtResource("48_kxxmk")
-mesh = SubResource("TorusMesh_192")
-
-[node name="Nose" type="MeshInstance3D" parent="Life/Cat" unique_id=391809215]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.25, 0.1, -0.11)
-material_override = ExtResource("5_ijbde")
-cast_shadow = 0
-mesh = SubResource("BoxMesh_193")
-
-[node name="Gull1" type="Node3D" parent="Life" unique_id=1030532557]
-transform = Transform3D(-1, 0, -8.742278e-08, 0, 1, 0, 8.742278e-08, 0, -1, -3.7, 13.46, -4.48)
-
-[node name="Body" type="MeshInstance3D" parent="Life/Gull1" unique_id=1357303401]
-transform = Transform3D(0.9, 0, 0, 0, 0.85, 0, 0, 0, 1.5, 0, 0.1, 0)
-material_override = ExtResource("49_ihf6j")
-mesh = SubResource("SphereMesh_194")
-
-[node name="Head" type="MeshInstance3D" parent="Life/Gull1" unique_id=1276500906]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.2, 0.13)
-material_override = ExtResource("49_ihf6j")
-mesh = SubResource("SphereMesh_195")
-
-[node name="Beak" type="MeshInstance3D" parent="Life/Gull1" unique_id=2104214041]
-transform = Transform3D(1, 0, 0, 0, 0.99026805, -0.1391731, 0, 0.1391731, 0.99026805, 0, 0.19, 0.22)
-material_override = ExtResource("50_tnt63")
-mesh = SubResource("BoxMesh_196")
-
-[node name="Wing-1" type="MeshInstance3D" parent="Life/Gull1" unique_id=15640262]
-transform = Transform3D(0.99026805, 0.1391731, 0, -0.13781868, 0.9806308, 0.1391731, 0.019369153, -0.13781868, 0.99026805, -0.1, 0.12, -0.03)
-material_override = ExtResource("51_gmqr5")
-mesh = SubResource("BoxMesh_197")
-
-[node name="Wing1" type="MeshInstance3D" parent="Life/Gull1" unique_id=281534253]
-transform = Transform3D(0.99026805, -0.1391731, 0, 0.13781868, 0.9806308, 0.1391731, -0.019369153, -0.13781868, 0.99026805, 0.1, 0.12, -0.03)
-material_override = ExtResource("51_gmqr5")
-mesh = SubResource("BoxMesh_197")
-
-[node name="Tail" type="MeshInstance3D" parent="Life/Gull1" unique_id=1617740293]
-transform = Transform3D(1, 0, 0, 0, 0.9659258, 0.25881904, 0, -0.25881904, 0.9659258, 0, 0.12, -0.2)
-material_override = ExtResource("51_gmqr5")
-mesh = SubResource("BoxMesh_198")
-
-[node name="Gull2" type="Node3D" parent="Life" unique_id=2099927563]
-transform = Transform3D(-0.9848077, 0, 0.1736483, 0, 1, 0, -0.1736483, 0, -0.9848077, -3.15, 13.46, -4.48)
-
-[node name="Body" type="MeshInstance3D" parent="Life/Gull2" unique_id=878691173]
-transform = Transform3D(0.9, 0, 0, 0, 0.85, 0, 0, 0, 1.5, 0, 0.1, 0)
-material_override = ExtResource("49_ihf6j")
-mesh = SubResource("SphereMesh_194")
-
-[node name="Head" type="MeshInstance3D" parent="Life/Gull2" unique_id=1032699300]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.2, 0.13)
-material_override = ExtResource("49_ihf6j")
-mesh = SubResource("SphereMesh_195")
-
-[node name="Beak" type="MeshInstance3D" parent="Life/Gull2" unique_id=863971712]
-transform = Transform3D(1, 0, 0, 0, 0.99026805, -0.1391731, 0, 0.1391731, 0.99026805, 0, 0.19, 0.22)
-material_override = ExtResource("50_tnt63")
-mesh = SubResource("BoxMesh_196")
-
-[node name="Wing-1" type="MeshInstance3D" parent="Life/Gull2" unique_id=1268722964]
-transform = Transform3D(0.99026805, 0.1391731, 0, -0.13781868, 0.9806308, 0.1391731, 0.019369153, -0.13781868, 0.99026805, -0.1, 0.12, -0.03)
-material_override = ExtResource("51_gmqr5")
-mesh = SubResource("BoxMesh_197")
-
-[node name="Wing1" type="MeshInstance3D" parent="Life/Gull2" unique_id=459166555]
-transform = Transform3D(0.99026805, -0.1391731, 0, 0.13781868, 0.9806308, 0.1391731, -0.019369153, -0.13781868, 0.99026805, 0.1, 0.12, -0.03)
-material_override = ExtResource("51_gmqr5")
-mesh = SubResource("BoxMesh_197")
-
-[node name="Tail" type="MeshInstance3D" parent="Life/Gull2" unique_id=1574212306]
-transform = Transform3D(1, 0, 0, 0, 0.9659258, 0.25881904, 0, -0.25881904, 0.9659258, 0, 0.12, -0.2)
-material_override = ExtResource("51_gmqr5")
-mesh = SubResource("BoxMesh_198")
-
-[node name="Gull3" type="Node3D" parent="Life" unique_id=1969008660]
-transform = Transform3D(-0.9848077, 0, -0.17364822, 0, 1, 0, 0.17364822, 0, -0.9848077, 2.5, 13.46, -4.48)
-
-[node name="Body" type="MeshInstance3D" parent="Life/Gull3" unique_id=1507398029]
-transform = Transform3D(0.9, 0, 0, 0, 0.85, 0, 0, 0, 1.5, 0, 0.1, 0)
-material_override = ExtResource("49_ihf6j")
-mesh = SubResource("SphereMesh_194")
-
-[node name="Head" type="MeshInstance3D" parent="Life/Gull3" unique_id=705065000]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.2, 0.13)
-material_override = ExtResource("49_ihf6j")
-mesh = SubResource("SphereMesh_195")
-
-[node name="Beak" type="MeshInstance3D" parent="Life/Gull3" unique_id=1591992214]
-transform = Transform3D(1, 0, 0, 0, 0.99026805, -0.1391731, 0, 0.1391731, 0.99026805, 0, 0.19, 0.22)
-material_override = ExtResource("50_tnt63")
-mesh = SubResource("BoxMesh_196")
-
-[node name="Wing-1" type="MeshInstance3D" parent="Life/Gull3" unique_id=311369011]
-transform = Transform3D(0.99026805, 0.1391731, 0, -0.13781868, 0.9806308, 0.1391731, 0.019369153, -0.13781868, 0.99026805, -0.1, 0.12, -0.03)
-material_override = ExtResource("51_gmqr5")
-mesh = SubResource("BoxMesh_197")
-
-[node name="Wing1" type="MeshInstance3D" parent="Life/Gull3" unique_id=113267656]
-transform = Transform3D(0.99026805, -0.1391731, 0, 0.13781868, 0.9806308, 0.1391731, -0.019369153, -0.13781868, 0.99026805, 0.1, 0.12, -0.03)
-material_override = ExtResource("51_gmqr5")
-mesh = SubResource("BoxMesh_197")
-
-[node name="Tail" type="MeshInstance3D" parent="Life/Gull3" unique_id=1536811366]
-transform = Transform3D(1, 0, 0, 0, 0.9659258, 0.25881904, 0, -0.25881904, 0.9659258, 0, 0.12, -0.2)
-material_override = ExtResource("51_gmqr5")
-mesh = SubResource("BoxMesh_198")
-
-[node name="Gull4" type="Node3D" parent="Life" unique_id=1312667894]
-transform = Transform3D(-0.9961947, 0, 0.08715564, 0, 1, 0, -0.08715564, 0, -0.9961947, 0, 9.77, 18.6)
-
-[node name="Body" type="MeshInstance3D" parent="Life/Gull4" unique_id=469034325]
-transform = Transform3D(0.9, 0, 0, 0, 0.85, 0, 0, 0, 1.5, 0, 0.1, 0)
-material_override = ExtResource("49_ihf6j")
-mesh = SubResource("SphereMesh_194")
-
-[node name="Head" type="MeshInstance3D" parent="Life/Gull4" unique_id=918842079]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.2, 0.13)
-material_override = ExtResource("49_ihf6j")
-mesh = SubResource("SphereMesh_195")
-
-[node name="Beak" type="MeshInstance3D" parent="Life/Gull4" unique_id=403356913]
-transform = Transform3D(1, 0, 0, 0, 0.99026805, -0.1391731, 0, 0.1391731, 0.99026805, 0, 0.19, 0.22)
-material_override = ExtResource("50_tnt63")
-mesh = SubResource("BoxMesh_196")
-
-[node name="Wing-1" type="MeshInstance3D" parent="Life/Gull4" unique_id=1953174267]
-transform = Transform3D(0.99026805, 0.1391731, 0, -0.13781868, 0.9806308, 0.1391731, 0.019369153, -0.13781868, 0.99026805, -0.1, 0.12, -0.03)
-material_override = ExtResource("51_gmqr5")
-mesh = SubResource("BoxMesh_197")
-
-[node name="Wing1" type="MeshInstance3D" parent="Life/Gull4" unique_id=1282833908]
-transform = Transform3D(0.99026805, -0.1391731, 0, 0.13781868, 0.9806308, 0.1391731, -0.019369153, -0.13781868, 0.99026805, 0.1, 0.12, -0.03)
-material_override = ExtResource("51_gmqr5")
-mesh = SubResource("BoxMesh_197")
-
-[node name="Tail" type="MeshInstance3D" parent="Life/Gull4" unique_id=1706795469]
-transform = Transform3D(1, 0, 0, 0, 0.9659258, 0.25881904, 0, -0.25881904, 0.9659258, 0, 0.12, -0.2)
-material_override = ExtResource("51_gmqr5")
-mesh = SubResource("BoxMesh_198")
 
 [node name="Sounds" type="Node3D" parent="." unique_id=823876303]
 

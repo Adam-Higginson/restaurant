@@ -28,6 +28,24 @@ const WALKWAYS: Array[Vector3] = [
 ]
 ## Point lights casting shadows are costly: at most this many on deck.
 const SHADOW_BUDGET: int = 3
+const UPPER_DECK: PackedScene = preload("res://scenes/prototype/deck/upper_deck.tscn")
+const WHEEL: PackedScene = preload("res://scenes/prototype/deck/ships_wheel.tscn")
+const ROPE_COIL: String = "res://scenes/prototype/deck/deck_rope_coil.tscn"
+## The lanterns hung on lantern posts, by the post each hangs from (#205).
+const POST_LANTERNS: Dictionary[String, String] = {
+	"BowPost": "BowLantern",
+	"NetPost": "NetLantern",
+	"QuarterPortPost": "QuarterPortLantern",
+	"QuarterStarboardPost": "QuarterStarboardLantern",
+}
+## Coiled rope lying about the deck: a couple, not one everywhere (#205).
+const MOST_COILS: int = 2
+## Set dressing taken off the deck in #205: the cat (for now), the gulls,
+## the mops and buckets, the flag locker and the net being mended.
+const CLEARED: Array[String] = [
+	"Life", "Dressing/MopAndBucket", "Dressing/Helm/Bucket",
+	"Dressing/Helm/FlagLocker", "Dressing/NetMending",
+]
 
 
 func test_the_port_stairs_lead_up_to_the_quarterdeck() -> void:
@@ -142,6 +160,58 @@ func test_the_deck_keeps_to_its_shadow_budget() -> void:
 
 	assert_int(lights).is_greater(6)
 	assert_int(shadowed).is_between(1, SHADOW_BUDGET)
+
+
+func test_each_post_lantern_hangs_from_its_hook() -> void:
+	var deck: Node3D = UPPER_DECK.instantiate() as Node3D
+	auto_free(deck)
+
+	for post_name: String in POST_LANTERNS:
+		var post: Node3D = deck.get_node("Lights/" + post_name) as Node3D
+		var lantern: Node3D = deck.get_node("Lights/" + POST_LANTERNS[post_name]) as Node3D
+		var hook: Vector3 = post.transform * (post.get_node("HookPoint") as Node3D).position
+		assert_vector(lantern.position).override_failure_message(
+				"%s hangs at %s, its hook is at %s" % [lantern.name, lantern.position, hook]) \
+				.is_equal_approx(hook, Vector3.ONE * 0.01)
+
+
+func test_the_wheel_is_drawn_once() -> void:
+	var wheel: Node3D = WHEEL.instantiate() as Node3D
+	auto_free(wheel)
+	var model: ThirdPartyModel = wheel.get_node("Meshy") as ThirdPartyModel
+
+	# The greybox wheel hides behind the made one, like the rest of the stand.
+	for part: Node in wheel.get_node("Wheel").get_children():
+		assert_bool(model.stand_ins.has(part as VisualInstance3D)).override_failure_message(
+				"%s still shows beside the made wheel" % part.name).is_true()
+
+
+func test_the_deck_is_cleared_of_clutter() -> void:
+	var deck: Node3D = UPPER_DECK.instantiate() as Node3D
+	auto_free(deck)
+
+	for gone: String in CLEARED:
+		assert_object(deck.get_node_or_null(gone)).override_failure_message(
+				"%s is still on deck" % gone).is_null()
+	var coils: int = 0
+	for found: Node in deck.find_children("*"):
+		if found.scene_file_path == ROPE_COIL:
+			coils += 1
+	assert_int(coils).is_less_equal(MOST_COILS)
+
+
+func test_the_quarterdeck_stairs_are_walled_on_the_hull_side() -> void:
+	var ship: Ship = new_moored_ship_with_player(Vector3(0, 1.05, 6))[0] as Ship
+	var runner: GdUnitSceneRunner = scene_runner(ship.get_parent())
+	await physics_ticks(runner, 5)
+	var player: Player3D = runner.find_child("Player") as Player3D
+
+	# Hugging the outer edge of each stair, halfway up: the wall's there, so
+	# you can't step off into the gap beside the hull.
+	assert_array(_blocking(ship, Vector3(5.6, 6.6, 11.8), player)) \
+			.contains(["StairWallStarboardShape"])
+	assert_array(_blocking(ship, Vector3(-5.6, 6.6, 11.8), player)) \
+			.contains(["StairWallPortShape"])
 
 
 # Names of whatever a player-sized capsule standing at [param feet] (ship

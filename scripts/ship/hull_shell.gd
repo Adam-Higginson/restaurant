@@ -115,6 +115,9 @@ static var _fitted: Dictionary[String, ArrayMesh] = {}
 		_redress()
 ## Greybox to hide while the hull shows.
 @export var stand_ins: Array[Node3D] = []
+## Pieces that only belong with the hull, shown only while it shows: the
+## boards patching the few holes in its planking (#205).
+@export var with_hull: Array[Node3D] = []
 
 ## The fitted hull, while it's showing.
 var model: MeshInstance3D = null
@@ -570,6 +573,9 @@ func _show_stand_ins(show_them: bool) -> void:
 	for node: Node3D in stand_ins:
 		if node != null:
 			node.visible = show_them
+	for node: Node3D in with_hull:
+		if node != null:
+			node.visible = not show_them
 
 
 func _redress() -> void:
