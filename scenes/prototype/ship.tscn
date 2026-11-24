@@ -7,7 +7,6 @@
 [ext_resource type="Script" path="res://scripts/ship/deck_edge.gd" id="196_deck_edge"]
 [ext_resource type="Resource" path="res://data/ship/hull_outline.tres" id="196_outline"]
 [ext_resource type="Material" path="res://assets/placeholder/materials/galley_wood.tres" id="2_nifss"]
-[ext_resource type="Material" path="res://assets/placeholder/materials/greybox_dark_wood.tres" id="3_t630l"]
 [ext_resource type="Material" path="res://assets/placeholder/materials/wet_deck.tres" id="10_wet"]
 [ext_resource type="Script" path="res://scripts/weather/shelter_zone.gd" id="11_shelter"]
 [ext_resource type="Material" path="res://assets/placeholder/materials/wet_dark_wood.tres" id="13_wetdark"]
@@ -38,6 +37,7 @@
 [ext_resource type="PackedScene" path="res://scenes/prototype/props/herb_planter.tscn" id="186_herbs"]
 [ext_resource type="PackedScene" path="res://scenes/prototype/galley.tscn" id="196_galley"]
 [ext_resource type="PackedScene" path="res://scenes/prototype/bunk_room.tscn" id="196_bunk"]
+[ext_resource type="Script" path="res://scripts/ship/stairs.gd" id="204_stairs"]
 
 [sub_resource type="BoxMesh" id="Mesh_Hull"]
 size = Vector3(12, 2.5, 30)
@@ -58,10 +58,22 @@ size = Vector3(0.55, 4, 0.3)
 size = Vector3(0.55, 4, 0.3)
 
 [sub_resource type="BoxMesh" id="Mesh_BulkheadStarboard"]
-size = Vector3(9.65, 4, 0.3)
+size = Vector3(8.05, 4, 0.3)
 
 [sub_resource type="BoxShape3D" id="Shape_BulkheadStarboard"]
-size = Vector3(9.65, 4, 0.3)
+size = Vector3(8.05, 4, 0.3)
+
+[sub_resource type="BoxMesh" id="Mesh_BulkheadBetweenDoors"]
+size = Vector3(0.63, 4, 0.3)
+
+[sub_resource type="BoxShape3D" id="Shape_BulkheadBetweenDoors"]
+size = Vector3(0.63, 4, 0.3)
+
+[sub_resource type="BoxMesh" id="Mesh_GalleyDoorLintel"]
+size = Vector3(0.97, 1.8, 0.3)
+
+[sub_resource type="BoxShape3D" id="Shape_GalleyDoorLintel"]
+size = Vector3(0.97, 1.8, 0.3)
 
 [sub_resource type="BoxMesh" id="Mesh_BulkheadLintel"]
 size = Vector3(1.2, 1.8, 0.3)
@@ -81,14 +93,14 @@ size = Vector3(9.5, 0.3, 7.85)
 [sub_resource type="BoxMesh" id="Mesh_DeckPortStrip"]
 size = Vector3(0.3, 0.3, 7.85)
 
-[sub_resource type="BoxMesh" id="Mesh_Ramp"]
-size = Vector3(1.8, 0.2, 8.6)
-
 [sub_resource type="BoxMesh" id="Cosy_5"]
 size = Vector3(0.16, 4, 6.65)
 
 [sub_resource type="BoxMesh" id="BoxMesh_vyg2w"]
 size = Vector3(2.3, 1, 0.1)
+
+[sub_resource type="BoxMesh" id="Mesh_BulwarkPatch"]
+size = Vector3(0.16, 0.85, 1.35)
 
 [sub_resource type="BoxMesh" id="BoxMesh_vutlk"]
 size = Vector3(0.1, 1, 1.12)
@@ -121,7 +133,7 @@ size = Vector3(9.5, 0.3, 7.85)
 size = Vector3(0.3, 0.3, 7.85)
 
 [sub_resource type="BoxShape3D" id="Shape_Ramp"]
-size = Vector3(1.8, 0.2, 8.6)
+size = Vector3(2.22, 0.2, 8.6)
 
 [sub_resource type="BoxShape3D" id="Cosy_38"]
 size = Vector3(0.16, 4, 6.65)
@@ -272,9 +284,19 @@ material_override = ExtResource("2_nifss")
 mesh = SubResource("Mesh_BulkheadPort")
 
 [node name="BulkheadStarboard" type="MeshInstance3D" parent="Visuals"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.875, 3, 1)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.675, 3, 1)
 material_override = ExtResource("2_nifss")
 mesh = SubResource("Mesh_BulkheadStarboard")
+
+[node name="BulkheadBetweenDoors" type="MeshInstance3D" parent="Visuals"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3.635, 3, 1)
+material_override = ExtResource("2_nifss")
+mesh = SubResource("Mesh_BulkheadBetweenDoors")
+
+[node name="GalleyDoorLintel" type="MeshInstance3D" parent="Visuals"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.835, 4.1, 1)
+material_override = ExtResource("2_nifss")
+mesh = SubResource("Mesh_GalleyDoorLintel")
 
 [node name="BulkheadLintel" type="MeshInstance3D" parent="Visuals"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4.55, 4.1, 1)
@@ -303,10 +325,11 @@ mesh = SubResource("Mesh_DeckPortStrip")
 
 [node name="UpperDeck" parent="Visuals" unique_id=1272191628 instance=ExtResource("90_upperdeck")]
 
-[node name="Ramp" type="MeshInstance3D" parent="Visuals" unique_id=762821746]
-transform = Transform3D(1, 0, 0, 0, 0.866, -0.5, 0, 0.5, 0.866, -4.6, 3.0634, 4.8239)
-material_override = ExtResource("3_t630l")
-mesh = SubResource("Mesh_Ramp")
+[node name="HatchStairs" type="Node3D" parent="Visuals" unique_id=762821746]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4.59, 1, 8.6)
+script = ExtResource("204_stairs")
+width = 2.22
+material = ExtResource("28_darkwood")
 
 [node name="CorridorWall" type="MeshInstance3D" parent="Visuals" unique_id=845896058]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3.4, 3, 4.475)
@@ -323,10 +346,21 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3.4, 4.5, 8.44)
 material_override = ExtResource("2_nifss")
 mesh = SubResource("BoxMesh_vutlk")
 
+[node name="BulwarkPatchPort" type="MeshInstance3D" parent="Visuals"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -6.54, 5.875, -1.85)
+material_override = ExtResource("90_propwood")
+mesh = SubResource("Mesh_BulwarkPatch")
+
+[node name="BulwarkPatchStarboard" type="MeshInstance3D" parent="Visuals"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6.54, 5.875, -1.85)
+material_override = ExtResource("90_propwood")
+mesh = SubResource("Mesh_BulwarkPatch")
+
 [node name="HullShell" type="Node3D" parent="Visuals" node_paths=PackedStringArray("stand_ins")]
 script = ExtResource("196_hull_shell")
 path = "res://assets/third_party/meshy/ship_hull_open2/model/model.glb"
 stand_ins = [NodePath("../Hull"), NodePath("../UpperDeck/Structure/HullSkin"), NodePath("../UpperDeck/Structure/Bow"), NodePath("../UpperDeck/Structure/SternGallery"), NodePath("../UpperDeck/Structure/SternTransom"), NodePath("../UpperDeck/Structure/SternWale"), NodePath("../UpperDeck/Structure/TaffrailCarving"), NodePath("../UpperDeck/Structure/BulwarkPort"), NodePath("../UpperDeck/Structure/BulwarkStarboard")]
+clear_boxes = Array[AABB]([AABB(-5.7, 1, 1.15, 11.4, 2.6, 6.75), AABB(-5.7, 1, 7.9, 11.4, 3, 6.8)])
 
 [node name="DeckEdge" type="Node3D" parent="." node_paths=PackedStringArray("retired")]
 script = ExtResource("196_deck_edge")
@@ -410,8 +444,16 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -5.425, 3, 1)
 shape = SubResource("Shape_BulkheadPort")
 
 [node name="BulkheadStarboardShape" type="CollisionShape3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.875, 3, 1)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.675, 3, 1)
 shape = SubResource("Shape_BulkheadStarboard")
+
+[node name="BulkheadBetweenDoorsShape" type="CollisionShape3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3.635, 3, 1)
+shape = SubResource("Shape_BulkheadBetweenDoors")
+
+[node name="GalleyDoorLintelShape" type="CollisionShape3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.835, 4.1, 1)
+shape = SubResource("Shape_GalleyDoorLintel")
 
 [node name="BulkheadLintelShape" type="CollisionShape3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4.55, 4.1, 1)
@@ -434,7 +476,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -5.85, 5.15, 5.075)
 shape = SubResource("Shape_DeckPortStrip")
 
 [node name="RampShape" type="CollisionShape3D" parent="." unique_id=1568678436]
-transform = Transform3D(1, 0, 0, 0, 0.866, -0.5, 0, 0.5, 0.866, -4.6, 3.0634, 4.8239)
+transform = Transform3D(1, 0, 0, 0, 0.866, -0.5, 0, 0.5, 0.866, -4.59, 3.0634, 4.8239)
 shape = SubResource("Shape_Ramp")
 
 [node name="Galley" parent="." unique_id=1147062125 instance=ExtResource("196_galley")]

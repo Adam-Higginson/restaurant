@@ -1,7 +1,6 @@
 [gd_scene format=3 uid="uid://bbily1fgbhslq"]
 
 [ext_resource type="Material" path="res://assets/placeholder/materials/crockery.tres" id="1_46xgr"]
-[ext_resource type="Material" path="res://assets/placeholder/materials/recipe.tres" id="2_1defr"]
 [ext_resource type="Material" path="res://assets/placeholder/materials/quilt_gold.tres" id="3_mewri"]
 
 [sub_resource type="CylinderMesh" id="CylinderMesh_y4u4s"]
@@ -10,9 +9,6 @@ bottom_radius = 0.07
 height = 0.05
 radial_segments = 7
 rings = 1
-
-[sub_resource type="BoxMesh" id="BoxMesh_kgub7"]
-size = Vector3(0.12, 0.01, 0.16)
 
 [sub_resource type="CylinderMesh" id="CylinderMesh_yudiw"]
 top_radius = 0.11
@@ -27,11 +23,6 @@ rings = 1
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 0.8, 0, 0.025, 0)
 material_override = ExtResource("1_46xgr")
 mesh = SubResource("CylinderMesh_y4u4s")
-
-[node name="Note" type="MeshInstance3D" parent="." unique_id=127442691]
-transform = Transform3D(0.9702957, 0, -0.2419219, 0, 1, 0, 0.2419219, 0, 0.9702957, 0.16, 0.005, 0.08)
-material_override = ExtResource("2_1defr")
-mesh = SubResource("BoxMesh_kgub7")
 
 [node name="LanternCushion" type="MeshInstance3D" parent="." unique_id=1251249524]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.02, 0.03, 0.26)

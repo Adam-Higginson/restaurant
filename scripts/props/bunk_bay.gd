@@ -14,6 +14,10 @@ extends StaticBody3D
 ## blanket folded at the foot) or slept in (quilt thrown back in a heap).
 enum Bedding { MADE, SLEPT_IN }
 
+## How far in front of the left curtain the right one hangs when both are
+## bunched open at the head of the bed.
+const OPEN_STAGGER: float = 0.025
+
 ## The lower bunk's quilt. Leave empty to keep the scene's own.
 @export var lower_quilt: Material
 ## The upper bunk's quilt. Leave empty to keep the scene's own.
@@ -48,13 +52,15 @@ func _ready() -> void:
 
 
 ## Where one curtain hangs on its rail: x is how far its middle is from the
-## bay's middle (towards [param side], -1 or 1), and y is how much of its
-## full width it's spread to. Drawn, the two meet in the middle and cover the
-## bunk; open, each is bunched up at its end of the rail.
+## bay's middle (the left curtain [param side] -1, the right one 1), and y is
+## how much of its full width it's spread to. Drawn, the two meet in the
+## middle and cover the bunk; open, both are bunched up together at the left
+## end of the rail, the head of the bed, clear of the ladder at the right
+## end (#204: bunched there, they hung through it).
 static func curtain_layout(closed: bool, side: int) -> Vector2:
 	if closed:
 		return Vector2(side * 0.49, 1.0)
-	return Vector2(side * 0.85, 0.25)
+	return Vector2(-0.85 if side < 0 else -0.74, 0.25)
 
 
 ## Which of a bed's pieces show for [param bedding]: the neat ones (the
@@ -85,6 +91,10 @@ func _hang_curtains(tier: String, closed: bool) -> void:
 				as Node3D
 		var layout: Vector2 = curtain_layout(closed, side)
 		curtain.position.x = layout.x
+		if not closed and side > 0:
+			# Bunched in front of the left one, so the two cloths don't
+			# share a plane and flicker.
+			curtain.position.z += OPEN_STAGGER
 		# The cloth is a child of the swinging curtain, so the swing (which
 		# keeps the curtain's own turn and scale) doesn't undo the bunching.
 		var cloth: MeshInstance3D = curtain.get_node("Cloth") as MeshInstance3D
