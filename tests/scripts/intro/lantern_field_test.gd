@@ -123,6 +123,53 @@ func test_the_rocking_swings_both_ways_and_dies_down() -> void:
 	assert_float(LanternField.rock_after(1.0, 1.0)).is_equal(0.0)
 
 
+func test_not_flickering_the_dead_lanterns_have_no_glow() -> void:
+	var field: LanternField = _new_field([Vector3(0, -5, 0), Vector3(2, -8, 0)])
+	field.advance(3.0)
+	assert_float(field.ember_of(0)).is_equal(0.0)
+	assert_float(_sent(field, 1, &"ember")).is_equal(0.0)
+
+
+func test_flickering_they_sputter_unevenly_each_to_its_own_rhythm() -> void:
+	var places: Array[Vector3] = []
+	for index: int in 12:
+		places.append(Vector3(index, -5, 0))
+	var field: LanternField = _new_field(places)
+	field.flicker = 1.0
+	var lit: int = 0
+	var dark: int = 0
+	var brightest: float = 0.0
+	for step: int in 60:
+		field.advance(0.05)
+		for index: int in field.count():
+			var ember: float = field.ember_of(index)
+			brightest = maxf(brightest, ember)
+			if ember > 0.05:
+				lit += 1
+			else:
+				dark += 1
+	# Some flicker up, but they're out more often than in.
+	assert_float(brightest).is_greater(0.3)
+	assert_int(lit).is_greater(0)
+	assert_int(dark).is_greater(lit)
+	# What the glass is told matches.
+	assert_float(_sent(field, 3, &"ember")).is_equal_approx(field.ember_of(3), 0.0001)
+	# And no two keep the same beat: over a couple of seconds they differ.
+	var apart: float = 0.0
+	for step: int in 40:
+		apart += absf(LanternField.sputter(0, step * 0.05) - LanternField.sputter(1, step * 0.05))
+	assert_float(apart).is_greater(0.5)
+
+
+func test_a_lantern_that_glows_of_its_own_keeps_its_glow_while_they_flicker() -> void:
+	var field: LanternField = _new_field([Vector3(0, -5, 0)], [0.6])
+	assert_float(field.ember_of(0)).is_equal_approx(0.6, 0.001)
+	field.flicker = 1.0
+	for step: int in 40:
+		field.advance(0.05)
+		assert_float(field.ember_of(0)).is_greater_equal(0.6)
+
+
 func test_starting_again_puts_every_lantern_back_where_it_began() -> void:
 	var field: LanternField = _new_field([Vector3(0, -5, 0)])
 	var lantern: Node3D = field.get_child(0) as Node3D
@@ -153,14 +200,17 @@ func _new_thing(field: LanternField, at: Vector3) -> Node3D:
 
 
 # A field with a dead lantern at each of [param places], in its own space.
-func _new_field(places: Array[Vector3]) -> LanternField:
+func _new_field(places: Array[Vector3], embers: Array[float] = []) -> LanternField:
 	var world: Node3D = Node3D.new()
 	auto_free(world)
 	add_child(world)
 	var field: LanternField = LanternField.new()
-	for place: Vector3 in places:
+	for index: int in places.size():
 		var lantern: Node3D = LANTERN.instantiate() as Node3D
-		lantern.position = place
+		lantern.position = places[index]
+		if index < embers.size():
+			var glass: GeometryInstance3D = lantern.get_node("Glass") as GeometryInstance3D
+			glass.set_instance_shader_parameter(&"ember", embers[index])
 		field.add_child(lantern)
 	world.add_child(field)
 	return field

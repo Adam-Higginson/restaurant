@@ -1,6 +1,7 @@
 class_name ScreenFade
 extends CanvasLayer
 ## A full-screen black fade with a title card on top, e.g. for going to sleep.
+## It can also fade to white, for the rescue's whiteout.
 ##
 ## Display only: the day cycle decides when to fade and what the title says.
 ## Each method runs its own Tween and returns once it's finished, so callers
@@ -26,11 +27,30 @@ func _ready() -> void:
 
 
 ## Shows the overlay and fades the screen to black, over [param seconds]
-## (or [member fade_seconds] if not given).
+## (or [member fade_seconds] if not given). From white it stays covered and
+## the white darkens to black.
 func fade_out(seconds: float = -1.0) -> void:
 	show()
+	if is_zero_approx(_black.modulate.a):
+		_black.color = Color.BLACK
 	_tween = _new_tween()
+	_tween.set_parallel()
 	_tween.tween_property(_black, "modulate:a", 1.0, _seconds_or_usual(seconds))
+	_tween.tween_property(_black, "color", Color.BLACK, _seconds_or_usual(seconds))
+	await _tween.finished
+
+
+## Shows the overlay and fades the screen to white, over [param seconds] (or
+## [member fade_seconds] if not given): a whiteout, the light filling
+## everything (#183). [method fade_out] afterwards takes it on to black.
+func fade_to_white(seconds: float = -1.0) -> void:
+	show()
+	if is_zero_approx(_black.modulate.a):
+		_black.color = Color.WHITE
+	_tween = _new_tween()
+	_tween.set_parallel()
+	_tween.tween_property(_black, "modulate:a", 1.0, _seconds_or_usual(seconds))
+	_tween.tween_property(_black, "color", Color.WHITE, _seconds_or_usual(seconds))
 	await _tween.finished
 
 
@@ -51,6 +71,7 @@ func fade_in(seconds: float = -1.0) -> void:
 	_tween.tween_property(_black, "modulate:a", 0.0, time)
 	_tween.tween_property(_title, "modulate:a", 0.0, time)
 	await _tween.finished
+	_black.color = Color.BLACK
 	hide()
 
 
@@ -60,6 +81,7 @@ func cover_now() -> void:
 	if _tween != null:
 		_tween.kill()
 	_black.modulate.a = 1.0
+	_black.color = Color.BLACK
 	show()
 
 
@@ -68,13 +90,20 @@ func uncover_now() -> void:
 	if _tween != null:
 		_tween.kill()
 	_black.modulate.a = 0.0
+	_black.color = Color.BLACK
 	_title.modulate.a = 0.0
 	hide()
 
 
-## Whether the screen is fully black.
+## Whether the screen is fully covered, black or white.
 func is_covering() -> bool:
 	return visible and is_equal_approx(_black.modulate.a, 1.0)
+
+
+## Whether the screen is fully covered in white (or so near white you'd
+## not tell: a fade on to black may have just begun).
+func is_white() -> bool:
+	return is_covering() and _black.color.v > 0.95
 
 
 func _seconds_or_usual(seconds: float) -> float:

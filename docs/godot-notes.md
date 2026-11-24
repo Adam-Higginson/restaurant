@@ -600,6 +600,16 @@ A growing glossary of the Godot concepts this project uses: what each one is, in
 
 **A MultiMesh's copies live in the renderer.** `set_instance_transform` hands each copy's place to the rendering server, and a headless run's stand-in server doesn't keep them, so reading one back in a test gives nothing. Test the numbers the copies are placed from instead. *Ours:* `HangingChain.point_at()`, tested in `tests/scripts/intro/grave_test.gd`.
 
+## The rescue as his sacrifice, to white (#183)
+
+**Clips that each set the whole scene.** Every clip in the underwater set keys every moving thing (the camera, him, you, his hand, the lights, the shape), even what it leaves still. So whichever clip plays, or wherever a skip jumps to, everything is where that moment wants it, and one clip can follow any other. The cost: a new moving thing needs a track in every clip. *Ours:* `scenes/prototype/intro/underwater.tscn`'s `Clips`; #183 added four tracks to all of them (`Flow:flow`, `Flow:filled`, `Lanterns:flicker`, `Lantern/Body:rotation`).
+
+**Turning a child, not the parent.** A child moves with its parent, so turning the parent swings everything hung off it. To turn only part of something, turn that part. *Ours:* his flame hand hangs off `Lantern`, so when he looks down or back at you it's `Lantern/Body` (his glass and face) that turns, and the hand stays on yours.
+
+**Fading CPU particles.** `GPUParticles3D` has `amount_ratio` to thin a stream without restarting it; `CPUParticles3D` doesn't. Its `color` tints every particle instead, if the particle's material has *Vertex Color > Use as Albedo* ticked, so the alpha in that colour fades them all. (Changing a particle node's `amount` or `lifetime` restarts the stream, so set those once.) *Ours:* `LightFlow`'s `Motes`, the gold running along your arm.
+
+**Tweening two things at once.** A `Tween` runs its steps one after another unless you call `set_parallel()`, after which they run together. *Ours:* `ScreenFade.fade_to_white()` brings the cover up and turns its colour white in the same moment, and `fade_out()` from white turns it to black while staying covered.
+
 ## Testing
 
 **gdUnit4.** The test framework (`addons/gdUnit4`). Suites extend our `GameTestSuite` and have `test_...` functions. `scene_runner` loads a scene and lets a test press inputs and wait physics ticks. *Ours:* `tests/`.

@@ -32,8 +32,17 @@ extends Node3D
 ## to settle, in seconds.
 @export var rock_angle: float = 0.5
 @export var rock_seconds: float = 3.0
+## How much the dead lanterns flicker, 0 to 1: as his light pours into you
+## (#183), faint embers sputter in them, each to its own rhythm, as if
+## something passed through them all. A clip moves it; at 0 they're as
+## they were (dark, or the steady glow a few of them keep).
+@export_range(0.0, 1.0) var flicker: float = 0.0:
+	set(value):
+		flicker = clampf(value, 0.0, 1.0)
 
 var _lanterns: Array[Node3D] = []
+## The glow each lantern has of its own (most none), kept while it flickers.
+var _base_ember: PackedFloat32Array = []
 var _rest: Array[Transform3D] = []
 ## How far each lantern has sunk since it was last put back, in metres.
 var _sunk: PackedFloat32Array = []
@@ -52,6 +61,11 @@ func _ready() -> void:
 		if lantern != null and lantern.has_node("Glass"):
 			_lanterns.append(lantern)
 			_rest.append(lantern.transform)
+			var glass: GeometryInstance3D = lantern.get_node("Glass") as GeometryInstance3D
+			var own: float = 0.0
+			if glass != null and glass.get_instance_shader_parameter(&"ember") != null:
+				own = glass.get_instance_shader_parameter(&"ember")
+			_base_ember.append(own)
 	_sunk.resize(_lanterns.size())
 	_since_rocked.resize(_lanterns.size())
 	_near.resize(_lanterns.size())
@@ -131,6 +145,22 @@ func distance_to_thing(place: Vector3) -> float:
 	return offset.distance_to(nearest)
 
 
+## How much glow lantern [param index] has right now, 0 to 1: its own steady
+## ember, or more while they flicker.
+func ember_of(index: int) -> float:
+	return maxf(_base_ember[index], flicker * sputter(index, _time))
+
+
+## How much a flickering lantern [param index] is alight [param time]
+## seconds in, 0 to 1: short uneven sputters, each to its own rhythm, out
+## more often than in.
+static func sputter(index: int, time: float) -> float:
+	var pace: float = 4.0 + share_of(index + 3) * 7.0
+	var wave: float = sin(time * pace + share_of(index + 11) * 40.0) \
+			* sin(time * pace * 0.37 + share_of(index + 17) * 20.0)
+	return clampf(wave * 2.5 - 0.9, 0.0, 1.0) * (0.35 + 0.65 * share_of(index + 5))
+
+
 ## How bright the lightning is now: 0 dark, 1 the brightest moment.
 func set_lightning(brightness: float) -> void:
 	_flash = clampf(brightness, 0.0, 1.0)
@@ -159,6 +189,10 @@ func _apply() -> void:
 		var glass: GeometryInstance3D = lantern.get_node("Glass") as GeometryInstance3D
 		if glass != null:
 			glass.set_instance_shader_parameter(&"cold", _flash)
+			if flicker > 0.0 or _base_ember[index] > 0.0:
+				glass.set_instance_shader_parameter(&"ember", ember_of(index))
+			else:
+				glass.set_instance_shader_parameter(&"ember", 0.0)
 		var rest: Transform3D = _rest[index]
 		var turned: Basis = Basis(Vector3.UP, _time * turn_speed * (share_of(index + 7) - 0.5) * 2.0)
 		var rocked: Basis = Basis(Vector3.RIGHT, tilt_of(index))

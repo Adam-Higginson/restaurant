@@ -1,7 +1,6 @@
 [gd_scene format=3]
 
 [ext_resource type="Script" path="res://scripts/sea/float_on_sea.gd" id="1_ejl8o"]
-[ext_resource type="PackedScene" path="res://scenes/prototype/intro/castaway.tscn" id="2_qsrks"]
 [ext_resource type="PackedScene" path="res://scenes/prototype/lantern_body.tscn" id="3_rqkdy"]
 [ext_resource type="Script" path="res://scripts/intro/splash_ring.gd" id="5_ring"]
 [ext_resource type="Shader" path="res://shaders/splash_ring.gdshader" id="6_ring"]
@@ -174,141 +173,19 @@ tracks/8/keys = {
 "values": [0.0, 0.0, 9.0, 3.0, 0.0]
 }
 
-[sub_resource type="Animation" id="Animation_ejl8o"]
-length = 3.6
-tracks/0/type = "value"
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/path = NodePath("Props/Castaway/Float:height_above")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/keys = {
-"times": PackedFloat32Array(0, 0.3, 0.75, 1.3, 2, 3.6),
-"transitions": PackedFloat32Array(1, 0.4, 1, 1, 1, 1),
-"update": 0,
-"values": [-1.4000000000000001, -0.06, -0.4, -0.26, -0.32, -0.3]
-}
-tracks/1/type = "value"
-tracks/1/imported = false
-tracks/1/enabled = true
-tracks/1/path = NodePath("Props/Castaway/Body:position")
-tracks/1/interp = 1
-tracks/1/loop_wrap = true
-tracks/1/keys = {
-"times": PackedFloat32Array(0, 0.8, 1.8),
-"transitions": PackedFloat32Array(1, 1, 0.5),
-"update": 0,
-"values": [Vector3(-0.0888476, 1.061952, -0.15350856), Vector3(-0.0888476, 1.061952, -0.15350856), Vector3(-0.0888476, 0.901952, -0.15350856)]
-}
-tracks/2/type = "value"
-tracks/2/imported = false
-tracks/2/enabled = true
-tracks/2/path = NodePath("Props/Castaway/LanternGlow:position")
-tracks/2/interp = 1
-tracks/2/loop_wrap = true
-tracks/2/keys = {
-"times": PackedFloat32Array(0, 0.8, 1.8),
-"transitions": PackedFloat32Array(1, 1, 0.5),
-"update": 0,
-"values": [Vector3(-0.0888476, 1.161952, -0.15350856), Vector3(-0.0888476, 1.161952, -0.15350856), Vector3(-0.0888476, 1.001952, -0.15350856)]
-}
-tracks/3/type = "value"
-tracks/3/imported = false
-tracks/3/enabled = true
-tracks/3/path = NodePath("Props/Castaway/Figure/Character:head_turn")
-tracks/3/interp = 1
-tracks/3/loop_wrap = true
-tracks/3/keys = {
-"times": PackedFloat32Array(0, 0.5, 1.6),
-"transitions": PackedFloat32Array(1, 1, 0.5),
-"update": 0,
-"values": [0.15, 0.15, 0.8]
-}
-tracks/4/type = "value"
-tracks/4/imported = false
-tracks/4/enabled = true
-tracks/4/path = NodePath("Props/Castaway/LanternGlow:light_energy")
-tracks/4/interp = 1
-tracks/4/loop_wrap = true
-tracks/4/keys = {
-"times": PackedFloat32Array(0, 3.6),
-"transitions": PackedFloat32Array(1, 1),
-"update": 0,
-"values": [2.4, 1.3]
-}
-
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_rescue"]
 _data = {
-&"flies": SubResource("Animation_flies"),
-&"surfaces": SubResource("Animation_ejl8o")
+&"flies": SubResource("Animation_flies")
 }
 
 [node name="RescueSet" type="Node3D" unique_id=1722548210]
 
 [node name="Shots" type="Node3D" parent="." unique_id=1187081554]
 
-[node name="FromTheWater" type="Marker3D" parent="Shots" unique_id=293350616 groups=["shots"]]
-transform = Transform3D(0.7539095, -0.35657337, -0.55179334, 0, 0.8398959, -0.54274756, 0.6569783, 0.40918255, 0.6332055, -12, 0.5, 4)
-
-[node name="Float" type="Node" parent="Shots/FromTheWater" unique_id=333015174]
-script = ExtResource("1_ejl8o")
-height_above = 0.5
-
-[node name="TheRail" type="Marker3D" parent="Shots" unique_id=1132034457 groups=["shots"]]
-transform = Transform3D(0.551062, -0.567931, -0.61138, 0, 0.732662, -0.680593, 0.834465, 0.375049, 0.403742, -10.9, 0.6, 3.6)
-
-[node name="Float" type="Node" parent="Shots/TheRail" unique_id=1092106892]
-script = ExtResource("1_ejl8o")
-height_above = 0.6
-
 [node name="ThePlunge" type="Marker3D" parent="Shots" unique_id=709512225 groups=["shots"]]
 transform = Transform3D(0.463748, 0.247319, -0.850747, 0, 0.960247, 0.279151, 0.885967, -0.129456, 0.445313, -13, 6.8, 29.5)
 
-[node name="Surfacing" type="Marker3D" parent="Shots" unique_id=858355138 groups=["shots"]]
-transform = Transform3D(0.08172958, -0.14058849, -0.986689, 0, 0.990001, -0.1410604, 0.99665457, 0.011528808, 0.08091237, -11.483061, 0, 2.090765)
-
-[node name="Float" type="Node" parent="Shots/Surfacing" unique_id=1833938679]
-script = ExtResource("1_ejl8o")
-height_above = 0.3
-
-[node name="Marks" type="Node3D" parent="." unique_id=583183069]
-
-[node name="Rail" type="Marker3D" parent="Marks" unique_id=459454856 groups=["marks"]]
-transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, -5.5, 5.3, 0)
-
 [node name="Props" type="Node3D" parent="." unique_id=1883263416]
-
-[node name="Castaway" type="Node3D" parent="Props" unique_id=1502860220 groups=["props"]]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -9.5, 0, 2.5)
-visible = false
-
-[node name="Float" type="Node" parent="Props/Castaway" unique_id=1931545759]
-script = ExtResource("1_ejl8o")
-height_above = -0.3
-
-[node name="Figure" parent="Props/Castaway" unique_id=2013599010 instance=ExtResource("2_qsrks")]
-transform = Transform3D(0.3623577, 0.18516758, -0.9134604, 0, 0.9800666, 0.19866933, 0.9320391, -0.071989365, 0.3551347, 0, 0, 0)
-
-[node name="Character" parent="Props/Castaway/Figure" index="5" node_paths=PackedStringArray("reach_for", "watch")]
-reach_for = NodePath("../../Body")
-reach = 1.0
-hand_grip = 1.0
-watch = NodePath("../../Body")
-
-[node name="LanternGlow" type="OmniLight3D" parent="Props/Castaway" unique_id=46930765]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.0888476, 1.001952, -0.15350856)
-light_color = Color(1, 0.72, 0.4, 1)
-light_energy = 2.4
-
-[node name="Body" parent="Props/Castaway" unique_id=1411871022 node_paths=PackedStringArray("light") instance=ExtResource("3_rqkdy")]
-transform = Transform3D(-5.2453668e-08, 0, 1.2, 0, 1.2, 0, -1.2, 0, -5.2453668e-08, -0.0888476, 0.901952, -0.15350856)
-look_name = "rescued_lantern"
-strength = 0.55
-door = 1.0
-streaked = true
-cracked = true
-light = NodePath("../LanternGlow")
-light_energy = 1.3
 
 [node name="FlyingLantern" type="Node3D" parent="Props" unique_id=541317971 groups=["props"]]
 transform = Transform3D(-1, 0, -8.742278e-08, 0, 1, 0, 8.742278e-08, 0, -1, 0.2, 5.2, 17.6)
