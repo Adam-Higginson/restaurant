@@ -1,11 +1,11 @@
 extends GameTestSuite
-## Tests for the flying fish (#197): none leap until they're turned on; then
-## they rise out of the sea beside the ship and glide forward over it, wings
-## out; turned off, the ones in the air land and no more leap.
+## Tests for the leaping fish (#197): none jump until they're turned on;
+## then they jump out of the sea beside the ship and arc forward, nose first;
+## turned off, the ones in the air land and no more jump.
 
 
 func test_none_leap_until_turned_on() -> void:
-	var fish: FlyingFish = _fish()
+	var fish: LeapingFish = _fish()
 	var runner: GdUnitSceneRunner = scene_runner(fish.get_parent())
 
 	await physics_ticks(runner, 120)
@@ -13,8 +13,8 @@ func test_none_leap_until_turned_on() -> void:
 	assert_int(fish.in_the_air()).is_equal(0)
 
 
-func test_turned_on_they_leap_beside_her_and_forward_over_the_sea() -> void:
-	var fish: FlyingFish = _fish()
+func test_turned_on_they_jump_beside_her_and_forward_over_the_sea() -> void:
+	var fish: LeapingFish = _fish()
 	var runner: GdUnitSceneRunner = scene_runner(fish.get_parent())
 	await physics_ticks(runner, 2)
 
@@ -35,7 +35,7 @@ func test_turned_on_they_leap_beside_her_and_forward_over_the_sea() -> void:
 
 
 func test_each_flies_nose_first() -> void:
-	var fish: FlyingFish = _fish()
+	var fish: LeapingFish = _fish()
 	fish.count = 1
 	var runner: GdUnitSceneRunner = scene_runner(fish.get_parent())
 	await physics_ticks(runner, 2)
@@ -55,7 +55,7 @@ func test_each_flies_nose_first() -> void:
 
 
 func test_turned_off_the_ones_in_the_air_land_and_no_more_leap() -> void:
-	var fish: FlyingFish = _fish()
+	var fish: LeapingFish = _fish()
 	var runner: GdUnitSceneRunner = scene_runner(fish.get_parent())
 	await physics_ticks(runner, 2)
 	fish.leaping = true
@@ -63,18 +63,18 @@ func test_turned_off_the_ones_in_the_air_land_and_no_more_leap() -> void:
 	assert_int(fish.in_the_air()).is_greater(0)
 
 	fish.leaping = false
-	# The longest glide takes glide.y / speed seconds.
-	await physics_ticks(runner, int(fish.glide.y / fish.speed * 60.0) + 10)
+	# The longest jump lasts airtime.y seconds.
+	await physics_ticks(runner, int(fish.airtime.y * 60.0) + 10)
 
 	assert_int(fish.in_the_air()).is_equal(0)
 	await physics_ticks(runner, 120)
 	assert_int(fish.in_the_air()).is_equal(0)
 
 
-func _fish() -> FlyingFish:
+func _fish() -> LeapingFish:
 	var world: Node3D = Node3D.new()
 	auto_free(world)
-	var fish: FlyingFish = FlyingFish.new()
-	fish.name = "FlyingFish"
+	var fish: LeapingFish = LeapingFish.new()
+	fish.name = "LeapingFish"
 	world.add_child(fish)
 	return fish

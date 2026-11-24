@@ -64,14 +64,14 @@ func test_the_lights_are_never_left_showing_when_a_cutscene_ends() -> void:
 	assert_float(_sea.grave).is_equal(0.0)
 
 
-func test_flying_fish_leap_on_cue_and_stop_when_the_cutscene_ends() -> void:
+func test_leaping_fish_leap_on_cue_and_stop_when_the_cutscene_ends() -> void:
 	_build()
-	var fish: FlyingFish = FlyingFish.new()
+	var fish: LeapingFish = LeapingFish.new()
 	_player.get_parent().add_child(fish)
 	var runner: GdUnitSceneRunner = scene_runner(_player.get_parent())
 	await physics_ticks(runner, 3)
 
-	play_cutscene(_conversation, _player, "@flying_fish on\nheron: Look at them go.")
+	play_cutscene(_conversation, _player, "@leaping_fish on\nheron: Look at them go.")
 	assert_bool(fish.leaping).is_true()
 	_conversation.press()
 	await physics_ticks(runner, 3)

@@ -39,7 +39,7 @@ const USAGE: Dictionary[StringName, String] = {
 	&"rain": "@rain 0.25 6.0 (the rain eases to that much, 0 to 1, over so many seconds)",
 	&"travel": "@travel cove (once the cutscene ends, the game goes there)",
 	&"clear": "@clear 1.0 12.0 (the morning clears into a bright day, 0 to 1, over so many seconds)",
-	&"flying_fish": "@flying_fish on or @flying_fish off (flying fish leap alongside the ship)",
+	&"leaping_fish": "@leaping_fish on or @leaping_fish off (fish jump from the water alongside the ship)",
 	&"look": "@look hook_lantern determined (a look for his eyes: calm, surprised, "
 			+ "determined, worried, pleading, effort, tired, asleep, pleased; or for his "
 			+ "glass: fogged, clear, streaked, dry, cracked, mended)",
@@ -94,7 +94,7 @@ static func _fits(cue: StringName, args: PackedStringArray) -> bool:
 					and (args.size() == 1 or _is_seconds(args[1]))
 		&"travel":
 			return args.size() == 1
-		&"muffle", &"hush", &"grave", &"flying_fish":
+		&"muffle", &"hush", &"grave", &"leaping_fish":
 			return args.size() == 1 and ["on", "off"].has(args[0])
 		&"hold_up":
 			return args.size() <= 1

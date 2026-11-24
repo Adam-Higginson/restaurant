@@ -2258,6 +2258,15 @@ transform = Transform3D(0.7385, -0.1872, 0.6478, 0.0, 0.9607, 0.2776, -0.6743, -
 [node name="TheLookout" type="Marker3D" parent="Shots" groups=["shots"]]
 transform = Transform3D(0.9827, -0.0188, 0.1845, 0.0, 0.9948, 0.1014, -0.1854, -0.0997, 0.9776, 1.6, 8.5, -11.4)
 
+[node name="RiggingDrips" type="Marker3D" parent="Shots" groups=["shots"]]
+transform = Transform3D(0.6156, 0.1523, 0.7732, 0.0, 0.9811, -0.1933, -0.788, 0.119, 0.604, 3.4, 8.2, -2.6)
+
+[node name="OffTheBeam" type="Marker3D" parent="Shots" groups=["shots"]]
+transform = Transform3D(0.5369, -0.0645, 0.8412, 0.0, 0.9971, 0.0765, -0.8437, -0.0411, 0.5353, 22.0, 7.0, 10.0)
+
+[node name="FishAlongside" type="Marker3D" parent="Shots" groups=["shots"]]
+transform = Transform3D(0.8096, -0.0356, 0.5859, 0.0, 0.9982, 0.0606, -0.587, -0.0491, 0.8081, -7.2, 1.9, 6.0)
+
 [node name="TowardsTheIsland" type="Marker3D" parent="Shots" groups=["shots"]]
 transform = Transform3D(0.3624, 0.1379, -0.9217, 0.0, 0.989, 0.1479, 0.932, -0.0536, 0.3585, -2.2, 8.4, 7.8)
 

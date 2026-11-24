@@ -6,8 +6,8 @@ extends CueHandler
 ## [code]@grave off[/code] lets them fade away again. The script carries on
 ## while they fade.
 ##
-## [code]@flying_fish on[/code] sets the [FlyingFish] leaping alongside the
-## ship, and [code]@flying_fish off[/code] lets the ones in the air land and
+## [code]@leaping_fish on[/code] sets the [LeapingFish] leaping alongside the
+## ship, and [code]@leaping_fish off[/code] lets the ones in the air land and
 ## no more leap (#197).
 ##
 ## The sea is never left showing them: when a cutscene ends, the lights are
@@ -22,11 +22,11 @@ var _tween: Tween = null
 
 
 func cues() -> Array[StringName]:
-	return [&"grave", &"flying_fish"]
+	return [&"grave", &"leaping_fish"]
 
 
 func _perform(cue: StringName, args: PackedStringArray) -> void:
-	if cue == &"flying_fish":
+	if cue == &"leaping_fish":
 		_set_fish(args[0] == "on")
 		return
 	_fade_to(1.0 if args[0] == "on" else 0.0, is_skipping())
@@ -39,7 +39,7 @@ func _on_ended(_tree_id: StringName) -> void:
 
 func _set_fish(on: bool) -> void:
 	if is_inside_tree():
-		get_tree().call_group(FlyingFish.GROUP, &"set_leaping", on)
+		get_tree().call_group(LeapingFish.GROUP, &"set_leaping", on)
 
 
 func _on_skip_started() -> void:
