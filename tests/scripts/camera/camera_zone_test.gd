@@ -18,7 +18,7 @@ func test_walking_in_uses_the_zone_shot() -> void:
 	assert_object(player.camera_rig.active_zone).is_null()
 
 	# The free camera looks along -Z, so up walks into the zone 3 m ahead.
-	await walk(runner, "move_up", 40)
+	await walk(runner, "move_up", 60)
 
 	assert_object(player.camera_rig.active_zone).is_same(zone)
 
@@ -33,11 +33,11 @@ func test_walking_out_restores_the_free_camera() -> void:
 	assert_object(player.camera_rig.active_zone).is_not_null()
 
 	# The shot looks along +Z, so up walks out of the zone's near side.
-	await walk(runner, "move_up", 60)
+	await walk(runner, "move_up", 90)
 
 	assert_object(player.camera_rig.active_zone).is_null()
 	# Out, and still going: holding up didn't flip round with the camera and
-	# walk back in (5 m/s for a second, from z = -5).
+	# walk back in (3.5 m/s for a second and a half, from z = -5).
 	assert_float(player.global_position.z).is_greater(-1.0)
 
 

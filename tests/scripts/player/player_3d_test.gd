@@ -101,7 +101,7 @@ func test_keeps_its_heading_when_the_camera_switches_mid_walk() -> void:
 	assert_vector(moved.normalized()).is_equal_approx(Vector3.FORWARD, NEAR)
 
 
-func test_holding_sprint_goes_twice_as_far() -> void:
+func test_holding_sprint_goes_further_by_the_sprint_factor() -> void:
 	var player: Player3D = new_player_3d_on_floor()
 	var runner: GdUnitSceneRunner = scene_runner(player.get_parent())
 	await physics_ticks(runner, 2)
