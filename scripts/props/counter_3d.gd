@@ -37,6 +37,9 @@ const FINISH_SECONDS: float = 0.5
 @export var start_item: Item = null
 ## Lean the camera in over the board while chopping.
 @export var lean_in: bool = true
+## How far the character is drawn forward over the board while chopping, in
+## metres: the counter keeps the body this far short of reaching it.
+@export var chop_lean_in: float = 0.28
 
 ## What's on the counter. Created when the counter is ready, never replaced.
 var slot: CounterSlot:
@@ -169,6 +172,7 @@ func start_chopping(player: Player3D, tool: HandTool) -> bool:
 	var detector: InteractionDetector3D = _detector_of(player)
 	if detector != null:
 		detector.set_busy("Stop chopping", "Cut")
+	_set_stance(player, true)
 	if lean_in and _chop_shot != null:
 		_leaning = player
 		player.camera_rig.hold_shot(_chop_shot)
@@ -186,6 +190,7 @@ func stop_chopping() -> void:
 	_stepping = null
 	if is_instance_valid(player):
 		player.controls_enabled = true
+		_set_stance(player, false)
 		var detector: InteractionDetector3D = _detector_of(player)
 		if detector != null:
 			detector.clear_busy()
@@ -321,6 +326,17 @@ func _keep_chopping(delta: float) -> void:
 		_finish_left -= delta
 		if _finish_left < 0.0:
 			stop_chopping()
+
+
+# Puts [param player]'s character into its chopping stance at the board, or
+# back out of it (#207).
+func _set_stance(player: Player3D, on: bool) -> void:
+	var model: CharacterModel = player.get_node_or_null("Model/Character") as CharacterModel
+	if model != null:
+		model.chopping = on
+		# The counter stops the body short of the board: the character leans
+		# in over it (only how it's drawn moves; the body stays put).
+		model.position = Vector3.FORWARD * chop_lean_in if on else Vector3.ZERO
 
 
 func _detector_of(player: Player3D) -> InteractionDetector3D:
