@@ -67,13 +67,19 @@ func link_ends() -> PackedVector3Array:
 
 ## The way from [param from] to [param to] (both in this node's space): the
 ## waypoints in between, nearest first, ending at [param to]. Empty if
-## there's no way there along the links.
+## there's no way there along the links. When the same waypoint is the
+## nearest to both ends, they're on the same patch of open deck, so the way
+## goes straight there instead of doubling back to it first (#203: the
+## captain crossing the quarterdeck from the wheel to the rail).
 func route(from: Vector3, to: Vector3) -> PackedVector3Array:
 	var path: PackedVector3Array = PackedVector3Array()
 	if _astar.get_point_count() == 0:
 		return path
 	var start: int = _astar.get_closest_point(from)
 	var end: int = _astar.get_closest_point(to)
+	if start == end:
+		path.append(to)
+		return path
 	var ids: PackedInt64Array = _astar.get_id_path(start, end)
 	if ids.is_empty():
 		return path

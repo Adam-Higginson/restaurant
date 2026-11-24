@@ -19,6 +19,18 @@ func test_the_way_goes_along_the_links_and_ends_at_the_target() -> void:
 			Vector3(4.5, 0, -4)])
 
 
+func test_near_the_same_waypoint_at_both_ends_the_way_goes_straight_there() -> void:
+	# Both ends are nearest A, so there's no doubling back to it (#203).
+	var walkways: Walkways = _walkways()
+	_point(walkways, &"A", Vector3.ZERO, [&"B"])
+	_point(walkways, &"B", Vector3(0, 0, -10), [])
+	walkways.rebuild()
+
+	var path: PackedVector3Array = walkways.route(Vector3(1, 0, 2), Vector3(3, 0, -1))
+
+	assert_array(Array(path)).is_equal([Vector3(3, 0, -1)])
+
+
 func test_with_no_way_along_the_links_there_is_no_route() -> void:
 	var walkways: Walkways = _walkways()
 	_point(walkways, &"A", Vector3.ZERO, [])
