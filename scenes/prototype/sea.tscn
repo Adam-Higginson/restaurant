@@ -12,6 +12,7 @@
 [ext_resource type="Script" path="res://scripts/cutscene/clip_cues.gd" id="309_clips"]
 [ext_resource type="Script" path="res://scripts/cutscene/storm_cues.gd" id="310_storm"]
 [ext_resource type="Script" path="res://scripts/cutscene/sea_cues.gd" id="310_sea_cues"]
+[ext_resource type="Script" path="res://scripts/cutscene/book_cues.gd" id="310_book_cues"]
 [ext_resource type="AudioStream" path="res://assets/audio/intro/impactBell_heavy_001.ogg" id="315_ring"]
 [ext_resource type="Script" path="res://scripts/cutscene/sound_cues.gd" id="311_sounds"]
 [ext_resource type="Script" path="res://scripts/cutscene/look_cues.gd" id="312_looks"]
@@ -218,6 +219,10 @@ script = ExtResource("309_clips")
 [node name="StormCues" type="Node" parent="." node_paths=PackedStringArray("weather")]
 script = ExtResource("310_storm")
 weather = NodePath("../Weather")
+
+[node name="BookCues" type="Node" parent="." node_paths=PackedStringArray("player")]
+script = ExtResource("310_book_cues")
+player = NodePath("../Player")
 
 [node name="SeaCues" type="Node" parent="." node_paths=PackedStringArray("sea")]
 script = ExtResource("310_sea_cues")

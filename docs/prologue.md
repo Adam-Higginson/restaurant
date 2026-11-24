@@ -9,7 +9,7 @@ This is the script the opening is being rebuilt to (#181). The GDD's *The openin
 **How it was fitted to the game (decided 2026-11-24):**
 - **The ship is the Salt and Ember**, not the Wayward, and the title screen stays her carved nameboard. The rail scene begins on your press.
 - **The player never speaks.** Where the script says the player nods, shakes their head or asks something, that's a reply you choose in the conversation box.
-- **You wake in your own bunk** in the bunk room, not a cabin, and the lantern lies on his round table by the stove.
+- **You wake in your own bunk** in the bunk room, not a cabin, with the captain standing over you at its foot (not calling from the doorway), and the lantern lies on his round table by the stove.
 - **The navigation room** is a new room in the empty bow half below deck, through a door in the galley's forward wall. The captain's cabin stays shut for now.
 - **The captain gives you the cooking pot.** The frying pan, your shield in a fight, is the first thing you find ashore.
 - **The rescue ends in white.** The haul up through the dead lanterns, the storm surface and the heron at the rail are gone; how you came aboard isn't shown.
@@ -213,7 +213,7 @@ The player slowly opens their eyes. They're lying in their bunk in the ship's bu
 
 Rainwater drips from somewhere above.
 
-The heron captain stands in the doorway.
+The heron captain stands at the foot of the bunk, beside them, as if he's been keeping watch.
 
 **HERON:** "Ah. You're awake."
 

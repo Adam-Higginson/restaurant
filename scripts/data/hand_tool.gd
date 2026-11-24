@@ -30,6 +30,9 @@ extends Resource
 ## How the Kiln fires [member model_path] (see [ThirdPartyModel.look]).
 @export var model_look: ArtLook = null
 @export var model_size: Vector3 = Vector3(0.15, 0.6, 0.06)
+## Whether this is the recipe book (#184): not used on anything, but read.
+## Selected and Used, it opens wherever you are, whatever's in reach.
+@export var is_recipe_book: bool = false
 
 ## The conversation flag that says the player owns this tool
 ## ([code]has_chefs_knife[/code]). Flags are saved with the voyage, so a tool

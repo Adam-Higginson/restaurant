@@ -1,55 +1,107 @@
 extends GameTestSuite
-## Tests for the galley's recipe book (it opens in the book view, a page per
-## dish, and every page fits its paper) and for the days at sea (each morning
-## is a new day).
+## Tests for the recipe book (#184): it lies by your pillow; picking it up
+## makes it yours and leaves the bunk empty; on your toolbar, Use reads it
+## wherever you are; it opens in the book view, a page per dish, and every
+## page fits its paper. And for the days at sea (each morning is a new day).
 
-const BOOK_AT: Vector3 = Vector3(3.15, 1.29, 4.95)
+## Where to stand to pick the book up from beside your pillow.
+const STAND_AT: Vector3 = Vector3(4.05, 1.05, 13.3)
 
 
-func test_reading_the_book_opens_it_with_a_page_per_recipe() -> void:
+func before_test() -> void:
+	Game.dialogue.reset()
+
+
+func after_test() -> void:
+	Game.dialogue.reset()
+
+
+func test_it_lies_by_your_pillow_and_picking_it_up_makes_it_yours() -> void:
+	var rig: Array[Node3D] = new_moored_ship_with_player(Vector3(0, 1.05, 6))
+	var ship: Ship = rig[0] as Ship
+	var player: Player3D = rig[1] as Player3D
+	var conversation: Conversation = new_conversation(player)
+	var runner: GdUnitSceneRunner = scene_runner(ship.get_parent())
+	await physics_ticks(runner, 2)
+	var book: RecipeBook = ship.get_node("BunkRoom/RecipeBook") as RecipeBook
+	var detector: InteractionDetector3D = player.get_node("InteractionDetector") \
+			as InteractionDetector3D
+	place_player_3d(runner, ship.to_global(STAND_AT))
+	player.face_towards(book.global_position)
+	await physics_ticks(runner, 3)
+	assert_bool(book.visible).is_true()
+	assert_str(detector.interact_prompt()).is_equal("Pick up the book")
+	assert_bool(player.toolbar.has_tool(&"recipe_book")).is_false()
+
+	await press(runner, "interact")
+	assert_bool(conversation.is_active()).is_true()
+	# Read through: held up, yours, opened (no book view here, so it
+	# doesn't), then the lantern's question and your nod.
+	for i: int in 400:
+		if not conversation.is_active():
+			break
+		var box: DialogueBox = conversation.box
+		if box != null and box.is_typing():
+			box.finish_typing()
+		conversation.press()
+		await physics_ticks(runner, 2)
+	assert_bool(conversation.is_active()).is_false()
+
+	assert_bool(Game.dialogue.is_set(RecipeBook.OWNED_FLAG)).is_true()
+	assert_bool(Game.dialogue.is_set(&"said_a_cook")).is_true()
+	assert_bool(player.toolbar.has_tool(&"recipe_book")).is_true()
+	assert_bool(book.visible).is_false()
+	assert_bool(book.is_taken()).is_true()
+	# Picking it up again does nothing.
+	assert_bool(book.pick_up(player)).is_false()
+
+
+func test_on_your_toolbar_use_reads_it_wherever_you_are() -> void:
 	var rig: Array[Node3D] = new_moored_ship_with_player(Vector3(0, 1.05, 6))
 	var player: Player3D = rig[1] as Player3D
 	var hud: Hud3D = new_hud_3d(player)
 	var runner: GdUnitSceneRunner = scene_runner(rig[0].get_parent())
 	await physics_ticks(runner, 2)
-	var book: RecipeBook = rig[0].get_node("Galley/RecipeBook") as RecipeBook
-	var recipes: Array[Recipe] = Catalog.load_default().recipes
-
-	var pages: int = book.read(player)
-
-	assert_int(pages).is_equal(recipes.size())
-	var view: BookView = hud.get_node("%BookView") as BookView
-	assert_bool(view.is_open()).is_true()
-	assert_str(view.reading.left_page().heading).is_equal(recipes[0].title)
-	assert_bool(player.controls_enabled).is_false()
-	assert_bool(hud.shows_play_parts()).is_false()
-
-	view.close()
-	assert_bool(hud.shows_play_parts()).is_true()
-
-
-func test_pressing_interact_at_the_book_opens_it_and_again_closes_it() -> void:
-	var rig: Array[Node3D] = new_moored_ship_with_player(Vector3(0, 1.05, 6))
-	var ship: Ship = rig[0] as Ship
-	var player: Player3D = rig[1] as Player3D
-	var hud: Hud3D = new_hud_3d(player)
-	var runner: GdUnitSceneRunner = scene_runner(ship.get_parent())
-	await physics_ticks(runner, 2)
-	var view: BookView = hud.get_node("%BookView") as BookView
 	var detector: InteractionDetector3D = player.get_node("InteractionDetector") \
 			as InteractionDetector3D
-	place_player_3d(runner, ship.to_global(Vector3(BOOK_AT.x + 0.85, 1.05, BOOK_AT.z)))
-	player.face_towards(ship.to_global(BOOK_AT))
-	await physics_ticks(runner, 3)
-	assert_str(detector.interact_prompt()).is_equal("Read the recipe book")
+	var view: BookView = hud.get_node("%BookView") as BookView
+	var recipes: Array[Recipe] = Catalog.load_default().recipes
+	Game.dialogue.set_flag(RecipeBook.OWNED_FLAG)
+	await physics_ticks(runner, 2)
+	assert_bool(player.toolbar.has_tool(&"recipe_book")).is_true()
+	for slot: int in Toolbar.SLOT_COUNT:
+		var tool: HandTool = player.toolbar.get_tool(slot)
+		if tool != null and tool.is_recipe_book:
+			player.toolbar.select(slot)
+	# Nothing in reach, and still it can be read.
+	assert_object(detector.focused).is_null()
+	assert_str(detector.tool_prompt()).is_equal("Read the recipe book")
 
-	await press(runner, "interact")
-	# The press that opened it mustn't close it again.
+	await press(runner, "use_tool")
+
 	assert_bool(view.is_open()).is_true()
-
-	await press(runner, "interact")
-	assert_bool(view.is_open()).is_false()
+	assert_int(view.reading.page_count()).is_equal(recipes.size())
+	assert_str(view.reading.left_page().heading).is_equal(recipes[0].title)
+	assert_bool(player.controls_enabled).is_false()
+	view.close()
 	assert_bool(player.controls_enabled).is_true()
+
+
+func test_opening_it_opens_the_book_view_with_a_page_per_recipe() -> void:
+	var rig: Array[Node3D] = new_moored_ship_with_player(Vector3(0, 1.05, 6))
+	var player: Player3D = rig[1] as Player3D
+	var hud: Hud3D = new_hud_3d(player)
+	var runner: GdUnitSceneRunner = scene_runner(rig[0].get_parent())
+	await physics_ticks(runner, 2)
+
+	var pages: int = RecipeBook.open_book(player, player)
+
+	assert_int(pages).is_equal(Catalog.load_default().recipes.size())
+	var view: BookView = hud.get_node("%BookView") as BookView
+	assert_bool(view.is_open()).is_true()
+	assert_bool(hud.shows_play_parts()).is_false()
+	view.close()
+	assert_bool(hud.shows_play_parts()).is_true()
 
 
 func test_every_recipe_page_fits_its_paper() -> void:
