@@ -174,13 +174,17 @@ The lantern freezes. His flame suddenly grows brighter.
 
 **LANTERN:** "Oh…"
 
-A golden light begins to travel from the lantern into the player's hand. The player's body begins to glow.
+A golden light begins to travel from the lantern into the player's hand. The player's body begins to glow. At the same time a thinner thread of his glow sinks away from him, down towards the dead lanterns far below, fading as it goes: they're drawing on him too.
 
-**LANTERN:** "Wait… that's my light. It's going into you."
+**LANTERN:** "The lanterns down there…"
+
+**LANTERN:** "they're calling my light."
 
 The light keeps flowing. The lantern tries to pull away, but the connection holds. His flame begins to shrink.
 
-**LANTERN:** "No, no, no… I'm going out…"
+**LANTERN:** "I can't…"
+
+**LANTERN:** "I can't hold on to it."
 
 The lanterns all around begin to flicker. A deep rumble rolls through the ocean.
 

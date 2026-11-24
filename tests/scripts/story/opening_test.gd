@@ -224,6 +224,7 @@ func test_his_light_pours_into_you_the_deep_stirs_and_he_lets_go_to_white() -> v
 	var hand: FlameHand = _underwater_set().get_node("Lantern/Hand") as FlameHand
 	var you: CharacterModel = _underwater_set().get_node("Castaway/Character") as CharacterModel
 	var flow: LightFlow = _underwater_set().get_node("Flow") as LightFlow
+	var drain: LightFlow = _underwater_set().get_node("Drain") as LightFlow
 	var field: LanternField = _underwater_set().get_node("Lanterns") as LanternField
 	var thing: Node3D = _underwater_set().get_node("Thing") as Node3D
 	var lightning: Lightning = _sea.get_node("Weather/Lightning") as Lightning
@@ -241,14 +242,18 @@ func test_his_light_pours_into_you_the_deep_stirs_and_he_lets_go_to_white() -> v
 	assert_bool(you.eyes_shut).is_true()
 	assert_float(face.strength).is_greater(0.95)
 	assert_float(flow.flow).is_equal(0.0)
+	assert_float(drain.flow).is_equal(0.0)
 
 	# Then his light pours out of his hand into you: the flow runs, you fill,
-	# and he fades.
+	# and he fades. A thinner thread of it sinks away to the lanterns far
+	# below (#203).
 	assert_bool(await _read_on_until(runner, said, &"it_flows")).is_true()
 	await physics_ticks(runner, 200)
 	assert_float(flow.flow).is_greater(0.5)
 	assert_float(flow.filled).is_greater(0.2)
 	assert_float(face.strength).is_less(0.95)
+	assert_float(drain.flow).is_greater(0.2)
+	assert_float(drain.to.global_position.y).is_less(drain.from.global_position.y - 3.0)
 
 	# He pulls back and it holds; the lanterns all round flicker; the thing
 	# passes far below, shown twice in the lightning.
@@ -268,6 +273,7 @@ func test_his_light_pours_into_you_the_deep_stirs_and_he_lets_go_to_white() -> v
 	# then white, and silence.
 	assert_bool(await _read_on_until(runner, said, &"lets_go")).is_true()
 	assert_float(face.strength).is_less(0.35)
+	assert_float(drain.flow).is_equal(0.0)
 	assert_bool(await _read_on_until(runner, said, &"asleep")).is_true()
 	assert_bool(_fade().is_white()).is_true()
 	assert_bool(_ambience().hushed).is_true()
