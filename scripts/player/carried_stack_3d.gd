@@ -7,9 +7,12 @@ extends Node3D
 ##
 ## Display only: it reads the player's [Arms] and rebuilds when they change.
 
-## Where the item sits from the hand bone, in the hand's own space: a little
-## below the palm, so it's held rather than skewered.
-@export var grip_offset: Vector3 = Vector3(0.0, -0.06, 0.03)
+## How far below the wrist the middle of the palm is, in metres: the item's
+## middle sits there, so it's in the hand with the arm hanging.
+@export var palm_drop: float = 0.08
+## How big the item is in the hand, as a share of its model's size: the
+## models are made for a table, a little big for one hand.
+@export var held_scale: float = 0.55
 
 @onready var _player: Player3D = get_parent() as Player3D
 @onready var _character: CharacterModel = \
@@ -19,6 +22,7 @@ extends Node3D
 func _ready() -> void:
 	# Placed by hand every frame, where the hand is drawn: not interpolated.
 	physics_interpolation_mode = Node.PHYSICS_INTERPOLATION_MODE_OFF
+	scale = Vector3.ONE * held_scale
 	_player.arms.changed.connect(_rebuild)
 	_rebuild()
 
@@ -27,7 +31,10 @@ func _process(_delta: float) -> void:
 	var hand: Node3D = held_in()
 	visible = hand != null and get_child_count() > 0
 	if hand != null:
-		global_position = hand.global_transform * grip_offset
+		# The model stands on its base: lower it by half its height so its
+		# middle is in the palm.
+		var half: float = ItemModel.FOOD_SIZE * held_scale / 2.0
+		global_position = hand.global_position + Vector3.DOWN * (palm_drop + half)
 
 
 ## The hand the item is held in, or null when there's no hand to hold it
