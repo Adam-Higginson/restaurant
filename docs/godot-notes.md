@@ -352,7 +352,7 @@ A growing glossary of the Godot concepts this project uses: what each one is, in
 
 **A material of your own (`duplicate()`).** Every instance of a scene shares the same material resource, so changing it on one changes them all. `material.duplicate()` makes a private copy for one instance. *Ours:* `LanternFace` copies its glass material in `_ready`, so fogging one lantern doesn't fog the others.
 
-**Driving a shader from a script.** A shader's `uniform` values are its dials. `material.set_shader_parameter("name", value)` turns one from code, every frame if you like, so game state can change how something is drawn. *Ours:* `LanternFace` sends his strength, lean, fog, streaks and crack to `lantern_glass.gdshader`; `CarvedName` sends the lamp's position to `carved_name.gdshader`, which lights the cuts of each letter from that side.
+**Driving a shader from a script.** A shader's `uniform` values are its dials. `material.set_shader_parameter("name", value)` turns one from code, every frame if you like, so game state can change how something is drawn. *Ours:* `LanternFace` sends his strength, lean, fog, streaks and crack to `lantern_flame.gdshader`; `CarvedName` sends the lamp's position to `carved_name.gdshader`, which lights the cuts of each letter from that side.
 
 **Easing towards a target.** Rather than jumping to a new value, move a fraction of the way there each frame: `value = lerp(value, target, 1.0 - exp(-speed * delta))`. It starts quickly and settles gently, and takes the same time whatever the frame rate. *Ours:* how his eyes change shape between looks.
 
@@ -454,7 +454,7 @@ A growing glossary of the Godot concepts this project uses: what each one is, in
 
 **Anti-aliasing by supersampling.** Drawing a shape at several samples per pixel and averaging them gives edge pixels in-between colours, so edges look smooth, not stepped. *Ours:* `tools/textures/paint_placeholders.py` paints our placeholder textures at 4 x 4 samples per pixel (#135). (Smoothing model edges on screen is a different thing: #134.)
 
-**Filtering by hand in a shader.** A shader that makes its own low-resolution picture (fire from noise, worked out per texel) can still look filtered: work out the four texels around a point and blend them by how far the point is between them, as a filtered texture does. *Ours:* the `soft` switch in `pixel_fire`, `lantern_glass` and `flame_hand` (#137).
+**Filtering by hand in a shader.** A shader that makes its own low-resolution picture (fire from noise, worked out per texel) can still look filtered: work out the four texels around a point and blend them by how far the point is between them, as a filtered texture does. *Ours:* the `soft` switch in `pixel_fire` (the stoves) and `flame_hand` (#137).
 
 **`.gdignore`.** An empty file named `.gdignore` in a folder makes Godot skip that folder: nothing in it is imported or shown in the FileSystem dock. *Ours:* `tools/textures/originals/`, the pixel-art originals kept only for the painting script (#135).
 
@@ -703,6 +703,20 @@ A growing glossary of the Godot concepts this project uses: what each one is, in
 **One-shot particles.** A `CPUParticles3D` with `one_shot` set fires all its particles once when told (`restart()`) and then stops. *Ours:* the spray as each fish leaves the water and drops back in.
 
 **Recording the game (Movie Maker).** `godot_console.exe --path . --write-movie out.avi --fixed-fps 30 <scene>` runs the scene and saves every frame and its sound to a video, at a steady 30 frames a second however slow the machine is. *Ours:* how the montage was recorded to send round.
+
+## Glass lanterns with a flame inside (#199)
+
+**Raymarching.** Instead of painting a picture onto a surface, a shader can follow your line of sight *into* the object from each pixel and step along it, asking "what's here?" at each step. Whatever it finds is drawn at its real depth, so it shifts behind the surface as you move. *Ours:* `lantern_flame.gdshader` steps through the thin cylinder round the wick (20 steps) to find the flame, then works out where the ray leaves the box to draw the floor plate, the roof or the far pane's grille.
+
+**Object space in a shader.** In `vertex()`, `VERTEX` is the point in the mesh's own space; `inverse(MODEL_MATRIX) * CAMERA_POSITION_WORLD` brings the camera into that space too. Working there, the flame stays inside the lantern however it swings or is scaled. *Ours:* the lantern glass's `local_spot` and `camera_local`.
+
+**See-through materials (alpha blending).** Setting `ALPHA` below 1 blends the surface over what's behind it. Godot multiplies everything the surface gives off by `ALPHA`, so to add light (a flame behind clear glass) without it fading, give `EMISSION` divided by the alpha. See-through things are drawn after solid ones, sorted back to front; `render_priority` on the material breaks ties. *Ours:* the lantern glass is clear (about 5%) but its flame shines at full strength.
+
+**Throwing pixels away (`discard`).** A fragment shader can `discard` a pixel: it's not drawn at all, and the surface stays solid everywhere else (unlike blending, so it sorts and casts shadows like any solid thing). *Ours:* `glass_cutout.gdshader` throws away every part of a Meshy lantern inside its glass box, so the painted glass vanishes and our glass shows through the frame.
+
+**A custom `light()` function.** A spatial shader can say how each light lights it: Godot calls `light()` once per light per pixel, with `LIGHT`, `ATTENUATION` and `LIGHT_COLOR`, and you add to `DIFFUSE_LIGHT`. *Ours:* the cut-away lantern frame caps each light's share, so the lantern's own light, centimetres away, warms the frame instead of burning it white.
+
+**Shadow bias.** A light's `shadow_bias` pushes shadows slightly away to stop surfaces shadowing themselves (speckled "acne"). Too much, and an occluder very close to the light lets light leak past it. *Ours:* the lantern lights use 0.02 rather than 0.1, so no light pours out under a lantern's solid base.
 
 ## Testing
 
