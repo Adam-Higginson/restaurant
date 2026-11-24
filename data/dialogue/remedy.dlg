@@ -4,7 +4,8 @@
 #
 # He asks what it is, takes it in (clearing his low flag, which clears the
 # bowl), lights up, rises and circles you. The captain, called down from the
-# helm, looks in at the bunk room door, then goes back to his usual place.
+# helm, looks in at the bunk room door, then goes back up to the wheel, where
+# the deck talk finds him (#187).
 
 ~ start
 @place player supper_seat
@@ -29,6 +30,7 @@ lantern: I've never had soup before.
 @wait 1.8
 @look lantern mended
 clear lantern_low
+set warmed_lantern
 @wait 0.6
 @look lantern pleased
 lantern: Oh!
@@ -58,7 +60,7 @@ heron: I can see.
 lantern: They made me soup!
 heron: Yes. I gathered that.
 @face heron player
-@send heron home
+@send heron wheel
 @wait 0.8
 lantern: Thank you.
 @wait 1.0

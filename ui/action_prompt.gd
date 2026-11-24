@@ -46,7 +46,8 @@ func _process(_delta: float) -> void:
 # _input rather than _unhandled_input: it sees every press first, even ones
 # the game then handles, and never marks them handled.
 func _input(event: InputEvent) -> void:
-	if event is InputEventKey or event is InputEventMouseButton 			or event is InputEventMouseMotion:
+	if event is InputEventKey or event is InputEventMouseButton \
+			or event is InputEventMouseMotion:
 		_device = Device.KEYBOARD_MOUSE
 	elif event is InputEventJoypadButton:
 		_device = Device.PAD

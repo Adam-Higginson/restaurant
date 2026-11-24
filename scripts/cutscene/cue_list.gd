@@ -36,6 +36,10 @@ const USAGE: Dictionary[StringName, String] = {
 	&"hush": "@hush on or @hush off",
 	&"grave": "@grave on or @grave off (the Grave of the Lanterns' faint lights far below the sea)",
 	&"lightning": "@lightning",
+	&"rain": "@rain 0.25 6.0 (the rain eases to that much, 0 to 1, over so many seconds)",
+	&"travel": "@travel cove (once the cutscene ends, the game goes there)",
+	&"clear": "@clear 1.0 12.0 (the morning clears into a bright day, 0 to 1, over so many seconds)",
+	&"leaping_fish": "@leaping_fish on or @leaping_fish off (fish jump from the water alongside the ship)",
 	&"look": "@look hook_lantern determined (a look for his eyes: calm, surprised, "
 			+ "determined, worried, pleading, effort, tired, asleep, pleased; or for his "
 			+ "glass: fogged, clear, streaked, dry, cracked, mended)",
@@ -85,7 +89,12 @@ static func _fits(cue: StringName, args: PackedStringArray) -> bool:
 			return args.size() >= 3 and _is_seconds(args[1])
 		&"say_in":
 			return args.size() >= 4 and _is_seconds(args[0]) and _is_seconds(args[2])
-		&"muffle", &"hush", &"grave":
+		&"rain", &"clear":
+			return args.size() in [1, 2] and _is_seconds(args[0]) and args[0].to_float() <= 1.0 \
+					and (args.size() == 1 or _is_seconds(args[1]))
+		&"travel":
+			return args.size() == 1
+		&"muffle", &"hush", &"grave", &"leaping_fish":
 			return args.size() == 1 and ["on", "off"].has(args[0])
 		&"hold_up":
 			return args.size() <= 1

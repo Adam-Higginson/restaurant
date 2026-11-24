@@ -52,7 +52,8 @@ func test_a_fired_head_shuts_its_eyes_by_showing_the_head_fired_asleep() -> void
 	# head alone, hidden until the eyes shut.
 	var awake_eyes: MeshInstance3D = model.skeleton.get_node("Eyes") as MeshInstance3D
 	var hidden: Callable = func() -> int:
-		return model.skeleton.find_children("*", "MeshInstance3D", false, false) 				.filter(func(mesh: Node) -> bool: return not (mesh as MeshInstance3D).visible).size()
+		return model.skeleton.find_children("*", "MeshInstance3D", false, false) \
+				.filter(func(mesh: Node) -> bool: return not (mesh as MeshInstance3D).visible).size()
 
 	assert_bool(awake_eyes.visible).is_true()
 	assert_int(hidden.call()).is_equal(1)
@@ -266,14 +267,23 @@ func test_the_walk_plays_as_fast_as_the_feet_must_go() -> void:
 	assert_float(CharacterModel.walk_playback(2.0, 0.0)).is_equal_approx(1.0, 0.001)
 
 
-func test_aboard_the_ship_you_walk_slower() -> void:
-	var sea: Node = (load("res://scenes/prototype/sea.tscn") as PackedScene).instantiate()
-	auto_free(sea)
-	var aboard: Player3D = sea.get_node("Player") as Player3D
-	var anywhere: Player3D = (load("res://scenes/prototype/player.tscn") as PackedScene) 			.instantiate() as Player3D
+func test_you_jog_at_the_same_pace_aboard_and_ashore() -> void:
+	var anywhere: Player3D = (load("res://scenes/prototype/player.tscn") as PackedScene) \
+			.instantiate() as Player3D
 	auto_free(anywhere)
-
-	assert_float(aboard.speed).is_less(anywhere.speed)
+	var model: CharacterModel = _model(anywhere)
+	for path: String in [
+		"res://scenes/prototype/sea.tscn",
+		"res://scenes/prototype/islands/cove.tscn",
+		"res://scenes/prototype/islands/duel_arena.tscn",
+	]:
+		var scene: Node = (load(path) as PackedScene).instantiate()
+		auto_free(scene)
+		var player: Player3D = scene.find_child("Player", true, false) as Player3D
+		assert_object(player).override_failure_message(path).is_not_null()
+		assert_float(player.speed).override_failure_message(path).is_equal(anywhere.speed)
+	# Quick enough to be a jog, not a walk.
+	assert_float(anywhere.speed).is_greater_equal(model.run_from)
 
 
 func test_the_pose_is_a_strike_or_parry_first_then_walking() -> void:
@@ -440,7 +450,8 @@ func test_the_boy_and_girl_wear_the_peasant_outfit() -> void:
 
 
 func test_the_intros_castaway_is_the_same_character_as_the_player() -> void:
-	var castaway: Node = (load("res://scenes/prototype/intro/castaway.tscn") as PackedScene) 			.instantiate()
+	var castaway: Node = (load("res://scenes/prototype/intro/castaway.tscn") as PackedScene) \
+			.instantiate()
 	auto_free(castaway)
 	var player: Node = (load("res://scenes/prototype/player.tscn") as PackedScene).instantiate()
 	auto_free(player)

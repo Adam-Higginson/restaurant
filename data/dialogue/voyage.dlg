@@ -1,0 +1,57 @@
+# The passage of time, the Prologue's Scene 7 (#187, the full montage #197).
+# Played by your bunk (Bedside) when you sleep after the deck talk: the night
+# passes in the dark, and it's the next morning. About a minute, almost
+# without words: the Grave of the Lanterns' last lights falling behind,
+# rainwater dripping from the rigging, the clouds clearing and the sea
+# turning from slate to turquoise (@clear), fish leaping from the water alongside
+# (@leaping_fish), the lantern flitting about the deck brighter than he's
+# been, the captain studying the old chart, clear water astern where the
+# Grave was, and the lantern seeing something ahead.
+#
+# It ends in the dark with the game going to the cove (@travel), where the
+# arrival plays (arrival.dlg).
+
+~ start
+@fade out 0.0
+@title The next morning
+@rain 0.45
+@grave on
+@shot astern cut
+@fade in 3.0
+@wait 4.0
+@grave off
+@wait 3.0
+@shot rigging_drips cut
+@wait 5.0
+@shot off_the_beam cut
+@clear 1.0 14.0
+@wait 9.0
+@leaping_fish on
+@shot fish_alongside cut
+@wait 8.0
+@place lantern lantern_flight_1
+@look lantern pleased
+@shot about_the_deck cut
+@wait 0.8
+@go lantern lantern_flight_2
+@wait 2.2
+@go lantern lantern_flight_3
+@wait 2.5
+@leaping_fish off
+@place heron chart_reading
+@shot at_the_chart cut
+@wait 5.0
+@shot astern cut
+@wait 5.0
+@place lantern the_bow
+@shot the_lookout cut
+@wait 1.5
+lantern: Captain?
+@shot at_the_chart cut
+heron: Hm?
+@shot the_lookout cut
+@look lantern surprised
+lantern: Look!
+set arriving
+@fade out 2.0
+@travel cove

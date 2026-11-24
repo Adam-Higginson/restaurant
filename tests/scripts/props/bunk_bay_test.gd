@@ -66,20 +66,23 @@ func test_a_reader_up_top_lights_the_candle() -> void:
 
 
 func test_all_four_curtains_are_cut_from_the_bay_s_cloth() -> void:
-	var cloth: Material = load("res://assets/placeholder/materials/curtain_mustard.tres") 			as Material
+	var cloth: Material = load("res://assets/placeholder/materials/curtain_mustard.tres") \
+			as Material
 	var bay: BunkBay = (load(SCENE) as PackedScene).instantiate() as BunkBay
 	bay.curtain_cloth = cloth
 	add_child(bay)
 	auto_free(bay)
 	for tier: String in ["Lower", "Upper"]:
 		for side: String in ["Left", "Right"]:
-			var mesh: MeshInstance3D = bay.get_node("%sCurtain%s/Cloth" % [tier, side]) 					as MeshInstance3D
+			var mesh: MeshInstance3D = bay.get_node("%sCurtain%s/Cloth" % [tier, side]) \
+					as MeshInstance3D
 			assert_object(mesh.material_override).is_same(cloth)
 
 
 func test_curtain_cloth_lets_a_lamp_glow_through() -> void:
 	for name: String in ["curtain", "curtain_mustard", "curtain_rust"]:
-		var cloth: StandardMaterial3D = load("res://assets/placeholder/materials/%s.tres" % name) 				as StandardMaterial3D
+		var cloth: StandardMaterial3D = load("res://assets/placeholder/materials/%s.tres" % name) \
+				as StandardMaterial3D
 		assert_bool(cloth.backlight_enabled).override_failure_message(
 				"%s isn't backlit" % name).is_true()
 

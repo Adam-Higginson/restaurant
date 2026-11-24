@@ -134,6 +134,8 @@ A growing glossary of the Godot concepts this project uses: what each one is, in
 
 **Override materials.** A mesh's own materials can be replaced per instance without touching the mesh: `material_override` covers the whole mesh, `set_surface_override_material()` one surface. *Ours:* `ThirdPartyModel` gives pack models the N64 grain shader this way, keeping each model's own colours.
 
+**Overridden properties on an instance.** A scene placed inside another (an *instance*) keeps its own values unless the outer scene changes one. A changed value is saved in the outer scene, shows in the Inspector with a circular ↺ revert arrow beside it, and clicking the arrow goes back to the instanced scene's value. *Ours:* `sea.tscn` used to set its `Player`'s `speed` to 2 m/s for a slower pace aboard; that's gone, so every scene uses `player.tscn`'s 3.5 m/s.
+
 **`@tool` scripts.** A script marked `@tool` also runs inside the editor, so it can show things while you edit (here, models loaded at runtime). Anything it adds without an *owner* isn't saved into the scene. *Ours:* `ThirdPartyModel` shows pack models in the editor without saving them.
 
 **Particle collision and heightfields.** Particles don't use the physics engine. They collide with special collider nodes instead. A `GPUParticlesCollisionHeightField3D` photographs everything inside its box from above into a height map, and particles that go below it have hit something. It's cheap and ideal for rain, but it can't see under overhangs. *Ours:* the ship's `RainCatcher` covers the whole ship, so drops land on the deck, rails and sail, and the deck keeps the galley dry.
@@ -677,6 +679,32 @@ A growing glossary of the Godot concepts this project uses: what each one is, in
 **`@export_range`.** `@export_range(1, 3) var quality: int` shows a slider in the Inspector that only allows 1 to 3. *Ours:* `Dispenser3D.quality`: the herb planter's is 2.
 
 **How names become cue words.** A cue finds a mark by its node name in snake case, and Godot's `to_snake_case()` splits numbers off: `LanternCircle1` is `lantern_circle_1`, not `lantern_circle1`. *Ours:* `remedy.dlg`; `supper_spot_test.gd` checks every mark and shot it names is really in the ship.
+
+## The voyage to the cove (#187)
+
+**One scene shared by two.** The conversation and its cue handlers are a scene of their own (`scenes/prototype/story.tscn`), instanced in both the sea and the cove. Each place fills in what it differs by: the instance's children can have their settings changed from the outer scene (its `player`, its `fade`), and extra nodes can hang under them (the sea's intro sounds and the cove's anchor clunk under `Story/SoundCues`).
+
+**Changing scene.** `get_tree().change_scene_to_file(path)` throws the whole current scene away and loads another. Anything that should survive the trip has to live outside it: ours is in the `Game` autoload, which is why the story's flags (`arriving`, `at_cove`) carry the voyage across. *Ours:* `TravelCues` (`@travel cove`) and `Opening` (carrying a voyage on at the island). Tests can't let it happen (it would replace the test's own scene), so both have a setting to only say they would.
+
+**`Area3D` as a trigger.** An `Area3D` with a collision shape notices bodies coming in (`body_entered`) without stopping them. *Ours:* `StoryTrigger` at the top of the hatch ramp plays the deck talk when you walk into it, once.
+
+**A body that follows physics (`sync_to_physics`).** The ship is an `AnimatableBody3D` set to move in step with the physics engine, which is what lets her carry you. The catch: set her position directly and the node only shows it after the next physics step, so reading it straight back gives the old one. *Ours:* `CoveArrival` waits two physics steps before standing you on her deck, and tweens her with `tween_method` from and to positions it gives outright rather than reading her position.
+
+**A tween in physics steps.** `create_tween().set_process_mode(Tween.TWEEN_PROCESS_PHYSICS)` moves things in the physics steps instead of the drawn frames, so a moving deck and the player standing on it agree. *Ours:* the ship sailing into the cove; `set_ease(Tween.EASE_OUT)` slows her to a stop at her anchorage.
+
+## The montage at sea (#197)
+
+**Blending through three looks.** `lerp(a, b, t)` goes from `a` to `b` as `t` goes 0 to 1. Blending the result again towards a third value gives three looks from two numbers: night to dawn by `dawn`, then on to a clear day by `clear`. *Ours:* `TimeOfDay.colour_of` and `number_of`, used for every sky, fog, sun and sea setting.
+
+**Colour correction with a curve (`adjustment_color_correction`).** An `Environment` can push the finished picture through a `GradientTexture1D`: each colour channel's brightness is looked up along the gradient, so it works as a curve per channel. A curve that's grey at each point (the same as its position) changes nothing. *Ours:* the sea's night grade, which cools and greys everything, eases off to that neutral curve as the day clears, or a blue sky could never look blue.
+
+**Fog over the sky (`fog_sky_affect`).** How much the depth fog covers the sky, 0 to 1. At 0.5 a blue sky comes out half fog-grey. *Ours:* turned down to 0.05 on a clear day.
+
+**A class inside a script.** `class Leap:` inside a script makes a small type of its own, used only there: a handy bundle of a few values with names. *Ours:* `LeapingFish` keeps each fish's body, spray and arc in a `Leap`.
+
+**One-shot particles.** A `CPUParticles3D` with `one_shot` set fires all its particles once when told (`restart()`) and then stops. *Ours:* the spray as each fish leaves the water and drops back in.
+
+**Recording the game (Movie Maker).** `godot_console.exe --path . --write-movie out.avi --fixed-fps 30 <scene>` runs the scene and saves every frame and its sound to a video, at a steady 30 frames a second however slow the machine is. *Ours:* how the montage was recorded to send round.
 
 ## The ship made (#196)
 

@@ -1,0 +1,50 @@
+# The first shore, the Prologue's Scene 8 (#187): the end of the Prologue.
+# Played by the cove's Arrival node when you come from the voyage: the Salt
+# and Ember sails into the cove while this plays (about 24 seconds), and
+# slows to her anchorage. You're on deck with the captain and the lantern,
+# looking at the island. Then the anchor goes down, the camera pulls back,
+# and the Prologue ends. Afterwards you're on deck, free, at anchor.
+
+~ start
+@fade out 0.0
+@shot out_of_the_mist cut
+@fade in 3.0
+@wait 3.5
+@place heron by_the_rail
+@place lantern over_the_rail
+@shot towards_the_island cut
+@look lantern surprised
+lantern: Oh!
+@look lantern pleased
+lantern: Isn't it lovely?
+heron: Land at last.
+lantern: Do you think they have any tomatoes?
+heron: You had soup yesterday.
+lantern: I liked the soup.
+heron: This is it.
+@face heron lantern
+lantern: The island?
+heron: The last mark on the chart.
+@wait 1.0
+heron: We've finally found it.
+lantern: So... what are we looking for?
+@face heron player
+heron: That's what we're here to find out.
+@shot the_whole_cove
+@wait 4.0
+@sound anchor
+@wait 1.5
+@shot towards_the_island cut
+heron: Come along. We've got a lot to do.
+@look lantern pleased
+lantern: Adventure!
+heron: Supplies.
+lantern: Adventure and supplies!
+@shot pull_back
+@wait 3.0
+@fade out 2.5
+@title The end of the Prologue
+@home heron
+@home lantern
+@shot free cut
+@fade in 2.0

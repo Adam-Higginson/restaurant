@@ -99,7 +99,7 @@ Claude writes the code, all of it: nothing is left as an exercise. The user is l
 - Add a credit to `CREDITS.txt` whenever a new pack, font or sound comes in.
 
 ## Code style
-Follow the official GDScript style guide. Godot enforces some of it: in project settings, missing types and unsafe calls/casts are **errors**, and unused or shadowed variables are warnings. `tests/code_standards_test.gd` loads every script under `scripts/`, `ui/` and `tests/`, so CI fails if any script breaks these rules.
+Follow the official GDScript style guide. Godot enforces some of it: in project settings, missing types and unsafe calls/casts are **errors**, and unused or shadowed variables are warnings. `tests/code_standards_test.gd` loads every script under `scripts/`, `ui/` and `tests/`, so CI fails if any script breaks these rules. It also fails on a tab after a line's indent: a long line whose `\` and line break were lost when it was edited by a script, joining the next line on.
 - **Naming:** `snake_case` files, variables and functions. `PascalCase` for `class_name` and node names. `CONSTANT_CASE` for constants and enum values. Prefix private members with `_`.
 - **Signals** are named in the past tense: `order_placed`, `dish_served`, `money_changed`.
 - **Script order:** `class_name`, `extends`, a `##` doc comment, signals, enums, constants, `@export` vars, public vars, private vars, `@onready` vars, built-in callbacks (`_ready`, `_physics_process`, ...), public functions, private functions.

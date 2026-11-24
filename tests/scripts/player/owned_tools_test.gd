@@ -67,7 +67,8 @@ func test_the_heron_gives_you_the_cooking_pot_not_the_pan() -> void:
 			# The pan's found ashore now (#187).
 			assert_str(String(step.flag)).is_not_equal("has_frying_pan")
 			gives = gives or step.flag == &"has_saucepan"
-		if step.kind == DialogueStep.Kind.CUE and step.cue == &"hold_up" 				and step.args == PackedStringArray(["saucepan"]):
+		if step.kind == DialogueStep.Kind.CUE and step.cue == &"hold_up" \
+				and step.args == PackedStringArray(["saucepan"]):
 			holds_it_up = true
 
 	assert_bool(gives).is_true()

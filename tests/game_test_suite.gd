@@ -6,6 +6,11 @@ extends GdUnitTestSuite
 ## exact number of ticks. Waiting on rendered frames would depend on machine
 ## speed and can pass locally but fail in CI.
 
+## The speed, in metres per second, of the player aboard
+## [method new_moored_ship_with_player]: the pace the walks through the ship
+## were timed for, kept when the game's own pace changes.
+const ROUTE_SPEED: float = 5.0
+
 ## Where tests keep a voyage when something saves (sleeping), so they never
 ## touch the real save. run_tests.sh runs several copies of Godot at once and
 ## gives each a TEST_SHARD number, so each copy has a save file of its own.
@@ -170,6 +175,9 @@ func new_moored_ship_with_player(pos: Vector3) -> Array[Node3D]:
 	var player_scene: PackedScene = load("res://scenes/prototype/player.tscn") as PackedScene
 	var player: Player3D = player_scene.instantiate() as Player3D
 	player.position = pos
+	# The walks through the ship are timed in ticks at this pace, so they test
+	# the ship's walkways, not how fast you jog.
+	player.speed = ROUTE_SPEED
 	world.add_child(player)
 	return [ship, player]
 

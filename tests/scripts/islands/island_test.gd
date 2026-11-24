@@ -102,7 +102,7 @@ func test_the_beach_boat_sits_on_the_sand_and_is_where_defeat_returns_you() -> v
 	assert_float(back).is_between(0.5, ground.shape.beach_width)
 
 
-func test_crabs_wait_on_the_beach_and_you_come_armed() -> void:
+func test_crabs_wait_on_the_beach_and_you_come_with_your_knife() -> void:
 	var runner: GdUnitSceneRunner = scene_runner(COVE)
 	await physics_ticks(runner, 60)
 	var ground: IslandGround = runner.find_child("Ground") as IslandGround
@@ -114,7 +114,21 @@ func test_crabs_wait_on_the_beach_and_you_come_armed() -> void:
 		var back: float = ground.shape.inland(crab.global_position.x, crab.global_position.z)
 		assert_float(back).is_between(1.0, ground.shape.beach_width)
 	var player: Player3D = runner.find_child("Player") as Player3D
-	assert_bool(duellist_of(player).has_pan()).is_true()
+	assert_bool(player.toolbar.has_tool(&"chefs_knife")).is_true()
+	# The pan's in the chest on the beach (#187).
+	assert_bool(duellist_of(player).has_pan()).is_false()
+
+
+func test_the_frying_pan_waits_in_a_chest_on_the_beach() -> void:
+	var runner: GdUnitSceneRunner = scene_runner(COVE)
+	await physics_ticks(runner, 30)
+	var chest: TreasureChest = runner.find_child("BeachChest") as TreasureChest
+	var landing: Node3D = runner.find_child("StepOut") as Node3D
+
+	assert_str(String(chest.treasure_id())).is_equal("frying_pan")
+	assert_bool(chest.is_opened()).is_false()
+	# A few steps from where the boat lands you.
+	assert_float(chest.global_position.distance_to(landing.global_position)).is_less(6.0)
 
 
 func test_the_ships_lanterns_are_out_by_day() -> void:
