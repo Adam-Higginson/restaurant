@@ -2,7 +2,6 @@
 
 [ext_resource type="Script" path="res://scripts/data/hand_tool.gd" id="1_tool"]
 [ext_resource type="Resource" path="res://data/elements/cut.tres" id="2_cut"]
-[ext_resource type="Resource" path="res://data/art/looks/prop.tres" id="3_look"]
 
 [resource]
 script = ExtResource("1_tool")
@@ -11,5 +10,5 @@ display_name = "Cheap Chef's Knife"
 verb = "Chop"
 color = Color(0.78, 0.8, 0.84, 1)
 element = ExtResource("2_cut")
-model_path = "res://assets/third_party/kaykit_restaurant/Assets/gltf/knife.gltf"
-model_look = ExtResource("3_look")
+model_path = "res://assets/third_party/meshy/kitchen_knife/model/model.glb"
+model_size = Vector3(0.95, 0.32, 0.06)

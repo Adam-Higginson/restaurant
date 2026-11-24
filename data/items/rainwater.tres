@@ -6,4 +6,5 @@
 script = ExtResource("1_item")
 id = &"rainwater"
 display_name = "Rainwater"
-color = Color(0.55, 0.7, 0.82, 1)
+color = Color(0.55, 0.7, 0.82, 0.8)
+liquid = true

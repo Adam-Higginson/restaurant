@@ -13,10 +13,13 @@ const FOOD_SIZE: float = 0.2
 ## Food sitting on a vessel is smaller, so up to three fit.
 const FOOD_ON_VESSEL_SIZE: float = 0.13
 ## A chopping board (a vessel taken apart, not whole).
-const BOARD_SIZE: Vector3 = Vector3(0.5, 0.04, 0.34)
+const BOARD_SIZE: Vector3 = Vector3(0.5, 0.06, 0.34)
 ## A plate or bowl (a vessel carried whole).
 const PLATE_RADIUS: float = 0.21
 const PLATE_HEIGHT: float = 0.03
+
+## How a liquid's surface is drawn: glossy, gently rippling.
+const LIQUID_SHADER: Shader = preload("res://shaders/liquid_surface.gdshader")
 
 ## One material per colour, shared by every model.
 static var _materials: Dictionary[Color, StandardMaterial3D] = {}
@@ -33,7 +36,17 @@ static func build(instance: ItemInstance) -> Node3D:
 		return root
 	var base: float = vessel_height(instance.item)
 	_add_vessel(root, instance.item)
-	var pieces: Array[ItemInstance] = instance.contents.get_contents()
+	var pieces: Array[ItemInstance] = []
+	var liquid: Item = null
+	for piece: ItemInstance in instance.contents.get_contents():
+		if piece.item.liquid and can_hold_liquid(instance.item):
+			liquid = piece.item
+		else:
+			pieces.append(piece)
+	if liquid != null:
+		root.add_child(liquid_surface(instance.item, liquid))
+		# Food in water or soup floats in it.
+		base = liquid_level(instance.item)
 	for i: int in pieces.size():
 		var spot: Vector2 = _food_spot(i, pieces.size())
 		var piece: Node3D = food(pieces[i].item, FOOD_ON_VESSEL_SIZE)
@@ -41,6 +54,50 @@ static func build(instance: ItemInstance) -> Node3D:
 		piece.name = "Food%d" % i
 		root.add_child(piece)
 	return root
+
+
+## Whether [param vessel] holds liquid as liquid, filling it: a pot, a pan or
+## a bowl. On a board or plate, water or soup is drawn as a piece of food.
+static func can_hold_liquid(vessel: Item) -> bool:
+	return vessel.vessel_shape != Item.VesselShape.FLAT
+
+
+## How high the surface of a liquid stands in [param vessel], in metres.
+static func liquid_level(vessel: Item) -> float:
+	match vessel.vessel_shape:
+		Item.VesselShape.POT:
+			return 0.12
+		Item.VesselShape.BOWL:
+			return 0.075
+		Item.VesselShape.PAN:
+			return 0.035
+	return 0.0
+
+
+## The surface of [param liquid] filling [param vessel] (#207): a rippling
+## disc in the liquid's colour, glossy, and see-through for water.
+static func liquid_surface(vessel: Item, liquid: Item) -> MeshInstance3D:
+	var mesh: CylinderMesh = CylinderMesh.new()
+	var radius: float = 0.14
+	match vessel.vessel_shape:
+		Item.VesselShape.BOWL:
+			radius = 0.13
+		Item.VesselShape.PAN:
+			radius = 0.17
+	mesh.top_radius = radius
+	mesh.bottom_radius = radius
+	mesh.height = 0.004
+	mesh.radial_segments = 20
+	mesh.rings = 1
+	var material: ShaderMaterial = ShaderMaterial.new()
+	material.shader = LIQUID_SHADER
+	material.set_shader_parameter(&"colour", liquid.color)
+	var surface: MeshInstance3D = MeshInstance3D.new()
+	surface.name = "Liquid"
+	surface.mesh = mesh
+	surface.material_override = material
+	surface.position = Vector3.UP * liquid_level(vessel)
+	return surface
 
 
 ## A piece of [param item] about [param size] metres across, standing on its
@@ -79,6 +136,8 @@ static func _add_model(parent: Node3D, item: Item, stand_ins: Array[VisualInstan
 			if shown:
 				_as_made(model.model, item.model_tint))
 	model.scale = Vector3.ONE * scale
+	model.position = item.model_offset * scale
+	model.rotation_degrees.y = item.model_yaw_degrees
 	model.path = item.model_path
 	parent.add_child(model)
 
@@ -130,12 +189,9 @@ static func _add_vessel(root: Node3D, item: Item) -> void:
 					Vector3(0.33, 0.04, 0.0))
 			handle.name = "Handle"
 			root.add_child(handle)
-			# The real pan (the one you parry with), when it's there, turned so
-			# its handle points the way the greybox's does.
+			# The real pan (the one you parry with), when it's there, its
+			# handle pointing the way the greybox's does (+X).
 			_add_model(root, item, [pan, handle], 1.0)
-			var real: Node3D = root.get_node_or_null("Model") as Node3D
-			if real != null:
-				real.rotation_degrees.y = 90.0
 		Item.VesselShape.POT:
 			var pot: MeshInstance3D = _cup(0.17, 0.16, 0.18, colour)
 			pot.name = "Pot"
@@ -145,11 +201,17 @@ static func _add_vessel(root: Node3D, item: Item) -> void:
 						Vector3(side * 0.2, 0.15, 0.0))
 				ear.name = "Handle%d" % int(side)
 				root.add_child(ear)
+			_add_model(root, item, [pot, root.get_node("Handle-1") as MeshInstance3D,
+					root.get_node("Handle1") as MeshInstance3D], 1.0)
 		_:
 			if item.carried_whole:
 				root.add_child(_disc(PLATE_RADIUS, PLATE_HEIGHT, colour))
 			else:
-				root.add_child(_box(BOARD_SIZE, colour, Vector3.UP * BOARD_SIZE.y / 2.0))
+				var board: MeshInstance3D = _box(BOARD_SIZE, colour,
+						Vector3.UP * BOARD_SIZE.y / 2.0)
+				board.name = "Board"
+				root.add_child(board)
+				_add_model(root, item, [board], 1.0)
 
 
 # An open vessel, [param top] wide at the rim and [param bottom] at the base.
