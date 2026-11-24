@@ -14,8 +14,6 @@ const PATH: String = "res://data/catalog.tres"
 ## The ship's crew and company: people you talk to rather than serve. Kept
 ## apart from [member people], who are the old restaurant's townsfolk.
 @export var crew: Array[Person] = []
-## The memories of home that cooking and fishing bring back.
-@export var memories: Array[Memory] = []
 ## The recipes written in the galley's recipe book.
 @export var recipes: Array[Recipe] = []
 

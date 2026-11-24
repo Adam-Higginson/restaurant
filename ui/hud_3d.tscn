@@ -7,7 +7,6 @@
 [ext_resource type="Script" path="res://ui/toolbar_bar.gd" id="2_belt"]
 [ext_resource type="Script" path="res://ui/held_item_label_3d.gd" id="3_held"]
 [ext_resource type="Script" path="res://ui/action_prompt.gd" id="4_prompt"]
-[ext_resource type="Script" path="res://ui/memory_card.gd" id="9_memory"]
 [ext_resource type="Script" path="res://ui/hearts_bar.gd" id="10_hearts"]
 [ext_resource type="Script" path="res://ui/hurt_overlay.gd" id="11_hurt"]
 [ext_resource type="Script" path="res://ui/chop_meter_bar.gd" id="13_chop"]
@@ -101,17 +100,6 @@ offset_right = 68.0
 offset_bottom = 18.0
 mouse_filter = 2
 script = ExtResource("13_chop")
-
-[node name="MemoryCard" type="Control" parent="."]
-unique_name_in_owner = true
-layout_mode = 3
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-mouse_filter = 2
-script = ExtResource("9_memory")
 
 [node name="BookLayer" type="CanvasLayer" parent="."]
 layer = 16

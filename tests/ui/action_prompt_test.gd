@@ -28,12 +28,12 @@ func test_names_the_mouse_buttons_by_default() -> void:
 	await physics_ticks(runner, 5)
 
 	assert_int(prompt.device).is_equal(ActionPrompt.Device.KEYBOARD_MOUSE)
-	assert_str(_line(prompt, "InteractLine").text) \
-			.is_equal("[RMB] Put Lettuce on Chopping Board")
-	# Nothing on the board to cut yet.
-	assert_bool(_line(prompt, "ToolLine").visible).is_false()
+	assert_str(_line(prompt, "ToolLine").text) \
+			.is_equal("[LMB] Put Lettuce on Chopping Board")
+	assert_str(_line(prompt, "InteractLine").text).is_equal("[RMB] Pick up Chopping Board")
 
-	await press(runner, "interact")
+	await press(runner, "use_tool")
+	player.toolbar.select(0)
 	await physics_ticks(runner, 2)
 
 	assert_str(_line(prompt, "InteractLine").text).is_equal("[RMB] Take Lettuce")

@@ -493,3 +493,57 @@ func _chop_onto(board: CounterSlot, plate: CounterSlot, item: Item, cuts: int) -
 		board.use_tool(KNIFE)
 	board.exchange_with(_arms)
 	plate.exchange_with(_arms)
+
+
+# --- Use and Interact, apart (#207) ----------------------------------------------
+
+func test_use_puts_the_held_item_down() -> void:
+	var hand: Toolbar = Toolbar.new()
+	var counter: CounterSlot = CounterSlot.new(null)
+	var tomato: ItemInstance = ItemInstance.new(TOMATO)
+	hand.add(tomato)
+
+	assert_str(counter.use_prompt(hand)).is_equal("Put down Tomato")
+	assert_str(counter.take_prompt(hand)).is_empty()
+	assert_bool(counter.use_with(hand)).is_true()
+
+	assert_object(counter.get_item()).is_same(tomato)
+	assert_bool(hand.is_empty()).is_true()
+
+
+func test_use_puts_food_on_the_board_and_interact_takes_it_off() -> void:
+	var hand: Toolbar = Toolbar.new()
+	var counter: CounterSlot = CounterSlot.new(BOARD)
+	hand.add(ItemInstance.new(LETTUCE))
+
+	assert_int(counter.use_action(hand)).is_equal(CounterSlot.Action.ADD_TO_VESSEL)
+	counter.use_with(hand)
+	assert_int(counter.take_action(hand)).is_equal(CounterSlot.Action.TAKE_FOOD)
+	assert_bool(counter.take_into(hand)).is_true()
+
+	assert_object(hand.top().item).is_same(LETTUCE)
+	assert_array(counter.get_item().contents.get_contents()).is_empty()
+
+
+func test_with_nothing_held_use_does_nothing() -> void:
+	var hand: Toolbar = Toolbar.new()
+	var counter: CounterSlot = CounterSlot.new(TOMATO)
+
+	assert_int(counter.use_action(hand)).is_equal(CounterSlot.Action.NONE)
+	assert_bool(counter.use_with(hand)).is_false()
+	assert_str(counter.take_prompt(hand)).is_equal("Pick up Tomato")
+
+
+func test_interact_picks_up_whatever_you_hold() -> void:
+	var hand: Toolbar = Toolbar.new()
+	var counter: CounterSlot = CounterSlot.new(BOARD)
+	counter.get_item().contents.add_item(ItemInstance.new(TOMATO))
+	hand.add(ItemInstance.new(LETTUCE))
+
+	# Holding lettuce, Use would put it on the board, but Interact takes the
+	# tomato off it into a free slot.
+	assert_int(counter.take_action(hand)).is_equal(CounterSlot.Action.TAKE_FOOD)
+	counter.take_into(hand)
+
+	assert_object(hand.top().item).is_same(TOMATO)
+	assert_int(hand.get_items().size()).is_equal(2)

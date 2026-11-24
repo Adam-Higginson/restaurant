@@ -100,7 +100,7 @@ func _play() -> void:
 	var carrying_on: bool = has_save and (chose_to_continue or not played)
 	if carrying_on:
 		# In the dark, once the title has gone.
-		SaveGame.restore(saved, Game.memories, time, spirit, Game.dialogue)
+		SaveGame.restore(saved, time, spirit, Game.dialogue)
 		Game.set_look(SaveGame.look_of(saved))
 		if Game.dialogue.is_set(Bedside.ARRIVED_FLAG):
 			await _carry_on_ashore(played)

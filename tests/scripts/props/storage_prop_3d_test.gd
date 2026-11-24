@@ -40,8 +40,8 @@ func test_puts_away_food_of_any_kind() -> void:
 	arms.add(onion)
 	arms.add(sliced)
 
-	pantry.act(arms)
-	pantry.act(arms)
+	assert_bool(pantry.put_away(arms)).is_true()
+	assert_bool(pantry.put_away(arms)).is_true()
 
 	assert_bool(arms.is_empty()).is_true()
 	assert_array(pantry.contents.get_items()).contains([onion, sliced])
@@ -49,35 +49,33 @@ func test_puts_away_food_of_any_kind() -> void:
 	assert_bool(_panel(pantry).is_open()).is_false()
 
 
-func test_empty_arms_open_the_panel() -> void:
+func test_open_shows_the_panel() -> void:
 	var pantry: StorageProp3D = _new_pantry()
-	pantry.act(Arms.new())
+	pantry.open(Arms.new())
 	assert_bool(_panel(pantry).is_open()).is_true()
 	assert_str((_panel(pantry).find_child("Title") as Label).text).is_equal("Pantry")
 
 
-func test_holding_a_plate_opens_the_panel_and_keeps_the_plate() -> void:
+func test_a_plate_isnt_put_away() -> void:
 	var pantry: StorageProp3D = _new_pantry()
 	var arms: Arms = Arms.new()
 	arms.add(ItemInstance.new(PLATE))
 
-	pantry.act(arms)
+	assert_bool(pantry.put_away(arms)).is_false()
 
-	assert_bool(_panel(pantry).is_open()).is_true()
 	assert_int(arms.size()).is_equal(1)
 	assert_int(pantry.contents.size()).is_equal(11)
 
 
-func test_a_full_pantry_opens_the_panel() -> void:
+func test_a_full_pantry_takes_nothing_more() -> void:
 	var pantry: StorageProp3D = _new_pantry()
 	while not pantry.contents.is_full():
 		pantry.contents.add(ItemInstance.new(ONION))
 	var arms: Arms = Arms.new()
 	arms.add(ItemInstance.new(TOMATO))
 
-	pantry.act(arms)
+	assert_bool(pantry.put_away(arms)).is_false()
 
-	assert_bool(_panel(pantry).is_open()).is_true()
 	assert_int(arms.size()).is_equal(1)
 
 
@@ -103,15 +101,16 @@ func test_interact_takes_a_tomato_out_through_the_panel() -> void:
 	assert_int(pantry.contents.count(TOMATO, ItemInstance.MIN_QUALITY)).is_equal(2)
 
 
-func test_prompt_says_put_away_or_open() -> void:
+func test_interact_opens_and_use_puts_away() -> void:
 	var pantry: StorageProp3D = _new_pantry()
 	var hand: Toolbar = Toolbar.new()
-	assert_str(pantry.interact_prompt(hand)).is_equal("Open Pantry")
+	assert_str(pantry.interact_prompt()).is_equal("Open Pantry")
+	assert_str(pantry.use_prompt(hand)).is_empty()
 	hand.add(ItemInstance.new(TOMATO))
-	assert_str(pantry.interact_prompt(hand)).is_equal("Put away Tomato")
+	assert_str(pantry.use_prompt(hand)).is_equal("Put away Tomato")
 	hand.take_top()
 	hand.add(ItemInstance.new(PLATE))
-	assert_str(pantry.interact_prompt(hand)).is_equal("Open Pantry")
+	assert_str(pantry.use_prompt(hand)).is_empty()
 
 
 func _instantiate() -> StorageProp3D:

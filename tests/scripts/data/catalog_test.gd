@@ -6,7 +6,7 @@ extends GameTestSuite
 ## Items with no reaction producing them: what the shop and the kitchen provide.
 const RAW: Array[String] = [
 	"lettuce", "tomato", "onion", "bread", "cheese", "chopping_board", "plate", "herring",
-	"frying_pan", "saucepan", "bowl", "rainwater", "mackerel", "crab_meat", "herbs",
+	"frying_pan", "saucepan", "bowl", "rainwater", "mackerel", "crab_meat",
 ]
 
 var _catalog: Catalog
@@ -30,7 +30,6 @@ func test_catalog_has_the_mvp_items() -> void:
 		&"pan_fried_herring", &"saucepan", &"bowl", &"rainwater", &"boiling_water",
 		&"chopped_onion", &"mackerel", &"mackerel_fillet", &"pan_fried_mackerel",
 		&"crab_meat", &"pan_seared_crab", &"chilli", &"chopped_chilli", &"spicy_tomato_soup",
-		&"herbs",
 	])
 
 
@@ -107,7 +106,7 @@ func test_storage_kinds_match_design_doc() -> void:
 		&"pan_fried_herring", &"chopped_onion", &"mackerel", &"mackerel_fillet",
 		&"pan_fried_mackerel", &"crab_meat", &"pan_seared_crab", &"chopped_chilli",
 	]
-	var cupboard: Array[StringName] = [&"onion", &"bread", &"chilli", &"herbs"]
+	var cupboard: Array[StringName] = [&"onion", &"bread", &"chilli"]
 	for item: Item in _catalog.items:
 		var expected: Item.StorageKind = Item.StorageKind.NONE
 		if item.id in fridge:

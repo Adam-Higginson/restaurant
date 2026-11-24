@@ -26,7 +26,7 @@ lines = PackedStringArray("Oil will keep a little light going, but it does not m
 [sub_resource type="Resource" id="Remedy"]
 script = ExtResource("2_page")
 heading = "A Remedy"
-lines = PackedStringArray("When a lantern's flame grows faint, a hot broth of ripe tomatoes, red chilli and wild herbs may restore its warmth.", "A bowl of red soup, well spiced, set down by it while it steams. It takes its warmth from the steam.")
+lines = PackedStringArray("When a lantern's flame grows faint, a hot broth of ripe tomatoes and red chilli may restore its warmth.", "A bowl of red soup, well spiced, set down by it while it steams. It takes its warmth from the steam.")
 
 [sub_resource type="Resource" id="After"]
 script = ExtResource("2_page")

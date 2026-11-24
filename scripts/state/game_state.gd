@@ -43,10 +43,6 @@ var clock: GameClock:
 		push_error("GameState: clock can't be replaced, use start_next_day()")
 ## Today's customers and takings. Like the clock, created once and never
 ## replaced; [method start_next_day] clears it.
-## The memories of home you've got back by cooking and fishing.
-var memories: MemoryBook:
-	get:
-		return _memories
 
 ## What conversations remember (flags) and can ask about (facts).
 var dialogue: DialogueState:
@@ -80,7 +76,6 @@ var _money: int = STARTING_MONEY
 var _day: int = 1
 var _clock: GameClock = GameClock.new()
 var _stats: DayStats = DayStats.new()
-var _memories: MemoryBook = MemoryBook.new(Catalog.load_default().memories)
 var _dialogue: DialogueState = DialogueState.new()
 var _is_open: bool = false
 var _look: PlayerLook.Body = PlayerLook.Body.BOY
@@ -95,7 +90,6 @@ func _init() -> void:
 ## the clock running, and the restaurant closed.
 func new_game() -> void:
 	_stats.reset()
-	_memories.clear()
 	_dialogue.reset()
 	_set_money(STARTING_MONEY)
 	_is_day_over = false

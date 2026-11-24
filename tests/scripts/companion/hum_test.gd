@@ -1,15 +1,7 @@
 extends GameTestSuite
 ## Tests for the lantern's hum: the memory melody's notes and timing, a soft
 ## swell on each note, silence after, the recording it's rendered into, and
-## that he hums when a memory comes back and after supper.
-
-
-func before_test() -> void:
-	Game.memories.clear()
-
-
-func after_test() -> void:
-	Game.memories.clear()
+## that he hums after supper.
 
 
 func test_the_notes_are_in_tune() -> void:
@@ -65,18 +57,3 @@ func test_a_quieter_lantern_turns_the_recording_down() -> void:
 	hum.loudness = 0.5
 
 	assert_float(hum.volume_db).is_equal_approx(linear_to_db(0.5), 0.001)
-
-
-func test_he_hums_when_a_memory_comes_back() -> void:
-	var rig: Array[Node3D] = new_moored_ship_with_player(Vector3(0, 1.05, 6))
-	var runner: GdUnitSceneRunner = scene_runner(rig[0].get_parent())
-	var spirit: LanternSpirit = rig[1].get_node("LanternSpirit") as LanternSpirit
-	await physics_ticks(runner, 2)
-	assert_bool(spirit.is_humming()).is_false()
-
-	Game.memories.notice(Catalog.load_default().find_item(&"garden_salad"))
-	await physics_ticks(runner, 2)
-
-	assert_bool(spirit.is_humming()).is_true()
-	await physics_ticks(runner, int(Hum.melody_seconds() * 60.0) + 10)
-	assert_bool(spirit.is_humming()).is_false()

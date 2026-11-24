@@ -1,8 +1,8 @@
 class_name StorageProp3D
 extends StaticBody3D
-## A container in 3D: the galley pantry, and later the hold. Interact puts the
-## top of the stack away if it fits here, and otherwise opens a panel to take
-## food out. See Storage in docs/GDD.md.
+## A container in 3D: the galley pantry, and later the hold. Interact opens a
+## panel to take food out; Use puts the held food away, if it fits here. See
+## Storage in docs/GDD.md.
 ##
 ## The rules live in [StorageContents]; this node connects it to the player
 ## and to its [ContainerPanel].
@@ -33,26 +33,43 @@ func _ready() -> void:
 		for i: int in start_items[item]:
 			_contents.add(ItemInstance.new(item))
 	_interactable.interacted.connect(_on_interacted)
-	_interactable.describe_interact = func(player: Player3D) -> String:
-		return interact_prompt(player.arms)
+	_interactable.used.connect(_on_used)
+	_interactable.describe_interact = func(_player: Player3D) -> String:
+		return interact_prompt()
+	_interactable.describe_use = func(player: Player3D) -> String:
+		return use_prompt(player.arms)
 
 
-## What Interact does: puts the top of [param arms] away if it fits here, and
-## otherwise opens the panel to take food out into [param arms].
-func act(arms: Arms) -> void:
+## What Interact does: opens the panel to take food out into [param arms].
+func open(arms: Arms) -> void:
+	_panel.open(display_name, _contents, arms)
+
+
+## What Use does: puts the held food away, if it fits here. Returns whether
+## it did.
+func put_away(arms: Arms) -> bool:
 	if not _contents.put_away(arms.top()):
-		_panel.open(display_name, _contents, arms)
-		return
+		return false
 	arms.take_top()
+	return true
 
 
-## What [method act] would do, for the HUD prompt: "Put away Tomato" or
-## "Open Pantry".
-func interact_prompt(arms: Arms) -> String:
-	if _contents.accepts(arms.top()):
-		return "Put away %s" % arms.top().item.display_name
+## The Interact prompt: "Open Pantry".
+func interact_prompt() -> String:
 	return "Open %s" % display_name
 
 
+## The Use prompt with [param arms]' held food: "Put away Tomato", or "" if
+## it doesn't go here.
+func use_prompt(arms: Arms) -> String:
+	if _contents.accepts(arms.top()):
+		return "Put away %s" % arms.top().item.display_name
+	return ""
+
+
 func _on_interacted(player: Player3D) -> void:
-	act(player.arms)
+	open(player.arms)
+
+
+func _on_used(player: Player3D) -> void:
+	put_away(player.arms)

@@ -1,10 +1,10 @@
 class_name ChopMeterBar
 extends Control
-## The chop meter, drawn over the chopping board you're facing (#152): a
-## small brass-rimmed bar with the sweet spot in its middle (bright gold for
-## a perfect cut, a paler band either side for a good one) and a marker
-## sweeping across it. Cut while the marker's in the gold. With food to cut
-## and no knife, it says you need one instead.
+## The chop meter while you chop at a board (#152, #207): a small brass-rimmed
+## bar, held still below the middle of the screen, with the sweet spot in its
+## middle (bright gold for a perfect cut, a paler band either side for a good
+## one) and a marker sweeping across it. Cut while the marker's in the gold.
+## Facing food to cut without the knife in hand, it says so instead.
 ##
 ## Display only: the meter itself is the board's [ChopMeter], ticked by its
 ## [Counter3D]. This finds the board whose meter is up and draws it there.
@@ -19,6 +19,8 @@ const TEXT: Color = Color(0.95, 0.9, 0.8)
 const PIP_EMPTY: Color = Color(0.1, 0.2, 0.23, 0.9)
 ## The bar's size, in the HUD's pixels.
 const BAR: Vector2 = Vector2(64, 6)
+## How far down the screen the bar's middle sits, as a share of its height.
+const HEIGHT_SHARE: float = 0.7
 
 ## The board being drawn, or null.
 var counter: Counter3D:
@@ -43,19 +45,24 @@ func _process(_delta: float) -> void:
 			_counter = board
 			_needs_knife = not board.is_meter_up()
 			break
-	var camera: Camera3D = get_viewport().get_camera_3d()
-	visible = _counter != null and camera != null \
-			and not camera.is_position_behind(_counter.meter_anchor())
+	visible = _counter != null
 	if visible:
-		position = (camera.unproject_position(_counter.meter_anchor()) - size / 2.0).round()
+		position = pinned_position(get_viewport_rect().size, size)
 	queue_redraw()
+
+
+## Where the bar sits on a screen of [param screen] pixels: held still in the
+## middle, a little below centre, above the toolbar. It used to follow the
+## board on screen, and shook as the ship rocked the board (#207).
+static func pinned_position(screen: Vector2, bar_size: Vector2) -> Vector2:
+	return (Vector2(screen.x / 2.0, screen.y * HEIGHT_SHARE) - bar_size / 2.0).round()
 
 
 func _draw() -> void:
 	if _counter == null:
 		return
 	if _needs_knife:
-		_draw_words("You need a knife")
+		_draw_words(_counter.knife_hint())
 		return
 	var meter: ChopMeter = _counter.meter
 	var bar: Rect2 = Rect2(Vector2(2, 6), BAR)

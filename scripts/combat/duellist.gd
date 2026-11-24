@@ -357,8 +357,14 @@ func _fall() -> void:
 # Whether the player can use the knife now: they're free to act and carry a
 # tool.
 func _can_cut() -> bool:
-	return _player.controls_enabled and not _player.is_dodging() \
-			and not _player.toolbar.get_tools().is_empty()
+	return _player.controls_enabled and not _player.is_dodging() and is_knife_out()
+
+
+## Whether a knife is the player's selected slot (#207): it only swings then,
+## never while they hold a tomato, the book or nothing at all.
+func is_knife_out() -> bool:
+	var tool: HandTool = _player.toolbar.selected_tool()
+	return tool != null and tool.element != null and tool.element.id == &"cut"
 
 
 # A cut starting: the step forward with it, and its landing a moment later.

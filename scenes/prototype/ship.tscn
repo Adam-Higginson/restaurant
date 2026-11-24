@@ -35,7 +35,6 @@
 [ext_resource type="Script" path="res://scripts/people/waypoint.gd" id="401_waypoint"]
 [ext_resource type="PackedScene" path="res://scenes/prototype/navigation_room.tscn" id="185_nav"]
 [ext_resource type="Script" path="res://scripts/story/story_trigger.gd" id="187_trigger"]
-[ext_resource type="PackedScene" path="res://scenes/prototype/props/herb_planter.tscn" id="186_herbs"]
 [ext_resource type="PackedScene" path="res://scenes/prototype/galley.tscn" id="196_galley"]
 [ext_resource type="PackedScene" path="res://scenes/prototype/bunk_room.tscn" id="196_bunk"]
 
@@ -527,9 +526,6 @@ done = &"deck_talk"
 
 [node name="Shape" type="CollisionShape3D" parent="DeckTalk"]
 shape = SubResource("Shape_DeckTalk")
-
-[node name="HerbPlanter" parent="." instance=ExtResource("186_herbs")]
-transform = Transform3D(0, 0, -1, 0, 1, 0, 1, 0, 0, 5.5, 5.3, 2.3)
 
 [node name="BunkRoom" parent="." unique_id=76019696 instance=ExtResource("196_bunk")]
 

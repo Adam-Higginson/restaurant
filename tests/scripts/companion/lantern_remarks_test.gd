@@ -1,16 +1,8 @@
 extends GameTestSuite
 ## Tests for what the lantern says when things happen (his lines are in
 ## data/dialogue/moments.dlg): he never repeats himself twice running, says
-## a few lines in turn, and speaks up when a memory comes back, when you land
+## a few lines in turn, and speaks up when you land
 ## a fish and when you stop the ship.
-
-
-func before_test() -> void:
-	Game.memories.clear()
-
-
-func after_test() -> void:
-	Game.memories.clear()
 
 
 func test_he_never_says_the_same_thing_twice_running() -> void:
@@ -66,17 +58,6 @@ func test_the_lines_of_a_remark_come_one_after_another() -> void:
 	assert_array(Array(heard)).contains_exactly_in_any_order(Array(short + long))
 	assert_int(heard.find(long[1])).is_equal(heard.find(long[0]) + 1)
 	assert_str(spirit.saying()).is_empty()
-
-
-func test_he_speaks_up_when_a_memory_comes_back() -> void:
-	var rig: Array[Node3D] = new_moored_ship_with_player(Vector3(0, 1.05, 6))
-	var runner: GdUnitSceneRunner = scene_runner(rig[0].get_parent())
-	var spirit: LanternSpirit = lantern_at_shoulder(rig[1])
-	await physics_ticks(runner, 2)
-
-	Game.memories.notice(Catalog.load_default().find_item(&"garden_salad"))
-
-	assert_bool(spirit.saying() in moment_lines(&"remembered")).is_true()
 
 
 func test_he_cheers_when_you_land_a_fish() -> void:

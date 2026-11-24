@@ -17,7 +17,6 @@ extends CanvasLayer
 @onready var _action_prompt: ActionPrompt = %ActionPrompt
 @onready var _hearts: HeartsBar = %HeartsBar
 @onready var _hurt_overlay: HurtOverlay = %HurtOverlay
-@onready var _memory_card: MemoryCard = %MemoryCard
 @onready var _dialogue_box: DialogueBox = %DialogueBox
 @onready var _dialogue_sounds: DialogueSounds = %DialogueSounds
 @onready var _book_view: BookView = %BookView
@@ -33,7 +32,6 @@ func _ready() -> void:
 	_hearts.setup(player)
 	_hurt_overlay.setup(player)
 	# The lantern lights up when a memory comes back.
-	Game.memories.remembered.connect(_on_remembered)
 	_book_view.opened.connect(func(_book: Book) -> void: _show_play_parts(false))
 	_book_view.closed.connect(func(_book: Book) -> void: _show_play_parts(true))
 	# The world's conversation may be ready after us.
@@ -68,8 +66,3 @@ func _show_play_parts(shown: bool) -> void:
 	_held_item.visible = shown
 	_action_prompt.visible = shown
 
-
-func _on_remembered(_memory: Memory) -> void:
-	var spirit: LanternSpirit = player.get_node_or_null("LanternSpirit") as LanternSpirit
-	if spirit != null:
-		spirit.excite()

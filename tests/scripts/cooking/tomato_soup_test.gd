@@ -8,14 +8,6 @@ extends GameTestSuite
 const AT_THE_BUTT: Vector3 = Vector3(-3.9, 5.35, -1.6)
 
 
-func before_test() -> void:
-	Game.memories.clear()
-
-
-func after_test() -> void:
-	Game.memories.clear()
-
-
 func test_the_water_butt_fills_a_held_saucepan() -> void:
 	var rig: Array[Node3D] = new_moored_ship_with_player(AT_THE_BUTT)
 	var player: Player3D = rig[1] as Player3D
@@ -24,11 +16,61 @@ func test_the_water_butt_fills_a_held_saucepan() -> void:
 	player.toolbar.add(ItemInstance.new(_item(&"saucepan")))
 
 	await walk(runner, "move_left", 2)
-	await press(runner, "interact")
+	await press(runner, "use_tool")
 
 	var food: Array[ItemInstance] = player.toolbar.top().contents.get_contents()
 	assert_int(food.size()).is_equal(1)
 	assert_str(String(food[0].item.id)).is_equal("rainwater")
+	# The hero stoops to dip it, standing still, then can walk again.
+	assert_bool(player.controls_enabled).is_false()
+	await physics_ticks(runner, 60)
+	assert_bool(player.controls_enabled).is_true()
+
+
+func test_a_pot_only_ever_holds_one_lot_of_water() -> void:
+	var butt: WaterButt = _butt()
+	var toolbar: Toolbar = Toolbar.new()
+	toolbar.add(ItemInstance.new(_item(&"saucepan")))
+
+	assert_bool(butt.fill(toolbar)).is_true()
+
+	assert_bool(butt.can_fill(toolbar)).is_false()
+	assert_bool(butt.fill(toolbar)).is_false()
+	assert_int(toolbar.top().contents.get_contents().size()).is_equal(1)
+
+
+func test_boiling_water_counts_as_the_one_lot() -> void:
+	var butt: WaterButt = _butt()
+	var toolbar: Toolbar = Toolbar.new()
+	toolbar.add(ItemInstance.new(_item(&"saucepan")))
+	toolbar.top().contents.add_item(ItemInstance.new(_item(&"boiling_water")))
+
+	assert_bool(butt.can_fill(toolbar)).is_false()
+	assert_str(butt.prompt(toolbar)).is_equal("Pour out the water")
+
+
+func test_a_pot_of_water_pours_back_into_the_butt() -> void:
+	var butt: WaterButt = _butt()
+	var toolbar: Toolbar = Toolbar.new()
+	toolbar.add(ItemInstance.new(_item(&"saucepan")))
+	butt.fill(toolbar)
+
+	assert_bool(butt.pour(toolbar)).is_true()
+
+	assert_array(toolbar.top().contents.get_contents()).is_empty()
+	assert_str(butt.prompt(toolbar)).is_equal("Fill Cooking Pot with rainwater")
+
+
+func test_soup_isnt_poured_away() -> void:
+	var butt: WaterButt = _butt()
+	var toolbar: Toolbar = Toolbar.new()
+	toolbar.add(ItemInstance.new(_item(&"saucepan")))
+	toolbar.top().contents.add_item(ItemInstance.new(_item(&"rainwater")))
+	toolbar.top().contents.add_item(ItemInstance.new(_item(&"diced_tomato")))
+
+	assert_bool(butt.can_pour(toolbar)).is_false()
+	assert_bool(butt.pour(toolbar)).is_false()
+	assert_str(butt.prompt(toolbar)).is_empty()
 
 
 func test_it_offers_nothing_to_empty_hands() -> void:
@@ -107,20 +149,6 @@ func test_soup_ladles_into_a_bowl_from_the_stack() -> void:
 	assert_bool(hob.heated.contents.get_contents().is_empty()).is_true()
 
 
-func test_your_first_soup_brings_back_rain_on_the_roof() -> void:
-	var rig: Array[Node3D] = new_moored_ship_with_player(Vector3(0, 1.05, 6))
-	var runner: GdUnitSceneRunner = scene_runner(rig[0].get_parent())
-	var pan: VesselContents = _soup_pan(rig[0] as Ship)
-	await physics_ticks(runner, 2)
-
-	pan.add_item(ItemInstance.new(_item(&"rainwater")))
-	pan.add_item(ItemInstance.new(_item(&"diced_tomato")))
-	pan.add_item(ItemInstance.new(_item(&"chopped_onion")))
-	await physics_ticks(runner, 12 * 60 + 5)
-
-	assert_bool(Game.memories.has(&"rain_on_the_roof")).is_true()
-
-
 # The pot on the soup hob. The captain gives it to you now (#186), so the hob
 # starts empty: set one down there first.
 func _soup_pan(ship: Ship) -> VesselContents:
@@ -132,6 +160,13 @@ func _soup_pan(ship: Ship) -> VesselContents:
 
 func _item(id: StringName) -> Item:
 	return Catalog.load_default().find_item(id)
+
+
+func _butt() -> WaterButt:
+	var butt: WaterButt = (load("res://scenes/prototype/props/water_butt.tscn") as PackedScene) \
+			.instantiate() as WaterButt
+	auto_free(butt)
+	return butt
 
 
 func _fire() -> Element:

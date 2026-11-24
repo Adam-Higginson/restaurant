@@ -444,7 +444,7 @@ func test_a_saved_voyage_carries_on_after_the_title_instead_of_the_rescue() -> v
 
 func test_a_voyage_saved_at_the_island_carries_on_there() -> void:
 	Game.dialogue.set_flag(Bedside.ARRIVED_FLAG)
-	SaveGame.write(SaveGame.capture(Game.memories, null, 1.0, Game.dialogue))
+	SaveGame.write(SaveGame.capture(null, 1.0, Game.dialogue))
 	Game.dialogue.reset()
 	_build(DialogueTree.START, true)
 	_opening.title_seconds = 0.2

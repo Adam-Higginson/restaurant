@@ -19,19 +19,6 @@ lantern: You're back. I kept the light on.
 lantern: There you are again.
 lantern: I didn't go anywhere. I can't, really.
 
-# A memory of home has just come back.
-~ remembered_1 [on remembered]
-lantern: Was that home? It sounded like home.
-
-~ remembered_2 [on remembered]
-lantern: Oh! Say it again. Slower.
-
-~ remembered_3 [on remembered]
-lantern: I think I remember that too. I don't. But I'd like to.
-
-~ remembered_4 [on remembered]
-lantern: Hold on to that one.
-
 # You've landed a fish.
 ~ caught_1 [on caught]
 lantern: A fish! Is home a fish? ...No. Probably not. [shout]

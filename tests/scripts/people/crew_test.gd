@@ -12,12 +12,10 @@ const ON_DECK: Vector3 = Vector3(0, 6.25, -16.2)
 
 func before_test() -> void:
 	Game.dialogue.reset()
-	Game.memories.clear()
 
 
 func after_test() -> void:
 	Game.dialogue.reset()
-	Game.memories.clear()
 
 
 func test_the_heron_is_by_the_stove_at_night() -> void:
@@ -126,16 +124,6 @@ func test_near_him_he_says_it_and_far_from_him_its_news_for_later() -> void:
 	assert_bool(spirit.tell(&"hove_to", &"news_bell")).is_false()
 	assert_str(spirit.saying()).is_equal(said)
 	assert_bool(Game.dialogue.is_set(&"news_bell")).is_true()
-
-
-func test_a_memory_that_comes_back_far_from_him_is_news() -> void:
-	var rig: Array[Node3D] = new_moored_ship_with_player(ON_DECK)
-	var runner: GdUnitSceneRunner = scene_runner(rig[0].get_parent())
-	await physics_ticks(runner, 5)
-
-	Game.memories.notice(Catalog.load_default().find_item(&"herring"))
-
-	assert_bool(Game.dialogue.is_set(&"news_memory")).is_true()
 
 
 func test_told_to_leave_home_he_follows_at_your_shoulder() -> void:

@@ -134,14 +134,32 @@ func test_use_tool_sends_the_selected_knife() -> void:
 	assert_array(tools).contains_exactly([KNIFE])
 
 
-func test_use_tool_while_holding_an_item_uses_the_tool_that_fits() -> void:
+func test_use_while_holding_an_item_uses_the_item_not_a_tool() -> void:
+	var player: Player3D = new_player_3d_on_floor()
+	var target: Interactable3D = _add_interactable(player, AHEAD)
+	target.describe_tool = func(_by: Player3D, tool: HandTool) -> String: return tool.verb
+	target.describe_use = func(_by: Player3D) -> String: return "Put down Tomato"
+	var runner: GdUnitSceneRunner = scene_runner(player.get_parent())
+	var tools: Array[HandTool] = []
+	var used: Array[int] = [0]
+	target.tool_used.connect(func(_p: Player3D, tool: HandTool) -> void: tools.append(tool))
+	target.used.connect(func(_p: Player3D) -> void: used[0] += 1)
+	player.arms.add(ItemInstance.new(TOMATO))
+	await _settle(player)
+
+	await press(runner, "use_tool")
+
+	assert_array(tools).is_empty()
+	assert_int(used[0]).is_equal(1)
+
+
+func test_use_with_the_knife_in_hand_uses_the_knife() -> void:
 	var player: Player3D = new_player_3d_on_floor()
 	var target: Interactable3D = _add_interactable(player, AHEAD)
 	target.describe_tool = func(_by: Player3D, tool: HandTool) -> String: return tool.verb
 	var runner: GdUnitSceneRunner = scene_runner(player.get_parent())
 	var tools: Array[HandTool] = []
 	target.tool_used.connect(func(_p: Player3D, tool: HandTool) -> void: tools.append(tool))
-	player.arms.add(ItemInstance.new(TOMATO))
 	await _settle(player)
 
 	await press(runner, "use_tool")
@@ -215,16 +233,18 @@ func test_prompts_come_from_the_focused_interactable() -> void:
 	assert_str(_detector(player).tool_prompt()).is_equal("Chop")
 
 
-func test_tool_prompt_shows_while_holding_an_item() -> void:
+func test_holding_an_item_the_use_prompt_is_for_it_not_the_knife() -> void:
 	var player: Player3D = new_player_3d_on_floor()
 	var target: Interactable3D = _add_interactable(player, AHEAD)
 	target.describe_tool = func(_by: Player3D, tool: HandTool) -> String: return tool.verb
+	target.describe_use = func(by: Player3D) -> String:
+		return "Put down %s" % by.toolbar.top().item.display_name
 	scene_runner(player.get_parent())
 	await _settle(player)
 
 	player.arms.add(ItemInstance.new(TOMATO))
 
-	assert_str(_detector(player).tool_prompt()).is_equal("Chop")
+	assert_str(_detector(player).tool_prompt()).is_equal("Put down Tomato")
 
 
 func test_a_disabled_or_undescribed_interactable_has_no_prompt() -> void:
