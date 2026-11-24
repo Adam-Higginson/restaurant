@@ -690,6 +690,20 @@ A growing glossary of the Godot concepts this project uses: what each one is, in
 
 **A tween in physics steps.** `create_tween().set_process_mode(Tween.TWEEN_PROCESS_PHYSICS)` moves things in the physics steps instead of the drawn frames, so a moving deck and the player standing on it agree. *Ours:* the ship sailing into the cove; `set_ease(Tween.EASE_OUT)` slows her to a stop at her anchorage.
 
+## The montage at sea (#197)
+
+**Blending through three looks.** `lerp(a, b, t)` goes from `a` to `b` as `t` goes 0 to 1. Blending the result again towards a third value gives three looks from two numbers: night to dawn by `dawn`, then on to a clear day by `clear`. *Ours:* `TimeOfDay.colour_of` and `number_of`, used for every sky, fog, sun and sea setting.
+
+**Colour correction with a curve (`adjustment_color_correction`).** An `Environment` can push the finished picture through a `GradientTexture1D`: each colour channel's brightness is looked up along the gradient, so it works as a curve per channel. A curve that's grey at each point (the same as its position) changes nothing. *Ours:* the sea's night grade, which cools and greys everything, eases off to that neutral curve as the day clears, or a blue sky could never look blue.
+
+**Fog over the sky (`fog_sky_affect`).** How much the depth fog covers the sky, 0 to 1. At 0.5 a blue sky comes out half fog-grey. *Ours:* turned down to 0.05 on a clear day.
+
+**A class inside a script.** `class Leap:` inside a script makes a small type of its own, used only there: a handy bundle of a few values with names. *Ours:* `LeapingFish` keeps each fish's body, spray and arc in a `Leap`.
+
+**One-shot particles.** A `CPUParticles3D` with `one_shot` set fires all its particles once when told (`restart()`) and then stops. *Ours:* the spray as each fish leaves the water and drops back in.
+
+**Recording the game (Movie Maker).** `godot_console.exe --path . --write-movie out.avi --fixed-fps 30 <scene>` runs the scene and saves every frame and its sound to a video, at a steady 30 frames a second however slow the machine is. *Ours:* how the montage was recorded to send round.
+
 ## Testing
 
 **gdUnit4.** The test framework (`addons/gdUnit4`). Suites extend our `GameTestSuite` and have `test_...` functions. `scene_runner` loads a scene and lets a test press inputs and wait physics ticks. *Ours:* `tests/`.

@@ -135,6 +135,23 @@ func test_once_youve_arrived_your_bunk_is_just_a_bunk_again() -> void:
 	assert_str(bunk.prompt()).is_not_equal("Sleep until we make land")
 
 
+func test_the_montage_clears_the_sky_brings_the_fish_and_runs_about_a_minute() -> void:
+	var lines: PackedStringArray = _script_of(&"voyage").split("\n")
+	var order: Array[String] = []
+	var held: float = 0.0
+	for line: String in lines:
+		var words: PackedStringArray = line.strip_edges().split(" ")
+		if words[0] in ["@grave", "@clear", "@leaping_fish", "@travel"]:
+			order.append(" ".join(words))
+		if words[0] == "@wait" or (words[0] == "@fade" and words.size() > 2):
+			held += words[words.size() - 1].to_float()
+
+	assert_array(order).is_equal(["@grave on", "@grave off", "@clear 1.0 14.0",
+			"@leaping_fish on", "@leaping_fish off", "@travel cove"])
+	# Mostly held shots, with a few lines at the end: about a minute in all.
+	assert_float(held).is_between(45.0, 65.0)
+
+
 func test_the_passage_at_sea_ends_by_going_to_the_cove() -> void:
 	var player: Player3D = new_player_3d_on_floor()
 	var conversation: Conversation = new_conversation(player)

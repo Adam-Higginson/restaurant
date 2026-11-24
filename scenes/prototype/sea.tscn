@@ -24,6 +24,7 @@
 [ext_resource type="Script" path="res://scripts/cutscene/choice_cues.gd" id="91_choice"]
 [ext_resource type="Script" path="res://scripts/story/first_quest.gd" id="93_first_quest"]
 [ext_resource type="Script" path="res://scripts/data/hand_tool.gd" id="152_tool"]
+[ext_resource type="Script" path="res://scripts/sea/leaping_fish.gd" id="197_fish"]
 
 [sub_resource type="FastNoiseLite" id="Noise_Cloud"]
 frequency = 0.008
@@ -123,6 +124,9 @@ curve = SubResource("Curve3D_ycoyo")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -25, 0, 40)
 route = NodePath("../Route")
 loop_route = true
+
+[node name="LeapingFish" type="Node3D" parent="Ship"]
+script = ExtResource("197_fish")
 
 [node name="Player" parent="." unique_id=1279594075 instance=ExtResource("7_p3dpl")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -23.5, 5.35, 47)

@@ -20,6 +20,7 @@
 [ext_resource type="Script" path="res://scripts/dialogue/dialogue_facts.gd" id="18_facts"]
 [ext_resource type="Script" path="res://scripts/dialogue/chatter.gd" id="19_chatter"]
 [ext_resource type="Script" path="res://scripts/cutscene/travel_cues.gd" id="20_travel"]
+[ext_resource type="Script" path="res://scripts/cutscene/time_cues.gd" id="21_time"]
 
 [node name="Story" type="Node"]
 
@@ -80,3 +81,6 @@ script = ExtResource("19_chatter")
 
 [node name="TravelCues" type="Node" parent="."]
 script = ExtResource("20_travel")
+
+[node name="TimeCues" type="Node" parent="."]
+script = ExtResource("21_time")
