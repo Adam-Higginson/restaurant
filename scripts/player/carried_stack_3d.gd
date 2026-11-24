@@ -22,6 +22,11 @@ extends Node3D
 ## Where a pot's or pan's handle is gripped, along its length from the bowl's
 ## middle, in the model's own metres (before [member held_scale]).
 @export var handle_grip: float = 0.42
+## Where a tool held in the hand sits, in the hand bone's own space: the bone
+## runs from the wrist along +Y to the knuckles, and the left hand's palm
+## faces +X. The book stands along the fingers, its face against the palm,
+## its middle just past the knuckles.
+@export var tool_grip: Transform3D = Transform3D(Basis(Vector3.UP, PI / 2.0), Vector3(0.04, 0.02, 0.0))
 ## How high the handle is above the pot's base, in the model's own metres.
 @export var handle_height: float = 0.12
 
@@ -47,6 +52,13 @@ func _process(_delta: float) -> void:
 	var hand: Node3D = held_in()
 	visible = hand != null and get_child_count() > 0
 	if hand == null:
+		return
+	if _held == null:
+		# A tool (the recipe book) moves with the hand itself: flat against
+		# the palm, its spine in the fingers, swinging as he walks.
+		var hand_basis: Basis = hand.global_basis.orthonormalized()
+		global_transform = Transform3D(hand_basis, hand.global_position) \
+				* Transform3D(tool_grip.basis.scaled(Vector3.ONE * held_scale), tool_grip.origin)
 		return
 	# Turned the way the hero faces.
 	if _model != null:
