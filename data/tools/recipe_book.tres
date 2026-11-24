@@ -1,0 +1,12 @@
+[gd_resource type="Resource" script_class="HandTool" format=3]
+
+[ext_resource type="Script" path="res://scripts/data/hand_tool.gd" id="1_tool"]
+
+[resource]
+script = ExtResource("1_tool")
+id = &"recipe_book"
+display_name = "Recipe Book"
+verb = "Read the recipe book"
+color = Color(0.42, 0.24, 0.14, 1)
+model_size = Vector3(0.3, 0.21, 0.04)
+is_recipe_book = true

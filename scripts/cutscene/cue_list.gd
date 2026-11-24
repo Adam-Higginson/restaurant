@@ -45,6 +45,7 @@ const USAGE: Dictionary[StringName, String] = {
 	&"hold_up": "@hold_up (you turn round and hold up what was in the chest), or "
 			+ "@hold_up frying_pan (hold up that item or tool, no chest needed)",
 	&"put_away": "@put_away (you lower what you were holding up)",
+	&"read": "@read recipe_book (opens it, and waits until it's closed)",
 }
 
 
@@ -78,7 +79,7 @@ static func _fits(cue: StringName, args: PackedStringArray) -> bool:
 			return not args.is_empty() and ["interact", "any"].has(args[0])
 		&"place", &"face", &"go", &"walk", &"send":
 			return args.size() == 2
-		&"hide", &"show", &"home", &"stage", &"play", &"start", &"queue", &"sound":
+		&"hide", &"show", &"home", &"stage", &"play", &"start", &"queue", &"sound", &"read":
 			return args.size() == 1
 		&"say":
 			return args.size() >= 3 and _is_seconds(args[1])
