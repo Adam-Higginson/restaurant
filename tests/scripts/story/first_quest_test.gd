@@ -126,6 +126,8 @@ func test_every_so_often_he_goes_for_a_drink_and_back_to_the_wheel() -> void:
 
 	# He said he was thirsty, went to the butt, drank, and came back up.
 	assert_bool(said.size() > 0 and quest.thirsty_lines.has(said[0])).is_true()
+	# After the drink he says how good the rain is (#207).
+	assert_bool(said.size() > 1 and quest.drunk_lines.has(said[1])).is_true()
 	assert_bool(reached_butt).is_true()
 	assert_int(done[0]).is_equal(1)
 	assert_bool(quest.is_on_errand).is_false()

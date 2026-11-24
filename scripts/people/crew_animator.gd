@@ -153,6 +153,17 @@ func _set_mood(to: Mood) -> void:
 	_show()
 
 
+## Plays [param clip] once (a drink), then goes back to what was playing.
+## Returns how long it takes, in seconds, or 0 if the model hasn't got it.
+func play_once(clip: StringName) -> float:
+	if _animator == null or clip == &"" or not _animator.has_animation(clip):
+		return 0.0
+	_animator.play(clip, blend_seconds)
+	var length: float = _animator.get_animation(clip).length
+	get_tree().create_timer(length).timeout.connect(func() -> void: _play(blend_seconds))
+	return length
+
+
 func _show() -> void:
 	_mood = Mood.WALK if _walking else _talk_mood
 	_play(blend_seconds)
