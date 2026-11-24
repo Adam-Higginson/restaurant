@@ -12,6 +12,7 @@ This is the script the opening is being rebuilt to (#181). The GDD's *The openin
 - **You wake in your own bunk** in the bunk room, not a cabin, with the captain standing over you at its foot (not calling from the doorway), and the lantern lies on his round table by the stove.
 - **The navigation room** is a new room in the empty bow half below deck, through a door at the forward end of the hatch ramp's corridor. The captain's cabin stays shut for now.
 - **The captain gives you the cooking pot** at the helm, where he stays while the lantern is low, going for a drink at the water butt now and then. The frying pan, your shield in a fight, is the first thing you find ashore.
+- **The deck talk plays by itself** the first time you come up on deck after the soup, and **the frying pan is in a washed-up chest** on the cove's beach (#187).
 - **The water comes from the water butt** on deck, not a stream off the rigging, and the soup is made in two steps (a Tomato Soup, then the chilli and herbs stirred in), as the recipe book has it (#186).
 - **The rescue ends in white.** The haul up through the dead lanterns, the storm surface and the heron at the rail are gone; how you came aboard isn't shown.
 - **The arrival is the cove** (#163): the ship anchors off the beach and you row ashore. The harbour, the settlement and the old structures belong to Chapter 1.
@@ -574,11 +575,19 @@ The lantern looks towards the horizon.
 
 **LANTERN:** "Everything's wet!"
 
-The heron sends the player to bed: we'll make land by morning. (Lines to be written; the lantern says the same if you go and talk to him.)
+The heron sends the player to bed. *(Lines drafted for #187; change them freely.)*
+
+**HERON:** "Get some sleep. We'll make land by morning."
+
+**LANTERN:** "Sleep well! I'll keep a lookout."
+
+Talking to either of them afterwards says it again ("Bed. We'll make land by morning." / "Off to your bunk! We'll be there by morning.").
 
 The player can now explore the ship freely. Sleeping in their bunk takes them to the next morning.
 
 ### Scene 7: Passage of time (#187)
+
+*As built (#187), a short version: the dawn over the stern with the Grave's last lights falling behind, the lantern flitting about the deck, the captain at the chart, and the lantern at the bow. The clear turquoise sea and the flying fish are to come.*
 
 **Location:** the Salt and Ember, at sea.
 
@@ -603,6 +612,8 @@ At last the lantern notices something in the distance.
 **LANTERN:** "Look!"
 
 ### Scene 8: The first shore (#187)
+
+*As built (#187): in the cove, the ship sails in from the fog and anchors during the scene; then "The end of the Prologue", and you're on deck. Ashore, the frying pan is in a washed-up chest a few steps from where the boat lands you.*
 
 **Location:** approaching the island.
 

@@ -642,6 +642,18 @@ A growing glossary of the Godot concepts this project uses: what each one is, in
 
 **How names become cue words.** A cue finds a mark by its node name in snake case, and Godot's `to_snake_case()` splits numbers off: `LanternCircle1` is `lantern_circle_1`, not `lantern_circle1`. *Ours:* `remedy.dlg`; `supper_spot_test.gd` checks every mark and shot it names is really in the ship.
 
+## The voyage to the cove (#187)
+
+**One scene shared by two.** The conversation and its cue handlers are a scene of their own (`scenes/prototype/story.tscn`), instanced in both the sea and the cove. Each place fills in what it differs by: the instance's children can have their settings changed from the outer scene (its `player`, its `fade`), and extra nodes can hang under them (the sea's intro sounds and the cove's anchor clunk under `Story/SoundCues`).
+
+**Changing scene.** `get_tree().change_scene_to_file(path)` throws the whole current scene away and loads another. Anything that should survive the trip has to live outside it: ours is in the `Game` autoload, which is why the story's flags (`arriving`, `at_cove`) carry the voyage across. *Ours:* `TravelCues` (`@travel cove`) and `Opening` (carrying a voyage on at the island). Tests can't let it happen (it would replace the test's own scene), so both have a setting to only say they would.
+
+**`Area3D` as a trigger.** An `Area3D` with a collision shape notices bodies coming in (`body_entered`) without stopping them. *Ours:* `StoryTrigger` at the top of the hatch ramp plays the deck talk when you walk into it, once.
+
+**A body that follows physics (`sync_to_physics`).** The ship is an `AnimatableBody3D` set to move in step with the physics engine, which is what lets her carry you. The catch: set her position directly and the node only shows it after the next physics step, so reading it straight back gives the old one. *Ours:* `CoveArrival` waits two physics steps before standing you on her deck, and tweens her with `tween_method` from and to positions it gives outright rather than reading her position.
+
+**A tween in physics steps.** `create_tween().set_process_mode(Tween.TWEEN_PROCESS_PHYSICS)` moves things in the physics steps instead of the drawn frames, so a moving deck and the player standing on it agree. *Ours:* the ship sailing into the cove; `set_ease(Tween.EASE_OUT)` slows her to a stop at her anchorage.
+
 ## Testing
 
 **gdUnit4.** The test framework (`addons/gdUnit4`). Suites extend our `GameTestSuite` and have `test_...` functions. `scene_runner` loads a scene and lets a test press inputs and wait physics ticks. *Ours:* `tests/`.
