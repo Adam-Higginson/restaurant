@@ -5,7 +5,6 @@ extends GameTestSuite
 
 const FIRE_SHADERS: Array[String] = [
 	"res://shaders/pixel_fire.gdshader",
-	"res://shaders/lantern_glass.gdshader",
 	"res://shaders/flame_hand.gdshader",
 ]
 

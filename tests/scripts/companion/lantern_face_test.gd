@@ -206,6 +206,17 @@ func test_each_lantern_has_its_own_glass_so_one_doesnt_change_another() -> void:
 	assert_float(_glass_number(other, "fog")).is_equal(0.0)
 
 
+func test_his_glass_shader_has_a_dial_for_everything_he_sends() -> void:
+	# A shader quietly ignores a value it has no uniform for, so check the
+	# glass's shader declares each one (read from its code: headless test
+	# runs don't compile shaders).
+	var code: String = _glass(_new_face()).shader.code
+	for uniform: String in ["float seed", "float strength", "vec3 lean", "float swell",
+			"float fog", "float streaks", "float crack"]:
+		assert_str(code).override_failure_message("no uniform %s" % uniform) \
+				.contains("uniform %s" % uniform)
+
+
 func test_a_cutscene_can_take_his_look_over_and_give_it_back() -> void:
 	var face: LanternFace = _new_face()
 	assert_bool(face.directed).is_false()
