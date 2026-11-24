@@ -620,6 +620,16 @@ A growing glossary of the Godot concepts this project uses: what each one is, in
 
 **A capture camera on a moving ship.** With physics interpolation on, things moved in the physics step (the ship, and everything aboard) are drawn a little behind where they are, smoothed between ticks. A throwaway camera placed by hand isn't, so stills from it show the ship shifted. Taking stills through the game's own camera rig, which is smoothed the same way, shows things where they really are.
 
+## The navigation room (#185)
+
+**A room as a scene of its own.** The room's walls, floor, ceiling and things are one scene (`scenes/prototype/navigation_room.tscn`, a `StaticBody3D` whose `CollisionShape3D` children are its walls), placed in the ship like any prop. It moves with the ship because it's a child of it, and it can be opened and arranged on its own. Other scenes go inside it too: the deck's chart table, the galley's bookshelf, the old book.
+
+**Cutting a doorway in a box wall.** A wall drawn and blocked by one box can't have a hole in it, so it becomes three boxes round the gap: one either side and one over the top (the lintel). The same three for the collision. *Ours:* `BulkheadPort`, `BulkheadStarboard` and `BulkheadLintel` (and their `...Shape`s) in `ship.tscn`.
+
+**Asking the physics world along a line.** `get_world_3d().direct_space_state.intersect_ray(...)` returns the first solid thing between two points, or nothing: a quick way for a test to ask "is this doorway open? is that wall closed?" without walking anyone through. *Ours:* `tests/scenes/navigation_room_test.gd`.
+
+**Something you only look at.** `Inspectable` (`scripts/props/`) is a prop with a `Reach`: Interact says "Look at the chart" and plays a section of `data/dialogue/look.dlg`. Writing what a thing looks like is writing a few lines there.
+
 ## Testing
 
 **gdUnit4.** The test framework (`addons/gdUnit4`). Suites extend our `GameTestSuite` and have `test_...` functions. `scene_runner` loads a scene and lets a test press inputs and wait physics ticks. *Ours:* `tests/`.
