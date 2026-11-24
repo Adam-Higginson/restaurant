@@ -5,6 +5,7 @@
 [ext_resource type="Resource" path="res://data/art/looks/character_head.tres" id="3_head"]
 [ext_resource type="Resource" path="res://data/art/looks/character_hair.tres" id="4_hair"]
 [ext_resource type="Resource" path="res://data/art/outfits/boy_sea.tres" id="5_outfit"]
+[ext_resource type="Resource" path="res://data/characters/boy_eyes.tres" id="6_eyes"]
 
 [resource]
 script = ExtResource("1")
@@ -40,3 +41,4 @@ whole_clip_names = Dictionary[StringName, String]({
 })
 whole_arm_scale = 0.9
 whole_hand_scale = 0.85
+whole_closed_eyes = ExtResource("6_eyes")

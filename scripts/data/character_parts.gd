@@ -60,6 +60,9 @@ const ASLEEP: String = "asleep"
 ## long and its hands too big.
 @export_range(0.5, 1.5) var whole_arm_scale: float = 1.0
 @export_range(0.5, 1.5) var whole_hand_scale: float = 1.0
+## Where its eyes are, so shut they're drawn closed. None paints over
+## whatever is eye-coloured, which only reads as shut on some faces.
+@export var whole_closed_eyes: ClosedEyes = null
 
 @export_group("Kiln")
 ## How the outfit is fired.

@@ -612,6 +612,8 @@ A growing glossary of the Godot concepts this project uses: what each one is, in
 
 **Moving loose parts in code.** A model with no skeleton can still move if it's cut into parts whose origins are their joints: turning a part's `transform` swings it from that joint. *Ours:* the crab's legs and claws (`Crab._move_parts`), cut by `tools/meshy/split_crab.py`.
 
+**Drawing in a bone's own space.** Every bone has its own coordinate system that moves with it. A shader told where a bone is each frame (as instance uniforms) can turn each point of the mesh into that bone's space, and there a spot on the face stays put however the head turns, so shapes can be drawn on it. *Ours:* the boy's closed eyes (`ClosedEyes`, `data/characters/boy_eyes.tres`), drawn over his painted eyes in his head bone's space; `CharacterModel._place_hands` tells the shader where his head is.
+
 ## The talk at the rail and the Grave of the Lanterns (#182)
 
 **Lights deep under a surface you can't see through.** The open sea is drawn solid, so nothing placed under it would show. To show faint lights far below anyway, its shader follows each pixel's line of sight (from `CAMERA_POSITION_WORLD` to the surface point) on down through the water to a chosen depth, and asks whether a light hangs there. Because the line carries on at its own angle, the lights stay put under the water and slide past each other as the camera moves, the way deep things do. *Ours:* `grave_lights()` in `shaders/water.gdshader`, three depths of seeded lights, faded in by the Sea's `grave` (the `@grave on` cue).

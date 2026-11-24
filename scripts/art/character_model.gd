@@ -230,6 +230,10 @@ var _hand_bones: Dictionary[Node3D, int] = {}
 ## A whole character's meshes and its hips bone, for the rounded shading's
 ## line (which follows the body as it lies down or bends).
 var _whole_meshes: Array[MeshInstance3D] = []
+## A whole character's body meshes its closed eyes are drawn on, and its
+## head bone: they're drawn in the head bone's space.
+var _eye_bodies: Array[MeshInstance3D] = []
+var _whole_head: int = -1
 var _whole_hips: int = -1
 ## What lifts the left arm when it reaches.
 var _arm: ArmReach = null
@@ -599,6 +603,24 @@ static func whole_bone(pack_name: String) -> String:
 	return pack_name
 
 
+## Gives the body meshes among [param meshes] (not the clothes, whose
+## names start "Outfit_") [param eyes] to draw shut. Returns the meshes
+## they're on, which need telling where the head is; none without eyes.
+static func draw_closed_eyes(meshes: Array[MeshInstance3D], eyes: ClosedEyes) -> Array[MeshInstance3D]:
+	var drawn: Array[MeshInstance3D] = []
+	if eyes == null:
+		return drawn
+	for mesh_node: MeshInstance3D in meshes:
+		if String(mesh_node.name).begins_with("Outfit_") or mesh_node.mesh == null:
+			continue
+		for surface: int in mesh_node.mesh.get_surface_count():
+			var material: ShaderMaterial = mesh_node.get_active_material(surface) as ShaderMaterial
+			if material != null:
+				eyes.apply(material)
+		drawn.append(mesh_node)
+	return drawn
+
+
 ## What a whole character built from [param parts] wears: its outfit, or
 ## nothing over what its model was made in when [param bare].
 static func outfit_for(parts: CharacterParts, bare: bool) -> CharacterOutfit:
@@ -846,6 +868,9 @@ func _hook_whole() -> void:
 		mesh_node.set_instance_shader_parameter(&"round_form", 0.75)
 		mesh_node.set_instance_shader_parameter(&"light_cap", 0.85)
 		_whole_meshes.append(mesh_node)
+	_whole_head = skeleton.find_bone(_bone("Head"))
+	_eye_bodies = draw_closed_eyes(_whole_meshes,
+			_whole_parts.whole_closed_eyes if _whole_head >= 0 else null)
 	# Pick up whatever was playing on the new animator.
 	var was: Pose = pose
 	pose = Pose.IDLE
@@ -878,6 +903,16 @@ func _place_hands() -> void:
 		var at: Transform3D = skeleton.global_transform * skeleton.get_bone_global_pose(bone)
 		hand.global_transform = Transform3D(
 				at.basis.orthonormalized() * _hand_fixes[hand], at.origin)
+	# Where the head is, for drawn closed eyes.
+	if _whole_head >= 0 and not _eye_bodies.is_empty():
+		var head: Transform3D = skeleton.get_bone_global_pose(_whole_head)
+		for body: MeshInstance3D in _eye_bodies:
+			if not is_instance_valid(body):
+				continue
+			body.set_instance_shader_parameter(&"head_origin", head.origin)
+			body.set_instance_shader_parameter(&"head_x", head.basis.x / head.basis.x.length_squared())
+			body.set_instance_shader_parameter(&"head_y", head.basis.y / head.basis.y.length_squared())
+			body.set_instance_shader_parameter(&"head_z", head.basis.z / head.basis.z.length_squared())
 	# The rounded shading's line runs through the hips, the way the body does.
 	if _whole_hips >= 0:
 		var hips: Transform3D = skeleton.get_bone_global_pose(_whole_hips)
@@ -1252,6 +1287,8 @@ func _undress() -> void:
 	_hand_fixes.clear()
 	_hand_bones.clear()
 	_whole_meshes.clear()
+	_eye_bodies.clear()
+	_whole_head = -1
 	_whole_hips = -1
 	_whole = false
 	_whole_parts = null
