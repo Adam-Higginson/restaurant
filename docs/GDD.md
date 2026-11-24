@@ -13,15 +13,17 @@ A cosy 3D adventure in the spirit of Ocarina of Time. You're pulled from the sea
 5. **Hands-on.** You walk your character between stations, across the deck and over the islands. The ship is a place, not a menu.
 
 ## Story
-- **The rescue:** a young adult sinks in dark water. A small, warm light drifts down and a hand of flame takes theirs. It's a **lantern spirit** (he/him), and he pulls them aboard a ship.
+- **The rescue:** a young adult sinks through the Grave of the Lanterns, a sea of dead lights. A small, warm light dives after them and a hand of flame takes theirs. It's a **lantern spirit** (he/him), and on the touch his light flows into them; he can't pull it back, and he gives them nearly all of it. They wake aboard a ship, the Salt and Ember, carrying his light (the Prologue: `docs/prologue.md`).
 - **The promise:** the lantern promises to get them home. He's sure they came from the nearest island. He's wrong, and he keeps being cheerfully wrong, island after island ("perhaps your home *moved*?"). Over time his guesses get more tender: he quietly hopes he's wrong, because if they find home, they'll leave the ship. **He talks (first sketch):** a few words float beside him at the moments that matter: a memory coming back ("Was that home? It sounded like home."), a fish landed ("A fish! Is home a fish? ...No. Probably not."), the ship stopping and waking at dawn. His lines are in `data/dialogue/moments.dlg`. **He has a home (first sketch, #93):** he lives at the little round table by the bunk room's stove, and you go to him to talk (Interact at the table). He no longer follows you about the ship. What he isn't there to see (a fish landed, the bell rung, a memory coming back) he asks about when you next visit: "You smell of fish. Was it a good fish?" Near enough to see (about 8 m), he still says his line on the spot. His following (at your shoulder, hovering over what you stop at) is kept in the code for #65 to decide. **His warmth (first sketch):** he fades slowly over time (dimmer, his light reaching less far, never out), and says so when he's low ("I'm a bit... dim. Is there soup?"). Share a dish with him at the little round table by the bunk room's stove and he drifts down to it, it's gone, and he glows warm again, more for a better dish: the GDD's "a warm meal by the stove rekindles him", and a reason to cook well.
 - **Memory:** the player remembers home only as **tastes and sounds**: a bread with something bitter and green in it, and three notes of a song. They search by cooking that taste and humming that tune to the people they meet, who recognise flavours and melodies and point the way ("That's sea-fennel. That only grows in the north."). The melody gains notes and the dish gets closer as the voyage goes on.
   - **Tastes of home (first sketch):** the first time you make or catch certain things, a memory comes back: a few quiet lines that fade in at the top of the screen while the lantern lights up ("A fogged window": butter spitting in a black pan, a boat drawn in a steamed-up window, somebody calling down the stairs). Each comes back once and is kept in your memory book. So far: your first herring, filleting it, frying it, slicing a tomato and a Garden Salad. They're data (`data/memories/`), so writing more is just writing.
-- **The crew:** each crew member comes from an island that turned out not to be home. The first is the gruff **heron captain**. The second (in the Prologue) is a **mossy rock cook**.
+- **The crew:** each crew member comes from an island that turned out not to be home. The first is the gruff **heron captain**. The second (in Chapter 1) is a **mossy rock cook**.
 - **The ending question:** when you finally find home, do you stay?
 - The wider story is still to be written.
 
 ## How it begins (first sketch)
+*This section describes the opening as it's built today. It's being rebuilt to the Prologue script (`docs/prologue.md`; see "The opening as intended"): the rail talk after the title (#182), the rescue ending in white as his light flows into you (#183, replacing beats 5 to 11 below), and waking to a lantern who talks (#184). Each task updates this section as it lands.*
+
 The game opens on **her name**. The title screen is the Salt and Ember's nameboard at her stern, under the gallery windows, in the rain: her name chiselled deep into a plank. A lantern swings on a hook above it, half asleep. The cuts are lit from wherever he is: the wall of each letter facing him glows, the far wall is dark and throws its shadow across the floor of the cut, and it all swings round as he passes. The letters he's left fall back into shadow, with only a faint ember glow down in the grooves; lightning shows all of it at once. "Press any button". It's there on every launch (#114). The name and the prompt are set in Cinzel, drawn from Roman carved capitals. The name is in heavy capitals cut into the wood itself, with the plank's grain running across it. While the title is up the gallery windows are off, so his light is what you see.
 
 That lantern is the lantern spirit, keeping watch. On a saved voyage he turns from the board, pleased to see you, and the button takes you on to "Day 3. Morning" and your bunk. On a new one the swinging stops, he leans out on his hook and looks over the water, finds something, and shouts it to the ship: "Someone in the water!" Down there, under the storm, your face, close and still for a few seconds: eyes shut, head slumped, the storm's surface far above and dark shapes hanging in the water behind you. Back at the stern nobody answers. He looks back once at the lit windows, and drops from the hook and over the side. From out on the water we watch him go: the storm sea, her stern with its windows lit, and one small point of light arcing out from her through the rain, its reflection running across the waves, until it hits the water: a tall jet of spray, a crown thrown outwards, mist, a ring of foam spreading across the swell, and his glow under the surface for a moment after he's gone. Her name is dark behind him, and the intro begins. It's one cutscene in twelve beats (#100, #102, #119, #120).
@@ -92,6 +94,7 @@ The ship's bell marks the day, as on real ships: eight bells calls everyone down
     - **By the galley wall:** stencilled boxes (SAIL, ROPE, TEA), crates and a rope coil, oilskins on pegs and a shelf. A rag-rug runner runs along the front, and a sheepskin lies by your bunk.
     - Light gathers in pools: the stove's fire (which casts shadows) and one softened lantern over the door side (the other shadow), a softer lantern over your side, the bunks' lamps and candles, candles on the table, the stern shelf and the chest of drawers, and cold blue moonlight from the windows. The room's own ambient light is dim but not black, so the corners stay dark brown.
   - **The pantry:** a tall cupboard at the end of the galley's row (see Storage).
+  - **The navigation room (to come, #185):** the bow half below deck, forward of the galley, is empty and closed off today. A small room there, through a door in the galley's forward wall, full of maps and books: old charts on the walls with strange markings, one with a hand-drawn route through the Grave of the Lanterns to an island whose name is washed away, and the shelf where the old book will live. The captain's cabin behind the quarterdeck door stays a facade for later.
   - **Your bunk:** the aft starboard lower bunk in the bunk room, under a gold patchwork quilt, its lantern lit. By the pillow: a shell from a beach you can't name, a folded note in your own hand, and a cushion where the lantern likes to sit.
 - The ship **really moves** between islands, but it never tilts or rocks: the deck stays level and still, so nothing slides off the counters and nobody feels seasick. The sea's motion shows in the water moving around the hull and in hanging things that swing, like the lanterns.
 - **Mooring:** at an island, a **gangplank** connects the ship to the shore. **Ring the ship's bell** while aboard to set sail.
@@ -105,6 +108,7 @@ Each island is a verse with its own sound, palette, ingredients and people. You 
 
 ### The first island: the cove (#163)
 A golden clearing in the fog, and the picture of what an island should feel like. Open `scenes/prototype/islands/cove.tscn` and press F6.
+- **How the story gets you here (#187).** The cove is where the Prologue ends: after the lantern's soup and a night's sleep, a montage carries the ship out of the Grave of the Lanterns into a turquoise morning, and she comes into the cove and anchors ("Adventure and supplies!"). Ashore, the first thing you find is the frying pan. The harbour, the settlement and the old structures in the Prologue script are Chapter 1's.
 - **Arriving (first sketch).** You begin on the ship's upper deck, at anchor about 70 m off the beach, looking across the water at the island and the hills behind it. The **jolly boat** sits on deck by the rail: Interact with it ("Row ashore") and the screen fades; you step out on the sand beside the same boat, pulled up at the waterline. Interact with that one ("Row back to the ship") to return. The row itself isn't shown yet, and this takes the place of the gangplank for an island with no harbour (see #67 for sailing between islands). An island is its own scene: the ship here is the real ship, standing still.
 - **The first crabs.** Three level-1 crabs wait along the beach, well clear of where you land. You come ashore with your knife and a frying pan, as in the duel arena, and losing a fight brings you back to the boat on the sand. Rocks, palms and driftwood aren't solid yet (#110).
 - **The lie of the land.** A cove: the waterline bites inland in the middle and comes out to a rocky point at each end. From the water: a shallow shelf of clear turquoise, a beach of pale sand about 10 m wide, a bank, then jungle, and behind it the land climbs into a hillside. Beyond that, ridges of far-off hills stand one behind another, covered in treetops and each paler than the last, so the island seems to go on. Haze builds with real distance: from the ship the whole island is a little veiled and the hills more so; the sunlit mist among the trees is only there when you're close. Out past the shelf the seabed drops away quickly into deep blue.
@@ -233,7 +237,8 @@ The text is set in Varela Round, a soft rounded face like OoT's.
 ## Books
 Reading a book is reading a book (#145). Interact with one and play pauses: the world dims and the book lies open across the screen, two pages of painted paper in a worn leather cover, bowing into a shadowed gutter, each page framed by a double ink rule. The words are in ink, set in IM Fell English (an old printed face, cut in the 1670s), with headings picked out in red-brown as old books did. Left and right (or A and D, or the stick) turn the pages two at a time, with a rustle; Interact or Cancel closes it with a soft thump. An odd last page has a blank one beside it. A page too full for its paper is set a size smaller.
 - **The recipe book** on the cook's stool is the first: a page per dish, written from the recipes themselves (`data/recipes/`).
-- **Next:** the old book on the galley shelf with a page on fire spirits, the clue to the first quest (see Quests); small drawings on pages (a page can already carry one); notes in the margins in a hand.
+- **The old book** with a page on fire spirits, the clue to the first quest (see Quests), is on the galley shelf; it moves to the navigation room as a book on the creatures and spirits of the sea (#185).
+- **Next:** small drawings on pages (a page can already carry one); notes in the margins in a hand.
 - The memory card at the top of the screen stays for memories coming back: those come to you, a book you open.
 
 ## Quests (first sketch)
@@ -244,6 +249,8 @@ Nothing floats over anyone's head: no exclamation marks, no quest log, no marker
 - **Kept for later:** crew lamps lit when someone has something to say; jobs chalked on a galley slate; the lantern's own to-do list, cheerfully wrong ("1. Find home (nearest island, easy). 2. Soup."); the folded note by your pillow in your own hand.
 
 ### The first quest: warming the lantern
+*This is the quest as built. It's being rebuilt as the Prologue's "A little warmth" (`docs/prologue.md`, #184 to #186): he talks while he's low and hints once you've read the old book; the old book moves to the navigation room and asks for tomatoes, red chilli and wild herbs; the captain gives you a cooking pot at the helm (not the frying pan, which you find ashore); herbs grow in a pot by the rail; you fill the pot under a stream of rain from the rigging; and once fed he floats up, spinning, and thanks you ("I remember you reaching for me.") instead of speaking for the first time.*
+
 The rescue cost him. He pulled you out of the sea and you held him up out of it, and he comes aboard spent: your first job is to bring him back. It's also how you learn to cook.
 1. **The captain wakes you.** Not the lantern: he lies on the round table by the stove under a glass, small and blue, a hairline crack across it, and says nothing. The captain is gruff and pretends not to be worried ("Up. You've slept enough for two." A glance at the table: "He's not said a word since."), but he doesn't know how to help his friend, and he'd rather swim than say so. He asks outright, in his way: you're the one who held him, so do something. (Lines are a first draft.)
 2. **The lean.** Even now the lantern points: the only thing his flame does is lean, barely, toward the galley.
@@ -416,51 +423,47 @@ The game opens at night in steady rain, and Studio Ghibli's rain is the referenc
 - Placeholder art is simple coloured shapes (greybox) until real models are made.
 
 ## The opening as intended (partly built)
-This is where the opening is headed. What's built so far is described under "How it begins". From this section, her nameboard as the title, his watch and his dive (beats 1 and 2), and his face are built (#114). The descent, the door, the reach and the flare of the mutual rescue are built too (#119), and so are the dead lanterns in the deep and the thing in the lightning (#120). The captain waking you, the lantern low and silent, and the captain's errand and hints are built too (#158), and so is feeding him back to himself and his first words (#155). Still to come: holding him up at the surface (#121), and the title screen keeping your voyage.
+This is where the opening is headed: the Prologue script, *The Grave of the Lanterns* (`docs/prologue.md`, decided 2026-11-24), which has the full scene-by-scene words. What's built so far is described under "How it begins", and some of it is being rebuilt to this (#182 to #187). Kept from what's built: her nameboard as the title, his dive, the dead lanterns in the deep and the thing passing below, his face, the captain waking you, the old book, the chilli, the cooking and the remedy cutscene.
 
 **The ship is the Salt and Ember.** That's her name in the story as well as the game's, so the crew can say it. Salt is the sea, and you, soaked through. Ember is the lantern.
 
 ### The beats
-1. **Her name.** Rain. A lantern swinging on a hook at the stern, its glow sliding along wet, weathered timber: carved letters, the gilt worn off their edges, water running in the grooves. You read the name a few letters at a time as the light passes, and lightning shows the whole board once: SALT AND EMBER. It waits for a button.
-2. **He hears something.** The lantern on the hook is the lantern spirit, keeping watch. On your press the swinging stops. He drops from the hook and over the side, and her name goes dark.
-3. **The dark.** You, sinking, with nothing warm anywhere. The player knows a light is on its way and you don't.
-4. **He's going out.** Water is bad for flames. He comes down small and fierce, shoving through the water, smaller and cooler with every push, and never once looks at himself: only at you. What reaches you is a guttering spark that can barely hold a shape.
-5. **The reach.** He opens his own door to reach out, which is what lets the sea in. The scene waits until you take his hand. He goes out, altogether, for one held second of black and silence. Then your hand catches him alight again, and the flare is what lifts you both.
-6. **You hold him up.** At the surface the roles flip. He's a small ember and the waves want him, so you keep him out of the water. The captain finds one point of warm light on a black sea. How you're brought aboard isn't shown.
-7. **Waking.** The bunk room. The captain wakes you. He's a dim glow under a glass on the round table, cracked, and he doesn't speak.
-8. **The rule.** The captain: "Nobody drowns on my ship. Nobody goes hungry either." / "You've managed the first." Gruff, not worried, he'd tell you; he looks at the glass anyway.
-9. **The first quest.** Warm him: an old book in the galley points to a spicy tomato soup, and making it teaches you to cook (see Quests).
-10. **His first words.** Only once he's fed: "There you are." / "You were in the water. I pulled. You held on. Good holding." / "I'll get you home. I know exactly where it is. Roughly."
+1. **Her name (built).** Rain. A lantern swinging on a hook at the stern, its glow sliding across the carved letters of her name. It waits for a button.
+2. **The rail (#182).** On your press the swinging stops and the camera draws back. Faint lights shimmer under the black water; the lantern leans out and calls to the captain at the wheel ("Something, or another one of your little lights?" / "I know the difference!"). The camera goes out over the water: thousands of lanterns under the surface, broken, tangled in great chains, a few still glowing like dying stars. This is the **Grave of the Lanterns**. A metallic ringing from below, a shape under the ship, and then, among the dead lights, a hand. "Somebody overboard!" / "Don't you dare—" and he's gone.
+3. **The rescue (#183).** You, sinking among the dead lanterns. He comes down, circles you, tries to lift you and can't. "Here. Take my hand." The scene waits until you take it.
+4. **His light goes into you.** A strange note through the water. His flame flares, then golden light runs out of him into your hand and you begin to glow. He tries to pull away and can't ("No, no, no. Stop..."), and his flame shrinks. The lanterns round you flicker; something vast passes beneath the chains. "I don't know who you are..." / "But I can't let you go." He lets go of the last of it: a burst of gold, white, silence. How you came aboard isn't shown.
+5. **Waking (#184).** Your bunk. The captain in the doorway: "Ah. You're awake." The lantern on his round table is barely lit but talking, and when he tries to float he sinks ("Oh. That's not ideal."). "You've used nearly all your light." / "You could have left them." / "I know." You remember nothing. By your pillow, a recipe book: "Are you a cook?" You nod.
+6. **The ship (#185).** Free to explore: the galley (tomatoes in the crate, the old cook's knife in his chest), the deck in the rain, and the new navigation room through the galley's forward door, with the chart of the route through the Grave of the Lanterns to an island whose name is washed away, and the old book: lanterns are creatures of warmth, fond of strong spices; "a hot broth of ripe tomatoes, red chilli and wild herbs may restore its warmth."
+7. **The captain and the pot (#186).** At the helm he tells you about the ship and the old trail they're following, and hands you an old cooking pot: "Try not to burn the ship down."
+8. **A little warmth (#186).** The first quest: tomatoes, chilli from the pantry, herbs from a pot by the rail, the pot filled under a stream of rain from the rigging, the soup boiled on the stove (see Quests).
+9. **The first meal (#186).** "Is that... for me?" The soup glows, his light floods back and he floats up, spinning: "I feel wonderful!" The captain at the door: "Well, I'll be." Then, quietly: "I remember you reaching for me. I'm glad you did."
+10. **On deck (#187).** The rain eases. The captain and the lantern at the helm: they're still heading for the island at the last mark on the old chart. "Probably wet." / "Everything's wet!" The captain sends you to sleep: land by morning.
+11. **The voyage (#187).** Sleep, and a wordless montage: the clouds clear, the sea turns from dark blue to turquoise, flying fish, the lantern bright about the deck, the Grave of the Lanterns falling behind. "Captain?" / "Hm?" / "Look!"
+12. **The first shore (#187).** The island out of the mist, the ship into the cove and anchored. "Do you think they have any tomatoes?" / "You had soup yesterday." The captain: "This is it. The last mark on the chart." / "So... what are we looking for?" / "That's what we're here to find out." / "Adventure!" / "Supplies." / "Adventure and supplies!" Fade: the end of the Prologue. Ashore, the first thing you find is the frying pan.
 
 **What it changes.**
-- The rescue is mutual: two things that each kept the other from going out. That's the title, acted out before anyone says it.
-- "Good holding" becomes thanks, and "I pulled" a joke between two people who both know better.
-- The rule that a warm meal rekindles him has its origin in the first minute: you've done it once already, with your hand.
-- The first ten minutes of play have a reason. You've held someone's light and watched it nearly fail, the captain doesn't know how to bring it back, and there's a stove through that door.
-- After the rescue he lives on the round table, so there's an empty hook at the stern where a lantern used to keep watch. Nobody aboard says why he came inside.
+- The rescue is his sacrifice: he gives you nearly all his light and can't take it back. The first quest is giving some of it back, with your own hands, and the soup is the first thing he's ever eaten.
+- He's a character from the first minute, chattering and failing to float, rather than silent until fed.
+- "I remember you reaching for me" closes the rescue: you reached, and he's glad.
+- The opening plants the story's questions: the Grave of the Lanterns, the thing beneath the chains, the light you now carry, and what the captain has followed the old trail so long to find.
+- After the rescue he lives on the round table, so there's an empty hook at the stern where a lantern used to keep watch.
 
 ### The rescue in full
-The rescue is three slices: the descent and the reach (built, #119), the deep (built, #120), and the surface (#121).
+Built so far (#119, #120): the descent, the reach, the dead lanterns in the deep and the thing in the lightning. Being rebuilt (#183) so the touch drains him instead of lighting him.
 
-**What the flare shows you (built, #120).** For one second the sea round you is amber, and below you, hanging in the deep, are cold, dark lanterns, some very old. Others have come down before him and not gone back up. There is no seabed to see, and there mustn't be: the water should feel bottomless, and the lanterns getting smaller and fainter with no end is what says so. They're empty: nothing in them answers his light. They're only shapes, shown by his flare and then by the lightning, and gone again when the light goes. Nobody ever explains them. They're why there's an empty hook at the stern afterwards.
+**The dead lanterns.** All round you, hanging in the deep at every depth, tilted, still sinking very slowly, smaller and fainter until the murk takes them: some broken, some caught in enormous chains, a few with a faint dying glow. There is no seabed to see, and there mustn't be: the water should feel bottomless. Nobody explains them. They're why there's an empty hook at the stern afterwards.
 
-**What the lightning shows you (built, #120).** As you rise and his light pulls in close, lightning strikes far above. Its cold white comes down through the water in shafts that fade to nothing on the way. Far in the background, deeper than nearly all the lanterns, something enormous is passing. It's never lit, and it's never in the foreground: it's a faint outline against the lit water, a blunt head and a long body that bends slowly, for players who look deeply enough. No eye, no face, nothing that announces it. The lanterns nearest it rock in its wake. The flash ends before the shape does. The storm's rumble drops out under a note so low it's mostly felt. He doesn't look down. Warm light shows you the sad thing and cold light the frightening one.
+**The thing below.** As his light pours into you, something enormous shifts in the dark beneath the chains. It's never lit and never in the foreground: a vast silhouette for players who look, no eye, no face, nothing that announces it. The lanterns nearest it rock in its wake, and the rumble is mostly felt.
 
-**Holding him up (#121).** At the surface you hold Interact to keep him above the waves. Let go and he dips, hisses and dims; lift him and it comes back. There's no way to fail and no bar: his eyes are the meter. His light is what the captain finds, so the brighter you kept him, the sooner the lightning shows the shape at the rail. With the ship passing (her name seen from the water, dark, the empty hook still swinging) he spends what's left on one small flare to be seen, and his eyes close. The captain is one tall still shape at the rail, looking down at one warm dot on a black sea. Nothing reaches down on screen: no boathook, no hand. Black, the storm muffling as if a door closed, and a small glass clink as something is set down over him. (The rail and the black are built, #120; the holding isn't yet.)
+**The light going into you.** The one touch is the whole rescue: your hand closes, his flame flares once, and then gold runs out of him along your arm until you glow and he's a guttering spark. He tries to pull back and the light holds you both. Then he chooses: the last of it goes, the screen fills with gold and goes white, and there's a held silence before the bunk room.
 
-**How it moves.** Weight, effort, wind and stillness, at a smooth frame rate.
-- Stillness before he acts: when he hears something, nothing happens for a second. Then he's gone.
-- His flame is his hair: it streams back, presses flat, ruffles when he pants, and bristles before a big effort.
-- Effort shows: he leans his whole body into each push and trembles at the end of it.
-- Small business: he looks at the failed hand, then at you, shivers off bubbles, and tries again.
-- You act too: your hand opens slowly before it closes on his, and your eyes open when he catches. Until then you hang slumped, and on the way up you hang from his arm.
-- Slow, fast, slow, stop, burst: an ordinary night held too long, an alarm nobody answers, his plunge, a short dark, a hard descent, a wait, two seconds of nothing, the flare, a haul with a beat to it, and stillness at the end.
-- The flare breathes in first, and after the peak there's rest: a few seconds of only rising.
-- Up top the wind has one direction and everything obeys it. Huge things move slowly.
+**How it moves.** Weight, effort and stillness, at a smooth frame rate.
+- His flame is his hair: it streams back as he dives, ruffles when he's flustered, and shrinks and cools as he gives his light away.
+- Effort shows: he leans his whole body into trying to lift you, and trembles at the end of it.
+- You act once: your hand opens slowly before it closes on his. Until then you hang slumped.
+- The flare breathes in first, and after the white there's rest.
 
-**Four frames worth keeping.** One per act, each with its own light: the hand of fire (warm light alone, close and small, shafts between your fingers), the deep lit by the flare (warm light at its biggest), the thing in the lightning (cold light alone), and the waterline (both at once, his ember and the storm, split by the surface).
-
-**Left for later.** The hum that becomes the home song, which waits for music; the sea glowing back at him as he passes; a flat calm before the hook; rain frozen by lightning.
+**Left for later.** The hum that becomes the home song, which waits for music; the sea glowing back at him as he passes.
 
 ### The title screen keeps your voyage
 It's the same nameboard on every launch, but it carries where you are.
@@ -483,36 +486,33 @@ Through the opening:
 | Moment | Eyes | Flame and glass |
 |---|---|---|
 | On watch | Half-lidded; one drifts shut and jerks open | Swaying with the hook |
-| He hears something | Snap wide and round | Stands still |
+| The lights under the water | Wide and eager | Leaning out toward the water |
+| The hand | Snap wide and round | Stands still |
 | The dive | Narrowed, slanted in | Streaming back behind him |
-| Going out | Slanted out, pinched; one flickering | Guttering, cooling to blue |
 | Reaching you | Huge, looking up at you | Struggling to hold the shape of a hand |
-| You take it | Squeezed shut, then wide | Catches, flares tall |
-| At the surface | Two tired slits, on you | A small ember |
-| Asleep | Two curved lines | Low and bluish; a hairline crack in the glass |
-| After the soup | One opens | Warms to amber; the crack closes |
+| You take it | Wide | Flares tall, then gold runs out of him into you |
+| Giving it away | Slanted out, pleading, then set | Shrinking, cooling to blue |
+| Awake and weak | Tired but bright, on you | Barely lit; it gutters and he sinks when he tries to float |
+| After the soup | Curves of delight | Amber and tall; he floats up, spinning |
+
+(The table is for the Prologue being built, #182 to #186. The built opening still uses the old beats: going out on the way down, catching alight on the touch, the ember at the surface, and asleep with a crack in his glass until the soup closes it.)
 
 ## MVP: the Prologue
-A tiny complete story arc that proves the "day is a song" loop and ends on the game's hook.
-1. **The rescue:** black water, a warm light, a hand of flame. The heron captain wakes you in your bunk; the lantern lies dim and silent under a glass. **The first quest** is to warm him: a page in an old book points to spicy tomato soup, and making it teaches the cooking (see Quests). Fed, he wakes, and he's certain: "The nearest island, that'll be your home!"
-2. **Evening one, the galley:** cook your first meal (Garden Salad) for the captain. Dinner gossip hints at the island ("mind the crabs"). The meal gives tomorrow's blessing (+1 heart).
-3. **Night on deck:** hum the three notes you remember. Nothing answers yet.
-4. **Morning ashore, the first island:**
-   - **Gather** 2–3 ingredients, one of which needs a trick.
-   - **Solve the bell puzzle:** ring the bells in the order of your memory melody.
-   - **Hunt crabs** with the knife and a frying-pan parry, with the lantern as lock-on, and bring the meat home for supper. Defeat means the lantern pulls you out.
-   - **Recruit** the mossy rock cook, who was trapped behind the puzzle. He tastes your food: "That bread you described... that's not from here."
-5. **Afternoon, sailing on:** the island slips into the fog, and one wonder drifts by.
-6. **Evening two:** dinner for three. The lantern, sheepish: "...Next island. *Definitely* the next one." End card.
+A tiny complete story arc, *The Grave of the Lanterns* (`docs/prologue.md`), about 30 to 45 minutes from the title to the first island. It introduces the world, makes the bond between you and the lantern, teaches exploring and cooking through the first puzzle, and brings you to the first shore.
+1. **The rail and the rescue:** the lantern and the captain over the Grave of the Lanterns, a hand among the dead lights, his dive, and his light flowing into you until the screen goes white (#182, #183).
+2. **Waking aboard:** the captain in the doorway, the lantern weak but talking, a recipe book by your pillow (#184).
+3. **Exploring the ship:** the galley, the deck and the navigation room, with the chart and the old book's clue (#185).
+4. **A little warmth:** the pot from the captain, tomatoes, chilli, herbs and rainwater, the soup, and the lantern restored (#186).
+5. **The voyage and the first shore:** the talk on deck, sleep, the montage out of the strange waters, and the ship anchoring in the cove (#187). End of the Prologue; Chapter 1 begins ashore with the frying pan and the crabs.
 
 **In:**
-- The deck, the galley and the bunk.
-- The ship sailing a fixed route, with the crew at the wheel.
+- The deck, the galley, the bunk room and the navigation room.
 - The lantern companion.
-- One island, one enemy type, one puzzle.
-- Two crew members and two or three dishes.
-- A three-note hum.
-- Three music tracks: galley, deck, island.
+- The heron captain.
+- One quest and one dish (Spicy Tomato Soup, now with herbs).
+- One island to arrive at: the cove.
+
+**Moved to Chapter 1 and later** (from the earlier Prologue sketch): the first evening's Garden Salad for the captain and dinner gossip ("mind the crabs"); humming the three remembered notes on deck at night; ashore, gathering with a trick, the bell puzzle in the order of your memory melody, hunting crabs for supper, and recruiting the mossy rock cook trapped behind the puzzle; the island slipping into the fog; dinner for three. The harbour, the small coastal settlement, the jungle mountain and the old structures from the Prologue script are Chapter 1's island too.
 
 ### Prototype first
 Before the Prologue, a greybox **Prototype** milestone proves the hardest new pieces without story or art: the sailing ship, the 3D player and free camera, camera zones, 3D cooking, the lantern, the duel, ship to island, and a galley mood pass (#60–#68).
