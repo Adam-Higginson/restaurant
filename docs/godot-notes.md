@@ -610,6 +610,16 @@ A growing glossary of the Godot concepts this project uses: what each one is, in
 
 **Tweening two things at once.** A `Tween` runs its steps one after another unless you call `set_parallel()`, after which they run together. *Ours:* `ScreenFade.fade_to_white()` brings the cover up and turns its colour white in the same moment, and `fade_out()` from white turns it to black while staying covered.
 
+## Waking with a weak, talking lantern, and the recipe book (#184)
+
+**A prop that plays a cutscene.** Any node can start a scene of its own: find the `Conversation` (`Conversation.find(self)`) and `play()` a `.dlg` by name. *Ours:* the `RecipeBook` by your pillow plays `recipe_book.dlg` when you pick it up, as the chest plays `chest.dlg`; it watches `Game.dialogue.flag_changed` for `has_recipe_book` and hides itself once you have it.
+
+**A tool that isn't used on anything.** Tools on the toolbar are normally used on whatever's in reach (the knife on a board). The recipe book is read instead, wherever you are, so `InteractionDetector3D` checks for it first (`HandTool.is_recipe_book`) and opens the book before looking for a target, and its HUD prompt is the tool's own `verb`.
+
+**A shader can draw outside a mesh's box.** Every mesh has a box round it (`get_aabb()`) that Godot uses to decide what's on screen. It only knows the mesh as made: a material that pushes the surface about in its vertex shader can draw beyond it. *Ours:* the quilt on your bunk draws higher than its box says, so the book was first placed "on" it and came out buried in it.
+
+**A capture camera on a moving ship.** With physics interpolation on, things moved in the physics step (the ship, and everything aboard) are drawn a little behind where they are, smoothed between ticks. A throwaway camera placed by hand isn't, so stills from it show the ship shifted. Taking stills through the game's own camera rig, which is smoothed the same way, shows things where they really are.
+
 ## Testing
 
 **gdUnit4.** The test framework (`addons/gdUnit4`). Suites extend our `GameTestSuite` and have `test_...` functions. `scene_runner` loads a scene and lets a test press inputs and wait physics ticks. *Ours:* `tests/`.
