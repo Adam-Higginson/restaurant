@@ -6,17 +6,75 @@ extends GameTestSuite
 const STOVE_SCENE: String = "res://scenes/prototype/props/galley_stove.tscn"
 
 
-func test_the_stove_flickers_steams_and_sparks() -> void:
+func test_the_stove_flickers_and_sparks() -> void:
 	var stove: GalleyStove = (load(STOVE_SCENE) as PackedScene).instantiate() as GalleyStove
 	add_child(stove)
 	auto_free(stove)
 
 	assert_object(stove.get_node("FireLight") as Flicker).is_not_null()
-	assert_bool(stove.steam().emitting).is_true()
 	assert_bool(stove.embers().emitting).is_true()
 	# They belong to the stove, so they rise straight up on a sailing ship.
-	assert_bool(stove.steam().local_coords).is_true()
 	assert_bool(stove.embers().local_coords).is_true()
+
+
+func test_no_steam_rises_from_an_empty_hob() -> void:
+	# Steam comes from a pan cooking on a hob (#204), never the hearth itself.
+	var stove: GalleyStove = (load(STOVE_SCENE) as PackedScene).instantiate() as GalleyStove
+	add_child(stove)
+	auto_free(stove)
+	assert_array(stove.find_children("Steam", "GPUParticles3D", true, false)).is_empty()
+
+
+func test_the_fire_burns_in_the_hearth_s_mouth() -> void:
+	# Flames dance over the Meshy hearth's painted fire (#204), low in its
+	# mouth, at the front, and sail with the ship.
+	var stove: GalleyStove = (load(STOVE_SCENE) as PackedScene).instantiate() as GalleyStove
+	add_child(stove)
+	auto_free(stove)
+	assert_bool(stove.flames().emitting).is_true()
+	assert_bool(stove.flames().local_coords).is_true()
+	var at: Vector3 = stove.to_local(stove.flames().global_position)
+	assert_float(at.y).is_between(0.1, 0.4)
+	assert_float(absf(at.x)).is_less(0.1)
+
+
+func test_the_chimney_runs_from_the_flue_up_through_the_deck() -> void:
+	var ship: Ship = new_moored_ship_with_player(Vector3(0, 1.05, 6))[0] as Ship
+	var stove: GalleyStove = ship.get_node("Galley/Stove") as GalleyStove
+	var chimney: MeshInstance3D = stove.get_node("Chimney") as MeshInstance3D
+	var pipe: CylinderMesh = chimney.mesh as CylinderMesh
+	# The galley sits at the ship's origin, so the stove's position is in ship
+	# space, and the chimney's is in the stove's.
+	var middle: float = stove.position.y + chimney.position.y
+	var foot: float = middle - pipe.height / 2.0
+	var top: float = middle + pipe.height / 2.0
+	var hearth: ThirdPartyModel = stove.get_node("Meshy") as ThirdPartyModel
+	# From the top of the stone flue (the hearth's full height), through the
+	# galley's ceiling (3.6 m up the ship), to above the deck (5.3 m).
+	var flue_top: float = stove.position.y + hearth.fit_size.y
+	assert_float(foot).is_between(flue_top - 0.1, flue_top + 0.05)
+	assert_float(top).is_greater(5.3)
+
+
+func test_there_is_one_kettle_aboard() -> void:
+	var ship: Ship = new_moored_ship_with_player(Vector3(0, 1.05, 6))[0] as Ship
+	var kettles: Array[Node] = ship.find_children("*", "", true, false).filter(
+			func(node: Node) -> bool:
+				return node.scene_file_path.ends_with("dressing/kettle.tscn"))
+	assert_int(kettles.size()).is_equal(1)
+
+
+func test_the_crew_table_is_cleared() -> void:
+	# Only the table, its benches and the bowls you serve from (#204).
+	var ship: Ship = new_moored_ship_with_player(Vector3(0, 1.05, 6))[0] as Ship
+	var table: Node3D = ship.get_node("Galley/CrewTable") as Node3D
+	for name: String in ["Runner", "BreadBoard", "Bowl1", "Tankard1", "Jug", "Loaf"]:
+		assert_object(table.get_node_or_null(name)).override_failure_message(
+				"%s is still on the table" % name).is_null()
+	for name: String in ["Mug1", "Mug2", "GreenBottle", "Kettle"]:
+		assert_object(ship.get_node_or_null("Galley/" + name)).override_failure_message(
+				"%s is still in the galley" % name).is_null()
+	assert_object(ship.get_node("Galley/BowlStack") as Dispenser3D).is_not_null()
 
 
 func test_the_chimney_smokes_up_on_deck_leaning_astern() -> void:
