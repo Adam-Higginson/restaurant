@@ -871,3 +871,25 @@ path = "res://assets/third_party/kaykit_restaurant/Assets/gltf/food_ingredient_b
 fit_size = Vector3(0.16, 0.08, 0.16)
 grain = false
 keep_as_made = true
+
+[node name="BenchForeMeshy" type="Node3D" parent="." node_paths=PackedStringArray("stand_ins")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, -0, 0, 1, 0, 0, -0.86)
+script = ExtResource("900_meshy")
+path = "res://assets/third_party/meshy/bench/model/model.glb"
+fit_size = Vector3(2.2, 0.5, 0.36)
+stretch = true
+stand_ins = [NodePath("../BenchFore"), NodePath("../BenchForeLeg1"), NodePath("../BenchForeLeg2"), NodePath("../BenchForeStretcher")]
+grain = false
+detail = 1.0
+keep_as_made = true
+
+[node name="BenchAftMeshy" type="Node3D" parent="." node_paths=PackedStringArray("stand_ins")]
+transform = Transform3D(-1, 0, 1.22465e-16, 0, 1, 0, -1.22465e-16, 0, -1, 0, 0, 0.86)
+script = ExtResource("900_meshy")
+path = "res://assets/third_party/meshy/bench/model/model.glb"
+fit_size = Vector3(2.2, 0.5, 0.36)
+stretch = true
+stand_ins = [NodePath("../BenchAft"), NodePath("../BenchAftLeg1"), NodePath("../BenchAftLeg2"), NodePath("../BenchAftStretcher")]
+grain = false
+detail = 1.0
+keep_as_made = true

@@ -1,5 +1,6 @@
 [gd_scene format=3 uid="uid://sntgjaikjoq0"]
 
+[ext_resource type="Script" path="res://scripts/art/third_party_model.gd" id="196_meshy"]
 [ext_resource type="Material" path="res://assets/placeholder/materials/dark_prop_wood.tres" id="1_4d3p6"]
 [ext_resource type="Material" path="res://assets/placeholder/materials/iron.tres" id="2_cxc7e"]
 [ext_resource type="Script" path="res://scripts/props/swinging.gd" id="3_awont"]
@@ -82,3 +83,13 @@ mesh = SubResource("BoxMesh_aw3d6")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.5, 0)
 material_override = ExtResource("5_ja3jx")
 mesh = SubResource("BoxMesh_gibnj")
+
+[node name="Meshy" type="Node3D" parent="." node_paths=PackedStringArray("stand_ins")]
+transform = Transform3D(6.12323e-17, 0, 1, 0, 1, 0, -1, 0, 6.12323e-17, 0, -0.58, 0.26)
+script = ExtResource("196_meshy")
+path = "res://assets/third_party/meshy/ships_bell/model/model.glb"
+fit_size = Vector3(0.45, 0.65, 0.8)
+stand_ins = [NodePath("../Plate"), NodePath("../Arm"), NodePath("../Swing/Crown"), NodePath("../Swing/Bell"), NodePath("../Swing/Lip"), NodePath("../Swing/Rope"), NodePath("../Swing/Knot")]
+grain = false
+detail = 1.0
+keep_as_made = true

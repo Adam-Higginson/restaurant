@@ -1,5 +1,6 @@
 [gd_scene format=3]
 
+[ext_resource type="Script" path="res://scripts/art/third_party_model.gd" id="196_meshy"]
 [ext_resource type="Script" path="res://scripts/props/storage_prop_3d.gd" id="1_hcdsu"]
 [ext_resource type="Script" path="res://scripts/data/item.gd" id="2_84ndg"]
 [ext_resource type="Resource" path="res://data/items/lettuce.tres" id="3_g7815"]
@@ -58,3 +59,14 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5, 0)
 shape = SubResource("BoxShape3D_3bupp")
 
 [node name="ContainerPanel" parent="." unique_id=683735547 instance=ExtResource("8_f6ssd")]
+
+[node name="Meshy" type="Node3D" parent="." node_paths=PackedStringArray("stand_ins")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, -0, 0, 1, 0, 0, 0)
+script = ExtResource("196_meshy")
+path = "res://assets/third_party/meshy/pantry/model/model.glb"
+fit_size = Vector3(1.1, 1.8, 0.6)
+stretch = true
+stand_ins = [NodePath("../Mesh"), NodePath("../Doors")]
+grain = false
+detail = 1.0
+keep_as_made = true

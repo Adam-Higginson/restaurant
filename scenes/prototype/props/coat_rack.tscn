@@ -1,5 +1,6 @@
 [gd_scene format=3 uid="uid://cs6ydcxj57nf3"]
 
+[ext_resource type="Script" path="res://scripts/art/third_party_model.gd" id="196_meshy"]
 [ext_resource type="Material" path="res://assets/placeholder/materials/dark_prop_wood.tres" id="1_6ue0p"]
 [ext_resource type="Material" path="res://assets/placeholder/materials/iron.tres" id="2_8g0ih"]
 [ext_resource type="Material" path="res://assets/placeholder/materials/brown_wool.tres" id="3_d6fsj"]
@@ -180,3 +181,13 @@ mesh = SubResource("BoxMesh_4avpy")
 [node name="Shape" type="CollisionShape3D" parent="." unique_id=1451843823]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.95, 0)
 shape = SubResource("BoxShape3D_2xidf")
+
+[node name="Meshy" type="Node3D" parent="." node_paths=PackedStringArray("stand_ins")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, -0, 0, 1, 0, 0, 0)
+script = ExtResource("196_meshy")
+path = "res://assets/third_party/meshy/coat_stand/model/model.glb"
+fit_size = Vector3(0.9, 1.85, 0.9)
+stand_ins = [NodePath("../Foot1"), NodePath("../Foot2"), NodePath("../Foot3"), NodePath("../Pole"), NodePath("../Knob"), NodePath("../Peg1"), NodePath("../Peg2"), NodePath("../Peg3"), NodePath("../Peg4"), NodePath("../Cap"), NodePath("../ScarfFront"), NodePath("../WoolCoat/Shoulders"), NodePath("../WoolCoat/Body"), NodePath("../WoolCoat/Skirt"), NodePath("../WoolCoat/SleeveL"), NodePath("../WoolCoat/SleeveR")]
+grain = false
+detail = 1.0
+keep_as_made = true
