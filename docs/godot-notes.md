@@ -678,6 +678,26 @@ A growing glossary of the Godot concepts this project uses: what each one is, in
 
 **How names become cue words.** A cue finds a mark by its node name in snake case, and Godot's `to_snake_case()` splits numbers off: `LanternCircle1` is `lantern_circle_1`, not `lantern_circle1`. *Ours:* `remedy.dlg`; `supper_spot_test.gd` checks every mark and shot it names is really in the ship.
 
+## The ship made (#196)
+
+**Moving a mesh's points.** `mesh.surface_get_arrays(0)` gives a surface's points, normals, texture coordinates and triangles as arrays you can change and build a new mesh from (`SurfaceTool.create_from_arrays`, then `commit()`). Stretch a model unevenly and its normals must be divided by the stretch, not multiplied. *Ours:* `HullShell.fit_mesh` fits the Meshy hull to the ship as it loads.
+
+**Leaving pixels undrawn (`discard`).** In a shader, `discard;` drops the pixel: nothing is drawn there, as if the surface had a hole. It drops it from the shadows too, so light comes through. *Ours:* `hull_shell.gdshader` leaves a hole wherever a `HullOpening` is.
+
+**Which side of a face you're seeing.** In a shader, `FRONT_FACING` is true when you see a triangle from its front. Godot draws a triangle's front where its corners run clockwise. *Ours:* the hull's planks go on its inside skin seen from the front, and on its outer skin seen from behind (through a hole in the inside).
+
+**Data in a vertex's colour.** A mesh's vertex colour (`COLOR` in a shader) can carry any number a shader needs, not only a colour. *Ours:* `HullShell.outer_skin` marks each of the hull's triangles white (outside) or black (inside).
+
+**A per-copy shader setting (`instance uniform`).** One material shared by many meshes, each with its own value: `mesh.set_instance_shader_parameter(&"cover", colour)`. *Ours:* every `ShelfBook` shares one material and sets its own cover colour.
+
+**Collision given to a body.** A physics body only feels `CollisionShape3D`s that are its direct children, or shapes handed to it in code: `create_shape_owner(self)` then `shape_owner_add_shape(id, shape)`. *Ours:* `DeckEdge` gives the ship its decks' edges and walls.
+
+**When a loaded resource is freed.** `load()` keeps a resource only while something holds it. Free the last scene using a model and the model goes; the next `load()` reads it from disk again. A `static var` (one shared by every copy of a script, for the whole run) can hold on to it. *Ours:* `ThirdPartyModel._loaded`, `HullShell._fitted`.
+
+**Children that aren't saved.** `add_child(node, false, Node.INTERNAL_MODE_BACK)` adds an internal child: it's drawn, but it isn't in the Scene dock and isn't saved with the scene. *Ours:* the hull, the decks' edges, the books in a row, a porthole's sleeve.
+
+**A tool script's resources must be tools too.** In the editor, a `@tool` script calling a `Resource`'s functions fails ("placeholder instance") unless that resource's script is `@tool` too. *Ours:* `HullOutline`, used by `DeckEdge`.
+
 ## Testing
 
 **gdUnit4.** The test framework (`addons/gdUnit4`). Suites extend our `GameTestSuite` and have `test_...` functions. `scene_runner` loads a scene and lets a test press inputs and wait physics ticks. *Ours:* `tests/`.

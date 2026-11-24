@@ -52,3 +52,22 @@ The chests' seams: the big gold one at -0.005 (just under its band, so the band 
 ```
 
 What they cost: the chests (two pictures, 18; two models, 30) and the food (three pictures, 27; three models, 45): 120 credits.
+
+## The ship's hull and the ship's props (#196)
+
+**The hull** is a Meshy model too, made to wrap our own decks and rooms rather than replace them:
+
+- **Draw the concept over our greybox.** A render of our ship (side and quarter views, on plain grey) went in with the style reference, so the picture kept our layout: raised forecastle and quarterdeck, the stern, the heron. Then edits took away what we build ourselves: no masts, sails or rigging; no rails, stairs or deck (an **open, hollow hull**, like an empty boat); no portholes or stern windows (we place windows where the rooms want them). Ask for "longer and sleeker" and "a pointed raked bow": the first open hull came out a tubby rowing boat.
+- **A black background with a glow** came back once: `tools/meshy/plain_background.gd` greyed it first.
+- **The model:** image-to-3D from one picture (the stern quarter), smart topology at 30,000 triangles, `meshy-7` texture at 4K (15 credits). A second, bow-side picture disagreed with the first about the shape, so it wasn't used.
+- **It came with holes.** Its port side's upper planking is mostly missing, and both skins have smaller holes. `HullShell` builds the hull from the starboard half and a mirror of it, cut exactly on the centreline (so the heron is symmetrical too).
+- **Fitting it** (`HullShell`; see the GDD's Architecture notes): the model is a metre long, its length along X, bow at -X. It's stretched along the ship by a few pairs (the middle more than the ends), deeper below its top edge than above so the rooms sit where it's wide, and let out where a room would poke through. Check every change from outside and on deck: a render can look right from one side and show a room's wall through the hull from the other.
+- **Its inside is ours.** Meshy painted the hull to be seen from outside; up close its inner faces are smeared. Each triangle is marked as outer skin or inside when it's fitted (by which way its corners wind, which agrees with Godot; Meshy's normals don't everywhere), and the shader draws the inside with our planks, coloured from a blurred read of Meshy's paint.
+- After changing the fit, run `tools/ship/measure_hull.gd` to save its shape again (`data/ship/hull_outline.tres`): the decks, rails, walls and porthole depths follow that file.
+
+**Props** went in the same way as before (`ThirdPartyModel`, `keep_as_made`, the greybox as stand-ins), stretched to their greybox's box: the galley hearth (made a little taller, so the hobs on its top sit on it), pantry, plate rack, crock shelf, the table's benches, the coat stand (with its coat and cap), the peg rails (with the oilskin and sou'wester) and the galley's bell (hung still: its bracket is in the model, so it can't swing).
+
+- **One book, many books.** The bookshelf is an empty Meshy shelf, filled with `BookRow`s of the one Meshy book (`ShelfBook`): its tan leather recoloured per book, its gilt (the most saturated paint) and page edges (by which way they face) left alone. Ask for the book's cover in a plain undyed leather so it takes any colour.
+- **The porthole** model wasn't used: its glass is painted solid blue, and our portholes are see-through now.
+
+What it cost: 444 credits in all, including the pictures and models that weren't used (the first hull concepts, the bow view, the porthole, the life ring's picture).
