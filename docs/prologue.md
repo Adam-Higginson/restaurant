@@ -14,6 +14,7 @@ This is the script the opening is being rebuilt to (#181). The GDD's *The openin
 - **The captain gives you the cooking pot** at the helm, where he stays while the lantern is low, going for a drink at the water butt now and then. The frying pan, your shield in a fight, is the first thing you find ashore.
 - **The deck talk plays by itself** the first time you come up on deck after the soup, and **the frying pan is in a washed-up chest** on the cove's beach (#187).
 - **The water comes from the water butt** on deck, not a stream off the rigging, and the soup is made in two steps (a Tomato Soup, then the chilli and herbs stirred in), as the recipe book has it (#186).
+- **They look out together (#203).** After the captain's first line from the wheel, the lantern flies off his hook to the starboard rail and the captain comes over to stand beside him, so the rest of the talk is side by side at the rail, and he goes over the side from there.
 - **The rescue ends in white.** The haul up through the dead lanterns, the storm surface and the heron at the rail are gone; how you came aboard isn't shown.
 - **The arrival is the cove** (#163): the ship anchors off the beach and you row ashore. The harbour, the settlement and the old structures belong to Chapter 1.
 
@@ -173,13 +174,17 @@ The lantern freezes. His flame suddenly grows brighter.
 
 **LANTERN:** "Oh…"
 
-A golden light begins to travel from the lantern into the player's hand. The player's body begins to glow.
+A golden light begins to travel from the lantern into the player's hand. The player's body begins to glow. At the same time a thinner thread of his glow sinks away from him, down towards the dead lanterns far below, fading as it goes: they're drawing on him too.
 
-**LANTERN:** "Wait. What's happening?"
+**LANTERN:** "The lanterns down there…"
+
+**LANTERN:** "they're calling my light."
 
 The light keeps flowing. The lantern tries to pull away, but the connection holds. His flame begins to shrink.
 
-**LANTERN:** "No, no, no. Stop…"
+**LANTERN:** "I can't…"
+
+**LANTERN:** "I can't hold on to it."
 
 The lanterns all around begin to flicker. A deep rumble rolls through the ocean.
 

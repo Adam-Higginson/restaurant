@@ -10,10 +10,12 @@ extends MeshInstance3D
 ## When it closes round yours, shafts of light fan out from between the two
 ## hands ([member rays], drawn by shaders/light_rays.gdshader).
 
-## How far along the sheet the palm sits at full reach and at none, as a
-## share of its length. The same numbers as in the shader.
-const PALM_AT_FULL_REACH: float = 0.7
-const PALM_AT_NO_REACH: float = 0.05
+## How far along the sheet from the wrist the palm sits at full reach and
+## at none, in sheet heights (the shader draws the hand in those, so it
+## keeps its shape however long the sheet is). The same numbers as in the
+## shader.
+const PALM_AT_FULL_REACH: float = 1.12
+const PALM_AT_NO_REACH: float = 0.08
 
 ## How far the arm reaches: 0 nothing (the hand's not there), 1 all the way.
 @export_range(0.0, 1.0) var reach: float = 0.0:
@@ -66,8 +68,8 @@ func _process(_delta: float) -> void:
 ## further the further it reaches. The sheet runs along -X from the wrist.
 func palm_position() -> Vector3:
 	var quad: QuadMesh = mesh as QuadMesh
-	var length: float = quad.size.x if quad != null else 1.0
-	return Vector3(-length * lerpf(PALM_AT_NO_REACH, PALM_AT_FULL_REACH, reach), 0.0, 0.0)
+	var height: float = quad.size.y if quad != null else 1.0
+	return Vector3(-height * lerpf(PALM_AT_NO_REACH, PALM_AT_FULL_REACH, reach), 0.0, 0.0)
 
 
 ## How brightly the palm's light shines right now: nothing with no reach,
@@ -87,6 +89,11 @@ func _apply() -> void:
 	if _material == null:
 		return
 	visible = reach > 0.001
+	# The sheet's shape, so the hand is drawn in proportion on it, its
+	# fingertips inside its far end (#203).
+	var quad: QuadMesh = mesh as QuadMesh
+	if quad != null and quad.size.y > 0.0:
+		_material.set_shader_parameter("aspect", quad.size.x / quad.size.y)
 	_material.set_shader_parameter("reach", reach)
 	_material.set_shader_parameter("form", form)
 	_material.set_shader_parameter("grip", grip)

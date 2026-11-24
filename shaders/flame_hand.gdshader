@@ -36,7 +36,8 @@ uniform float reach = 1.0;
 uniform float form = 1.0;
 // How far the fingers have closed: 0 an open hand, 1 closed round yours.
 uniform float grip = 0.0;
-// How long the sheet is against how wide it is.
+// How long the sheet is against how wide it is (FlameHand sets it from the
+// sheet, so the fingertips stay on it).
 uniform float aspect = 1.6;
 // Draw the hand smoothly, as N64 fire was filtered; off snaps it to chunky
 // texel squares.

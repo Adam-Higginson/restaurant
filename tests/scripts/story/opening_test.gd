@@ -108,17 +108,25 @@ func test_the_rail_looks_down_into_the_grave_finds_a_hand_and_ends_in_his_dive()
 	var hook_lantern: Node3D = _hook_lantern()
 	await physics_ticks(runner, 3)
 
-	# "Look." The camera goes out over the water and down into the Grave
-	# of the Lanterns, a set of its own. You're not to be seen yet.
+	# He's off his hook and round to the rail, and the captain comes over
+	# from the wheel to stand beside him (#203). "Look." The camera goes past
+	# him, out over the water and down into the Grave of the Lanterns, a set
+	# of its own. You're not to be seen yet.
 	assert_bool(await _read_on_until(runner, said, &"the_grave")).is_true()
+	var beside: Vector3 = _mark("beside_him").global_position
+	var perch: Vector3 = _mark("rail_perch").global_position
+	assert_float(_heron().global_position.distance_to(beside)).is_less(0.3)
+	assert_float(hook_lantern.global_position.distance_to(perch)).is_less(0.6)
 	await physics_ticks(runner, 3)
+	assert_bool(grave.is_open).is_false()
+	await physics_ticks(runner, 100)
 	assert_bool(grave.is_open).is_true()
 	assert_bool(overboard.visible).is_false()
 
 	# "That one..." Back up top, the ringing, then down again as something
 	# passes far beneath: the thing goes by under the lanterns.
 	assert_bool(await _read_on_until(runner, said, &"the_shape")).is_true()
-	await physics_ticks(runner, 3)
+	await physics_ticks(runner, 100)
 	assert_bool(grave.is_open).is_true()
 	var thing_was: Vector3 = thing.position
 	await physics_ticks(runner, 120)
@@ -136,11 +144,11 @@ func test_the_rail_looks_down_into_the_grave_finds_a_hand_and_ends_in_his_dive()
 	assert_bool(await _read_on_until(runner, said, &"plunge")).is_true()
 	assert_bool(grave.is_open).is_false()
 	await physics_ticks(runner, 45)
-	var to_hook: Vector3 = (_mark("hook").global_position - _heron().global_position)
-	to_hook.y = 0.0
+	var to_him: Vector3 = (_mark("rail_perch").global_position - _heron().global_position)
+	to_him.y = 0.0
 	var facing: Vector3 = -(_heron().get_node("Model") as Node3D).global_basis.z
 	facing.y = 0.0
-	assert_float(facing.normalized().dot(to_hook.normalized())).is_greater(0.7)
+	assert_float(facing.normalized().dot(to_him.normalized())).is_greater(0.7)
 	assert_bool(flying.visible).is_true()
 	assert_float(flying.position.distance_to(hung_at)).is_greater(2.0)
 	assert_bool(hook_lantern.is_visible_in_tree()).is_false()
@@ -216,6 +224,7 @@ func test_his_light_pours_into_you_the_deep_stirs_and_he_lets_go_to_white() -> v
 	var hand: FlameHand = _underwater_set().get_node("Lantern/Hand") as FlameHand
 	var you: CharacterModel = _underwater_set().get_node("Castaway/Character") as CharacterModel
 	var flow: LightFlow = _underwater_set().get_node("Flow") as LightFlow
+	var drain: LightFlow = _underwater_set().get_node("Drain") as LightFlow
 	var field: LanternField = _underwater_set().get_node("Lanterns") as LanternField
 	var thing: Node3D = _underwater_set().get_node("Thing") as Node3D
 	var lightning: Lightning = _sea.get_node("Weather/Lightning") as Lightning
@@ -233,14 +242,18 @@ func test_his_light_pours_into_you_the_deep_stirs_and_he_lets_go_to_white() -> v
 	assert_bool(you.eyes_shut).is_true()
 	assert_float(face.strength).is_greater(0.95)
 	assert_float(flow.flow).is_equal(0.0)
+	assert_float(drain.flow).is_equal(0.0)
 
 	# Then his light pours out of his hand into you: the flow runs, you fill,
-	# and he fades.
+	# and he fades. A thinner thread of it sinks away to the lanterns far
+	# below (#203).
 	assert_bool(await _read_on_until(runner, said, &"it_flows")).is_true()
 	await physics_ticks(runner, 200)
 	assert_float(flow.flow).is_greater(0.5)
 	assert_float(flow.filled).is_greater(0.2)
 	assert_float(face.strength).is_less(0.95)
+	assert_float(drain.flow).is_greater(0.2)
+	assert_float(drain.to.global_position.y).is_less(drain.from.global_position.y - 3.0)
 
 	# He pulls back and it holds; the lanterns all round flicker; the thing
 	# passes far below, shown twice in the lightning.
@@ -260,6 +273,7 @@ func test_his_light_pours_into_you_the_deep_stirs_and_he_lets_go_to_white() -> v
 	# then white, and silence.
 	assert_bool(await _read_on_until(runner, said, &"lets_go")).is_true()
 	assert_float(face.strength).is_less(0.35)
+	assert_float(drain.flow).is_equal(0.0)
 	assert_bool(await _read_on_until(runner, said, &"asleep")).is_true()
 	assert_bool(_fade().is_white()).is_true()
 	assert_bool(_ambience().hushed).is_true()
