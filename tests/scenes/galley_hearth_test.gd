@@ -31,8 +31,9 @@ func test_the_fire_burns_in_the_hearth_s_mouth() -> void:
 	var stove: GalleyStove = (load(STOVE_SCENE) as PackedScene).instantiate() as GalleyStove
 	add_child(stove)
 	auto_free(stove)
-	assert_bool(stove.flames().emitting).is_true()
-	assert_bool(stove.flames().local_coords).is_true()
+	assert_int(stove.flames().get_child_count()).is_equal(GalleyStove.TONGUES.size())
+	# A child of the stove, so it sails with the ship.
+	assert_bool(stove.is_ancestor_of(stove.flames())).is_true()
 	var at: Vector3 = stove.to_local(stove.flames().global_position)
 	assert_float(at.y).is_between(0.1, 0.4)
 	assert_float(absf(at.x)).is_less(0.1)

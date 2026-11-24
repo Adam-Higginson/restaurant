@@ -140,6 +140,34 @@ static func liquid_surface(vessel: Item, liquid: Item) -> MeshInstance3D:
 	return surface
 
 
+## A model of [param tool] standing on its base at the origin (the recipe book
+## in your hand, #207): its own model fitted into its
+## [member HandTool.model_size], over a greybox block in its colour.
+static func tool_model(tool: HandTool) -> Node3D:
+	var root: Node3D = Node3D.new()
+	root.name = "Tool"
+	var block: MeshInstance3D = _box(tool.model_size, tool.color, Vector3.UP * tool.model_size.y / 2.0)
+	block.name = "Greybox"
+	root.add_child(block)
+	if tool.model_path.is_empty() or not ResourceLoader.exists(tool.model_path):
+		return root
+	var model: ThirdPartyModel = ThirdPartyModel.new()
+	model.name = "Model"
+	model.look = tool.model_look
+	model.keep_as_made = tool.model_look == null
+	model.grain = false
+	model.detail = 1.0
+	model.fit_size = tool.model_size
+	model.stand_ins = [block]
+	if model.keep_as_made:
+		model.dressed.connect(func(shown: bool) -> void:
+			if shown:
+				_as_made(model.model, Color.WHITE))
+	model.path = tool.model_path
+	root.add_child(model)
+	return root
+
+
 ## A piece of [param item] about [param size] metres across, standing on its
 ## base at the origin: its real model, with a greybox cube in its colour in
 ## its place whenever the model isn't there (a fresh clone, CI).

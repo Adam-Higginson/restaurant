@@ -467,7 +467,9 @@ func _hold(in_hands: bool) -> void:
 # the knife sweeps across in front.
 func _pose_knife_and_pan() -> void:
 	var fighting: bool = combo.is_cutting() or combo.is_charging()
-	_knife.visible = fighting or _knife_shown_left > 0.0
+	# In the hand whenever it's the selected slot too (#207), when there's a
+	# hand to hold it.
+	_knife.visible = fighting or _knife_shown_left > 0.0 or (_in_hands and is_knife_out())
 	if _trail != null:
 		_trail.quiet = not fighting
 	if combo.is_cutting() and not _in_hands:

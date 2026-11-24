@@ -6,21 +6,29 @@ extends StaticBody3D
 ## ([Flicker]) is the warmest light aboard. Steam comes from the pans cooking
 ## on its hobs ([PanFeel]), not from the hearth itself (#204).
 ##
-## The flames, embers and smoke are particle systems built here in code, so
+## The flames (#207) are tongues drawn by a shader ([code]hearth_flame[/code]),
+## standing on the logs and always facing you. The embers and smoke are
+## particle systems. All are built here in code, so
 ## their settings sit in one place (like [RainEffect]). They start at the
 ## FlameSpot, EmberSpot and SmokeSpot markers. All three move with the stove
 ## (local coordinates), so they don't smear as the ship sails; the smoke, out
 ## in the wind on deck, leans astern as it rises. The flames (#204) dance over
 ## the fire painted in the Meshy hearth's mouth, so it burns, not just glows.
 
-## Tongues of flame a second from the logs.
-@export var flame_rate: float = 30.0
+## The tongues of flame, each as x (across), y (up from the logs), width and
+## height, in metres: a big one in the middle and two smaller either side.
+const TONGUES: Array[Vector4] = [Vector4(0.0, 0.0, 0.34, 0.46), Vector4(-0.12, 0.0, 0.24, 0.32),
+		Vector4(0.12, 0.0, 0.22, 0.3)]
+const FLAME_SHADER: Shader = preload("res://shaders/hearth_flame.gdshader")
+
+## How far behind the FlameSpot the flames stand, into the mouth, in metres.
+@export var flame_depth: float = -0.1
 ## Embers a second from the fire door.
 @export var ember_rate: float = 3.0
 ## Puffs of smoke a second from the chimney.
 @export var smoke_rate: float = 5.0
 
-var _flames: GPUParticles3D = null
+var _flames: Node3D = null
 var _embers: GPUParticles3D = null
 var _smoke: GPUParticles3D = null
 
@@ -39,7 +47,7 @@ func _ready() -> void:
 
 
 ## The flames rising from the logs.
-func flames() -> GPUParticles3D:
+func flames() -> Node3D:
 	return _flames
 
 
@@ -53,49 +61,28 @@ func smoke() -> GPUParticles3D:
 	return _smoke
 
 
-func _make_flames() -> GPUParticles3D:
-	var process: ParticleProcessMaterial = ParticleProcessMaterial.new()
-	process.emission_shape = ParticleProcessMaterial.EMISSION_SHAPE_BOX
-	process.emission_box_extents = Vector3(0.15, 0.02, 0.05)
-	process.direction = Vector3.UP
-	process.spread = 8.0
-	process.initial_velocity_min = 0.35
-	process.initial_velocity_max = 0.55
-	# Hot air pulls each tongue up faster as it goes; a wobble makes it lick.
-	process.gravity = Vector3(0.0, 0.6, 0.0)
-	process.turbulence_enabled = true
-	process.turbulence_noise_strength = 0.35
-	process.turbulence_noise_scale = 3.0
-	process.scale_min = 0.7
-	process.scale_max = 1.2
-	# Each tongue is broad at the logs and thins to a point as it rises.
-	process.scale_curve = _curve_texture([Vector2(0.0, 1.0), Vector2(1.0, 0.15)])
-	var heat: Gradient = Gradient.new()
-	heat.offsets = PackedFloat32Array([0.0, 0.15, 0.55, 1.0])
-	heat.colors = PackedColorArray([Color(1.0, 0.8, 0.3, 0.0), Color(1.0, 0.66, 0.16, 0.9),
-			Color(1.0, 0.36, 0.04, 0.7), Color(0.6, 0.1, 0.0, 0.0)])
-	var ramp: GradientTexture1D = GradientTexture1D.new()
-	ramp.gradient = heat
-	process.color_ramp = ramp
-
-	# Drawn over what's behind rather than added to it, so they stay orange
-	# in the bright firelight instead of washing out white.
-	var material: StandardMaterial3D = _soft_material(Color(1.0, 1.0, 1.0, 1.0))
-	var mesh: QuadMesh = QuadMesh.new()
-	mesh.size = Vector2(0.07, 0.24)
-	mesh.material = material
-
-	var particles: GPUParticles3D = GPUParticles3D.new()
-	particles.name = "Flames"
-	particles.local_coords = true
-	particles.lifetime = 0.7
-	particles.amount = maxi(ceili(flame_rate * particles.lifetime), 1)
-	particles.preprocess = 0.7
-	particles.process_material = process
-	particles.draw_pass_1 = mesh
-	particles.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
-	particles.visibility_aabb = AABB(Vector3(-0.5, -0.2, -0.5), Vector3(1, 1, 1))
-	return particles
+func _make_flames() -> Node3D:
+	var fire: Node3D = Node3D.new()
+	fire.name = "Flames"
+	# Set back into the mouth, over the logs (the particle flames hung out in
+	# front of it and ghosted in the firelight, #207).
+	fire.position = Vector3(0.0, 0.0, flame_depth)
+	for tongue: Vector4 in TONGUES:
+		var mesh: QuadMesh = QuadMesh.new()
+		mesh.size = Vector2(tongue.z, tongue.w)
+		var material: ShaderMaterial = ShaderMaterial.new()
+		material.shader = FLAME_SHADER
+		material.set_shader_parameter(&"seed", tongue.x * 3.1 + tongue.y)
+		material.set_shader_parameter(&"speed", 1.4 + tongue.z * 2.0)
+		var quad: MeshInstance3D = MeshInstance3D.new()
+		quad.name = "Tongue"
+		quad.mesh = mesh
+		quad.material_override = material
+		quad.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
+		# Standing on the logs: its middle half its height up.
+		quad.position = Vector3(tongue.x, tongue.y + tongue.w / 2.0, 0.0)
+		fire.add_child(quad)
+	return fire
 
 
 func _make_smoke() -> GPUParticles3D:

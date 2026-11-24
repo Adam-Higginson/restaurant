@@ -27,6 +27,8 @@ const CUT: Element = preload("res://data/elements/cut.tres")
 const FLASH_SECONDS: float = 0.3
 ## How fast you step up to the board, in metres a second.
 const STEP_SPEED: float = 4.0
+## The longest stepping up to the board takes, in seconds.
+const STEP_SECONDS: float = 0.6
 ## How long chop mode lingers after the last cut, so it's seen to land.
 const FINISH_SECONDS: float = 0.5
 
@@ -50,6 +52,9 @@ var flash_left: float = 0.0
 
 var _slot: CounterSlot = null
 var _needs_knife: bool = false
+## Seconds left of stepping up to the board, and how far off it was last.
+var _step_left: float = 0.0
+var _last_gap: float = INF
 ## What the model shows, and the food that was inside it, to tell cooking on
 ## (refresh the model) from food going in or out (build it again).
 var _shown: ItemInstance = null
@@ -267,6 +272,8 @@ func _chopper() -> Player3D:
 func _step_up(player: Player3D) -> void:
 	if get_node_or_null("ChopStand") != null:
 		_stepping = player
+		_step_left = STEP_SECONDS
+		_last_gap = INF
 		player.face_towards(_item_spot.global_position)
 
 
@@ -281,9 +288,14 @@ func _step(facing: Player3D, delta: float) -> void:
 	var stand: Marker3D = get_node("ChopStand") as Marker3D
 	var gap: Vector3 = stand.global_position - _stepping.global_position
 	gap.y = 0.0
-	if gap.length() < 0.02:
+	_step_left -= delta
+	# Done when there, out of time, or no nearer than last time: the mark can
+	# sit just inside the counter, and pushing on into it while the physics
+	# pushed back shook the hero all through chopping (#207).
+	if gap.length() < 0.02 or _step_left <= 0.0 or gap.length() >= _last_gap - 0.001:
 		_stepping = null
 		return
+	_last_gap = gap.length()
 	_stepping.global_position += gap.limit_length(STEP_SPEED * delta)
 
 

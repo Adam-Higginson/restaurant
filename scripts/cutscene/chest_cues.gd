@@ -23,11 +23,11 @@ extends CueHandler
 const HALO_SHADER: Shader = preload("res://shaders/sparkle.gdshader")
 ## The colour of a treasure's light: the green of an opened chest.
 const TREASURE_GREEN: Color = Color(0.62, 1.0, 0.68)
-## How far a tool held up (the knife) is turned from standing on end, in
-## degrees: 90 lays it flat across the hands.
-const TOOL_TURN_DEGREES: float = 90.0
-## Marks a treasure laid flat, which faces the camera rather than spinning.
-const LAID_FLAT: StringName = &"laid_flat"
+## How far a model is turned about its forward axis to stand it up, in
+## degrees: our Meshy tools and pans lie along X, the knife's point and the
+## pans' handles at +X or -X. The knife stands point up, a pan handle up.
+const TOOL_TURN_DEGREES: float = -90.0
+const ITEM_TURN_DEGREES: float = 90.0
 
 ## The player who opens chests.
 @export var player: Player3D
@@ -91,17 +91,8 @@ func _ready() -> void:
 func _process(delta: float) -> void:
 	if not is_instance_valid(_treasure):
 		return
-	if _treasure.has_meta(LAID_FLAT):
-		# A flat thing (the knife) faces the camera, its whole length across
-		# the hands; spinning, it would sweep round end-on like a propeller.
-		var camera: Camera3D = get_viewport().get_camera_3d()
-		if camera != null:
-			var to_camera: Vector3 = camera.global_position - _treasure.global_position
-			to_camera.y = 0.0
-			if not to_camera.is_zero_approx():
-				_treasure.global_basis = Basis.looking_at(-to_camera, Vector3.UP)
-	else:
-		_treasure.rotate_y(TAU * spin_turns * delta)
+	# Every treasure turns slowly on the spot, standing up, as in Zelda (#207).
+	_treasure.rotate_y(TAU * spin_turns * delta)
 	# Always over your hands, from the moment it appears: it rises with
 	# them, floating, bobbing gently.
 	_treasure.global_position = hands_point() \
@@ -271,36 +262,35 @@ func _begin_staging() -> void:
 	_shot_before = player.camera_rig.held_shot()
 
 
-## The model of [param tool] to hold up, laid flat across the hands (a knife
-## lies blade sideways between them, not on end): its own model when it has
-## one, otherwise a greybox bar in its colour. Freed by whoever adds it.
+## The model of [param tool] to hold up, standing on end and turning (the
+## knife point up, #207): its own model when it has one, otherwise a greybox
+## bar in its colour. Freed by whoever adds it.
 static func make_treasure(tool: HandTool) -> Node3D:
-	var treasure: Node3D = _treasure_of("", null, Vector3(0.15, 0.6, 0.06), Color.WHITE, false) \
-			if tool == null \
-			else _treasure_of(tool.model_path, tool.model_look, tool.model_size, tool.color, false)
-	(treasure.get_node("Turn") as Node3D).rotation_degrees.z = TOOL_TURN_DEGREES
-	treasure.set_meta(LAID_FLAT, true)
-	return treasure
+	if tool == null:
+		return _treasure_of("", null, Vector3(0.15, 0.6, 0.06), Color.WHITE, 0.0)
+	return _treasure_of(tool.model_path, tool.model_look, tool.model_size, tool.color,
+			tool.hold_up_turn_degrees)
 
 
-## The model of [param item] to hold up (the heron's pan): its own model
-## stood on end, handle up, so it shows its face; otherwise a greybox block.
+## The model of [param item] to hold up (the captain's pot): its own model
+## stood on end, handle up, turning on the spot; otherwise a greybox block.
 static func make_item_treasure(item: Item) -> Node3D:
-	return _treasure_of(item.model_path, item.model_look, item.model_size, item.color, true)
+	return _treasure_of(item.model_path, item.model_look, item.model_size, item.color,
+			ITEM_TURN_DEGREES)
 
 
 # A treasure to hold up: the model at [param path] fitted into [param size]
-# (a greybox block in [param tint] without it), lit and haloed, centred on
-# the hands. [param stood_up] turns a flat thing (a pan) on end.
+# (a greybox block in [param tint] without it), lit and haloed, its middle on
+# the hands. [param turn_degrees] turns it about its forward axis to stand it
+# up (a knife point up, a pot handle up).
 static func _treasure_of(path: String, look: ArtLook, size: Vector3, tint: Color,
-		stood_up: bool) -> Node3D:
+		turn_degrees: float) -> Node3D:
 	var root: Node3D = Node3D.new()
 	root.name = "Treasure"
-	# What turns it on end, if it's stood up: its length (Z) becomes its height.
+	# What stands it on end: its length (X, for our Meshy models) turned up.
 	var turn: Node3D = Node3D.new()
 	turn.name = "Turn"
-	if stood_up:
-		turn.rotation_degrees.x = -90.0
+	turn.rotation_degrees.z = turn_degrees
 	root.add_child(turn)
 	var bar: MeshInstance3D = MeshInstance3D.new()
 	bar.name = "Greybox"
@@ -336,10 +326,16 @@ static func _treasure_of(path: String, look: ArtLook, size: Vector3, tint: Color
 		var model: ThirdPartyModel = ThirdPartyModel.new()
 		model.name = "Model"
 		model.look = look
+		model.keep_as_made = look == null
+		model.grain = false
+		model.detail = 1.0
 		model.fit_size = size
 		model.stand_ins = [bar]
-		# Centred on the hands rather than sitting on them.
-		model.position = Vector3.DOWN * size.y / 2.0
+		# Its middle on the hands, so it turns on the spot rather than round a
+		# point off to one side (the pot orbited round its bowl, #207).
+		model.dressed.connect(func(shown: bool) -> void:
+			if shown:
+				model.position = -_middle_of(model))
 		turn.add_child(model)
 		model.path = path
 	return root
@@ -396,3 +392,22 @@ func _play(stream: AudioStream) -> void:
 		return
 	_sound.stream = stream
 	_sound.play()
+
+
+# The middle of everything drawn under [param model], in its parent's space.
+static func _middle_of(model: Node3D) -> Vector3:
+	var box: AABB = AABB()
+	var first: bool = true
+	for node: Node in model.find_children("*", "MeshInstance3D", true, false):
+		var mesh: MeshInstance3D = node as MeshInstance3D
+		if not mesh.visible or mesh.mesh == null:
+			continue
+		var to_model: Transform3D = Transform3D.IDENTITY
+		var at: Node = mesh
+		while at != model and at != null:
+			to_model = (at as Node3D).transform * to_model
+			at = at.get_parent()
+		var part: AABB = to_model * mesh.get_aabb()
+		box = part if first else box.merge(part)
+		first = false
+	return Vector3.ZERO if first else model.transform * box.get_center() - model.position
