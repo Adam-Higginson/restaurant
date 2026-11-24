@@ -90,6 +90,10 @@ uniform float streaks = 0.0;
 uniform float crack = 0.0;
 
 const int STEPS = 20;
+// Rain on the glass: how many cells across a pane hold a bead each, and how
+// many drops run down it at once.
+const float BEAD_CELLS = 7.0;
+const int RUNNERS = 3;
 
 varying vec3 local_spot;
 varying vec3 local_normal;
@@ -197,6 +201,59 @@ float lattice_at(vec2 pane) {
 	float off = min(off_rising, off_falling);
 	float pixel = max(fwidth(off), 1e-5);
 	return (1.0 - smoothstep(lattice_width - pixel, lattice_width + pixel, off)) * lattice;
+}
+
+
+// One drop, [off] being how far from its middle in drop radii. Returns how
+// much of the drop is here (x, 1 inside it and 0 outside), its glint where
+// it catches the light, small and up to the left (y), and the shade along
+// its lower rim (z). A drop sits a little taller than wide.
+vec3 drop_shape(vec2 off) {
+	float d = length(off * vec2(1.0, 0.85));
+	float body = 1.0 - smoothstep(0.72, 1.0, d);
+	float glint = 1.0 - smoothstep(0.0, 0.3, length(off - vec2(-0.28, 0.34)));
+	float shade = smoothstep(0.45, 0.9, d) * smoothstep(0.0, 0.6, -off.y);
+	return vec3(body, glint * body, shade * body);
+}
+
+
+// Rain on a pane at [spot] (across it 0 to 1, and up it 0 to [top], so a
+// drop is round), [pane] telling the panes apart. Returns how wet it is
+// there (x), how much a drop's glint shows (y) and how much a drop's rim
+// shades it (z), each 0 to 1.
+vec3 rain_on_glass(vec2 spot, float pane, float top, float time) {
+	// Beads: one in some of the cells of a grid, each landing, clinging a
+	// while and drying in its own time.
+	vec2 grid = spot * BEAD_CELLS;
+	vec2 cell = floor(grid);
+	vec2 in_cell = fract(grid);
+	float chance = hash(cell + pane * 13.1);
+	vec2 centre = vec2(0.3) + 0.4 * vec2(hash(cell + 1.7 + pane), hash(cell + 4.3 + pane));
+	float size = hash(cell + 9.1 + pane);
+	float radius = mix(0.07, 0.26, size * size);
+	float life = fract(time * 0.06 + chance * 5.0);
+	float shown = step(0.4, chance) * smoothstep(0.0, 0.04, life)
+			* (1.0 - smoothstep(0.75, 1.0, life));
+	vec3 drops = drop_shape((in_cell - centre) / radius) * shown;
+	// Runners: a drop grows heavy and runs, wavering, faster and slower.
+	for (int k = 0; k < RUNNERS; k++) {
+		float which = float(k) + pane * 5.0;
+		float run = time * (0.1 + 0.07 * hash(vec2(which, 2.0))) + hash(vec2(which, 5.0));
+		float n = floor(run);
+		float f = fract(run);
+		float fallen = f * 0.6 + smoothstep(0.2, 0.8, f) * 0.4;
+		float head_y = top * (1.15 - fallen * 1.4);
+		float lane = 0.15 + 0.7 * hash(vec2(which, n));
+		float x_here = lane + 0.012 * sin(spot.y * 32.0 + n * 2.3);
+		float x_head = lane + 0.012 * sin(head_y * 32.0 + n * 2.3);
+		vec3 head = drop_shape((spot - vec2(x_head, head_y)) / 0.038);
+		// The trail it leaves above it, thinning and drying as it goes.
+		float above = spot.y - head_y;
+		float trail = (1.0 - smoothstep(0.003, 0.01, abs(spot.x - x_here)))
+				* step(0.0, above) * (1.0 - smoothstep(0.0, top * 0.45, above)) * 0.4;
+		drops = max(drops, vec3(max(head.x, trail), head.yz));
+	}
+	return drops;
 }
 
 
@@ -353,15 +410,20 @@ void fragment() {
 	light = mix(light, misted, fog * 0.85);
 	alpha = mix(alpha, 1.0, fog * 0.85);
 
-	// Streaks: a few lanes, each with a bright drop sliding down.
-	float lane = floor(across * 6.0);
-	float lane_middle = (lane + 0.5) / 6.0;
-	float wander = (hash(vec2(lane, 1.0)) - 0.5) * 0.06;
-	float in_lane = 1.0 - smoothstep(0.0, 0.035, abs(across - lane_middle + wander));
-	float fall = TIME * (0.35 + hash(vec2(lane, 7.0)) * 0.4) + hash(vec2(lane, 3.0));
-	float tail = smoothstep(0.55, 1.0, fract(up_pane + fall)) * in_lane * streaks;
-	light = mix(light, vec3(0.9, 0.96, 1.0) * 1.6, tail * 0.8);
-	alpha = mix(alpha, 1.0, tail * 0.6);
+	// Rain on the glass (#203): beads clinging to each pane, landing and
+	// drying, and now and then one that runs down, leaving a thin wet trail.
+	// Water on lit glass shows the flame behind it, so the drops are warm
+	// with a small bright glint, not white.
+	if (streaks > 0.0 && !in_the_top_or_bottom) {
+		float pane_seed = side_pane ? sign(local_normal.x) * 3.1 : sign(local_normal.z) * 7.3;
+		vec2 wet_spot = vec2(across, up_pane * box_half.y / box_half.x);
+		vec3 drops = rain_on_glass(wet_spot, pane_seed, box_half.y / box_half.x, TIME) * streaks;
+		vec3 drop_light = pane_glow * 1.5 + warm_now * 0.1 * bright;
+		light = mix(light, drop_light, drops.x * 0.5);
+		light *= 1.0 - drops.z * 0.6;
+		light += vec3(1.0, 0.95, 0.85) * drops.y * 1.0;
+		alpha = mix(alpha, 1.0, drops.x * 0.25 + drops.z * 0.2 + drops.y * 0.35);
+	}
 
 	// The crack: a jagged dark line down the front pane, from the top.
 	if (local_normal.z < -0.5 && crack > 0.0) {
