@@ -3,6 +3,7 @@
 [ext_resource type="Material" path="res://assets/placeholder/materials/dark_prop_wood.tres" id="1_fpjil"]
 [ext_resource type="Material" path="res://assets/placeholder/materials/prop_wood.tres" id="2_1emcy"]
 [ext_resource type="Material" path="res://assets/placeholder/materials/iron.tres" id="3_g447m"]
+[ext_resource type="Script" path="res://scripts/art/third_party_model.gd" id="4_meshy"]
 
 [sub_resource type="CylinderMesh" id="CylinderMesh_8wki2"]
 top_radius = 0.075
@@ -152,3 +153,13 @@ mesh = SubResource("BoxMesh_mu0it")
 [node name="Shape" type="CollisionShape3D" parent="." unique_id=1003226857]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.21, 0)
 shape = SubResource("BoxShape3D_cp2rb")
+
+[node name="Meshy" type="Node3D" parent="." node_paths=PackedStringArray("stand_ins")]
+transform = Transform3D(0, 0, 1, 0, 1, 0, -1, 0, 0, 0, 0, 0)
+script = ExtResource("4_meshy")
+path = "res://assets/third_party/meshy/woodpile/model/model.glb"
+fit_size = Vector3(0.72, 0.55, 0.64)
+stand_ins = [NodePath("../Log1"), NodePath("../Log2"), NodePath("../Log3"), NodePath("../Log4"), NodePath("../Log5"), NodePath("../Log6"), NodePath("../Log7"), NodePath("../Log8"), NodePath("../Log9"), NodePath("../Split1"), NodePath("../Split2")]
+grain = false
+detail = 1.0
+keep_as_made = true
