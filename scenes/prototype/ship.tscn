@@ -641,7 +641,7 @@ morning_spot = NodePath("../../HeronMorning")
 [node name="Shots" type="Node3D" parent="."]
 
 [node name="LanternTable" type="Marker3D" parent="Shots" groups=["shots"]]
-transform = Transform3D(0.7399, -0.1748, 0.6496, 0.0000, 0.9657, 0.2598, -0.6727, -0.1923, 0.7145, 2.0, 2.4, 6.4)
+transform = Transform3D(-0.8805, -0.0944, 0.4646, 0.0000, 0.9800, 0.1991, -0.4741, 0.1753, -0.8628, 1.7, 2.35, 4.1)
 
 [node name="StoveNook" type="Marker3D" parent="Shots" groups=["shots"]]
 transform = Transform3D(-0.837, -0.104, 0.537, 0, 0.982, 0.19, -0.547, 0.159, -0.822, 0.3, 2.6, 8.4)
@@ -650,13 +650,13 @@ transform = Transform3D(-0.837, -0.104, 0.537, 0, 0.982, 0.19, -0.547, 0.159, -0
 transform = Transform3D(-0.7714, 0.1435, -0.62, 0, 0.9743, 0.2255, 0.6364, 0.1739, -0.7515, 2.1, 2.6, 11.4)
 
 [node name="Doorway" type="Marker3D" parent="Shots" groups=["shots"]]
-transform = Transform3D(0.2659, -0.0320, 0.9635, 0.0000, 0.9994, 0.0332, -0.9640, -0.0088, 0.2658, 0.3, 2.3, 6.4)
+transform = Transform3D(-0.8232, -0.0482, 0.5657, 0.0000, 0.9964, 0.0849, -0.5677, 0.0699, -0.8202, -0.2, 2.3, 4.4)
 
 [node name="PotOnStove" type="Marker3D" parent="Shots" groups=["shots"]]
 transform = Transform3D(0.5233, 0.1413, -0.8404, 0, 0.9861, 0.1659, 0.8522, -0.0868, 0.516, 0.8, 2.5, 3.3)
 
 [node name="SupperWide" type="Marker3D" parent="Shots" groups=["shots"]]
-transform = Transform3D(0.5711, -0.2254, 0.7894, 0.0000, 0.9616, 0.2746, -0.8209, -0.1568, 0.5491, 3.3, 2.7, 7.2)
+transform = Transform3D(-0.8462, -0.1296, 0.5168, 0.0000, 0.9700, 0.2432, -0.5328, 0.2058, -0.8208, 2.7, 2.7, 3.3)
 
 [node name="RescueSet" parent="." instance=ExtResource("311_rescue")]
 
@@ -745,7 +745,7 @@ transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, 0.05
 transform = Transform3D(0.9138, 0, 0.4061, 0, 1, 0, -0.4061, 0, 0.9138, 4.1, 1, 13.8)
 
 [node name="Doorway" type="Marker3D" parent="Marks" groups=["marks"]]
-transform = Transform3D(0, 0, -1, 0, 1, 0, 1, 0, 0, -2.6, 1, 5.6)
+transform = Transform3D(0.351, 0, -0.936, 0, 1, 0, 0.936, 0, 0.351, -2.2, 1, 7.2)
 
 [node name="SupperSeat" type="Marker3D" parent="Marks" groups=["marks"]]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.0, 1.0, 6.35)
