@@ -188,11 +188,12 @@ func _action_prompt(action: Action, arms: Arms) -> String:
 		Action.PUT_DOWN:
 			return "Put down %s" % held.item.display_name
 		Action.ADD_TO_VESSEL:
-			return "Put %s on %s" % [held.item.display_name, _item.item.display_name]
+			return "Put %s %s %s" % [held.item.display_name, _into(_item.item),
+					_item.item.display_name]
 		Action.MOVE_ONTO_PLATE:
 			var food: Array[ItemInstance] = _item.contents.get_contents()
 			var what: String = food[0].item.display_name if food.size() == 1 else "food"
-			return "Put %s on %s" % [what, held.item.display_name]
+			return "Put %s %s %s" % [what, _into(held.item), held.item.display_name]
 		Action.TAKE_FOOD:
 			return "Take %s" % _board_food().item.display_name
 		Action.PICK_UP:
@@ -222,12 +223,21 @@ func use_tool(tool: HandTool, grade: int = 0) -> bool:
 func _board_food() -> ItemInstance:
 	if _item == null or not _item.is_vessel() or _item.item.carried_whole:
 		return null
+	# Once it's in water or soup, it's part of it (#207): nothing comes back
+	# out by hand. Ladle the lot into a bowl, or pour water back at the butt.
+	if VesselLook.has_liquid(_item.contents):
+		return null
 	var food: Array[ItemInstance] = _item.contents.get_contents()
 	return null if food.is_empty() else food[food.size() - 1]
 
 
 # Whether the food on a board here could all slide onto [param held], a plate
 # or bowl.
+# "in" a pot, pan or bowl; "on" a board or plate.
+static func _into(vessel: Item) -> String:
+	return "on" if vessel.vessel_shape == Item.VesselShape.FLAT else "in"
+
+
 func _can_move_onto(held: ItemInstance) -> bool:
 	if held == null or not held.is_vessel() or not held.item.carried_whole:
 		return false

@@ -50,6 +50,10 @@ var flash_left: float = 0.0
 
 var _slot: CounterSlot = null
 var _needs_knife: bool = false
+## What the model shows, and the food that was inside it, to tell cooking on
+## (refresh the model) from food going in or out (build it again).
+var _shown: ItemInstance = null
+var _shown_inside: Array[ItemInstance] = []
 ## Whoever is chopping here (chop mode, #207), or null; and their knife.
 var _chopping: Player3D = null
 var _tool: HandTool = null
@@ -223,12 +227,23 @@ func cut_with(player: Player3D, tool: HandTool) -> bool:
 
 # Swaps the old model for one of what's here now.
 func _show_item() -> void:
+	var item: ItemInstance = _slot.get_item()
+	var inside: Array[ItemInstance] = []
+	if item != null and item.is_vessel():
+		inside = item.contents.get_contents()
+	# Still the same thing with the same food in it, only cooking on: update
+	# the model in place rather than building it again every tick (#207).
+	if item != null and item == _shown and inside == _shown_inside \
+			and _item_spot.get_child_count() == 1:
+		ItemModel.refresh(_item_spot.get_child(0) as Node3D, item)
+		return
+	_shown = item
+	_shown_inside = inside
 	for child: Node in _item_spot.get_children():
 		# Out of the tree now, not at the end of the frame, so there's never
 		# an old and a new model at once.
 		_item_spot.remove_child(child)
 		child.queue_free()
-	var item: ItemInstance = _slot.get_item()
 	if item != null:
 		_item_spot.add_child(ItemModel.build(item))
 
