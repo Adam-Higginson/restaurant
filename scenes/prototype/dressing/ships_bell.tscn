@@ -6,6 +6,12 @@
 [ext_resource type="Script" path="res://scripts/props/swinging.gd" id="3_awont"]
 [ext_resource type="Material" path="res://assets/placeholder/materials/brass.tres" id="4_dj0a4"]
 [ext_resource type="Material" path="res://assets/placeholder/materials/rope.tres" id="5_ja3jx"]
+[ext_resource type="Script" path="res://scripts/props/dinner_bell.gd" id="6_bell"]
+[ext_resource type="Script" path="res://scripts/interaction/interactable_3d.gd" id="7_reach"]
+[ext_resource type="AudioStream" path="res://assets/audio/intro/impactBell_heavy_001.ogg" id="8_ring"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_reach"]
+size = Vector3(0.9, 1.6, 0.9)
 
 [sub_resource type="BoxMesh" id="BoxMesh_v7dxf"]
 size = Vector3(0.16, 0.22, 0.03)
@@ -41,6 +47,7 @@ size = Vector3(0.02, 0.3, 0.02)
 size = Vector3(0.05, 0.05, 0.05)
 
 [node name="ShipsBell" type="Node3D" unique_id=1617109830]
+script = ExtResource("6_bell")
 
 [node name="Plate" type="MeshInstance3D" parent="." unique_id=384378575]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0.015)
@@ -93,3 +100,16 @@ stand_ins = [NodePath("../Plate"), NodePath("../Arm"), NodePath("../Swing/Crown"
 grain = false
 detail = 1.0
 keep_as_made = true
+
+[node name="Reach" type="Area3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.9, 0.5)
+script = ExtResource("7_reach")
+focus_height = 0.6
+
+[node name="Shape" type="CollisionShape3D" parent="Reach"]
+shape = SubResource("BoxShape3D_reach")
+
+[node name="RingSound" type="AudioStreamPlayer3D" parent="."]
+stream = ExtResource("8_ring")
+volume_db = -6.0
+unit_size = 3.0

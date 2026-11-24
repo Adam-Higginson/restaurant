@@ -1,8 +1,7 @@
 extends GameTestSuite
 ## Tests for what the lantern says when things happen (his lines are in
 ## data/dialogue/moments.dlg): he never repeats himself twice running, says
-## a few lines in turn, and speaks up when you land
-## a fish and when you stop the ship.
+## a few lines in turn, and speaks up when you land a fish.
 
 
 func test_he_never_says_the_same_thing_twice_running() -> void:
@@ -75,21 +74,6 @@ func test_he_cheers_when_you_land_a_fish() -> void:
 	await press(runner, "interact")
 
 	assert_bool(spirit.saying() in moment_lines(&"caught")).is_true()
-
-
-func test_he_is_glad_when_you_stop_the_ship() -> void:
-	var rig: Array[Node3D] = new_moored_ship_with_player(Vector3(0, 6.25, -11.9))
-	var ship: Ship = rig[0] as Ship
-	ship.set_sail()
-	var runner: GdUnitSceneRunner = scene_runner(ship.get_parent())
-	var spirit: LanternSpirit = lantern_at_shoulder(rig[1])
-	await physics_ticks(runner, 5)
-
-	await walk(runner, "move_down", 2)
-	await physics_ticks(runner, 3)
-	await press(runner, "interact")
-
-	assert_bool(spirit.saying() in moment_lines(&"hove_to")).is_true()
 
 
 func _lines_of(section: StringName) -> PackedStringArray:

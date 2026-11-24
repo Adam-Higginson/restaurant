@@ -4,7 +4,7 @@
 # caught sections (never the same one twice running, if there's another).
 # See scripts/dialogue/remark.gd for the tags and guards a section can have.
 #
-# Moments: returned, remembered, caught, morning, hove_to, supper, dim,
+# Moments: returned, caught, morning, table_bare, supper, dim,
 # pulled_out, crab_killed.
 # Placeholder writing: rewrite freely.
 
@@ -39,12 +39,12 @@ lantern: The rain's tired too, I think.
 ~ morning_3 [on morning]
 lantern: Look, it's grey and pink. That's my favourite colour.
 
-# You've stopped the ship at the bell.
-~ hove_to_1 [on hove_to]
-lantern: Stopping? Good. I like it when the sea holds still.
+# You've rung the galley bell for supper with nothing on the table (#207).
+~ table_bare_1 [on table_bare]
+lantern: Supper? ...There's nothing on the table.
 
-~ hove_to_2 [on hove_to]
-lantern: The fish will come now. Fish like quiet.
+~ table_bare_2 [on table_bare]
+lantern: I came all this way! Well. All the way from my table.
 
 # You've shared a meal with him.
 ~ supper_1 [on supper]

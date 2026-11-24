@@ -1,14 +1,16 @@
 # The first meal, the Prologue's Scene 5 (#186): the end of the first quest.
-# Played by the SupperSpot (his round table) the moment you set the spicy
-# tomato soup down by him while he's low. Your side is the replies you pick.
+# Played by the SupperTable in the galley (#207) when you've set the spicy
+# tomato soup on the long table and rung the bell for supper while he's low.
+# Your side is the replies you pick.
 #
-# He asks what it is, takes it in (clearing his low flag, which clears the
-# bowl), lights up, rises and circles you. The captain, called down from the
-# helm, looks in at the bunk room door, then goes back up to the wheel, where
-# the deck talk finds him (#187).
+# He comes over to the table, asks what it is, takes it in (clearing his low
+# flag, which empties the bowl), lights up, rises and circles you. The
+# captain, called down from the helm, looks in from the hatch stairs, then
+# goes back up to the wheel, where the deck talk finds him (#187).
 
 ~ start
 @place player supper_seat
+@place lantern lantern_arrives
 @shot supper_wide cut
 @look lantern surprised
 lantern: Oh! What's that?

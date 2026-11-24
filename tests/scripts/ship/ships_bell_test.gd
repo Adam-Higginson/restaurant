@@ -1,6 +1,6 @@
 extends GameTestSuite
-## Tests for the ship's bell and what the ship does when it's rung: heave to
-## (ease to a stop) and get under way (ease back up to speed).
+## Tests for the ship's bell (it just rings since #207) and the ship's own
+## heaving to (ease to a stop) and getting under way (back up to speed).
 
 
 func test_heaving_to_eases_the_ship_to_a_stop() -> void:
@@ -48,23 +48,6 @@ func test_getting_under_way_eases_back_up_to_speed() -> void:
 	assert_float(ship.way).is_equal(1.0)
 
 
-func test_ringing_the_bell_heaves_to_then_sets_sail() -> void:
-	var ship: Ship = _sailing_ship()
-	var runner: GdUnitSceneRunner = scene_runner(ship.get_parent())
-	var bell: ShipsBell = _bell(ship)
-	await physics_ticks(runner, 5)
-	assert_str(bell.prompt()).contains("heave to")
-
-	bell.ring()
-	await physics_ticks(runner, 75)
-	assert_bool(ship.is_sailing).is_false()
-	assert_str(bell.prompt()).contains("set sail")
-
-	bell.ring()
-	await physics_ticks(runner, 75)
-	assert_float(ship.way).is_equal(1.0)
-
-
 func test_pulling_the_rope_rings_the_bell() -> void:
 	var rig: Array[Node3D] = new_moored_ship_with_player(Vector3(0, 6.25, -11.9))
 	var ship: Ship = rig[0] as Ship
@@ -107,3 +90,17 @@ func _sailing_ship() -> Ship:
 
 func _bell(ship: Ship) -> ShipsBell:
 	return ship.get_node("Visuals/UpperDeck/Belfry") as ShipsBell
+
+
+func test_ringing_the_bell_no_longer_stops_the_ship() -> void:
+	var ship: Ship = _sailing_ship()
+	var runner: GdUnitSceneRunner = scene_runner(ship.get_parent())
+	var bell: ShipsBell = _bell(ship)
+	await physics_ticks(runner, 5)
+	assert_str(bell.prompt()).is_equal("Ring the bell")
+
+	bell.ring()
+	await physics_ticks(runner, 75)
+
+	assert_bool(ship.is_sailing).is_true()
+	assert_float(ship.way).is_equal(1.0)

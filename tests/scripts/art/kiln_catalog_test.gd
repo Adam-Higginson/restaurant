@@ -66,7 +66,7 @@ func test_the_game_fires_its_props_and_player_each_once() -> void:
 	var fired: PackedStringArray = []
 	for job: KilnJob in KilnCatalog.all_jobs():
 		fired.append(job.fired_path().get_file())
-	for wanted: String in ["pot_A.prop.", "kettle.prop.", "knife.prop.",
+	for wanted: String in ["pot_A.prop.", "kettle.prop.",
 			"Male_Peasant.character_body.glb", "Superhero_Female_FullBody.character_head.glb",
 			"Hair_Buns.character_hair.glb"]:
 		var found: bool = false

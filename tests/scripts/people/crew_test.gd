@@ -121,9 +121,9 @@ func test_near_him_he_says_it_and_far_from_him_its_news_for_later() -> void:
 	place_player_3d(runner, ON_DECK)
 	await physics_ticks(runner, 5)
 	assert_bool(spirit.is_in_earshot()).is_false()
-	assert_bool(spirit.tell(&"hove_to", &"news_bell")).is_false()
+	assert_bool(spirit.tell(&"caught", &"news_fish")).is_false()
 	assert_str(spirit.saying()).is_equal(said)
-	assert_bool(Game.dialogue.is_set(&"news_bell")).is_true()
+	assert_bool(Game.dialogue.is_set(&"news_fish")).is_true()
 
 
 func test_told_to_leave_home_he_follows_at_your_shoulder() -> void:
@@ -148,7 +148,7 @@ func test_with_nothing_to_share_the_round_table_talks_to_the_lantern() -> void:
 	var supper: SupperSpot = rig[0].get_node("BunkRoom/SupperSpot") as SupperSpot
 	await physics_ticks(runner, 3)
 
-	assert_str(supper.prompt(player.arms)).is_equal("Talk to the lantern")
+	assert_str(supper.prompt()).is_equal("Talk to the lantern")
 	supper.use(player)
 
 	assert_str(String(conversation.talking)).is_equal("lantern")
@@ -158,11 +158,10 @@ func test_with_nothing_to_share_the_round_table_talks_to_the_lantern() -> void:
 func test_without_a_conversation_in_the_scene_the_table_offers_nothing() -> void:
 	var rig: Array[Node3D] = new_moored_ship_with_player(BY_THE_STOVE)
 	var runner: GdUnitSceneRunner = scene_runner(rig[0].get_parent())
-	var player: Player3D = rig[1] as Player3D
 	var supper: SupperSpot = rig[0].get_node("BunkRoom/SupperSpot") as SupperSpot
 	await physics_ticks(runner, 3)
 
-	assert_str(supper.prompt(player.arms)).is_empty()
+	assert_str(supper.prompt()).is_empty()
 
 
 func test_scripts_can_ask_about_the_time_the_weather_and_the_ship() -> void:
