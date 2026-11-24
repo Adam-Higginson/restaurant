@@ -20,11 +20,12 @@ signal dodged(move: DodgeMove)
 ## The group the player is in, so others can find them.
 const GROUP: StringName = &"player"
 
-## Walking speed in metres per second.
-@export var speed: float = 5.0
+## Moving speed in metres per second: a gentle jog, the same aboard and
+## ashore. A half-pushed stick goes at half of it.
+@export var speed: float = 3.5
 ## How many times faster you go while holding sprint (Shift, or clicking the
 ## left stick in).
-@export var sprint_factor: float = 2.0
+@export var sprint_factor: float = 1.6
 ## How fast the model turns to face the way you walk, in degrees per second.
 ## Not used yet: the model turns at once.
 @export var turn_speed: float = 720.0
