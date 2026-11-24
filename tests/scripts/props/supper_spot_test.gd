@@ -142,6 +142,8 @@ func test_the_first_meal_plays_as_you_set_it_down() -> void:
 		speakers.append(speaker.id if speaker != null else &""))
 
 	assert_bool(spot.share(player)).is_true()
+	# The bowl's left with you, empty.
+	assert_bool(player.toolbar.top().contents.get_contents().is_empty()).is_true()
 	# At once, not after he's eaten: he asks what it is first.
 	await physics_ticks(runner, 2)
 	assert_bool(conversation.is_active()).is_true()

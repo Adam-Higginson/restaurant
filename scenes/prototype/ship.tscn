@@ -2224,7 +2224,7 @@ transform = Transform3D(0.9975, -0.0148, -0.069, 0, 0.9777, -0.2101, 0.0706, 0.2
 transform = Transform3D(0.5233, 0.1413, -0.8404, 0, 0.9861, 0.1659, 0.8522, -0.0868, 0.516, 0.8, 2.5, 3.3)
 
 [node name="SupperWide" type="Marker3D" parent="Shots" groups=["shots"]]
-transform = Transform3D(-0.6735, -0.1879, 0.7149, 0.0, 0.9672, 0.2542, -0.7392, 0.1712, -0.6514, 1.25, 2.55, 8.75)
+transform = Transform3D(0.9087, 0.0996, -0.4055, 0.0, 0.9711, 0.2385, 0.4175, -0.2167, 0.8825, -2.6, 2.5, 13.3)
 
 [node name="RescueSet" parent="." instance=ExtResource("311_rescue")]
 
