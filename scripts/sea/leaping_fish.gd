@@ -12,6 +12,9 @@ extends Node3D
 
 ## The group leaping fish are in, for the cue.
 const GROUP: StringName = &"leaping_fish"
+## How far her side is from her centreline when there's no [member outline]
+## (the old box hull's).
+const SIDE: float = 6.0
 
 ## The fish they're made from: its model and its colour.
 @export var fish: Item = preload("res://data/items/herring.tres")
@@ -28,7 +31,10 @@ const GROUP: StringName = &"leaping_fish"
 				if not leap.flying:
 					leap.rest = randf_range(0.0, 1.2)
 ## How far out from her side they jump, in metres: nearest and furthest.
-@export var out_from: Vector2 = Vector2(6.0, 14.0)
+@export var out_from: Vector2 = Vector2(0.0, 8.0)
+## Her hull's shape (#196): they jump from beyond its side, as wide as it is
+## near the sea wherever they fly. Without one, her side is [constant SIDE] out.
+@export var outline: HullOutline
 ## Along her length, from bow to stern (her -Z is forward), where they rise.
 @export var along: Vector2 = Vector2(-14.0, 18.0)
 ## How far each jump carries, in metres, and how high, shortest to longest.
@@ -139,11 +145,26 @@ func _make_spray() -> CPUParticles3D:
 	return spray
 
 
+## How far her side reaches from her centreline anywhere between
+## [param from_z] and [param to_z], at the sea and up to where the fish fly.
+func side_between(from_z: float, to_z: float) -> float:
+	if outline == null:
+		return SIDE
+	var widest: float = 0.0
+	var z: float = from_z
+	while z <= to_z + 0.01:
+		for up: float in PackedFloat32Array([0.0, 0.5, 1.0, 1.5, 2.0]):
+			widest = maxf(widest, outline.half_width_at(z, sea_level + up))
+		z += 0.5
+	return widest
+
+
 func _launch(leap: Leap) -> void:
 	var side: float = -1.0 if randf() < 0.5 else 1.0
-	var out: float = side * randf_range(out_from.x, out_from.y)
 	var start: float = randf_range(along.x, along.y)
 	var length: float = randf_range(reach.x, reach.y)
+	var clear: float = side_between(start - length, start)
+	var out: float = side * (clear + randf_range(out_from.x, out_from.y))
 	leap.from = Vector3(out, sea_level, start)
 	# Forward (her -Z), drifting a little in or out.
 	leap.to = Vector3(out + randf_range(-0.5, 0.5), sea_level, start - length)
