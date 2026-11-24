@@ -52,7 +52,11 @@ func test_you_cannot_walk_through_the_stove_or_the_table() -> void:
 
 func test_the_galley_stays_dry_in_the_rain() -> void:
 	var ship: Ship = new_moored_ship_with_player(Vector3(0, 1.05, 6))[0] as Ship
-	for path: String in ["Visuals/GalleyFloor", "Visuals/WallPort", "Visuals/Bulkhead"]:
+	# The bulkhead is three pieces round the navigation room's door (#185),
+	# and the room is dry too.
+	for path: String in ["Visuals/GalleyFloor", "Visuals/WallPort", "Visuals/BulkheadPort",
+			"Visuals/BulkheadStarboard", "Visuals/BulkheadLintel", "NavigationRoom/Forward",
+			"NavigationRoom/Floor"]:
 		var mesh: MeshInstance3D = ship.get_node(path) as MeshInstance3D
 		var material: ShaderMaterial = mesh.material_override as ShaderMaterial
 		var exposure: float = material.get_shader_parameter(&"exposure")

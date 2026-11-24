@@ -10,7 +10,7 @@ This is the script the opening is being rebuilt to (#181). The GDD's *The openin
 - **The ship is the Salt and Ember**, not the Wayward, and the title screen stays her carved nameboard. The rail scene begins on your press.
 - **The player never speaks.** Where the script says the player nods, shakes their head or asks something, that's a reply you choose in the conversation box.
 - **You wake in your own bunk** in the bunk room, not a cabin, with the captain standing over you at its foot (not calling from the doorway), and the lantern lies on his round table by the stove.
-- **The navigation room** is a new room in the empty bow half below deck, through a door in the galley's forward wall. The captain's cabin stays shut for now.
+- **The navigation room** is a new room in the empty bow half below deck, through a door at the forward end of the hatch ramp's corridor. The captain's cabin stays shut for now.
 - **The captain gives you the cooking pot.** The frying pan, your shield in a fight, is the first thing you find ashore.
 - **The rescue ends in white.** The haul up through the dead lanterns, the storm surface and the heron at the rail are gone; how you came aboard isn't shown.
 - **The arrival is the cove** (#163): the ship anchors off the beach and you row ashore. The harbour, the settlement and the old structures belong to Chapter 1.
@@ -338,7 +338,7 @@ The player is free to explore the ship. It should feel like a small, self-contai
 
 - **Rainwater:** "Fresh rainwater is collecting along the edge of the deck." The player has no pot yet, so there's nothing to do with it.
 
-**The navigation room.** Through a door at the front of the galley: a small room full of maps and books. Old charts cover the walls, some with strange markings.
+**The navigation room.** Through a door at the forward end of the corridor from the hatch ramp, beside the galley: a small room full of maps and books. Old charts cover the walls, some with strange markings.
 
 - **The navigation chart:** one chart has a hand-drawn route through a stretch of ocean marked with a faded warning, THE GRAVE OF THE LANTERNS. A destination is marked beyond it, but the island's name is lost to age and water damage. "An old chart. Someone has marked a route through the Grave of the Lanterns. The destination appears to be an island somewhere beyond the fog."
 - **The old book:** on a shelf, an old leather-bound volume with a faded lantern on its cover. "An old book about the creatures and spirits of the sea." Its yellowed pages have drawings of little lantern creatures, and a passage:

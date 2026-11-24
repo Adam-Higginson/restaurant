@@ -117,7 +117,7 @@ heron: Hm.
 # and still have no water, he mentions the water.
 ~ still_low
 heron: Well? He's no brighter.
-heron: There's books in the galley. I don't read 'em. Somebody did, once.
+heron: There's books in the chart room, forward of the ramp. I don't read 'em. Somebody did, once.
 -> END
 
 ~ hint_water
