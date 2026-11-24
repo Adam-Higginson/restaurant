@@ -73,7 +73,8 @@ func test_you_cannot_walk_through_the_stool() -> void:
 
 
 func test_the_stool_collides_where_it_is_drawn() -> void:
-	var stool: StaticBody3D = (load("res://scenes/prototype/dressing/stool.tscn") as PackedScene) 			.instantiate() as StaticBody3D
+	var stool: StaticBody3D = (load("res://scenes/prototype/dressing/stool.tscn") as PackedScene) \
+			.instantiate() as StaticBody3D
 	auto_free(stool)
 	var model: ThirdPartyModel = stool.get_node("Model") as ThirdPartyModel
 	var shape: CollisionShape3D = stool.get_node("Shape") as CollisionShape3D
@@ -86,7 +87,8 @@ func test_the_stool_collides_where_it_is_drawn() -> void:
 
 func test_crates_stool_and_bookshelf_are_solid() -> void:
 	for name: String in ["veg_crate", "lettuce_crate", "stool", "bookshelf"]:
-		var piece: Node = (load("res://scenes/prototype/dressing/%s.tscn" % name) as PackedScene) 				.instantiate()
+		var piece: Node = (load("res://scenes/prototype/dressing/%s.tscn" % name) as PackedScene) \
+				.instantiate()
 		auto_free(piece)
 		assert_object(piece as StaticBody3D).override_failure_message(
 				"%s isn't solid" % name).is_not_null()

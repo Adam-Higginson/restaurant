@@ -170,7 +170,8 @@ func test_starting_again_you_are_who_you_were() -> void:
 	opening.player = player
 	opening.ship = ship
 	opening.title_seconds = 0.1
-	var fade: ScreenFade = (load("res://ui/screen_fade.tscn") as PackedScene).instantiate() 			as ScreenFade
+	var fade: ScreenFade = (load("res://ui/screen_fade.tscn") as PackedScene).instantiate() \
+			as ScreenFade
 	fade.name = "ScreenFade"
 	fade.fade_seconds = 0.1
 	opening.add_child(fade)

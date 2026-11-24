@@ -71,7 +71,8 @@ func test_a_garden_salad_from_start_to_finish_while_sailing() -> void:
 	ship.set_sail()
 	await physics_ticks(runner, 30)
 	var start: Vector3 = ship.global_position
-	var detector: InteractionDetector3D = player.get_node("InteractionDetector") 			as InteractionDetector3D
+	var detector: InteractionDetector3D = player.get_node("InteractionDetector") \
+			as InteractionDetector3D
 
 	# A plate from the rack goes down on the counter.
 	await _go_to(runner, ship, "PlateRack")
@@ -138,7 +139,8 @@ func test_one_pantry_visit_takes_lettuce_and_a_tomato() -> void:
 
 	await _go_to(runner, ship, "Pantry")
 	await press(runner, "interact")
-	var panel: ContainerPanel = _station(ship, "Pantry").get_node("ContainerPanel") 			as ContainerPanel
+	var panel: ContainerPanel = _station(ship, "Pantry").get_node("ContainerPanel") \
+			as ContainerPanel
 	for food_name: String in ["Lettuce", "Tomato"]:
 		for button: Button in panel.get_rows():
 			if button.text.begins_with(food_name):

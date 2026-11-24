@@ -16,7 +16,8 @@ const FETCHED_FLAG: StringName = &"fetched_water"
 ## A loop of rain drumming into it, heard only close by: the one tell, for
 ## anyone listening, of where the ship's water comes from. Third-party and
 ## gitignored; without it the butt is silent.
-@export_file("*.ogg", "*.wav") var drumming_path: String = 		"res://assets/third_party/audio/rain_window.ogg"
+@export_file("*.ogg", "*.wav") var drumming_path: String = \
+		"res://assets/third_party/audio/rain_window.ogg"
 ## How loud the drumming is in a full storm, in decibels. The recording is
 ## loud, and it should only be noticed standing by the butt.
 @export var drumming_db: float = -12.0

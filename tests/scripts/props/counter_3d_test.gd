@@ -98,7 +98,8 @@ func test_the_detector_prompts_for_the_board() -> void:
 	var player: Player3D = new_player_3d_on_floor()
 	_add_counter(player, BOARD)
 	var runner: GdUnitSceneRunner = scene_runner(player.get_parent())
-	var detector: InteractionDetector3D = player.get_node("InteractionDetector") 			as InteractionDetector3D
+	var detector: InteractionDetector3D = player.get_node("InteractionDetector") \
+			as InteractionDetector3D
 	player.arms.add(ItemInstance.new(LETTUCE))
 	await physics_ticks(runner, 5)
 

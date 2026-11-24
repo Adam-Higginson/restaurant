@@ -88,7 +88,8 @@ static func _fits(cue: StringName, args: PackedStringArray) -> bool:
 		&"say_in":
 			return args.size() >= 4 and _is_seconds(args[0]) and _is_seconds(args[2])
 		&"rain":
-			return args.size() in [1, 2] and _is_seconds(args[0]) and args[0].to_float() <= 1.0 					and (args.size() == 1 or _is_seconds(args[1]))
+			return args.size() in [1, 2] and _is_seconds(args[0]) and args[0].to_float() <= 1.0 \
+					and (args.size() == 1 or _is_seconds(args[1]))
 		&"travel":
 			return args.size() == 1
 		&"muffle", &"hush", &"grave":

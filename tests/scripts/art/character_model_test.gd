@@ -52,7 +52,8 @@ func test_a_fired_head_shuts_its_eyes_by_showing_the_head_fired_asleep() -> void
 	# head alone, hidden until the eyes shut.
 	var awake_eyes: MeshInstance3D = model.skeleton.get_node("Eyes") as MeshInstance3D
 	var hidden: Callable = func() -> int:
-		return model.skeleton.find_children("*", "MeshInstance3D", false, false) 				.filter(func(mesh: Node) -> bool: return not (mesh as MeshInstance3D).visible).size()
+		return model.skeleton.find_children("*", "MeshInstance3D", false, false) \
+				.filter(func(mesh: Node) -> bool: return not (mesh as MeshInstance3D).visible).size()
 
 	assert_bool(awake_eyes.visible).is_true()
 	assert_int(hidden.call()).is_equal(1)
@@ -270,7 +271,8 @@ func test_aboard_the_ship_you_walk_slower() -> void:
 	var sea: Node = (load("res://scenes/prototype/sea.tscn") as PackedScene).instantiate()
 	auto_free(sea)
 	var aboard: Player3D = sea.get_node("Player") as Player3D
-	var anywhere: Player3D = (load("res://scenes/prototype/player.tscn") as PackedScene) 			.instantiate() as Player3D
+	var anywhere: Player3D = (load("res://scenes/prototype/player.tscn") as PackedScene) \
+			.instantiate() as Player3D
 	auto_free(anywhere)
 
 	assert_float(aboard.speed).is_less(anywhere.speed)
@@ -440,7 +442,8 @@ func test_the_boy_and_girl_wear_the_peasant_outfit() -> void:
 
 
 func test_the_intros_castaway_is_the_same_character_as_the_player() -> void:
-	var castaway: Node = (load("res://scenes/prototype/intro/castaway.tscn") as PackedScene) 			.instantiate()
+	var castaway: Node = (load("res://scenes/prototype/intro/castaway.tscn") as PackedScene) \
+			.instantiate()
 	auto_free(castaway)
 	var player: Node = (load("res://scenes/prototype/player.tscn") as PackedScene).instantiate()
 	auto_free(player)
