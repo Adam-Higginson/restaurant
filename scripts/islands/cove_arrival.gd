@@ -120,4 +120,4 @@ func _stand_on_deck() -> void:
 func _save() -> void:
 	var spirit: LanternSpirit = player.get_node_or_null("LanternSpirit") as LanternSpirit
 	var warmth: float = spirit.warmth if spirit != null else 1.0
-	SaveGame.write(SaveGame.capture(Game.memories, null, warmth, Game.dialogue, Game.look))
+	SaveGame.write(SaveGame.capture(null, warmth, Game.dialogue, Game.look))

@@ -8,12 +8,11 @@
 [ext_resource type="Resource" path="res://data/items/spicy_tomato_soup.tres" id="6_res"]
 [ext_resource type="Resource" path="res://data/items/tomato_soup.tres" id="7_c"]
 [ext_resource type="Resource" path="res://data/items/chopped_chilli.tres" id="8_c"]
-[ext_resource type="Resource" path="res://data/items/herbs.tres" id="9_herbs"]
 
 [resource]
 script = ExtResource("3_reaction")
 id = &"spicy_tomato_soup"
-consumes = Array[ExtResource("1_item")]([ExtResource("7_c"), ExtResource("8_c"), ExtResource("9_herbs")])
+consumes = Array[ExtResource("1_item")]([ExtResource("7_c"), ExtResource("8_c")])
 requires = Array[ExtResource("1_item")]([ExtResource("5_req")])
 elements = Array[ExtResource("2_element")]([ExtResource("4_el")])
 amount = 4.0

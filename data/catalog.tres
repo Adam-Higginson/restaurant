@@ -43,12 +43,6 @@
 [ext_resource type="Resource" path="res://data/items/pan_fried_herring.tres" id="31_fried"]
 [ext_resource type="Resource" path="res://data/reactions/fry_herring.tres" id="32_fry"]
 [ext_resource type="Resource" path="res://data/reactions/fry_whole_herring.tres" id="33_fry_whole"]
-[ext_resource type="Script" path="res://scripts/data/memory.gd" id="39_memory"]
-[ext_resource type="Resource" path="res://data/memories/first_catch.tres" id="40_mem"]
-[ext_resource type="Resource" path="res://data/memories/scales.tres" id="41_mem"]
-[ext_resource type="Resource" path="res://data/memories/fogged_window.tres" id="42_mem"]
-[ext_resource type="Resource" path="res://data/memories/warm_tomatoes.tres" id="43_mem"]
-[ext_resource type="Resource" path="res://data/memories/squeaky_gate.tres" id="44_mem"]
 [ext_resource type="Resource" path="res://data/items/saucepan.tres" id="50_soup"]
 [ext_resource type="Resource" path="res://data/items/bowl.tres" id="51_soup"]
 [ext_resource type="Resource" path="res://data/items/rainwater.tres" id="52_soup"]
@@ -58,7 +52,6 @@
 [ext_resource type="Resource" path="res://data/reactions/boil_water.tres" id="61_soupr"]
 [ext_resource type="Resource" path="res://data/reactions/tomato_soup.tres" id="62_soupr"]
 [ext_resource type="Resource" path="res://data/reactions/tomato_soup_shortcut.tres" id="63_soupr"]
-[ext_resource type="Resource" path="res://data/memories/rain_on_the_roof.tres" id="45_mem"]
 [ext_resource type="Script" path="res://scripts/data/recipe.gd" id="69_recipe"]
 [ext_resource type="Resource" path="res://data/recipes/garden_salad.tres" id="70_rec"]
 [ext_resource type="Resource" path="res://data/recipes/tomato_soup.tres" id="71_rec"]
@@ -69,14 +62,12 @@
 [ext_resource type="Resource" path="res://data/reactions/fillet_mackerel.tres" id="85_mackr"]
 [ext_resource type="Resource" path="res://data/reactions/fry_mackerel.tres" id="86_mackr"]
 [ext_resource type="Resource" path="res://data/reactions/fry_whole_mackerel.tres" id="87_mackr"]
-[ext_resource type="Resource" path="res://data/memories/first_light.tres" id="46_mem"]
 [ext_resource type="Resource" path="res://data/items/crab_meat.tres" id="90_crab"]
 [ext_resource type="Resource" path="res://data/items/pan_seared_crab.tres" id="91_crab"]
 [ext_resource type="Resource" path="res://data/reactions/sear_crab.tres" id="92_crabr"]
 [ext_resource type="Resource" path="res://data/recipes/pan_seared_crab.tres" id="93_rec"]
 [ext_resource type="Resource" path="res://data/items/chilli.tres" id="94_chilli"]
 [ext_resource type="Resource" path="res://data/items/chopped_chilli.tres" id="95_chilli"]
-[ext_resource type="Resource" path="res://data/items/herbs.tres" id="100_herbs"]
 [ext_resource type="Resource" path="res://data/items/spicy_tomato_soup.tres" id="96_spicy"]
 [ext_resource type="Resource" path="res://data/reactions/chop_chilli.tres" id="97_chillir"]
 [ext_resource type="Resource" path="res://data/reactions/spicy_tomato_soup.tres" id="98_spicyr"]
@@ -85,11 +76,10 @@
 
 [resource]
 script = ExtResource("23_itf3g")
-items = Array[ExtResource("3_ri6n3")]([ExtResource("4_n75ka"), ExtResource("5_wvss8"), ExtResource("6_0uqn3"), ExtResource("7_5q4dk"), ExtResource("8_l2ssu"), ExtResource("9_kruv5"), ExtResource("10_7671r"), ExtResource("11_5u5l8"), ExtResource("12_lcsjk"), ExtResource("13_vx4vr"), ExtResource("14_cta3b"), ExtResource("15_wwfey"), ExtResource("16_rhhc8"), ExtResource("26_herring"), ExtResource("27_fillet"), ExtResource("30_pan"), ExtResource("31_fried"), ExtResource("50_soup"), ExtResource("51_soup"), ExtResource("52_soup"), ExtResource("53_soup"), ExtResource("54_soup"), ExtResource("80_mack"), ExtResource("81_mack"), ExtResource("82_mack"), ExtResource("90_crab"), ExtResource("91_crab"), ExtResource("94_chilli"), ExtResource("95_chilli"), ExtResource("96_spicy"), ExtResource("100_herbs")])
+items = Array[ExtResource("3_ri6n3")]([ExtResource("4_n75ka"), ExtResource("5_wvss8"), ExtResource("6_0uqn3"), ExtResource("7_5q4dk"), ExtResource("8_l2ssu"), ExtResource("9_kruv5"), ExtResource("10_7671r"), ExtResource("11_5u5l8"), ExtResource("12_lcsjk"), ExtResource("13_vx4vr"), ExtResource("14_cta3b"), ExtResource("15_wwfey"), ExtResource("16_rhhc8"), ExtResource("26_herring"), ExtResource("27_fillet"), ExtResource("30_pan"), ExtResource("31_fried"), ExtResource("50_soup"), ExtResource("51_soup"), ExtResource("52_soup"), ExtResource("53_soup"), ExtResource("54_soup"), ExtResource("80_mack"), ExtResource("81_mack"), ExtResource("82_mack"), ExtResource("90_crab"), ExtResource("91_crab"), ExtResource("94_chilli"), ExtResource("95_chilli"), ExtResource("96_spicy")])
 elements = Array[ExtResource("1_sq7co")]([ExtResource("2_gpcun"), ExtResource("29_fire")])
 reactions = Array[ExtResource("17_gx03v")]([ExtResource("18_dxvgn"), ExtResource("19_qdmq8"), ExtResource("20_oyiyi"), ExtResource("21_m07uu"), ExtResource("22_3onb0"), ExtResource("28_fillet_herring"), ExtResource("32_fry"), ExtResource("33_fry_whole"), ExtResource("60_soupr"), ExtResource("61_soupr"), ExtResource("62_soupr"), ExtResource("63_soupr"), ExtResource("85_mackr"), ExtResource("86_mackr"), ExtResource("87_mackr"), ExtResource("92_crabr"), ExtResource("97_chillir"), ExtResource("98_spicyr"), ExtResource("99_spicyr")])
 tools = Array[ExtResource("24_tool")]([ExtResource("25_knife"), ExtResource("25_recipe_book")])
 people = Array[ExtResource("17_7671r")]([ExtResource("18_5u5l8"), ExtResource("19_lcsjk"), ExtResource("20_vx4vr"), ExtResource("21_cta3b"), ExtResource("22_wwfey"), ExtResource("23_rhhc8")])
 crew = Array[ExtResource("17_7671r")]([ExtResource("90_heron"), ExtResource("91_lantern")])
-memories = Array[ExtResource("39_memory")]([ExtResource("40_mem"), ExtResource("41_mem"), ExtResource("42_mem"), ExtResource("43_mem"), ExtResource("44_mem"), ExtResource("45_mem"), ExtResource("46_mem")])
 recipes = Array[ExtResource("69_recipe")]([ExtResource("70_rec"), ExtResource("71_rec"), ExtResource("100_rec"), ExtResource("72_rec"), ExtResource("93_rec")])

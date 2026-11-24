@@ -1,7 +1,7 @@
 class_name SaveGame
 extends RefCounted
-## The voyage so far, kept between plays: the memories of home you've got
-## back, which day it is and whether it's morning, how warm the lantern is,
+## The voyage so far, kept between plays: which day it is and whether it's
+## morning, how warm the lantern is,
 ## what conversations remember (their flags), and who the player is (their
 ## [PlayerLook]). Saved when you wake from sleep in your bunk, loaded by the [Opening].
 ##
@@ -16,15 +16,10 @@ const VERSION: int = 1
 
 
 ## What's worth keeping, now, as plain data.
-static func capture(memories: MemoryBook, time: TimeOfDay, warmth: float,
-		dialogue: DialogueState = null,
+static func capture(time: TimeOfDay, warmth: float, dialogue: DialogueState = null,
 		look: PlayerLook.Body = PlayerLook.Body.BOY) -> Dictionary:
-	var ids: Array[String] = []
-	for id: StringName in memories.remembered_ids():
-		ids.append(String(id))
 	return {
 		"version": VERSION,
-		"memories": ids,
 		"day": time.day if time != null else 1,
 		"morning": time != null and time.is_morning(),
 		"warmth": warmth,
@@ -69,15 +64,11 @@ static func erase() -> void:
 		DirAccess.remove_absolute(ProjectSettings.globalize_path(path))
 
 
-## Puts a saved voyage back: the memories (quietly, without their cards), the
-## day and time, the lantern's warmth, and what conversations remember. A
-## save from before conversations has no flags, and that's fine.
-static func restore(data: Dictionary, memories: MemoryBook, time: TimeOfDay,
-		spirit: LanternSpirit, dialogue: DialogueState = null) -> void:
-	var ids: Array[StringName] = []
-	for id: Variant in data.get("memories", []):
-		ids.append(StringName(str(id)))
-	memories.restore(ids)
+## Puts a saved voyage back: the day and time, the lantern's warmth, and what
+## conversations remember. A save from before conversations has no flags, and
+## that's fine; one with memories of home in it (removed in #207) still loads.
+static func restore(data: Dictionary, time: TimeOfDay, spirit: LanternSpirit,
+		dialogue: DialogueState = null) -> void:
 	var morning: bool = data.get("morning", false)
 	var day: int = data.get("day", 1)
 	var warmth: float = data.get("warmth", 1.0)

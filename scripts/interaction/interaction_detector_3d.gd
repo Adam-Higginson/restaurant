@@ -27,6 +27,11 @@ signal interact_missed
 var focused: Interactable3D = null
 
 var _bob_time: float = 0.0
+## Whether something has the player busy, and the prompts it shows meanwhile.
+## See [method set_busy].
+var _busy: bool = false
+var _busy_interact: String = ""
+var _busy_use: String = ""
 
 @onready var _player: Player3D = get_parent() as Player3D
 @onready var _arrow: Node3D = $FocusArrow
@@ -62,11 +67,12 @@ func _unhandled_input(event: InputEvent) -> void:
 			interact_missed.emit()
 	elif event.is_action_pressed("use_tool"):
 		get_viewport().set_input_as_handled()
-		if not try_use_tool():
+		if not try_use() and _player.toolbar.selected_tool() != null:
 			tool_missed.emit()
 
 
-## Uses the focused interactable, if any. Returns whether something was used.
+## Interacts with the focused interactable, if any. Returns whether something
+## was there.
 func try_interact() -> bool:
 	if not is_instance_valid(focused):
 		return false
@@ -74,35 +80,54 @@ func try_interact() -> bool:
 	return true
 
 
-## Uses a tool on the focused interactable: the selected one, or if the
-## selected slot isn't a tool, the toolbar's tool that works here (the knife
-## on a board). Does nothing with nothing in reach or no tool that fits.
-## Returns whether a tool was used. The recipe book is read instead,
-## wherever you are and whatever's in reach (#184).
-func try_use_tool() -> bool:
+## Uses what's in the selected slot (#207): a tool on the focused
+## interactable (the knife on a board), or a held item (put the tomato down,
+## fill the pot). Nothing else on the toolbar is ever used. Returns whether
+## something was done. The recipe book is read instead, wherever you are and
+## whatever's in reach (#184).
+func try_use() -> bool:
 	if _is_reading_book():
 		return RecipeBook.open_book(self, _player) > 0
-	var tool: HandTool = tool_to_use()
-	if tool == null:
+	if not is_instance_valid(focused):
 		return false
-	focused.use_tool(_player, tool)
-	return true
+	# A tool in hand goes to what's in front, even if it does nothing there:
+	# the knife never swings at the galley's furniture.
+	var tool: HandTool = _player.toolbar.selected_tool()
+	if tool != null:
+		focused.use_tool(_player, tool)
+		return true
+	if _player.toolbar.top() != null and not focused.use_prompt(_player).is_empty():
+		focused.use(_player)
+		return true
+	return false
 
 
-## The tool Use tool would use right now (see [method try_use_tool]), or null.
-## Never the recipe book: that's read, not used on anything.
+## The tool Use would use right now: the selected one, if it does anything
+## on the focused interactable; otherwise null. Never the recipe book: that's
+## read, not used on anything.
 func tool_to_use() -> HandTool:
 	if not is_instance_valid(focused):
 		return null
 	var selected: HandTool = _player.toolbar.selected_tool()
-	if selected != null and selected.is_recipe_book:
+	if selected == null or selected.is_recipe_book:
 		return null
-	if selected != null:
-		return selected
-	for tool: HandTool in _player.toolbar.get_tools():
-		if not focused.tool_prompt(_player, tool).is_empty():
-			return tool
-	return null
+	if focused.tool_prompt(_player, selected).is_empty():
+		return null
+	return selected
+
+
+## Shows [param interact_text] and [param use_text] as the button prompts in
+## place of the focused interactable's, while something has the player busy
+## (chopping: "Stop chopping", "Cut"). [method clear_busy] ends it.
+func set_busy(interact_text: String, use_text: String) -> void:
+	_busy = true
+	_busy_interact = interact_text
+	_busy_use = use_text
+
+
+## Goes back to prompting for the focused interactable.
+func clear_busy() -> void:
+	_busy = false
 
 
 ## Whether this should act on [param event], given the current
@@ -115,23 +140,29 @@ static func accepts_event(event: InputEvent, mouse_mode: Input.MouseMode) -> boo
 	return true
 
 
-## What Interact would do right now, e.g. "Put down Tomato", or "" with
+## What Interact would do right now, e.g. "Pick up Tomato", or "" with
 ## nothing in reach or nothing to do. The HUD prompt shows it.
 func interact_prompt() -> String:
+	if _busy:
+		return _busy_interact
 	if not is_instance_valid(focused):
 		return ""
 	return focused.interact_prompt(_player)
 
 
-## What Use tool would do right now, e.g. "Chop", or "" with nothing in reach
-## or no tool that does anything here.
+## What Use would do right now with the selected slot, e.g. "Chop" or "Put
+## down Tomato", or "" with nothing in reach or nothing it does here.
 func tool_prompt() -> String:
+	if _busy:
+		return _busy_use
 	if _is_reading_book():
 		return _player.toolbar.selected_tool().verb
 	var tool: HandTool = tool_to_use()
-	if tool == null:
+	if tool != null:
+		return focused.tool_prompt(_player, tool)
+	if not is_instance_valid(focused) or _player.toolbar.top() == null:
 		return ""
-	return focused.tool_prompt(_player, tool)
+	return focused.use_prompt(_player)
 
 
 # Whether the recipe book is the selected slot: Use reads it.

@@ -258,6 +258,18 @@ func test_without_a_tool_there_is_no_swing() -> void:
 	assert_bool(duellist_of(player).strike()).is_false()
 
 
+func test_holding_a_tomato_use_doesnt_swing_the_knife() -> void:
+	var player: Player3D = new_player_3d_on_floor()
+	var runner: GdUnitSceneRunner = scene_runner(player.get_parent())
+	await physics_ticks(runner, 2)
+	player.toolbar.add(ItemInstance.new(TOMATO))
+
+	await press(runner, "use_tool")
+
+	assert_bool(duellist_of(player).is_knife_out()).is_false()
+	assert_bool(duellist_of(player).is_striking()).is_false()
+
+
 func test_a_second_swing_waits_for_the_first() -> void:
 	var player: Player3D = new_player_3d_on_floor()
 	var runner: GdUnitSceneRunner = scene_runner(player.get_parent())
@@ -562,6 +574,8 @@ func test_a_parry_then_strikes_in_the_stagger_count() -> void:
 	var crab: Crab = new_crab(player, CLOSE)
 	var runner: GdUnitSceneRunner = scene_runner(player.get_parent())
 	player.toolbar.add(ItemInstance.new(PAN))
+	# The knife back in hand to strike (#207): only the selected slot is used.
+	player.toolbar.select(0)
 	await physics_ticks(runner, 40)
 	duellist_of(player).raise_pan()
 	await physics_ticks(runner, FIRST_HIT - 40)

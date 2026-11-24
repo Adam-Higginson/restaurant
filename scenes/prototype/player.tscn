@@ -22,7 +22,6 @@
 [ext_resource type="AudioStream" path="res://assets/audio/combat/hurt.tres" id="35_hurt"]
 [ext_resource type="AudioStream" path="res://assets/audio/combat/heartbeat.tres" id="36_heartbeat"]
 [ext_resource type="Script" path="res://scripts/art/third_party_model.gd" id="37_model"]
-[ext_resource type="Resource" path="res://data/art/looks/prop.tres" id="kiln_prop"]
 [ext_resource type="Script" path="res://scripts/art/character_model.gd" id="38_character"]
 [ext_resource type="Resource" path="res://data/characters/boy.tres" id="39_boy"]
 [ext_resource type="Resource" path="res://data/characters/girl.tres" id="39_girl"]
@@ -168,13 +167,14 @@ material_override = SubResource("StandardMaterial3D_blade")
 mesh = SubResource("BoxMesh_blade")
 
 [node name="KnifeModel" type="Node3D" parent="Model/Knife" node_paths=PackedStringArray("stand_ins")]
-transform = Transform3D(1, 0, 0, 0, 0, 1, 0, -1, 0, 0, 0, -0.35)
+transform = Transform3D(0, 0, -1, 0, 1, 0, 1, 0, 0, 0, -0.19, -0.925)
 script = ExtResource("37_model")
-path = "res://assets/third_party/kaykit_restaurant/Assets/gltf/knife.gltf"
-look = ExtResource("kiln_prop")
-fit_size = Vector3(0.3, 1.15, 0.12)
+path = "res://assets/third_party/meshy/kitchen_knife/model/model.glb"
+fit_size = Vector3(1.15, 10, 10)
 stand_ins = [NodePath("../Blade")]
-grain_metres = 0.08
+grain = false
+detail = 1.0
+keep_as_made = true
 
 [node name="Heel" type="Marker3D" parent="Model/Knife"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -0.5)
@@ -226,13 +226,14 @@ material_override = ExtResource("23_iron")
 mesh = SubResource("CylinderMesh_pan")
 
 [node name="PanModel" type="Node3D" parent="Model/Pan" node_paths=PackedStringArray("stand_ins")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.06, 0.18)
+transform = Transform3D(0, 0, -1, 0, 1, 0, 1, 0, 0, 0, -0.06, 0.18)
 script = ExtResource("37_model")
-path = "res://assets/third_party/kaykit_restaurant/Assets/gltf/pan_A.gltf"
-look = ExtResource("kiln_prop")
-fit_size = Vector3(0.7, 0.2, 1.05)
+path = "res://assets/third_party/meshy/frying_pan/model/model.glb"
+fit_size = Vector3(10, 10, 0.7)
 stand_ins = [NodePath("../Plate")]
-grain_metres = 0.08
+grain = false
+detail = 1.0
+keep_as_made = true
 
 [node name="Sparks" type="CPUParticles3D" parent="Model"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.0, -0.6)

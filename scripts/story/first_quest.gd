@@ -33,9 +33,15 @@ signal reached_helm
 ## What he says as he sets off for a drink, one at random, overheard.
 @export var thirsty_lines: PackedStringArray = PackedStringArray([
 	"Thirsty work, this.", "Could do with a drink.", "Salt in everything. Need a drink."])
-## How far he bends to dip the ladle, and tips back to swallow, in degrees.
-@export var dip_degrees: float = 18.0
-@export var tip_degrees: float = 14.0
+## His drinking animation (cupping water to his beak), by its name in his
+## model's file. Without it he just stoops to the butt and back.
+@export var drink_animation: StringName = &"Drink"
+## What he says after his drink, one at random, in a speech bubble.
+@export var drunk_lines: PackedStringArray = PackedStringArray([
+	"Ahh. Nothing like rain.", "Sweetest water there is, rain.",
+	"Storm's good for one thing, anyway."])
+## How far he stoops to the butt when he has no drinking animation, in degrees.
+@export var dip_degrees: float = 10.0
 
 ## Whether he's off for a drink: on his way there, drinking, or on his way
 ## back to the helm.
@@ -154,20 +160,32 @@ func _run(crewmate: Crewmate, walker: CrewWalker) -> void:
 	errand_done.emit()
 
 
-# The drink: he bends to dip the ladle, straightens, then tips his head back
-# to swallow, as herons do. His whole body leans: there's no drinking
-# animation yet, so this stands in for one.
+# The drink (#207): he plays his drinking animation if his model has one
+# ([member drink_animation]); without it he only stoops a little to the butt
+# and straightens (no more tipping his whole body back). Then he says how
+# good the rain is, in a speech bubble: a nudge, for anyone listening.
 func _drink(crewmate: Crewmate) -> void:
+	var seconds: float = 0.0
+	for child: Node in crewmate.get_children():
+		if child is CrewAnimator:
+			seconds = (child as CrewAnimator).play_once(drink_animation)
+	if seconds > 0.0:
+		await get_tree().create_timer(seconds, false).timeout
+	else:
+		await _stoop(crewmate)
+	if not drunk_lines.is_empty() and crewmate.head != null:
+		crewmate.head.say(drunk_lines[randi() % drunk_lines.size()])
+
+
+# Without a drinking animation: a small stoop to the butt and back.
+func _stoop(crewmate: Crewmate) -> void:
 	var model: Node3D = crewmate.get_node_or_null("Model") as Node3D
 	if model == null:
 		return
 	var tween: Tween = create_tween()
 	tween.tween_property(model, "rotation:x", -deg_to_rad(dip_degrees), 0.6) \
 			.set_trans(Tween.TRANS_SINE)
-	tween.tween_interval(0.5)
-	tween.tween_property(model, "rotation:x", deg_to_rad(tip_degrees), 0.7) \
-			.set_trans(Tween.TRANS_SINE)
-	tween.tween_interval(0.9)
+	tween.tween_interval(1.2)
 	tween.tween_property(model, "rotation:x", 0.0, 0.6).set_trans(Tween.TRANS_SINE)
 	await tween.finished
 

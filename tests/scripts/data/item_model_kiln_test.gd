@@ -27,8 +27,8 @@ func test_an_item_kept_as_made_is_never_fired() -> void:
 	assert_object(item.kiln_job()).is_null()
 
 
-func test_the_knife_is_fired_for_holding_up() -> void:
-	assert_object(KNIFE.kiln_job()).is_not_null()
+func test_the_meshy_knife_is_drawn_as_made() -> void:
+	assert_object(KNIFE.kiln_job()).is_null()
 
 
 func test_the_kiln_finds_the_models_of_the_food() -> void:

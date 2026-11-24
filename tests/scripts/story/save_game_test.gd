@@ -6,26 +6,22 @@ extends GameTestSuite
 
 func before_test() -> void:
 	SaveGame.erase()
-	Game.memories.clear()
 
 
 func after_test() -> void:
 	SaveGame.erase()
-	Game.memories.clear()
 	Game.set_look(PlayerLook.Body.BOY)
 
 
 func test_a_voyage_saves_and_reads_back() -> void:
-	var book: MemoryBook = MemoryBook.new(Catalog.load_default().memories)
-	book.notice(Catalog.load_default().find_item(&"herring"))
 	var time: TimeOfDay = TimeOfDay.new()
 	auto_free(time)
 	time.day = 4
 
-	assert_bool(SaveGame.write(SaveGame.capture(book, time, 0.6))).is_true()
+	assert_bool(SaveGame.write(SaveGame.capture(time, 0.6))).is_true()
 	var data: Dictionary = SaveGame.read()
 
-	assert_array(data["memories"]).contains_exactly(["first_catch"])
+	assert_bool(data.has("memories")).is_false()
 	var day: int = data["day"]
 	var morning: bool = data["morning"]
 	var warmth: float = data["warmth"]
@@ -44,19 +40,12 @@ func test_no_save_or_a_garbled_one_reads_as_nothing() -> void:
 	assert_dict(SaveGame.read()).is_empty()
 
 
-func test_restoring_puts_memories_back_quietly() -> void:
-	var book: MemoryBook = MemoryBook.new(Catalog.load_default().memories)
-	var heard: Array[int] = [0]
-	book.remembered.connect(func(_memory: Memory) -> void: heard[0] += 1)
+func test_a_save_with_memories_of_home_in_it_still_restores() -> void:
 	var time: TimeOfDay = TimeOfDay.new()
 	auto_free(time)
 
-	SaveGame.restore({"memories": ["first_catch", "nonsense"], "day": 3, "morning": true},
-			book, time, null)
+	SaveGame.restore({"memories": ["first_catch"], "day": 3, "morning": true}, time, null)
 
-	assert_bool(book.has(&"first_catch")).is_true()
-	assert_int(book.remembered_ids().size()).is_equal(1)
-	assert_int(heard[0]).is_equal(0)
 	assert_int(time.day).is_equal(3)
 	assert_bool(time.is_morning()).is_true()
 
@@ -71,7 +60,6 @@ func test_sleeping_saves_the_voyage() -> void:
 	(bedside.get_node("ScreenFade") as ScreenFade).fade_seconds = 0.05
 	bedside.sleep_seconds = 0.05
 	await physics_ticks(runner, 2)
-	Game.memories.notice(Catalog.load_default().find_item(&"garden_salad"))
 
 	await bedside.sleep(rig[1] as Player3D)
 
@@ -80,7 +68,6 @@ func test_sleeping_saves_the_voyage() -> void:
 	var day: int = data["day"]
 	assert_bool(morning).is_true()
 	assert_int(day).is_equal(2)
-	assert_array(data["memories"]).contains(["squeaky_gate"])
 
 
 func test_starting_again_carries_on_the_voyage() -> void:
@@ -105,7 +92,6 @@ func test_starting_again_carries_on_the_voyage() -> void:
 
 	await physics_ticks(runner, 40)
 
-	assert_bool(Game.memories.has(&"first_catch")).is_true()
 	assert_int(time.day).is_equal(5)
 	assert_bool(time.is_morning()).is_true()
 	var spirit: LanternSpirit = player.get_node("LanternSpirit") as LanternSpirit
@@ -117,12 +103,11 @@ func test_what_conversations_remember_is_saved_and_comes_back() -> void:
 	var state: DialogueState = DialogueState.new()
 	state.set_flag(&"met_heron")
 	state.add(&"talked.heron", 3)
-	var book: MemoryBook = MemoryBook.new(Catalog.load_default().memories)
 
-	assert_bool(SaveGame.write(SaveGame.capture(book, null, 1.0, state))).is_true()
+	assert_bool(SaveGame.write(SaveGame.capture(null, 1.0, state))).is_true()
 	var other: DialogueState = DialogueState.new()
 	other.set_flag(&"stale")
-	SaveGame.restore(SaveGame.read(), book, null, null, other)
+	SaveGame.restore(SaveGame.read(), null, null, other)
 
 	assert_bool(other.is_set(&"met_heron")).is_true()
 	assert_int(other.value(&"talked.heron")).is_equal(3)
@@ -130,31 +115,27 @@ func test_what_conversations_remember_is_saved_and_comes_back() -> void:
 
 
 func test_a_save_from_before_conversations_still_loads() -> void:
-	var book: MemoryBook = MemoryBook.new(Catalog.load_default().memories)
-	var old: Dictionary = SaveGame.capture(book, null, 0.7)
+	var old: Dictionary = SaveGame.capture(null, 0.7)
 	old.erase("flags")
 	assert_bool(SaveGame.write(old)).is_true()
 	var state: DialogueState = DialogueState.new()
 
 	var data: Dictionary = SaveGame.read()
-	SaveGame.restore(data, book, null, null, state)
+	SaveGame.restore(data, null, null, state)
 
 	assert_bool(data.is_empty()).is_false()
 	assert_dict(state.to_dict()).is_empty()
 
 
 func test_who_you_are_is_saved_and_read_back() -> void:
-	var book: MemoryBook = MemoryBook.new(Catalog.load_default().memories)
-
-	assert_bool(SaveGame.write(SaveGame.capture(book, null, 1.0, null,
+	assert_bool(SaveGame.write(SaveGame.capture(null, 1.0, null,
 			PlayerLook.Body.GIRL))).is_true()
 
 	assert_int(SaveGame.look_of(SaveGame.read())).is_equal(PlayerLook.Body.GIRL)
 
 
 func test_a_save_from_before_looks_were_chosen_is_a_boy() -> void:
-	var book: MemoryBook = MemoryBook.new(Catalog.load_default().memories)
-	var old: Dictionary = SaveGame.capture(book, null, 0.7)
+	var old: Dictionary = SaveGame.capture(null, 0.7)
 	old.erase("look")
 
 	assert_int(SaveGame.look_of(old)).is_equal(PlayerLook.Body.BOY)

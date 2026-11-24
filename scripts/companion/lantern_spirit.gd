@@ -164,10 +164,6 @@ func _ready() -> void:
 			var owed: float = _owed_warmth
 			_owed_warmth = 0.0
 			rekindle(owed))
-	Game.memories.remembered.connect(func(_memory: Memory) -> void:
-		if is_in_earshot() and not is_low():
-			hum()
-		tell(&"remembered", &"news_memory"))
 	# He's a child of the player, so he's ready before the player is: wait
 	# until the player has its model before finding its shoulder.
 	_settle.call_deferred()

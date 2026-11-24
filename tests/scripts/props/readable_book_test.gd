@@ -34,7 +34,7 @@ func test_it_points_to_a_spiced_red_soup_and_never_to_the_water() -> void:
 		text += page.heading + " " + " ".join(page.lines) + " "
 	text = text.to_lower()
 
-	for clue: String in ["red soup", "tomato", "chilli", "spice", "herbs"]:
+	for clue: String in ["red soup", "tomato", "chilli", "spice"]:
 		assert_str(text).contains(clue)
 	for giveaway: String in ["water", "rain", "butt"]:
 		assert_str(text).not_contains(giveaway)

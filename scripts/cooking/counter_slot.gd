@@ -1,8 +1,10 @@
 class_name CounterSlot
 extends RefCounted
-## The spot on a counter that holds one item, food or a utensil, and swaps it
-## with the player's arms on Interact. A vessel here (a chopping board, a
-## plate) takes food from the arms, and Use tool works on what's in it. See
+## The spot on a counter that holds one item, food or a utensil. In 3D, Use
+## (left click) puts the held item here ([method use_with]) and Interact (right
+## click) takes from here ([method take_into]); the 2D galley's one button
+## does both ([method exchange_with]). A vessel here (a chopping board, a
+## plate) takes food from the arms, and a tool works on what's in it. See
 ## "Vessels and fittings" in docs/GDD.md.
 ##
 ## Plain logic with no node, so any counter (the 3D galley's for now) can
@@ -97,7 +99,13 @@ func interact_action(arms: Arms) -> Action:
 
 ## Does what [method interact_action] says. Returns whether anything moved.
 func exchange_with(arms: Arms) -> bool:
-	match interact_action(arms):
+	return _perform(interact_action(arms), arms)
+
+
+# Does [param action] between here and [param arms]. Returns whether anything
+# moved.
+func _perform(action: Action, arms: Arms) -> bool:
+	match action:
 		Action.PUT_DOWN:
 			return place(arms.take_top())
 		Action.ADD_TO_VESSEL:
@@ -120,11 +128,63 @@ func exchange_with(arms: Arms) -> bool:
 	return false
 
 
-## What the prompt says Interact would do, e.g. "Put down Tomato", or "" for
-## nothing.
-func interact_prompt(arms: Arms) -> String:
+## What Use (left click) does here with the held item (#207): put it down on
+## the empty counter, put food into the vessel here, or slide the board's
+## food onto the held plate. [constant Action.NONE] with nothing held.
+func use_action(arms: Arms) -> Action:
 	var held: ItemInstance = arms.top()
-	match interact_action(arms):
+	if held == null:
+		return Action.NONE
+	if _item == null:
+		return Action.PUT_DOWN
+	if _item.is_vessel() and not held.is_vessel():
+		return Action.ADD_TO_VESSEL if _item.contents.room() > 0 else Action.NONE
+	if _can_move_onto(held):
+		return Action.MOVE_ONTO_PLATE
+	return Action.NONE
+
+
+## What Interact (right click) does here (#207): take the top food off a
+## board, or pick up the whole item, into a free toolbar slot, whatever is
+## held. [constant Action.NONE] with nothing here or no slot free.
+func take_action(arms: Arms) -> Action:
+	if _item == null or arms.is_full():
+		return Action.NONE
+	if _board_food() != null:
+		return Action.TAKE_FOOD
+	return Action.PICK_UP
+
+
+## Does what [method use_action] says. Returns whether anything moved.
+func use_with(arms: Arms) -> bool:
+	return _perform(use_action(arms), arms)
+
+
+## Does what [method take_action] says. Returns whether anything moved.
+func take_into(arms: Arms) -> bool:
+	return _perform(take_action(arms), arms)
+
+
+## What the prompt says Use would do, e.g. "Put down Tomato", or "".
+func use_prompt(arms: Arms) -> String:
+	return _action_prompt(use_action(arms), arms)
+
+
+## What the prompt says Interact would do, e.g. "Pick up Plate", or "".
+func take_prompt(arms: Arms) -> String:
+	return _action_prompt(take_action(arms), arms)
+
+
+## What the prompt says the one-button [method exchange_with] would do, e.g.
+## "Put down Tomato", or "" for nothing.
+func interact_prompt(arms: Arms) -> String:
+	return _action_prompt(interact_action(arms), arms)
+
+
+# The words for doing [param action] between here and [param arms].
+func _action_prompt(action: Action, arms: Arms) -> String:
+	var held: ItemInstance = arms.top()
+	match action:
 		Action.PUT_DOWN:
 			return "Put down %s" % held.item.display_name
 		Action.ADD_TO_VESSEL:

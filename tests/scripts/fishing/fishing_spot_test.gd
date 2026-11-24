@@ -101,8 +101,10 @@ func test_at_dawn_the_mackerel_bite_instead() -> void:
 	assert_str(String(player.toolbar.top().item.id)).is_equal("mackerel")
 
 
+# The rod came off the deck in #207 (it confused players); fishing is kept for
+# later, so the tests put one back where it stood, at the starboard rail.
 func _spot(ship: Ship) -> FishingSpot:
-	return ship.get_node("Visuals/UpperDeck/Dressing/FishingSpot") as FishingSpot
+	return add_rod(ship)
 
 
 # Bites come a tenth of a second after a cast, and wait a second for a strike.

@@ -4,8 +4,8 @@ extends GameTestSuite
 ## a talk.
 
 ## Every moment the game asks the lantern to react to.
-const MOMENTS: Array[StringName] = [&"returned", &"remembered", &"caught",
-		&"morning", &"hove_to", &"supper", &"dim", &"pulled_out",
+const MOMENTS: Array[StringName] = [&"returned", &"caught",
+		&"morning", &"table_bare", &"supper", &"dim", &"pulled_out",
 		&"crab_killed"]
 
 

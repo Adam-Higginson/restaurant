@@ -1,0 +1,14 @@
+# The lantern, low (#158), eats something that isn't the remedy (#207).
+# Played by the SupperTable when the galley bell is rung. He's grateful, but
+# still cold, and hints at what he needs: something warmer, with a bite.
+# Placeholder writing: rewrite freely.
+
+~ start
+@go lantern supper_bowl
+@wait 1.5
+@look lantern tired
+lantern: Mm. Thank you. That was kind.
+lantern: I'm still so cold, though...
+lantern: Something warmer, maybe? Something with a bit of fire in it.
+@home lantern
+-> END

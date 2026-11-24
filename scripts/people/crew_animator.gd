@@ -46,6 +46,10 @@ enum Mood {
 ## hasn't got it: another file made on the same skeleton (the heron's rig came
 ## with a walk in a file of its own). Its first animation is taken.
 @export_file("*.glb") var walk_animation_from: String = ""
+## Other animations to borrow the same way, by the name to play them as: a
+## file each, made on the same skeleton, whose first animation is taken (the
+## heron's drink, #207).
+@export var borrowed: Dictionary[StringName, String] = {}
 
 ## What they're doing now.
 var mood: Mood = Mood.IDLE:
@@ -153,6 +157,17 @@ func _set_mood(to: Mood) -> void:
 	_show()
 
 
+## Plays [param clip] once (a drink), then goes back to what was playing.
+## Returns how long it takes, in seconds, or 0 if the model hasn't got it.
+func play_once(clip: StringName) -> float:
+	if _animator == null or clip == &"" or not _animator.has_animation(clip):
+		return 0.0
+	_animator.play(clip, blend_seconds)
+	var length: float = _animator.get_animation(clip).length
+	get_tree().create_timer(length).timeout.connect(func() -> void: _play(blend_seconds))
+	return length
+
+
 func _show() -> void:
 	_mood = Mood.WALK if _walking else _talk_mood
 	_play(blend_seconds)
@@ -187,11 +202,18 @@ func _on_dressed(shown: bool) -> void:
 # if it hasn't one of its own. The other file is on the same skeleton, so its
 # tracks name the same bones.
 func _borrow_walk() -> void:
-	if walk_animation == &"" or walk_animation_from.is_empty() \
-			or _animator.has_animation(walk_animation) \
-			or not ResourceLoader.exists(walk_animation_from):
+	_borrow(walk_animation, walk_animation_from)
+	for clip: StringName in borrowed:
+		_borrow(clip, borrowed[clip])
+
+
+# Adds the first animation of the file at [param path] to the model's own as
+# [param clip], unless it already has one by that name.
+func _borrow(clip: StringName, path: String) -> void:
+	if clip == &"" or path.is_empty() or _animator.has_animation(clip) \
+			or not ResourceLoader.exists(path):
 		return
-	var source: PackedScene = load(walk_animation_from) as PackedScene
+	var source: PackedScene = load(path) as PackedScene
 	if source == null:
 		return
 	var other: Node = source.instantiate()
@@ -200,8 +222,8 @@ func _borrow_walk() -> void:
 		var their: AnimationPlayer = players[0] as AnimationPlayer
 		var names: PackedStringArray = their.get_animation_list()
 		if not names.is_empty():
-			var walk: Animation = their.get_animation(names[0]).duplicate() as Animation
+			var animation: Animation = their.get_animation(names[0]).duplicate() as Animation
 			var library: AnimationLibrary = _animator.get_animation_library(&"")
 			if library != null:
-				library.add_animation(walk_animation, walk)
+				library.add_animation(clip, animation)
 	other.free()

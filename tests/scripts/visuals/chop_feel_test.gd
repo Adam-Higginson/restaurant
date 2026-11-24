@@ -61,33 +61,20 @@ func test_the_knife_leaves_no_trail_at_the_board() -> void:
 	assert_int((player.get_node("KnifeTrail") as KnifeTrail).length()).is_equal(0)
 
 
-func test_the_first_cut_steps_you_up_to_the_board() -> void:
+func test_starting_to_chop_steps_you_up_to_the_board() -> void:
 	var setup: Array = await _board_with_tomato()
 	var counter: Counter3D = setup[0]
 	var player: Player3D = setup[1]
 	var runner: GdUnitSceneRunner = setup[2]
-	var before: float = _distance(player, counter)
 
-	counter.cut_with(player, KNIFE)
 	await physics_ticks(runner, 20)
 
-	assert_float(_distance(player, counter)).is_less(before - 0.3)
+	# It starts 1.2 m away.
+	assert_float(_distance(player, counter)).is_less(0.9)
 
 
-func test_walking_away_stops_the_step() -> void:
-	var setup: Array = await _board_with_tomato()
-	var counter: Counter3D = setup[0]
-	var player: Player3D = setup[1]
-	var runner: GdUnitSceneRunner = setup[2]
-
-	counter.cut_with(player, KNIFE)
-	await walk(runner, "move_down", 24)
-
-	assert_float(_distance(player, counter)).is_greater(1.5)
-
-
-# A board with a tomato on it 1.2 m in front of a player facing it, after
-# the meter's gone up. Returns [counter, player, runner].
+# A board with a tomato on it 1.2 m in front of a player facing it, knife in
+# hand, chopping (#207). Returns [counter, player, runner].
 func _board_with_tomato() -> Array:
 	var player: Player3D = new_player_3d_on_floor()
 	var counter: Counter3D = (load(COUNTER_SCENE) as PackedScene).instantiate() as Counter3D
@@ -97,6 +84,7 @@ func _board_with_tomato() -> Array:
 	var runner: GdUnitSceneRunner = scene_runner(player.get_parent())
 	counter.slot.get_item().contents.add_item(ItemInstance.new(TOMATO))
 	await physics_ticks(runner, 5)
+	counter.start_chopping(player, KNIFE)
 	return [counter, player, runner]
 
 

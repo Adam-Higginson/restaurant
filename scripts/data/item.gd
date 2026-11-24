@@ -32,6 +32,14 @@ enum VesselShape { FLAT, BOWL, PAN, POT }
 ## Multiplies the model's colours: a fillet's model browned for the fried
 ## dish, the herring's made greener for a mackerel.
 @export var model_tint: Color = Color.WHITE
+## Moves the fitted model, in metres: a pot or pan's model is centred with its
+## handle, so it's slid along to put the bowl in the middle, where food goes.
+@export var model_offset: Vector3 = Vector3.ZERO
+## Turns the fitted model about the up axis, in degrees.
+@export var model_yaw_degrees: float = 0.0
+## Whether it's a liquid (water, soup): in a pot or bowl it's drawn as a
+## surface filling it, not as a piece of food sitting in it (#207).
+@export var liquid: bool = false
 ## How many food items fit in it, for vessels (a chopping board, a plate).
 ## 0 for everything else, including food.
 @export var capacity: int = 0

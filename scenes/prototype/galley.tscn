@@ -31,6 +31,7 @@
 [ext_resource type="PackedScene" path="res://scenes/prototype/dressing/coat_hooks.tscn" id="48_p2e1w"]
 [ext_resource type="PackedScene" path="res://scenes/prototype/dressing/picture_frame.tscn" id="48_picture"]
 [ext_resource type="PackedScene" path="res://scenes/prototype/dressing/ships_bell.tscn" id="49_bbi6x"]
+[ext_resource type="PackedScene" path="res://scenes/prototype/props/supper_table.tscn" id="207_supper"]
 [ext_resource type="PackedScene" path="res://scenes/prototype/dressing/dropped_jacket.tscn" id="50_7hlps"]
 [ext_resource type="PackedScene" path="res://scenes/prototype/dressing/chart_corner.tscn" id="51_svp7d"]
 [ext_resource type="PackedScene" path="res://scenes/prototype/dressing/bookshelf.tscn" id="52_books"]
@@ -820,3 +821,6 @@ stand_ins = [NodePath("../CrockShelf"), NodePath("../CrockShelfBracket1"), NodeP
 grain = false
 detail = 1.0
 keep_as_made = true
+
+[node name="SupperTable" parent="." instance=ExtResource("207_supper")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1, 1.82, 5.3)

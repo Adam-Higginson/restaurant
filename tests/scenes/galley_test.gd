@@ -79,43 +79,53 @@ func test_a_garden_salad_from_start_to_finish_while_sailing() -> void:
 	assert_str(detector.interact_prompt()).is_equal("Take Plate")
 	await press(runner, "interact")
 	await _go_to(runner, ship, "Counter")
-	assert_str(detector.interact_prompt()).is_equal("Put down Plate")
-	await press(runner, "interact")
+	assert_str(detector.tool_prompt()).is_equal("Put down Plate")
+	await press(runner, "use_tool")
 
 	# Lettuce from the pantry, chopped on the board, carried to the plate.
 	await _take_from_pantry(runner, ship, "Lettuce")
 	await _go_to(runner, ship, "BoardCounter")
-	assert_str(detector.interact_prompt()).is_equal("Put Lettuce on Chopping Board")
-	await press(runner, "interact")
+	assert_str(detector.tool_prompt()).is_equal("Put Lettuce on Chopping Board")
+	await press(runner, "use_tool")
+	# The knife out (it's in the first slot), and chopping started.
+	player.toolbar.select(0)
 	assert_str(detector.tool_prompt()).is_equal("Chop")
+	await press(runner, "use_tool")
 	# Each cut made on the chop meter's sweet spot: perfect.
 	for i: int in 3:
 		board.meter.position = board.meter.centre
 		await press(runner, "use_tool")
+	# The perfect cuts' hit stops slow the game a moment, so allow for them.
+	await physics_ticks(runner, int(Counter3D.FINISH_SECONDS * 60.0) + 40)
+	assert_bool(board.is_chopping()).is_false()
 	assert_str(detector.tool_prompt()).is_empty()
 	await press(runner, "interact")
 	assert_object(player.arms.top().item).is_same(CHOPPED_LETTUCE)
 	await _go_to(runner, ship, "Counter")
-	assert_str(detector.interact_prompt()).is_equal("Put Chopped Lettuce on Plate")
-	await press(runner, "interact")
+	assert_str(detector.tool_prompt()).is_equal("Put Chopped Lettuce on Plate")
+	await press(runner, "use_tool")
 	assert_bool(player.arms.is_empty()).is_true()
 
-	# A tomato sliced on the board (two cuts, stopping before diced), then the
-	# plate carried over to it: the tomato slides onto the plate.
+	# A tomato sliced on the board (two cuts, then stopping before it's diced),
+	# then the plate carried over to it: the tomato slides onto the plate.
 	await _take_from_pantry(runner, ship, "Tomato")
 	await _go_to(runner, ship, "BoardCounter")
-	await press(runner, "interact")
+	await press(runner, "use_tool")
+	player.toolbar.select(0)
+	await press(runner, "use_tool")
 	for i: int in 2:
 		board.meter.position = board.meter.centre
 		await press(runner, "use_tool")
+	assert_str(detector.interact_prompt()).is_equal("Stop chopping")
+	await press(runner, "interact")
 	await _go_to(runner, ship, "Counter")
 	assert_str(detector.interact_prompt()).is_equal("Pick up Plate")
 	await press(runner, "interact")
 	await _go_to(runner, ship, "BoardCounter")
-	assert_str(detector.interact_prompt()).is_equal("Put Sliced Tomato on Plate")
-	await press(runner, "interact")
+	assert_str(detector.tool_prompt()).is_equal("Put Sliced Tomato on Plate")
+	await press(runner, "use_tool")
 	await _go_to(runner, ship, "Counter")
-	await press(runner, "interact")
+	await press(runner, "use_tool")
 
 	var plate: ItemInstance = counter.slot.get_item()
 	assert_object(plate.item).is_same(PLATE)

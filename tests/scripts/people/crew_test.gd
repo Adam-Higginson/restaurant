@@ -12,12 +12,10 @@ const ON_DECK: Vector3 = Vector3(0, 6.25, -16.2)
 
 func before_test() -> void:
 	Game.dialogue.reset()
-	Game.memories.clear()
 
 
 func after_test() -> void:
 	Game.dialogue.reset()
-	Game.memories.clear()
 
 
 func test_the_heron_is_by_the_stove_at_night() -> void:
@@ -123,19 +121,9 @@ func test_near_him_he_says_it_and_far_from_him_its_news_for_later() -> void:
 	place_player_3d(runner, ON_DECK)
 	await physics_ticks(runner, 5)
 	assert_bool(spirit.is_in_earshot()).is_false()
-	assert_bool(spirit.tell(&"hove_to", &"news_bell")).is_false()
+	assert_bool(spirit.tell(&"caught", &"news_fish")).is_false()
 	assert_str(spirit.saying()).is_equal(said)
-	assert_bool(Game.dialogue.is_set(&"news_bell")).is_true()
-
-
-func test_a_memory_that_comes_back_far_from_him_is_news() -> void:
-	var rig: Array[Node3D] = new_moored_ship_with_player(ON_DECK)
-	var runner: GdUnitSceneRunner = scene_runner(rig[0].get_parent())
-	await physics_ticks(runner, 5)
-
-	Game.memories.notice(Catalog.load_default().find_item(&"herring"))
-
-	assert_bool(Game.dialogue.is_set(&"news_memory")).is_true()
+	assert_bool(Game.dialogue.is_set(&"news_fish")).is_true()
 
 
 func test_told_to_leave_home_he_follows_at_your_shoulder() -> void:
@@ -173,11 +161,10 @@ func test_the_round_table_no_longer_talks_for_him() -> void:
 	var conversation: Conversation = Conversation.new()
 	rig[0].get_parent().add_child(conversation)
 	var runner: GdUnitSceneRunner = scene_runner(rig[0].get_parent())
-	var player: Player3D = rig[1] as Player3D
 	var supper: SupperSpot = rig[0].get_node("BunkRoom/SupperSpot") as SupperSpot
 	await physics_ticks(runner, 3)
 
-	assert_str(supper.prompt(player.arms)).is_empty()
+	assert_str(supper.prompt()).is_empty()
 
 
 func test_without_a_conversation_in_the_scene_the_lantern_offers_nothing() -> void:

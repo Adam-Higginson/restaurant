@@ -120,7 +120,7 @@ func _sail_on(player: Player3D) -> void:
 func _save(player: Player3D) -> void:
 	var spirit: LanternSpirit = player.get_node_or_null("LanternSpirit") as LanternSpirit
 	var warmth: float = spirit.warmth if spirit != null else 1.0
-	SaveGame.write(SaveGame.capture(Game.memories, _time_of_day(), warmth, Game.dialogue,
+	SaveGame.write(SaveGame.capture(_time_of_day(), warmth, Game.dialogue,
 			Game.look))
 
 

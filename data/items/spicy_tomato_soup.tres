@@ -7,3 +7,4 @@ script = ExtResource("1_item")
 id = &"spicy_tomato_soup"
 display_name = "Spicy Tomato Soup"
 color = Color(0.78, 0.2, 0.1, 1)
+liquid = true

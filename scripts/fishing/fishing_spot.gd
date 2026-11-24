@@ -89,7 +89,6 @@ func _on_interacted(player: Player3D) -> void:
 				if player.toolbar.add(fish):
 					caught.emit(fish)
 					_tell(player, &"caught", &"news_fish")
-					Game.memories.notice(fish_now)
 
 
 # The lantern reacts to [param moment] if he's near enough to have seen;

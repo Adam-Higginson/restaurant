@@ -205,3 +205,6 @@ listen_animation = &"Listening_Gesture"
 walker = NodePath("../Walker")
 walk_animation = &"walk"
 walk_animation_from = "res://assets/third_party/meshy/heron/rig/walk.glb"
+borrowed = Dictionary[StringName, String]({
+&"Drink": "res://assets/third_party/meshy/heron/drink/animation_glb.glb"
+})

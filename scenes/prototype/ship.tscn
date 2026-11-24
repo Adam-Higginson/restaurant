@@ -34,7 +34,6 @@
 [ext_resource type="Script" path="res://scripts/people/waypoint.gd" id="401_waypoint"]
 [ext_resource type="PackedScene" path="res://scenes/prototype/navigation_room.tscn" id="185_nav"]
 [ext_resource type="Script" path="res://scripts/story/story_trigger.gd" id="187_trigger"]
-[ext_resource type="PackedScene" path="res://scenes/prototype/props/herb_planter.tscn" id="186_herbs"]
 [ext_resource type="PackedScene" path="res://scenes/prototype/galley.tscn" id="196_galley"]
 [ext_resource type="PackedScene" path="res://scenes/prototype/bunk_room.tscn" id="196_bunk"]
 [ext_resource type="Script" path="res://scripts/ship/stairs.gd" id="204_stairs"]
@@ -571,9 +570,6 @@ done = &"deck_talk"
 [node name="Shape" type="CollisionShape3D" parent="DeckTalk"]
 shape = SubResource("Shape_DeckTalk")
 
-[node name="HerbPlanter" parent="." instance=ExtResource("186_herbs")]
-transform = Transform3D(0, 0, -1, 0, 1, 0, 1, 0, 0, 5.5, 5.3, 2.3)
-
 [node name="BunkRoom" parent="." unique_id=76019696 instance=ExtResource("196_bunk")]
 
 [node name="ForecastleShape" type="CollisionShape3D" parent="." unique_id=2007758597]
@@ -692,7 +688,7 @@ morning_spot = NodePath("../../HeronMorning")
 [node name="Shots" type="Node3D" parent="."]
 
 [node name="LanternTable" type="Marker3D" parent="Shots" groups=["shots"]]
-transform = Transform3D(0.8872, 0.0961, -0.4512, -0.0000, 0.9781, 0.2083, 0.4614, -0.1848, 0.8678, -1.65, 2.3, 12.45)
+transform = Transform3D(-0.8805, -0.0944, 0.4646, 0.0000, 0.9800, 0.1991, -0.4741, 0.1753, -0.8628, 1.7, 2.35, 4.1)
 
 [node name="StoveNook" type="Marker3D" parent="Shots" groups=["shots"]]
 transform = Transform3D(-0.837, -0.104, 0.537, 0, 0.982, 0.19, -0.547, 0.159, -0.822, 0.3, 2.6, 8.4)
@@ -701,13 +697,13 @@ transform = Transform3D(-0.837, -0.104, 0.537, 0, 0.982, 0.19, -0.547, 0.159, -0
 transform = Transform3D(-0.7714, 0.1435, -0.62, 0, 0.9743, 0.2255, 0.6364, 0.1739, -0.7515, 2.1, 2.6, 11.4)
 
 [node name="Doorway" type="Marker3D" parent="Shots" groups=["shots"]]
-transform = Transform3D(0.9975, -0.0148, -0.069, 0, 0.9777, -0.2101, 0.0706, 0.2095, 0.9753, -2.95, 2.3, 11.2)
+transform = Transform3D(-0.8232, -0.0482, 0.5657, 0.0000, 0.9964, 0.0849, -0.5677, 0.0699, -0.8202, -0.2, 2.3, 4.4)
 
 [node name="PotOnStove" type="Marker3D" parent="Shots" groups=["shots"]]
 transform = Transform3D(0.5233, 0.1413, -0.8404, 0, 0.9861, 0.1659, 0.8522, -0.0868, 0.516, 0.8, 2.5, 3.3)
 
 [node name="SupperWide" type="Marker3D" parent="Shots" groups=["shots"]]
-transform = Transform3D(0.9087, 0.0996, -0.4055, 0.0, 0.9711, 0.2385, 0.4175, -0.2167, 0.8825, -2.6, 2.5, 13.3)
+transform = Transform3D(-0.8462, -0.1296, 0.5168, 0.0000, 0.9700, 0.2432, -0.5328, 0.2058, -0.8208, 2.7, 2.7, 3.3)
 
 [node name="RescueSet" parent="." instance=ExtResource("311_rescue")]
 
@@ -796,34 +792,34 @@ transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, 4.35
 transform = Transform3D(0.9138, 0, 0.4061, 0, 1, 0, -0.4061, 0, 0.9138, 3.85, 1, 12.45)
 
 [node name="Doorway" type="Marker3D" parent="Marks" groups=["marks"]]
-transform = Transform3D(-0.5582, 0, -0.8297, 0, 1, 0, 0.8297, 0, -0.5582, -2.72, 1, 7.95)
+transform = Transform3D(0.351, 0, -0.936, 0, 1, 0, 0.936, 0, 0.351, -2.2, 1, 7.2)
 
 [node name="SupperSeat" type="Marker3D" parent="Marks" groups=["marks"]]
-transform = Transform3D(-1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, -1.0, -1.0, 1.0, 10.25)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.0, 1.0, 6.35)
 
 [node name="SupperBowl" type="Marker3D" parent="Marks" groups=["marks"]]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.15, 1.85, 11.1)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.0, 2.1, 5.3)
 
 [node name="LanternRises" type="Marker3D" parent="Marks" groups=["marks"]]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.0, 2.75, 11.2)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.0, 2.9, 5.2)
 
 [node name="LanternCircle1" type="Marker3D" parent="Marks" groups=["marks"]]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.05, 2.25, 10.7)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.0, 2.25, 6.0)
 
 [node name="LanternCircle2" type="Marker3D" parent="Marks" groups=["marks"]]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.45, 2.3, 9.35)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.4, 2.3, 7.1)
 
 [node name="LanternCircle3" type="Marker3D" parent="Marks" groups=["marks"]]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.85, 2.25, 9.55)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.8, 2.25, 7.0)
 
 [node name="LanternCircle4" type="Marker3D" parent="Marks" groups=["marks"]]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.75, 2.2, 10.85)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.0, 2.2, 5.9)
 
 [node name="LanternThanks" type="Marker3D" parent="Marks" groups=["marks"]]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.0, 2.0, 10.85)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.0, 2.0, 5.75)
 
-[node name="LanternAtTable" type="Marker3D" parent="Marks" groups=["marks"]]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.0, 2.025, 11.2)
+[node name="LanternArrives" type="Marker3D" parent="Marks" groups=["marks"]]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.6, 2.3, 5.95)
 
 [node name="TheHelm" type="Marker3D" parent="Shots" groups=["shots"]]
 transform = Transform3D(-0.5787, -0.2547, 0.7747, 0.0, 0.95, 0.3124, -0.8155, 0.1808, -0.5498, 2.7, 9.5, 10.5)

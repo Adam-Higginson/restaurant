@@ -2,14 +2,12 @@
 
 [ext_resource type="Script" path="res://scripts/props/supper_spot.gd" id="1_supper"]
 [ext_resource type="Script" path="res://scripts/interaction/interactable_3d.gd" id="2_reach"]
-[ext_resource type="Resource" path="res://data/items/spicy_tomato_soup.tres" id="3_remedy"]
 
 [sub_resource type="BoxShape3D" id="Reach"]
 size = Vector3(1.1, 0.8, 1.1)
 
 [node name="SupperSpot" type="Node3D"]
 script = ExtResource("1_supper")
-remedy = ExtResource("3_remedy")
 
 [node name="Reach" type="Area3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.1, 0)
