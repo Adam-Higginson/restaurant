@@ -134,6 +134,8 @@ A growing glossary of the Godot concepts this project uses: what each one is, in
 
 **Override materials.** A mesh's own materials can be replaced per instance without touching the mesh: `material_override` covers the whole mesh, `set_surface_override_material()` one surface. *Ours:* `ThirdPartyModel` gives pack models the N64 grain shader this way, keeping each model's own colours.
 
+**Overridden properties on an instance.** A scene placed inside another (an *instance*) keeps its own values unless the outer scene changes one. A changed value is saved in the outer scene, shows in the Inspector with a circular ↺ revert arrow beside it, and clicking the arrow goes back to the instanced scene's value. *Ours:* `sea.tscn` used to set its `Player`'s `speed` to 2 m/s for a slower pace aboard; that's gone, so every scene uses `player.tscn`'s 3.5 m/s.
+
 **`@tool` scripts.** A script marked `@tool` also runs inside the editor, so it can show things while you edit (here, models loaded at runtime). Anything it adds without an *owner* isn't saved into the scene. *Ours:* `ThirdPartyModel` shows pack models in the editor without saving them.
 
 **Particle collision and heightfields.** Particles don't use the physics engine. They collide with special collider nodes instead. A `GPUParticlesCollisionHeightField3D` photographs everything inside its box from above into a height map, and particles that go below it have hit something. It's cheap and ideal for rain, but it can't see under overhangs. *Ours:* the ship's `RainCatcher` covers the whole ship, so drops land on the deck, rails and sail, and the deck keeps the galley dry.
