@@ -42,7 +42,7 @@ func test_it_opens_on_her_name_and_waits_for_any_button() -> void:
 	var swing: SternSwing = _ship.get_node("SternWatch/Swing") as SternSwing
 	var face: LanternFace = hook_lantern.get_node("Body") as LanternFace
 	var underwater: Stage = _sea.get_node("Stages/Underwater") as Stage
-	var prompt: CutscenePrompt = _sea.get_node("CutscenePrompt") as CutscenePrompt
+	var prompt: CutscenePrompt = _sea.get_node("Story/CutscenePrompt") as CutscenePrompt
 	await physics_ticks(runner, 3)
 
 	# Black at first; you're by your bunk and can't move.
@@ -157,7 +157,7 @@ func test_he_comes_down_warm_finds_you_and_holds_out_his_hand() -> void:
 	var said: Array[int] = [0]
 	_conversation.line_said.connect(func(_speaker: Person) -> void: said[0] += 1)
 	var underwater: Stage = _sea.get_node("Stages/Underwater") as Stage
-	var prompt: CutscenePrompt = _sea.get_node("CutscenePrompt") as CutscenePrompt
+	var prompt: CutscenePrompt = _sea.get_node("Story/CutscenePrompt") as CutscenePrompt
 	var face: LanternFace = _sinking_lantern()
 	var hand: FlameHand = _underwater_set().get_node("Lantern/Hand") as FlameHand
 	var trail: CPUParticles3D = _underwater_set().get_node("Lantern/Trail") as CPUParticles3D
@@ -442,18 +442,36 @@ func test_a_saved_voyage_carries_on_after_the_title_instead_of_the_rescue() -> v
 	assert_bool(_fade().visible).is_false()
 
 
+func test_a_voyage_saved_at_the_island_carries_on_there() -> void:
+	Game.dialogue.set_flag(Bedside.ARRIVED_FLAG)
+	SaveGame.write(SaveGame.capture(Game.memories, null, 1.0, Game.dialogue))
+	Game.dialogue.reset()
+	_build(DialogueTree.START, true)
+	_opening.title_seconds = 0.2
+	# Heard, rather than really going (that would replace the test's scene).
+	_opening.island_scene = ""
+	var runner: GdUnitSceneRunner = scene_runner(_sea)
+	await physics_ticks(runner, 240)
+
+	runner.simulate_key_pressed(KEY_ENTER)
+	await _choose_voyage(runner, CONTINUE)
+
+	assert_bool(await wait_for_signal(_opening.went_ashore, 20.0)).is_true()
+	assert_bool(Game.dialogue.is_set(Bedside.ARRIVED_FLAG)).is_true()
+
+
 func test_everything_the_intro_asks_for_is_in_the_scene() -> void:
 	_build()
 	_opening.skip = true
 	var runner: GdUnitSceneRunner = scene_runner(_sea)
 	await physics_ticks(runner, 3)
 	assert_bool(_opening.is_playing).is_false()
-	var shots: ShotCues = _sea.get_node("ShotCues") as ShotCues
-	var actors: ActorCues = _sea.get_node("ActorCues") as ActorCues
+	var shots: ShotCues = _sea.get_node("Story/ShotCues") as ShotCues
+	var actors: ActorCues = _sea.get_node("Story/ActorCues") as ActorCues
 	var stages: StageCues = _sea.get_node("StageCues") as StageCues
-	var clips: ClipCues = _sea.get_node("ClipCues") as ClipCues
-	var sounds: SoundCues = _sea.get_node("SoundCues") as SoundCues
-	var looks: LookCues = _sea.get_node("LookCues") as LookCues
+	var clips: ClipCues = _sea.get_node("Story/ClipCues") as ClipCues
+	var sounds: SoundCues = _sea.get_node("Story/SoundCues") as SoundCues
+	var looks: LookCues = _sea.get_node("Story/LookCues") as LookCues
 	var tree: DialogueTree = DialogueLibrary.find(INTRO)
 	assert_array(tree.errors).is_empty()
 
@@ -679,7 +697,7 @@ func _heron() -> Crewmate:
 
 
 func _mark(mark_name: String) -> Marker3D:
-	return (_sea.get_node("ActorCues") as ActorCues).find_mark(mark_name)
+	return (_sea.get_node("Story/ActorCues") as ActorCues).find_mark(mark_name)
 
 
 func _sea_surface() -> Sea:
@@ -752,4 +770,4 @@ func _build(section: StringName = DialogueTree.START, load_save: bool = false) -
 	_choice_cues().ask = false
 	_ship = _sea.get_node("Ship") as Ship
 	_player = _sea.get_node("Player") as Player3D
-	_conversation = _sea.get_node("Conversation") as Conversation
+	_conversation = _sea.get_node("Story/Conversation") as Conversation

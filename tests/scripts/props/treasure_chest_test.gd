@@ -1,10 +1,12 @@
 extends GameTestSuite
 ## Tests for the treasure chest (#152): opening it plays its cutscene, which
 ## gives you what's inside; it opens only once, and stays open in a saved
-## voyage; a full toolbar is told so; and the galley's chest holds the knife.
+## voyage; a full toolbar is told so; the galley's chest holds the knife; and
+## a chest can hold an item instead (the pan on the cove's beach, #187).
 
 const KNIFE: HandTool = preload("res://data/tools/chefs_knife.tres")
 const TOMATO: Item = preload("res://data/items/tomato.tres")
+const PAN: Item = preload("res://data/items/frying_pan.tres")
 const CHEST: PackedScene = preload("res://scenes/prototype/props/treasure_chest.tscn")
 const FLAG: StringName = &"opened_test_chest"
 
@@ -122,6 +124,22 @@ func test_the_treasure_is_held_up_and_put_away_after() -> void:
 	await physics_ticks(runner, 5)
 
 	assert_object(_cues.treasure()).is_null()
+
+
+func test_a_chest_can_hold_an_item_and_gives_it_to_you() -> void:
+	var runner: GdUnitSceneRunner = _build()
+	_chest.contents = null
+	_chest.item = PAN
+	await physics_ticks(runner, 2)
+	assert_str(String(_chest.treasure_id())).is_equal("frying_pan")
+
+	assert_bool(_chest.open_for(_player)).is_true()
+	_conversation.skip()
+	await physics_ticks(runner, 10)
+
+	assert_bool(Game.dialogue.is_set(&"has_frying_pan")).is_true()
+	assert_bool(_player.toolbar.has_item(&"frying_pan")).is_true()
+	assert_bool(_chest.is_opened()).is_true()
 
 
 func test_the_galley_chest_holds_the_knife() -> void:

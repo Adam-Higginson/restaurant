@@ -104,6 +104,25 @@ func test_a_sound_with_no_recording_yet_is_silent_without_complaint() -> void:
 	assert_bool(heartbeat.playing).is_false()
 
 
+func test_rain_eases_on_cue_and_stays_eased_after() -> void:
+	_build()
+	var runner: GdUnitSceneRunner = scene_runner(_player.get_parent())
+	await physics_ticks(runner, 3)
+	_weather.intensity = 0.8
+
+	play_cutscene(_conversation, _player, "@rain 0.2 1.0
+heron: It's easing.")
+	await physics_ticks(runner, 20)
+	assert_float(_weather.intensity).is_between(0.21, 0.79)
+	await physics_ticks(runner, 60)
+	assert_float(_weather.intensity).is_equal_approx(0.2, 0.01)
+	_conversation.press()
+	await physics_ticks(runner, 5)
+
+	assert_bool(_conversation.is_active()).is_false()
+	assert_float(_weather.intensity).is_equal_approx(0.2, 0.01)
+
+
 func test_lightning_strikes_on_cue() -> void:
 	_build()
 	var runner: GdUnitSceneRunner = scene_runner(_player.get_parent())

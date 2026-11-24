@@ -113,7 +113,8 @@ func test_a_spicy_soup_left_on_the_hob_is_just_done() -> void:
 
 
 func test_the_planter_on_deck_gives_fresh_herbs() -> void:
-	var planter: Dispenser3D = (load("res://scenes/prototype/props/herb_planter.tscn") 			as PackedScene).instantiate() as Dispenser3D
+	var planter: Dispenser3D = (load("res://scenes/prototype/props/herb_planter.tscn") \
+			as PackedScene).instantiate() as Dispenser3D
 	add_child(planter)
 	auto_free(planter)
 	var arms: Arms = Arms.new()

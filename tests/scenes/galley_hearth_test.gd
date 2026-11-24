@@ -29,7 +29,8 @@ func test_the_chimney_smokes_up_on_deck_leaning_astern() -> void:
 	assert_float(stove.to_local(stove.smoke().global_position).y).is_greater(4.3)
 	# It sails with the ship, and the wind leans it astern (+z) as it rises.
 	assert_bool(stove.smoke().local_coords).is_true()
-	var process: ParticleProcessMaterial = stove.smoke().process_material 			as ParticleProcessMaterial
+	var process: ParticleProcessMaterial = stove.smoke().process_material \
+			as ParticleProcessMaterial
 	assert_float(process.gravity.y).is_greater(0.0)
 	assert_float(process.gravity.z).is_greater(0.0)
 
@@ -70,7 +71,8 @@ func test_the_galley_stays_dry_in_the_rain() -> void:
 
 
 func test_the_lanterns_glow_as_bright_as_set() -> void:
-	var lantern: Lantern = (load("res://scenes/prototype/props/lantern.tscn") as PackedScene) 			.instantiate() as Lantern
+	var lantern: Lantern = (load("res://scenes/prototype/props/lantern.tscn") as PackedScene) \
+			.instantiate() as Lantern
 	lantern.light_energy = 0.7
 	lantern.light_range = 3.0
 	add_child(lantern)

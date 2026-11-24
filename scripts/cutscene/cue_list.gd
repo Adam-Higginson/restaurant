@@ -36,6 +36,8 @@ const USAGE: Dictionary[StringName, String] = {
 	&"hush": "@hush on or @hush off",
 	&"grave": "@grave on or @grave off (the Grave of the Lanterns' faint lights far below the sea)",
 	&"lightning": "@lightning",
+	&"rain": "@rain 0.25 6.0 (the rain eases to that much, 0 to 1, over so many seconds)",
+	&"travel": "@travel cove (once the cutscene ends, the game goes there)",
 	&"look": "@look hook_lantern determined (a look for his eyes: calm, surprised, "
 			+ "determined, worried, pleading, effort, tired, asleep, pleased; or for his "
 			+ "glass: fogged, clear, streaked, dry, cracked, mended)",
@@ -85,6 +87,11 @@ static func _fits(cue: StringName, args: PackedStringArray) -> bool:
 			return args.size() >= 3 and _is_seconds(args[1])
 		&"say_in":
 			return args.size() >= 4 and _is_seconds(args[0]) and _is_seconds(args[2])
+		&"rain":
+			return args.size() in [1, 2] and _is_seconds(args[0]) and args[0].to_float() <= 1.0 \
+					and (args.size() == 1 or _is_seconds(args[1]))
+		&"travel":
+			return args.size() == 1
 		&"muffle", &"hush", &"grave":
 			return args.size() == 1 and ["on", "off"].has(args[0])
 		&"hold_up":

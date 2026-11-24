@@ -28,6 +28,9 @@ const CUTSCENE: StringName = &"chest"
 
 ## What's inside: a tool to keep.
 @export var contents: HandTool
+## Or an item to keep, if it holds no tool: the frying pan washed up on the
+## cove's beach (#187).
+@export var item: Item
 ## The conversation flag set once it's opened, so it stays open in a saved
 ## voyage. Each chest needs its own ([code]opened_galley_chest[/code]).
 @export var flag: StringName = &""
@@ -100,19 +103,30 @@ func prompt(player: Player3D) -> String:
 	if contents != null and not player.toolbar.has_tool(contents.id) \
 			and player.toolbar.is_full():
 		return "Your toolbar is full"
+	if contents == null and item != null and not player.toolbar.has_item(item.id) \
+			and player.toolbar.is_full():
+		return "Your toolbar is full"
 	return "Open"
+
+
+## The id of what's inside, the tool's or else the item's: it names the
+## section of the chest's cutscene that's played. Empty if it's empty.
+func treasure_id() -> StringName:
+	if contents != null:
+		return contents.id
+	return item.id if item != null else &""
 
 
 ## Opens it for [param player]: plays the chest's cutscene. Returns whether
 ## it started.
 func open_for(player: Player3D) -> bool:
-	if prompt(player) != "Open" or contents == null:
+	if prompt(player) != "Open" or treasure_id() == &"":
 		return false
 	var conversation: Conversation = Conversation.find(self)
 	if conversation == null:
 		return false
 	_opening = true
-	if not conversation.play(CUTSCENE, player, contents.id):
+	if not conversation.play(CUTSCENE, player, treasure_id()):
 		_opening = false
 		return false
 	conversation.ended.connect(_on_cutscene_ended, CONNECT_ONE_SHOT)

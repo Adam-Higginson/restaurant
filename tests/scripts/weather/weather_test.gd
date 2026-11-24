@@ -108,7 +108,8 @@ func test_splashes_sail_with_the_ship() -> void:
 
 func test_the_ship_catches_rain_over_its_whole_deck() -> void:
 	var ship: Ship = new_moored_ship_with_player(ON_DECK)[0] as Ship
-	var catcher: GPUParticlesCollisionHeightField3D = 			ship.get_node("RainCatcher") as GPUParticlesCollisionHeightField3D
+	var catcher: GPUParticlesCollisionHeightField3D = \
+			ship.get_node("RainCatcher") as GPUParticlesCollisionHeightField3D
 	# Every corner of the deck and the top of the mast are inside it.
 	var box: AABB = AABB(catcher.position - catcher.size / 2.0, catcher.size)
 	for corner: Vector3 in [Vector3(-6, 5.3, -15), Vector3(6, 5.3, 15), Vector3(0, 16.5, -4)]:

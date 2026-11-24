@@ -123,7 +123,8 @@ func share(player: Player3D) -> bool:
 # flag. With no conversation to play it in, he simply comes back.
 func _mend(player: Player3D) -> void:
 	var conversation: Conversation = Conversation.find(self)
-	var played: bool = conversation != null and is_instance_valid(player) 			and conversation.play(remedy_scene, player)
+	var played: bool = conversation != null and is_instance_valid(player) \
+			and conversation.play(remedy_scene, player)
 	if not played:
 		Game.dialogue.clear(LanternSpirit.LOW_FLAG)
 	mended.emit()

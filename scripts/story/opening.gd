@@ -17,15 +17,27 @@ extends Node
 ## dark after the cutscene, so a new voyage has nothing to undo. A new
 ## voyage leaves the old save until you next sleep, which replaces it.
 ##
+## A voyage saved after reaching the island (#187) carries on there: the
+## title, then the cove, on deck at anchor.
+##
 ## Set [member skip] to start straight on deck instead (tests and tools do).
 
 ## Emitted when the opening's over and you can move.
 signal finished
+## Emitted when a voyage saved at the island carries on there, just before
+## the game goes to [member island_scene].
+signal went_ashore
 
 ## What a script asks to know whether a saved voyage is being carried on:
 ## [code]? saved_voyage[/code].
 const SAVED_FACT: StringName = &"saved_voyage"
 
+## Where a voyage saved after reaching the island carries on.
+const ISLAND_SCENE: String = "res://scenes/prototype/islands/cove.tscn"
+
+## The scene a voyage saved at the island carries on in. Empty stays here
+## (tests hear [signal went_ashore] instead).
+@export var island_scene: String = ISLAND_SCENE
 ## Start straight away, with no opening.
 @export var skip: bool = false
 ## The player who wakes.
@@ -90,6 +102,9 @@ func _play() -> void:
 		# In the dark, once the title has gone.
 		SaveGame.restore(saved, Game.memories, time, spirit, Game.dialogue)
 		Game.set_look(SaveGame.look_of(saved))
+		if Game.dialogue.is_set(Bedside.ARRIVED_FLAG):
+			await _carry_on_ashore(played)
+			return
 		await _carry_on(saved, time, played)
 	elif not played:
 		# Nothing to play it with (a bare test scene): just open your eyes.
@@ -116,6 +131,20 @@ func _play_cutscene() -> bool:
 	if conversation.is_active():
 		await conversation.ended
 	return true
+
+
+# A voyage saved at the island: say where, and go there. The cove opens in
+# view, on deck at anchor.
+func _carry_on_ashore(after_cutscene: bool) -> void:
+	if after_cutscene:
+		await get_tree().process_frame
+	_fade.cover_now()
+	await _fade.show_title("The island")
+	await get_tree().create_timer(title_seconds).timeout
+	_playing = false
+	went_ashore.emit()
+	if island_scene != "":
+		get_tree().change_scene_to_file.call_deferred(island_scene)
 
 
 # A saved voyage: say which day it is, then open your eyes.

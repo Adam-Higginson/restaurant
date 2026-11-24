@@ -1,0 +1,52 @@
+# The deck talk, the Prologue's Scene 6 (#187). Played by the DeckTalk
+# trigger (a StoryTrigger at the top of the hatch ramp) the first time you
+# come up on deck after the lantern's soup (the flag warmed_lantern). The
+# rain is easing. The captain is at the wheel, the lantern beside him, and
+# they're mid-talk as you come up. Your side is the reply you pick.
+#
+# It ends with them sending you to bed: sleeping in your bunk now sails on
+# through the night to the island (Bedside, the flag deck_talk).
+
+~ start
+set deck_talk
+@rain 0.2 8.0
+@place heron wheel
+@place lantern beside_the_helm
+@face heron lantern
+@shot the_helm cut
+@wait 0.6
+lantern: Much better, isn't it?
+heron: Yes. Much.
+lantern: I was beginning to think I'd never feel warm again.
+heron: Let's hope you don't make a habit of nearly putting yourself out.
+@look lantern pleased
+lantern: I'll try.
+@place player by_the_helm
+@face heron player
+@shot the_three cut
+@wait 0.6
+heron: We've lost a little time, but we haven't lost our way.
+@face heron the_chart
+heron: We're still heading for the island.
+@look lantern surprised
+lantern: Oh! I do like that island.
+@face heron lantern
+heron: You've never been there.
+@look lantern pleased
+lantern: I like the look of it.
+- (Look between them) -> the_last_mark
+
+~ the_last_mark
+@face heron player
+heron: It's the last mark on the old chart. Whatever we're looking for, there's a good chance we'll find a clue there.
+lantern: I wonder what it'll be like.
+heron: Probably wet.
+@look lantern surprised
+lantern: Everything's wet!
+@wait 0.8
+heron: Get some sleep. We'll make land by morning.
+@look lantern pleased
+lantern: Sleep well! I'll keep a lookout.
+@home lantern
+@shot free
+-> END

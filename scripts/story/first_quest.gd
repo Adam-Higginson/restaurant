@@ -7,7 +7,7 @@ extends Node
 ## do with a drink, walks to the water butt, drinks, and walks back to the
 ## wheel. He's thirsty, not helping; but anyone on deck sees where the ship's
 ## water comes from. Once the lantern's well again the drinks stop: the first
-## meal's cutscene (remedy.dlg) sends him home.
+## meal's cutscene (remedy.dlg) sends him back up to the wheel.
 ##
 ## The words of the quest are in the dialogue files; this only moves the
 ## captain (and gives him his few words about being thirsty).

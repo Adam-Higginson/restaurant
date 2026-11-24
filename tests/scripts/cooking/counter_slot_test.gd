@@ -387,15 +387,18 @@ func test_a_held_plate_at_an_empty_board_picks_up_the_board() -> void:
 func test_interact_action_matches_each_case() -> void:
 	var hand: Toolbar = Toolbar.new()
 	assert_int(CounterSlot.new(null).interact_action(hand)).is_equal(CounterSlot.Action.NONE)
-	assert_int(CounterSlot.new(TOMATO).interact_action(hand)) 			.is_equal(CounterSlot.Action.PICK_UP)
+	assert_int(CounterSlot.new(TOMATO).interact_action(hand)) \
+			.is_equal(CounterSlot.Action.PICK_UP)
 	var board: CounterSlot = CounterSlot.new(BOARD)
 	assert_int(board.interact_action(hand)).is_equal(CounterSlot.Action.PICK_UP)
 	board.get_item().contents.add_item(ItemInstance.new(LETTUCE))
 	assert_int(board.interact_action(hand)).is_equal(CounterSlot.Action.TAKE_FOOD)
 
 	hand.add(ItemInstance.new(TOMATO))
-	assert_int(CounterSlot.new(null).interact_action(hand)) 			.is_equal(CounterSlot.Action.PUT_DOWN)
-	assert_int(CounterSlot.new(PLATE).interact_action(hand)) 			.is_equal(CounterSlot.Action.ADD_TO_VESSEL)
+	assert_int(CounterSlot.new(null).interact_action(hand)) \
+			.is_equal(CounterSlot.Action.PUT_DOWN)
+	assert_int(CounterSlot.new(PLATE).interact_action(hand)) \
+			.is_equal(CounterSlot.Action.ADD_TO_VESSEL)
 	# The board already holds its one piece of food.
 	assert_int(board.interact_action(hand)).is_equal(CounterSlot.Action.NONE)
 

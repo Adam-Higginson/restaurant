@@ -1,28 +1,14 @@
 [gd_scene format=3 uid="uid://ctpgvenmhd26t"]
 
-[ext_resource type="Script" path="res://scripts/dialogue/conversation.gd" id="300_talk"]
-[ext_resource type="Script" path="res://scripts/camera/shot_cues.gd" id="301_shots"]
-[ext_resource type="Script" path="res://scripts/dialogue/dialogue_facts.gd" id="302_facts"]
-[ext_resource type="Script" path="res://scripts/dialogue/chatter.gd" id="303_chatter"]
-[ext_resource type="Script" path="res://scripts/cutscene/fade_cues.gd" id="304_fades"]
-[ext_resource type="Script" path="res://scripts/cutscene/wait_cues.gd" id="305_waits"]
-[ext_resource type="Script" path="res://scripts/cutscene/actor_cues.gd" id="306_actors"]
-[ext_resource type="Script" path="res://scripts/debug/cutscene_keys.gd" id="307_keys"]
+[ext_resource type="PackedScene" path="res://scenes/prototype/story.tscn" id="320_story"]
 [ext_resource type="Script" path="res://scripts/cutscene/stage_cues.gd" id="308_stages"]
-[ext_resource type="Script" path="res://scripts/cutscene/clip_cues.gd" id="309_clips"]
 [ext_resource type="Script" path="res://scripts/cutscene/storm_cues.gd" id="310_storm"]
 [ext_resource type="Script" path="res://scripts/cutscene/sea_cues.gd" id="310_sea_cues"]
-[ext_resource type="Script" path="res://scripts/cutscene/book_cues.gd" id="310_book_cues"]
 [ext_resource type="AudioStream" path="res://assets/audio/intro/impactBell_heavy_001.ogg" id="315_ring"]
-[ext_resource type="Script" path="res://scripts/cutscene/sound_cues.gd" id="311_sounds"]
-[ext_resource type="Script" path="res://scripts/cutscene/look_cues.gd" id="312_looks"]
 [ext_resource type="PackedScene" path="res://scenes/prototype/intro/underwater_stage.tscn" id="313_underwater"]
 [ext_resource type="PackedScene" path="res://scenes/prototype/intro/grave_stage.tscn" id="313_grave"]
-[ext_resource type="PackedScene" path="res://ui/cutscene_prompt.tscn" id="314_prompt"]
-[ext_resource type="AudioStream" path="res://assets/audio/ui/confirmation_001.wav" id="315_confirm"]
 [ext_resource type="AudioStream" path="res://assets/audio/intro/grasp.tres" id="316_grasp"]
 [ext_resource type="Script" path="res://scripts/audio/optional_sound.gd" id="318_optional"]
-[ext_resource type="Script" path="res://scripts/cutscene/speech_cues.gd" id="319_speech"]
 [ext_resource type="PackedScene" path="res://scenes/prototype/ship.tscn" id="5_ahqms"]
 [ext_resource type="PackedScene" path="res://scenes/prototype/player.tscn" id="7_p3dpl"]
 [ext_resource type="PackedScene" path="res://ui/hud_3d.tscn" id="8_hud"]
@@ -36,12 +22,8 @@
 [ext_resource type="Script" path="res://scripts/cutscene/voyage_cues.gd" id="93_voyage"]
 [ext_resource type="PackedScene" path="res://ui/look_choice.tscn" id="90_look"]
 [ext_resource type="Script" path="res://scripts/cutscene/choice_cues.gd" id="91_choice"]
-[ext_resource type="PackedScene" path="res://ui/build_tag.tscn" id="92_build_tag"]
 [ext_resource type="Script" path="res://scripts/story/first_quest.gd" id="93_first_quest"]
 [ext_resource type="Script" path="res://scripts/data/hand_tool.gd" id="152_tool"]
-[ext_resource type="Script" path="res://scripts/cutscene/chest_cues.gd" id="152_chest"]
-[ext_resource type="AudioStream" path="res://assets/audio/combat/impactWood_light_002.ogg" id="152_creak"]
-[ext_resource type="AudioStream" path="res://assets/audio/combat/maximize_003.ogg" id="152_fanfare"]
 
 [sub_resource type="FastNoiseLite" id="Noise_Cloud"]
 frequency = 0.008
@@ -182,48 +164,68 @@ layer = 20
 [node name="VoyageCues" type="Node" parent="Opening"]
 script = ExtResource("93_voyage")
 
-[node name="Conversation" type="Node" parent="."]
-script = ExtResource("300_talk")
+[node name="Story" parent="." instance=ExtResource("320_story")]
+
+[node name="ShotCues" parent="Story" node_paths=PackedStringArray("player")]
+player = NodePath("../../Player")
+
+[node name="FadeCues" parent="Story" node_paths=PackedStringArray("fade")]
+fade = NodePath("../../Opening/ScreenFade")
+
+[node name="ActorCues" parent="Story" node_paths=PackedStringArray("player")]
+player = NodePath("../../Player")
+
+[node name="ChestCues" parent="Story" node_paths=PackedStringArray("player")]
+player = NodePath("../../Player")
+
+[node name="BookCues" parent="Story" node_paths=PackedStringArray("player")]
+player = NodePath("../../Player")
+
+[node name="DialogueFacts" parent="Story" node_paths=PackedStringArray("ship", "weather")]
+ship = NodePath("../../Ship")
+weather = NodePath("../../Weather")
+
+[node name="Chatter" parent="Story" node_paths=PackedStringArray("player")]
+player = NodePath("../../Player")
+
+[node name="Grasp" type="AudioStreamPlayer" parent="Story/SoundCues"]
+stream = ExtResource("316_grasp")
+volume_db = 0.0
+
+[node name="Flare" type="AudioStreamPlayer" parent="Story/SoundCues"]
+script = ExtResource("318_optional")
+recording = "res://assets/third_party/audio/lantern_flare.ogg"
+
+[node name="DeepNote" type="AudioStreamPlayer" parent="Story/SoundCues"]
+script = ExtResource("318_optional")
+recording = "res://assets/third_party/audio/deep_note.ogg"
+
+[node name="Plunge" type="AudioStreamPlayer" parent="Story/SoundCues"]
+script = ExtResource("318_optional")
+recording = "res://assets/third_party/audio/plunge.ogg"
+
+[node name="Bell" type="AudioStreamPlayer" parent="Story/SoundCues"]
+script = ExtResource("318_optional")
+recording = "res://assets/third_party/audio/bell_far.ogg"
+
+[node name="Ring" type="AudioStreamPlayer" parent="Story/SoundCues"]
+stream = ExtResource("315_ring")
+volume_db = -10.0
+pitch_scale = 0.62
+
+[node name="Gasp" type="AudioStreamPlayer" parent="Story/SoundCues"]
+script = ExtResource("318_optional")
+recording = "res://assets/third_party/audio/gasp.ogg"
 
 [node name="FirstQuest" type="Node" parent="."]
 script = ExtResource("93_first_quest")
 
-[node name="ShotCues" type="Node" parent="." node_paths=PackedStringArray("player")]
-script = ExtResource("301_shots")
-player = NodePath("../Player")
-
-[node name="FadeCues" type="Node" parent="." node_paths=PackedStringArray("fade")]
-script = ExtResource("304_fades")
-fade = NodePath("../Opening/ScreenFade")
-
-[node name="WaitCues" type="Node" parent="." node_paths=PackedStringArray("prompt", "build_tag")]
-script = ExtResource("305_waits")
-prompt = NodePath("../CutscenePrompt")
-build_tag = NodePath("../BuildTag")
-
-[node name="ActorCues" type="Node" parent="." node_paths=PackedStringArray("player")]
-script = ExtResource("306_actors")
-player = NodePath("../Player")
-
-[node name="ChestCues" type="Node" parent="." node_paths=PackedStringArray("player")]
-script = ExtResource("152_chest")
-player = NodePath("../Player")
-creak = ExtResource("152_creak")
-fanfare = ExtResource("152_fanfare")
-
 [node name="StageCues" type="Node" parent="."]
 script = ExtResource("308_stages")
-
-[node name="ClipCues" type="Node" parent="."]
-script = ExtResource("309_clips")
 
 [node name="StormCues" type="Node" parent="." node_paths=PackedStringArray("weather")]
 script = ExtResource("310_storm")
 weather = NodePath("../Weather")
-
-[node name="BookCues" type="Node" parent="." node_paths=PackedStringArray("player")]
-script = ExtResource("310_book_cues")
-player = NodePath("../Player")
 
 [node name="SeaCues" type="Node" parent="." node_paths=PackedStringArray("sea")]
 script = ExtResource("310_sea_cues")
@@ -235,67 +237,8 @@ choice = NodePath("../LookChoice")
 
 [node name="LookChoice" parent="." instance=ExtResource("90_look")]
 
-[node name="SpeechCues" type="Node" parent="." node_paths=PackedStringArray("prompt")]
-script = ExtResource("319_speech")
-prompt = NodePath("../CutscenePrompt")
-
-[node name="LookCues" type="Node" parent="."]
-script = ExtResource("312_looks")
-
-[node name="SoundCues" type="Node" parent="."]
-script = ExtResource("311_sounds")
-
-[node name="Confirm" type="AudioStreamPlayer" parent="SoundCues"]
-stream = ExtResource("315_confirm")
-volume_db = -8.0
-
-[node name="Grasp" type="AudioStreamPlayer" parent="SoundCues"]
-stream = ExtResource("316_grasp")
-volume_db = 0.0
-
-[node name="Flare" type="AudioStreamPlayer" parent="SoundCues"]
-script = ExtResource("318_optional")
-recording = "res://assets/third_party/audio/lantern_flare.ogg"
-
-[node name="DeepNote" type="AudioStreamPlayer" parent="SoundCues"]
-script = ExtResource("318_optional")
-recording = "res://assets/third_party/audio/deep_note.ogg"
-
-[node name="Plunge" type="AudioStreamPlayer" parent="SoundCues"]
-script = ExtResource("318_optional")
-recording = "res://assets/third_party/audio/plunge.ogg"
-
-[node name="Bell" type="AudioStreamPlayer" parent="SoundCues"]
-script = ExtResource("318_optional")
-recording = "res://assets/third_party/audio/bell_far.ogg"
-
-[node name="Ring" type="AudioStreamPlayer" parent="SoundCues"]
-stream = ExtResource("315_ring")
-volume_db = -10.0
-pitch_scale = 0.62
-
-[node name="Gasp" type="AudioStreamPlayer" parent="SoundCues"]
-script = ExtResource("318_optional")
-recording = "res://assets/third_party/audio/gasp.ogg"
-
 [node name="Stages" type="Node" parent="."]
 
 [node name="Underwater" parent="Stages" instance=ExtResource("313_underwater")]
 
 [node name="Grave" parent="Stages" instance=ExtResource("313_grave")]
-
-[node name="CutscenePrompt" parent="." instance=ExtResource("314_prompt")]
-
-[node name="BuildTag" parent="." instance=ExtResource("92_build_tag")]
-
-[node name="CutsceneKeys" type="Node" parent="."]
-script = ExtResource("307_keys")
-
-[node name="DialogueFacts" type="Node" parent="." node_paths=PackedStringArray("ship", "weather")]
-script = ExtResource("302_facts")
-ship = NodePath("../Ship")
-weather = NodePath("../Weather")
-
-[node name="Chatter" type="Node" parent="." node_paths=PackedStringArray("player")]
-script = ExtResource("303_chatter")
-player = NodePath("../Player")
