@@ -1,6 +1,6 @@
 class_name ContainerPanel
 extends CanvasLayer
-## Lists what's in a container (the fridge, the cupboard, the delivery crate),
+## Lists what's in a container (the galley pantry; once, the fridge and cupboard),
 ## one row per item and quality ("Tomato ★ ×2"). Picking a row moves one onto
 ## the player's arms. It pauses the whole game while it's open, and shows the
 ## mouse cursor (the 3D camera captures it) until it closes.
@@ -12,6 +12,17 @@ extends CanvasLayer
 signal closed
 
 const FONT_SIZE: int = 8
+## The pantry's look (#207): a painted wood back, shelves for rows, and a
+## paper label for its name.
+const WOOD: Texture2D = preload("res://assets/placeholder/textures/weathered_wood.png")
+const WOOD_TINT: Color = Color(0.85, 0.62, 0.42)
+const SHELF: Color = Color(0.5, 0.33, 0.19)
+const SHELF_LIT: Color = Color(0.64, 0.44, 0.26)
+const SHELF_LIP: Color = Color(0.24, 0.14, 0.08)
+const PAPER: Color = Color(0.93, 0.87, 0.72)
+const INK: Color = Color(0.3, 0.18, 0.1)
+const CREAM: Color = Color(0.98, 0.93, 0.82)
+const BRASS: Color = Color(0.9, 0.7, 0.35)
 
 var _contents: StorageContents = null
 var _arms: Arms = null
@@ -22,11 +33,13 @@ var _mouse_mode_before: Input.MouseMode = Input.MOUSE_MODE_VISIBLE
 @onready var _rows: VBoxContainer = %Rows
 @onready var _status: Label = %Status
 @onready var _close_button: Button = %CloseButton
+@onready var _panel: PanelContainer = $Panel
 
 
 func _ready() -> void:
 	hide()
 	_close_button.pressed.connect(close)
+	_dress()
 
 
 func _unhandled_input(event: InputEvent) -> void:
@@ -95,6 +108,7 @@ func _refresh() -> void:
 		var button: Button = Button.new()
 		button.text = describe(piece.item, piece.quality, _contents.count(piece.item, piece.quality))
 		button.add_theme_font_size_override("font_size", FONT_SIZE)
+		dress_shelf(button)
 		button.disabled = arms_full
 		button.pressed.connect(_contents.take_into.bind(_arms, piece.item, piece.quality))
 		_rows.add_child(button)
@@ -141,3 +155,66 @@ func _restore_focus(index: int) -> void:
 		_close_button.grab_focus()
 	else:
 		enabled[mini(index, enabled.size() - 1)].grab_focus()
+
+
+## Styles [param button] as a shelf in the pantry: a plank with a dark lip
+## under it, lighter when it's pointed at or picked, and a brass edge when
+## it's the one a controller would pick.
+static func dress_shelf(button: Button) -> void:
+	button.add_theme_stylebox_override(&"normal", _plank(SHELF, SHELF_LIP))
+	button.add_theme_stylebox_override(&"hover", _plank(SHELF_LIT, SHELF_LIP))
+	button.add_theme_stylebox_override(&"pressed", _plank(SHELF_LIT, BRASS))
+	button.add_theme_stylebox_override(&"focus", _edge(BRASS))
+	button.add_theme_stylebox_override(&"disabled", _plank(SHELF.darkened(0.3), SHELF_LIP))
+	for state: StringName in [&"font_color", &"font_hover_color", &"font_pressed_color",
+			&"font_focus_color"]:
+		button.add_theme_color_override(state, CREAM)
+	button.add_theme_color_override(&"font_disabled_color", CREAM.darkened(0.45))
+	button.add_theme_color_override(&"font_outline_color", SHELF_LIP)
+	button.add_theme_constant_override(&"outline_size", 2)
+
+
+# The wood back, the paper label on top, and the shelves.
+func _dress() -> void:
+	var back: StyleBoxTexture = StyleBoxTexture.new()
+	back.texture = WOOD
+	back.axis_stretch_horizontal = StyleBoxTexture.AXIS_STRETCH_MODE_TILE
+	back.axis_stretch_vertical = StyleBoxTexture.AXIS_STRETCH_MODE_TILE
+	back.modulate_color = WOOD_TINT
+	back.set_content_margin_all(6.0)
+	_panel.add_theme_stylebox_override(&"panel", back)
+	var label: StyleBoxFlat = StyleBoxFlat.new()
+	label.bg_color = PAPER
+	label.border_color = INK
+	label.set_border_width_all(1)
+	label.set_corner_radius_all(1)
+	label.content_margin_left = 6.0
+	label.content_margin_right = 6.0
+	label.content_margin_top = 1.0
+	label.content_margin_bottom = 1.0
+	_title.add_theme_stylebox_override(&"normal", label)
+	_title.add_theme_color_override(&"font_color", INK)
+	_status.add_theme_color_override(&"font_color", CREAM)
+	_status.add_theme_color_override(&"font_outline_color", SHELF_LIP)
+	_status.add_theme_constant_override(&"outline_size", 2)
+	dress_shelf(_close_button)
+
+
+static func _plank(colour: Color, lip: Color) -> StyleBoxFlat:
+	var plank: StyleBoxFlat = StyleBoxFlat.new()
+	plank.bg_color = colour
+	plank.border_color = lip
+	plank.border_width_bottom = 2
+	plank.content_margin_left = 6.0
+	plank.content_margin_right = 6.0
+	plank.content_margin_top = 2.0
+	plank.content_margin_bottom = 3.0
+	return plank
+
+
+static func _edge(colour: Color) -> StyleBoxFlat:
+	var edge: StyleBoxFlat = StyleBoxFlat.new()
+	edge.draw_center = false
+	edge.border_color = colour
+	edge.set_border_width_all(1)
+	return edge
