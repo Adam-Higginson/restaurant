@@ -3,6 +3,9 @@
 [ext_resource type="PackedScene" path="res://scenes/prototype/people/heron.tscn" id="200_heron"]
 [ext_resource type="Script" path="res://scripts/people/crew_station.gd" id="201_station"]
 [ext_resource type="Script" path="res://scripts/ship/ship.gd" id="1_7ykrf"]
+[ext_resource type="Script" path="res://scripts/ship/hull_shell.gd" id="196_hull_shell"]
+[ext_resource type="Script" path="res://scripts/ship/deck_edge.gd" id="196_deck_edge"]
+[ext_resource type="Resource" path="res://data/ship/hull_outline.tres" id="196_outline"]
 
 [ext_resource type="Material" path="res://assets/placeholder/materials/galley_wood.tres" id="2_nifss"]
 
@@ -237,7 +240,7 @@ size = Vector3(12, 2.5, 30)
 size = Vector3(11.4, 0.02, 13.7)
 
 [sub_resource type="BoxMesh" id="Mesh_WallPort"]
-size = Vector3(0.3, 4, 30)
+size = Vector3(0.3, 4, 19)
 
 [sub_resource type="BoxMesh" id="Mesh_WallBow"]
 size = Vector3(11.4, 4, 0.3)
@@ -772,30 +775,31 @@ material_override = ExtResource("17_floor")
 mesh = SubResource("Mesh_GalleyFloor")
 
 [node name="WallPort" type="MeshInstance3D" parent="Visuals" unique_id=1860593509]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -5.85, 3, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -5.85, 3, 5.5)
 material_override = ExtResource("2_nifss")
 mesh = SubResource("Mesh_WallPort")
 
 [node name="WallStarboard" type="CSGBox3D" parent="Visuals" unique_id=655685187]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5.85, 3, 0)
-size = Vector3(0.3, 4, 30)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5.85, 3, 7.8)
+size = Vector3(0.3, 4, 14.4)
 material = ExtResource("2_nifss")
 
 [node name="PortholeByStove" type="CSGCylinder3D" parent="Visuals/WallStarboard" unique_id=648698662]
-transform = Transform3D(0, -1, 0, 1, 0, 0, 0, 0, 1, 0, -0.65, 5.2)
+transform = Transform3D(0, -1, 0, 1, 0, 0, 0, 0, 1, 0, -0.65, -2.6)
 operation = 2
 radius = 0.37
 height = 0.6
 sides = 16
 
 [node name="PortholeByTable" type="CSGCylinder3D" parent="Visuals/WallStarboard" unique_id=52888359]
-transform = Transform3D(0, -1, 0, 1, 0, 0, 0, 0, 1, 0, -0.7, 11)
+transform = Transform3D(0, -1, 0, 1, 0, 0, 0, 0, 1, 0, -0.7, 3.2)
 operation = 2
 radius = 0.28
 height = 0.6
 sides = 16
 
 [node name="WallBow" type="MeshInstance3D" parent="Visuals" unique_id=1101394976]
+visible = false
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3, -14.85)
 material_override = ExtResource("2_nifss")
 mesh = SubResource("Mesh_WallBow")
@@ -1352,6 +1356,22 @@ mesh = SubResource("PlaneMesh_1bt7x")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.7, 2.55, 7.99)
 material_override = ExtResource("28_darkwood")
 mesh = SubResource("BoxMesh_g41xf")
+
+[node name="HullShell" type="Node3D" parent="Visuals" node_paths=PackedStringArray("stand_ins")]
+script = ExtResource("196_hull_shell")
+path = "res://assets/third_party/meshy/ship_hull_open2/model/model.glb"
+stand_ins = [NodePath("../Hull"), NodePath("../UpperDeck/Structure/HullSkin"), NodePath("../UpperDeck/Structure/Bow"), NodePath("../UpperDeck/Structure/SternGallery"), NodePath("../UpperDeck/Structure/SternTransom"), NodePath("../UpperDeck/Structure/SternWale"), NodePath("../UpperDeck/Structure/TaffrailCarving"), NodePath("../UpperDeck/Structure/BulwarkPort"), NodePath("../UpperDeck/Structure/BulwarkStarboard")]
+
+[node name="DeckEdge" type="Node3D" parent="." node_paths=PackedStringArray("retired")]
+script = ExtResource("196_deck_edge")
+outline = ExtResource("196_outline")
+deck_material = ExtResource("10_wet")
+rail_material = ExtResource("13_wetdark")
+pieces = PackedVector3Array(6.2, -30, -10.8, 5.3, -10.8, 1.15, 7.3, 13.3, 30)
+strips = PackedVector4Array(5.3, 1.15, 10.3, 5.95, 7.3, 10.3, 13.3, 5.8)
+sides = PackedVector3Array(6.2, -30, -10.8, 5.3, -10.8, 10.3, 7.3, 10.3, 30)
+bulkheads = PackedVector4Array(5.3, 10.3, 2.0, 5.8)
+retired = [NodePath("../Visuals/DeckFore"), NodePath("../Visuals/UpperDeck/Structure/Forecastle/Deck"), NodePath("../Visuals/UpperDeck/Structure/Quarterdeck/DeckAft"), NodePath("../Visuals/UpperDeck/Structure/SternRail")]
 
 [node name="RainCatcher" type="GPUParticlesCollisionHeightField3D" parent="." unique_id=16950638]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8, -2)
@@ -2040,62 +2060,6 @@ shape = SubResource("BoxShape3D_absnv")
 [editable path="Visuals/PortholeSternPort"]
 
 [editable path="Visuals/PortholeSternStarboard"]
-
-[node name="BulwarkPortShape" type="CollisionShape3D" parent="." unique_id=537378954]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -5.88, 5.825, -0.25)
-shape = SubResource("Deck_BulwarkPortShape")
-
-[node name="ForecastlePortSideShape" type="CollisionShape3D" parent="." unique_id=1632437902]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -5.88, 6.275, -12.9)
-shape = SubResource("Deck_ForecastlePortSideShape")
-
-[node name="QuarterdeckPortSideShape" type="CollisionShape3D" parent="." unique_id=299057610]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -5.88, 6.85, 12.65)
-shape = SubResource("Deck_QuarterdeckPortSideShape")
-
-[node name="BulwarkStarboardShape" type="CollisionShape3D" parent="." unique_id=1133001119]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5.88, 5.825, -0.25)
-shape = SubResource("Deck_BulwarkStarboardShape")
-
-[node name="ForecastleStarboardSideShape" type="CollisionShape3D" parent="." unique_id=1516222526]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5.88, 6.275, -12.9)
-shape = SubResource("Deck_ForecastleStarboardSideShape")
-
-[node name="QuarterdeckStarboardSideShape" type="CollisionShape3D" parent="." unique_id=1333954780]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5.88, 6.85, 12.65)
-shape = SubResource("Deck_QuarterdeckStarboardSideShape")
-
-[node name="BowDeckShape" type="CollisionShape3D" parent="." unique_id=1358703353]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)
-shape = SubResource("Deck_BowDeckShape")
-
-[node name="BowBulwark1Shape" type="CollisionShape3D" parent="." unique_id=765290583]
-transform = Transform3D(-0.946, 0, -0.32416, 0, 1, 0, 0.32416, 0, -0.946, 5.4417, 6.725, -16.014)
-shape = SubResource("Deck_BowBulwark1Shape")
-
-[node name="BowBulwark2Shape" type="CollisionShape3D" parent="." unique_id=1462383394]
-transform = Transform3D(-0.63112, 0, -0.77569, 0, 1, 0, 0.77569, 0, -0.63112, 4.074, 6.725, -17.923)
-shape = SubResource("Deck_BowBulwark2Shape")
-
-[node name="BowBulwark3Shape" type="CollisionShape3D" parent="." unique_id=2003596830]
-transform = Transform3D(-0.24574, 0, -0.96933, 0, 1, 0, 0.96933, 0, -0.24574, 1.5423, 6.725, -19.119)
-shape = SubResource("Deck_BowBulwark3Shape")
-
-[node name="BowBulwark4Shape" type="CollisionShape3D" parent="." unique_id=862028003]
-transform = Transform3D(0.24574, 0, -0.96933, 0, 1, 0, 0.96933, 0, 0.24574, -1.5423, 6.725, -19.119)
-shape = SubResource("Deck_BowBulwark4Shape")
-
-[node name="BowBulwark5Shape" type="CollisionShape3D" parent="." unique_id=1828672600]
-transform = Transform3D(0.63112, 0, -0.77569, 0, 1, 0, 0.77569, 0, 0.63112, -4.074, 6.725, -17.923)
-shape = SubResource("Deck_BowBulwark5Shape")
-
-[node name="BowBulwark6Shape" type="CollisionShape3D" parent="." unique_id=1069083867]
-transform = Transform3D(0.946, 0, -0.32416, 0, 1, 0, 0.32416, 0, 0.946, -5.4417, 6.725, -16.014)
-shape = SubResource("Deck_BowBulwark6Shape")
-
-[node name="SternShape" type="CollisionShape3D" parent="." unique_id=1337617091]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 6.85, 14.88)
-shape = SubResource("Deck_SternShape")
 
 [node name="ForecastleShape" type="CollisionShape3D" parent="." unique_id=2007758597]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 5.75, -12.71)
