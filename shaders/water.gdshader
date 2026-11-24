@@ -53,6 +53,15 @@ uniform float night_glow : hint_range(0.0, 2.0) = 0.6;
 // The misty sky the surface mirrors at glancing angles.
 uniform vec4 sky_reflection : source_color = vec4(0.2, 0.24, 0.28, 1.0);
 
+// The Grave of the Lanterns far below (#182): a few faint warm lights deep
+// under the surface. grave is how much shows, 0 (the open sea) to 1; set by
+// the Sea from a cutscene's @grave cue.
+uniform float grave = 0.0;
+uniform vec4 grave_color : source_color = vec4(1.0, 0.55, 0.2, 1.0);
+uniform float grave_energy = 0.45;
+// What share of the places one could be actually has a light.
+uniform float grave_share : hint_range(0.0, 1.0) = 0.06;
+
 varying vec3 v_world;
 varying vec3 v_normal;
 varying float v_height;
@@ -150,6 +159,45 @@ vec2 rain_slope(vec2 world, float time) {
 	return slope;
 }
 
+// How much light from the Grave of the Lanterns reaches the surface at
+// [world], seen from [eye]. The view ray carries on down through the surface
+// to three depths, and at each a few seeded spots hold a dying light. Because
+// each is found where the ray reaches its depth, the lights sit under the
+// water and slide past each other as the camera moves, as deep things do.
+float grave_lights(vec3 world, vec3 eye, float time) {
+	vec3 ray = normalize(world - eye);
+	// Looking flat across the water, nothing below can be seen.
+	if (ray.y > -0.08) {
+		return 0.0;
+	}
+	float lit = 0.0;
+	for (int layer = 0; layer < 3; layer++) {
+		float depth = 5.0 + float(layer) * 7.0;
+		vec2 at = world.xz + ray.xz / -ray.y * depth;
+		float cell_size = 4.0 + float(layer) * 2.5;
+		vec2 base = floor(at / cell_size);
+		for (int x = -1; x <= 1; x++) {
+			for (int y = -1; y <= 1; y++) {
+				vec2 cell = base + vec2(float(x), float(y)) + float(layer) * 31.0;
+				float seed = hash(cell);
+				if (seed > grave_share) {
+					continue;
+				}
+				vec2 centre = (cell - float(layer) * 31.0
+						+ vec2(hash(cell + 1.3), hash(cell + 5.1)) * 0.6 + 0.2) * cell_size;
+				float d = length(at - centre);
+				float radius = 0.25 + 0.2 * hash(cell + 9.9);
+				// A small core, and a wider faint halo from the water around it.
+				float glow = exp(-d * d / (radius * radius))
+						+ 0.2 * exp(-d * d / (radius * radius * 9.0));
+				float gutter = 0.7 + 0.3 * sin(time * (0.8 + seed * 3.0) + seed * 40.0);
+				lit += glow * gutter * (1.0 - float(layer) * 0.3);
+			}
+		}
+	}
+	return lit;
+}
+
 void fragment() {
 	float hull_d = hull_distance(v_world);
 	// The hull hides the water inside it; cut it out so it can't show
@@ -207,6 +255,11 @@ void fragment() {
 	EMISSION = sky + crest_color.rgb * glow * night_glow
 			+ foam_color.rgb * foam * night_glow * 0.35
 			+ glimmer_color.rgb * glints * glimmer;
+	if (grave > 0.0) {
+		// Seen through the water, so foam and the mirrored sky hide them.
+		EMISSION += grave_color.rgb * grave_lights(v_world, CAMERA_POSITION_WORLD, TIME)
+				* grave * grave_energy * (1.0 - foam) * (1.0 - fresnel);
+	}
 	ROUGHNESS = mix(roughness_water, 0.85, foam);
 	METALLIC = 0.0;
 	SPECULAR = 0.5;

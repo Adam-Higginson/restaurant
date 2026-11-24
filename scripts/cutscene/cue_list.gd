@@ -34,6 +34,7 @@ const USAGE: Dictionary[StringName, String] = {
 	&"sound": "@sound splash",
 	&"muffle": "@muffle on or @muffle off",
 	&"hush": "@hush on or @hush off",
+	&"grave": "@grave on or @grave off (the Grave of the Lanterns' faint lights far below the sea)",
 	&"lightning": "@lightning",
 	&"look": "@look hook_lantern determined (a look for his eyes: calm, surprised, "
 			+ "determined, worried, pleading, effort, tired, asleep, pleased; or for his "
@@ -83,7 +84,7 @@ static func _fits(cue: StringName, args: PackedStringArray) -> bool:
 			return args.size() >= 3 and _is_seconds(args[1])
 		&"say_in":
 			return args.size() >= 4 and _is_seconds(args[0]) and _is_seconds(args[2])
-		&"muffle", &"hush":
+		&"muffle", &"hush", &"grave":
 			return args.size() == 1 and ["on", "off"].has(args[0])
 		&"hold_up":
 			return args.size() <= 1
