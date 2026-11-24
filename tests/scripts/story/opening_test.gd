@@ -442,6 +442,24 @@ func test_a_saved_voyage_carries_on_after_the_title_instead_of_the_rescue() -> v
 	assert_bool(_fade().visible).is_false()
 
 
+func test_a_voyage_saved_at_the_island_carries_on_there() -> void:
+	Game.dialogue.set_flag(Bedside.ARRIVED_FLAG)
+	SaveGame.write(SaveGame.capture(Game.memories, null, 1.0, Game.dialogue))
+	Game.dialogue.reset()
+	_build(DialogueTree.START, true)
+	_opening.title_seconds = 0.2
+	# Heard, rather than really going (that would replace the test's scene).
+	_opening.island_scene = ""
+	var runner: GdUnitSceneRunner = scene_runner(_sea)
+	await physics_ticks(runner, 240)
+
+	runner.simulate_key_pressed(KEY_ENTER)
+	await _choose_voyage(runner, CONTINUE)
+
+	assert_bool(await wait_for_signal(_opening.went_ashore, 20.0)).is_true()
+	assert_bool(Game.dialogue.is_set(Bedside.ARRIVED_FLAG)).is_true()
+
+
 func test_everything_the_intro_asks_for_is_in_the_scene() -> void:
 	_build()
 	_opening.skip = true

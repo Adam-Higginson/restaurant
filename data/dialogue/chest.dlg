@@ -18,3 +18,13 @@ narrator: Not much of an edge, but it's yours. It chops at the *chopping board*,
 # He's silent while he's low (the first quest).
 ? not lantern_low
 lantern: A cook's first treasure! Mind your fingers.
+
+# The frying pan, washed up in a chest on the cove's beach (#187): the first
+# thing you find ashore, before the crabs.
+~ frying_pan
+@open
+@hold_up
+set has_frying_pan
+narrator: You got the *Frying Pan*!
+narrator: Washed up with the tide, and only a little dented. It cooks on the *hob*, and raised, it fends off a blow.
+lantern: Now we're ready for anything. Adventure, and supplies!

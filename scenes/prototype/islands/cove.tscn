@@ -37,10 +37,7 @@
 [ext_resource type="PackedScene" path="res://ui/screen_fade.tscn" id="36_fade"]
 [ext_resource type="PackedScene" path="res://scenes/prototype/creatures/crab.tscn" id="37_crab"]
 [ext_resource type="Script" path="res://scripts/combat/duel_arena.gd" id="38_duel"]
-[ext_resource type="Script" path="res://scripts/data/item.gd" id="39_item"]
 [ext_resource type="Resource" path="res://data/items/frying_pan.tres" id="40_pan"]
-[ext_resource type="Resource" path="res://data/items/tomato.tres" id="41_tomato"]
-[ext_resource type="Resource" path="res://data/items/lettuce.tres" id="42_lettuce"]
 [ext_resource type="Shader" path="res://shaders/far_canopy.gdshader" id="43_canopy"]
 [ext_resource type="Script" path="res://scripts/islands/near_mist.gd" id="44_mist"]
 [ext_resource type="Script" path="res://scripts/islands/gull_flock.gd" id="45_gulls"]
@@ -48,6 +45,9 @@
 [ext_resource type="PackedScene" path="res://scenes/prototype/islands/props/coconut.tscn" id="47_coconut"]
 [ext_resource type="Shader" path="res://shaders/blown_leaf.gdshader" id="48_leaf"]
 [ext_resource type="PackedScene" path="res://scenes/prototype/story.tscn" id="187_story"]
+[ext_resource type="Script" path="res://scripts/islands/cove_arrival.gd" id="187_arrival"]
+[ext_resource type="AudioStream" path="res://assets/audio/combat/impactMetal_heavy_000.ogg" id="187_anchor"]
+[ext_resource type="PackedScene" path="res://scenes/prototype/props/treasure_chest.tscn" id="187_chest"]
 
 [sub_resource type="FastNoiseLite" id="Noise_cloud"]
 noise_type = 3
@@ -390,6 +390,11 @@ settle_on = ExtResource("5_shape")
 
 [node name="StepOut" type="Marker3D" parent="." groups=["landing"]]
 transform = Transform3D(0, 0, -1, 0, 1, 0, 1, 0, 0, -21.00, 1.0, 7.64)
+
+[node name="BeachChest" parent="." instance=ExtResource("187_chest")]
+transform = Transform3D(0, 0, 1, 0, 1, 0, -1, 0, 0, -16.8, 0.28, 5.6)
+item = ExtResource("40_pan")
+flag = &"opened_beach_chest"
 
 [node name="NearCrab" parent="." instance=ExtResource("37_crab")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.00, 1.6, 1.94)
@@ -788,7 +793,6 @@ player = NodePath("../Player")
 [node name="Duel" type="Node3D" parent="." node_paths=PackedStringArray("player")]
 script = ExtResource("38_duel")
 player = NodePath("../Player")
-start_items = Array[ExtResource("39_item")]([ExtResource("40_pan"), ExtResource("41_tomato"), ExtResource("42_lettuce"), ExtResource("41_tomato")])
 
 [node name="Story" parent="." instance=ExtResource("187_story")]
 
@@ -812,3 +816,26 @@ ship = NodePath("../../Ship")
 
 [node name="Chatter" parent="Story" node_paths=PackedStringArray("player")]
 player = NodePath("../../Player")
+
+[node name="Arrival" type="Node" parent="." node_paths=PackedStringArray("ship", "player", "start", "fade")]
+script = ExtResource("187_arrival")
+ship = NodePath("../Ship")
+player = NodePath("../Player")
+start = NodePath("../Ship/DeckStart")
+fade = NodePath("../ScreenFade")
+
+[node name="Shots" type="Node3D" parent="."]
+
+[node name="OutOfTheMist" type="Marker3D" parent="Shots" groups=["shots"]]
+transform = Transform3D(-0.2108, -0.0094, -0.9775, 0.0, 1.0, -0.0096, 0.9775, -0.002, -0.2108, 45.0, 5.5, 71.0)
+
+[node name="TheWholeCove" type="Marker3D" parent="Shots" groups=["shots"]]
+transform = Transform3D(0.8099, 0.1279, -0.5724, 0.0, 0.9759, 0.2181, 0.5865, -0.1766, 0.7905, -32.0, 18.0, 104.0)
+
+[node name="PullBack" type="Marker3D" parent="Shots" groups=["shots"]]
+transform = Transform3D(0.8805, -0.1382, 0.4535, 0.0, 0.9566, 0.2915, -0.4741, -0.2567, 0.8422, 36.0, 22.0, 126.0)
+
+[node name="Anchor" type="AudioStreamPlayer" parent="Story/SoundCues"]
+stream = ExtResource("187_anchor")
+volume_db = -6.0
+pitch_scale = 0.55

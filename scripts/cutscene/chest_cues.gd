@@ -157,7 +157,10 @@ func _open(chest: TreasureChest) -> void:
 
 
 func _hold_up(chest: TreasureChest) -> void:
-	_raise(make_treasure(chest.contents), chest.hold_shot(), chest.get_parent())
+	var treasure: Node3D = make_treasure(chest.contents)
+	if chest.contents == null and chest.item != null:
+		treasure = make_item_treasure(chest.item)
+	_raise(treasure, chest.hold_shot(), chest.get_parent())
 
 
 # Holds up [param id] (an item's or a tool's), handed over rather than found
