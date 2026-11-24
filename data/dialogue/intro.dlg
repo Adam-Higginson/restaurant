@@ -302,17 +302,18 @@ lantern: Oh...
 -> it_flows
 
 # Then the light runs out of his hand into yours, along your arm, and you
-# begin to glow. He tries to pull away, and it holds, and his flame shrinks.
+# begin to glow. It's his own light, and he knows it. He tries to pull away,
+# and it holds, and his flame shrinks: he's going out (#203).
 ~ it_flows
 @stage underwater
 @muffle on
 @look sinking_lantern worried
 @play flows
-lantern: Wait. What's happening?
+lantern: Wait... that's my light. It's going into you.
 @look sinking_lantern effort
 @play pulls_back
 @look sinking_lantern pleading
-lantern: No, no, no. Stop...
+lantern: No, no, no... I'm going out...
 -> the_deep_stirs
 
 # All round, the dead lanterns flicker. A deep rumble. He looks down:
