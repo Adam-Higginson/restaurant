@@ -47,6 +47,7 @@
 [ext_resource type="Shader" path="res://shaders/gull.gdshader" id="46_gull"]
 [ext_resource type="PackedScene" path="res://scenes/prototype/islands/props/coconut.tscn" id="47_coconut"]
 [ext_resource type="Shader" path="res://shaders/blown_leaf.gdshader" id="48_leaf"]
+[ext_resource type="PackedScene" path="res://scenes/prototype/story.tscn" id="187_story"]
 
 [sub_resource type="FastNoiseLite" id="Noise_cloud"]
 noise_type = 3
@@ -788,3 +789,26 @@ player = NodePath("../Player")
 script = ExtResource("38_duel")
 player = NodePath("../Player")
 start_items = Array[ExtResource("39_item")]([ExtResource("40_pan"), ExtResource("41_tomato"), ExtResource("42_lettuce"), ExtResource("41_tomato")])
+
+[node name="Story" parent="." instance=ExtResource("187_story")]
+
+[node name="ShotCues" parent="Story" node_paths=PackedStringArray("player")]
+player = NodePath("../../Player")
+
+[node name="FadeCues" parent="Story" node_paths=PackedStringArray("fade")]
+fade = NodePath("../../ScreenFade")
+
+[node name="ActorCues" parent="Story" node_paths=PackedStringArray("player")]
+player = NodePath("../../Player")
+
+[node name="ChestCues" parent="Story" node_paths=PackedStringArray("player")]
+player = NodePath("../../Player")
+
+[node name="BookCues" parent="Story" node_paths=PackedStringArray("player")]
+player = NodePath("../../Player")
+
+[node name="DialogueFacts" parent="Story" node_paths=PackedStringArray("ship")]
+ship = NodePath("../../Ship")
+
+[node name="Chatter" parent="Story" node_paths=PackedStringArray("player")]
+player = NodePath("../../Player")

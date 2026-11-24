@@ -1,0 +1,78 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://scripts/dialogue/conversation.gd" id="1_talk"]
+[ext_resource type="Script" path="res://scripts/camera/shot_cues.gd" id="2_shots"]
+[ext_resource type="Script" path="res://scripts/cutscene/fade_cues.gd" id="3_fades"]
+[ext_resource type="Script" path="res://scripts/cutscene/wait_cues.gd" id="4_waits"]
+[ext_resource type="Script" path="res://scripts/cutscene/actor_cues.gd" id="5_actors"]
+[ext_resource type="Script" path="res://scripts/cutscene/chest_cues.gd" id="6_chest"]
+[ext_resource type="AudioStream" path="res://assets/audio/combat/impactWood_light_002.ogg" id="7_creak"]
+[ext_resource type="AudioStream" path="res://assets/audio/combat/maximize_003.ogg" id="8_fanfare"]
+[ext_resource type="Script" path="res://scripts/cutscene/clip_cues.gd" id="9_clips"]
+[ext_resource type="Script" path="res://scripts/cutscene/book_cues.gd" id="10_books"]
+[ext_resource type="Script" path="res://scripts/cutscene/speech_cues.gd" id="11_speech"]
+[ext_resource type="Script" path="res://scripts/cutscene/look_cues.gd" id="12_looks"]
+[ext_resource type="Script" path="res://scripts/cutscene/sound_cues.gd" id="13_sounds"]
+[ext_resource type="AudioStream" path="res://assets/audio/ui/confirmation_001.wav" id="14_confirm"]
+[ext_resource type="PackedScene" path="res://ui/cutscene_prompt.tscn" id="15_prompt"]
+[ext_resource type="PackedScene" path="res://ui/build_tag.tscn" id="16_build_tag"]
+[ext_resource type="Script" path="res://scripts/debug/cutscene_keys.gd" id="17_keys"]
+[ext_resource type="Script" path="res://scripts/dialogue/dialogue_facts.gd" id="18_facts"]
+[ext_resource type="Script" path="res://scripts/dialogue/chatter.gd" id="19_chatter"]
+
+[node name="Story" type="Node"]
+
+[node name="Conversation" type="Node" parent="."]
+script = ExtResource("1_talk")
+
+[node name="ShotCues" type="Node" parent="."]
+script = ExtResource("2_shots")
+
+[node name="FadeCues" type="Node" parent="."]
+script = ExtResource("3_fades")
+
+[node name="WaitCues" type="Node" parent="." node_paths=PackedStringArray("prompt", "build_tag")]
+script = ExtResource("4_waits")
+prompt = NodePath("../CutscenePrompt")
+build_tag = NodePath("../BuildTag")
+
+[node name="ActorCues" type="Node" parent="."]
+script = ExtResource("5_actors")
+
+[node name="ChestCues" type="Node" parent="."]
+script = ExtResource("6_chest")
+creak = ExtResource("7_creak")
+fanfare = ExtResource("8_fanfare")
+
+[node name="ClipCues" type="Node" parent="."]
+script = ExtResource("9_clips")
+
+[node name="BookCues" type="Node" parent="."]
+script = ExtResource("10_books")
+
+[node name="SpeechCues" type="Node" parent="." node_paths=PackedStringArray("prompt")]
+script = ExtResource("11_speech")
+prompt = NodePath("../CutscenePrompt")
+
+[node name="LookCues" type="Node" parent="."]
+script = ExtResource("12_looks")
+
+[node name="SoundCues" type="Node" parent="."]
+script = ExtResource("13_sounds")
+
+[node name="Confirm" type="AudioStreamPlayer" parent="SoundCues"]
+stream = ExtResource("14_confirm")
+volume_db = -8.0
+
+[node name="CutscenePrompt" parent="." instance=ExtResource("15_prompt")]
+
+[node name="BuildTag" parent="." instance=ExtResource("16_build_tag")]
+
+[node name="CutsceneKeys" type="Node" parent="."]
+script = ExtResource("17_keys")
+
+[node name="DialogueFacts" type="Node" parent="."]
+script = ExtResource("18_facts")
+
+[node name="Chatter" type="Node" parent="."]
+script = ExtResource("19_chatter")
