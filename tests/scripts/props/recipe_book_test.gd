@@ -1,11 +1,12 @@
 extends GameTestSuite
-## Tests for the recipe book (#184): it lies by your pillow; picking it up
-## makes it yours and leaves the bunk empty; on your toolbar, Use reads it
-## wherever you are; it opens in the book view, a page per dish, and every
-## page fits its paper. And for the days at sea (each morning is a new day).
+## Tests for the recipe book (#184): it lies on the lantern's table by your
+## bunk (#206); picking it up makes it yours, on your toolbar to read later,
+## without opening it; on your toolbar, Use reads it wherever you are; it
+## opens in the book view, a page per dish, and every page fits its paper.
+## And for the days at sea (each morning is a new day).
 
-## Where to stand to pick the book up from beside your pillow.
-const STAND_AT: Vector3 = Vector3(4.05, 1.05, 13.3)
+## Where to stand to pick the book up from the table by your bunk.
+const STAND_AT: Vector3 = Vector3(3.6, 1.05, 13.6)
 
 
 func before_test() -> void:
@@ -16,14 +17,21 @@ func after_test() -> void:
 	Game.dialogue.reset()
 
 
-func test_it_lies_by_your_pillow_and_picking_it_up_makes_it_yours() -> void:
+func test_it_lies_by_the_lantern_and_picking_it_up_makes_it_yours_unopened() -> void:
 	var rig: Array[Node3D] = new_moored_ship_with_player(Vector3(0, 1.05, 6))
 	var ship: Ship = rig[0] as Ship
 	var player: Player3D = rig[1] as Player3D
 	var conversation: Conversation = new_conversation(player)
+	var hud: Hud3D = new_hud_3d(player)
+	var view: BookView = hud.get_node("%BookView") as BookView
+	var opened: Array[int] = [0]
+	view.opened.connect(func(_book: Book) -> void: opened[0] += 1)
 	var runner: GdUnitSceneRunner = scene_runner(ship.get_parent())
 	await physics_ticks(runner, 2)
 	var book: RecipeBook = ship.get_node("BunkRoom/RecipeBook") as RecipeBook
+	# On the little table by your bunk, beside the lantern's perch.
+	var perch: Node3D = ship.get_node("BunkRoom/LanternPerch/Perch") as Node3D
+	assert_float(book.global_position.distance_to(perch.global_position)).is_less(0.8)
 	var detector: InteractionDetector3D = player.get_node("InteractionDetector") \
 			as InteractionDetector3D
 	place_player_3d(runner, ship.to_global(STAND_AT))
@@ -35,8 +43,8 @@ func test_it_lies_by_your_pillow_and_picking_it_up_makes_it_yours() -> void:
 
 	await press(runner, "interact")
 	assert_bool(conversation.is_active()).is_true()
-	# Read through: held up, yours, opened (no book view here, so it
-	# doesn't), then the lantern's question and your nod.
+	# Read through: held up and yours, then the lantern's question and your
+	# nod. It doesn't fall open: you read it later (#206).
 	for i: int in 400:
 		if not conversation.is_active():
 			break
@@ -50,6 +58,8 @@ func test_it_lies_by_your_pillow_and_picking_it_up_makes_it_yours() -> void:
 	assert_bool(Game.dialogue.is_set(RecipeBook.OWNED_FLAG)).is_true()
 	assert_bool(Game.dialogue.is_set(&"said_a_cook")).is_true()
 	assert_bool(player.toolbar.has_tool(&"recipe_book")).is_true()
+	assert_int(opened[0]).is_equal(0)
+	assert_bool(player.controls_enabled).is_true()
 	assert_bool(book.visible).is_false()
 	assert_bool(book.is_taken()).is_true()
 	# Picking it up again does nothing.

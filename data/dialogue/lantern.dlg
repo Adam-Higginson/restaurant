@@ -1,4 +1,4 @@
-# The lantern, at home on the round table by the stove. Cheerful, and
+# The lantern, at home on the little table by your bunk. Cheerful, and
 # cheerfully wrong about where home is; underneath, a little tender.
 # Placeholder writing: rewrite freely.
 #
@@ -65,7 +65,7 @@ lantern: Close. I know exactly where it is. Roughly.
 
 ~ follow
 set asked_follow
-lantern: I'd like to. But somebody has to keep the stove company.
+lantern: I'd like to. But somebody has to keep your bunk warm.
 lantern: And you always come back here. So this is where I'll be.
 -> ask
 

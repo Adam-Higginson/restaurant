@@ -118,7 +118,7 @@ size = Vector3(0.62, 0.08, 0.57)
 [sub_resource type="CylinderMesh" id="CylinderMesh_2jov4"]
 top_radius = 0.12
 bottom_radius = 0.12
-height = 2.6
+height = 3.2
 radial_segments = 10
 rings = 1
 
@@ -136,7 +136,7 @@ size = Vector3(1.62, 0.97, 1.1)
 size = Vector3(0.55, 1.63, 0.5)
 
 [sub_resource type="CylinderShape3D" id="CylinderShape3D_krnr7"]
-height = 2.6
+height = 3.2
 radius = 0.13
 
 [node name="GalleyStove" type="StaticBody3D" unique_id=1203071614]
@@ -289,12 +289,12 @@ material_override = ExtResource("2_nemon")
 mesh = SubResource("BoxMesh_ia3yc")
 
 [node name="Chimney" type="MeshInstance3D" parent="." unique_id=575221552]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.42, 3.9, -0.15)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.16, 3.58, -0.39)
 material_override = ExtResource("6_pgcco")
 mesh = SubResource("CylinderMesh_2jov4")
 
 [node name="ChimneyCap" type="MeshInstance3D" parent="." unique_id=59241382]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.42, 5.26, -0.15)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.16, 5.26, -0.39)
 material_override = ExtResource("6_pgcco")
 mesh = SubResource("CylinderMesh_axku2")
 
@@ -309,14 +309,14 @@ omni_range = 6.5
 script = ExtResource("7_0s3pi")
 base_energy = 3.6
 
-[node name="SteamSpot" type="Marker3D" parent="." unique_id=798394963]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.3, 1.3, 0.15)
-
 [node name="EmberSpot" type="Marker3D" parent="." unique_id=1544278457]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5, 0.62)
 
+[node name="FlameSpot" type="Marker3D" parent="." unique_id=1544278458]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.26, 0.5)
+
 [node name="SmokeSpot" type="Marker3D" parent="." unique_id=1456928540]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.42, 5.32, -0.15)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.16, 5.32, -0.39)
 
 [node name="Shape" type="CollisionShape3D" parent="." unique_id=313201134]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.485, 0.1)
@@ -327,14 +327,14 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.42, 1.785, -0.15)
 shape = SubResource("BoxShape3D_mdfui")
 
 [node name="ChimneyShape" type="CollisionShape3D" parent="." unique_id=1158850892]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.42, 3.9, -0.15)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.16, 3.58, -0.39)
 shape = SubResource("CylinderShape3D_krnr7")
 
 [node name="Meshy" type="Node3D" parent="." node_paths=PackedStringArray("stand_ins")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0.17)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0.075)
 script = ExtResource("196_meshy")
 path = "res://assets/third_party/meshy/galley_hearth/model/model.glb"
-fit_size = Vector3(1.62, 1.8, 1.15)
+fit_size = Vector3(1.62, 1.98, 1.34)
 stretch = true
 stand_ins = [NodePath("../Plinth"), NodePath("../Back"), NodePath("../PierLeft"), NodePath("../PierRight"), NodePath("../Lintel"), NodePath("../Sill"), NodePath("../SootBack"), NodePath("../SootLeft"), NodePath("../SootRight"), NodePath("../SootTop"), NodePath("../EmberBed"), NodePath("../LogBack"), NodePath("../LogFront"), NodePath("../Fire"), NodePath("../ArchStone1"), NodePath("../ArchStone2"), NodePath("../ArchStone3"), NodePath("../ArchStone4"), NodePath("../ArchStone5"), NodePath("../Quoin1"), NodePath("../Quoin2"), NodePath("../Quoin3"), NodePath("../Quoin4"), NodePath("../Top"), NodePath("../Rail"), NodePath("../RailBracket1"), NodePath("../RailBracket2"), NodePath("../Flue"), NodePath("../FlueCollar")]
 grain = false

@@ -98,45 +98,6 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.03, 0)
 material_override = ExtResource("3_gvinq")
 mesh = SubResource("TorusMesh_5")
 
-[node name="Coil3" type="Node3D" parent="." unique_id=986785453]
-transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, -0.1, 0.68, -0.2)
-
-[node name="Coil" type="MeshInstance3D" parent="Coil3" unique_id=2130312963]
-transform = Transform3D(1, 0, 0, 0, -6.556708e-08, -1, 0, 1.5, -4.371139e-08, 0, -0.2, 0)
-material_override = ExtResource("3_gvinq")
-mesh = SubResource("TorusMesh_4")
-
-[node name="Hitch" type="MeshInstance3D" parent="Coil3" unique_id=1491693864]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.03, 0)
-material_override = ExtResource("3_gvinq")
-mesh = SubResource("TorusMesh_5")
-
-[node name="Coil4" type="Node3D" parent="." unique_id=762103138]
-transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, -0.1, 0.68, 0.2)
-
-[node name="Coil" type="MeshInstance3D" parent="Coil4" unique_id=821867894]
-transform = Transform3D(1, 0, 0, 0, -6.556708e-08, -1, 0, 1.5, -4.371139e-08, 0, -0.2, 0)
-material_override = ExtResource("3_gvinq")
-mesh = SubResource("TorusMesh_4")
-
-[node name="Hitch" type="MeshInstance3D" parent="Coil4" unique_id=2082419764]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.03, 0)
-material_override = ExtResource("3_gvinq")
-mesh = SubResource("TorusMesh_5")
-
-[node name="Coil6" type="Node3D" parent="." unique_id=419879189]
-transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, -0.1, 0.68, 1)
-
-[node name="Coil" type="MeshInstance3D" parent="Coil6" unique_id=2111874639]
-transform = Transform3D(1, 0, 0, 0, -6.556708e-08, -1, 0, 1.5, -4.371139e-08, 0, -0.2, 0)
-material_override = ExtResource("3_gvinq")
-mesh = SubResource("TorusMesh_4")
-
-[node name="Hitch" type="MeshInstance3D" parent="Coil6" unique_id=576642385]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.03, 0)
-material_override = ExtResource("3_gvinq")
-mesh = SubResource("TorusMesh_5")
-
 [node name="Shape" type="CollisionShape3D" parent="." unique_id=1324579986]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.04, 0.4, 0)
 shape = SubResource("BoxShape3D_6")

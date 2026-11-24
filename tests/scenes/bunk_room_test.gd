@@ -171,15 +171,38 @@ func test_you_can_walk_the_length_of_the_port_bunks() -> void:
 	assert_float(_player_on(ship, runner).z).is_greater(13.0)
 
 
-func test_every_crew_bay_has_a_light_on() -> void:
+func test_the_crew_bays_stand_empty() -> void:
+	# Only the captain is aboard (#204): every other bunk is made, open and dark.
 	var ship: Ship = new_moored_ship_with_player(Vector3(0, 1.05, 9.3))[0] as Ship
 	for node: Node in ship.get_node("BunkRoom").get_children():
 		var bay: BunkBay = node as BunkBay
 		if bay == null or bay.name == "YourBunk":
 			continue
-		# Somebody in every crew bay is up: a lamp below or a candle above.
-		assert_bool(bay.lamp_lit or bay.upper_lamp_lit).override_failure_message(
-				"%s is dark" % bay.name).is_true()
+		var empty: bool = bay.lower_bedding == BunkBay.Bedding.MADE \
+				and bay.upper_bedding == BunkBay.Bedding.MADE \
+				and not bay.lower_curtains_closed and not bay.upper_curtains_closed \
+				and not bay.lamp_lit and not bay.upper_lamp_lit
+		assert_bool(empty).override_failure_message("%s looks lived in" % bay.name).is_true()
+
+
+func test_you_sleep_at_the_foot_of_your_bunk() -> void:
+	var rig: Array[Node3D] = new_moored_ship_with_player(Vector3(4.0, 1.05, 13.95))
+	var player: Player3D = rig[1] as Player3D
+	var runner: GdUnitSceneRunner = scene_runner(rig[0].get_parent())
+	await physics_ticks(runner, 2)
+	# The recipe book waits on the crate at the bunk's foot (#206): taken
+	# first, as it is in play, it no longer comes before the bed.
+	Game.dialogue.set_flag(RecipeBook.OWNED_FLAG)
+	await physics_ticks(runner, 2)
+
+	await walk(runner, "move_right", 2)
+	await physics_ticks(runner, 2)
+
+	var detector: InteractionDetector3D = player.get_node("InteractionDetector") \
+			as InteractionDetector3D
+	assert_object(detector.focused).is_not_null()
+	assert_str(detector.focused.interact_prompt(player)).is_equal("Sleep until morning")
+	Game.dialogue.clear(RecipeBook.OWNED_FLAG)
 
 
 func test_you_can_walk_from_the_ramp_foot_to_your_bunk() -> void:
@@ -211,3 +234,18 @@ func _ceiling_above(ship: Ship, from: Vector3) -> float:
 func _player_on(ship: Ship, runner: GdUnitSceneRunner) -> Vector3:
 	var player: Player3D = runner.find_child("Player") as Player3D
 	return ship.to_local(player.global_position)
+
+
+func test_the_hull_isnt_drawn_inside_the_rooms() -> void:
+	# Meshy's hull rose through the bunk room's ceiling at the stern (#204).
+	var ship: Ship = new_moored_ship_with_player(Vector3(0, 1.05, 9.3))[0] as Ship
+	var hull: HullShell = ship.get_node("Visuals/HullShell") as HullShell
+	for spot: Vector3 in [Vector3(0, 3.8, 14.0), Vector3(-5.0, 3.5, 12.0), Vector3(5.0, 1.3, 3.0)]:
+		assert_bool(hull.clear_boxes.any(func(box: AABB) -> bool: return box.has_point(spot))) \
+				.override_failure_message("The hull still shows at %s" % spot).is_true()
+	# Only inside the rooms' own walls, floor and ceiling, never the outside.
+	for box: AABB in hull.clear_boxes:
+		assert_float(box.position.x).is_greater_equal(-5.7)
+		assert_float(box.end.x).is_less_equal(5.7)
+		assert_float(box.position.y).is_greater_equal(1.0)
+		assert_float(box.end.y).is_less_equal(CEILING_Y)

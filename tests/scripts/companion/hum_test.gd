@@ -68,7 +68,8 @@ func test_a_quieter_lantern_turns_the_recording_down() -> void:
 
 
 func test_he_hums_when_a_memory_comes_back() -> void:
-	var rig: Array[Node3D] = new_moored_ship_with_player(Vector3(0, 1.05, 6))
+	# In earshot of him, at home on his table by your bunk (#206).
+	var rig: Array[Node3D] = new_moored_ship_with_player(Vector3(3.3, 1.05, 12.5))
 	var runner: GdUnitSceneRunner = scene_runner(rig[0].get_parent())
 	var spirit: LanternSpirit = rig[1].get_node("LanternSpirit") as LanternSpirit
 	await physics_ticks(runner, 2)

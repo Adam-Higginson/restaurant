@@ -31,6 +31,10 @@ const END: StringName = &"END"
 ## The speaker written for a line nobody says, shown with no name:
 ## [code]narrator: You got the *Cheap Chef's Knife*![/code]. Stored as &"".
 const NARRATOR: StringName = &"narrator"
+## The hero's id: the player. The replies he picks are his to say, and show
+## his name once the story gives him one (a [Person] with this id in the
+## catalog); until then, no name.
+const HERO: StringName = &"hero"
 
 @export var kind: Kind = Kind.LINE
 ## The condition this step runs under, as written, or "" for always.

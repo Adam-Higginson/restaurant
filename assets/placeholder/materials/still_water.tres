@@ -1,0 +1,16 @@
+[gd_resource type="ShaderMaterial" format=3 uid="uid://cst1llwat3r04"]
+
+[ext_resource type="Shader" uid="uid://bgn8u0kql5jvo" path="res://shaders/still_water.gdshader" id="1_still"]
+
+[resource]
+render_priority = 0
+shader = ExtResource("1_still")
+shader_parameter/deep_colour = Color(0.02, 0.045, 0.055, 1)
+shader_parameter/shallow_colour = Color(0.06, 0.13, 0.14, 1)
+shader_parameter/sky_colour = Color(0.22, 0.27, 0.32, 1)
+shader_parameter/roughness = 0.03
+shader_parameter/ripple_scale = 9.0
+shader_parameter/ripple_strength = 0.25
+shader_parameter/drop_cells = 7.0
+shader_parameter/drop_life = 0.9
+shader_parameter/ring_strength = 1.0
