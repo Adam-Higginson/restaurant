@@ -20,6 +20,46 @@ uniform vec4 albedo_color : source_color = vec4(1.0);
 uniform vec4 base_tint : source_color = vec4(1.0);
 // The skin colour shut eyes are painted in.
 uniform vec4 eyelid_color : source_color = vec4(0.9, 0.6, 0.4, 1.0);
+// A calmer face over the one it was made with (FaceRepaint,
+// scripts/art/face_repaint.gd; #172). [mouth_paint] repaints the mouth:
+// 0 leaves it alone. Measured in
+// the head bone's own space, in its units (centimetres for a Meshy model;
+// +x the character's left, +y up, +z out of its face). [mouth_area] is the
+// patch covered (its middle x, y, and half its width and height: a rounded
+// box, its edge faded over [mouth_feather] of the way in), only in front of
+// [mouth_front]. In it the paint becomes [mouth_skin], and the light falls
+// as on a smooth dome about [mouth_dome] ([mouth_smoothing] of the way), so
+// a mouth sculpted into the mesh stops showing in its shading. Then a line
+// is drawn: [mouth_line] is its middle (x, y) and half its width, and
+// [mouth_curve] how far its ends sit above (or, negative, below) its middle.
+uniform float mouth_paint = 0.0;
+uniform vec4 mouth_area = vec4(0.0, 0.0, 1.0, 1.0);
+uniform float mouth_feather : hint_range(0.0, 1.0) = 0.35;
+uniform float mouth_front = 0.0;
+uniform vec4 mouth_skin : source_color = vec4(0.9, 0.6, 0.4, 1.0);
+uniform vec3 mouth_dome = vec3(0.0, 0.0, -10.0);
+uniform float mouth_smoothing : hint_range(0.0, 1.0) = 1.0;
+uniform vec3 mouth_line = vec3(0.0, 0.0, 1.0);
+uniform float mouth_thickness = 0.2;
+uniform float mouth_curve = 0.0;
+uniform vec4 mouth_color : source_color = vec4(0.6, 0.3, 0.2, 1.0);
+// [brow_paint] repaints the brows, in the same space; 0 leaves them alone.
+// Each is the other mirrored across x = [brow_mirror]; the numbers are the
+// left (+x) one's. In [brow_area] (like [mouth_area]) paint darker than
+// [brow_skin] is covered with it, then a brow is drawn from its inner end
+// to its outer one ([brow_line]: inner x, y, outer x, y), rising
+// [brow_arch] in the middle, as thick as [brow_thickness] at each end. Only
+// on the skin: points out of the face past a dome ([brow_skin_depth]: how
+// far in the middle, how fast it falls to the sides) are the hair in front.
+uniform float brow_paint = 0.0;
+uniform float brow_mirror = 0.0;
+uniform vec4 brow_area = vec4(3.0, 14.0, 2.5, 1.0);
+uniform vec2 brow_skin_depth = vec2(7.0, 0.06);
+uniform vec4 brow_skin : source_color = vec4(0.9, 0.6, 0.4, 1.0);
+uniform vec4 brow_line = vec4(1.5, 13.6, 5.2, 13.6);
+uniform float brow_arch = 0.2;
+uniform vec2 brow_thickness = vec2(0.5, 0.15);
+uniform vec4 brow_color : source_color = vec4(0.33, 0.21, 0.1, 1.0);
 
 // Where light turns to shadow, as the cosine between the surface and the
 // light: 0 is side-on, above 0 pushes more of the body into shadow.
@@ -83,6 +123,13 @@ instance uniform float light_cap = 0.0;
 // eye-coloured (the whites, a blue iris) is painted over in [eyelid_color],
 // which leaves the dark lash line the texture already has as a closed eye.
 instance uniform float eyes_shut = 0.0;
+// Where the head bone is now, for the [mouth_paint] repainting (set every
+// frame): a point less [head_origin], measured along each of the head_
+// axes (each divided by its length squared), is that point in head space.
+instance uniform vec3 head_origin = vec3(0.0);
+instance uniform vec3 head_x = vec3(1.0, 0.0, 0.0);
+instance uniform vec3 head_y = vec3(0.0, 1.0, 0.0);
+instance uniform vec3 head_z = vec3(0.0, 0.0, 1.0);
 // PROTOTYPE: creatures with a shell (the crab). [ball_form] lights the mesh
 // as a smooth dome about [ball_centre] (in the mesh's own space, [ball_radius]
 // across), so a low-poly shell shades as one clean curve and not as facets.
@@ -105,6 +152,8 @@ varying vec3 true_normal;
 // uses it to place shadows, and a rounded one there makes the mesh shadow
 // itself in dark patches.
 varying vec3 shade_normal;
+// Where this point is in the head bone's space, for the mouth.
+varying vec3 face_at;
 // Where this point is on the shell, about -1 to 1 each way, and which way
 // its surface faces in the mesh's own space.
 varying vec3 shell_point;
@@ -122,10 +171,60 @@ float under_cloth(uvec4 bones, vec4 weights) {
 }
 
 
+// How much of the neutral mouth a point in head space gets, 0 to 1: all of
+// it inside the rounded box, fading to none at its edge and behind its front.
+float mouth_share(vec3 at) {
+	vec2 off = abs(at.xy - mouth_area.xy) / max(mouth_area.zw, vec2(0.0001));
+	float reach = pow(pow(off.x, 4.0) + pow(off.y, 4.0), 0.25);
+	float inside = 1.0 - smoothstep(1.0 - mouth_feather, 1.0, reach);
+	return mouth_paint * inside * smoothstep(mouth_front - 0.5, mouth_front + 0.5, at.z);
+}
+
+
+// How light a colour looks, 0 to 1 (judged in sRGB, as it's seen).
+float looks_light(vec3 colour) {
+	return dot(pow(clamp(colour, 0.0, 1.0), vec3(1.0 / 2.2)), vec3(0.2126, 0.7152, 0.0722));
+}
+
+
+// The paint with the brows repainted, at [param at] in head space.
+vec3 repaint_brows(vec3 paint, vec3 at) {
+	// Both brows as the left one.
+	vec2 p = vec2(brow_mirror + abs(at.x - brow_mirror), at.y);
+	// The skin, not the hair hanging in front of it.
+	float skin_z = brow_skin_depth.x - brow_skin_depth.y * at.x * at.x;
+	float on_skin = 1.0 - smoothstep(skin_z - 0.15, skin_z + 0.15, at.z);
+	vec2 off = abs(p - brow_area.xy) / max(brow_area.zw, vec2(0.0001));
+	float reach = pow(pow(off.x, 4.0) + pow(off.y, 4.0), 0.25);
+	float inside = (1.0 - smoothstep(0.85, 1.0, reach)) * on_skin * brow_paint;
+	// The old brow: whatever here is darker than the skin and brown (warm),
+	// so the eyes' blue-black lashes are kept.
+	float darker = smoothstep(0.02, 0.07, looks_light(brow_skin.rgb) - looks_light(paint));
+	float warm = smoothstep(1.1, 1.5, paint.r / max(paint.b, 0.001));
+	paint = mix(paint, brow_skin.rgb, darker * warm * inside);
+	// The new one: along the line from its inner end to its outer one.
+	vec2 inner = brow_line.xy;
+	vec2 outer = brow_line.zw;
+	float along = dot(p - inner, outer - inner) / max(dot(outer - inner, outer - inner), 0.0001);
+	float t = clamp(along, 0.0, 1.0);
+	float middle_y = mix(inner.y, outer.y, t) + brow_arch * 4.0 * t * (1.0 - t);
+	float half_thick = 0.5 * mix(brow_thickness.x, brow_thickness.y, t);
+	float across = abs(p.y - middle_y);
+	float drawn = (1.0 - smoothstep(half_thick - 0.06, half_thick + 0.04, across))
+			* smoothstep(-0.03, 0.02, along) * (1.0 - smoothstep(0.97, 1.02, along));
+	return mix(paint, brow_color.rgb, drawn * on_skin * brow_paint);
+}
+
+
 void vertex() {
 	height = (MODEL_MATRIX * vec4(VERTEX, 1.0)).y - MODEL_MATRIX[3].y;
 	covered = hidden_bones == 0 ? 0.0 : under_cloth(BONE_INDICES, BONE_WEIGHTS);
 	true_normal = MODELVIEW_NORMAL_MATRIX * NORMAL;
+	face_at = vec3(0.0);
+	if (mouth_paint > 0.0 || brow_paint > 0.0) {
+		vec3 from_head = VERTEX - head_origin;
+		face_at = vec3(dot(from_head, head_x), dot(from_head, head_y), dot(from_head, head_z));
+	}
 	shell_point = (VERTEX - ball_centre) / max(ball_radius, 0.0001);
 	shell_facing = NORMAL;
 	vec3 shaded = NORMAL;
@@ -139,6 +238,14 @@ void vertex() {
 		from_line -= round_axis * dot(from_line, round_axis);
 		vec3 outward = normalize(from_line + vec3(0.0, 0.0, 0.0001));
 		shaded = normalize(mix(shaded, outward, round_form));
+	}
+	if (mouth_paint > 0.0) {
+		// Over the mouth, lit as a smooth dome: the dome's facing, turned
+		// from head space back into the mesh's.
+		vec3 out_of = normalize(face_at - mouth_dome);
+		vec3 dome = normalize(normalize(head_x) * out_of.x + normalize(head_y) * out_of.y
+				+ normalize(head_z) * out_of.z);
+		shaded = normalize(mix(shaded, dome, mouth_share(face_at) * mouth_smoothing));
 	}
 	shade_normal = MODELVIEW_NORMAL_MATRIX * shaded;
 }
@@ -163,6 +270,23 @@ void fragment() {
 		// Keep the cloth's own folds and shading: dye it, scaled by its brightness.
 		vec3 dyed = dye * clamp(brightest / 0.85, 0.0, 1.2);
 		paint = mix(paint, dyed, cloth * recolour_strength);
+	}
+	if (mouth_paint > 0.0) {
+		float share = mouth_share(face_at);
+		if (share > 0.0) {
+			// The face's own mouth, covered in skin and lit smooth.
+			paint = mix(paint, mouth_skin.rgb, share);
+			NORMAL = normalize(mix(NORMAL, normalize(shade_normal), share * mouth_smoothing));
+			// The new mouth: a short line, fading out at its ends.
+			float along = (face_at.x - mouth_line.x) / max(mouth_line.z, 0.0001);
+			float line_y = mouth_line.y + mouth_curve * along * along;
+			float on_line = (1.0 - smoothstep(mouth_thickness * 0.5, mouth_thickness,
+					abs(face_at.y - line_y))) * (1.0 - smoothstep(0.75, 1.0, abs(along)));
+			paint = mix(paint, mouth_color.rgb, on_line * share);
+		}
+	}
+	if (brow_paint > 0.0) {
+		paint = repaint_brows(paint, face_at);
 	}
 	if (eyes_shut > 0.0) {
 		// Judged as it looks (sRGB): near white, or bluer than it is red or green.

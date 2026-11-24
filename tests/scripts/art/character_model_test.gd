@@ -524,3 +524,81 @@ func test_the_boy_has_a_clip_for_every_move_the_player_makes() -> void:
 		assert_bool(boy.whole_clips.has(move)).override_failure_message(String(move)).is_true()
 	for named: StringName in boy.whole_clip_names:
 		assert_bool(boy.whole_clips.has(named)).override_failure_message(String(named)).is_true()
+
+
+func test_a_calmer_face_is_painted_on_the_body_not_the_clothes() -> void:
+	var body: MeshInstance3D = _styled_mesh("Body")
+	var shirt: MeshInstance3D = _styled_mesh("Outfit_Shirt")
+	var meshes: Array[MeshInstance3D] = [body, shirt]
+
+	var painted: Array[MeshInstance3D] = CharacterModel.paint_face(meshes, FaceRepaint.new())
+
+	assert_array(painted).contains_exactly([body])
+	var on_body: float = _material_of(body).get_shader_parameter(&"mouth_paint")
+	assert_float(on_body).is_equal(1.0)
+	# The clothes are left as made: never given the setting at all.
+	assert_that(_material_of(shirt).get_shader_parameter(&"mouth_paint")).is_null()
+
+
+func test_without_a_repaint_the_face_keeps_its_own() -> void:
+	var body: MeshInstance3D = _styled_mesh("Body")
+	var meshes: Array[MeshInstance3D] = [body]
+	CharacterModel.paint_face(meshes, FaceRepaint.new())
+
+	var painted: Array[MeshInstance3D] = CharacterModel.paint_face(meshes, null)
+
+	assert_array(painted).is_empty()
+	var on_body: float = _material_of(body).get_shader_parameter(&"mouth_paint")
+	assert_float(on_body).is_equal(0.0)
+
+
+func test_its_arms_are_as_thick_as_asked_and_its_hands_evenly_sized() -> void:
+	var parts: CharacterParts = CharacterParts.new()
+	parts.whole_arm_scale = 0.9
+	parts.whole_upper_arm_thickness = 0.95
+	parts.whole_forearm_thickness = 1.12
+	parts.whole_hand_scale = 0.8
+
+	var sizes: Dictionary[String, Vector3] = CharacterModel.body_sizes(parts)
+
+	# Each bone's size is its parent's times its own.
+	var upper: Vector3 = sizes["upperarm_l"]
+	var fore: Vector3 = upper * sizes["lowerarm_l"]
+	var hand: Vector3 = fore * sizes["hand_l"]
+	assert_vector(upper).is_equal_approx(Vector3(0.855, 0.9, 0.855), Vector3.ONE * 0.0001)
+	# Thickness on its own: the forearm keeps the arm's length.
+	assert_vector(fore).is_equal_approx(Vector3(1.008, 0.9, 1.008), Vector3.ONE * 0.0001)
+	assert_vector(hand).is_equal_approx(Vector3.ONE * 0.72, Vector3.ONE * 0.0001)
+	assert_vector(sizes["hand_r"]).is_equal(sizes["hand_l"])
+
+
+func test_twisting_the_forearms_turns_each_about_its_length_the_two_mirrored() -> void:
+	var clip: Animation = Animation.new()
+	for bone: String in ["LeftForeArm", "RightForeArm"]:
+		var track: int = clip.add_track(Animation.TYPE_ROTATION_3D)
+		clip.track_set_path(track, NodePath("Skeleton3D:" + bone))
+		clip.rotation_track_insert_key(track, 0.0, Quaternion.IDENTITY)
+
+	CharacterModel.twist_forearms(clip, ["LeftForeArm", "RightForeArm"], -55.0)
+
+	var left: Quaternion = clip.track_get_key_value(0, 0)
+	var right: Quaternion = clip.track_get_key_value(1, 0)
+	assert_vector(left.get_axis() * left.get_angle()).is_equal_approx(
+			Vector3.UP * deg_to_rad(-55.0), Vector3.ONE * 0.0001)
+	assert_vector(right.get_axis() * right.get_angle()).is_equal_approx(
+			Vector3.UP * deg_to_rad(55.0), Vector3.ONE * 0.0001)
+
+
+# A mesh called [param called] drawn in the stylised look.
+func _styled_mesh(called: String) -> MeshInstance3D:
+	var mesh_node: MeshInstance3D = MeshInstance3D.new()
+	mesh_node.name = called
+	mesh_node.mesh = BoxMesh.new()
+	mesh_node.set_surface_override_material(0,
+			CharacterStyle.new().make_material(StandardMaterial3D.new()))
+	auto_free(mesh_node)
+	return mesh_node
+
+
+func _material_of(mesh_node: MeshInstance3D) -> ShaderMaterial:
+	return mesh_node.get_active_material(0) as ShaderMaterial
