@@ -1,44 +1,41 @@
 class_name CarriedStack3D
 extends Node3D
 ## Shows the item selected on the player's toolbar (what they hold) as a small
-## model above their head. Bobs gently while the player walks.
+## model in the hero's left hand, the one the knife doesn't use. Until #206 it
+## floated above his head, a leftover from the restaurant game; now, with no
+## hand to hold it (the greybox body), it isn't shown at all.
 ##
 ## Display only: it reads the player's [Arms] and rebuilds when they change.
 
-## How far the stack bobs up and down while walking, in metres.
-@export var bob_height: float = 0.04
-## Bobs per second while walking.
-@export var bob_rate: float = 3.0
-
-## Seconds spent walking since the player last stood still.
-var _bob_time: float = 0.0
-## Where the stack sits when not bobbing, as placed in the scene.
-var _rest_height: float = 0.0
+## Where the item sits from the hand bone, in the hand's own space: a little
+## below the palm, so it's held rather than skewered.
+@export var grip_offset: Vector3 = Vector3(0.0, -0.06, 0.03)
 
 @onready var _player: Player3D = get_parent() as Player3D
+@onready var _character: CharacterModel = \
+		get_node_or_null("../Model/Character") as CharacterModel
 
 
 func _ready() -> void:
-	_rest_height = position.y
+	# Placed by hand every frame, where the hand is drawn: not interpolated.
+	physics_interpolation_mode = Node.PHYSICS_INTERPOLATION_MODE_OFF
 	_player.arms.changed.connect(_rebuild)
 	_rebuild()
 
 
-# On physics ticks, like the player: the stack is drawn part-way between ticks
-# along with the body, so it moves smoothly with it.
-func _physics_process(delta: float) -> void:
-	if _player.is_walking:
-		_bob_time += delta
-	else:
-		_bob_time = 0.0
-	position.y = _rest_height + bob_offset(_bob_time, bob_height, bob_rate)
+func _process(_delta: float) -> void:
+	var hand: Node3D = held_in()
+	visible = hand != null and get_child_count() > 0
+	if hand != null:
+		global_position = hand.global_transform * grip_offset
 
 
-## How far the stack is lifted (or dropped) after [param walked] seconds of
-## walking: a sine wave of [param height] metres at [param rate] bobs per
-## second, starting from rest.
-static func bob_offset(walked: float, height: float, rate: float) -> float:
-	return sin(walked * rate * TAU) * height
+## The hand the item is held in, or null when there's no hand to hold it
+## (the greybox body), so it isn't shown.
+func held_in() -> Node3D:
+	if _character == null or not is_instance_valid(_character.left_hand):
+		return null
+	return _character.left_hand
 
 
 # Throws the old model away and builds one of what's held now.
