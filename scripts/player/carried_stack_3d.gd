@@ -27,6 +27,9 @@ extends Node3D
 ## faces +X. The book stands along the fingers, its face against the palm,
 ## its middle just past the knuckles.
 @export var tool_grip: Transform3D = Transform3D(Basis(Vector3.UP, PI / 2.0), Vector3(0.04, 0.02, 0.0))
+## Where a piece of food sits in the hand, in the hand bone's space: its base
+## against the palm (+X), its middle level with the middle of the fingers.
+@export var food_grip: Transform3D = Transform3D(Basis(Vector3.BACK, -PI / 2.0), Vector3(0.02, 0.07, 0.0))
 ## How high the handle is above the pot's base, in the model's own metres.
 @export var handle_height: float = 0.12
 
@@ -53,12 +56,14 @@ func _process(_delta: float) -> void:
 	visible = hand != null and get_child_count() > 0
 	if hand == null:
 		return
-	if _held == null:
-		# A tool (the recipe book) moves with the hand itself: flat against
-		# the palm, its spine in the fingers, swinging as he walks.
+	if _held == null or not _held.is_vessel():
+		# A tool (the recipe book) or a piece of food moves with the hand
+		# itself, swinging as he walks: the book flat against the palm, food
+		# resting in it.
+		var grip: Transform3D = tool_grip if _held == null else food_grip
 		var hand_basis: Basis = hand.global_basis.orthonormalized()
 		global_transform = Transform3D(hand_basis, hand.global_position) \
-				* Transform3D(tool_grip.basis.scaled(Vector3.ONE * held_scale), tool_grip.origin)
+				* Transform3D(grip.basis.scaled(Vector3.ONE * held_scale), grip.origin)
 		return
 	# Turned the way the hero faces.
 	if _model != null:
