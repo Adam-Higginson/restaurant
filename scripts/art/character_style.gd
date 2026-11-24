@@ -57,6 +57,24 @@ const OUTLINE_SHADER: Shader = preload("res://shaders/outline.gdshader")
 		bands = value
 		emit_changed()
 
+@export_group("Brush")
+## How far the edge between light and shadow is broken up into painted
+## strokes, as hand-painted anime shading is (0 is a clean line).
+@export_range(0.0, 1.0) var brush_strength: float = 0.0:
+	set(value):
+		brush_strength = value
+		emit_changed()
+## How many strokes fit across the texture: more is finer.
+@export_range(1.0, 400.0) var brush_scale: float = 80.0:
+	set(value):
+		brush_scale = value
+		emit_changed()
+## How much longer a stroke is than it is wide.
+@export_range(1.0, 8.0) var brush_stretch: float = 4.0:
+	set(value):
+		brush_stretch = value
+		emit_changed()
+
 @export_group("Highlight")
 ## How bright the small hard highlight is (0 turns it off).
 @export_range(0.0, 2.0) var specular_strength: float = 0.25:
@@ -133,6 +151,9 @@ func apply(material: ShaderMaterial) -> void:
 	material.set_shader_parameter(&"shadow_softness", shadow_softness)
 	material.set_shader_parameter(&"lit_falloff", lit_falloff)
 	material.set_shader_parameter(&"bands", bands)
+	material.set_shader_parameter(&"brush_strength", brush_strength)
+	material.set_shader_parameter(&"brush_scale", brush_scale)
+	material.set_shader_parameter(&"brush_stretch", brush_stretch)
 	material.set_shader_parameter(&"specular_strength", specular_strength)
 	material.set_shader_parameter(&"specular_size", specular_size)
 	material.set_shader_parameter(&"rim_strength", rim_strength)

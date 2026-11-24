@@ -45,6 +45,23 @@ const SURFACE: Dictionary[StringName, Variant] = {
 ## none, the look we chose (#172), shapes told apart by light and colour.
 @export_range(0.0, 4.0) var line_width: float = 1.0
 @export_range(0.0, 1.0) var line_strength: float = 0.0
+## Crisp in front, painted and airy behind: between [member far_start] and
+## [member far_end] metres away the brush grows to [member far_brush] times
+## its size, and colours ease [member haze_strength] of the way to a paler,
+## warmer shade of themselves in [member haze_color].
+@export var far_start: float = 4.0
+@export var far_end: float = 30.0
+@export_range(1.0, 4.0) var far_brush: float = 2.0
+@export_range(0.0, 1.0) var haze_strength: float = 0.35
+@export var haze_color: Color = Color(1.0, 0.86, 0.72)
+## A thin bright rim along the characters' outer edge, on the side towards
+## [member rim_toward] on screen (y is down): how strong (0 is none), how
+## wide in pixels at 1080p, and its tint. Characters stand out with it,
+## the way anime games do it, without an outline.
+@export_range(0.0, 1.0) var character_rim: float = 0.7
+@export_range(0.0, 8.0) var character_rim_width: float = 3.0
+@export var rim_toward: Vector2 = Vector2(-0.6, -0.8)
+@export var rim_tint: Color = Color(1.0, 0.85, 0.62)
 @export_group("Surfaces")
 ## How much richer and darker a planked surface's own colour is made, now
 ## that no grain picture colours it.
@@ -156,6 +173,17 @@ func _apply() -> void:
 			var material: ShaderMaterial = screen.mesh.surface_get_material(0) as ShaderMaterial
 			material.set_shader_parameter(&"line_width", line_width)
 			material.set_shader_parameter(&"line_strength", line_strength)
+			material.set_shader_parameter(&"far_start", far_start)
+			material.set_shader_parameter(&"far_end", far_end)
+			material.set_shader_parameter(&"far_brush", far_brush)
+			material.set_shader_parameter(&"haze_strength", haze_strength)
+			material.set_shader_parameter(&"haze_color", haze_color)
+		# The rim is only on the characters' copy.
+		var people: ShaderMaterial = screens[1].mesh.surface_get_material(0) as ShaderMaterial
+		people.set_shader_parameter(&"silhouette_rim", character_rim)
+		people.set_shader_parameter(&"rim_width", character_rim_width)
+		people.set_shader_parameter(&"rim_toward", rim_toward)
+		people.set_shader_parameter(&"rim_tint", rim_tint)
 	if _filter != null:
 		_filter.visible = enabled
 	_apply_surfaces()

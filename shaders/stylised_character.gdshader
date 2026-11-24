@@ -45,6 +45,13 @@ uniform float shadow_softness : hint_range(0.0, 0.5) = 0.04;
 uniform float lit_falloff : hint_range(0.0, 1.0) = 0.35;
 // How many steps from shadow to full light: 1 is two-tone.
 uniform int bands : hint_range(1, 4) = 1;
+// The edge between light and shadow broken into painted strokes: how far
+// (0 is a clean line), how many strokes across the texture, and how much
+// longer than wide each is. Laid out on the texture, so they stay put on
+// the body as it moves.
+uniform float brush_strength : hint_range(0.0, 1.0) = 0.0;
+uniform float brush_scale = 80.0;
+uniform float brush_stretch = 4.0;
 // What colour the shadow side is lit with, as a share of the light: warm
 // and a little purple rather than grey.
 uniform vec4 shadow_color : source_color = vec4(0.46, 0.44, 0.58, 1.0);
@@ -244,6 +251,31 @@ void fragment() {
 }
 
 
+// A random number from 0 to 1 for each whole-numbered spot.
+float brush_hash(vec2 spot) {
+	return fract(sin(dot(spot, vec2(127.1, 311.7))) * 43758.5453);
+}
+
+
+// Smooth noise: the random numbers blended between spots.
+float brush_noise(vec2 at) {
+	vec2 cell = floor(at);
+	vec2 f = fract(at);
+	f = f * f * (3.0 - 2.0 * f);
+	return mix(mix(brush_hash(cell), brush_hash(cell + vec2(1.0, 0.0)), f.x),
+			mix(brush_hash(cell + vec2(0.0, 1.0)), brush_hash(cell + vec2(1.0, 1.0)), f.x), f.y);
+}
+
+
+// Short painted strokes at [param uv], 0 to 1: noise stretched along one
+// slanting way, at two sizes.
+float brush_strokes(vec2 uv) {
+	vec2 at = mat2(vec2(0.8, 0.6), vec2(-0.6, 0.8)) * (uv * brush_scale);
+	at.x /= max(brush_stretch, 1.0);
+	return brush_noise(at) * 0.65 + brush_noise(at * 2.3 + 7.1) * 0.35;
+}
+
+
 // How lit a point is, 0 to 1, from the cosine between surface and light: a
 // staircase of [bands] soft-edged steps starting at the threshold.
 float steps(float facing) {
@@ -260,7 +292,8 @@ float steps(float facing) {
 void light() {
 	vec3 shading = normalize(shade_normal);
 	float facing = dot(shading, LIGHT);
-	float lit = steps(facing);
+	// Painted strokes push the edge of the light back and forth.
+	float lit = steps(facing + (brush_strokes(UV) - 0.5) * brush_strength);
 	// Cast shadows cut cleanly too. Sun and moon shadows come in ATTENUATION
 	// alone; lamps also fade with distance there, which should stay smooth.
 	float reach = 1.0;

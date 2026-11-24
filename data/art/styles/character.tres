@@ -5,3 +5,6 @@
 [resource]
 script = ExtResource("1_style")
 outline = false
+brush_strength = 0.35
+brush_scale = 80.0
+brush_stretch = 4.0

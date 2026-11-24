@@ -38,6 +38,24 @@ uniform float depth_edge : hint_range(0.0, 0.2) = 0.03;
 uniform float normal_edge : hint_range(0.0, 1.0) = 0.45;
 // Lines fade out beyond this distance in metres, so far detail doesn't clog.
 uniform float line_fade_distance = 14.0;
+// Crisp in front, painted and airy behind (#172): between [far_start] and
+// [far_end] metres the brush grows to [far_brush] times its size, and the
+// colour eases [haze_strength] of the way to a paler, warmer, softer shade
+// of itself in [haze_color] (its own brightness kept, so night stays dark).
+uniform float far_start = 4.0;
+uniform float far_end = 30.0;
+uniform float far_brush : hint_range(1.0, 4.0) = 1.0;
+uniform float haze_strength : hint_range(0.0, 1.0) = 0.0;
+uniform vec4 haze_color : source_color = vec4(1.0, 0.86, 0.72, 1.0);
+// A thin bright rim along a character's outer edge, on the side towards
+// [rim_toward] (a direction on screen; y is down), so characters stand
+// out without an outline (#172): where the surface [rim_width] pixels
+// that way is far behind, the colour is lifted [silhouette_rim] of the
+// way and tinted [rim_tint]. Only the characters' copy turns it on.
+uniform float silhouette_rim : hint_range(0.0, 1.0) = 0.0;
+uniform float rim_width : hint_range(0.0, 8.0) = 2.0;
+uniform vec2 rim_toward = vec2(-0.6, -0.8);
+uniform vec4 rim_tint : source_color = vec4(1.0, 0.85, 0.62, 1.0);
 
 const int TAPS = 4;
 
@@ -94,8 +112,23 @@ void fragment() {
 	vec2 pixel = 1.0 / VIEWPORT_SIZE;
 	float scale = VIEWPORT_SIZE.y / 1080.0;
 	vec3 colour = texture(screen_texture, SCREEN_UV).rgb;
+	// How far off this pixel is, from the near edge of "far" to its end.
+	float away = smoothstep(far_start, far_end, -view_position(SCREEN_UV, INV_PROJECTION_MATRIX).z);
 	if (brush_size > 0.0) {
-		colour = painted(SCREEN_UV, pixel * scale * brush_size / float(TAPS));
+		float brush = brush_size * mix(1.0, far_brush, away);
+		colour = painted(SCREEN_UV, pixel * scale * brush / float(TAPS));
+	}
+	if (silhouette_rim > 0.0) {
+		float here_away = -view_position(SCREEN_UV, INV_PROJECTION_MATRIX).z;
+		vec2 toward = normalize(rim_toward) * pixel * scale * rim_width;
+		float there_away = -view_position(SCREEN_UV + toward, INV_PROJECTION_MATRIX).z;
+		float edge = smoothstep(0.25, 0.6, there_away - here_away);
+		colour = mix(colour, colour * 1.4 + rim_tint.rgb * 0.22, edge * silhouette_rim);
+	}
+	if (haze_strength > 0.0) {
+		float bright = dot(colour, vec3(0.3, 0.5, 0.2));
+		vec3 airy = haze_color.rgb * (bright * 1.15 + 0.015);
+		colour = mix(colour, airy, away * haze_strength);
 	}
 
 	if (line_width > 0.0) {

@@ -612,6 +612,10 @@ A growing glossary of the Godot concepts this project uses: what each one is, in
 
 **Moving loose parts in code.** A model with no skeleton can still move if it's cut into parts whose origins are their joints: turning a part's `transform` swings it from that joint. *Ours:* the crab's legs and claws (`Crab._move_parts`), cut by `tools/meshy/split_crab.py`.
 
+**Noise in a shader.** A shader can make its own pattern from numbers: a hash turns each whole-numbered spot into a random number, and blending between neighbouring spots gives smooth noise; stretch it one way and it looks like brush strokes. *Ours:* `brush_strokes()` in `shaders/stylised_character.gdshader` breaks the edge between light and shadow into painted strokes (the style's `brush_strength`).
+
+**A rim from the depth buffer.** A full-screen shader can read how far away the surface under each pixel is (`hint_depth_texture`). Where a character's pixel has something much further away just beside it, it's on the character's outer edge, and lightening it there draws a thin rim that separates the character from what's behind, with no outline. *Ours:* `silhouette_rim` in `shaders/painted_filter.gdshader`, on the painted look's characters-only copy (`PaintedLook.character_rim`). The same distance makes faraway things softer and hazier (`far_brush`, `haze_strength`).
+
 **Drawing in a bone's own space.** Every bone has its own coordinate system that moves with it. A shader told where a bone is each frame (as instance uniforms) can turn each point of the mesh into that bone's space, and there a spot on the face stays put however the head turns, so shapes can be drawn on it. *Ours:* the boy's closed eyes (`ClosedEyes`, `data/characters/boy_eyes.tres`), drawn over his painted eyes in his head bone's space; `CharacterModel._place_hands` tells the shader where his head is.
 
 ## The talk at the rail and the Grave of the Lanterns (#182)
