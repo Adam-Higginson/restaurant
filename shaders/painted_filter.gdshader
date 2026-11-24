@@ -56,6 +56,20 @@ uniform float silhouette_rim : hint_range(0.0, 1.0) = 0.0;
 uniform float rim_width : hint_range(0.0, 8.0) = 2.0;
 uniform vec2 rim_toward = vec2(-0.6, -0.8);
 uniform vec4 rim_tint : source_color = vec4(1.0, 0.85, 0.62, 1.0);
+// Every edge in the picture brushed (#172): the brush is moved up to
+// [stroke_jitter] pixels by a pattern of strokes about [stroke_size]
+// metres across, [stroke_stretch] times longer than wide, pinned to the
+// surfaces (so it doesn't swim as the camera moves). On a flat colour it
+// changes nothing; at an edge (a shadow, a pool of lamplight, one colour
+// against another) it makes the edge ragged, like a brush.
+uniform float stroke_jitter : hint_range(0.0, 8.0) = 0.0;
+uniform float stroke_size = 0.15;
+uniform float stroke_stretch = 4.0;
+// How far the brush follows the picture's edges (#172): 0 paints square
+// dabs; above that each dab is turned to lie along the edge it's on and
+// stretched into an oval up to (1 + [brush_flow]) times longer, the way
+// a brush is drawn along a form. Flat areas, with no edge, stay as dabs.
+uniform float brush_flow : hint_range(0.0, 1.0) = 0.0;
 
 const int TAPS = 4;
 
@@ -78,9 +92,66 @@ vec3 view_normal(vec2 uv) {
 }
 
 
+// A random number from 0 to 1 for each whole-numbered spot.
+float stroke_hash(vec2 spot) {
+	return fract(sin(dot(spot, vec2(127.1, 311.7))) * 43758.5453);
+}
+
+
+// Smooth noise: the random numbers blended between spots.
+float stroke_noise(vec2 at) {
+	vec2 cell = floor(at);
+	vec2 f = fract(at);
+	f = f * f * (3.0 - 2.0 * f);
+	return mix(mix(stroke_hash(cell), stroke_hash(cell + vec2(1.0, 0.0)), f.x),
+			mix(stroke_hash(cell + vec2(0.0, 1.0)), stroke_hash(cell + vec2(1.0, 1.0)), f.x), f.y);
+}
+
+
+// Which way and how far the brush is moved at a point of a surface
+// ([param world], facing [param facing]), -0.5 to 0.5 each way: strokes
+// laid on whichever of the floor or wall planes the surface lies most
+// along, stretched one slanting way.
+vec2 stroke_offset(vec3 world, vec3 facing) {
+	vec3 a = abs(facing);
+	vec2 plane = a.y > max(a.x, a.z) ? world.xz : (a.x > a.z ? world.zy : world.xy);
+	vec2 at = mat2(vec2(0.8, 0.6), vec2(-0.6, 0.8)) * (plane / max(stroke_size, 0.001));
+	at.x /= max(stroke_stretch, 1.0);
+	return vec2(stroke_noise(at), stroke_noise(at + vec2(19.7, 7.3))) - 0.5;
+}
+
+
+// How bright the picture looks at [param uv], squashed so a bright window
+// doesn't drown everything else.
+float tone_at(vec2 uv) {
+	vec3 colour = texture(screen_texture, uv).rgb;
+	return dot(colour / (1.0 + colour), vec3(0.3, 0.5, 0.2));
+}
+
+
 vec3 painted(vec2 uv, vec2 step_size) {
 	vec3 best = vec3(0.0);
 	float best_spread = 1e9;
+	// Which way the edge here runs, and how strongly, from how the
+	// brightness changes across the brush: the dabs are laid along it.
+	vec2 along = vec2(1.0, 0.0);
+	vec2 stretch = vec2(1.0);
+	if (brush_flow > 0.0) {
+		vec2 r = step_size * float(TAPS) * 0.5;
+		float right = tone_at(uv + vec2(r.x, 0.0)) - tone_at(uv - vec2(r.x, 0.0));
+		float down = tone_at(uv + vec2(0.0, r.y)) - tone_at(uv - vec2(0.0, r.y));
+		float diagonal = tone_at(uv + r) - tone_at(uv - r);
+		float other = tone_at(uv + vec2(r.x, -r.y)) - tone_at(uv + vec2(-r.x, r.y));
+		vec2 rise = vec2(right + 0.35 * (diagonal + other), down + 0.35 * (diagonal - other));
+		float strength = length(rise);
+		if (strength > 1e-5) {
+			// The edge runs across the way the brightness rises.
+			along = vec2(-rise.y, rise.x) / strength;
+			float flow = smoothstep(0.01, 0.08, strength) * brush_flow;
+			stretch = vec2(1.0 + flow, 1.0 / (1.0 + flow));
+		}
+	}
+	vec2 across = vec2(-along.y, along.x);
 	for (int quadrant = 0; quadrant < 4; quadrant++) {
 		vec2 side = vec2(quadrant % 2 == 0 ? -1.0 : 1.0, quadrant < 2 ? -1.0 : 1.0);
 		vec3 sum = vec3(0.0);
@@ -88,7 +159,9 @@ vec3 painted(vec2 uv, vec2 step_size) {
 		float tone_squares = 0.0;
 		for (int y = 0; y <= TAPS; y++) {
 			for (int x = 0; x <= TAPS; x++) {
-				vec3 colour = texture(screen_texture, uv + vec2(float(x), float(y)) * side * step_size).rgb;
+				vec2 dab = vec2(float(x), float(y)) * side * stretch;
+				vec2 turned = along * dab.x + across * dab.y;
+				vec3 colour = texture(screen_texture, uv + turned * step_size).rgb;
 				sum += colour;
 				// Judge evenness on a squashed brightness, so a bright window
 				// doesn't drown everything else.
@@ -112,11 +185,19 @@ void fragment() {
 	vec2 pixel = 1.0 / VIEWPORT_SIZE;
 	float scale = VIEWPORT_SIZE.y / 1080.0;
 	vec3 colour = texture(screen_texture, SCREEN_UV).rgb;
+	vec3 seen = view_position(SCREEN_UV, INV_PROJECTION_MATRIX);
 	// How far off this pixel is, from the near edge of "far" to its end.
-	float away = smoothstep(far_start, far_end, -view_position(SCREEN_UV, INV_PROJECTION_MATRIX).z);
+	float away = smoothstep(far_start, far_end, -seen.z);
+	vec2 brush_at = SCREEN_UV;
+	// Not on the sky, which is endlessly far.
+	if (stroke_jitter > 0.0 && -seen.z < far_end * 20.0) {
+		vec3 world = (INV_VIEW_MATRIX * vec4(seen, 1.0)).xyz;
+		vec3 facing = (INV_VIEW_MATRIX * vec4(view_normal(SCREEN_UV), 0.0)).xyz;
+		brush_at += stroke_offset(world, facing) * 2.0 * pixel * scale * stroke_jitter;
+	}
 	if (brush_size > 0.0) {
 		float brush = brush_size * mix(1.0, far_brush, away);
-		colour = painted(SCREEN_UV, pixel * scale * brush / float(TAPS));
+		colour = painted(brush_at, pixel * scale * brush / float(TAPS));
 	}
 	if (silhouette_rim > 0.0) {
 		float here_away = -view_position(SCREEN_UV, INV_PROJECTION_MATRIX).z;

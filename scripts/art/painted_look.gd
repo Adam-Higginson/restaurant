@@ -62,6 +62,17 @@ const SURFACE: Dictionary[StringName, Variant] = {
 @export_range(0.0, 8.0) var character_rim_width: float = 3.0
 @export var rim_toward: Vector2 = Vector2(-0.6, -0.8)
 @export var rim_tint: Color = Color(1.0, 0.85, 0.62)
+## Every edge in the scenery brushed: how far the brush is moved, in
+## pixels at 1080p (0 is none), by strokes about [member stroke_size]
+## metres across and [member stroke_stretch] times longer than wide,
+## pinned to the surfaces. Characters have their own (the style's brush).
+@export_range(0.0, 8.0) var scenery_strokes: float = 3.0
+@export var stroke_size: float = 0.15
+@export_range(1.0, 8.0) var stroke_stretch: float = 4.0
+## How far the brush follows the picture's edges: 0 paints square dabs,
+## up to 1 lays each dab along the edge it's on, as an oval up to twice
+## as long as it's wide, so strokes follow the forms.
+@export_range(0.0, 1.0) var brush_flow: float = 0.8
 @export_group("Surfaces")
 ## How much richer and darker a planked surface's own colour is made, now
 ## that no grain picture colours it.
@@ -178,6 +189,12 @@ func _apply() -> void:
 			material.set_shader_parameter(&"far_brush", far_brush)
 			material.set_shader_parameter(&"haze_strength", haze_strength)
 			material.set_shader_parameter(&"haze_color", haze_color)
+			material.set_shader_parameter(&"brush_flow", brush_flow)
+		# Brushed edges only on the scenery's copy.
+		var scenery: ShaderMaterial = screens[0].mesh.surface_get_material(0) as ShaderMaterial
+		scenery.set_shader_parameter(&"stroke_jitter", scenery_strokes)
+		scenery.set_shader_parameter(&"stroke_size", stroke_size)
+		scenery.set_shader_parameter(&"stroke_stretch", stroke_stretch)
 		# The rim is only on the characters' copy.
 		var people: ShaderMaterial = screens[1].mesh.surface_get_material(0) as ShaderMaterial
 		people.set_shader_parameter(&"silhouette_rim", character_rim)
