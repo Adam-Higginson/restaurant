@@ -34,6 +34,8 @@ const MODEL_WIDTH: float = 0.676
 
 ## One material for every book (each book sets its own cover colour on it).
 static var _shared: ShaderMaterial = null
+## The book model, kept loaded once it's been used.
+static var _model: PackedScene = null
 
 var _look: Node3D = null
 
@@ -55,7 +57,9 @@ func _build() -> void:
 		_look = null
 	var size: float = height / MODEL_HEIGHT
 	if ResourceLoader.exists(MODEL):
-		_look = (load(MODEL) as PackedScene).instantiate() as Node3D
+		if _model == null:
+			_model = load(MODEL) as PackedScene
+		_look = _model.instantiate() as Node3D
 		# Spine (-x) round to face +Z, then sized and stood on the floor.
 		# (Its thickness is along its own z, which the turn lays along +X.)
 		_look.transform = Transform3D(Basis(Vector3.UP, PI / 2.0) * Basis.from_scale(

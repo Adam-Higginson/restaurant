@@ -126,6 +126,11 @@ const GRAIN: Texture2D = preload("res://assets/placeholder/materials/n64_grain.t
 ## viewport when it's done.
 @export_tool_button("Fire in Kiln", "Bake") var fire_button: Callable = fire_in_kiln
 
+## Every model loaded this run, kept so the next copy of a scene doesn't load
+## it from disk again: the ship is made many times in the tests, and freeing it
+## would otherwise free its models too (#196).
+static var _loaded: Dictionary[String, PackedScene] = {}
+
 ## The loaded model, or null when its file isn't there.
 var model: Node3D = null
 ## Whether the model showing is the Kiln's fired one.
@@ -171,7 +176,7 @@ func dress() -> bool:
 		scene = load(job.fired_path()) as PackedScene
 		fired = scene != null
 	if scene == null and not path.is_empty() and ResourceLoader.exists(path):
-		scene = load(path) as PackedScene
+		scene = _load_model(path)
 	if scene == null:
 		_show_stand_ins(true)
 		dressed.emit(false)
@@ -370,6 +375,17 @@ func _hide_under_outfit(skeleton: Skeleton3D) -> void:
 
 
 # The outfit changed: dress the model again in it.
+## [param file] loaded, from [member _loaded] if it was loaded before. In the
+## editor it's always loaded afresh, so a model imported again shows at once.
+static func _load_model(file: String) -> PackedScene:
+	if not Engine.is_editor_hint() and _loaded.has(file):
+		return _loaded[file]
+	var scene: PackedScene = load(file) as PackedScene
+	if scene != null and not Engine.is_editor_hint():
+		_loaded[file] = scene
+	return scene
+
+
 func _redress() -> void:
 	if is_inside_tree():
 		dress()
