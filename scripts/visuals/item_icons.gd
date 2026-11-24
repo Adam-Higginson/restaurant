@@ -21,6 +21,8 @@ const VIEW_FROM: Vector3 = Vector3(0.55, 0.75, 1.0)
 const MARGIN: float = 1.15
 ## How far a tool is turned, lying across its picture, in degrees.
 const TOOL_TILT: float = -45.0
+## How many frames a picture is drawn for before it is kept.
+const SETTLE_FRAMES: int = 4
 
 ## The pictures taken, by key.
 var _icons: Dictionary[String, Texture2D] = {}
@@ -123,10 +125,14 @@ func _take_next() -> void:
 			else _tool_model(_tools[key])
 	_stage.add_child(model)
 	_frame(model)
-	_studio.render_target_update_mode = SubViewport.UPDATE_ONCE
-	await RenderingServer.frame_post_draw
+	# A few frames, not one: a material drawn for the first time can take a
+	# frame or two to be ready, and would be missing from the picture.
+	_studio.render_target_update_mode = SubViewport.UPDATE_ALWAYS
+	for i: int in SETTLE_FRAMES:
+		await RenderingServer.frame_post_draw
 	if not is_inside_tree():
 		return
+	_studio.render_target_update_mode = SubViewport.UPDATE_DISABLED
 	var image: Image = _studio.get_texture().get_image()
 	model.queue_free()
 	_queue.erase(key)
@@ -159,6 +165,8 @@ func _tool_model(tool: HandTool) -> Node3D:
 		model.look = tool.model_look
 		model.keep_as_made = tool.model_look == null
 		model.fit_size = tool.model_size
+		model.grain = false
+		model.detail = 1.0
 		model.stand_ins = [bar]
 		model.path = tool.model_path
 		root.add_child(model)
