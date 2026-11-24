@@ -74,7 +74,7 @@ tracks/0/keys = {
 "times": PackedFloat32Array(0, 0.7, 1.45, 1.6),
 "transitions": PackedFloat32Array(0.6, 1.7, 1, 1),
 "update": 0,
-"values": [Vector3(0.2, 5.2, 17.6), Vector3(0.9, 9, 22.2), Vector3(1.5, 2.7, 26.6), Vector3(1.6, 0.8, 27)]
+"values": [Vector3(7.6, 8.5, 11.6), Vector3(9.3, 10.7, 13.4), Vector3(11.5, 2.7, 15.2), Vector3(11.6, 0.8, 15.4)]
 }
 tracks/1/type = "value"
 tracks/1/imported = false
@@ -86,7 +86,7 @@ tracks/1/keys = {
 "times": PackedFloat32Array(0, 1.45),
 "transitions": PackedFloat32Array(1, 1),
 "update": 0,
-"values": [Vector3(0.3, 3.1415927, 0), Vector3(2.6, 3.1415927, 0.4)]
+"values": [Vector3(0.3, 4.712, 0), Vector3(2.6, 4.712, 0.4)]
 }
 tracks/2/type = "value"
 tracks/2/imported = false
@@ -183,12 +183,12 @@ _data = {
 [node name="Shots" type="Node3D" parent="." unique_id=1187081554]
 
 [node name="ThePlunge" type="Marker3D" parent="Shots" unique_id=709512225 groups=["shots"]]
-transform = Transform3D(0.463748, 0.247319, -0.850747, 0, 0.960247, 0.279151, 0.885967, -0.129456, 0.445313, -13, 6.8, 29.5)
+transform = Transform3D(0.707, -0.086, 0.701, 0, 0.992, 0.122, -0.707, -0.086, 0.701, 21, 6.5, 25.5)
 
 [node name="Props" type="Node3D" parent="." unique_id=1883263416]
 
 [node name="FlyingLantern" type="Node3D" parent="Props" unique_id=541317971 groups=["props"]]
-transform = Transform3D(-1, 0, -8.742278e-08, 0, 1, 0, 8.742278e-08, 0, -1, 0.2, 5.2, 17.6)
+transform = Transform3D(0, 0, -1, 0, 1, 0, 1, 0, 0, 7.6, 8.5, 11.6)
 visible = false
 
 [node name="Glow" type="OmniLight3D" parent="Props/FlyingLantern" unique_id=606525772]
@@ -206,7 +206,7 @@ light = NodePath("../Glow")
 light_energy = 3.0
 
 [node name="PlungeSplash" type="Node3D" parent="." unique_id=1976417428]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.5, 0.1, 26.6)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 11.6, 0.1, 15.4)
 
 [node name="Float" type="Node" parent="PlungeSplash" unique_id=707114881]
 script = ExtResource("1_ejl8o")

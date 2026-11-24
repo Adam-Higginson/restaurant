@@ -15,11 +15,23 @@ func test_drawn_curtains_meet_in_the_middle_and_cover_the_rail() -> void:
 		assert_float(signf(layout.x)).is_equal(float(side))
 
 
-func test_open_curtains_are_bunched_at_the_ends() -> void:
+func test_open_curtains_are_bunched_at_the_head_clear_of_the_ladder() -> void:
+	# The ladder stands at the right end of the bay (x 0.55 to 0.85).
 	for side: int in [-1, 1]:
 		var layout: Vector2 = BunkBay.curtain_layout(false, side)
 		assert_float(layout.y).is_less(0.5)
-		assert_float(absf(layout.x)).is_greater(0.7)
+		assert_float(layout.x).is_less(-0.6)
+		assert_float(layout.x + layout.y / 2.0).is_less(0.0)
+
+
+func test_open_curtains_dont_share_a_plane() -> void:
+	var bay: BunkBay = (load(SCENE) as PackedScene).instantiate() as BunkBay
+	add_child(bay)
+	auto_free(bay)
+	for tier: String in ["Lower", "Upper"]:
+		var left: Node3D = bay.get_node(tier + "CurtainLeft") as Node3D
+		var right: Node3D = bay.get_node(tier + "CurtainRight") as Node3D
+		assert_float(right.position.z - left.position.z).is_greater(0.02)
 
 
 func test_open_curtains_leave_the_middle_clear() -> void:

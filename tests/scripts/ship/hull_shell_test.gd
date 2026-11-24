@@ -104,6 +104,17 @@ func test_without_the_model_the_greybox_stays() -> void:
 	assert_object(shell.model).is_null()
 
 
+func test_without_the_model_the_patches_over_its_holes_hide() -> void:
+	var patch: MeshInstance3D = MeshInstance3D.new()
+	auto_free(patch)
+	var shell: HullShell = HullShell.new()
+	auto_free(shell)
+	shell.with_hull = [patch]
+	shell.path = "res://assets/third_party/meshy/not_a_hull/model.glb"
+	assert_bool(shell.dress()).is_false()
+	assert_bool(patch.visible).is_false()
+
+
 ## Model x to ship z: -1 to -10, 0 to 0, 1 to 30.
 func _map() -> PackedVector2Array:
 	return PackedVector2Array([Vector2(-1.0, -10.0), Vector2(0.0, 0.0), Vector2(1.0, 30.0)])

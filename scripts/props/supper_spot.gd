@@ -1,12 +1,14 @@
 class_name SupperSpot
 extends Node3D
-## The little round table by the bunk room's stove, where the lantern lives:
-## its [code]Perch[/code] is his home. Interact talks to him. Supper isn't
-## shared here any more: it's set on the galley's long table and the bell is
-## rung ([SupperTable], [DinnerBell], #207).
+## The little round table by the bunk room's stove. The lantern used to live
+## here; he lives by your bunk now ([LanternPerch], #206) and is talked to
+## there, and supper is set on the galley's long table and the bell rung
+## ([SupperTable], [DinnerBell], #207). With [member talk] set, Interact
+## here talks to him; it's off on the ship.
 
-## The conversation Interact starts: a file in [code]data/dialogue[/code].
-@export var talk: StringName = &"lantern"
+## The conversation Interact starts: a file in [code]data/dialogue[/code], or
+## none.
+@export var talk: StringName = &""
 
 @onready var _reach: Interactable3D = $Reach
 

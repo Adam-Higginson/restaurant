@@ -23,6 +23,8 @@ uniform vec2 hull_half = vec2(6.0, 15.0);
 uniform float bow_reach = 0.0;
 // How strong the wake is: 0 moored, 1 at full sail.
 uniform float wake = 0.0;
+// How far astern the wake's foam lasts before it's all broken up, in metres.
+uniform float wake_length = 42.0;
 
 // --- Weather ---------------------------------------------------------------
 // Rain intensity, 0 to 1: how many rain rings dimple the surface.
@@ -230,13 +232,30 @@ void fragment() {
 	foam = max(foam, hull_band * smoothstep(0.25, 0.75, noise + 0.25));
 	float stirred = hull_band;
 	float behind = local.y - hull_half.y;
-	if (behind > 0.0 && wake > 0.0) {
-		float spread = hull_half.x * (0.7 + behind * 0.12);
-		float across = 1.0 - smoothstep(spread * 0.6, spread, abs(local.x));
-		float fade = 1.0 - smoothstep(0.0, 45.0, behind);
-		float streaks = smoothstep(0.35, 0.8, texture(foam_noise, local * vec2(0.18, 0.05)).r);
-		foam = max(foam, across * fade * streaks * wake);
-		stirred = max(stirred, across * fade * wake);
+	if (behind > -1.0 && wake > 0.0) {
+		// The wake (#203). Its foam is laid on the water where the ship
+		// passed, so it's patterned in the world's space, not the ship's: it
+		// stays where it fell and the ship draws away from it, instead of
+		// dragging the same stripes along behind her. The newest is a churned
+		// band straight astern; it widens, thins and breaks into patches as
+		// it ages, and two faint arms spread out at an angle either side.
+		float aft = max(behind, 0.0);
+		float age = clamp(aft / wake_length, 0.0, 1.0);
+		float coarse = texture(foam_noise, v_world.xz * 0.09 + vec2(TIME * 0.006, 0.0)).r;
+		float fine = texture(foam_noise, v_world.xz * 0.31 - vec2(0.0, TIME * 0.015)).r;
+		float churn = coarse * 0.6 + fine * 0.4;
+		float half_width = hull_half.x * (0.45 + aft * 0.045);
+		float across = 1.0 - smoothstep(half_width * 0.3, half_width, abs(local.x));
+		float band = across * smoothstep(0.38 + age * 0.3, 0.64 + age * 0.3, churn) * 0.8
+				* (1.0 - smoothstep(0.55, 1.0, age));
+		float arm_out = hull_half.x * 0.75 + aft * 0.34;
+		float arm_off = abs(abs(local.x) - arm_out);
+		float arm = (1.0 - smoothstep(0.0, 0.35 + aft * 0.02, arm_off))
+				* smoothstep(0.4, 0.7, fine + 0.1) * (1.0 - smoothstep(0.15, 0.9, age)) * 0.4;
+		float from_stern = smoothstep(-1.0, 1.5, behind);
+		float wake_foam = max(band, arm) * wake * from_stern;
+		foam = max(foam, wake_foam);
+		stirred = max(stirred, across * (1.0 - age) * wake * from_stern);
 	}
 	// Where the water's been stirred, tiny specks glint and fade.
 	float specks = texture(foam_noise, v_world.xz * 1.3 + vec2(TIME * 0.11, -TIME * 0.07)).r;

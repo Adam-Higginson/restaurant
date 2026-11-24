@@ -3,8 +3,6 @@
 [ext_resource type="Script" path="res://scripts/art/third_party_model.gd" id="900_meshy"]
 [ext_resource type="Material" path="res://assets/placeholder/materials/wet_dark_wood.tres" id="1_i8u3m"]
 [ext_resource type="Material" uid="uid://pmxhjggurfpb" path="res://assets/placeholder/materials/wet_prop_wood.tres" id="2_bbcf2"]
-[ext_resource type="Material" uid="uid://jowvs14ra7v2" path="res://assets/placeholder/materials/wet_rope.tres" id="3_tx8ky"]
-
 [sub_resource type="CylinderMesh" id="CylinderMesh_1"]
 top_radius = 0.6
 bottom_radius = 0.62
@@ -34,18 +32,6 @@ bottom_radius = 0.03
 height = 0.32
 radial_segments = 6
 rings = 1
-
-[sub_resource type="TorusMesh" id="TorusMesh_7"]
-inner_radius = 0.1
-outer_radius = 0.15
-rings = 14
-ring_segments = 5
-
-[sub_resource type="TorusMesh" id="TorusMesh_8"]
-inner_radius = 0.025
-outer_radius = 0.06
-rings = 8
-ring_segments = 4
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_9"]
 size = Vector3(1.8, 1, 1.8)
@@ -188,84 +174,6 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.8, 0.86, 0.4)
 material_override = ExtResource("2_bbcf2")
 cast_shadow = 0
 mesh = SubResource("CylinderMesh_6")
-
-[node name="CoilFore1" type="Node3D" parent="." unique_id=1039908176]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.4, 0.8, -0.9)
-
-[node name="Coil" type="MeshInstance3D" parent="CoilFore1" unique_id=29084374]
-transform = Transform3D(1, 0, 0, 0, -6.556708e-08, -1, 0, 1.5, -4.371139e-08, 0, -0.2, 0)
-material_override = ExtResource("3_tx8ky")
-mesh = SubResource("TorusMesh_7")
-
-[node name="Hitch" type="MeshInstance3D" parent="CoilFore1" unique_id=1284692075]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.03, 0)
-material_override = ExtResource("3_tx8ky")
-mesh = SubResource("TorusMesh_8")
-
-[node name="CoilFore2" type="Node3D" parent="." unique_id=775562019]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.4, 0.8, -0.9)
-
-[node name="Coil" type="MeshInstance3D" parent="CoilFore2" unique_id=443291023]
-transform = Transform3D(1, 0, 0, 0, -6.556708e-08, -1, 0, 1.5, -4.371139e-08, 0, -0.2, 0)
-material_override = ExtResource("3_tx8ky")
-mesh = SubResource("TorusMesh_7")
-
-[node name="Hitch" type="MeshInstance3D" parent="CoilFore2" unique_id=1593170776]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.03, 0)
-material_override = ExtResource("3_tx8ky")
-mesh = SubResource("TorusMesh_8")
-
-[node name="CoilPort" type="Node3D" parent="." unique_id=1038599465]
-transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, -0.9, 0.8, 0)
-
-[node name="Coil" type="MeshInstance3D" parent="CoilPort" unique_id=1493399742]
-transform = Transform3D(1, 0, 0, 0, -6.556708e-08, -1, 0, 1.5, -4.371139e-08, 0, -0.2, 0)
-material_override = ExtResource("3_tx8ky")
-mesh = SubResource("TorusMesh_7")
-
-[node name="Hitch" type="MeshInstance3D" parent="CoilPort" unique_id=1424055657]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.03, 0)
-material_override = ExtResource("3_tx8ky")
-mesh = SubResource("TorusMesh_8")
-
-[node name="CoilStarboard1" type="Node3D" parent="." unique_id=1128798642]
-transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, 0.9, 0.8, -0.4)
-
-[node name="Coil" type="MeshInstance3D" parent="CoilStarboard1" unique_id=657769842]
-transform = Transform3D(1, 0, 0, 0, -6.556708e-08, -1, 0, 1.5, -4.371139e-08, 0, -0.2, 0)
-material_override = ExtResource("3_tx8ky")
-mesh = SubResource("TorusMesh_7")
-
-[node name="Hitch" type="MeshInstance3D" parent="CoilStarboard1" unique_id=1069010971]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.03, 0)
-material_override = ExtResource("3_tx8ky")
-mesh = SubResource("TorusMesh_8")
-
-[node name="CoilStarboard2" type="Node3D" parent="." unique_id=1109397687]
-transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, 0.9, 0.8, 0.4)
-
-[node name="Coil" type="MeshInstance3D" parent="CoilStarboard2" unique_id=749267235]
-transform = Transform3D(1, 0, 0, 0, -6.556708e-08, -1, 0, 1.5, -4.371139e-08, 0, -0.2, 0)
-material_override = ExtResource("3_tx8ky")
-mesh = SubResource("TorusMesh_7")
-
-[node name="Hitch" type="MeshInstance3D" parent="CoilStarboard2" unique_id=1609433878]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.03, 0)
-material_override = ExtResource("3_tx8ky")
-mesh = SubResource("TorusMesh_8")
-
-[node name="CoilAft" type="Node3D" parent="." unique_id=1454969325]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.8, 0.9)
-
-[node name="Coil" type="MeshInstance3D" parent="CoilAft" unique_id=1548563426]
-transform = Transform3D(1, 0, 0, 0, -6.556708e-08, -1, 0, 1.5, -4.371139e-08, 0, -0.2, 0)
-material_override = ExtResource("3_tx8ky")
-mesh = SubResource("TorusMesh_7")
-
-[node name="Hitch" type="MeshInstance3D" parent="CoilAft" unique_id=959075713]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.03, 0)
-material_override = ExtResource("3_tx8ky")
-mesh = SubResource("TorusMesh_8")
 
 [node name="Shape" type="CollisionShape3D" parent="." unique_id=1990677209]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5, 0)

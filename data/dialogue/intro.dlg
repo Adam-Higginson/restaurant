@@ -19,7 +19,8 @@
 #   no recording yet (plunge, bell, flare, deep_note, gasp):
 #   they're silent until one is put where the player's Recording points.
 # - The title is her nameboard at the stern: the letters, the hook, the
-#   lantern on it and his clips (takes_watch, hears, dives, welcome) are in
+#   lantern on it and his clips (takes_watch, hears, welcome, to_the_rail and
+#   the ones at the rail), the rail's shots and marks, and camera_goes_over are in
 #   scenes/prototype/intro/stern_watch.tscn.
 # - His looks (@look) are listed in scripts/companion/lantern_face.gd.
 #
@@ -70,10 +71,9 @@
 # The Prologue's first scene (docs/prologue.md, #182). A quiet night
 # first. Then he's seen something: faint lights, far down in the water. The
 # swinging stops and the camera draws back from her name to the stern, the
-# black sea and the rain, and the captain at the wheel above. He leans out
-# on his hook and calls up to him. (The shots are markers in
-# scenes/prototype/intro/stern_watch.tscn: TheBoard, TheStern, TheHook and
-# TheWheel. The captain stands on its Wheel mark.)
+# black sea and the rain, and the captain at the wheel above. He calls up to
+# him. (The shots are markers in scenes/prototype/intro/stern_watch.tscn:
+# TheBoard, TheStern and TheWheel. The captain stands on its Wheel mark.)
 ~ the_stern
 @play takes_watch
 @shot the_board cut
@@ -93,22 +93,41 @@ lantern: I knew I hadn't imagined it.
 lantern: Captain? I think I've found something.
 @shot the_wheel cut
 heron: Something, or another one of your little lights?
-@shot the_hook cut
+-> to_the_rail
+
+# He's off his hook and round the ship's quarter to the rail, to see
+# better, and the captain leaves the wheel and comes over to stand beside
+# him: they look out at the lights together (#203). (The shots TheQuarter,
+# SideBySide, HisLookout and CaptainAtRail and the marks RailPerch and
+# BesideHim are in stern_watch.tscn; his flight is the clip to_the_rail.)
+~ to_the_rail
+@shot the_quarter cut
 @look hook_lantern determined
-lantern: I know the difference!
-@shot the_wheel cut
+@start to_the_rail
+@send heron beside_him
+@say_in 0.9 lantern 1.8 I know the difference!
+@wait 2.6
+@shot side_by_side cut
+@walk heron beside_him
+@shot captain_at_rail cut
 heron: Do you?
-@shot the_hook cut
+@shot side_by_side cut
 @look hook_lantern calm
+@start looks_over_the_rail
 lantern: Look.
 -> the_grave
 
-# The camera goes past him, out over the water and down: the Grave of the
-# Lanterns. Thousands of them, empty, some broken, some caught in great
-# chains, a few still glowing like dying stars, and no bottom. (The set is
+# The camera goes past him, out over the water and down, and the sea gives
+# way to what's under it: the Grave of the Lanterns. Thousands of them,
+# empty, some broken, some caught in great chains, a few still glowing like
+# dying stars, and no bottom. (The set is
 # scenes/prototype/intro/grave.tscn; its camera moves are the clips
-# over_the_grave, that_one, passes_below and finds_the_hand.)
+# over_the_grave, that_one, passes_below and finds_the_hand. The move over
+# the side is the clip camera_goes_over, which carries the shot OverTheSide.)
 ~ the_grave
+@shot over_the_side cut
+@start camera_goes_over
+@wait 1.5
 @stage grave
 @play over_the_grave
 lantern: There must be hundreds of them.
@@ -119,18 +138,24 @@ heron: Longer than either of us.
 lantern: Wait. That one...
 -> something_down_there
 
-# Back up top. He leans further, and something rings, far below.
+# Back up top, through black. He leans further, and something rings, far
+# below. (at_the_rail and the captain's place put them back at the rail, so
+# this beat can be started on its own while tuning.)
 ~ something_down_there
-@stage off
-@shot the_hook cut
+@fade out 0.5
+@stage off cut
+@play at_the_rail
+@place heron beside_him
+@shot his_lookout cut
 @look hook_lantern worried
+@fade in 0.6
 lantern: Captain, I think there's something down there.
-@shot the_wheel cut
+@shot captain_at_rail cut
 heron: Don't lean too far over.
-@shot the_hook cut
+@shot his_lookout cut
 @look hook_lantern determined
 lantern: I'm not!
-@play leans_further
+@play leans_over_the_rail
 @sound ring
 @wait 1.8
 @look hook_lantern surprised
@@ -141,8 +166,11 @@ lantern: That's strange.
 # anything passes under them, seen only by what it hides, and the lanterns
 # rock in its wake.
 ~ the_shape
+@start steadies_at_the_rail
+@shot over_the_side cut
+@start camera_goes_over
+@wait 1.5
 @stage grave
-@start steadies
 @say_in 2.5 heron 2.6 Back away from the rail.
 @say_in 5.6 lantern 2.2 I think I saw—
 @play passes_below
@@ -159,26 +187,30 @@ heron: What is it?
 lantern: There's somebody in the water.
 -> overboard
 
-# Back up top. He shouts it, and the captain turns, too late: before he's
-# finished, the lantern is off the hook and over the side.
+# Back up top, through black. He shouts it, and the captain turns, too
+# late: before he's finished, the lantern is over the rail and gone.
 ~ overboard
-@stage off
-@shot the_wheel cut
+@fade out 0.5
+@stage off cut
+@play at_the_rail
+@place heron beside_him
+@shot captain_at_rail cut
+@fade in 0.5
 heron: What?
-@shot the_hook cut
+@shot his_lookout cut
 @look hook_lantern determined
 lantern: Somebody overboard!
-@shot the_wheel cut
-@face heron hook
+@shot captain_at_rail cut
+@face heron rail_perch
 @say heron 1.4 Don't you dare—
 @wait 0.7
-@shot the_hook cut
-@start dives
+@shot his_lookout cut
+@start dives_from_the_rail
 @wait 0.3
 -> plunge
 
-# The plunge. From out on the water: the storm sea, the ship's stern, and
-# one small point of light arcing out from her through the rain. It hits
+# The plunge. From out on the water: the storm sea, the ship's quarter, and
+# one small point of light arcing out from her rail through the rain. It hits
 # the water, and it's gone.
 ~ plunge
 @look flying_lantern determined
@@ -271,17 +303,21 @@ lantern: Oh...
 -> it_flows
 
 # Then the light runs out of his hand into yours, along your arm, and you
-# begin to glow. He tries to pull away, and it holds, and his flame shrinks.
+# begin to glow. And a thinner thread of it sinks away from him, down to the
+# dead lanterns far below (the Drain node): they're drawing on him too. He
+# tries to pull away, and it holds, and his flame shrinks (#203).
 ~ it_flows
 @stage underwater
 @muffle on
 @look sinking_lantern worried
 @play flows
-lantern: Wait. What's happening?
+lantern: The lanterns down there...
+lantern: they're calling my light.
 @look sinking_lantern effort
 @play pulls_back
 @look sinking_lantern pleading
-lantern: No, no, no. Stop...
+lantern: I can't...
+lantern: I can't hold on to it.
 -> the_deep_stirs
 
 # All round, the dead lanterns flicker. A deep rumble. He looks down:
@@ -324,13 +360,13 @@ lantern: But I can't let you go.
 
 # The white goes to black, and stays black for a while: how you came aboard
 # isn't shown. Then, slowly, the bunk room at night, the storm outside: you
-# asleep in your bunk, and the captain standing at its foot, watching over
-# you. The lantern isn't beside you: he's on his round table by the stove,
-# small and blue, his light nearly all gone (#158).
+# asleep in your bunk, and the captain standing by its head, watching over
+# you. The lantern is beside you, on the little table at the foot of your
+# bunk (#206), small and blue, his light nearly all gone (#158).
 ~ asleep
 @place heron bedside
 @show heron
-@face heron player
+@face heron sleeping_you
 @hide player
 @show sleeping_you
 @home lantern
@@ -344,26 +380,34 @@ set lantern_low
 @wait 0.8
 -> waking
 
-# You wake on your own, with the captain standing over you at the foot of
+# You wake on your own, with the captain standing over you by the head of
 # your bunk (the Prologue's Scene 2, #184).
 ~ waking
 @start wakes
 @wait 1.6
+-> you_look_up
+
+# Still lying down, you look up: the captain, standing over you by the head
+# of your bunk, the lantern on his table at its foot. The captain is the
+# first to speak (#206).
+~ you_look_up
+@shot you_lying_down cut
+@wait 0.6
+heron: Ah. You're awake.
+heron: Good. I was beginning to wonder whether we'd rescued you or merely inconvenienced a corpse.
 -> by_your_bunk
 
 # By the time we look round you're up, and he's there by your bunk; the
-# lantern on his round table, barely lit, but talking. He tries to float
-# over to you and can't. The captain asks what you remember, and you've
-# nothing to tell him. (Your answers are the replies you pick.)
+# lantern on the table at its foot, barely lit, but talking. He tries to
+# float over to you and can't. The captain asks what you remember, and
+# you've nothing to tell him. (Your answers are the replies you pick.)
 ~ by_your_bunk
 @hide sleeping_you
 @show player
 @face heron player
-@shot beside_your_bunk cut
-@wait 0.8
-heron: Ah. You're awake.
-heron: Good. I was beginning to wonder whether we'd rescued you or merely inconvenienced a corpse.
-@shot stove_nook
+@face player heron
+@shot by_the_lantern cut
+@wait 0.6
 @look lantern pleased
 lantern: I told you they'd wake up!
 @face heron lantern
@@ -387,7 +431,7 @@ heron: You could have left them.
 @wait 1.0
 lantern: I know.
 @face heron player
-@shot beside_your_bunk
+@shot facing_him
 heron: Do you remember anything?
 - (Shake your head) -> your_name
 
@@ -406,6 +450,7 @@ heron: How you ended up in the water?
 ~ i_see
 heron: I see.
 @face heron lantern
+@shot beside_your_bunk
 heron: Well, whatever happened out there, you're fortunate he's as stubborn as he is.
 @look lantern pleased
 lantern: You're welcome.
@@ -417,11 +462,13 @@ heron: And try not to fall overboard again.
 
 # Then the ship is yours. The captain goes up on deck to the helm, where you
 # find him for the pot (the FirstQuest node in sea.tscn walks him there, and
-# to the water butt for a drink now and then). The lantern has a word first.
-# The recipe book lies by your pillow (RecipeBook: data/dialogue/recipe_book.dlg).
+# to the water butt for a drink now and then). The lantern has a word first,
+# and points you to your book: it's on his table, by him (picking it up is
+# data/dialogue/recipe_book.dlg, #206).
 ~ yours
-@shot stove_nook
+@shot by_the_lantern
 @look lantern tired
 lantern: Don't mind him.
 lantern: He's always like that.
+lantern: Oh! And you left your book here. It's on the table, by me.
 @shot free cut

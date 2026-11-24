@@ -27,6 +27,13 @@ uniform vec4 murk_color : source_color = vec4(0.004, 0.014, 0.02, 1.0);
 uniform float murk = 0.11;
 // The night sky mirrored at a glancing angle.
 uniform vec4 sky_reflection : source_color = vec4(0.1, 0.13, 0.16, 1.0);
+// The mist the sea goes into far off: its colour, and between what
+// distances from the eye it closes in, in metres (curve > 1 keeps the near
+// water clear for longer). Match the set's Environment fog.
+uniform vec4 mist_color : source_color = vec4(0.08, 0.115, 0.15, 1.0);
+uniform float mist_begin = 18.0;
+uniform float mist_end = 62.0;
+uniform float mist_curve = 1.6;
 // How many raindrops land, 0 to 1.
 uniform float rain : hint_range(0.0, 1.0) = 0.8;
 
@@ -93,9 +100,12 @@ void fragment() {
 	vec3 water = mix(below, murk_color.rgb, hidden);
 
 	float fresnel = pow(1.0 - clamp(dot(NORMAL, VIEW), 0.0, 1.0), 4.0);
+	// Far off, the sea goes into the mist (#203), so there's no edge to it:
+	// the same colour and distances as the set's fog, which the sky gets.
+	float misted = pow(smoothstep(mist_begin, mist_end, -VERTEX.z), mist_curve);
 	ALBEDO = vec3(0.0);
-	EMISSION = water * (1.0 - fresnel) + sky_reflection.rgb * fresnel;
+	EMISSION = mix(water * (1.0 - fresnel) + sky_reflection.rgb * fresnel, mist_color.rgb, misted);
 	ROUGHNESS = 0.06;
-	SPECULAR = 0.5;
+	SPECULAR = 0.5 * (1.0 - misted);
 	METALLIC = 0.0;
 }

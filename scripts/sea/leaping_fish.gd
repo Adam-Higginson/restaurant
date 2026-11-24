@@ -15,6 +15,8 @@ const GROUP: StringName = &"leaping_fish"
 ## How far her side is from her centreline when there's no [member outline]
 ## (the old box hull's).
 const SIDE: float = 6.0
+## How far beyond her side, as measured, the nearest of them jump, in metres.
+const SIDE_MARGIN: float = 0.25
 
 ## The fish they're made from: its model and its colour.
 @export var fish: Item = preload("res://data/items/herring.tres")
@@ -164,10 +166,13 @@ func _launch(leap: Leap) -> void:
 	var start: float = randf_range(along.x, along.y)
 	var length: float = randf_range(reach.x, reach.y)
 	var clear: float = side_between(start - length, start)
-	var out: float = side * (clear + randf_range(out_from.x, out_from.y))
+	# A little clear of her side too, as the side is only measured every
+	# half metre.
+	var out: float = side * (clear + SIDE_MARGIN + randf_range(out_from.x, out_from.y))
 	leap.from = Vector3(out, sea_level, start)
-	# Forward (her -Z), drifting a little in or out.
-	leap.to = Vector3(out + randf_range(-0.5, 0.5), sea_level, start - length)
+	# Forward (her -Z), drifting a little further out, never in towards her:
+	# drifting in, one leaping close beside her could pass through her side.
+	leap.to = Vector3(out + side * randf_range(0.0, 0.5), sea_level, start - length)
 	leap.peak = randf_range(height.x, height.y)
 	leap.seconds = randf_range(airtime.x, airtime.y)
 	leap.t = 0.0

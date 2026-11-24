@@ -1,14 +1,17 @@
 extends GameTestSuite
 ## Tests for the navigation room (#185), forward of the galley's port side:
-## its door at the forward end of the hatch ramp's corridor is open and the
-## rest of the bulkhead isn't, its own walls close it in, the old book is on
-## its shelf (and no longer in the galley), and you can look at the chart.
+## its doors (from the galley, #204, and at the forward end of the hatch
+## corridor) are open and the rest of the bulkhead isn't, its own walls close
+## it in, you can walk in from the galley to the old book on its shelf (no
+## longer in the galley), and you can look at the chart.
 
 ## Where things are, in ship space.
 const CORRIDOR: Vector3 = Vector3(-4.55, 1.6, 2.6)
 const IN_THE_ROOM: Vector3 = Vector3(-4.55, 1.6, -1.0)
 const BY_THE_TABLE: Vector3 = Vector3(-1.2, 1.05, -1.45)
 const TABLE: Vector3 = Vector3(-2.5, 1.5, -1.45)
+## In the galley, in front of the door to the navigation room.
+const GALLEY_BY_THE_DOOR: Vector3 = Vector3(-2.835, 1.05, 2.3)
 
 
 func before_test() -> void:
@@ -91,3 +94,34 @@ func _blocked(ship: Ship, from: Vector3, to: Vector3) -> bool:
 	var ray: PhysicsRayQueryParameters3D = PhysicsRayQueryParameters3D.create(
 			ship.to_global(from), ship.to_global(to))
 	return not space.intersect_ray(ray).is_empty()
+
+
+func test_you_walk_in_from_the_galley_and_reach_the_old_book() -> void:
+	# The corridor's door is shut in under the hatch stairs, so the room's way
+	# in is a door from the galley (#204), port of the pantry.
+	var rig: Array[Node3D] = new_moored_ship_with_player(GALLEY_BY_THE_DOOR)
+	var ship: Ship = rig[0] as Ship
+	var player: Player3D = rig[1] as Player3D
+	var runner: GdUnitSceneRunner = scene_runner(ship.get_parent())
+	await physics_ticks(runner, 3)
+
+	# Forward through the door, to port across the room, and forward again to
+	# the shelf.
+	await walk(runner, "move_up", 30)
+	assert_float(ship.to_local(player.global_position).z).override_failure_message(
+			"Stopped at %s, short of the room" % ship.to_local(player.global_position)) \
+			.is_less(0.0)
+	await walk(runner, "move_left", 18)
+	await walk(runner, "move_up", 22)
+	var at: Vector3 = ship.to_local(player.global_position)
+	assert_bool(at.x < -4.0 and at.z < -1.5).override_failure_message(
+			"Stopped at %s, short of the shelf" % at).is_true()
+
+	var book: ReadableBook = ship.get_node("NavigationRoom/OldBook") as ReadableBook
+	player.face_towards(book.global_position)
+	await physics_ticks(runner, 3)
+	var detector: InteractionDetector3D = player.get_node("InteractionDetector") \
+			as InteractionDetector3D
+	assert_str(detector.interact_prompt()).override_failure_message(
+			"At %s the prompt is '%s'" % [ship.to_local(player.global_position),
+			detector.interact_prompt()]).contains("Read the old book")
