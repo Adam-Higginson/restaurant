@@ -741,6 +741,12 @@ size = Vector3(0.05, 0.8, 1.5)
 [sub_resource type="BoxMesh" id="BoxMesh_PatchStern"]
 size = Vector3(0.05, 0.6, 0.6)
 
+[sub_resource type="TorusMesh" id="TorusMesh_Eyebolt"]
+inner_radius = 0.035
+outer_radius = 0.07
+rings = 8
+ring_segments = 6
+
 [node name="UpperDeck" type="Node3D" unique_id=1977730867]
 
 [node name="Structure" type="Node3D" parent="." unique_id=1876875134]
@@ -4814,8 +4820,13 @@ material_override = ExtResource("13_ddrw7")
 cast_shadow = 0
 mesh = SubResource("CylinderMesh_34")
 
+[node name="BobstayEyebolt" type="MeshInstance3D" parent="Rigging"]
+transform = Transform3D(0, -1, 0, 1, 0, 0, 0, 0, 1, 0, 3.5, -18.76)
+material_override = ExtResource("6_iav1l")
+mesh = SubResource("TorusMesh_Eyebolt")
+
 [node name="Bobstay" type="MeshInstance3D" parent="Rigging" unique_id=2000732101]
-transform = Transform3D(0, 0, 0.05, 0.026476, -10.824718, 0, 0.042415, 6.756778, 0, 0, 6.012359, -22.028389)
+transform = Transform3D(0, 0, 0.05, 0.032017, -7.924077, 0, 0.038405, 6.606, 0, 0, 7.462039, -22.103)
 material_override = ExtResource("16_8fstm")
 mesh = SubResource("CylinderMesh_34")
 
