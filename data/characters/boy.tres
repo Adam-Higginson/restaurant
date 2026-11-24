@@ -36,3 +36,5 @@ whole_clip_names = Dictionary[StringName, String]({
 &"Sword_Heavy_Combo": "Right_Hand_Sword_Slash",
 &"Idle_Shield": "Sword_Parry"
 })
+whole_arm_scale = 0.9
+whole_hand_scale = 0.85
