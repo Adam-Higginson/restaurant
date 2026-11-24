@@ -744,6 +744,16 @@ A growing glossary of the Godot concepts this project uses: what each one is, in
 
 **Shadow bias.** A light's `shadow_bias` pushes shadows slightly away to stop surfaces shadowing themselves (speckled "acne"). Too much, and an occluder very close to the light lets light leak past it. *Ours:* the lantern lights use 0.02 rather than 0.1, so no light pours out under a lantern's solid base.
 
+## Prologue polish (#203)
+
+**Acting after the clips (`mixer_applied`).** An `AnimationPlayer` (an `AnimationMixer`) sets the properties its clip keys during its own processing each frame, so anything a script sets on those properties earlier in the frame is overwritten. Its `mixer_applied` signal is emitted just after it has set them: connect to it to adjust what the clip did, every frame, and win. *Ours:* `KeepsFacing` (`scripts/intro/keeps_facing.gd`) turns the underwater lantern to face you after his clips have moved him, so they can tip and rock him but never turn him away.
+
+**Depth fog, and the sea going into it.** An `Environment`'s fog with `fog_mode` set to Depth fades things to the fog colour between two distances (`fog_depth_begin`, `fog_depth_end`, shaped by `fog_depth_curve`), and `fog_sky_affect` covers the background too. A shader that reads the screen (our see-through sea) may not be fogged with the rest, so it fades itself by its depth (`-VERTEX.z`, the distance in front of the camera) to the same colour. *Ours:* `grave.tscn`'s environment and `grave_water.gdshader`'s `mist_*` uniforms, matched, so the Grave's sea has no edge.
+
+**World-space versus object-space patterns.** Sampling a texture with a pixel's world position (`v_world.xz`) pins the pattern to the world; with its position in a moving object's space, the pattern rides along with the object. *Ours:* the wake's foam in `water.gdshader` is shaped in the ship's space (straight astern, widening behind her) but patterned in the world's, so the foam stays where she left it and she draws away from it.
+
+**Changing over under black.** A dissolve from one picture to another looks odd when the two don't match; dipping through black (fade out, change everything at once, fade in) reads as a cut in time instead. *Ours:* `@stage off cut` closes the Grave stage at once while the screen is black (`StageCues`); going down into the Grave, the camera instead moves out over the sea, looking down, so the dissolve joins two pictures of dark water.
+
 ## Testing
 
 **gdUnit4.** The test framework (`addons/gdUnit4`). Suites extend our `GameTestSuite` and have `test_...` functions. `scene_runner` loads a scene and lets a test press inputs and wait physics ticks. *Ours:* `tests/`.

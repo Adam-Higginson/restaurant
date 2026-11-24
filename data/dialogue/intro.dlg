@@ -19,7 +19,8 @@
 #   no recording yet (plunge, bell, flare, deep_note, gasp):
 #   they're silent until one is put where the player's Recording points.
 # - The title is her nameboard at the stern: the letters, the hook, the
-#   lantern on it and his clips (takes_watch, hears, dives, welcome) are in
+#   lantern on it and his clips (takes_watch, hears, welcome, to_the_rail and
+#   the ones at the rail), the rail's shots and marks, and camera_goes_over are in
 #   scenes/prototype/intro/stern_watch.tscn.
 # - His looks (@look) are listed in scripts/companion/lantern_face.gd.
 #
