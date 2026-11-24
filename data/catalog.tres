@@ -76,6 +76,7 @@
 [ext_resource type="Resource" path="res://data/recipes/pan_seared_crab.tres" id="93_rec"]
 [ext_resource type="Resource" path="res://data/items/chilli.tres" id="94_chilli"]
 [ext_resource type="Resource" path="res://data/items/chopped_chilli.tres" id="95_chilli"]
+[ext_resource type="Resource" path="res://data/items/herbs.tres" id="100_herbs"]
 [ext_resource type="Resource" path="res://data/items/spicy_tomato_soup.tres" id="96_spicy"]
 [ext_resource type="Resource" path="res://data/reactions/chop_chilli.tres" id="97_chillir"]
 [ext_resource type="Resource" path="res://data/reactions/spicy_tomato_soup.tres" id="98_spicyr"]
@@ -84,7 +85,7 @@
 
 [resource]
 script = ExtResource("23_itf3g")
-items = Array[ExtResource("3_ri6n3")]([ExtResource("4_n75ka"), ExtResource("5_wvss8"), ExtResource("6_0uqn3"), ExtResource("7_5q4dk"), ExtResource("8_l2ssu"), ExtResource("9_kruv5"), ExtResource("10_7671r"), ExtResource("11_5u5l8"), ExtResource("12_lcsjk"), ExtResource("13_vx4vr"), ExtResource("14_cta3b"), ExtResource("15_wwfey"), ExtResource("16_rhhc8"), ExtResource("26_herring"), ExtResource("27_fillet"), ExtResource("30_pan"), ExtResource("31_fried"), ExtResource("50_soup"), ExtResource("51_soup"), ExtResource("52_soup"), ExtResource("53_soup"), ExtResource("54_soup"), ExtResource("80_mack"), ExtResource("81_mack"), ExtResource("82_mack"), ExtResource("90_crab"), ExtResource("91_crab"), ExtResource("94_chilli"), ExtResource("95_chilli"), ExtResource("96_spicy")])
+items = Array[ExtResource("3_ri6n3")]([ExtResource("4_n75ka"), ExtResource("5_wvss8"), ExtResource("6_0uqn3"), ExtResource("7_5q4dk"), ExtResource("8_l2ssu"), ExtResource("9_kruv5"), ExtResource("10_7671r"), ExtResource("11_5u5l8"), ExtResource("12_lcsjk"), ExtResource("13_vx4vr"), ExtResource("14_cta3b"), ExtResource("15_wwfey"), ExtResource("16_rhhc8"), ExtResource("26_herring"), ExtResource("27_fillet"), ExtResource("30_pan"), ExtResource("31_fried"), ExtResource("50_soup"), ExtResource("51_soup"), ExtResource("52_soup"), ExtResource("53_soup"), ExtResource("54_soup"), ExtResource("80_mack"), ExtResource("81_mack"), ExtResource("82_mack"), ExtResource("90_crab"), ExtResource("91_crab"), ExtResource("94_chilli"), ExtResource("95_chilli"), ExtResource("96_spicy"), ExtResource("100_herbs")])
 elements = Array[ExtResource("1_sq7co")]([ExtResource("2_gpcun"), ExtResource("29_fire")])
 reactions = Array[ExtResource("17_gx03v")]([ExtResource("18_dxvgn"), ExtResource("19_qdmq8"), ExtResource("20_oyiyi"), ExtResource("21_m07uu"), ExtResource("22_3onb0"), ExtResource("28_fillet_herring"), ExtResource("32_fry"), ExtResource("33_fry_whole"), ExtResource("60_soupr"), ExtResource("61_soupr"), ExtResource("62_soupr"), ExtResource("63_soupr"), ExtResource("85_mackr"), ExtResource("86_mackr"), ExtResource("87_mackr"), ExtResource("92_crabr"), ExtResource("97_chillir"), ExtResource("98_spicyr"), ExtResource("99_spicyr")])
 tools = Array[ExtResource("24_tool")]([ExtResource("25_knife"), ExtResource("25_recipe_book")])

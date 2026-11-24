@@ -415,10 +415,10 @@ heron: Come along. You should have a look around.
 heron: And try not to fall overboard again.
 -> yours
 
-# Then the ship is yours. The captain goes about his business: up on deck
-# for a drink at the water butt, and back to his fire (the FirstQuest node
-# in sea.tscn walks him there and back). The lantern has a word first. The
-# recipe book lies by your pillow (RecipeBook: data/dialogue/recipe_book.dlg).
+# Then the ship is yours. The captain goes up on deck to the helm, where you
+# find him for the pot (the FirstQuest node in sea.tscn walks him there, and
+# to the water butt for a drink now and then). The lantern has a word first.
+# The recipe book lies by your pillow (RecipeBook: data/dialogue/recipe_book.dlg).
 ~ yours
 @shot stove_nook
 @look lantern tired

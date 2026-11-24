@@ -363,14 +363,14 @@ func test_you_wake_the_captain_and_the_weak_lantern_talk_and_then_the_ship_is_yo
 			"(Look down)"])
 	assert_str(lines[lines.size() - 1]).is_equal("He's always like that.")
 
-	# Then the ship is yours, and the captain sets off for his drink.
+	# Then the ship is yours, and the captain sets off up to the helm (#186).
 	assert_bool(_opening.is_playing).is_false()
 	assert_bool(_conversation.is_active()).is_false()
 	assert_bool(_player.controls_enabled).is_true()
 	assert_bool(rig.is_fixed).is_false()
 	assert_bool(heron.is_present()).is_true()
 	await physics_ticks(runner, 2)
-	assert_bool(quest.is_on_errand).is_true()
+	assert_bool(quest.is_heading_to_helm).is_true()
 	assert_bool(walker.is_walking).is_true()
 	# He's still low once it's over, his glass whole.
 	assert_bool(spirit.is_low()).is_true()
@@ -399,10 +399,10 @@ func test_skipping_the_intro_ends_it_with_everything_put_away() -> void:
 	assert_bool((_ship.get_node("WakingSet/Props/SleepingYou") as Node3D).visible).is_false()
 	assert_bool((_player.get_node("Model") as Node3D).visible).is_true()
 	assert_object((_player.get_node("LanternSpirit") as LanternSpirit).held).is_null()
-	# The captain is about, setting off for his drink at the water butt, and
-	# the lantern is low (#158).
+	# The captain is about, setting off up to the helm (#186), and the lantern
+	# is low (#158).
 	assert_bool(heron.is_present()).is_true()
-	assert_bool((_sea.get_node("FirstQuest") as FirstQuest).is_on_errand).is_true()
+	assert_bool((_sea.get_node("FirstQuest") as FirstQuest).is_heading_to_helm).is_true()
 	assert_bool(Game.dialogue.is_set(LanternSpirit.LOW_FLAG)).is_true()
 	var at: Vector3 = _ship.to_local(_player.global_position)
 	assert_float(at.distance_to(_opening.wake_spot)).is_less(0.6)
