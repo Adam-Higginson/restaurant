@@ -24,7 +24,7 @@ const USAGE: Dictionary[StringName, String] = {
 	&"go": "@go lantern room_middle (the lantern floats to a mark and stays)",
 	&"walk": "@walk heron water_butt (they walk to a mark, or 'home'; the script waits)",
 	&"send": "@send heron water_butt (they set off for a mark, or 'home'; the script goes on)",
-	&"stage": "@stage underwater or @stage off",
+	&"stage": "@stage underwater or @stage off, with 'cut' after to cut instead of fade",
 	&"play": "@play lantern_descends",
 	&"start": "@start drifting",
 	&"queue": "@queue offered (to follow the clip that's playing now)",
@@ -83,7 +83,9 @@ static func _fits(cue: StringName, args: PackedStringArray) -> bool:
 			return not args.is_empty() and ["interact", "any"].has(args[0])
 		&"place", &"face", &"go", &"walk", &"send":
 			return args.size() == 2
-		&"hide", &"show", &"home", &"stage", &"play", &"start", &"queue", &"sound", &"read":
+		&"stage":
+			return args.size() == 1 or (args.size() == 2 and args[1] == "cut")
+		&"hide", &"show", &"home", &"play", &"start", &"queue", &"sound", &"read":
 			return args.size() == 1
 		&"say":
 			return args.size() >= 3 and _is_seconds(args[1])

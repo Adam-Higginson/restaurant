@@ -109,6 +109,22 @@ func test_a_stage_fades_up_and_away_over_its_seconds() -> void:
 	assert_bool(_title.visible).is_false()
 
 
+func test_cut_brings_a_stage_up_and_away_at_once_whatever_its_fade() -> void:
+	# For changing over under a fade to black (#203).
+	_build()
+	_title.fade_seconds = 5.0
+	var runner: GdUnitSceneRunner = scene_runner(_player.get_parent())
+	await physics_ticks(runner, 3)
+	var content: Control = _title.get_child(0) as Control
+
+	play_cutscene(_conversation, _player, "@stage title cut\nheron: Up.\n@stage off cut\nheron: Away.")
+	assert_float(content.modulate.a).is_equal_approx(1.0, 0.01)
+
+	_conversation.press()
+	assert_bool(_title.is_open).is_false()
+	assert_bool(_title.visible).is_false()
+
+
 func test_a_cutscene_never_leaves_a_stage_up_when_it_ends() -> void:
 	_build()
 	var runner: GdUnitSceneRunner = scene_runner(_player.get_parent())
