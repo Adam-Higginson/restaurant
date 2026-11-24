@@ -21,6 +21,8 @@ extends CueHandler
 
 ## The soft glow behind a treasure held up: a round spot facing the camera.
 const HALO_SHADER: Shader = preload("res://shaders/sparkle.gdshader")
+## The colour of a treasure's light: the green of an opened chest.
+const TREASURE_GREEN: Color = Color(0.62, 1.0, 0.68)
 ## How far a tool held up (the knife) is turned from standing on end, in
 ## degrees: 90 lays it flat across the hands.
 const TOOL_TURN_DEGREES: float = 90.0
@@ -39,14 +41,21 @@ const LAID_FLAT: StringName = &"laid_flat"
 ## long the treasure takes to pop in, in your hands.
 @export var rise_seconds: float = 0.9
 @export var pop_seconds: float = 0.3
-## How far above where the hands meet the treasure is held, in metres.
-@export var above_hands: float = 0.18
+## How far above where the hands meet the treasure floats, in metres, and
+## how far it bobs up and down as it floats, and how fast (bobs a second).
+@export var above_hands: float = 0.12
+@export var bob_height: float = 0.03
+@export var bob_rate: float = 0.6
 ## How fast the treasure turns while it's held up, in turns a second.
 @export var spin_turns: float = 0.35
+## How far your head turns to look at the camera while you hold the
+## treasure up: 0 not at all, 1 straight at it.
+@export_range(0.0, 1.0) var look_at_camera: float = 0.85
 ## Where the camera stands for a gift held up without a chest: how far in
-## front of you, how high, and how far round to one side, in degrees.
+## front of you, how high (above your head, looking down at you and what
+## you hold up), and how far round to one side, in degrees.
 @export var gift_shot_distance: float = 2.3
-@export var gift_shot_height: float = 1.35
+@export var gift_shot_height: float = 2.5
 @export var gift_shot_angle: float = 40.0
 ## The lid creaking up, and the fanfare as the treasure is held up.
 @export var creak: AudioStream
@@ -65,6 +74,11 @@ var _shot_before: Marker3D = null
 ## Whether a scene is under way (a chest opening or a gift held up), so the
 ## shot from before it is remembered once, not replaced by its own shots.
 var _staging: bool = false
+## What your head was watching before you looked at the camera, and how
+## far it was turned, to put back.
+var _watch_before: Node3D = null
+var _turn_before: float = 0.0
+var _looking: bool = false
 
 
 func _ready() -> void:
@@ -88,12 +102,14 @@ func _process(delta: float) -> void:
 				_treasure.global_basis = Basis.looking_at(-to_camera, Vector3.UP)
 	else:
 		_treasure.rotate_y(TAU * spin_turns * delta)
-	# Always in your hands, from the moment it appears: it rises with them.
-	_treasure.global_position = hands_point()
+	# Always over your hands, from the moment it appears: it rises with
+	# them, floating, bobbing gently.
+	_treasure.global_position = hands_point() \
+			+ Vector3.UP * bob_height * sin(Time.get_ticks_msec() / 1000.0 * TAU * bob_rate)
 
 
-## Where the treasure is held: [member above_hands] over where your hands
-## meet as they really are, or over your head without a character.
+## Where the treasure floats: [member above_hands] over where your hands
+## are as they really are, or over your head without a character.
 func hands_point() -> Vector3:
 	var model: CharacterModel = _character()
 	if model != null:
@@ -217,9 +233,17 @@ func _raise(treasure_node: Node3D, shot: Marker3D, world: Node) -> void:
 	world.add_child(_treasure)
 	_treasure.global_position = hands_point()
 	var model: CharacterModel = _character()
+	var camera: Camera3D = get_viewport().get_camera_3d()
+	if model != null and camera != null and not _looking:
+		_looking = true
+		_watch_before = model.watch
+		_turn_before = model.head_turn
+		model.watch = camera
 	if is_skipping():
 		if model != null:
 			model.hold_up = 1.0
+			if _looking:
+				model.head_turn = look_at_camera
 		release(held)
 		return
 	_play(fanfare)
@@ -230,6 +254,9 @@ func _raise(treasure_node: Node3D, shot: Marker3D, world: Node) -> void:
 	if model != null:
 		rise.tween_property(model, "hold_up", 1.0, rise_seconds) \
 				.set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_OUT)
+		if _looking:
+			rise.tween_property(model, "head_turn", look_at_camera, rise_seconds) \
+					.set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_OUT)
 	await pause(rise_seconds, held)
 	release(held)
 
@@ -284,19 +311,20 @@ static func _treasure_of(path: String, look: ArtLook, size: Vector3, tint: Color
 	colour.metallic = 0.4
 	bar.material_override = colour
 	turn.add_child(bar)
-	# Lit as a treasure is: a warm light of its own, and a soft halo behind
-	# it bright enough to bloom.
+	# Lit as a treasure is, in the chest's green: a light of its own, and a
+	# small soft halo behind it.
 	var light: OmniLight3D = OmniLight3D.new()
 	light.name = "Light"
-	light.light_color = Color(1.0, 0.82, 0.5)
-	light.light_energy = 1.4
-	light.omni_range = 1.4
+	light.light_color = TREASURE_GREEN
+	light.light_energy = 0.6
+	light.omni_range = 1.2
 	root.add_child(light)
 	var halo_mesh: QuadMesh = QuadMesh.new()
-	halo_mesh.size = Vector2(0.9, 0.9)
+	halo_mesh.size = Vector2(0.55, 0.55)
 	var halo_material: ShaderMaterial = ShaderMaterial.new()
 	halo_material.shader = HALO_SHADER
-	halo_material.set_shader_parameter(&"energy", 0.9)
+	halo_material.set_shader_parameter(&"colour", TREASURE_GREEN)
+	halo_material.set_shader_parameter(&"energy", 0.6)
 	halo_mesh.material = halo_material
 	var halo: MeshInstance3D = MeshInstance3D.new()
 	halo.name = "Halo"
@@ -325,6 +353,16 @@ func _put_away() -> void:
 	var model: CharacterModel = _character()
 	if model != null and model.hold_up > 0.0:
 		create_tween().tween_property(model, "hold_up", 0.0, 0.35)
+	if model != null and _looking:
+		# Your head goes back to what it was watching before.
+		var watch_before: Node3D = _watch_before
+		var back: Tween = create_tween()
+		back.tween_property(model, "head_turn", _turn_before, 0.35)
+		back.tween_callback(func() -> void:
+			if is_instance_valid(model):
+				model.watch = watch_before if is_instance_valid(watch_before) else null)
+	_looking = false
+	_watch_before = null
 	if is_instance_valid(player):
 		# Back to the shot from before (the conversation's), or the free camera.
 		if is_instance_valid(_shot_before):

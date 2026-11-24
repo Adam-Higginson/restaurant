@@ -18,6 +18,22 @@ uniform sampler2D albedo_texture : source_color, filter_linear_mipmap_anisotropi
 uniform vec4 albedo_color : source_color = vec4(1.0);
 // Multiplies every character's colours: the shared base colour of the look.
 uniform vec4 base_tint : source_color = vec4(1.0);
+// The skin colour shut eyes are painted in.
+uniform vec4 eyelid_color : source_color = vec4(0.9, 0.6, 0.4, 1.0);
+// Shut eyes drawn closed (ClosedEyes, scripts/art/closed_eyes.gd; #172), in
+// the head bone's own space: each eye's oval (middle x, y, half width and
+// height; [lid_right] at -x, [lid_left] at +x), how far each is turned
+// ([lid_tilt], radians), and only in front of [lid_front]. While shut, the
+// oval is covered in [eyelid_color] and a lash line drawn through its
+// corners, [lash_sag] of its half height lower in the middle. A zero-wide
+// [lid_left] falls back to painting over whatever is eye-coloured.
+uniform vec4 lid_right = vec4(0.0);
+uniform vec4 lid_left = vec4(0.0);
+uniform vec2 lid_tilt = vec2(0.0);
+uniform float lid_front = 0.0;
+uniform vec4 lash_color : source_color = vec4(0.2, 0.12, 0.07, 1.0);
+uniform float lash_thickness = 0.14;
+uniform float lash_sag = 0.3;
 
 // Where light turns to shadow, as the cosine between the surface and the
 // light: 0 is side-on, above 0 pushes more of the body into shadow.
@@ -29,6 +45,13 @@ uniform float shadow_softness : hint_range(0.0, 0.5) = 0.04;
 uniform float lit_falloff : hint_range(0.0, 1.0) = 0.35;
 // How many steps from shadow to full light: 1 is two-tone.
 uniform int bands : hint_range(1, 4) = 1;
+// The edge between light and shadow broken into painted strokes: how far
+// (0 is a clean line), how many strokes across the texture, and how much
+// longer than wide each is. Laid out on the texture, so they stay put on
+// the body as it moves.
+uniform float brush_strength : hint_range(0.0, 1.0) = 0.0;
+uniform float brush_scale = 80.0;
+uniform float brush_stretch = 4.0;
 // What colour the shadow side is lit with, as a share of the light: warm
 // and a little purple rather than grey.
 uniform vec4 shadow_color : source_color = vec4(0.46, 0.44, 0.58, 1.0);
@@ -66,10 +89,28 @@ instance uniform int hidden_bones = 0;
 // about the model's upright axis, 0 to 1. Lumps and folds in the mesh stop
 // breaking the light/shadow edge into patches, leaving one clean shape.
 instance uniform float round_form = 0.0;
+// The column's line: a point on it and which way it runs, in the mesh's own
+// space. Upright through the middle by default; a character that lies down
+// or bends passes its hips and which way its body runs, or the rounding
+// (made for a body standing up) shades it in dark patches.
+instance uniform vec3 round_origin = vec3(0.0);
+instance uniform vec3 round_axis = vec3(0.0, 1.0, 0.0);
 // PROTOTYPE: the brightest any one light may be on this mesh (0 is no cap).
 // A low sun hits an upright character far harder than the floor; capped, the
 // lit side stays the character's own colour, warmed, and doesn't burn out.
 instance uniform float light_cap = 0.0;
+// How far this mesh's eyes are shut, 0 to 1 (#172). A Meshy face is one
+// painted texture with no eyelids, so shut eyes are painted: whatever is
+// eye-coloured (the whites, a blue iris) is painted over in [eyelid_color],
+// which leaves the dark lash line the texture already has as a closed eye.
+instance uniform float eyes_shut = 0.0;
+// Where the head bone is now, for drawn closed eyes (set every frame): a
+// point less [head_origin], measured along each head_ axis (each divided
+// by its length squared), is that point in the head's own space.
+instance uniform vec3 head_origin = vec3(0.0);
+instance uniform vec3 head_x = vec3(1.0, 0.0, 0.0);
+instance uniform vec3 head_y = vec3(0.0, 1.0, 0.0);
+instance uniform vec3 head_z = vec3(0.0, 0.0, 1.0);
 // PROTOTYPE: creatures with a shell (the crab). [ball_form] lights the mesh
 // as a smooth dome about [ball_centre] (in the mesh's own space, [ball_radius]
 // across), so a low-poly shell shades as one clean curve and not as facets.
@@ -87,6 +128,13 @@ varying float covered;
 // The surface's real facing, in view space, kept for the rim when the
 // shading uses a rounded one.
 varying vec3 true_normal;
+// The facing the shading uses (in view space): the surface's own, or the
+// rounded one. The mesh's real NORMAL is left alone, because Godot also
+// uses it to place shadows, and a rounded one there makes the mesh shadow
+// itself in dark patches.
+varying vec3 shade_normal;
+// Where this point is in the head bone's space, for drawn closed eyes.
+varying vec3 face_at;
 // Where this point is on the shell, about -1 to 1 each way, and which way
 // its surface faces in the mesh's own space.
 varying vec3 shell_point;
@@ -104,21 +152,45 @@ float under_cloth(uvec4 bones, vec4 weights) {
 }
 
 
+// One drawn closed eye at [param at] (head space): how far it's covered
+// (x) and how far it's on the lash line (y).
+vec2 closed_eye(vec3 at, vec4 eye, float tilt) {
+	vec2 from = at.xy - eye.xy;
+	// Along and across the eye, as it's turned.
+	vec2 d = vec2(cos(tilt) * from.x + sin(tilt) * from.y, -sin(tilt) * from.x + cos(tilt) * from.y);
+	vec2 n = d / max(eye.zw, vec2(0.0001));
+	float cover = 1.0 - smoothstep(0.9, 1.15, length(n));
+	float line_y = -lash_sag * eye.w * (1.0 - n.x * n.x);
+	float lash = (1.0 - smoothstep(lash_thickness * 0.5, lash_thickness, abs(d.y - line_y)))
+			* (1.0 - smoothstep(0.8, 1.0, abs(n.x)));
+	return vec2(cover, lash);
+}
+
+
 void vertex() {
 	height = (MODEL_MATRIX * vec4(VERTEX, 1.0)).y - MODEL_MATRIX[3].y;
 	covered = hidden_bones == 0 ? 0.0 : under_cloth(BONE_INDICES, BONE_WEIGHTS);
 	true_normal = MODELVIEW_NORMAL_MATRIX * NORMAL;
+	face_at = vec3(0.0);
+	if (eyes_shut > 0.0 && lid_left.z > 0.0) {
+		vec3 from_head = VERTEX - head_origin;
+		face_at = vec3(dot(from_head, head_x), dot(from_head, head_y), dot(from_head, head_z));
+	}
 	shell_point = (VERTEX - ball_centre) / max(ball_radius, 0.0001);
 	shell_facing = NORMAL;
+	vec3 shaded = NORMAL;
 	if (ball_form > 0.0) {
 		// A dome: squashed a little, so the top faces up more than a ball's.
 		vec3 dome = normalize(shell_point * vec3(1.0, 1.6, 1.0) + vec3(0.0, 0.25, 0.0));
-		NORMAL = normalize(mix(NORMAL, dome, ball_form));
+		shaded = normalize(mix(shaded, dome, ball_form));
 	}
 	if (round_form > 0.0) {
-		vec3 outward = normalize(vec3(VERTEX.x, 0.0, VERTEX.z) + vec3(0.0, 0.0, 0.0001));
-		NORMAL = normalize(mix(NORMAL, outward, round_form));
+		vec3 from_line = VERTEX - round_origin;
+		from_line -= round_axis * dot(from_line, round_axis);
+		vec3 outward = normalize(from_line + vec3(0.0, 0.0, 0.0001));
+		shaded = normalize(mix(shaded, outward, round_form));
 	}
+	shade_normal = MODELVIEW_NORMAL_MATRIX * shaded;
 }
 
 
@@ -141,6 +213,20 @@ void fragment() {
 		// Keep the cloth's own folds and shading: dye it, scaled by its brightness.
 		vec3 dyed = dye * clamp(brightest / 0.85, 0.0, 1.2);
 		paint = mix(paint, dyed, cloth * recolour_strength);
+	}
+	if (eyes_shut > 0.0 && lid_left.z > 0.0) {
+		// Drawn closed: lids over both eyes, and a lash line across each.
+		float in_front = smoothstep(lid_front - 0.3, lid_front + 0.3, face_at.z);
+		vec2 eye = max(closed_eye(face_at, lid_right, lid_tilt.x),
+				closed_eye(face_at, lid_left, lid_tilt.y)) * in_front * eyes_shut;
+		paint = mix(paint, eyelid_color.rgb, eye.x);
+		paint = mix(paint, lash_color.rgb, eye.y);
+	} else if (eyes_shut > 0.0) {
+		// Judged as it looks (sRGB): near white, or bluer than it is red or green.
+		vec3 looks = pow(clamp(paint, 0.0, 1.0), vec3(1.0 / 2.2));
+		float white = smoothstep(0.6, 0.75, min(looks.r, min(looks.g, looks.b)));
+		float blue = smoothstep(0.0, 0.05, looks.b - max(looks.r, looks.g));
+		paint = mix(paint, eyelid_color.rgb, clamp(white + blue, 0.0, 1.0) * eyes_shut);
 	}
 	if (shell > 0.0) {
 		float top = smoothstep(-0.25, 0.6, normalize(shell_facing).y);
@@ -165,6 +251,31 @@ void fragment() {
 }
 
 
+// A random number from 0 to 1 for each whole-numbered spot.
+float brush_hash(vec2 spot) {
+	return fract(sin(dot(spot, vec2(127.1, 311.7))) * 43758.5453);
+}
+
+
+// Smooth noise: the random numbers blended between spots.
+float brush_noise(vec2 at) {
+	vec2 cell = floor(at);
+	vec2 f = fract(at);
+	f = f * f * (3.0 - 2.0 * f);
+	return mix(mix(brush_hash(cell), brush_hash(cell + vec2(1.0, 0.0)), f.x),
+			mix(brush_hash(cell + vec2(0.0, 1.0)), brush_hash(cell + vec2(1.0, 1.0)), f.x), f.y);
+}
+
+
+// Short painted strokes at [param uv], 0 to 1: noise stretched along one
+// slanting way, at two sizes.
+float brush_strokes(vec2 uv) {
+	vec2 at = mat2(vec2(0.8, 0.6), vec2(-0.6, 0.8)) * (uv * brush_scale);
+	at.x /= max(brush_stretch, 1.0);
+	return brush_noise(at) * 0.65 + brush_noise(at * 2.3 + 7.1) * 0.35;
+}
+
+
 // How lit a point is, 0 to 1, from the cosine between surface and light: a
 // staircase of [bands] soft-edged steps starting at the threshold.
 float steps(float facing) {
@@ -179,8 +290,10 @@ float steps(float facing) {
 
 
 void light() {
-	float facing = dot(NORMAL, LIGHT);
-	float lit = steps(facing);
+	vec3 shading = normalize(shade_normal);
+	float facing = dot(shading, LIGHT);
+	// Painted strokes push the edge of the light back and forth.
+	float lit = steps(facing + (brush_strokes(UV) - 0.5) * brush_strength);
 	// Cast shadows cut cleanly too. Sun and moon shadows come in ATTENUATION
 	// alone; lamps also fade with distance there, which should stay smooth.
 	float reach = 1.0;
@@ -200,7 +313,7 @@ void light() {
 	// A small hard highlight, only where lit.
 	vec3 half_way = normalize(VIEW + LIGHT);
 	float shine = smoothstep(1.0 - specular_size - specular_softness,
-			1.0 - specular_size + specular_softness, dot(NORMAL, half_way));
+			1.0 - specular_size + specular_softness, dot(shading, half_way));
 	SPECULAR_LIGHT += light * shine * specular_strength * lit;
 
 	// The rim: the edge seen side-on, on the side the light reaches.

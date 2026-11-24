@@ -29,6 +29,11 @@ uniform float depth_push : hint_range(0.0, 0.05) = 0.01;
 // hidden bones isn't drawn, so the body never pokes through the cloth.
 instance uniform int hidden_bones = 0;
 
+// Off (0) for a mesh that mustn't be outlined: a piece of clothing. Meshy
+// makes a garment as a thick shell with a lining, and the outline round the
+// lining shows through the cloth as dark patches (#172).
+instance uniform float outline_amount = 1.0;
+
 // How much of this point is under clothing, 0 to 1.
 varying float covered;
 
@@ -58,7 +63,7 @@ void vertex() {
 
 
 void fragment() {
-	if (covered > 0.5) {
+	if (covered > 0.5 || outline_amount <= 0.0) {
 		discard;
 	}
 	ALBEDO = outline_color.rgb;

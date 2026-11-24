@@ -1,5 +1,6 @@
 [gd_scene format=3 uid="uid://0uysykqykbfrb"]
 
+[ext_resource type="Script" path="res://scripts/art/third_party_model.gd" id="900_meshy"]
 [ext_resource type="Material" path="res://assets/placeholder/materials/wet_dark_wood.tres" id="1_2ulbt"]
 [ext_resource type="Material" path="res://assets/placeholder/materials/cork.tres" id="2_4jfrr"]
 [ext_resource type="Material" path="res://assets/placeholder/materials/chart.tres" id="3_02k3q"]
@@ -99,3 +100,13 @@ mesh = SubResource("SphereMesh_8")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.22, -0.13, -0.075)
 material_override = ExtResource("6_lx5ki")
 mesh = SubResource("SphereMesh_8")
+
+[node name="Meshy" type="Node3D" parent="." node_paths=PackedStringArray("stand_ins")]
+transform = Transform3D(-1, 0, 0, 0, 1, 0, 0, 0, -1, 0, -0.39, -0.075)
+script = ExtResource("900_meshy")
+path = "res://assets/third_party/meshy/noticeboard/model/model.glb"
+fit_size = Vector3(1.12, 0.86, 0.19)
+stand_ins = [NodePath("../Frame"), NodePath("../Cork"), NodePath("../Roof"), NodePath("../Map"), NodePath("../Note1"), NodePath("../Note2"), NodePath("../Drawing"), NodePath("../Pin1"), NodePath("../Pin2"), NodePath("../Pin3"), NodePath("../Pin4"), NodePath("../Pin5")]
+grain = false
+detail = 1.0
+keep_as_made = true

@@ -24,7 +24,9 @@ Run with Blender 4.4 from Git Bash:
     "C:/Program Files/Blender Foundation/Blender 4.4/blender.exe" -b \\
         -P tools/meshy/fit_layer.py -- BODY.glb PIECE.glb OUT.glb SLOT
 
-SLOT is top, legs or feet (see SLOTS). Heights are in metres for a 1.6 m
+SLOT is top, legs, feet, coat or boots (see SLOTS). A coat is a top that
+reaches the thighs and sits outside the trousers; boots are feet that reach
+below the knee, slimmed to the leg. Heights are in metres for a 1.6 m
 character, measured off the outfit's concept picture; they scale with the
 body's height.
 """
@@ -39,9 +41,22 @@ from mathutils import Vector
 # 1.6 m body), how far in from the middle counts as the trunk (to measure
 # the body without the arms), and how far to raise the arms (degrees).
 SLOTS = {
-    "top": {"band": (0.91, 1.34), "trunk": 0.16, "raise": 0.0},
+    # "hem" straightens a ragged bottom edge: every point within that many
+    # metres of the bottom is brought up level with it.
+    "top": {"band": (0.91, 1.34), "trunk": 0.16, "raise": 0.0, "hem": 0.035},
     "legs": {"band": (0.33, 0.97), "trunk": 0.3, "raise": 0.0},
     "feet": {"band": (0.0, 0.385), "trunk": 0.3, "raise": 0.0},
+    # "raise" below zero lowers the arms. "trim_top" cuts that share off the
+    # top of the piece first (a coat's peg). "gap" holds it further off the
+    # body than GAP, to clear the clothes under it.
+    "coat": {"band": (0.72, 1.41), "trunk": 0.16, "raise": 0.0, "gap": 0.03},
+    # A coat made hanging from a peg, sleeves straight down: the peg is cut
+    # off and the arms lowered into the sleeves. It fits poorly (the sleeves
+    # are fused to the coat's body); make coats on the body, as "coat".
+    "hung_coat": {"band": (0.7, 1.4), "trunk": 0.16, "raise": -38.0, "trim_top": 0.1, "gap": 0.03},
+    # "slim" narrows each boot about its own middle after it's sized by
+    # height, so a chunky pair hugs a thin leg.
+    "boots": {"band": (0.0, 0.41), "trunk": 0.3, "raise": 0.0, "pair": True, "slim": 0.74},
 }
 ## The gap left between body and cloth, in metres: wider than the body's
 ## outline (at most 8 mm), or the outline shows through the cloth.
@@ -74,8 +89,10 @@ def bone_head(name):
     return armature.matrix_world @ armature.pose.bones[name].head
 
 
-# Raise the arms to meet the sleeves, checking each way turns the arm up.
-if settings["raise"] > 0.0:
+# Raise (or lower) the arms to meet the sleeves, checking each way turns the
+# arm the way that's wanted.
+lowering = settings["raise"] < 0.0
+if settings["raise"] != 0.0:
     select_only(armature)
     bpy.ops.object.mode_set(mode="POSE")
     for side in ("Left", "Right"):
@@ -87,13 +104,15 @@ if settings["raise"] > 0.0:
         for axis in (0, 2):
             for sign in (1.0, -1.0):
                 bone.rotation_euler = (0.0, 0.0, 0.0)
-                bone.rotation_euler[axis] = sign * math.radians(settings["raise"])
+                bone.rotation_euler[axis] = sign * math.radians(abs(settings["raise"]))
                 bpy.context.view_layer.update()
                 lift = bone_head(side + "ForeArm").z
+                if lowering:
+                    lift = -lift
                 if best is None or lift > best[0]:
                     best = (lift, axis, sign)
         bone.rotation_euler = (0.0, 0.0, 0.0)
-        bone.rotation_euler[best[1]] = best[2] * math.radians(settings["raise"])
+        bone.rotation_euler[best[1]] = best[2] * math.radians(abs(settings["raise"]))
         bpy.context.view_layer.update()
     bpy.ops.object.mode_set(mode="OBJECT")
 
@@ -119,6 +138,15 @@ piece.name = "Outfit_" + slot
 piece.parent = None
 select_only(piece)
 bpy.ops.object.transform_apply(location=True, rotation=True, scale=True)
+if settings.get("trim_top", 0.0) > 0.0:
+    import bmesh
+    heights = [v.co.z for v in piece.data.vertices]
+    cut = max(heights) - (max(heights) - min(heights)) * settings["trim_top"]
+    trimmed = bmesh.new()
+    trimmed.from_mesh(piece.data)
+    bmesh.ops.delete(trimmed, geom=[v for v in trimmed.verts if v.co.z > cut], context="VERTS")
+    trimmed.to_mesh(piece.data)
+    trimmed.free()
 
 
 def bounds(points):
@@ -198,7 +226,7 @@ def drop_lining(ob, target):
 
 body_points = world_points(posed)
 trunk = settings["trunk"]
-if slot == "feet":
+if slot == "feet" or settings.get("pair", False):
     # A boot per foot: split the pair, fit each to its own foot. Measure the
     # pair first: after splitting, the piece is only one loose part.
     lo, hi = bounds(world_points(piece))
@@ -221,6 +249,12 @@ if slot == "feet":
         foot = region(body_points, low, high, lambda x, s=sign: x * s > 0.0)
         b_lo, b_hi = bounds(world_points(boot))
         fit(boot, foot, (high - low) * (b_hi.z - b_lo.z) / (hi.z - lo.z))
+        slim = settings.get("slim", 1.0)
+        if slim != 1.0:
+            s_lo, s_hi = bounds(world_points(boot))
+            mid = (s_lo + s_hi) / 2.0
+            for v in boot.data.vertices:
+                v.co = Vector((mid.x + (v.co.x - mid.x) * slim, mid.y + (v.co.y - mid.y) * slim, v.co.z))
         boots.append(boot)
     select_only(boots[0])
     boots[1].select_set(True)
@@ -234,13 +268,21 @@ else:
     # drop_lining(piece, posed) tore holes at the shoulders; with the cloth
     # drawn on both sides and held 12 mm off the body it isn't needed.
 
+# Straighten a ragged hem: Meshy draws a shirt's bottom edge as an uneven
+# line, which shows as dark jags against the belt.
+if settings.get("hem", 0.0) > 0.0:
+    level = low + settings["hem"] * scale_to_body
+    for v in piece.data.vertices:
+        if v.co.z < level:
+            v.co.z = level
+
 # Push anything inside the body back out, by a hair.
 select_only(piece)
 wrap = piece.modifiers.new("OutsideBody", "SHRINKWRAP")
 wrap.target = posed
 wrap.wrap_method = "NEAREST_SURFACEPOINT"
 wrap.wrap_mode = "OUTSIDE"
-wrap.offset = GAP
+wrap.offset = settings.get("gap", GAP)
 bpy.ops.object.modifier_apply(modifier=wrap.name)
 
 # Each vertex takes the skin weights of the body nearest it.
@@ -255,7 +297,7 @@ bpy.ops.object.datalayout_transfer(modifier=transfer.name)
 bpy.ops.object.modifier_apply(modifier=transfer.name)
 
 # The pose it was fitted in becomes the armature's rest pose for this piece.
-if settings["raise"] > 0.0:
+if settings["raise"] != 0.0:
     select_only(armature)
     bpy.ops.object.mode_set(mode="POSE")
     bpy.ops.pose.armature_apply(selected=False)

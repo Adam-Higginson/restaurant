@@ -5167,7 +5167,12 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4.9, 5.3, -1.2)
 [node name="WaterButt" type="StaticBody3D" parent="Dressing" unique_id=260946632 instance=ExtResource("23_leehl")]
 transform = Transform3D(1.35, 0, 0, 0, 1.35, 0, 0, 0, 1.35, -5, 5.3, -1.6)
 
+[node name="Meshy" parent="Dressing/WaterButt"]
+path = "res://assets/third_party/meshy/water_butt/model/model.glb"
+fit_size = Vector3(1.05, 0.73, 0.9)
+
 [node name="Ladle" type="MeshInstance3D" parent="Dressing" unique_id=533575010]
+visible = false
 transform = Transform3D(0.9396926, 0.17101006, 0.2961981, 0, 0.8660254, -0.5, -0.34202012, 0.4698463, 0.81379765, -4.85, 6.5, -1.5)
 material_override = ExtResource("11_nfyf8")
 mesh = SubResource("BoxMesh_168")
@@ -5176,6 +5181,9 @@ mesh = SubResource("BoxMesh_168")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -5, 5.3, -1.6)
 script = ExtResource("28_sv7ji")
 water = ExtResource("29_v8w0a")
+
+[node name="Surface" parent="Dressing/Rainwater"]
+transform = Transform3D(1.08, 0, 0, 0, 1, 0, 0, 0, 1.08, -0.067, 0.85, 0)
 
 [node name="FishingSpot" type="Node3D" parent="Dressing" unique_id=1852587873 instance=ExtResource("32_ddph0")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5.62, 5.3, 4.3)
@@ -5258,7 +5266,7 @@ mesh = SubResource("CylinderMesh_174")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -5.4, 6.2, -11.25)
 
 [node name="BowLantern" type="Node3D" parent="Lights" unique_id=1616231698 instance=ExtResource("42_16o8s")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4.76, 8.5, -11.25)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4.33, 7.95, -11.25)
 script = ExtResource("43_dro8j")
 light_energy = 1.0
 light_range = 5.0
@@ -5269,7 +5277,7 @@ phase = 0.15
 transform = Transform3D(-1, 0, -8.742278e-08, 0, 1, 0, 8.742278e-08, 0, -1, 5.45, 5.3, 0.4)
 
 [node name="NetLantern" type="Node3D" parent="Lights" unique_id=656915140 instance=ExtResource("42_16o8s")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4.81, 7.6000004, 0.40000007)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4.38, 7.05, 0.4)
 script = ExtResource("43_dro8j")
 light_energy = 1.1
 light_range = 5.0
@@ -5280,7 +5288,7 @@ phase = 0.55
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -5.45, 7.42, 14.45)
 
 [node name="QuarterPortLantern" type="Node3D" parent="Lights" unique_id=1906627720 instance=ExtResource("42_16o8s")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4.81, 9.72, 14.45)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4.38, 9.17, 14.45)
 script = ExtResource("43_dro8j")
 light_energy = 0.95
 light_range = 5.0
@@ -5291,7 +5299,7 @@ phase = 0.8
 transform = Transform3D(-1, 0, -8.742278e-08, 0, 1, 0, 8.742278e-08, 0, -1, 5.45, 7.42, 14.45)
 
 [node name="QuarterStarboardLantern" type="Node3D" parent="Lights" unique_id=56486248 instance=ExtResource("42_16o8s")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4.81, 9.72, 14.45)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4.38, 9.17, 14.45)
 script = ExtResource("43_dro8j")
 light_energy = 0.95
 light_range = 5.0

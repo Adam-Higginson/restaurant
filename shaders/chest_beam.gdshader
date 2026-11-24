@@ -10,13 +10,13 @@
 shader_type spatial;
 render_mode unshaded, blend_add, cull_disabled, depth_draw_never, fog_disabled, shadows_disabled;
 
-uniform vec4 colour : source_color = vec4(1.0, 0.68, 0.28, 1.0);
+uniform vec4 colour : source_color = vec4(0.62, 1.0, 0.68, 1.0);
 // How bright the beam is where it leaves the chest, at full strength.
-uniform float energy = 2.0;
+uniform float energy = 1.2;
 // How bright it is right now, 0 (none) to 1.
 uniform float brightness = 0.0;
 // How quickly it fades on the way up: higher fades sooner.
-uniform float fade = 1.6;
+uniform float fade = 2.4;
 // How many spokes of brighter light, and how fast they turn.
 uniform float spokes = 5.0;
 uniform float spin = 0.12;

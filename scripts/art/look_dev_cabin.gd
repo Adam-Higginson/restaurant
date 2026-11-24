@@ -110,6 +110,12 @@ func _ready() -> void:
 			_capture_folder = option.trim_prefix("--capture=")
 		if option.begins_with("--treatment="):
 			_only_treatment = option.trim_prefix("--treatment=")
+		if option.begins_with("--outfit="):
+			# Dress whoever wears an outfit in this one, to photograph it.
+			var outfit: CharacterOutfit = load(option.trim_prefix("--outfit=")) as CharacterOutfit
+			for character: ThirdPartyModel in characters:
+				if character != null and character.outfit != null and outfit != null:
+					character.outfit = outfit
 	if style != null:
 		style = style.duplicate() as CharacterStyle
 	for character: ThirdPartyModel in posed:

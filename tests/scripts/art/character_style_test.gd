@@ -61,6 +61,27 @@ func test_changing_a_setting_says_so() -> void:
 	assert_bool(heard[0]).is_true()
 
 
+func test_its_material_gets_the_brush_strokes_at_the_shadows_edge() -> void:
+	var style: CharacterStyle = CharacterStyle.new()
+	style.brush_strength = 0.35
+	style.brush_scale = 90.0
+
+	var material: ShaderMaterial = style.make_material(_painted())
+
+	var strength: float = material.get_shader_parameter(&"brush_strength")
+	var scale: float = material.get_shader_parameter(&"brush_scale")
+	assert_float(strength).is_equal_approx(0.35, 0.0001)
+	assert_float(scale).is_equal_approx(90.0, 0.0001)
+
+
+func test_the_games_characters_have_painted_shadow_edges_and_no_outline() -> void:
+	# The real style (#172): the painted look, without ink.
+	var style: CharacterStyle = load("res://data/art/styles/character.tres") as CharacterStyle
+
+	assert_bool(style.outline).is_false()
+	assert_float(style.brush_strength).is_greater(0.0)
+
+
 func _painted() -> StandardMaterial3D:
 	var source: StandardMaterial3D = StandardMaterial3D.new()
 	source.albedo_color = Color(0.7, 0.5, 0.3)

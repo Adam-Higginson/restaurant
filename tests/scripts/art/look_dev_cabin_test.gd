@@ -29,16 +29,17 @@ func test_the_characters_switch_to_as_made_and_back() -> void:
 		assert_object(character.style).is_same(cabin.style)
 
 
-func test_switching_outlines_off_never_touches_the_shared_style() -> void:
+func test_switching_outlines_on_never_touches_the_shared_style() -> void:
 	var runner: GdUnitSceneRunner = scene_runner(CABIN)
 	var cabin: LookDevCabin = runner.scene() as LookDevCabin
 
-	cabin.set_outlined(false)
+	cabin.set_outlined(true)
 
-	assert_bool(cabin.style.outline).is_false()
+	assert_bool(cabin.style.outline).is_true()
 	var shared: CharacterStyle = load(SHARED_STYLE) as CharacterStyle
 	assert_object(cabin.style).is_not_same(shared)
-	assert_bool(shared.outline).is_true()
+	# The game's own characters have no outline (#172).
+	assert_bool(shared.outline).is_false()
 
 
 func test_plain_light_swaps_the_environment_and_puts_the_lamps_out() -> void:

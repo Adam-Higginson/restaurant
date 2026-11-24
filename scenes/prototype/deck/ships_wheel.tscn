@@ -1,5 +1,6 @@
 [gd_scene format=3 uid="uid://hza45obeaciaw"]
 
+[ext_resource type="Script" path="res://scripts/art/third_party_model.gd" id="900_meshy"]
 [ext_resource type="Material" path="res://assets/placeholder/materials/wet_dark_wood.tres" id="1_2dtn6"]
 [ext_resource type="Material" uid="uid://pmxhjggurfpb" path="res://assets/placeholder/materials/wet_prop_wood.tres" id="2_810hj"]
 [ext_resource type="Material" path="res://assets/placeholder/materials/brass.tres" id="3_7v2wb"]
@@ -155,3 +156,12 @@ mesh = SubResource("CylinderMesh_9")
 [node name="Shape" type="CollisionShape3D" parent="." unique_id=1036002604]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.8, 0.1)
 shape = SubResource("BoxShape3D_10")
+
+[node name="Meshy" type="Node3D" parent="." node_paths=PackedStringArray("stand_ins")]
+script = ExtResource("900_meshy")
+path = "res://assets/third_party/meshy/ships_wheel/model/model.glb"
+fit_size = Vector3(1.58, 1.97, 0.59)
+stand_ins = [NodePath("../Plinth"), NodePath("../UprightPort"), NodePath("../UprightStarboard"), NodePath("../Crossbar"), NodePath("../Housing")]
+grain = false
+detail = 1.0
+keep_as_made = true

@@ -491,3 +491,80 @@ func _use_fired_stand_ins() -> void:
 
 func _model(player: Player3D) -> CharacterModel:
 	return player.get_node("Model/Character") as CharacterModel
+
+
+# --- A whole character (the Meshy boy, #172) ---------------------------------------
+
+func test_a_whole_character_has_its_own_names_for_the_bones_we_ask_for() -> void:
+	assert_str(CharacterModel.whole_bone("hand_r")).is_equal("RightHand")
+	assert_str(CharacterModel.whole_bone("lowerarm_l")).is_equal("LeftForeArm")
+	assert_str(CharacterModel.whole_bone("ball_l")).is_equal("LeftToeBase")
+	assert_str(CharacterModel.whole_bone("pelvis")).is_equal("Hips")
+	# A bone both call the same keeps its name.
+	assert_str(CharacterModel.whole_bone("Head")).is_equal("Head")
+
+
+func test_a_whole_character_s_strikes_play_once_and_everything_else_loops() -> void:
+	for strike: StringName in [&"Sword_Regular_A", &"Sword_Heavy_Combo", &"Roll"]:
+		assert_bool(CharacterModel.plays_once(strike)).override_failure_message(
+				String(strike)).is_true()
+	for held: StringName in [&"Idle", &"Walk", &"Jog_Fwd", &"Sword_Idle", &"Idle_Shield"]:
+		assert_bool(CharacterModel.plays_once(held)).override_failure_message(
+				String(held)).is_false()
+
+
+func test_the_boy_has_a_clip_for_every_move_the_player_makes() -> void:
+	# The real resource: every animation the model plays by default has a
+	# file to play it from, and every clip it names is one of those.
+	var boy: CharacterParts = load("res://data/characters/boy.tres") as CharacterParts
+	var model: CharacterModel = CharacterModel.new()
+	auto_free(model)
+	for move: StringName in [model.idle_animation, model.walk_animation, model.run_animation,
+			model.strike_animation, model.parry_animation, model.charge_animation,
+			model.hold_up_animation]:
+		assert_bool(boy.whole_clips.has(move)).override_failure_message(String(move)).is_true()
+	for named: StringName in boy.whole_clip_names:
+		assert_bool(boy.whole_clips.has(named)).override_failure_message(String(named)).is_true()
+
+
+func test_a_still_clip_holds_every_track_at_one_moment_of_the_clip() -> void:
+	var clip: Animation = Animation.new()
+	clip.length = 2.0
+	var turn: int = clip.add_track(Animation.TYPE_ROTATION_3D)
+	clip.track_set_path(turn, NodePath("Skeleton:upperarm_l"))
+	clip.rotation_track_insert_key(turn, 0.0, Quaternion.IDENTITY)
+	clip.rotation_track_insert_key(turn, 2.0, Quaternion(Vector3.FORWARD, PI / 2.0))
+	var move: int = clip.add_track(Animation.TYPE_POSITION_3D)
+	clip.track_set_path(move, NodePath("Skeleton:pelvis"))
+	clip.position_track_insert_key(move, 0.0, Vector3.ZERO)
+	clip.position_track_insert_key(move, 2.0, Vector3(0, 2, 0))
+
+	var still: Animation = CharacterModel.still_of(clip, 1.0)
+
+	assert_int(still.get_track_count()).is_equal(2)
+	assert_int(still.track_get_key_count(0)).is_equal(1)
+	assert_str(String(still.track_get_path(0))).is_equal("Skeleton:upperarm_l")
+	var halfway: Quaternion = Quaternion(Vector3.FORWARD, PI / 4.0)
+	assert_bool(still.rotation_track_interpolate(0, 0.05).is_equal_approx(halfway)).is_true()
+	assert_bool(still.position_track_interpolate(1, 0.05).is_equal_approx(Vector3(0, 1, 0))) \
+			.is_true()
+	assert_int(still.loop_mode).is_equal(Animation.LOOP_LINEAR)
+
+
+func test_a_whole_character_wears_its_outfit_unless_undressed() -> void:
+	var boy: CharacterParts = load("res://data/characters/boy.tres") as CharacterParts
+
+	assert_object(CharacterModel.outfit_for(boy, false)).is_same(boy.whole_outfit)
+	assert_object(CharacterModel.outfit_for(boy, true)).is_null()
+
+
+func test_the_castaway_pulled_from_the_sea_is_in_his_underwear() -> void:
+	# The real scenes: in the water he wears only what his model was made in.
+	for path: String in ["res://scenes/prototype/intro/underwater.tscn",
+			"res://scenes/prototype/intro/grave.tscn"]:
+		var scene: Node = (load(path) as PackedScene).instantiate()
+		auto_free(scene)
+		var found: Array[Node] = scene.find_children("*", "CharacterModel", true, false)
+		assert_array(found).override_failure_message(path).is_not_empty()
+		for model: Node in found:
+			assert_bool((model as CharacterModel).undressed).override_failure_message(path).is_true()

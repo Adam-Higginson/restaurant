@@ -511,7 +511,7 @@ tracks/21/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
 "update": 0,
-"values": [Vector3(0.11, 0.4, 0.8)]
+"values": [Vector3(0.189, 0.4, 0.813)]
 }
 tracks/22/type = "value"
 tracks/22/imported = false
@@ -1018,7 +1018,7 @@ tracks/21/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
 "update": 0,
-"values": [Vector3(0.11, 0.4, 0.8)]
+"values": [Vector3(0.189, 0.4, 0.813)]
 }
 tracks/22/type = "value"
 tracks/22/imported = false
@@ -1525,7 +1525,7 @@ tracks/21/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
 "update": 0,
-"values": [Vector3(0.11, 0.4, 0.8)]
+"values": [Vector3(0.189, 0.4, 0.813)]
 }
 tracks/22/type = "value"
 tracks/22/imported = false
@@ -2032,7 +2032,7 @@ tracks/21/keys = {
 "times": PackedFloat32Array(0, 1.25, 1.8, 2.4, 3.1, 4.6),
 "transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1),
 "update": 0,
-"values": [Vector3(0.11, 0.4, 0.8), Vector3(0.11, 0.47, 0.8), Vector3(0.11, 0.42, 0.8), Vector3(0.11, 0.48, 0.8), Vector3(0.11, 0.37, 0.8), Vector3(0.11, 0.4, 0.8)]
+"values": [Vector3(0.189, 0.4, 0.813), Vector3(0.189, 0.47, 0.813), Vector3(0.189, 0.42, 0.813), Vector3(0.189, 0.48, 0.813), Vector3(0.189, 0.37, 0.813), Vector3(0.189, 0.4, 0.813)]
 }
 tracks/22/type = "value"
 tracks/22/imported = false
@@ -2539,7 +2539,7 @@ tracks/21/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
 "update": 0,
-"values": [Vector3(0.11, 0.4, 0.8)]
+"values": [Vector3(0.189, 0.4, 0.813)]
 }
 tracks/22/type = "value"
 tracks/22/imported = false
@@ -3046,7 +3046,7 @@ tracks/21/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
 "update": 0,
-"values": [Vector3(0.11, 0.4, 0.8)]
+"values": [Vector3(0.189, 0.4, 0.813)]
 }
 tracks/22/type = "value"
 tracks/22/imported = false
@@ -3553,7 +3553,7 @@ tracks/21/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
 "update": 0,
-"values": [Vector3(0.11, 0.4, 0.8)]
+"values": [Vector3(0.189, 0.4, 0.813)]
 }
 tracks/22/type = "value"
 tracks/22/imported = false
@@ -4060,7 +4060,7 @@ tracks/21/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
 "update": 0,
-"values": [Vector3(0.11, 0.4, 0.8)]
+"values": [Vector3(0.189, 0.4, 0.813)]
 }
 tracks/22/type = "value"
 tracks/22/imported = false
@@ -4567,7 +4567,7 @@ tracks/21/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
 "update": 0,
-"values": [Vector3(0.11, 0.4, 0.8)]
+"values": [Vector3(0.189, 0.4, 0.813)]
 }
 tracks/22/type = "value"
 tracks/22/imported = false
@@ -5074,7 +5074,7 @@ tracks/21/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
 "update": 0,
-"values": [Vector3(0.11, 0.4, 0.8)]
+"values": [Vector3(0.189, 0.4, 0.813)]
 }
 tracks/22/type = "value"
 tracks/22/imported = false
@@ -5582,7 +5582,7 @@ tracks/21/keys = {
 "times": PackedFloat32Array(0, 3, 6),
 "transitions": PackedFloat32Array(1, 1, 1),
 "update": 0,
-"values": [Vector3(0.11, 0.4, 0.8), Vector3(0.11, 0.34, 0.8), Vector3(0.11, 0.4, 0.8)]
+"values": [Vector3(0.189, 0.4, 0.813), Vector3(0.189, 0.34, 0.813), Vector3(0.189, 0.4, 0.813)]
 }
 tracks/22/type = "value"
 tracks/22/imported = false
@@ -6089,7 +6089,7 @@ tracks/21/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
 "update": 0,
-"values": [Vector3(0.11, 0.4, 0.8)]
+"values": [Vector3(0.189, 0.4, 0.813)]
 }
 tracks/22/type = "value"
 tracks/22/imported = false
@@ -6596,7 +6596,7 @@ tracks/21/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
 "update": 0,
-"values": [Vector3(0.11, 0.4, 0.8)]
+"values": [Vector3(0.189, 0.4, 0.813)]
 }
 tracks/22/type = "value"
 tracks/22/imported = false
@@ -7103,7 +7103,7 @@ tracks/21/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
 "update": 0,
-"values": [Vector3(0.11, 0.4, 0.8)]
+"values": [Vector3(0.189, 0.4, 0.813)]
 }
 tracks/22/type = "value"
 tracks/22/imported = false
@@ -7610,7 +7610,7 @@ tracks/21/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
 "update": 0,
-"values": [Vector3(0.11, 0.4, 0.8)]
+"values": [Vector3(0.189, 0.4, 0.813)]
 }
 tracks/22/type = "value"
 tracks/22/imported = false
@@ -8117,7 +8117,7 @@ tracks/21/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
 "update": 0,
-"values": [Vector3(0.11, 0.4, 0.8)]
+"values": [Vector3(0.189, 0.4, 0.813)]
 }
 tracks/22/type = "value"
 tracks/22/imported = false
@@ -8624,7 +8624,7 @@ tracks/21/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
 "update": 0,
-"values": [Vector3(0.11, 0.4, 0.8)]
+"values": [Vector3(0.189, 0.4, 0.813)]
 }
 tracks/22/type = "value"
 tracks/22/imported = false
@@ -8935,6 +8935,7 @@ light_volumetric_fog_energy = 0.3
 transform = Transform3D(0.83711946, -0.31049567, 0.45035928, 0.15892528, 0.9258315, 0.3428978, -0.5234251, -0.21547297, 0.8243771, 0, 7.5, 0)
 
 [node name="Character" parent="Castaway" index="5" node_paths=PackedStringArray("reach_for", "watch")]
+undressed = true
 blend_seconds = 0.8
 reach_for = NodePath("../../Lantern/PalmLight")
 watch = NodePath("../../Lantern/Body")

@@ -38,10 +38,10 @@ const CUTSCENE: StringName = &"chest"
 @export var open_degrees: float = 105.0
 @export var open_seconds: float = 0.8
 ## How bright the light inside is once it's open.
-@export var glow_energy: float = 1.8
+@export var glow_energy: float = 0.9
 ## How much of the light stays once the treasure's been taken (0 to 1), and
 ## how long it takes to settle there.
-@export var afterglow: float = 0.15
+@export var afterglow: float = 0.0
 @export var settle_seconds: float = 1.5
 
 var _opening: bool = false

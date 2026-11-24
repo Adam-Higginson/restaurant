@@ -147,9 +147,10 @@ world = NodePath("../WorldEnvironment")
 moon = NodePath("../Moon")
 weather = NodePath("../Weather")
 
-[node name="PaintedLook" type="Node" parent="." node_paths=PackedStringArray("world")]
+[node name="PaintedLook" type="Node" parent="." node_paths=PackedStringArray("world", "stroke_anchor")]
 script = ExtResource("400_painted")
 world = NodePath("../WorldEnvironment")
+stroke_anchor = NodePath("../Ship")
 
 [node name="Opening" type="Node" parent="." unique_id=1418227362 node_paths=PackedStringArray("player", "ship")]
 script = ExtResource("15_opening")
