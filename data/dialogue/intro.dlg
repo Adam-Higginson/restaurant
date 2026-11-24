@@ -324,13 +324,13 @@ lantern: But I can't let you go.
 
 # The white goes to black, and stays black for a while: how you came aboard
 # isn't shown. Then, slowly, the bunk room at night, the storm outside: you
-# asleep in your bunk, and the captain standing at its foot, watching over
-# you. The lantern isn't beside you: he's on his round table by the stove,
-# small and blue, his light nearly all gone (#158).
+# asleep in your bunk, and the captain standing by its head, watching over
+# you. The lantern is beside you, on the little table at the foot of your
+# bunk (#206), small and blue, his light nearly all gone (#158).
 ~ asleep
 @place heron bedside
 @show heron
-@face heron player
+@face heron sleeping_you
 @hide player
 @show sleeping_you
 @home lantern
@@ -344,26 +344,34 @@ set lantern_low
 @wait 0.8
 -> waking
 
-# You wake on your own, with the captain standing over you at the foot of
+# You wake on your own, with the captain standing over you by the head of
 # your bunk (the Prologue's Scene 2, #184).
 ~ waking
 @start wakes
 @wait 1.6
+-> you_look_up
+
+# Still lying down, you look up: the captain, standing over you by the head
+# of your bunk, the lantern on his table at its foot. The captain is the
+# first to speak (#206).
+~ you_look_up
+@shot you_lying_down cut
+@wait 0.6
+heron: Ah. You're awake.
+heron: Good. I was beginning to wonder whether we'd rescued you or merely inconvenienced a corpse.
 -> by_your_bunk
 
 # By the time we look round you're up, and he's there by your bunk; the
-# lantern on his round table, barely lit, but talking. He tries to float
-# over to you and can't. The captain asks what you remember, and you've
-# nothing to tell him. (Your answers are the replies you pick.)
+# lantern on the table at its foot, barely lit, but talking. He tries to
+# float over to you and can't. The captain asks what you remember, and
+# you've nothing to tell him. (Your answers are the replies you pick.)
 ~ by_your_bunk
 @hide sleeping_you
 @show player
 @face heron player
-@shot beside_your_bunk cut
-@wait 0.8
-heron: Ah. You're awake.
-heron: Good. I was beginning to wonder whether we'd rescued you or merely inconvenienced a corpse.
-@shot stove_nook
+@face player heron
+@shot by_the_lantern cut
+@wait 0.6
 @look lantern pleased
 lantern: I told you they'd wake up!
 @face heron lantern
@@ -387,7 +395,7 @@ heron: You could have left them.
 @wait 1.0
 lantern: I know.
 @face heron player
-@shot beside_your_bunk
+@shot facing_him
 heron: Do you remember anything?
 - (Shake your head) -> your_name
 
@@ -406,6 +414,7 @@ heron: How you ended up in the water?
 ~ i_see
 heron: I see.
 @face heron lantern
+@shot beside_your_bunk
 heron: Well, whatever happened out there, you're fortunate he's as stubborn as he is.
 @look lantern pleased
 lantern: You're welcome.
@@ -417,11 +426,13 @@ heron: And try not to fall overboard again.
 
 # Then the ship is yours. The captain goes up on deck to the helm, where you
 # find him for the pot (the FirstQuest node in sea.tscn walks him there, and
-# to the water butt for a drink now and then). The lantern has a word first.
-# The recipe book lies by your pillow (RecipeBook: data/dialogue/recipe_book.dlg).
+# to the water butt for a drink now and then). The lantern has a word first,
+# and points you to your book: it's on his table, by him (picking it up is
+# data/dialogue/recipe_book.dlg, #206).
 ~ yours
-@shot stove_nook
+@shot by_the_lantern
 @look lantern tired
 lantern: Don't mind him.
 lantern: He's always like that.
+lantern: Oh! And you left your book here. It's on the table, by me.
 @shot free cut

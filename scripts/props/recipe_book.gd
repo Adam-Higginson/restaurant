@@ -1,12 +1,13 @@
 class_name RecipeBook
 extends Node3D
-## The recipe book, a small battered thing lying on the table by your bunk
-## when you wake (#184). Pick it up (Interact) and it plays the cutscene
-## [constant CUTSCENE] ([code]data/dialogue/recipe_book.dlg[/code]): you hold
-## it up, it's yours (the flag [code]has_recipe_book[/code] puts it on your
-## toolbar), it opens, and the lantern asks if you're a cook. After that it's
-## gone from the table: you carry it, and select it on the toolbar and Use it
-## to read it wherever you are.
+## The recipe book, a small battered thing lying on the lantern's table by
+## your bunk when you wake (#184; the lantern tells you it's there, #206).
+## Pick it up (Interact) and it plays the cutscene [constant CUTSCENE]
+## ([code]data/dialogue/recipe_book.dlg[/code]): you hold it up, it's yours
+## (the flag [code]has_recipe_book[/code] puts it on your toolbar), and the
+## lantern asks if you're a cook. It doesn't open there: you read it later.
+## After that it's gone from the table: you carry it, and select it on the
+## toolbar and Use it to read it wherever you are.
 ##
 ## [method open_book] opens it in the [BookView]: a page for each dish the
 ## galley knows, and how to make it.

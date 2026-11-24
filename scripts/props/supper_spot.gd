@@ -1,11 +1,12 @@
 class_name SupperSpot
 extends Node3D
-## The little round table by the bunk room's stove, where the lantern lives
-## (its [code]Perch[/code] is his home) and where you share supper with him:
-## holding a bowl or plate with a dish in it, Interact. The dish sits on the
-## table a moment while he drifts down to it, then it's gone and he glows
-## warm again: more for a better dish. The bowl stays with you. With nothing
-## to share, Interact talks to him instead.
+## The little round table by the bunk room's stove, where you share supper
+## with the lantern: holding a bowl or plate with a dish in it, Interact. He
+## lives by your bunk ([LanternPerch], #206) and comes over: the dish sits on
+## the table a moment while he drifts down to it, then it's gone and he glows
+## warm again: more for a better dish. The bowl stays with you. With
+## [member talk] set, Interact with nothing to share talks to him instead
+## (off here since he moved: you talk to him by your bunk).
 ##
 ## Home from the sea low (#158), he only stirs for the old book's remedy
 ## (#155): set it down by him and [member remedy_scene] plays at once, the
@@ -23,8 +24,8 @@ signal mended
 ## How long the dish sits on the table while he eats, in seconds.
 @export var eat_seconds: float = 2.5
 ## The conversation Interact starts when you've nothing to share: a file in
-## [code]data/dialogue[/code].
-@export var talk: StringName = &"lantern"
+## [code]data/dialogue[/code], or none.
+@export var talk: StringName = &""
 ## The dish that brings him back when he's low: the old book's remedy. While
 ## he's low it's the only one he stirs for.
 @export var remedy: Item

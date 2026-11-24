@@ -28,6 +28,15 @@ _data = {
 [node name="InYourBunk" type="Marker3D" parent="Shots" unique_id=409966004 groups=["shots"]]
 transform = Transform3D(-0.27881008, 0.33463153, -0.90015924, 0, 0.93732774, 0.34844884, 0.9603462, 0.09715105, -0.26133645, 3.45, 2.4, 12.85)
 
+[node name="YouLyingDown" type="Marker3D" parent="Shots" groups=["shots"]]
+transform = Transform3D(0.8831, -0.0129, -0.469, -0.0, 0.9996, -0.0276, 0.4692, 0.0244, 0.8828, 3.65, 1.95, 14.35)
+
+[node name="FacingHim" type="Marker3D" parent="Shots" groups=["shots"]]
+transform = Transform3D(-0.9676, 0.0419, -0.2489, 0.0, 0.9861, 0.1659, 0.2524, 0.1606, -0.9542, 3.3, 2.5, 12.3)
+
+[node name="ByTheLantern" type="Marker3D" parent="Shots" groups=["shots"]]
+transform = Transform3D(0.5039, 0.211, -0.8376, -0.0, 0.9697, 0.2443, 0.8638, -0.1231, 0.4886, 3.3, 2.3, 14.55)
+
 [node name="Marks" type="Node3D" parent="." unique_id=522339311]
 
 [node name="ByYourBunk" type="Marker3D" parent="Marks" unique_id=1770651431 groups=["marks"]]

@@ -1,7 +1,7 @@
 extends GameTestSuite
 ## Tests for the crew aboard: the heron stands by the stove at night and at
 ## the wheel in the morning, swapping when the time does; the lantern lives
-## at the round table instead of following you, and what he doesn't see
+## on the little table by your bunk (#206) instead of following you, and what he doesn't see
 ## becomes news for later; and the facts scripts can ask about.
 
 ## By the bunk room stove, near the round table.
@@ -74,13 +74,13 @@ func test_the_heron_stands_clear_of_the_table_and_the_stove() -> void:
 	assert_float(_flat_distance(heron, stove)).is_greater(1.2)
 
 
-func test_the_lantern_lives_at_the_round_table_and_doesnt_follow() -> void:
+func test_the_lantern_lives_by_your_bunk_and_doesnt_follow() -> void:
 	var rig: Array[Node3D] = new_moored_ship_with_player(BY_THE_STOVE)
 	var runner: GdUnitSceneRunner = scene_runner(rig[0].get_parent())
 	var player: Player3D = rig[1] as Player3D
 	var spirit: LanternSpirit = player.get_node("LanternSpirit") as LanternSpirit
 	await physics_ticks(runner, 5)
-	var perch: Node3D = rig[0].get_node("BunkRoom/SupperSpot/Perch") as Node3D
+	var perch: Node3D = rig[0].get_node("BunkRoom/LanternPerch/Perch") as Node3D
 	assert_object(spirit.home).is_same(perch)
 
 	place_player_3d(runner, ON_DECK)
@@ -96,7 +96,7 @@ func test_at_home_he_rides_along_as_the_ship_sails() -> void:
 	var runner: GdUnitSceneRunner = scene_runner(rig[0].get_parent())
 	var ship: Ship = rig[0] as Ship
 	var spirit: LanternSpirit = rig[1].get_node("LanternSpirit") as LanternSpirit
-	var perch: Node3D = ship.get_node("BunkRoom/SupperSpot/Perch") as Node3D
+	var perch: Node3D = ship.get_node("BunkRoom/LanternPerch/Perch") as Node3D
 	await physics_ticks(runner, 5)
 
 	ship.set_sail()
@@ -151,7 +151,24 @@ func test_told_to_leave_home_he_follows_at_your_shoulder() -> void:
 	assert_bool(spirit.is_in_earshot()).is_true()
 
 
-func test_with_nothing_to_share_the_round_table_talks_to_the_lantern() -> void:
+func test_by_your_bunk_you_can_talk_to_the_lantern() -> void:
+	var rig: Array[Node3D] = new_moored_ship_with_player(BY_THE_STOVE)
+	var conversation: Conversation = Conversation.new()
+	rig[0].get_parent().add_child(conversation)
+	var runner: GdUnitSceneRunner = scene_runner(rig[0].get_parent())
+	var player: Player3D = rig[1] as Player3D
+	var perch: LanternPerch = rig[0].get_node("BunkRoom/LanternPerch") as LanternPerch
+	await physics_ticks(runner, 3)
+
+	assert_str(perch.prompt()).is_equal("Talk to the lantern")
+	perch.use(player)
+
+	assert_str(String(conversation.talking)).is_equal("lantern")
+	conversation.stop()
+
+
+func test_the_round_table_no_longer_talks_for_him() -> void:
+	# He doesn't live there now: with nothing to share, it offers nothing.
 	var rig: Array[Node3D] = new_moored_ship_with_player(BY_THE_STOVE)
 	var conversation: Conversation = Conversation.new()
 	rig[0].get_parent().add_child(conversation)
@@ -160,21 +177,16 @@ func test_with_nothing_to_share_the_round_table_talks_to_the_lantern() -> void:
 	var supper: SupperSpot = rig[0].get_node("BunkRoom/SupperSpot") as SupperSpot
 	await physics_ticks(runner, 3)
 
-	assert_str(supper.prompt(player.arms)).is_equal("Talk to the lantern")
-	supper.use(player)
-
-	assert_str(String(conversation.talking)).is_equal("lantern")
-	conversation.stop()
+	assert_str(supper.prompt(player.arms)).is_empty()
 
 
-func test_without_a_conversation_in_the_scene_the_table_offers_nothing() -> void:
+func test_without_a_conversation_in_the_scene_the_lantern_offers_nothing() -> void:
 	var rig: Array[Node3D] = new_moored_ship_with_player(BY_THE_STOVE)
 	var runner: GdUnitSceneRunner = scene_runner(rig[0].get_parent())
-	var player: Player3D = rig[1] as Player3D
-	var supper: SupperSpot = rig[0].get_node("BunkRoom/SupperSpot") as SupperSpot
+	var perch: LanternPerch = rig[0].get_node("BunkRoom/LanternPerch") as LanternPerch
 	await physics_ticks(runner, 3)
 
-	assert_str(supper.prompt(player.arms)).is_empty()
+	assert_str(perch.prompt()).is_empty()
 
 
 func test_scripts_can_ask_about_the_time_the_weather_and_the_ship() -> void:
