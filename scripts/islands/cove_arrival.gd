@@ -32,7 +32,7 @@ const ARRIVED_FLAG: StringName = Bedside.ARRIVED_FLAG
 ## The cutscene: a file in [code]data/dialogue[/code].
 @export var cutscene: StringName = &"arrival"
 ## Where she starts from, measured from her anchorage, in metres.
-@export var sail_from: Vector3 = Vector3(90, 0, 0)
+@export var sail_from: Vector3 = Vector3(60, 0, 0)
 ## How long she takes to come in to her anchorage, in seconds.
 @export var sail_seconds: float = 24.0
 

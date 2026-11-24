@@ -823,17 +823,18 @@ ship = NodePath("../Ship")
 player = NodePath("../Player")
 start = NodePath("../Ship/DeckStart")
 fade = NodePath("../ScreenFade")
+sail_from = Vector3(60, 0, 0)
 
 [node name="Shots" type="Node3D" parent="."]
 
 [node name="OutOfTheMist" type="Marker3D" parent="Shots" groups=["shots"]]
-transform = Transform3D(-0.2108, -0.0094, -0.9775, 0.0, 1.0, -0.0096, 0.9775, -0.002, -0.2108, 45.0, 5.5, 71.0)
+transform = Transform3D(-0.6051, 0.0063, -0.7961, 0.0, 1.0, 0.008, 0.7962, 0.0048, -0.6051, 22.0, 6.5, 48.0)
 
 [node name="TheWholeCove" type="Marker3D" parent="Shots" groups=["shots"]]
-transform = Transform3D(0.8099, 0.1279, -0.5724, 0.0, 0.9759, 0.2181, 0.5865, -0.1766, 0.7905, -32.0, 18.0, 104.0)
+transform = Transform3D(0.7241, 0.2147, -0.6554, 0.0, 0.9503, 0.3113, 0.6897, -0.2254, 0.6882, -34.0, 20.0, 86.0)
 
 [node name="PullBack" type="Marker3D" parent="Shots" groups=["shots"]]
-transform = Transform3D(0.8805, -0.1382, 0.4535, 0.0, 0.9566, 0.2915, -0.4741, -0.2567, 0.8422, 36.0, 22.0, 126.0)
+transform = Transform3D(0.838, -0.2312, 0.4943, 0.0, 0.9058, 0.4237, -0.5457, -0.355, 0.7591, 30.0, 26.0, 93.0)
 
 [node name="Anchor" type="AudioStreamPlayer" parent="Story/SoundCues"]
 stream = ExtResource("187_anchor")
