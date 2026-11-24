@@ -74,6 +74,15 @@ uniform mat4 stroke_space = mat4(1.0);
 // stretched into an oval up to (1 + [brush_flow]) times longer, the way
 // a brush is drawn along a form. Flat areas, with no edge, stay as dabs.
 uniform float brush_flow : hint_range(0.0, 1.0) = 0.0;
+// How much of the painting things right in front of you get (#172), 0 to
+// 1: the brush, its ragged strokes and its flow are this share of their
+// size up close, and grow to all of it by [far_end], so near things stay
+// clean and readable and the painting is mostly in the distance.
+uniform float near_paint : hint_range(0.0, 1.0) = 1.0;
+// How much of the painted colour is laid over the picture (#172), 0 to 1:
+// below 1 some of the crisp picture shows through, so the dabs soften
+// the textures instead of replacing them.
+uniform float paint_mix : hint_range(0.0, 1.0) = 1.0;
 
 const int TAPS = 4;
 
@@ -133,14 +142,14 @@ float tone_at(vec2 uv) {
 }
 
 
-vec3 painted(vec2 uv, vec2 step_size) {
+vec3 painted(vec2 uv, vec2 step_size, float flow_amount) {
 	vec3 best = vec3(0.0);
 	float best_spread = 1e9;
 	// Which way the edge here runs, and how strongly, from how the
 	// brightness changes across the brush: the dabs are laid along it.
 	vec2 along = vec2(1.0, 0.0);
 	vec2 stretch = vec2(1.0);
-	if (brush_flow > 0.0) {
+	if (flow_amount > 0.0) {
 		vec2 r = step_size * float(TAPS) * 0.5;
 		float right = tone_at(uv + vec2(r.x, 0.0)) - tone_at(uv - vec2(r.x, 0.0));
 		float down = tone_at(uv + vec2(0.0, r.y)) - tone_at(uv - vec2(0.0, r.y));
@@ -151,7 +160,7 @@ vec3 painted(vec2 uv, vec2 step_size) {
 		if (strength > 1e-5) {
 			// The edge runs across the way the brightness rises.
 			along = vec2(-rise.y, rise.x) / strength;
-			float flow = smoothstep(0.01, 0.08, strength) * brush_flow;
+			float flow = smoothstep(0.01, 0.08, strength) * flow_amount;
 			stretch = vec2(1.0 + flow, 1.0 / (1.0 + flow));
 		}
 	}
@@ -192,16 +201,21 @@ void fragment() {
 	vec3 seen = view_position(SCREEN_UV, INV_PROJECTION_MATRIX);
 	// How far off this pixel is, from the near edge of "far" to its end.
 	float away = smoothstep(far_start, far_end, -seen.z);
+	// How much of the painting this pixel gets: [near_paint] up close, all
+	// of it far off (from right in front, so it grows over the middle
+	// distance too).
+	float paint = mix(near_paint, 1.0, smoothstep(0.0, far_end, -seen.z));
 	vec2 brush_at = SCREEN_UV;
 	// Not on the sky, which is endlessly far.
 	if (stroke_jitter > 0.0 && -seen.z < far_end * 20.0) {
 		vec3 world = (stroke_space * INV_VIEW_MATRIX * vec4(seen, 1.0)).xyz;
 		vec3 facing = (stroke_space * INV_VIEW_MATRIX * vec4(view_normal(SCREEN_UV), 0.0)).xyz;
-		brush_at += stroke_offset(world, facing) * 2.0 * pixel * scale * stroke_jitter;
+		brush_at += stroke_offset(world, facing) * 2.0 * pixel * scale * stroke_jitter * paint;
 	}
 	if (brush_size > 0.0) {
-		float brush = brush_size * mix(1.0, far_brush, away);
-		colour = painted(brush_at, pixel * scale * brush / float(TAPS));
+		float brush = brush_size * mix(1.0, far_brush, away) * paint;
+		vec3 dabs = painted(brush_at, pixel * scale * brush / float(TAPS), brush_flow * paint);
+		colour = mix(colour, dabs, paint_mix);
 	}
 	if (silhouette_rim > 0.0) {
 		float here_away = -view_position(SCREEN_UV, INV_PROJECTION_MATRIX).z;

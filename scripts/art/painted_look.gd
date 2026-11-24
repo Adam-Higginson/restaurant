@@ -39,7 +39,7 @@ const SURFACE: Dictionary[StringName, Variant] = {
 ## How much richer colours are than the scene's own grade.
 @export_range(0.5, 2.0) var saturation: float = 1.12
 ## Brush widths in pixels at 1080p: the scenery's, and the characters'.
-@export_range(0.0, 8.0) var brush: float = 2.3
+@export_range(0.0, 8.0) var brush: float = 1.5
 @export_range(0.0, 8.0) var character_brush: float = 0.9
 ## Ink line width in pixels at 1080p, and how dark the line is: 0 draws
 ## none, the look we chose (#172), shapes told apart by light and colour.
@@ -51,7 +51,7 @@ const SURFACE: Dictionary[StringName, Variant] = {
 ## warmer shade of themselves in [member haze_color].
 @export var far_start: float = 4.0
 @export var far_end: float = 30.0
-@export_range(1.0, 4.0) var far_brush: float = 2.0
+@export_range(1.0, 4.0) var far_brush: float = 1.6
 @export_range(0.0, 1.0) var haze_strength: float = 0.35
 @export var haze_color: Color = Color(1.0, 0.86, 0.72)
 ## A thin bright rim along the characters' outer edge, on the side towards
@@ -66,7 +66,7 @@ const SURFACE: Dictionary[StringName, Variant] = {
 ## pixels at 1080p (0 is none), by strokes about [member stroke_size]
 ## metres across and [member stroke_stretch] times longer than wide,
 ## pinned to the surfaces. Characters have their own (the style's brush).
-@export_range(0.0, 8.0) var scenery_strokes: float = 3.0
+@export_range(0.0, 8.0) var scenery_strokes: float = 2.0
 @export var stroke_size: float = 0.15
 @export_range(1.0, 8.0) var stroke_stretch: float = 4.0
 ## What the scenery's strokes are pinned to: the ship, so they ride with
@@ -75,7 +75,16 @@ const SURFACE: Dictionary[StringName, Variant] = {
 ## How far the brush follows the picture's edges: 0 paints square dabs,
 ## up to 1 lays each dab along the edge it's on, as an oval up to twice
 ## as long as it's wide, so strokes follow the forms.
-@export_range(0.0, 1.0) var brush_flow: float = 0.8
+@export_range(0.0, 1.0) var brush_flow: float = 0.6
+## How much of the scenery's painting things right in front of you get:
+## the brush, its strokes and its flow are this share of their size up
+## close, growing to all of it by [member far_end]. Lower keeps near
+## things cleaner; 1 paints everything the same.
+@export_range(0.0, 1.0) var near_paint: float = 0.4
+## How much of the painted colour is laid over the scenery: below 1 some
+## of the crisp picture shows through, so the brush softens the textures
+## instead of replacing them.
+@export_range(0.0, 1.0) var paint_mix: float = 0.8
 @export_group("Surfaces")
 ## How much richer and darker a planked surface's own colour is made, now
 ## that no grain picture colours it.
@@ -202,6 +211,8 @@ func _apply() -> void:
 		var scenery: ShaderMaterial = screens[0].mesh.surface_get_material(0) as ShaderMaterial
 		_scenery_material = scenery
 		scenery.set_shader_parameter(&"stroke_jitter", scenery_strokes)
+		scenery.set_shader_parameter(&"near_paint", near_paint)
+		scenery.set_shader_parameter(&"paint_mix", paint_mix)
 		scenery.set_shader_parameter(&"stroke_size", stroke_size)
 		scenery.set_shader_parameter(&"stroke_stretch", stroke_stretch)
 		# The rim is only on the characters' copy.
