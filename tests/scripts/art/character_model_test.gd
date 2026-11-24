@@ -520,10 +520,35 @@ func test_the_boy_has_a_clip_for_every_move_the_player_makes() -> void:
 	var model: CharacterModel = CharacterModel.new()
 	auto_free(model)
 	for move: StringName in [model.idle_animation, model.walk_animation, model.run_animation,
-			model.strike_animation, model.parry_animation, model.charge_animation]:
+			model.strike_animation, model.parry_animation, model.charge_animation,
+			model.hold_up_animation]:
 		assert_bool(boy.whole_clips.has(move)).override_failure_message(String(move)).is_true()
 	for named: StringName in boy.whole_clip_names:
 		assert_bool(boy.whole_clips.has(named)).override_failure_message(String(named)).is_true()
+
+
+func test_a_still_clip_holds_every_track_at_one_moment_of_the_clip() -> void:
+	var clip: Animation = Animation.new()
+	clip.length = 2.0
+	var turn: int = clip.add_track(Animation.TYPE_ROTATION_3D)
+	clip.track_set_path(turn, NodePath("Skeleton:upperarm_l"))
+	clip.rotation_track_insert_key(turn, 0.0, Quaternion.IDENTITY)
+	clip.rotation_track_insert_key(turn, 2.0, Quaternion(Vector3.FORWARD, PI / 2.0))
+	var move: int = clip.add_track(Animation.TYPE_POSITION_3D)
+	clip.track_set_path(move, NodePath("Skeleton:pelvis"))
+	clip.position_track_insert_key(move, 0.0, Vector3.ZERO)
+	clip.position_track_insert_key(move, 2.0, Vector3(0, 2, 0))
+
+	var still: Animation = CharacterModel.still_of(clip, 1.0)
+
+	assert_int(still.get_track_count()).is_equal(2)
+	assert_int(still.track_get_key_count(0)).is_equal(1)
+	assert_str(String(still.track_get_path(0))).is_equal("Skeleton:upperarm_l")
+	var halfway: Quaternion = Quaternion(Vector3.FORWARD, PI / 4.0)
+	assert_bool(still.rotation_track_interpolate(0, 0.05).is_equal_approx(halfway)).is_true()
+	assert_bool(still.position_track_interpolate(1, 0.05).is_equal_approx(Vector3(0, 1, 0))) \
+			.is_true()
+	assert_int(still.loop_mode).is_equal(Animation.LOOP_LINEAR)
 
 
 func test_a_whole_character_wears_its_outfit_unless_undressed() -> void:

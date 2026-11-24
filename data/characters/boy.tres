@@ -28,7 +28,8 @@ whole_clips = Dictionary[StringName, String]({
 &"Sword_Regular_B": "res://assets/third_party/meshy/boy_stern/anim/animation_glb.glb",
 &"Sword_Regular_C": "res://assets/third_party/meshy/boy_stern/anim/animation_glb.glb",
 &"Sword_Heavy_Combo": "res://assets/third_party/meshy/boy_stern/anim/animation_glb.glb",
-&"Idle_Shield": "res://assets/third_party/meshy/boy_stern/anim/animation_glb.glb"
+&"Idle_Shield": "res://assets/third_party/meshy/boy_stern/anim/animation_glb.glb",
+&"Hold_Up": "res://assets/third_party/meshy/boy_stern/anim/cheer_both_hands.glb"
 })
 whole_clip_names = Dictionary[StringName, String]({
 &"Idle": "Long_Breathe_and_Look_Around",

@@ -52,6 +52,9 @@ const HEAD_BONES: PackedStringArray = CharacterParts.HEAD_BONES
 const MOVING_BONES: PackedStringArray = ["root", "pelvis"]
 ## The animation library's name on the [AnimationPlayer].
 const LIBRARY: StringName = &"moves"
+## The still pose held while holding something up, made from a moment of
+## [member hold_up_animation] (see [method still_of]).
+const HOLD_UP_STILL: StringName = &"Hold_Up_Still"
 ## The whole character's (Meshy's) name for each bone this script and its
 ## helpers ask for by the packs' names.
 const WHOLE_BONES: Dictionary[String, String] = {
@@ -168,18 +171,32 @@ const CHOP_CONTACT: float = 0.62
 		if _arm != null:
 			_arm.grip = hand_grip
 ## How far both arms are raised over the head, holding something up for all
-## to see (a treasure from a chest): 0 as the animation has them, 1 held up
-## (see [ArmReach]). The shoulders lift with them; the hands stay open.
+## to see (a treasure from a chest): 0 as the animation has them, 1 held up.
+## A character with a [member hold_up_animation] (a Meshy cheer) strikes
+## that pose as it rises, and goes back to standing as it falls; one
+## without lifts its arms straight up ([ArmReach]), the hands open.
 @export_range(0.0, 1.0) var hold_up: float = 0.0:
 	set(value):
+		var was: float = hold_up
 		hold_up = clampf(value, 0.0, 1.0)
+		var posed: bool = has_hold_up_pose()
 		for arm: ArmReach in _lifts:
-			arm.amount = hold_up
+			arm.amount = 0.0 if posed else hold_up
+		if posed and hold_up > was and not _held_up:
+			_strike_hold_up(true)
+		elif posed and hold_up < was and _held_up:
+			_strike_hold_up(false)
 ## Where the hands meet when held up, above the head, in metres: how high
 ## over the head bone, how far in front of it, and how far apart the hands are.
 @export var hold_up_height: float = 0.6
 @export var hold_up_forward: float = 0.14
 @export var hold_up_spread: float = 0.17
+## The clip whose pose is held while holding something up (the whole
+## character's "Cheer with Both Hands"), how far into it, in seconds,
+## and how long the arms take to go up into it and come down from it.
+@export var hold_up_animation: StringName = &"Hold_Up"
+@export var hold_up_at: float = 0.3
+@export var hold_up_blend: float = 0.6
 ## Something for the head to turn towards. Optional.
 @export var watch: Node3D
 ## How far the head has turned towards [member watch], leaving the rest of
@@ -221,6 +238,8 @@ var left_hand: Node3D = null
 var _animator: AnimationPlayer = null
 ## Whether the character showing is a whole one (Meshy), and its parts.
 var _whole: bool = false
+## Whether the hold-up pose is struck (see [member hold_up]).
+var _held_up: bool = false
 var _whole_parts: CharacterParts = null
 ## A whole character's moves, made once per build.
 var _whole_moves: AnimationLibrary = null
@@ -293,6 +312,10 @@ func _process(delta: float) -> void:
 		_head.target = watch.global_position
 	if hold_up > 0.0:
 		_aim_lifts()
+	# Holding something up, the pose stays struck whatever else happens.
+	if _held_up:
+		_animator.speed_scale = 1.0
+		return
 	var walking: bool = player != null and player.is_walking
 	var charging: bool = _duellist != null and _duellist.is_charging()
 	var parrying: bool = _duellist != null and _duellist.parry.is_active()
@@ -406,6 +429,43 @@ func act(anim_name: StringName, from: float, length: float, seconds: float,
 	_act_left = seconds
 	pose = as_pose
 	return true
+
+
+## Whether holding something up strikes a pose from a clip (see
+## [member hold_up]), not lifting the arms straight up.
+func has_hold_up_pose() -> bool:
+	return _animator != null and _animator.has_animation("%s/%s" % [LIBRARY, HOLD_UP_STILL])
+
+
+## A clip that holds [param clip] still [param at] seconds in: every track
+## keeps the one value it has then, looping, so it can be blended into and
+## out of like any other move.
+static func still_of(clip: Animation, at: float) -> Animation:
+	var still: Animation = Animation.new()
+	still.length = 0.1
+	still.loop_mode = Animation.LOOP_LINEAR
+	var when: float = clampf(at, 0.0, clip.length)
+	for track: int in clip.get_track_count():
+		var kind: Animation.TrackType = clip.track_get_type(track)
+		var copy: int = still.add_track(kind)
+		still.track_set_path(copy, clip.track_get_path(track))
+		match kind:
+			Animation.TYPE_POSITION_3D:
+				still.position_track_insert_key(copy, 0.0,
+						clip.position_track_interpolate(track, when))
+			Animation.TYPE_ROTATION_3D:
+				still.rotation_track_insert_key(copy, 0.0,
+						clip.rotation_track_interpolate(track, when))
+			Animation.TYPE_SCALE_3D:
+				still.scale_track_insert_key(copy, 0.0, clip.scale_track_interpolate(track, when))
+			Animation.TYPE_BLEND_SHAPE:
+				still.blend_shape_track_insert_key(copy, 0.0,
+						clip.blend_shape_track_interpolate(track, when))
+			Animation.TYPE_VALUE:
+				still.track_insert_key(copy, 0.0, clip.value_track_interpolate(track, when))
+			_:
+				still.remove_track(copy)
+	return still
 
 
 ## How long the animation [param anim_name] is, in seconds, or 0 if there's
@@ -963,6 +1023,10 @@ func _whole_library(parts: CharacterParts) -> AnimationLibrary:
 				clip.track_set_key_value(track, key, at - off)
 		clip.loop_mode = Animation.LOOP_NONE if plays_once(anim_name) else Animation.LOOP_LINEAR
 		library.add_animation(anim_name, clip)
+	# Holding something up is one moment of its clip, held.
+	if library.has_animation(hold_up_animation):
+		library.add_animation(HOLD_UP_STILL,
+				still_of(library.get_animation(hold_up_animation), hold_up_at))
 	# The poses it has no clip for.
 	var forward: Vector3 = Vector3.RIGHT
 	var across: Vector3 = Vector3.BACK
@@ -1291,6 +1355,7 @@ func _undress() -> void:
 	_whole_head = -1
 	_whole_hips = -1
 	_whole = false
+	_held_up = false
 	_whole_parts = null
 	_whole_moves = null
 	if character != null:
@@ -1336,3 +1401,16 @@ func _show_stand_ins(shown: bool) -> void:
 	for stand_in: VisualInstance3D in stand_ins:
 		if stand_in != null:
 			stand_in.visible = shown
+
+
+# Strikes the hold-up pose ([param up]) or goes back to standing, blending
+# over [member hold_up_blend] seconds.
+func _strike_hold_up(up: bool) -> void:
+	_held_up = up
+	_act_left = 0.0
+	_animator.speed_scale = 1.0
+	if up:
+		_animator.play(StringName("%s/%s" % [LIBRARY, HOLD_UP_STILL]), hold_up_blend)
+		return
+	pose = Pose.IDLE
+	_animator.play(StringName("%s/%s" % [LIBRARY, idle_animation]), hold_up_blend * 0.6)
