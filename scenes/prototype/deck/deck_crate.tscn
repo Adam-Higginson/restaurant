@@ -1,5 +1,6 @@
 [gd_scene format=3 uid="uid://xcf68q0pn3via"]
 
+[ext_resource type="Script" path="res://scripts/art/third_party_model.gd" id="900_meshy"]
 [ext_resource type="Material" uid="uid://pmxhjggurfpb" path="res://assets/placeholder/materials/wet_prop_wood.tres" id="1_jsmsw"]
 [ext_resource type="Material" path="res://assets/placeholder/materials/wet_dark_wood.tres" id="2_vjseq"]
 
@@ -88,3 +89,12 @@ mesh = SubResource("BoxMesh_4")
 [node name="Shape" type="CollisionShape3D" parent="." unique_id=2019321953]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.3, 0)
 shape = SubResource("BoxShape3D_5")
+
+[node name="Meshy" type="Node3D" parent="." node_paths=PackedStringArray("stand_ins")]
+script = ExtResource("900_meshy")
+path = "res://assets/third_party/meshy/crate/model/model.glb"
+fit_size = Vector3(0.62, 0.62, 0.62)
+stand_ins = [NodePath("../Box"), NodePath("../Corner1"), NodePath("../Corner2"), NodePath("../Corner3"), NodePath("../Corner4"), NodePath("../BottomRimFore"), NodePath("../BottomRimAft"), NodePath("../BottomRimPort"), NodePath("../BottomRimStarboard"), NodePath("../TopRimFore"), NodePath("../TopRimAft"), NodePath("../TopRimPort"), NodePath("../TopRimStarboard")]
+grain = false
+detail = 1.0
+keep_as_made = true

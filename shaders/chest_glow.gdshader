@@ -6,11 +6,11 @@
 shader_type spatial;
 render_mode unshaded, cull_disabled, shadows_disabled;
 
-uniform vec4 colour : source_color = vec4(1.0, 0.74, 0.32, 1.0);
+uniform vec4 colour : source_color = vec4(0.62, 1.0, 0.68, 1.0);
 // The dark of a shut, empty chest's floor.
 uniform vec4 dark : source_color = vec4(0.06, 0.04, 0.03, 1.0);
 // How bright the light is at full strength: above 1 it blooms.
-uniform float energy = 1.8;
+uniform float energy = 1.0;
 // How bright it is right now, 0 (dark) to 1.
 uniform float brightness = 0.0;
 

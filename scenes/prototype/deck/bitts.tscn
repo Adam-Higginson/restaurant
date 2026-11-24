@@ -1,5 +1,6 @@
 [gd_scene format=3 uid="uid://uej8bhza1w1hc"]
 
+[ext_resource type="Script" path="res://scripts/art/third_party_model.gd" id="900_meshy"]
 [ext_resource type="Material" path="res://assets/placeholder/materials/wet_dark_wood.tres" id="1_nqrof"]
 [ext_resource type="Material" uid="uid://jowvs14ra7v2" path="res://assets/placeholder/materials/wet_rope.tres" id="2_eamys"]
 
@@ -71,3 +72,12 @@ mesh = SubResource("BoxMesh_4")
 [node name="Shape" type="CollisionShape3D" parent="." unique_id=1798863846]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.45, 0)
 shape = SubResource("BoxShape3D_5")
+
+[node name="Meshy" type="Node3D" parent="." node_paths=PackedStringArray("stand_ins")]
+script = ExtResource("900_meshy")
+path = "res://assets/third_party/meshy/bitts/model/model.glb"
+fit_size = Vector3(1.3, 0.91, 0.5)
+stand_ins = [NodePath("../PostPort"), NodePath("../CapPort"), NodePath("../TurnsPort"), NodePath("../Turns2Port"), NodePath("../PostStarboard"), NodePath("../CapStarboard"), NodePath("../TurnsStarboard"), NodePath("../Turns2Starboard"), NodePath("../Crossbar")]
+grain = false
+detail = 1.0
+keep_as_made = true

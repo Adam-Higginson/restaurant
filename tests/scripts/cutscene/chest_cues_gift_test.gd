@@ -79,6 +79,27 @@ func test_the_gift_appears_in_your_hands() -> void:
 			.is_less(0.05)
 
 
+func test_holding_it_up_you_look_at_the_camera_then_back() -> void:
+	var setup: Array = _build()
+	var player: Player3D = setup[0]
+	var conversation: Conversation = setup[1]
+	var runner: GdUnitSceneRunner = setup[3]
+	var model: CharacterModel = player.get_node("Model/Character") as CharacterModel
+	await physics_ticks(runner, 2)
+
+	play_cutscene(conversation, player, "~ start\n@hold_up frying_pan\nnarrator: You got it!")
+	await physics_ticks(runner, 80)
+
+	assert_object(model.watch).is_same(player.get_viewport().get_camera_3d())
+	assert_float(model.head_turn).is_greater(0.5)
+
+	conversation.stop()
+	await physics_ticks(runner, 60)
+
+	assert_object(model.watch).is_null()
+	assert_float(model.head_turn).is_equal_approx(0.0, 0.01)
+
+
 # A player on a floor with a conversation and the chest cues. Returns
 # [player, conversation, cues, runner].
 func _build() -> Array:

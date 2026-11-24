@@ -1,0 +1,10 @@
+[gd_resource type="Resource" script_class="CharacterOutfit" format=3]
+
+[ext_resource type="Script" path="res://scripts/art/character_outfit.gd" id="1_outfit"]
+
+[resource]
+script = ExtResource("1_outfit")
+top = "res://assets/third_party/meshy/boy_stern/layers/sea_coat.glb"
+long_sleeves = true
+legs = "res://assets/third_party/meshy/boy_stern/layers/start_legs.glb"
+feet = "res://assets/third_party/meshy/boy_stern/layers/sea_feet.glb"

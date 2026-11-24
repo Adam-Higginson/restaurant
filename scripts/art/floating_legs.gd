@@ -24,6 +24,10 @@ extends SkeletonModifier3D
 @export var drift: float = 0.1
 @export var drift_seconds: float = 5.0
 
+## Another skeleton's names for the leg bones (the packs' name to its own),
+## for a character that isn't built from the packs. Empty uses the packs'.
+@export var bones: Dictionary[String, String] = {}
+
 var _time: float = 0.0
 
 
@@ -36,12 +40,17 @@ func _process_modification() -> void:
 	if skeleton == null or amount <= 0.0:
 		return
 	var sway: float = drift_now(_time)
-	swing(skeleton, &"thigh_l", (thigh_left + sway) * amount)
-	swing(skeleton, &"thigh_r", (thigh_right - sway) * amount)
-	swing(skeleton, &"calf_l", (knee_left + sway * 0.6) * amount)
-	swing(skeleton, &"calf_r", (knee_right - sway * 0.6) * amount)
-	swing(skeleton, &"foot_l", foot_point * amount)
-	swing(skeleton, &"foot_r", foot_point * amount)
+	swing(skeleton, _named("thigh_l"), (thigh_left + sway) * amount)
+	swing(skeleton, _named("thigh_r"), (thigh_right - sway) * amount)
+	swing(skeleton, _named("calf_l"), (knee_left + sway * 0.6) * amount)
+	swing(skeleton, _named("calf_r"), (knee_right - sway * 0.6) * amount)
+	swing(skeleton, _named("foot_l"), foot_point * amount)
+	swing(skeleton, _named("foot_r"), foot_point * amount)
+
+
+func _named(pack_name: String) -> StringName:
+	var own: String = bones[pack_name] if bones.has(pack_name) else pack_name
+	return StringName(own)
 
 
 ## How far the drift has carried the legs [param seconds] in, in radians:

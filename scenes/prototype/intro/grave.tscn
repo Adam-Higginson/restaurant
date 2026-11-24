@@ -1239,6 +1239,7 @@ transform = Transform3D(0.97, -0.17, 0.12, 0.18, 0.98, -0.06, -0.11, 0.08, 0.99,
 reach_for = NodePath("../../Reach")
 reach = 1.0
 eyes_shut = true
+undressed = true
 afloat = 1.0
 
 [node name="Reach" type="Marker3D" parent="Overboard"]

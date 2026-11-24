@@ -11,12 +11,12 @@ extends Node
 ## - takes the N64 look off: every pack model is drawn as it was made (not
 ##   the Kiln's crunched copy, and with no grain), and the ship's planking
 ##   loses its small blurred wood-grain picture, leaving clean painted planks.
-## F8 switches it on and off while the game runs (debug builds only), to
-## compare. It leaves the scene's own time of day, weather and fog alone.
+## F7 switches it on and off while the game runs (debug builds only), to
+## compare (F8 is taken: it replays a cutscene's section). It leaves the scene's own time of day, weather and fog alone.
 
 const FILTER: Shader = preload("res://shaders/painted_filter.gdshader")
 const STYLE: CharacterStyle = preload("res://data/art/styles/character.tres")
-const TOGGLE_KEY: Key = KEY_F8
+const TOGGLE_KEY: Key = KEY_F7
 const WOOD_HUE: float = 0.06
 ## What a planked surface is given: no grain picture (null is plain white),
 ## no grain bumps, and more difference between one plank and the next.
@@ -39,11 +39,52 @@ const SURFACE: Dictionary[StringName, Variant] = {
 ## How much richer colours are than the scene's own grade.
 @export_range(0.5, 2.0) var saturation: float = 1.12
 ## Brush widths in pixels at 1080p: the scenery's, and the characters'.
-@export_range(0.0, 8.0) var brush: float = 2.3
+@export_range(0.0, 8.0) var brush: float = 1.5
 @export_range(0.0, 8.0) var character_brush: float = 0.9
-## Ink line width in pixels at 1080p, and how dark the line is.
+## Ink line width in pixels at 1080p, and how dark the line is: 0 draws
+## none, the look we chose (#172), shapes told apart by light and colour.
 @export_range(0.0, 4.0) var line_width: float = 1.0
-@export_range(0.0, 1.0) var line_strength: float = 0.6
+@export_range(0.0, 1.0) var line_strength: float = 0.0
+## Crisp in front, painted and airy behind: between [member far_start] and
+## [member far_end] metres away the brush grows to [member far_brush] times
+## its size, and colours ease [member haze_strength] of the way to a paler,
+## warmer shade of themselves in [member haze_color].
+@export var far_start: float = 4.0
+@export var far_end: float = 30.0
+@export_range(1.0, 4.0) var far_brush: float = 1.6
+@export_range(0.0, 1.0) var haze_strength: float = 0.35
+@export var haze_color: Color = Color(1.0, 0.86, 0.72)
+## A thin bright rim along the characters' outer edge, on the side towards
+## [member rim_toward] on screen (y is down): how strong (0 is none), how
+## wide in pixels at 1080p, and its tint. Characters stand out with it,
+## the way anime games do it, without an outline.
+@export_range(0.0, 1.0) var character_rim: float = 0.7
+@export_range(0.0, 8.0) var character_rim_width: float = 3.0
+@export var rim_toward: Vector2 = Vector2(-0.6, -0.8)
+@export var rim_tint: Color = Color(1.0, 0.85, 0.62)
+## Every edge in the scenery brushed: how far the brush is moved, in
+## pixels at 1080p (0 is none), by strokes about [member stroke_size]
+## metres across and [member stroke_stretch] times longer than wide,
+## pinned to the surfaces. Characters have their own (the style's brush).
+@export_range(0.0, 8.0) var scenery_strokes: float = 2.0
+@export var stroke_size: float = 0.15
+@export_range(1.0, 8.0) var stroke_stretch: float = 4.0
+## What the scenery's strokes are pinned to: the ship, so they ride with
+## it as it sails and rocks. None pins them to the world.
+@export var stroke_anchor: Node3D
+## How far the brush follows the picture's edges: 0 paints square dabs,
+## up to 1 lays each dab along the edge it's on, as an oval up to twice
+## as long as it's wide, so strokes follow the forms.
+@export_range(0.0, 1.0) var brush_flow: float = 0.6
+## How much of the scenery's painting things right in front of you get:
+## the brush, its strokes and its flow are this share of their size up
+## close, growing to all of it by [member far_end]. Lower keeps near
+## things cleaner; 1 paints everything the same.
+@export_range(0.0, 1.0) var near_paint: float = 0.4
+## How much of the painted colour is laid over the scenery: below 1 some
+## of the crisp picture shows through, so the brush softens the textures
+## instead of replacing them.
+@export_range(0.0, 1.0) var paint_mix: float = 0.8
 @export_group("Surfaces")
 ## How much richer and darker a planked surface's own colour is made, now
 ## that no grain picture colours it.
@@ -57,6 +98,8 @@ const SURFACE: Dictionary[StringName, Variant] = {
 @export_range(0.0, 4.0) var light_cap: float = 0.85
 
 var _filter: MeshInstance3D
+## The scenery copy's material, told where [member stroke_anchor] is.
+var _scenery_material: ShaderMaterial
 var _style: CharacterStyle
 # The look for shelled creatures: two steps of shade, a wet shine, a firmer line.
 var _shell_style: CharacterStyle
@@ -92,6 +135,8 @@ func _ready() -> void:
 	_shell_style.outline_thickness = 2.6
 	_shell_style.outline_max_width = 0.02
 	_shell_style.outline_color = Color(0.3, 0.06, 0.07)
+	# No outlines in the painted look (#172), shells included.
+	_shell_style.outline = false
 	if world == null:
 		var found: Array[Node] = get_tree().root.find_children("*", "WorldEnvironment", true, false)
 		if not found.is_empty():
@@ -101,6 +146,9 @@ func _ready() -> void:
 
 
 func _process(_delta: float) -> void:
+	if _scenery_material != null and is_instance_valid(stroke_anchor):
+		_scenery_material.set_shader_parameter(&"stroke_space",
+				Projection(stroke_anchor.get_global_transform_interpolated().affine_inverse()))
 	# The filter rides on whichever camera is in use (cutscenes change it).
 	var camera: Camera3D = get_viewport().get_camera_3d()
 	if _filter != null and camera != null and _filter.get_parent() != camera:
@@ -153,6 +201,26 @@ func _apply() -> void:
 			var material: ShaderMaterial = screen.mesh.surface_get_material(0) as ShaderMaterial
 			material.set_shader_parameter(&"line_width", line_width)
 			material.set_shader_parameter(&"line_strength", line_strength)
+			material.set_shader_parameter(&"far_start", far_start)
+			material.set_shader_parameter(&"far_end", far_end)
+			material.set_shader_parameter(&"far_brush", far_brush)
+			material.set_shader_parameter(&"haze_strength", haze_strength)
+			material.set_shader_parameter(&"haze_color", haze_color)
+			material.set_shader_parameter(&"brush_flow", brush_flow)
+		# Brushed edges only on the scenery's copy.
+		var scenery: ShaderMaterial = screens[0].mesh.surface_get_material(0) as ShaderMaterial
+		_scenery_material = scenery
+		scenery.set_shader_parameter(&"stroke_jitter", scenery_strokes)
+		scenery.set_shader_parameter(&"near_paint", near_paint)
+		scenery.set_shader_parameter(&"paint_mix", paint_mix)
+		scenery.set_shader_parameter(&"stroke_size", stroke_size)
+		scenery.set_shader_parameter(&"stroke_stretch", stroke_stretch)
+		# The rim is only on the characters' copy.
+		var people: ShaderMaterial = screens[1].mesh.surface_get_material(0) as ShaderMaterial
+		people.set_shader_parameter(&"silhouette_rim", character_rim)
+		people.set_shader_parameter(&"rim_width", character_rim_width)
+		people.set_shader_parameter(&"rim_toward", rim_toward)
+		people.set_shader_parameter(&"rim_tint", rim_tint)
 	if _filter != null:
 		_filter.visible = enabled
 	_apply_surfaces()
