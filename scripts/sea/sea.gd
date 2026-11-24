@@ -28,6 +28,14 @@ var rain: float = 0.0:
 	set(value):
 		rain = clampf(value, 0.0, 1.0)
 
+## How much of the Grave of the Lanterns shows far below the surface, 0 to
+## 1: a few faint lights at different depths that stay put under the water
+## as the camera moves. 0 (the open sea) unless a cutscene brings it up with
+## [code]@grave on[/code] (see [SeaCues]).
+var grave: float = 0.0:
+	set(value):
+		grave = clampf(value, 0.0, 1.0)
+
 ## Seconds of wave time. Shared with [Waves] calls so they agree with the shader.
 var time: float:
 	get:
@@ -93,6 +101,7 @@ func _apply() -> void:
 	_material.set_shader_parameter("wave_b", b)
 	_material.set_shader_parameter("wave_time", _time * settings.time_scale)
 	_material.set_shader_parameter("rain", rain)
+	_material.set_shader_parameter("grave", grave)
 	_material.set_shader_parameter("hull_half", hull_half)
 	_material.set_shader_parameter("bow_reach", bow_reach)
 	if is_instance_valid(ship):
