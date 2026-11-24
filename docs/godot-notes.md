@@ -590,6 +590,16 @@ A growing glossary of the Godot concepts this project uses: what each one is, in
 
 **Editable children of an instanced scene.** A scene placed inside another (an instance) is sealed: you can move it, but not touch the nodes inside it. Right-click it → *Editable Children* opens it up, so one inner node's property can be changed for this placement only, without touching the original scene. *Ours:* the look-dev cabin's `Heron`, whose `Model/Meshy` gets the stylised `style` there and nowhere else.
 
+## The talk at the rail and the Grave of the Lanterns (#182)
+
+**Lights deep under a surface you can't see through.** The open sea is drawn solid, so nothing placed under it would show. To show faint lights far below anyway, its shader follows each pixel's line of sight (from `CAMERA_POSITION_WORLD` to the surface point) on down through the water to a chosen depth, and asks whether a light hangs there. Because the line carries on at its own angle, the lights stay put under the water and slide past each other as the camera moves, the way deep things do. *Ours:* `grave_lights()` in `shaders/water.gdshader`, three depths of seeded lights, faded in by the Sea's `grave` (the `@grave on` cue).
+
+**Volumetric fog needs something behind it.** Volumetric fog is added to whatever a pixel's ray hits, by how much fog it passes through on the way. A plain clear colour isn't hit by anything, so it gets none, and things in the fog come out *brighter* than the empty water around them: the wrong way round. A big dark sphere round the set (faces turned inwards) gives every ray something to end on, so the fog builds up behind things and they stand dark against it. *Ours:* `Deep` in `scenes/prototype/intro/grave.tscn`, with the fog itself a `FogVolume` box that stops at the surface (`UnderTheSurface`).
+
+**A camera moved by a clip, and physics interpolation.** With physics interpolation on, Godot smooths things moved in the physics step between ticks. A camera moved by an `AnimationPlayer` on rendered frames instead makes it warn ("triggered from outside physics process"). Setting the camera's `physics_interpolation_mode` to Off says "draw me exactly where the clip puts me". *Ours:* the grave set's `Camera`.
+
+**A MultiMesh's copies live in the renderer.** `set_instance_transform` hands each copy's place to the rendering server, and a headless run's stand-in server doesn't keep them, so reading one back in a test gives nothing. Test the numbers the copies are placed from instead. *Ours:* `HangingChain.point_at()`, tested in `tests/scripts/intro/grave_test.gd`.
+
 ## Testing
 
 **gdUnit4.** The test framework (`addons/gdUnit4`). Suites extend our `GameTestSuite` and have `test_...` functions. `scene_runner` loads a scene and lets a test press inputs and wait physics ticks. *Ours:* `tests/`.
