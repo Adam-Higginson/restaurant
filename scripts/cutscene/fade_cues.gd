@@ -1,7 +1,9 @@
 class_name FadeCues
 extends CueHandler
 ## Fades and title cards for cutscenes. [code]@fade out[/code] fades the
-## screen to black and [code]@fade in[/code] back again, each holding the
+## screen to black and [code]@fade in[/code] back again ([code]@fade white[/code]
+## fades it to white, for a whiteout; @fade out from there turns the white to
+## black), each holding the
 ## script until it's done; a number after says how many seconds it takes
 ## ([code]@fade in 2.0[/code]). [code]@title Somewhere at sea[/code] shows
 ## those words over black, making the screen black first if it isn't.
@@ -33,16 +35,19 @@ func _perform(cue: StringName, args: PackedStringArray) -> void:
 		await fade.show_title(" ".join(args))
 		release(title_held)
 		return
-	var out: bool = args[0] == "out"
 	var seconds: float = args[1].to_float() if args.size() > 1 else -1.0
-	_black_wanted = out
+	# White covers the screen as black does (and skipped, it's black).
+	_black_wanted = args[0] != "in"
 	if is_skipping():
 		return
 	var held: int = hold()
-	if out:
-		await fade.fade_out(seconds)
-	else:
-		await fade.fade_in(seconds)
+	match args[0]:
+		"out":
+			await fade.fade_out(seconds)
+		"white":
+			await fade.fade_to_white(seconds)
+		_:
+			await fade.fade_in(seconds)
 	release(held)
 
 

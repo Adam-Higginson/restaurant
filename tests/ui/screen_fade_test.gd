@@ -22,6 +22,35 @@ func test_fade_out_covers_the_screen() -> void:
 	assert_bool(fade.is_covering()).is_true()
 
 
+func test_fade_to_white_covers_the_screen_in_white() -> void:
+	var fade: ScreenFade = _new_fade()
+	assert_bool(await finishes_within(fade.fade_to_white)).is_true()
+	assert_bool(fade.is_covering()).is_true()
+	assert_bool(fade.is_white()).is_true()
+
+
+func test_from_white_fade_out_goes_to_black_and_fade_in_leaves_black_for_next_time() -> void:
+	var fade: ScreenFade = _new_fade()
+	await finishes_within(fade.fade_to_white)
+	assert_bool(await finishes_within(fade.fade_out)).is_true()
+	assert_bool(fade.is_covering()).is_true()
+	assert_bool(fade.is_white()).is_false()
+
+	await finishes_within(fade.fade_to_white)
+	await finishes_within(fade.fade_in)
+	# The next plain fade out is black again.
+	await finishes_within(fade.fade_out)
+	assert_bool(fade.is_white()).is_false()
+
+
+func test_covering_at_once_is_always_black() -> void:
+	var fade: ScreenFade = _new_fade()
+	await finishes_within(fade.fade_to_white)
+	fade.cover_now()
+	assert_bool(fade.is_covering()).is_true()
+	assert_bool(fade.is_white()).is_false()
+
+
 func test_show_title_shows_the_text() -> void:
 	var fade: ScreenFade = _new_fade()
 	await finishes_within(fade.fade_out)

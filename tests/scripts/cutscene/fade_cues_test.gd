@@ -35,6 +35,30 @@ func test_fade_out_holds_the_script_until_the_screen_is_black() -> void:
 	assert_bool(_fade.is_covering()).is_true()
 
 
+func test_fade_white_holds_the_script_until_the_screen_is_white_and_out_turns_it_black() -> void:
+	_build()
+	var runner: GdUnitSceneRunner = scene_runner(_player.get_parent())
+	await physics_ticks(runner, 3)
+
+	play_cutscene(_conversation, _player,
+			"@fade white 0.5\nheron: The light.\n@fade out 0.5\nheron: The dark.")
+	await physics_ticks(runner, 15)
+	assert_int(_lines).is_equal(0)
+	assert_bool(_fade.is_covering()).is_false()
+	await physics_ticks(runner, 25)
+	assert_int(_lines).is_equal(1)
+	assert_bool(_fade.is_white()).is_true()
+
+	_conversation.press()
+	await physics_ticks(runner, 15)
+	# It stays covered all the way from white to black.
+	assert_bool(_fade.is_covering()).is_true()
+	await physics_ticks(runner, 25)
+	assert_int(_lines).is_equal(2)
+	assert_bool(_fade.is_covering()).is_true()
+	assert_bool(_fade.is_white()).is_false()
+
+
 func test_fade_in_holds_the_script_until_the_screen_is_clear() -> void:
 	_build()
 	var runner: GdUnitSceneRunner = scene_runner(_player.get_parent())
