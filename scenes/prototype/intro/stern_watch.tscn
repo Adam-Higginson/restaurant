@@ -390,9 +390,277 @@ tracks/1/keys = {
 "values": [Vector3(-0.72, 3.05, 0), Vector3(-0.36, 2.94, 0)]
 }
 
+[sub_resource type="Animation" id="Animation_to_rail"]
+length = 2.4
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Swing:swinging")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Swing/HookLantern:position")
+tracks/1/interp = 2
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.5, 1.3, 2.0, 2.4),
+"transitions": PackedFloat32Array(0.6, 1, 1, 0.5, 1),
+"update": 0,
+"values": [Vector3(0, -1.8, 0.1), Vector3(0.6, -1.1, 0.9), Vector3(4.5, 0.9, -0.5), Vector3(6.9, 1.3, -4.6), Vector3(7.2, 1.2, -4.9)]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("Swing/HookLantern:rotation")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0, 0.5, 1.3, 2.0, 2.4),
+"transitions": PackedFloat32Array(1, 1, 1, 0.5, 1),
+"update": 0,
+"values": [Vector3(-0.36, 2.94, 0), Vector3(0.2, 3.6, 0.15), Vector3(0.1, 4.3, 0.12), Vector3(-0.1, 4.712, 0), Vector3(-0.25, 4.712, 0)]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("Swing/HookLantern:visible")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
+}
+
+[sub_resource type="Animation" id="Animation_rail_looks"]
+length = 2.0
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Swing/HookLantern:position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.8, 2.0),
+"transitions": PackedFloat32Array(1, 0.5, 1),
+"update": 0,
+"values": [Vector3(7.2, 1.2, -4.9), Vector3(7.32, 1.15, -4.9), Vector3(7.3, 1.17, -4.9)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Swing/HookLantern:rotation")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.8, 2.0),
+"transitions": PackedFloat32Array(1, 0.5, 1),
+"update": 0,
+"values": [Vector3(-0.25, 4.712, 0), Vector3(-0.5, 4.712, 0), Vector3(-0.42, 4.712, 0)]
+}
+
+[sub_resource type="Animation" id="Animation_rail_leans"]
+length = 1.2
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Swing/HookLantern:position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 1.2),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Vector3(7.3, 1.17, -4.9), Vector3(7.6, 1.07, -4.9)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Swing/HookLantern:rotation")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 1.2),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Vector3(-0.42, 4.712, 0), Vector3(-0.78, 4.712, 0)]
+}
+
+[sub_resource type="Animation" id="Animation_rail_steadies"]
+length = 0.6
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Swing/HookLantern:position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.6),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Vector3(7.6, 1.07, -4.9), Vector3(7.3, 1.17, -4.9)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Swing/HookLantern:rotation")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.6),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Vector3(-0.78, 4.712, 0), Vector3(-0.42, 4.712, 0)]
+}
+
+[sub_resource type="Animation" id="Animation_rail_dives"]
+length = 1.5
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Swing:swinging")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Swing/HookLantern:position")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.3, 0.75, 1.5),
+"transitions": PackedFloat32Array(0.6, 1.7, 1, 1),
+"update": 0,
+"values": [Vector3(7.3, 1.17, -4.9), Vector3(7.7, 1.55, -4.9), Vector3(8.9, -2.5, -4.6), Vector3(9.9, -7.5, -4.4)]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("Swing/HookLantern:rotation")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0, 0.75),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Vector3(-0.42, 4.712, 0), Vector3(-1.1, 4.712, 0)]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("Swing/HookLantern/Body:lean")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0, 0.6),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Vector3(0, 0, 0), Vector3(0, 0, -1)]
+}
+tracks/4/type = "value"
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/path = NodePath("Swing/HookLantern:visible")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/keys = {
+"times": PackedFloat32Array(0, 1.5),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [true, false]
+}
+
+[sub_resource type="Animation" id="Animation_goes_over"]
+length = 2.6
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Shots/OverTheSide:transform")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 1.2, 2.6),
+"transitions": PackedFloat32Array(-1.8, 1, 1),
+"update": 0,
+"values": [Transform3D(-0.53, 0.32, -0.784, 0, 0.925, 0.378, 0.848, 0.2, -0.49, 3.9, 10.1, 9.7), Transform3D(-0.178, 0.67, -0.72, 0, 0.732, 0.681, 0.983, 0.121, -0.131, 7, 10.2, 10.6), Transform3D(-0.158, 0.887, -0.432, 0, 0.437, 0.899, 0.987, 0.142, -0.069, 10, 10.4, 11)]
+}
+
+[sub_resource type="Animation" id="Animation_at_rail"]
+length = 0.1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Swing:swinging")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Swing/HookLantern:position")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector3(7.3, 1.17, -4.9)]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("Swing/HookLantern:rotation")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector3(-0.42, 4.712, 0)]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("Swing/HookLantern:visible")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
+}
+
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_yxevo"]
 _data = {
+&"at_the_rail": SubResource("Animation_at_rail"),
+&"camera_goes_over": SubResource("Animation_goes_over"),
 &"dives": SubResource("Animation_wianm"),
+&"dives_from_the_rail": SubResource("Animation_rail_dives"),
+&"leans_over_the_rail": SubResource("Animation_rail_leans"),
+&"looks_over_the_rail": SubResource("Animation_rail_looks"),
+&"steadies_at_the_rail": SubResource("Animation_rail_steadies"),
+&"to_the_rail": SubResource("Animation_to_rail"),
 &"glances_back": SubResource("Animation_glance"),
 &"hears": SubResource("Animation_2558b"),
 &"leans_further": SubResource("Animation_further"),
@@ -489,6 +757,21 @@ transform = Transform3D(0.8321, -0.2327, 0.5035, 0, 0.9077, 0.4196, -0.5547, -0.
 [node name="TheWheel" type="Marker3D" parent="Shots" groups=["shots"]]
 transform = Transform3D(-0.7634, 0.0753, -0.6415, 0, 0.9932, 0.1166, 0.6459, 0.089, -0.7582, -2.2, 9.4, 10.2)
 
+[node name="TheQuarter" type="Marker3D" parent="Shots" groups=["shots"]]
+transform = Transform3D(0.749, -0.169, 0.639, 0, 0.966, 0.255, -0.661, -0.191, 0.724, 11.5, 10.5, 23.5)
+
+[node name="SideBySide" type="Marker3D" parent="Shots" groups=["shots"]]
+transform = Transform3D(-0.53, 0.32, -0.784, 0, 0.925, 0.378, 0.848, 0.2, -0.49, 3.9, 10.1, 9.7)
+
+[node name="HisLookout" type="Marker3D" parent="Shots" groups=["shots"]]
+transform = Transform3D(-0.64, -0.129, 0.757, 0, 0.985, 0.168, -0.768, 0.107, -0.631, 9, 8.95, 10.2)
+
+[node name="CaptainAtRail" type="Marker3D" parent="Shots" groups=["shots"]]
+transform = Transform3D(0.458, -0.141, 0.877, 0, 0.987, 0.159, -0.889, -0.073, 0.452, 9.2, 9.6, 14.2)
+
+[node name="OverTheSide" type="Marker3D" parent="Shots" groups=["shots"]]
+transform = Transform3D(-0.53, 0.32, -0.784, 0, 0.925, 0.378, 0.848, 0.2, -0.49, 3.9, 10.1, 9.7)
+
 [node name="Marks" type="Node3D" parent="."]
 
 [node name="Wheel" type="Marker3D" parent="Marks" groups=["marks"]]
@@ -496,6 +779,12 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 7.3, 12.8)
 
 [node name="Hook" type="Marker3D" parent="Marks" groups=["marks"]]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 5.45, 16.5)
+
+[node name="RailPerch" type="Marker3D" parent="Marks" groups=["marks"]]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 7.2, 8.5, 11.6)
+
+[node name="BesideHim" type="Marker3D" parent="Marks" groups=["marks"]]
+transform = Transform3D(0, 0, -1, 0, 1, 0, 1, 0, 0, 5.9, 7.3, 12.5)
 
 [node name="Clips" type="AnimationPlayer" parent="." unique_id=1119508766 groups=["clips"]]
 libraries/ = SubResource("AnimationLibrary_yxevo")

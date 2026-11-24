@@ -70,10 +70,9 @@
 # The Prologue's first scene (docs/prologue.md, #182). A quiet night
 # first. Then he's seen something: faint lights, far down in the water. The
 # swinging stops and the camera draws back from her name to the stern, the
-# black sea and the rain, and the captain at the wheel above. He leans out
-# on his hook and calls up to him. (The shots are markers in
-# scenes/prototype/intro/stern_watch.tscn: TheBoard, TheStern, TheHook and
-# TheWheel. The captain stands on its Wheel mark.)
+# black sea and the rain, and the captain at the wheel above. He calls up to
+# him. (The shots are markers in scenes/prototype/intro/stern_watch.tscn:
+# TheBoard, TheStern and TheWheel. The captain stands on its Wheel mark.)
 ~ the_stern
 @play takes_watch
 @shot the_board cut
@@ -93,22 +92,41 @@ lantern: I knew I hadn't imagined it.
 lantern: Captain? I think I've found something.
 @shot the_wheel cut
 heron: Something, or another one of your little lights?
-@shot the_hook cut
+-> to_the_rail
+
+# He's off his hook and round the ship's quarter to the rail, to see
+# better, and the captain leaves the wheel and comes over to stand beside
+# him: they look out at the lights together (#203). (The shots TheQuarter,
+# SideBySide, HisLookout and CaptainAtRail and the marks RailPerch and
+# BesideHim are in stern_watch.tscn; his flight is the clip to_the_rail.)
+~ to_the_rail
+@shot the_quarter cut
 @look hook_lantern determined
-lantern: I know the difference!
-@shot the_wheel cut
+@start to_the_rail
+@send heron beside_him
+@say_in 0.9 lantern 1.8 I know the difference!
+@wait 2.6
+@shot side_by_side cut
+@walk heron beside_him
+@shot captain_at_rail cut
 heron: Do you?
-@shot the_hook cut
+@shot side_by_side cut
 @look hook_lantern calm
+@start looks_over_the_rail
 lantern: Look.
 -> the_grave
 
-# The camera goes past him, out over the water and down: the Grave of the
-# Lanterns. Thousands of them, empty, some broken, some caught in great
-# chains, a few still glowing like dying stars, and no bottom. (The set is
+# The camera goes past him, out over the water and down, and the sea gives
+# way to what's under it: the Grave of the Lanterns. Thousands of them,
+# empty, some broken, some caught in great chains, a few still glowing like
+# dying stars, and no bottom. (The set is
 # scenes/prototype/intro/grave.tscn; its camera moves are the clips
-# over_the_grave, that_one, passes_below and finds_the_hand.)
+# over_the_grave, that_one, passes_below and finds_the_hand. The move over
+# the side is the clip camera_goes_over, which carries the shot OverTheSide.)
 ~ the_grave
+@shot over_the_side cut
+@start camera_goes_over
+@wait 1.5
 @stage grave
 @play over_the_grave
 lantern: There must be hundreds of them.
@@ -119,18 +137,24 @@ heron: Longer than either of us.
 lantern: Wait. That one...
 -> something_down_there
 
-# Back up top. He leans further, and something rings, far below.
+# Back up top, through black. He leans further, and something rings, far
+# below. (at_the_rail and the captain's place put them back at the rail, so
+# this beat can be started on its own while tuning.)
 ~ something_down_there
-@stage off
-@shot the_hook cut
+@fade out 0.5
+@stage off cut
+@play at_the_rail
+@place heron beside_him
+@shot his_lookout cut
 @look hook_lantern worried
+@fade in 0.6
 lantern: Captain, I think there's something down there.
-@shot the_wheel cut
+@shot captain_at_rail cut
 heron: Don't lean too far over.
-@shot the_hook cut
+@shot his_lookout cut
 @look hook_lantern determined
 lantern: I'm not!
-@play leans_further
+@play leans_over_the_rail
 @sound ring
 @wait 1.8
 @look hook_lantern surprised
@@ -141,8 +165,11 @@ lantern: That's strange.
 # anything passes under them, seen only by what it hides, and the lanterns
 # rock in its wake.
 ~ the_shape
+@start steadies_at_the_rail
+@shot over_the_side cut
+@start camera_goes_over
+@wait 1.5
 @stage grave
-@start steadies
 @say_in 2.5 heron 2.6 Back away from the rail.
 @say_in 5.6 lantern 2.2 I think I saw—
 @play passes_below
@@ -159,26 +186,30 @@ heron: What is it?
 lantern: There's somebody in the water.
 -> overboard
 
-# Back up top. He shouts it, and the captain turns, too late: before he's
-# finished, the lantern is off the hook and over the side.
+# Back up top, through black. He shouts it, and the captain turns, too
+# late: before he's finished, the lantern is over the rail and gone.
 ~ overboard
-@stage off
-@shot the_wheel cut
+@fade out 0.5
+@stage off cut
+@play at_the_rail
+@place heron beside_him
+@shot captain_at_rail cut
+@fade in 0.5
 heron: What?
-@shot the_hook cut
+@shot his_lookout cut
 @look hook_lantern determined
 lantern: Somebody overboard!
-@shot the_wheel cut
-@face heron hook
+@shot captain_at_rail cut
+@face heron rail_perch
 @say heron 1.4 Don't you dare—
 @wait 0.7
-@shot the_hook cut
-@start dives
+@shot his_lookout cut
+@start dives_from_the_rail
 @wait 0.3
 -> plunge
 
-# The plunge. From out on the water: the storm sea, the ship's stern, and
-# one small point of light arcing out from her through the rain. It hits
+# The plunge. From out on the water: the storm sea, the ship's quarter, and
+# one small point of light arcing out from her rail through the rain. It hits
 # the water, and it's gone.
 ~ plunge
 @look flying_lantern determined
