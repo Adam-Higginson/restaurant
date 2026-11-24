@@ -106,11 +106,6 @@ mesh = SubResource("R5")
 surface_material_override/0 = SubResource("R4")
 cast_shadow = 0
 
-[node name="HullOpening" type="Node3D" parent="."]
-script = ExtResource("196_opening")
-radius = 0.27
-outline = ExtResource("196_outline")
-
 [node name="Moonlight" type="SpotLight3D" parent="."]
 transform = Transform3D(-1, 0, 0, 0, 0.743, 0.669, 0, 0.669, -0.743, 0, 0.25, 0.1)
 light_color = Color(0.4, 0.55, 1, 1)
@@ -118,3 +113,8 @@ light_energy = 3.5
 spot_range = 7.0
 spot_angle = 30.0
 spot_attenuation = 0.8
+
+[node name="HullOpening" type="Node3D" parent="."]
+script = ExtResource("196_opening")
+radius = 0.27
+outline = ExtResource("196_outline")

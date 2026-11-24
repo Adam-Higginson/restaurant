@@ -38,7 +38,7 @@ func test_the_galley_has_its_hearth_table_and_lanterns() -> void:
 	var ship: Ship = new_moored_ship_with_player(Vector3(0, 1.05, 6))[0] as Ship
 	assert_object(ship.get_node("Galley/Stove") as GalleyStove).is_not_null()
 	assert_object(ship.get_node("Galley/CrewTable") as StaticBody3D).is_not_null()
-	for lantern: String in ["Visuals/GalleyLanternFore", "Visuals/GalleyLanternAft"]:
+	for lantern: String in ["Galley/GalleyLanternFore", "Galley/GalleyLanternAft"]:
 		assert_object(ship.get_node(lantern) as Swinging).is_not_null()
 
 
@@ -110,12 +110,15 @@ func test_the_galley_walls_reach_the_deck() -> void:
 	# No gap between the galley's walls and the deck above (5 m up the ship)
 	# to see into from the bunk room or the ramp.
 	var ship: Ship = new_moored_ship_with_player(Vector3(0, 1.05, 6))[0] as Ship
-	for name: String in ["CorridorWall", "PartitionStarboard", "PartitionLintel"]:
-		var wall: MeshInstance3D = ship.get_node("Visuals/" + name) as MeshInstance3D
+	# The corridor's wall is the ship's; the partition is the galley's own (#196).
+	for name: String in ["Visuals/CorridorWall", "Galley/PartitionStarboard",
+			"Galley/PartitionLintel"]:
+		var wall: MeshInstance3D = ship.get_node(name) as MeshInstance3D
 		var top: float = wall.position.y + (wall.mesh as BoxMesh).size.y / 2.0
 		assert_float(top).override_failure_message("%s stops at %.2f" % [name, top]) \
 				.is_greater_equal(4.99)
-		var shape: CollisionShape3D = ship.get_node(name + "Shape") as CollisionShape3D
+		var shape_path: String = name.replace("Visuals/", "") + "Shape"
+		var shape: CollisionShape3D = ship.get_node(shape_path) as CollisionShape3D
 		var shape_top: float = shape.position.y + (shape.shape as BoxShape3D).size.y / 2.0
 		assert_float(shape_top).is_greater_equal(4.99)
 
@@ -124,7 +127,7 @@ func test_the_galley_has_its_own_dim_ambient_light() -> void:
 	# Inside, the dark warm ambient of the galley's probe replaces the night
 	# sky's, so the corners stay dark.
 	var ship: Ship = new_moored_ship_with_player(Vector3(0, 1.05, 6))[0] as Ship
-	var probe: ReflectionProbe = ship.get_node("Visuals/GalleyProbe") as ReflectionProbe
+	var probe: ReflectionProbe = ship.get_node("Galley/GalleyProbe") as ReflectionProbe
 	assert_bool(probe.interior).is_true()
 	assert_int(probe.ambient_mode).is_equal(ReflectionProbe.AMBIENT_COLOR)
 	assert_float(probe.ambient_color_energy).is_less(0.5)
