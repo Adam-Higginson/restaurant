@@ -341,16 +341,17 @@ set lantern_low
 @wait 0.8
 -> waking
 
-# It's the captain who wakes you, from the doorway.
+# You wake on your own, and the captain is in the doorway, come to look
+# you over (the Prologue's Scene 2, #184).
 ~ waking
-heron: Up. You've slept enough for two.
 @start wakes
-@wait 1.2
+@wait 1.6
 -> doorway
 
-# A tall shadow in the doorway: the captain, come to look you over. By the
-# time we look back you're up, by your bunk. He's gruff, and not worried,
-# he'd tell you; he looks at the lantern anyway.
+# The captain in the doorway; the lantern on his round table, barely lit,
+# but talking. He tries to float over to you and can't. The captain asks
+# what you remember, and you've nothing to tell him. (Your answers are
+# the replies you pick.)
 ~ doorway
 @hide sleeping_you
 @show player
@@ -359,21 +360,67 @@ heron: Up. You've slept enough for two.
 @face heron player
 @shot doorway cut
 @wait 0.8
-heron: Nobody drowns on my ship. Nobody goes hungry either.
-heron: You've managed the first.
-@face heron lantern
+heron: Ah. You're awake.
+heron: Good. I was beginning to wonder whether we'd rescued you or merely inconvenienced a corpse.
 @shot stove_nook
-@wait 1.5
-heron: He's not said a word since.
+@look lantern pleased
+lantern: I told you they'd wake up!
+@face heron lantern
+heron: You also told me you were perfectly capable of swimming.
+lantern: I am!
+@look lantern tired
+heron: Clearly.
+@look lantern surprised
+lantern: Oh! Hello!
+@go lantern lantern_tries
+@wait 1.0
+@look lantern tired
+@go lantern lantern_sinks
+@wait 0.9
+@home lantern
 @wait 0.8
+lantern: Oh. That's not ideal.
+heron: You've used nearly all your light.
+lantern: I know.
+heron: You could have left them.
+@wait 1.0
+lantern: I know.
 @face heron player
 @shot doorway
-heron: I don't know lamps. I know ships.
-heron: You held on to him out there. See if you can't hold on a bit longer.
+heron: Do you remember anything?
+- (Shake your head) -> your_name
+
+~ your_name
+heron: Your name?
+- (Say nothing) -> where_from
+
+~ where_from
+heron: Where you came from?
+- (Say nothing) -> how_you_ended
+
+~ how_you_ended
+heron: How you ended up in the water?
+- (Look down) -> i_see
+
+~ i_see
+heron: I see.
+@face heron lantern
+heron: Well, whatever happened out there, you're fortunate he's as stubborn as he is.
+@look lantern pleased
+lantern: You're welcome.
+heron: I wasn't thanking you.
+@face heron player
+heron: Come along. You should have a look around.
+heron: And try not to fall overboard again.
 -> yours
 
 # Then the ship is yours. The captain goes about his business: up on deck
 # for a drink at the water butt, and back to his fire (the FirstQuest node
-# in sea.tscn walks him there and back).
+# in sea.tscn walks him there and back). The lantern has a word first. The
+# recipe book lies by your pillow (RecipeBook: data/dialogue/recipe_book.dlg).
 ~ yours
+@shot stove_nook
+@look lantern tired
+lantern: Don't mind him.
+lantern: He's always like that.
 @shot free cut

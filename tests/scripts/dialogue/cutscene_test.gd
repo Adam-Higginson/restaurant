@@ -174,6 +174,21 @@ func test_skipping_stops_at_a_choice_which_is_yours_to_make() -> void:
 	assert_bool(Game.dialogue.is_set(&"agreed")).is_true()
 
 
+func test_skipping_goes_past_a_choice_with_only_one_answer() -> void:
+	_build()
+	var runner: GdUnitSceneRunner = scene_runner(_player.get_parent())
+	await physics_ticks(runner, 3)
+	play_cutscene(_conversation, _player,
+			"heron: One.\n- (Nod) -> nod\n~ nod\nset nodded\nheron: Two.\nset done")
+
+	_conversation.skip()
+
+	# One answer is no choice: it's made for you, and it runs to the end.
+	assert_bool(Game.dialogue.is_set(&"nodded")).is_true()
+	assert_bool(Game.dialogue.is_set(&"done")).is_true()
+	assert_bool(_conversation.is_active()).is_false()
+
+
 func test_an_ordinary_talk_cant_be_skipped() -> void:
 	_build()
 	var runner: GdUnitSceneRunner = scene_runner(_player.get_parent())

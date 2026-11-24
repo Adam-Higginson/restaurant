@@ -278,7 +278,7 @@ func test_his_light_pours_into_you_the_deep_stirs_and_he_lets_go_to_white() -> v
 	assert_bool(_ambience().hushed).is_false()
 
 
-func test_you_wake_and_the_captain_appears_and_then_the_ship_is_yours() -> void:
+func test_you_wake_the_captain_and_the_weak_lantern_talk_and_then_the_ship_is_yours() -> void:
 	_build(&"asleep")
 	var runner: GdUnitSceneRunner = scene_runner(_sea)
 	var heron: Crewmate = _ship.get_node("Crew/Heron") as Crewmate
@@ -289,11 +289,20 @@ func test_you_wake_and_the_captain_appears_and_then_the_ship_is_yours() -> void:
 	var your_body: Node3D = _player.get_node("Model") as Node3D
 	var quest: FirstQuest = _sea.get_node("FirstQuest") as FirstQuest
 	var walker: CrewWalker = heron.get_node("Walker") as CrewWalker
+	var tries: Marker3D = _mark("lantern_tries")
 	var said: Array[int] = [0]
-	_conversation.line_said.connect(func(_speaker: Person) -> void: said[0] += 1)
+	var lines: PackedStringArray = PackedStringArray()
+	var speakers: PackedStringArray = PackedStringArray()
+	_conversation.line_said.connect(func(speaker: Person) -> void:
+		said[0] += 1
+		lines.append(_conversation.box.line_text())
+		speakers.append(String(speaker.id) if speaker != null else ""))
+	var replies: PackedStringArray = PackedStringArray()
+	_conversation.choice_made.connect(func() -> void:
+		replies.append(_conversation.box.shown_choices()[_conversation.selected_choice()]))
 
 	# Out of the black: you, asleep in your bunk. He isn't beside you: he's
-	# home on his table, low and silent (#158), his glass whole (#183).
+	# home on his table, low (#158), his glass whole (#183).
 	assert_bool(await _reaches(runner, &"waking")).is_true()
 	assert_bool(_fade().visible).is_false()
 	assert_bool(heron.is_present()).is_false()
@@ -304,34 +313,52 @@ func test_you_wake_and_the_captain_appears_and_then_the_ship_is_yours() -> void:
 	assert_bool(spirit.face().cracked).is_false()
 	assert_bool(rig.is_fixed).is_true()
 
-	# It's the captain who wakes you, and your eyes open.
-	assert_bool(await _line_shows(runner, said, 1)).is_true()
-	_press()
-	await physics_ticks(runner, 60)
+	# You wake on your own: your eyes open before anyone says a word.
+	await physics_ticks(runner, 70)
 	assert_bool(you_asleep.eyes_shut).is_false()
+	assert_int(said[0]).is_equal(0)
 
-	# The captain in the doorway, on a fixed shot.
+	# The captain in the doorway, on a fixed shot, and you're up.
 	assert_bool(await _reaches(runner, &"doorway")).is_true()
-	await physics_ticks(runner, 60)
+	assert_bool(await _line_shows(runner, said, 1)).is_true()
 	var doorway: Node3D = _ship.get_node("Marks/Doorway") as Node3D
 	assert_bool(heron.is_present()).is_true()
 	assert_vector(heron.global_position).is_equal_approx(doorway.global_position, NEAR)
-	assert_bool(rig.is_fixed).is_true()
-	# By now you're up, standing by your bunk.
 	assert_bool(sleeping.visible).is_false()
 	assert_bool(your_body.visible).is_true()
-	# Nobody drowns... / You've managed the first. / He's not said a word
-	# since. / I don't know lamps. / Hold on a bit longer.
-	for line: int in range(2, 7):
-		assert_bool(await _line_shows(runner, said, line)).is_true()
-		_press()
+	assert_str(lines[0]).is_equal("Ah. You're awake.")
 
-	# Then the ship is yours (at once: the last line ends it), and the captain
-	# sets off for his drink.
-	for i: int in 600:
+	# Read on, answering when asked. Low as he is, the lantern talks; he
+	# tries to float over to you and sinks back home.
+	var floated: bool = false
+	var pressed: int = 0
+	var answered_after: int = -1
+	for i: int in 3600:
 		if not _opening.is_playing:
 			break
+		if spirit.held == tries:
+			floated = true
+		# The box goes on showing a reply until the next line: answer once.
+		if _conversation.box.shown_choices().size() > 0 and answered_after != said[0]:
+			answered_after = said[0]
+			await physics_ticks(runner, 2)
+			_press()
+			await physics_ticks(runner, 2)
+		elif said[0] > pressed:
+			await physics_ticks(runner, 2)
+			pressed = said[0]
+			_press()
 		await physics_ticks(runner, 1)
+	assert_bool(floated).is_true()
+	assert_object(spirit.held).is_null()
+	assert_bool(speakers.has("lantern")).is_true()
+	assert_bool(lines.has("Oh. That's not ideal.")).is_true()
+	# You've nothing to tell him: the replies are things you do.
+	assert_array(Array(replies)).is_equal(["(Shake your head)", "(Say nothing)", "(Say nothing)",
+			"(Look down)"])
+	assert_str(lines[lines.size() - 1]).is_equal("He's always like that.")
+
+	# Then the ship is yours, and the captain sets off for his drink.
 	assert_bool(_opening.is_playing).is_false()
 	assert_bool(_conversation.is_active()).is_false()
 	assert_bool(_player.controls_enabled).is_true()
@@ -340,7 +367,7 @@ func test_you_wake_and_the_captain_appears_and_then_the_ship_is_yours() -> void:
 	await physics_ticks(runner, 2)
 	assert_bool(quest.is_on_errand).is_true()
 	assert_bool(walker.is_walking).is_true()
-	# He's still low once it's over: tired and silent, his glass whole.
+	# He's still low once it's over, his glass whole.
 	assert_bool(spirit.is_low()).is_true()
 	assert_bool(spirit.face().cracked).is_false()
 

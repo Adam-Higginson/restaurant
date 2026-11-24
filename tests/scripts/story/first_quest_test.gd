@@ -136,14 +136,28 @@ func test_the_captain_sends_you_to_the_books_then_hints_at_the_water() -> void:
 	assert_str(after_fetching).not_contains("seawater")
 
 
-func test_low_the_lantern_says_nothing_and_doesnt_chip_in() -> void:
+func test_low_the_lantern_talks_weakly_but_keeps_the_clue_to_himself() -> void:
 	var state: DialogueState = DialogueState.new()
 	state.set_fact(&"night", func() -> int: return 1)
 	state.set_flag(LanternSpirit.LOW_FLAG)
 
-	assert_array(Array(_said(&"lantern", state))).is_equal(["..."])
+	var said: PackedStringArray = _said(&"lantern", state)
+	# He talks (#184), not "...": weak, and wrong about feeling better.
+	assert_array(Array(said)).is_equal(["Oh, hello again!", "I'm feeling a little better. I think.",
+			"Well, perhaps not."])
+	assert_str(" ".join(said).to_lower()).not_contains("spic")
 	for line: String in _said(&"heron", state):
 		assert_str(line).not_contains("I pulled")
+
+
+func test_low_once_youve_read_the_old_book_he_thinks_of_spicy_food() -> void:
+	var state: DialogueState = DialogueState.new()
+	state.set_fact(&"night", func() -> int: return 1)
+	state.set_flag(LanternSpirit.LOW_FLAG)
+	state.set_flag(&"read_fire_spirits")
+
+	assert_array(Array(_said(&"lantern", state))).is_equal(["Oh, hello again!", "Spicy food?",
+			"I do like spicy food.", "I don't think I've ever had any, though."])
 
 
 func test_overheard_chatter_leaves_out_a_muted_speaker() -> void:
