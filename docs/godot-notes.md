@@ -744,6 +744,16 @@ A growing glossary of the Godot concepts this project uses: what each one is, in
 
 **Shadow bias.** A light's `shadow_bias` pushes shadows slightly away to stop surfaces shadowing themselves (speckled "acne"). Too much, and an occluder very close to the light lets light leak past it. *Ours:* the lantern lights use 0.02 rather than 0.1, so no light pours out under a lantern's solid base.
 
+## The cooking rework (#207)
+
+**A mode that owns the buttons (`_input`).** `_input` hears every press before any `_unhandled_input` does, so a node that's taken over (a mini-game) can grab its presses first and call `set_input_as_handled()` so nothing else acts on them. *Ours:* chop mode in `Counter3D._input`: left click cuts, right click or Esc stops, and the camera rig never sees that Esc (it would free the mouse).
+
+**Theme overrides and StyleBoxes.** Every Control draws itself from its theme; `add_theme_stylebox_override`, `add_theme_color_override` and `add_theme_constant_override` change one look on one node from code. A `StyleBoxFlat` is a coloured box with borders and rounded corners; a `StyleBoxTexture` fills the box with a picture (tiled with `AXIS_STRETCH_MODE_TILE`) tinted by `modulate_color`. A Button has a StyleBox per state (`normal`, `hover`, `pressed`, `focus`, `disabled`); a Label's background is its `normal` StyleBox. *Ours:* the pantry's panel (`ContainerPanel._dress`): a weathered wood back, plank shelves with a dark lip, a paper label.
+
+**Ripples without a texture.** A shader can make a flat disc look like liquid by tilting its normal with a few sine waves of `UV` and `TIME` and writing that to `NORMAL_MAP` (see "Bump and normal maps" above); low `ROUGHNESS` makes the lamps glint off it, and `ALPHA` below 1 lets the pot's floor show through water. *Ours:* `shaders/liquid_surface.gdshader`, the water and soup in a pot or bowl.
+
+**A one-shot particle burst.** A `CPUParticles3D` with `one_shot` on and `explosiveness` near 1 throws all its particles at once when `emitting` is set; its `finished` signal says when the last has died, so it can free itself. *Ours:* the splash at the water butt (`WaterButt._splash`).
+
 ## Testing
 
 **gdUnit4.** The test framework (`addons/gdUnit4`). Suites extend our `GameTestSuite` and have `test_...` functions. `scene_runner` loads a scene and lets a test press inputs and wait physics ticks. *Ours:* `tests/`.
