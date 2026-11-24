@@ -7,7 +7,7 @@ extends Node
 ## A new voyage then asks who you are, a boy or a girl (the script's
 ## [code]@who_are_you[/code], see [ChoiceCues]), and goes under: the rescue,
 ## and you wake by your bunk at night with the storm outside, the lantern
-## across the room and the captain in the doorway. Then the ship is yours.
+## across the room and the captain standing over you. Then the ship is yours.
 ##
 ## With a saved voyage, the title asks whether to carry it on or start a new
 ## one (the script can tell there's one by asking [constant SAVED_FACT]).

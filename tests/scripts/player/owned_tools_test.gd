@@ -58,15 +58,16 @@ func test_the_game_starts_you_with_no_tools() -> void:
 	fail("the sea scene's Player doesn't set start_tools")
 
 
-func test_the_heron_gives_you_the_frying_pan() -> void:
+func test_the_heron_gives_you_the_cooking_pot_not_the_pan() -> void:
 	var tree: DialogueTree = DialogueLibrary.find(&"heron")
 	var gives: bool = false
 	var holds_it_up: bool = false
 	for step: DialogueStep in tree.steps:
-		if step.kind == DialogueStep.Kind.SET and step.flag == &"has_frying_pan":
-			gives = true
-		if step.kind == DialogueStep.Kind.CUE and step.cue == &"hold_up" \
-				and step.args == PackedStringArray(["frying_pan"]):
+		if step.kind == DialogueStep.Kind.SET:
+			# The pan's found ashore now (#187).
+			assert_str(String(step.flag)).is_not_equal("has_frying_pan")
+			gives = gives or step.flag == &"has_saucepan"
+		if step.kind == DialogueStep.Kind.CUE and step.cue == &"hold_up" 				and step.args == PackedStringArray(["saucepan"]):
 			holds_it_up = true
 
 	assert_bool(gives).is_true()

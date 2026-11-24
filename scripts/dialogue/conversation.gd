@@ -309,7 +309,8 @@ func is_aside_up() -> bool:
 
 
 ## Skips the cutscene under way: the script runs to its end now, with every
-## wait and fade made instant. It stops at a choice, if it comes to one.
+## wait and fade made instant. It stops at a choice, if it comes to one
+## (a choice with only one answer is made for you).
 ## Does nothing in an ordinary conversation.
 func skip() -> void:
 	if not _active or not _cutscene or _skipping or _runner.is_choosing():
@@ -388,6 +389,11 @@ func _on_line_shown(line: DialogueStep) -> void:
 
 func _on_choices_shown(choices: Array[DialogueStep]) -> void:
 	_selected = 0
+	if _skipping and choices.size() == 1:
+		# One answer isn't a choice (your silent replies on waking, #184):
+		# it's made for you, and the skip goes on.
+		_runner.choose(0)
+		return
 	# A choice is yours to make, even when skipping.
 	if _skipping:
 		_skipping = false

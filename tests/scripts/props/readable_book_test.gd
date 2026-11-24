@@ -1,13 +1,14 @@
 extends GameTestSuite
 ## Tests for ReadableBook, a book in the world you can read, and the old book
-## on fire spirits on the galley shelf (#159): it opens at the page the
+## on the creatures and spirits of the sea, on the navigation room's shelf
+## (#159, moved there in #185): it opens at the page the
 ## heron's feather marks, says what the lantern needs, never gives the water
 ## away, and remembers you've read it.
 
 const FIRE_SPIRITS: String = "res://data/books/fire_spirits.tres"
-## Where the old book lies: on the galley bookshelf's third shelf, in ship
-## space.
-const BOOK_AT: Vector3 = Vector3(-3.13, 1.97, 3.57)
+## Where the old book lies: on the navigation room bookshelf's third shelf,
+## in ship space.
+const BOOK_AT: Vector3 = Vector3(-5.43, 1.97, -2.18)
 
 
 func before_test() -> void:
@@ -33,7 +34,7 @@ func test_it_points_to_a_spiced_red_soup_and_never_to_the_water() -> void:
 		text += page.heading + " " + " ".join(page.lines) + " "
 	text = text.to_lower()
 
-	for clue: String in ["red soup", "tomato", "chilli", "spiced"]:
+	for clue: String in ["red soup", "tomato", "chilli", "spice", "herbs"]:
 		assert_str(text).contains(clue)
 	for giveaway: String in ["water", "rain", "butt"]:
 		assert_str(text).not_contains(giveaway)

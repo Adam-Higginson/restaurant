@@ -75,8 +75,21 @@ lantern: Always. He likes you, though. He said "hm" in the nice way.
 lantern: Hello! And goodbye. And hello again, later.
 -> END
 
-# Home from the sea, low and cracked (#158): he can't answer. Fed the
-# remedy, he can (#155).
+# Home from the sea, low (#158): he gave you nearly all his light (#183)
+# and he's barely lit, but he talks (#184). He won't give the old book's
+# clue away: only once you've read it does he think of spicy food. Fed the
+# remedy, he's himself again (#155).
 ~ low
-lantern: ...
+lantern: Oh, hello again!
+? read_fire_spirits
+-> spicy
+lantern: I'm feeling a little better. I think.
+@look lantern tired
+lantern: Well, perhaps not.
+-> END
+
+~ spicy
+lantern: Spicy food?
+lantern: I do like spicy food.
+lantern: I don't think I've ever had any, though.
 -> END

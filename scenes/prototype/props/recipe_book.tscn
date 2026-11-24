@@ -6,39 +6,33 @@
 [ext_resource type="Material" path="res://assets/placeholder/materials/linen.tres" id="4_pages"]
 
 [sub_resource type="BoxMesh" id="Cover"]
-size = Vector3(0.21, 0.02, 0.3)
+size = Vector3(0.17, 0.012, 0.24)
 
 [sub_resource type="BoxMesh" id="Pages"]
-size = Vector3(0.19, 0.025, 0.28)
+size = Vector3(0.155, 0.03, 0.225)
 
 [sub_resource type="BoxShape3D" id="Reach"]
-size = Vector3(0.5, 1.0, 0.5)
+size = Vector3(1.0, 1.0, 1.0)
 
 [node name="RecipeBook" type="Node3D"]
 script = ExtResource("1_book")
 
-[node name="CoverLeft" type="MeshInstance3D" parent="."]
-transform = Transform3D(0.9945219, -0.104528464, 0, 0.104528464, 0.9945219, 0, 0, 0, 1, -0.105, 0.012, 0)
+[node name="CoverBottom" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.006, 0)
 material_override = ExtResource("3_leather")
 mesh = SubResource("Cover")
 
-[node name="CoverRight" type="MeshInstance3D" parent="."]
-transform = Transform3D(0.9945219, 0.104528464, 0, -0.104528464, 0.9945219, 0, 0, 0, 1, 0.105, 0.012, 0)
+[node name="Pages" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.004, 0.027, 0)
+material_override = ExtResource("4_pages")
+mesh = SubResource("Pages")
+
+[node name="CoverTop" type="MeshInstance3D" parent="."]
+transform = Transform3D(0.9986, 0, 0.0523, 0, 1, 0, -0.0523, 0, 0.9986, 0.003, 0.048, 0.004)
 material_override = ExtResource("3_leather")
 mesh = SubResource("Cover")
-
-[node name="PagesLeft" type="MeshInstance3D" parent="."]
-transform = Transform3D(0.9945219, -0.104528464, 0, 0.104528464, 0.9945219, 0, 0, 0, 1, -0.1, 0.03, 0)
-material_override = ExtResource("4_pages")
-mesh = SubResource("Pages")
-
-[node name="PagesRight" type="MeshInstance3D" parent="."]
-transform = Transform3D(0.9945219, 0.104528464, 0, -0.104528464, 0.9945219, 0, 0, 0, 1, 0.1, 0.03, 0)
-material_override = ExtResource("4_pages")
-mesh = SubResource("Pages")
 
 [node name="Reach" type="Area3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.3, 0)
 script = ExtResource("2_reach")
 focus_height = 0.8
 

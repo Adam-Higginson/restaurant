@@ -128,7 +128,7 @@ func test_the_remedy_brings_him_back_and_warms_him() -> void:
 	assert_bool(spirit.face().cracked).is_false()
 
 
-func test_the_remedy_plays_his_first_words_and_the_captains() -> void:
+func test_the_first_meal_plays_as_you_set_it_down() -> void:
 	var rig: Array[Node3D] = new_moored_ship_with_player(BY_THE_TABLE)
 	var player: Player3D = rig[1] as Player3D
 	var conversation: Conversation = new_conversation(player)
@@ -142,18 +142,73 @@ func test_the_remedy_plays_his_first_words_and_the_captains() -> void:
 		speakers.append(speaker.id if speaker != null else &""))
 
 	assert_bool(spot.share(player)).is_true()
-	assert_bool(await wait_for_signal(spot.mended, spot.eat_seconds + 2.0)).is_true()
+	# The bowl's left with you, empty.
+	assert_bool(player.toolbar.top().contents.get_contents().is_empty()).is_true()
+	# At once, not after he's eaten: he asks what it is first.
+	await physics_ticks(runner, 2)
 	assert_bool(conversation.is_active()).is_true()
-	for i: int in 10:
+	assert_bool(Game.dialogue.is_set(LanternSpirit.LOW_FLAG)).is_true()
+	for i: int in 2400:
 		if not conversation.is_active():
 			break
-		await physics_ticks(runner, 2)
-		conversation.press()
+		await physics_ticks(runner, 1)
+		if i % 10 == 0:
+			conversation.press()
 
 	assert_bool(conversation.is_active()).is_false()
 	assert_bool(Game.dialogue.is_set(LanternSpirit.LOW_FLAG)).is_false()
-	# His three first words, then the captain's "Hm. Soup."
-	assert_array(speakers).is_equal([&"lantern", &"lantern", &"lantern", &"heron"])
+	# His questions and his joy, the captain at the door, and his thanks.
+	var l: StringName = &"lantern"
+	var h: StringName = &"heron"
+	assert_array(speakers).is_equal([l, l, l, l, l, l, l, l, h, l, h, l, h, l, l, l])
+
+
+func test_every_mark_and_shot_the_first_meal_uses_is_in_the_ship() -> void:
+	var ship: Node = (load("res://scenes/prototype/ship.tscn") as PackedScene).instantiate()
+	auto_free(ship)
+	var script: String = FileAccess.get_file_as_string("res://data/dialogue/remedy.dlg")
+	var marks: Array[String] = []
+	var shots: Array[String] = []
+	for node: Node in ship.get_node("Marks").get_children():
+		marks.append(String(node.name).to_snake_case())
+	for node: Node in ship.get_node("Shots").get_children():
+		shots.append(String(node.name).to_snake_case())
+	var used: int = 0
+
+	for line: String in script.split("
+"):
+		var words: PackedStringArray = line.strip_edges().split(" ")
+		if words[0] in ["@go", "@place"] and words.size() > 2:
+			assert_array(marks).contains([words[2]])
+			used += 1
+		elif words[0] == "@shot" and words[1] != "free":
+			assert_array(shots).contains([words[1]])
+			used += 1
+
+	assert_int(used).is_greater(8)
+
+
+func test_the_first_meals_bowl_waits_on_the_table_until_hes_well() -> void:
+	var rig: Array[Node3D] = new_moored_ship_with_player(BY_THE_TABLE)
+	var player: Player3D = rig[1] as Player3D
+	new_conversation(player)
+	var runner: GdUnitSceneRunner = scene_runner(rig[0].get_parent())
+	await physics_ticks(runner, 2)
+	Game.dialogue.set_flag(LanternSpirit.LOW_FLAG)
+	player.toolbar.add(_bowl_of(&"spicy_tomato_soup", 1))
+	var spot: SupperSpot = (rig[0] as Ship).get_node("BunkRoom/SupperSpot") as SupperSpot
+	var plate_spot: Node3D = spot.get_node("PlateSpot") as Node3D
+
+	assert_bool(spot.share(player)).is_true()
+	# The scene waits on his first line (nobody presses): longer than a
+	# supper takes, and the bowl's still there.
+	await get_tree().create_timer(spot.eat_seconds + 0.5).timeout
+	assert_int(plate_spot.get_child_count()).is_equal(1)
+
+	Game.dialogue.clear(LanternSpirit.LOW_FLAG)
+	await physics_ticks(runner, 2)
+
+	assert_int(plate_spot.get_child_count()).is_equal(0)
 
 
 func _spirit(rig: Array[Node3D]) -> LanternSpirit:

@@ -77,8 +77,11 @@ func try_interact() -> bool:
 ## Uses a tool on the focused interactable: the selected one, or if the
 ## selected slot isn't a tool, the toolbar's tool that works here (the knife
 ## on a board). Does nothing with nothing in reach or no tool that fits.
-## Returns whether a tool was used.
+## Returns whether a tool was used. The recipe book is read instead,
+## wherever you are and whatever's in reach (#184).
 func try_use_tool() -> bool:
+	if _is_reading_book():
+		return RecipeBook.open_book(self, _player) > 0
 	var tool: HandTool = tool_to_use()
 	if tool == null:
 		return false
@@ -87,10 +90,13 @@ func try_use_tool() -> bool:
 
 
 ## The tool Use tool would use right now (see [method try_use_tool]), or null.
+## Never the recipe book: that's read, not used on anything.
 func tool_to_use() -> HandTool:
 	if not is_instance_valid(focused):
 		return null
 	var selected: HandTool = _player.toolbar.selected_tool()
+	if selected != null and selected.is_recipe_book:
+		return null
 	if selected != null:
 		return selected
 	for tool: HandTool in _player.toolbar.get_tools():
@@ -120,10 +126,18 @@ func interact_prompt() -> String:
 ## What Use tool would do right now, e.g. "Chop", or "" with nothing in reach
 ## or no tool that does anything here.
 func tool_prompt() -> String:
+	if _is_reading_book():
+		return _player.toolbar.selected_tool().verb
 	var tool: HandTool = tool_to_use()
 	if tool == null:
 		return ""
 	return focused.tool_prompt(_player, tool)
+
+
+# Whether the recipe book is the selected slot: Use reads it.
+func _is_reading_book() -> bool:
+	var selected: HandTool = _player.toolbar.selected_tool()
+	return selected != null and selected.is_recipe_book
 
 
 func _update_focus() -> void:

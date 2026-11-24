@@ -123,7 +123,7 @@ func test_skipping_blacks_the_screen_at_once_and_clears_it_after() -> void:
 	_fade.fade_seconds = 0.2
 	var runner: GdUnitSceneRunner = scene_runner(_player.get_parent())
 	await physics_ticks(runner, 3)
-	play_cutscene(_conversation, _player, "heron: One.\n- Stay. -> END")
+	play_cutscene(_conversation, _player, "heron: One.\n- Stay. -> END\n- Go. -> END")
 
 	_conversation.skip()
 	# It stopped at the choice: the screen clears so you can read it.
@@ -138,7 +138,7 @@ func test_a_skip_leaves_the_screen_black_if_the_script_last_asked_for_black() ->
 	var runner: GdUnitSceneRunner = scene_runner(_player.get_parent())
 	await physics_ticks(runner, 3)
 	play_cutscene(_conversation, _player,
-			"heron: One.\n@fade out 5\nheron: Two.\n- Stay. -> END")
+			"heron: One.\n@fade out 5\nheron: Two.\n- Stay. -> END\n- Go. -> END")
 
 	_conversation.skip()
 	await physics_ticks(runner, 20)

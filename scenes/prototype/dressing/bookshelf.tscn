@@ -6,7 +6,6 @@
 [ext_resource type="Script" path="res://scripts/art/third_party_model.gd" id="4_d"]
 [ext_resource type="Resource" path="res://data/art/looks/prop.tres" id="kiln_prop"]
 [ext_resource type="Material" path="res://assets/placeholder/materials/green_glass.tres" id="5_d"]
-[ext_resource type="PackedScene" path="res://scenes/prototype/props/old_book.tscn" id="6_old"]
 
 [sub_resource type="BoxMesh" id="S1"]
 size = Vector3(0.05, 1.9, 0.32)
@@ -214,9 +213,6 @@ path = "res://assets/third_party/kaykit_furniture/Assets/gltf/book_set.gltf"
 look = ExtResource("kiln_prop")
 fit_size = Vector3(0.32, 0.27, 0.2)
 grain_metres = 0.1
-
-[node name="OldBook" parent="Row3" instance=ExtResource("6_old")]
-transform = Transform3D(-0.9848, 0, -0.1736, 0, 1, 0, 0.1736, 0, -0.9848, 0.38, 0, 0.0)
 
 [node name="Shelf4" type="MeshInstance3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.4, 0.01)

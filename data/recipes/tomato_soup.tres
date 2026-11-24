@@ -8,4 +8,4 @@ script = ExtResource("1_recipe")
 id = &"tomato_soup"
 dish = ExtResource("2_dish")
 title = "Tomato Soup"
-steps = PackedStringArray("Fill the saucepan with water.", "Boil it on the hearth (4s). Dice a tomato, chop an onion.", "Add both, boil (8s), and ladle it into a bowl.", "All in cold at once is quicker, and worse.")
+steps = PackedStringArray("Fill the pot with water.", "Boil it on the hearth (4s). Dice a tomato, chop an onion.", "Add both, boil (8s), and ladle it into a bowl.", "All in cold at once is quicker, and worse.")

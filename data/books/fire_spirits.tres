@@ -5,36 +5,36 @@
 
 [sub_resource type="Resource" id="Title"]
 script = ExtResource("2_page")
-heading = "Of Small Fires"
-lines = PackedStringArray("Being an account of the little flames that think, set down from what lamplighters, stokers and ships' cooks have told.", "With a remedy.")
+heading = "Of the Creatures and Spirits of the Sea"
+lines = PackedStringArray("Being an account of what lives in it and what haunts it, set down from what sailors, lamplighters and ships' cooks have told.", "With a remedy.")
 
 [sub_resource type="Resource" id="Nature"]
 script = ExtResource("2_page")
-heading = "Their Nature"
-lines = PackedStringArray("A fire spirit is a flame that has learned to want. It will mostly keep to a lamp, a lantern or a stove, and is loyal to whoever keeps it lit.", "It will tell you what it wants without a word: its flame leans that way.")
+heading = "The Little Lights"
+lines = PackedStringArray("The little lights of the deep are creatures of warmth. Their flames are sustained by the heat of living things.", "They are particularly fond of strong spices. Their flames lean towards what they want.")
 
 [sub_resource type="Resource" id="Sea"]
 script = ExtResource("2_page")
-heading = "Their Enemy"
-lines = PackedStringArray("The sea is no friend to them. One that has been in it comes out small and blue and silent, and its glass may crack.", "It is not out. It is only very low.")
+heading = "Their Generosity"
+lines = PackedStringArray("A little light will give its warmth away, and give too much. One that has done so is small and blue, and can barely hold itself up.", "It is not out. It is only very low.")
 
 [sub_resource type="Resource" id="Feeding"]
 script = ExtResource("2_page")
 heading = "Their Feeding"
-lines = PackedStringArray("Wood and oil will keep a fire spirit going, but they do not mend one. For that it must be fed as we are.", "It is fondest of consumption: warm things, spiced things, things that bite back.")
+lines = PackedStringArray("Oil will keep a little light going, but it does not mend one. For that it must be fed as we are.", "It likes warm things best: spiced things, things that bite back.")
 
 [sub_resource type="Resource" id="Remedy"]
 script = ExtResource("2_page")
 heading = "A Remedy"
-lines = PackedStringArray("For a spirit gone low and blue: a bowl of red soup, well peppered, set down by it while it steams.", "Tomatoes serve best, with a chilli for the bite. It takes its warmth from the steam.")
+lines = PackedStringArray("When a lantern's flame grows faint, a hot broth of ripe tomatoes, red chilli and wild herbs may restore its warmth.", "A bowl of red soup, well spiced, set down by it while it steams. It takes its warmth from the steam.")
 
-[sub_resource type="Resource" id="Glass"]
+[sub_resource type="Resource" id="After"]
 script = ExtResource("2_page")
-heading = "Of the Glass"
-lines = PackedStringArray("A cracked glass mends as the flame comes back.", "Do not be alarmed if, once warm, it will not stop talking.")
+heading = "Afterwards"
+lines = PackedStringArray("A light restored is brighter than before.", "Do not be alarmed if, once warm, it will not stop talking.")
 
 [resource]
 script = ExtResource("1_book")
-title = "Of Small Fires"
-pages = Array[ExtResource("2_page")]([SubResource("Title"), SubResource("Nature"), SubResource("Sea"), SubResource("Feeding"), SubResource("Remedy"), SubResource("Glass")])
+title = "Of the Creatures and Spirits of the Sea"
+pages = Array[ExtResource("2_page")]([SubResource("Title"), SubResource("Nature"), SubResource("Sea"), SubResource("Feeding"), SubResource("Remedy"), SubResource("After")])
 opens_at = 4

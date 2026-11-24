@@ -642,6 +642,38 @@ A growing glossary of the Godot concepts this project uses: what each one is, in
 
 **Tweening two things at once.** A `Tween` runs its steps one after another unless you call `set_parallel()`, after which they run together. *Ours:* `ScreenFade.fade_to_white()` brings the cover up and turns its colour white in the same moment, and `fade_out()` from white turns it to black while staying covered.
 
+## Waking with a weak, talking lantern, and the recipe book (#184)
+
+**A prop that plays a cutscene.** Any node can start a scene of its own: find the `Conversation` (`Conversation.find(self)`) and `play()` a `.dlg` by name. *Ours:* the `RecipeBook` by your pillow plays `recipe_book.dlg` when you pick it up, as the chest plays `chest.dlg`; it watches `Game.dialogue.flag_changed` for `has_recipe_book` and hides itself once you have it.
+
+**A tool that isn't used on anything.** Tools on the toolbar are normally used on whatever's in reach (the knife on a board). The recipe book is read instead, wherever you are, so `InteractionDetector3D` checks for it first (`HandTool.is_recipe_book`) and opens the book before looking for a target, and its HUD prompt is the tool's own `verb`.
+
+**A shader can draw outside a mesh's box.** Every mesh has a box round it (`get_aabb()`) that Godot uses to decide what's on screen. It only knows the mesh as made: a material that pushes the surface about in its vertex shader can draw beyond it. *Ours:* the quilt on your bunk draws higher than its box says, so the book was first placed "on" it and came out buried in it.
+
+**A capture camera on a moving ship.** With physics interpolation on, things moved in the physics step (the ship, and everything aboard) are drawn a little behind where they are, smoothed between ticks. A throwaway camera placed by hand isn't, so stills from it show the ship shifted. Taking stills through the game's own camera rig, which is smoothed the same way, shows things where they really are.
+
+## The navigation room (#185)
+
+**A room as a scene of its own.** The room's walls, floor, ceiling and things are one scene (`scenes/prototype/navigation_room.tscn`, a `StaticBody3D` whose `CollisionShape3D` children are its walls), placed in the ship like any prop. It moves with the ship because it's a child of it, and it can be opened and arranged on its own. Other scenes go inside it too: the deck's chart table, the galley's bookshelf, the old book.
+
+**Cutting a doorway in a box wall.** A wall drawn and blocked by one box can't have a hole in it, so it becomes three boxes round the gap: one either side and one over the top (the lintel). The same three for the collision. *Ours:* `BulkheadPort`, `BulkheadStarboard` and `BulkheadLintel` (and their `...Shape`s) in `ship.tscn`.
+
+**Asking the physics world along a line.** `get_world_3d().direct_space_state.intersect_ray(...)` returns the first solid thing between two points, or nothing: a quick way for a test to ask "is this doorway open? is that wall closed?" without walking anyone through. *Ours:* `tests/scenes/navigation_room_test.gd`.
+
+**Something you only look at.** `Inspectable` (`scripts/props/`) is a prop with a `Reach`: Interact says "Look at the chart" and plays a section of `data/dialogue/look.dlg`. Writing what a thing looks like is writing a few lines there.
+
+## The pot, the herbs and the first meal (#186)
+
+**Growing the walkway network.** The crew find their way with Godot's A* search (`AStar3D`) over `Waypoint` markers joined by their `links`; a route runs from the waypoint nearest where they are to the one nearest where they're going. Adding a way somewhere new is adding waypoints and naming the links: Godot joins them both ways. *Ours:* `HatchStarboard`, `PortWaist`, `AftOfHatch`, `PortStairFoot`, `PortStairTop` and `Helm` under `Walkways` in `ship.tscn` take the captain up to the wheel, and `walkways_test.gd` casts a ray along every link to prove nothing solid is in the way (it caught the first try clipping the hatch).
+
+**An overheard line.** A crewmate's `head` is a `Speaker`: `head.say("Could do with a drink.")` shows a bubble over them, heard by anyone near, without starting a conversation. *Ours:* `FirstQuest` when the captain sets off for a drink.
+
+**A method, not a lambda, on an autoload's signal.** `Game.dialogue` lives for the whole game, but the props listening to it come and go. Connect a method (`Game.dialogue.flag_changed.connect(_on_flag_changed)`) and Godot drops the connection when the prop is freed; a lambda that captures things can outlive them and complain ("Lambda capture ... was freed"). *Ours:* `SupperSpot._on_flag_changed` clears the first meal's bowl when the lantern's well.
+
+**`@export_range`.** `@export_range(1, 3) var quality: int` shows a slider in the Inspector that only allows 1 to 3. *Ours:* `Dispenser3D.quality`: the herb planter's is 2.
+
+**How names become cue words.** A cue finds a mark by its node name in snake case, and Godot's `to_snake_case()` splits numbers off: `LanternCircle1` is `lantern_circle_1`, not `lantern_circle1`. *Ours:* `remedy.dlg`; `supper_spot_test.gd` checks every mark and shot it names is really in the ship.
+
 ## Testing
 
 **gdUnit4.** The test framework (`addons/gdUnit4`). Suites extend our `GameTestSuite` and have `test_...` functions. `scene_runner` loads a scene and lets a test press inputs and wait physics ticks. *Ours:* `tests/`.
