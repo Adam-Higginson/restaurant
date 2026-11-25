@@ -37,6 +37,12 @@ enum VesselShape { FLAT, BOWL, PAN, POT }
 @export var model_offset: Vector3 = Vector3.ZERO
 ## Turns the fitted model about the up axis, in degrees.
 @export var model_yaw_degrees: float = 0.0
+## Rolls the fitted model about its forward axis, in degrees: a chilli made
+## standing on its tip is laid down flat (#214).
+@export var model_roll_degrees: float = 0.0
+## How many small copies of the model make it up, scattered and turned: a
+## chopped chilli is three bits of the chilli's model (#214). 1 is the whole.
+@export_range(1, 6) var model_pieces: int = 1
 ## Whether it's a liquid (water, soup): in a pot or bowl it's drawn as a
 ## surface filling it, not as a piece of food sitting in it (#207).
 @export var liquid: bool = false
