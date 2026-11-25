@@ -174,8 +174,9 @@ OoT-style duels: lock on, read the enemy, strike at the opening.
 
 ### Preparation
 - **Dinner is the briefing:** crew gossip at the table tells you what's on tomorrow's island ("the crabs hate pepper", "the tide goes out at four bells").
-- **Tonight's meal is tomorrow's blessing:** what the crew eats at dinner shapes the next day ashore (a hearty stew for an extra heart, ginger soup against the cold).
-- **Packing:** going ashore is a real choice: healing buns, a jar of honey to lure something, pepper. What you take is what fits on your toolbar next to your tools, so space is the limit.
+- **Tonight's meal is tomorrow's blessing,** like Monster Hunter's canteen before a hunt: the pot for the mess (see Crew and meals) shapes the next day ashore. The first blessing is an extra heart for the day, shown on the HUD and gone at nightfall (#147). Later, different dishes give different blessings (ginger soup against the cold).
+- **Food heals, in jars (#146).** Healing ashore is food you packed. A **jar** is a vessel from a shelf in the galley, holding one dish: a pan, bowl or plate tips its dish into it. Only jars can be eaten; plates and bowls stay at the table. Select the jar on the toolbar and press Use tool: you stop and eat for about a second, open to hits, so you find a gap in the fight. A ★ dish heals one heart, ★★ two, ★★★ all of them. Not with full hearts ("You're full"), and you keep the empty jar. Food gives hearts only, no morale meter. Until an island is joined to the ship (#67), the duel arena starts you with a jar of Pan-seared Crab.
+- **Packing:** going ashore is a real choice: jars of food to heal, a jar of honey to lure something, pepper. What you take is what fits on your toolbar next to your tools, so space is the limit.
 - **Taste weaknesses:** creatures react to food (pepper makes them sneeze, honey distracts, smoke makes them sleepy), so cooking knowledge is combat knowledge.
 
 ### Defeat
@@ -283,15 +284,21 @@ The rescue cost him. He pulled you out of the sea and you held him up out of it,
 
 ## Crew and meals
 - For now you cook **for the crew only**. There are no paying customers and no money.
-- **Mealtimes:** dinner in the galley every evening. The crew sit at the galley table, and you serve each of them a dish.
-- Each crew member has tastes (loves, likes, dislikes) and a dish that means home to them. Getting it right, without being told how, is how you become family.
+- **Food is the one currency, and it only ever helps.** There's no hunger bar and nothing punishes a skipped meal: you go ashore as you are. Cooking well sends you ashore stronger, and it's how quests and stories move on. The same pantry feeds three mouths: what you pack for the shore, the crew's table and the lantern.
+- **Dinner is two things to cook**, however big the crew grows:
+  - **The pot for the mess**, as on real ships: one shared dish that everyone eats, and each crew member enjoys it by their own taste. It sets **tomorrow's blessing** (see Preparation). First version (#147): whatever's in the stew pot on the galley table when you go to bed, the crew eat overnight, and morning brings an extra heart for the day. It moves to the dinner bell (eight bells) once the day has one (#95).
+  - **The special plate:** one person a night gets their own dish: their home dish, a request, or something an islander asked for. The pot is the power; the special plate is the story.
+- Each crew member has tastes (loves, likes, dislikes) and a dish that means home to them. Getting it right is how you become family.
+- **Recipes** come three ways: hints (overheard chatter, dinner gossip), **recipe books found as treasure** on the islands, and sometimes a character who teaches you their exact recipe.
+- **Quests are orders:** an islander or a crew member asks for a dish (or the catch to make one), and the special plate is where it's served.
+- **The lantern** takes his share too: suppers shared with him (at his table in the bunk room) keep his light up, the light that's your lock-on and your torch ashore. How far it reaches is still to design.
 - **Dinner gives:**
   - gossip (tomorrow's briefing),
   - tomorrow's blessing,
   - the crew's mood,
   - the next pieces of each crew member's story.
 - **Music at the table:** crew members play instruments (the accordion-playing lantern, for one). Each recruit can add a part to the galley's song.
-- Still to design: whether meals other than dinner exist, how crew mood works, and what quality does now that there are no tips (probably a stronger blessing).
+- Still to design: whether meals other than dinner exist, how crew mood works, how a better pot or a bigger crew strengthens the blessing, and how the lantern's light ties to his suppers.
 
 ## Cooking
 Cooking is hands-on and works like a small chemistry system, in the spirit of Breath of the Wild: food reacts to where you put it. Every state food can be in is a named, designed item (tomato, sliced tomato, diced tomato, boiling water, tomato soup), so only combinations someone designed exist. Anything else simply doesn't react.
@@ -551,8 +558,9 @@ Taking the wheel, the sea chart, storms, bosses, more islands, crew field abilit
 ## Open questions
 - The title, and the player character's name and look.
 - The story beyond the Prologue: where home is, the lantern's secret, why the player was in the sea.
-- How crew mood works, and what quality gives without tips.
-- Meals other than dinner, and food for the lantern.
+- How crew mood works, and how quality strengthens the blessing.
+- Meals other than dinner, and how much a shared supper lights the lantern's way.
+- Leftovers: whether a pot can fill several jars, or a jar hold several servings.
 - Money and trading: is there any economy at all?
 - Storage aboard: one pantry or chilled and dry, and the hold.
 - How much of a day is player-paced vs clock-driven (the 2D game's clock ran 6:00–2:00).
