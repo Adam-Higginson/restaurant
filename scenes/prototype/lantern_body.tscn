@@ -4,6 +4,9 @@
 [ext_resource type="Material" path="res://assets/placeholder/materials/iron.tres" id="2_iron"]
 [ext_resource type="Material" path="res://assets/placeholder/materials/hold_dark.tres" id="3_dark"]
 [ext_resource type="Shader" path="res://shaders/lantern_flame.gdshader" id="4_glass"]
+[ext_resource type="Script" path="res://scripts/art/third_party_model.gd" id="5_meshy"]
+[ext_resource type="Script" path="res://scripts/art/painted_glow.gd" id="6_glow"]
+[ext_resource type="Material" path="res://assets/placeholder/materials/brass.tres" id="7_brass"]
 
 [sub_resource type="ShaderMaterial" id="Material_Glass"]
 render_priority = 1
@@ -129,30 +132,47 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.085, 0, -0.094)
 
 [node name="Top" type="MeshInstance3D" parent="Door"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.085, 0.093, 0)
-material_override = ExtResource("2_iron")
+material_override = ExtResource("7_brass")
 cast_shadow = 0
 mesh = SubResource("DoorRail")
 
 [node name="Bottom" type="MeshInstance3D" parent="Door"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.085, -0.093, 0)
-material_override = ExtResource("2_iron")
+material_override = ExtResource("7_brass")
 cast_shadow = 0
 mesh = SubResource("DoorRail")
 
 [node name="Hinge" type="MeshInstance3D" parent="Door"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.007, 0, 0)
-material_override = ExtResource("2_iron")
+material_override = ExtResource("7_brass")
 cast_shadow = 0
 mesh = SubResource("DoorStile")
 
 [node name="Edge" type="MeshInstance3D" parent="Door"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.163, 0, 0)
-material_override = ExtResource("2_iron")
+material_override = ExtResource("7_brass")
 cast_shadow = 0
 mesh = SubResource("DoorStile")
 
 [node name="Latch" type="MeshInstance3D" parent="Door"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.163, -0.02, -0.006)
-material_override = ExtResource("2_iron")
+material_override = ExtResource("7_brass")
 cast_shadow = 0
 mesh = SubResource("DoorLatch")
+
+[node name="Meshy" type="Node3D" parent="." node_paths=PackedStringArray("stand_ins")]
+transform = Transform3D(-1, 0, -8.742278e-08, 0, 1, 0, 8.742278e-08, 0, -1, 0, -0.15, 0)
+script = ExtResource("5_meshy")
+path = "res://assets/third_party/meshy/lantern_spirit/model/model.glb"
+fit_size = Vector3(0.22, 0.38, 0.22)
+stand_ins = [NodePath("../Ring"), NodePath("../Cap"), NodePath("../Post1"), NodePath("../Post2"), NodePath("../Post3"), NodePath("../Post4"), NodePath("../Base")]
+grain = false
+detail = 1.0
+keep_as_made = true
+
+[node name="Glow" type="Node" parent="." node_paths=PackedStringArray("model", "glass")]
+script = ExtResource("6_glow")
+model = NodePath("../Meshy")
+glass = NodePath("../Glass")
+cut_size = Vector3(0.2, 0.22, 0.2)
+corner = 0.085

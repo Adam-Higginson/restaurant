@@ -178,7 +178,18 @@ static func food(item: Item, size: float) -> Node3D:
 	piece.add_child(cube)
 	# Fitted to its own size (one Kiln job per item), then shrunk on a vessel
 	# as the cubes are, so up to three fit.
-	_add_model(piece, item, [cube], size / FOOD_SIZE)
+	if item.model_pieces <= 1:
+		_add_model(piece, item, [cube], size / FOOD_SIZE)
+		return piece
+	# In bits: small copies in a ring, each turned its own way.
+	for i: int in item.model_pieces:
+		var bit: Node3D = Node3D.new()
+		bit.name = "Bit%d" % i
+		var angle: float = TAU * float(i) / float(item.model_pieces)
+		bit.position = Vector3(cos(angle), 0.0, sin(angle)) * size * 0.25
+		bit.rotation.y = angle * 1.7 + 0.6
+		piece.add_child(bit)
+		_add_model(bit, item, [cube], size / FOOD_SIZE * 0.5)
 	return piece
 
 
@@ -205,7 +216,7 @@ static func _add_model(parent: Node3D, item: Item, stand_ins: Array[VisualInstan
 				_as_made(model.model, item.model_tint))
 	model.scale = Vector3.ONE * scale
 	model.position = item.model_offset * scale
-	model.rotation_degrees.y = item.model_yaw_degrees
+	model.rotation_degrees = Vector3(0.0, item.model_yaw_degrees, item.model_roll_degrees)
 	model.path = item.model_path
 	parent.add_child(model)
 

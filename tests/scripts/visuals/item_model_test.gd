@@ -29,3 +29,12 @@ func test_food_in_an_empty_pot_sits_on_its_floor() -> void:
 	var food: Node3D = model.get_node("Food0") as Node3D
 	assert_float(food.position.y).is_equal_approx(ItemModel.floor_height(POT), 0.001)
 	assert_object(model.get_node_or_null("Liquid")).is_null()
+
+
+func test_a_chopped_chilli_is_in_bits() -> void:
+	var chopped: Item = preload("res://data/items/chopped_chilli.tres")
+	var model: Node3D = ItemModel.food(chopped, ItemModel.FOOD_SIZE)
+	auto_free(model)
+
+	assert_int(model.find_children("Bit*", "", false, false).size()).is_equal(chopped.model_pieces)
+	assert_int(chopped.model_pieces).is_greater(1)
