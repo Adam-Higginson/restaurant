@@ -31,6 +31,7 @@ func test_the_water_butt_fills_a_held_saucepan() -> void:
 
 
 func test_switching_slots_during_the_dip_leaves_the_pot_empty() -> void:
+	Game.dialogue.clear(WaterButt.FETCHED_FLAG)
 	var rig: Array[Node3D] = new_moored_ship_with_player(AT_THE_BUTT)
 	var player: Player3D = rig[1] as Player3D
 	var runner: GdUnitSceneRunner = scene_runner(rig[0].get_parent())
