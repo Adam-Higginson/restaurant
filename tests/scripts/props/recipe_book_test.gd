@@ -102,6 +102,21 @@ func test_opening_it_opens_the_book_view_with_a_page_per_recipe() -> void:
 	assert_bool(hud.shows_play_parts()).is_true()
 
 
+func test_journal_recipes_unlock_with_the_cookbook_and_fit_the_page() -> void:
+	var early: Book = RecipeBook.make_journal()
+	for page: BookPage in early.pages:
+		assert_str(page.heading).is_not_equal("Spicy Tomato Soup")
+	for flag: StringName in [&"has_saucepan", &"read_fire_spirits", &"fetched_water",
+			&"cooked_remedy", &"warmed_lantern"]:
+		Game.dialogue.set_flag(flag)
+	var finished: Book = RecipeBook.make_journal()
+	var has_remedy: bool = false
+	for page: BookPage in finished.pages:
+		has_remedy = has_remedy or page.heading == "Spicy Tomato Soup"
+		assert_bool(BookView.fits(page)).override_failure_message(page.heading).is_true()
+	assert_bool(has_remedy).is_true()
+
+
 func test_every_recipe_page_fits_its_paper() -> void:
 	var book: Book = RecipeBook.make_book(Catalog.load_default().recipes)
 	for page: BookPage in book.pages:

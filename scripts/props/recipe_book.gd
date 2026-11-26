@@ -83,14 +83,18 @@ static func make_journal() -> Book:
 	book.pages.append(BookPage.make("Voyage · A Little Warmth", PackedStringArray(["Next · " + next, entries[0]])))
 	var recent: PackedStringArray = entries.slice(1)
 	book.pages.append(BookPage.make("Voyage", recent))
-	for recipe: Recipe in Catalog.load_default().recipes:
+	book.pages.append(BookPage.make("Recipes", PackedStringArray([
+		"Some of these are mine. Some I've picked up since I came aboard."
+	])))
+	var recipes: Array[Recipe] = Catalog.load_default().recipes
+	for recipe: Recipe in recipes:
 		if recipe.id == &"spicy_tomato_soup" and not state.is_set(&"read_fire_spirits"):
 			continue
 		var steps: PackedStringArray = recipe.steps.duplicate()
 		if recipe.id == &"tomato_soup":
 			steps.insert(0, "If I'm in a hurry, everything can go in cold. I always think I'll "
 					+ "get away with it. I can always taste it.")
-		book.pages.append(BookPage.make("Recipes · " + recipe.title, steps))
+		book.pages.append(BookPage.make(recipe.title, steps))
 	return book
 
 
