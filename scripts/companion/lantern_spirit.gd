@@ -114,6 +114,7 @@ var _held: Node3D = null
 
 var _attention: Node3D = null
 ## What he's been sent to hover over in a fight (the lock-on target), or null.
+var _cutscene_gaze: Node3D
 var _watched: Node3D = null
 var _mood: Mood = Mood.CALM
 ## His light's usual waver, kept so a fight can change it and put it back.
@@ -417,6 +418,11 @@ func flame_strength() -> float:
 	return remap(warmth, min_warmth, 1.0, 0.35, 1.0)
 
 
+## Keeps his eyes on a cutscene actor until the conversation releases him.
+func face_actor(target: Node3D) -> void:
+	_cutscene_gaze = target
+
+
 ## Where he wants to be now: at home if he has one; otherwise hovering over
 ## what he's looking at, or by the player's shoulder.
 func goal_spot() -> Vector3:
@@ -543,6 +549,13 @@ func _on_focus_changed(interactable: Interactable3D) -> void:
 # player faces.
 func _face(delta: float) -> void:
 	var look: Vector3 = player.facing
+	if is_instance_valid(_cutscene_gaze):
+		look = to_local(_cutscene_gaze.global_position)
+		var pitch: float = atan2(look.y, Vector2(look.x, look.z).length())
+		_body.rotation.x = rotate_toward(_body.rotation.x, clampf(pitch, -0.24, 0.24), delta)
+		_turn_towards(look, delta)
+		return
+	_body.rotation.x = rotate_toward(_body.rotation.x, 0.0, delta)
 	if is_instance_valid(home):
 		# At home he watches you, when you're near enough to watch.
 		if not is_in_earshot():
@@ -552,8 +565,11 @@ func _face(delta: float) -> void:
 		look = _watched.global_position - global_position
 	elif is_instance_valid(_attention):
 		look = _attention.global_position - global_position
-	look.y = 0.0
-	if look.length() < 0.01:
+	_turn_towards(look, delta)
+
+
+func _turn_towards(look: Vector3, delta: float) -> void:
+	if Vector2(look.x, look.z).length() < 0.01:
 		return
 	var yaw: float = atan2(-look.x, -look.z)
 	_body.rotation.y = rotate_toward(_body.rotation.y, yaw, delta * 4.0)

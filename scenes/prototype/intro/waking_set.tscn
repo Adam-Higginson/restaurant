@@ -48,7 +48,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.6, 2.55, 11.8)
 [node name="Props" type="Node3D" parent="." unique_id=1506382072]
 
 [node name="SleepingYou" parent="Props" unique_id=1384354435 groups=["props"] instance=ExtResource("1_ma0b6")]
-transform = Transform3D(-1, 0, 2.5351817e-06, 3.5376715e-07, 0.990216, 0.13954312, -2.5103775e-06, 0.13954312, -0.990216, 5.225, 1.6819999, 13.65)
+transform = Transform3D(-1, 0, 2.5351817e-06, 3.5376715e-07, 0.990216, 0.13954312, -2.5103775e-06, 0.13954312, -0.990216, 5.225, 1.79, 13.75)
 visible = false
 
 [node name="Character" parent="Props/SleepingYou" index="5"]

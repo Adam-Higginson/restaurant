@@ -95,23 +95,22 @@ lantern: Captain? I think I've found something.
 heron: Something, or another one of your little lights?
 -> to_the_rail
 
-# He's off his hook and round the ship's quarter to the rail, to see
-# better, and the captain leaves the wheel and comes over to stand beside
-# him: they look out at the lights together (#203). (The shots TheQuarter,
-# SideBySide, HisLookout and CaptainAtRail and the marks RailPerch and
-# BesideHim are in stern_watch.tscn; his flight is the clip to_the_rail.)
+# He lifts off the hook, settles beside the captain and invites him over
+# before leading him to the rail. The two flights have separate clips in
+# stern_watch.tscn so he can hold at the wheel while the player reads.
 ~ to_the_rail
-@shot the_quarter cut
+@shot the_stern cut
 @look hook_lantern determined
+@play to_captain
+@face heron at_wheel
+@shot the_wheel cut
+lantern: Captain. Come take a look.
+@shot the_quarter cut
 @start to_the_rail
 @send heron beside_him
-@say_in 0.9 lantern 1.8 I know the difference!
-@wait 2.6
+@wait 2.4
 @shot side_by_side cut
 @walk heron beside_him
-@shot captain_at_rail cut
-heron: Do you?
-@shot side_by_side cut
 @look hook_lantern calm
 @start looks_over_the_rail
 lantern: Look.
@@ -128,7 +127,7 @@ lantern: Look.
 @shot over_the_side cut
 @start camera_goes_over
 @wait 1.5
-@stage grave
+@stage grave cut
 @play over_the_grave
 lantern: There must be hundreds of them.
 heron: Thousands, most likely.
@@ -138,23 +137,20 @@ heron: Longer than either of us.
 lantern: Wait. That one...
 -> something_down_there
 
-# Back up top, through black. He leans further, and something rings, far
+# Cut back to the rail. He leans further, and something rings, far
 # below. (at_the_rail and the captain's place put them back at the rail, so
 # this beat can be started on its own while tuning.)
 ~ something_down_there
-@fade out 0.5
 @stage off cut
 @play at_the_rail
 @place heron beside_him
 @shot his_lookout cut
 @look hook_lantern worried
-@fade in 0.6
 lantern: Captain, I think there's something down there.
 @shot captain_at_rail cut
-heron: Don't lean too far over.
+heron: What do you hear?
 @shot his_lookout cut
-@look hook_lantern determined
-lantern: I'm not!
+@look hook_lantern worried
 @play leans_over_the_rail
 @sound ring
 @wait 1.8
@@ -170,7 +166,7 @@ lantern: That's strange.
 @shot over_the_side cut
 @start camera_goes_over
 @wait 1.5
-@stage grave
+@stage grave cut
 @say_in 2.5 heron 2.6 Back away from the rail.
 @say_in 5.6 lantern 2.2 I think I saw—
 @play passes_below
@@ -179,7 +175,7 @@ lantern: That's strange.
 # Something drifting amongst the dead lights. At first it looks like
 # another broken lantern. Then: a hand.
 ~ the_hand
-@stage grave
+@stage grave cut
 @play finds_the_hand
 lantern: ...
 lantern: Captain?
@@ -187,15 +183,13 @@ heron: What is it?
 lantern: There's somebody in the water.
 -> overboard
 
-# Back up top, through black. He shouts it, and the captain turns, too
+# Cut back to the rail. He shouts it, and the captain turns, too
 # late: before he's finished, the lantern is over the rail and gone.
 ~ overboard
-@fade out 0.5
 @stage off cut
 @play at_the_rail
 @place heron beside_him
 @shot captain_at_rail cut
-@fade in 0.5
 heron: What?
 @shot his_lookout cut
 @look hook_lantern determined
@@ -227,7 +221,7 @@ lantern: Somebody overboard!
 # The dark. The storm stops dead as the water closes over, and he's
 # already in it. Far above, a bell: somebody heard him.
 ~ dark
-@stage underwater
+@stage underwater cut
 @muffle on
 @sound bell
 -> light
@@ -237,7 +231,7 @@ lantern: Somebody overboard!
 # costs him nothing yet. His light finds dim shapes hanging all round:
 # lanterns, like him. (The Prologue's Scene 1, #183.)
 ~ light
-@stage underwater
+@stage underwater cut
 @muffle on
 @look sinking_lantern determined
 @look sinking_lantern clear
@@ -248,22 +242,22 @@ lantern: Somebody overboard!
 @play lantern_arrives
 -> finds_you
 
-# He finds you, and circles you. You don't answer.
+# He dips to look for a response. You don't answer.
 ~ finds_you
-@stage underwater
+@stage underwater cut
 @muffle on
 @look sinking_lantern surprised
 lantern: Hello?
 @look sinking_lantern worried
 lantern: Can you hear me?
-@play circles
+@play searches_your_face
 lantern: Oh, you're in a bad way...
 -> tries
 
 # He gets under you and heaves, and you go on sinking. He looks up at the
 # surface, so far above, and back at you.
 ~ tries
-@stage underwater
+@stage underwater cut
 @muffle on
 @look sinking_lantern effort
 @say_in 1.2 lantern 2.4 Come on. Come on!
@@ -278,7 +272,7 @@ lantern: Hold on. I've got you.
 # and his flame comes out into the shape of a hand, and holds it out to
 # you. It waits for as long as it takes. You can take it at any moment.
 ~ reach
-@stage underwater
+@stage underwater cut
 @muffle on
 @look sinking_lantern effort
 @play opens_door
@@ -295,7 +289,7 @@ lantern: Hold on. I've got you.
 # The touch. A strange note through the water. He freezes, and his flame
 # flares brighter.
 ~ it_catches
-@stage underwater
+@stage underwater cut
 @muffle on
 @look sinking_lantern surprised
 @play catches
@@ -307,7 +301,7 @@ lantern: Oh...
 # dead lanterns far below (the Drain node): they're drawing on him too. He
 # tries to pull away, and it holds, and his flame shrinks (#203).
 ~ it_flows
-@stage underwater
+@stage underwater cut
 @muffle on
 @look sinking_lantern worried
 @play flows
@@ -324,7 +318,7 @@ lantern: I can't hold on to it.
 # something enormous shifts in the dark below, passing beneath the chains,
 # shown only in the lightning.
 ~ the_deep_stirs
-@stage underwater
+@stage underwater cut
 @muffle on
 @look sinking_lantern surprised
 @start stirs
@@ -342,7 +336,7 @@ lantern: I can't hold on to it.
 # He looks back at you, almost out. He chooses, and lets the last of it go:
 # a burst of gold that fills everything. White. Silence.
 ~ lets_go
-@stage underwater
+@stage underwater cut
 @muffle on
 @look sinking_lantern tired
 @play looks_back
@@ -370,7 +364,8 @@ lantern: But I can't let you go.
 @hide player
 @show sleeping_you
 @home lantern
-@look lantern tired
+@face lantern sleeping_you
+@look lantern worried
 set lantern_low
 @shot in_your_bunk cut
 @fade out 3.0
@@ -404,6 +399,7 @@ heron: Good. I was beginning to wonder whether we'd rescued you or merely inconv
 ~ by_your_bunk
 @hide sleeping_you
 @show player
+@face lantern player
 @face heron player
 @face player heron
 @shot by_the_lantern cut

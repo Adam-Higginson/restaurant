@@ -142,6 +142,8 @@ func _face(actor: Node3D, target: String) -> void:
 		(actor as Player3D).face_towards(point)
 	elif actor is Crewmate:
 		(actor as Crewmate).face_towards(point)
+	elif actor is LanternSpirit:
+		(actor as LanternSpirit).face_actor(mark if mark != null else other)
 
 
 # Whatever a cutscene did to the player and the lantern doesn't outlast it:
@@ -151,8 +153,10 @@ func _on_ended(_tree_id: StringName) -> void:
 		return
 	_set_present(player, true)
 	var spirit: LanternSpirit = find_actor(LANTERN) as LanternSpirit
-	if spirit != null and spirit.held != null:
-		spirit.let_go()
+	if spirit != null:
+		spirit.face_actor(null)
+		if spirit.held != null:
+			spirit.let_go()
 
 
 # Skipping: whoever is still walking somewhere is there at once.

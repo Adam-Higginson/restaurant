@@ -749,3 +749,5 @@ A growing glossary of the Godot concepts this project uses: what each one is, in
 ## Testing
 
 **gdUnit4.** The test framework (`addons/gdUnit4`). Suites extend our `GameTestSuite` and have `test_...` functions. `scene_runner` loads a scene and lets a test press inputs and wait physics ticks. *Ours:* `tests/`.
+
+**Vertex displacement.** A spatial shader can move a mesh’s vertices before Godot draws it. The mesh needs enough subdivisions to bend smoothly. The Grave’s water moves the vertices up and down and uses the wave slopes for its lighting and refraction.

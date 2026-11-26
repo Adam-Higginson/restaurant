@@ -31,8 +31,8 @@ uniform vec4 sky_reflection : source_color = vec4(0.1, 0.13, 0.16, 1.0);
 // distances from the eye it closes in, in metres (curve > 1 keeps the near
 // water clear for longer). Match the set's Environment fog.
 uniform vec4 mist_color : source_color = vec4(0.08, 0.115, 0.15, 1.0);
-uniform float mist_begin = 18.0;
-uniform float mist_end = 62.0;
+uniform float mist_begin = 7.0;
+uniform float mist_end = 29.0;
 uniform float mist_curve = 1.6;
 // How many raindrops land, 0 to 1.
 uniform float rain : hint_range(0.0, 1.0) = 0.8;
@@ -67,8 +67,14 @@ vec2 rain_slope(vec2 world, float time) {
 }
 
 varying vec3 v_world;
+varying vec2 swell_normal;
 
 void vertex() {
+	float roll = dot(VERTEX.xz, vec2(0.65, 0.43)) - TIME * 1.55;
+	float cross_wave = dot(VERTEX.xz, vec2(-0.31, 0.87)) - TIME * 1.16;
+	VERTEX.y += 0.23 * sin(roll) + 0.11 * sin(cross_wave);
+	swell_normal = -0.23 * cos(roll) * vec2(0.65, 0.43)
+			- 0.11 * cos(cross_wave) * vec2(-0.31, 0.87);
 	v_world = (MODEL_MATRIX * vec4(VERTEX, 1.0)).xyz;
 }
 
@@ -76,7 +82,7 @@ void fragment() {
 	vec2 uv = v_world.xz * detail_scale;
 	vec3 na = texture(detail_a, uv + vec2(0.03, 0.02) * TIME).xyz * 2.0 - 1.0;
 	vec3 nb = texture(detail_b, uv * 1.6 - vec2(0.025, 0.03) * TIME).xyz * 2.0 - 1.0;
-	vec2 slope = (na.xy + nb.xy) * detail_strength + rain_slope(v_world.xz, TIME) * rain;
+	vec2 slope = swell_normal + (na.xy + nb.xy) * detail_strength + rain_slope(v_world.xz, TIME) * rain;
 	vec3 n = normalize(vec3(slope.x, 1.0, slope.y));
 	NORMAL = normalize((VIEW_MATRIX * vec4(n, 0.0)).xyz);
 
