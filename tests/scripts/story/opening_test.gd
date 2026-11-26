@@ -367,12 +367,16 @@ func test_you_wake_the_captain_and_the_weak_lantern_talk_and_then_the_ship_is_yo
 	assert_vector(heron.global_position).is_equal_approx(bedside.global_position, NEAR)
 	assert_float(heron.global_position.distance_to(_player.global_position)).is_less(3.0)
 	assert_bool(sleeping.visible).is_false()
+	var seated: Node3D = _ship.get_node("WakingSet/Props/SeatedYou") as Node3D
+	assert_bool(seated.visible).is_true()
+	await physics_ticks(runner, 86)
 	assert_bool(your_body.visible).is_true()
+	assert_bool(seated.visible).is_false()
 
 	# Read on, answering when asked. Low as he is, the lantern talks; he
 	# tries to float over to you and sinks back home.
 	var floated: bool = false
-	var pressed: int = said[0]
+	var pressed: int = said[0] - 1
 	var answered_after: int = -1
 	var facing_him: Marker3D = _shot("facing_him")
 	var asked_facing: Array[bool] = [false]

@@ -56,6 +56,14 @@ Hold Tab (Start on a controller) for a second to skip it. (In `sea.tscn`, the `O
 
 **Keeping the voyage (first sketch):** sleeping in your bunk is where the game saves: the day and whether it's morning, and the lantern's warmth. Start again and the opening carries on ("Day 3. Morning", "You're back. I kept the light on.") instead of beginning anew. To start a new voyage, delete `voyage.save` from the user data folder.
 
+### A Little Warmth (#224)
+
+The captain stays at the bunk until you rise and says you both gave him a fright. The book Lantern kept for you is your journal. It opens once when picked up. J or View/Back reopens it during play. Voyage records what happened in your voice and shows the next step. Recipes gives the steps for each dish.
+
+Find the captain at the wheel for the pot, then read the cookbook by the galley stove. The navigation room stays closed in the prologue. Fresh water is a small discovery. You can spot the captain drinking on deck, hear the rain hitting the barrel, or ask him directly. Filling the pot shows a short progress bar and updates the toolbar when the water goes in.
+
+The pantry keeps a reserve of tomatoes, onions and chilli for retries. The slops bucket empties a batch and leaves the vessel in your hand. Ladle soup into a bowl, set the meal at the placemat, and ring the bell. The captain and Lantern come to the table for any meal. Plain tomato soup can go back in the pot with chilli. Spicy tomato soup restores Lantern's light, and he rises to show the captain.
+
 ## A day is a song
 A day has four parts, like a song:
 - **Morning ashore, the verse:** different every day. Explore an island, gather ingredients, solve its puzzles, duel what lives there, meet its people.

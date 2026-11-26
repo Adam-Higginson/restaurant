@@ -751,3 +751,7 @@ A growing glossary of the Godot concepts this project uses: what each one is, in
 **gdUnit4.** The test framework (`addons/gdUnit4`). Suites extend our `GameTestSuite` and have `test_...` functions. `scene_runner` loads a scene and lets a test press inputs and wait physics ticks. *Ours:* `tests/`.
 
 **Vertex displacement.** A spatial shader can move a mesh’s vertices before Godot draws it. The mesh needs enough subdivisions to bend smoothly. The Grave’s water moves the vertices up and down and uses the wave slopes for its lighting and refraction.
+
+**Input Map.** The project names actions independently of their buttons so scripts and prompts can use the same binding. The Journal action comes from the Input Map and the HUD reads its key or controller button.
+
+**Sampling an animation.** An animation can set a property to a point on another clip's timeline. The waking scene samples the imported lying and sitting clips on its cutscene stand-ins so it can cut from the bunk to Lantern and back.

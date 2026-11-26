@@ -36,6 +36,7 @@ ExtResource("9_crab"): 1,
 ExtResource("10_onion"): 2,
 ExtResource("11_chilli"): 2
 })
+remedy_reserve = Array[ExtResource("2_84ndg")]([ExtResource("4_laobp"), ExtResource("10_onion"), ExtResource("11_chilli")])
 
 [node name="Mesh" type="MeshInstance3D" parent="." unique_id=24910583]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.9, 0)

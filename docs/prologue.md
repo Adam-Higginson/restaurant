@@ -414,7 +414,9 @@ The player looks at the pot.
 
 **HERON:** "Try not to burn the ship down."
 
-### Quest 1: A little warmth (#186)
+### Quest 1: A little warmth (#186, #224)
+
+The journal found beside your bunk opens to Voyage and has a Recipes section. The captain points you to the cookbook in the galley after handing over the pot. The chart room stays closed. Fresh water can be found by looking and listening on deck, or by asking the captain. Soup goes in a bowl. Both crewmates come when you ring for supper. Lantern needs spicy tomato soup to recover, and a plain batch can be finished with chilli. Spare pantry ingredients and the slops bucket make it possible to retry.
 
 > The lantern gave nearly all of his light to save you. He's barely able to float, let alone light the way. Perhaps there's something you can do to help.
 

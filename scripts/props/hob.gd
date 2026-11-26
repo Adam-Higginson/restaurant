@@ -20,12 +20,18 @@ var _heated: ItemInstance = null
 func _ready() -> void:
 	super()
 	slot.item_changed.connect(_on_item_changed)
+	slot.food_made.connect(_remember_remedy)
 	_on_item_changed(slot.get_item())
 
 
 func _physics_process(delta: float) -> void:
 	if _heated != null:
 		_heated.contents.tick(delta)
+
+
+func _remember_remedy(food: ItemInstance) -> void:
+	if food.item.id == &"spicy_tomato_soup":
+		Game.dialogue.set_flag(&"cooked_remedy")
 
 
 func _on_item_changed(item: ItemInstance) -> void:

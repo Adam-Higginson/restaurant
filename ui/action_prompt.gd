@@ -28,12 +28,23 @@ var device: Device:
 var _device: Device = Device.KEYBOARD_MOUSE
 var _detector: InteractionDetector3D = null
 var _dodge: Dodge = null
+var _player: Player3D = null
+
 
 @onready var _interact_line: Label = $InteractLine
 @onready var _tool_line: Label = $ToolLine
+@onready var _journal_line: Label = Label.new()
+@onready var _fill_bar: ProgressBar = ProgressBar.new()
 
 
 func _ready() -> void:
+	add_child(_journal_line)
+	_journal_line.hide()
+	add_child(_fill_bar)
+	_fill_bar.custom_minimum_size = Vector2(80, 6)
+	_fill_bar.max_value = 1.0
+	_fill_bar.show_percentage = false
+	_fill_bar.hide()
 	_show_lines("", "")
 
 
@@ -58,6 +69,7 @@ func _input(event: InputEvent) -> void:
 
 ## Starts prompting for [param player].
 func setup(player: Player3D) -> void:
+	_player = player
 	_detector = player.get_node("InteractionDetector") as InteractionDetector3D
 	_dodge = player.get_node_or_null("Dodge") as Dodge
 
@@ -66,6 +78,17 @@ func setup(player: Player3D) -> void:
 ## frame; tests call it to check the lines without waiting for one.
 func refresh() -> void:
 	if _detector == null:
+		return
+	_journal_line.visible = is_instance_valid(_player) and _player.controls_enabled \
+			and Game.dialogue.is_set(RecipeBook.OWNED_FLAG)
+	if _journal_line.visible:
+		_journal_line.text = line_text(&"journal", "Journal")
+	_fill_bar.visible = is_instance_valid(_player) and _player.fill_progress >= 0.0
+	if _fill_bar.visible:
+		_fill_bar.value = _player.fill_progress
+		_show_lines("", "")
+		_tool_line.text = "Filling pot…"
+		_tool_line.show()
 		return
 	var interact: String = _detector.interact_prompt()
 	# Only with nothing in front at all: a prop there takes the press.

@@ -585,3 +585,21 @@ func test_food_goes_in_a_pot_and_on_a_board() -> void:
 	assert_str(CounterSlot.new(preload("res://data/items/saucepan.tres")).use_prompt(hand)) \
 			.is_equal("Put Diced Tomato in Cooking Pot")
 	assert_str(CounterSlot.new(BOARD).use_prompt(hand)).is_equal("Put Diced Tomato on Chopping Board")
+
+func test_soup_requires_a_bowl_and_a_plain_batch_can_go_back() -> void:
+	var pot: Item = load("res://data/items/saucepan.tres") as Item
+	var soup: Item = load("res://data/items/tomato_soup.tres") as Item
+	var bowl: Item = load("res://data/items/bowl.tres") as Item
+	var plate: Item = load("res://data/items/plate.tres") as Item
+	var slot: CounterSlot = CounterSlot.new(pot)
+	var original: ItemInstance = ItemInstance.new(soup)
+	slot.get_item().contents.add_item(original)
+	var arms: Toolbar = Toolbar.new()
+	arms.add(ItemInstance.new(plate))
+	assert_bool(slot.use_with(arms)).is_false()
+	assert_str(slot.use_prompt(arms)).is_equal("Use a bowl for soup")
+	arms.add(ItemInstance.new(bowl))
+	assert_bool(slot.use_with(arms)).is_true()
+	assert_object(arms.top().contents.get_contents()[0]).is_same(original)
+	assert_bool(slot.use_with(arms)).is_true()
+	assert_object(slot.get_item().contents.get_contents()[0]).is_same(original)

@@ -30,6 +30,7 @@ enum Action {
 	ADD_TO_VESSEL,
 	## Slide the food from the board here onto the held plate or bowl.
 	MOVE_ONTO_PLATE,
+	RETURN_SOUP,
 	## Take the top food off the board here.
 	TAKE_FOOD,
 	## Pick up the whole item here.
@@ -88,6 +89,8 @@ func interact_action(arms: Arms) -> Action:
 		return Action.NONE if held == null else Action.PUT_DOWN
 	if _item.is_vessel() and held != null and not held.is_vessel():
 		return Action.ADD_TO_VESSEL if _item.contents.room() > 0 else Action.NONE
+	if _can_return_soup(held):
+		return Action.RETURN_SOUP
 	if _can_move_onto(held):
 		return Action.MOVE_ONTO_PLATE
 	if arms.is_full():
@@ -112,6 +115,12 @@ func _perform(action: Action, arms: Arms) -> bool:
 			if not _item.contents.add_item(arms.top()):
 				return false
 			arms.take_top()
+			return true
+		Action.RETURN_SOUP:
+			var food: ItemInstance = arms.top().contents.get_contents()[0]
+			if not _item.contents.add_item(food):
+				return false
+			arms.top().contents.remove_item(food)
 			return true
 		Action.MOVE_ONTO_PLATE:
 			var plate: VesselContents = arms.top().contents
@@ -139,6 +148,8 @@ func use_action(arms: Arms) -> Action:
 		return Action.PUT_DOWN
 	if _item.is_vessel() and not held.is_vessel():
 		return Action.ADD_TO_VESSEL if _item.contents.room() > 0 else Action.NONE
+	if _can_return_soup(held):
+		return Action.RETURN_SOUP
 	if _can_move_onto(held):
 		return Action.MOVE_ONTO_PLATE
 	return Action.NONE
@@ -167,6 +178,13 @@ func take_into(arms: Arms) -> bool:
 
 ## What the prompt says Use would do, e.g. "Put down Tomato", or "".
 func use_prompt(arms: Arms) -> String:
+	var held: ItemInstance = arms.top()
+	if _item != null and _item.is_vessel() and not _item.item.carried_whole \
+			and held != null and held.is_vessel() and held.item.carried_whole \
+			and held.item.vessel_shape != Item.VesselShape.BOWL:
+		for food: ItemInstance in _item.contents.get_contents():
+			if food.item.id in [&"tomato_soup", &"spicy_tomato_soup"]:
+				return "Use a bowl for soup"
 	return _action_prompt(use_action(arms), arms)
 
 
@@ -190,9 +208,13 @@ func _action_prompt(action: Action, arms: Arms) -> String:
 		Action.ADD_TO_VESSEL:
 			return "Put %s %s %s" % [held.item.display_name, _into(_item.item),
 					_item.item.display_name]
+		Action.RETURN_SOUP:
+			return "Pour tomato soup back into the pot"
 		Action.MOVE_ONTO_PLATE:
 			var food: Array[ItemInstance] = _item.contents.get_contents()
 			var what: String = food[0].item.display_name if food.size() == 1 else "food"
+			if food.size() == 1 and food[0].item.id in [&"tomato_soup", &"spicy_tomato_soup"]:
+				return "Ladle %s into bowl" % what
 			return "Put %s %s %s" % [what, _into(held.item), held.item.display_name]
 		Action.TAKE_FOOD:
 			return "Take %s" % _board_food().item.display_name
@@ -238,12 +260,26 @@ static func _into(vessel: Item) -> String:
 	return "on" if vessel.vessel_shape == Item.VesselShape.FLAT else "in"
 
 
+func _can_return_soup(held: ItemInstance) -> bool:
+	if _item == null or not _item.is_vessel() or _item.item.vessel_shape != Item.VesselShape.POT \
+			or not _item.contents.get_contents().is_empty() \
+			or held == null or not held.is_vessel() or held.item.vessel_shape != Item.VesselShape.BOWL:
+		return false
+	var food: Array[ItemInstance] = held.contents.get_contents()
+	return food.size() == 1 and food[0].item.id == &"tomato_soup"
+
+
 func _can_move_onto(held: ItemInstance) -> bool:
 	if held == null or not held.is_vessel() or not held.item.carried_whole:
 		return false
 	if _item == null or not _item.is_vessel() or _item.item.carried_whole:
 		return false
-	var count: int = _item.contents.get_contents().size()
+	var food: Array[ItemInstance] = _item.contents.get_contents()
+	if held.item.vessel_shape != Item.VesselShape.BOWL:
+		for dish: ItemInstance in food:
+			if dish.item.id in [&"tomato_soup", &"spicy_tomato_soup"]:
+				return false
+	var count: int = food.size()
 	return count > 0 and held.contents.room() >= count
 
 

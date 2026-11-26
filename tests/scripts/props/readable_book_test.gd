@@ -8,7 +8,7 @@ extends GameTestSuite
 const FIRE_SPIRITS: String = "res://data/books/fire_spirits.tres"
 ## Where the old book lies: on the navigation room bookshelf's third shelf,
 ## in ship space.
-const BOOK_AT: Vector3 = Vector3(-5.43, 1.97, -2.18)
+const BOOK_AT: Vector3 = Vector3(4.55, 1.95, 1.45)
 
 
 func before_test() -> void:
@@ -57,7 +57,7 @@ func test_pressing_interact_at_the_shelf_opens_it_and_remembers() -> void:
 	var view: BookView = hud.get_node("%BookView") as BookView
 	var detector: InteractionDetector3D = player.get_node("InteractionDetector") \
 			as InteractionDetector3D
-	place_player_3d(runner, ship.to_global(Vector3(BOOK_AT.x + 0.9, 1.05, BOOK_AT.z)))
+	place_player_3d(runner, ship.to_global(Vector3(BOOK_AT.x, 1.05, BOOK_AT.z + 0.9)))
 	player.face_towards(ship.to_global(BOOK_AT))
 	await physics_ticks(runner, 3)
 	assert_str(detector.interact_prompt()).is_equal("Read the old book")

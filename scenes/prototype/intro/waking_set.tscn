@@ -2,6 +2,8 @@
 
 [ext_resource type="PackedScene" path="res://scenes/prototype/intro/castaway.tscn" id="1_ma0b6"]
 
+[ext_resource type="Script" path="res://scripts/intro/waking_set.gd" id="WakePoses"]
+
 [sub_resource type="Animation" id="Animation_mq8rs"]
 tracks/0/type = "value"
 tracks/0/imported = false
@@ -16,12 +18,58 @@ tracks/0/keys = {
 "values": [true, false]
 }
 
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath(":stir")
+tracks/1/interp = 1
+tracks/1/loop_wrap = false
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 1),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [0.0, 0.0]
+}
+
+[sub_resource type="Animation" id="Stirs"]
+length = 0.66
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(":stir")
+tracks/0/interp = 1
+tracks/0/loop_wrap = false
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.66),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [0.0, 0.33]
+}
+
+[sub_resource type="Animation" id="Stands"]
+length = 1.04
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(":rise")
+tracks/0/interp = 1
+tracks/0/loop_wrap = false
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 1.03),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [0.0, 1.03]
+}
+
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_e4ro8"]
 _data = {
+&"stands_from_bunk": SubResource("Stands"),
+&"stirs_in_bunk": SubResource("Stirs"),
 &"wakes": SubResource("Animation_mq8rs")
 }
 
 [node name="WakingSet" type="Node3D" unique_id=1352994850]
+script = ExtResource("WakePoses")
 
 [node name="Shots" type="Node3D" parent="." unique_id=489627623]
 
@@ -42,6 +90,10 @@ transform = Transform3D(0.5039, 0.211, -0.8376, -0.0, 0.9697, 0.2443, 0.8638, -0
 [node name="ByYourBunk" type="Marker3D" parent="Marks" unique_id=1770651431 groups=["marks"]]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4.4, 1.98, 13.62)
 
+[node name="BunkStand" type="Marker3D" parent="Marks" groups=["marks"]]
+position = Vector3(4.38, 1.05, 13.45)
+rotation = Vector3(0, 1.570796, 0)
+
 [node name="RoomMiddle" type="Marker3D" parent="Marks" unique_id=1406862355 groups=["marks"]]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.6, 2.55, 11.8)
 
@@ -55,7 +107,17 @@ visible = false
 held_animation = &"LayToIdle"
 eyes_shut = true
 
+[node name="SeatedYou" parent="Props" groups=["props"] instance=ExtResource("1_ma0b6")]
+position = Vector3(4.45, 1.05, 13.45)
+rotation = Vector3(0, 1.570796, 0)
+visible = false
+
+[node name="Character" parent="Props/SeatedYou" index="5"]
+held_animation = &"Sitting_Exit"
+
 [node name="Clips" type="AnimationPlayer" parent="." unique_id=1204081331 groups=["clips"]]
 libraries/ = SubResource("AnimationLibrary_e4ro8")
 
 [editable path="Props/SleepingYou"]
+
+[editable path="Props/SeatedYou"]

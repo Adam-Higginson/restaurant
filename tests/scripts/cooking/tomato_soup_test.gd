@@ -18,13 +18,16 @@ func test_the_water_butt_fills_a_held_saucepan() -> void:
 	await walk(runner, "move_left", 2)
 	await press(runner, "use_tool")
 
+	assert_bool(player.toolbar.top().contents.get_contents().is_empty()).is_true()
+	assert_bool(player.controls_enabled).is_false()
+	assert_float(player.fill_progress).is_greater_equal(0.0)
+	await physics_ticks(runner, 60)
 	var food: Array[ItemInstance] = player.toolbar.top().contents.get_contents()
 	assert_int(food.size()).is_equal(1)
-	assert_str(String(food[0].item.id)).is_equal("rainwater")
-	# The hero stoops to dip it, standing still, then can walk again.
-	assert_bool(player.controls_enabled).is_false()
-	await physics_ticks(runner, 60)
+	if not food.is_empty():
+		assert_str(String(food[0].item.id)).is_equal("rainwater")
 	assert_bool(player.controls_enabled).is_true()
+	assert_float(player.fill_progress).is_equal(-1.0)
 
 
 func test_a_pot_only_ever_holds_one_lot_of_water() -> void:

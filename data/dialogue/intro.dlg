@@ -389,7 +389,13 @@ set lantern_low
 @shot you_lying_down cut
 @wait 0.6
 heron: Ah. You're awake.
-heron: Good. I was beginning to wonder whether we'd rescued you or merely inconvenienced a corpse.
+heron: Easy. Take your time.
+@play stirs_in_bunk
+@shot by_the_lantern cut
+@face heron lantern
+heron: You gave me a fright.
+lantern: Did I?
+heron: Both of you did.
 -> by_your_bunk
 
 # By the time we look round you're up, and he's there by your bunk; the
@@ -398,7 +404,14 @@ heron: Good. I was beginning to wonder whether we'd rescued you or merely inconv
 # you've nothing to tell him. (Your answers are the replies you pick.)
 ~ by_your_bunk
 @hide sleeping_you
+@show seated_you
+@face heron seated_you
+@shot beside_your_bunk cut
+@play stands_from_bunk
+@place player bunk_stand
+@hide seated_you
 @show player
+@wait 0.3
 @face lantern player
 @face heron player
 @face player heron
@@ -452,8 +465,8 @@ heron: Well, whatever happened out there, you're fortunate he's as stubborn as h
 lantern: You're welcome.
 heron: I wasn't thanking you.
 @face heron player
-heron: Come along. You should have a look around.
-heron: And try not to fall overboard again.
+heron: I need to take the wheel. When you're steady, come and find me.
+heron: Let's see if we can get him warm again. Start with that book by your bunk.
 -> yours
 
 # Then the ship is yours. The captain goes up on deck to the helm, where you

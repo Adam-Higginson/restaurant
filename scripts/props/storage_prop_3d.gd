@@ -15,6 +15,8 @@ extends StaticBody3D
 @export_range(0, 99) var slots: int = 0
 ## Food inside when the scene starts, at normal quality.
 @export var start_items: Dictionary[Item, int] = {}
+## Ingredients the crew keeps in reserve during the first cooking quest.
+@export var remedy_reserve: Array[Item] = []
 
 ## What's inside. Created when the prop is ready, never replaced.
 var contents: StorageContents:
@@ -64,7 +66,14 @@ func interact_prompt() -> String:
 func use_prompt(arms: Arms) -> String:
 	if _contents.accepts(arms.top()):
 		return "Put away %s" % arms.top().item.display_name
+	if _can_restock():
+		return "Restock soup ingredients"
 	return ""
+
+
+func _can_restock() -> bool:
+	return not remedy_reserve.is_empty() and Game.dialogue.is_set(LanternSpirit.LOW_FLAG) \
+			and Game.dialogue.is_set(&"read_fire_spirits") and not _contents.is_full()
 
 
 func _on_interacted(player: Player3D) -> void:
@@ -72,4 +81,7 @@ func _on_interacted(player: Player3D) -> void:
 
 
 func _on_used(player: Player3D) -> void:
-	put_away(player.arms)
+	if put_away(player.arms) or not _can_restock():
+		return
+	for item: Item in remedy_reserve:
+		_contents.add(ItemInstance.new(item))

@@ -92,7 +92,7 @@ func test_ringing_with_nothing_on_the_table_feeds_nobody() -> void:
 	assert_bool(_spirit(rig).is_visiting()).is_false()
 
 
-func test_low_anything_but_the_remedy_he_eats_sadly_and_hints() -> void:
+func test_plain_soup_keeps_lantern_cold_and_leaves_the_batch_to_finish() -> void:
 	var rig: Array[Node3D] = new_moored_ship_with_player(AT_THE_TABLE)
 	var player: Player3D = rig[1] as Player3D
 	var conversation: Conversation = new_conversation(player)
@@ -115,9 +115,11 @@ func test_low_anything_but_the_remedy_he_eats_sadly_and_hints() -> void:
 		if i % 10 == 0:
 			conversation.press()
 	await physics_ticks(runner, int(table.eat_seconds * 60.0) + 10)
-	# Still low: only the remedy brings him back. But he ate it.
+	# Plain soup is returned after he gives the hint.
 	assert_bool(Game.dialogue.is_set(LanternSpirit.LOW_FLAG)).is_true()
-	assert_bool(bowl.contents.get_contents().is_empty()).is_true()
+	assert_bool(Game.dialogue.is_set(&"served_plain_soup")).is_true()
+	assert_int(bowl.contents.get_contents().size()).is_equal(1)
+	assert_bool(table.pick_up(player.arms)).is_true()
 
 
 func test_the_remedy_at_the_table_plays_the_first_meal() -> void:
@@ -186,12 +188,13 @@ func test_every_mark_and_shot_supper_uses_is_in_the_ship() -> void:
 	assert_int(used).is_greater(9)
 
 
-func test_the_bell_says_ring_for_supper() -> void:
+func test_the_bell_explains_what_to_do_with_an_empty_table() -> void:
 	var rig: Array[Node3D] = new_moored_ship_with_player(AT_THE_TABLE)
 	scene_runner(rig[0].get_parent())
 	var reach: Interactable3D = _bell(rig).get_node("Reach") as Interactable3D
 
-	assert_str(reach.interact_prompt(rig[1] as Player3D)).is_equal("Ring for supper")
+	assert_str(reach.interact_prompt(rig[1] as Player3D)).is_equal(
+			"Set a meal on the table first")
 
 
 func _table(rig: Array[Node3D]) -> SupperTable:

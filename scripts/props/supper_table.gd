@@ -121,7 +121,7 @@ func call_to_supper(player: Player3D) -> bool:
 	var food: ItemInstance = dish()
 	if food == null or _eating:
 		if spirit != null and food == null:
-			spirit.tell(&"table_bare")
+			spirit.remark(&"table_bare")
 		return false
 	var amount: float = warmth_of(food)
 	if _is_low():
@@ -131,6 +131,7 @@ func call_to_supper(player: Player3D) -> bool:
 			_eat_sadly(player, spirit, food)
 		return true
 	_eating = true
+	_invite_captain()
 	if spirit != null:
 		spirit.visit(_plate_spot, eat_seconds)
 		spirit.rekindle(amount)
@@ -139,6 +140,27 @@ func call_to_supper(player: Player3D) -> bool:
 	shared.emit(food, amount)
 	_finish_eating.call_deferred(food, eat_seconds)
 	return true
+
+
+# Everyday supper keeps control with the player as the captain walks over.
+func _invite_captain() -> void:
+	var seat: Marker3D = null
+	for node: Node in get_tree().get_nodes_in_group(ActorCues.GROUP):
+		if node.name == &"CaptainSupperSeat" and node is Marker3D:
+			seat = node as Marker3D
+			break
+	if seat == null:
+		return
+	for node: Node in get_tree().get_nodes_in_group(Crewmate.GROUP):
+		var crew: Crewmate = node as Crewmate
+		if crew != null and crew.person != null and crew.person.id == &"heron":
+			var walker: CrewWalker = crew.get_node_or_null("Walker") as CrewWalker
+			if walker != null and walker.walk_to(seat):
+				await walker.walk_ended
+				await get_tree().create_timer(eat_seconds).timeout
+				if is_instance_valid(walker):
+					walker.walk_home()
+			return
 
 
 ## Where the dish sits on the table.
@@ -165,10 +187,22 @@ func _mend(player: Player3D, spirit: LanternSpirit, food: ItemInstance, amount: 
 func _eat_sadly(player: Player3D, spirit: LanternSpirit, food: ItemInstance) -> void:
 	_eating = true
 	shared.emit(food, 0.0)
+	var plain: bool = food.item.id == &"tomato_soup"
+	if plain:
+		Game.dialogue.set_flag(&"served_plain_soup")
+		Game.dialogue.set_flag(&"supper_plain_soup")
 	var conversation: Conversation = Conversation.find(self)
 	var played: bool = conversation != null and conversation.play(hint_scene, player)
 	if not played and spirit != null:
 		spirit.visit(_plate_spot, eat_seconds)
+	if plain:
+		if played:
+			await conversation.ended
+		else:
+			await get_tree().create_timer(eat_seconds).timeout
+		Game.dialogue.clear(&"supper_plain_soup")
+		_eating = false
+		return
 	_finish_eating.call_deferred(food, eat_seconds)
 
 

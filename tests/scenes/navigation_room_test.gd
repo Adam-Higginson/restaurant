@@ -47,13 +47,13 @@ func test_the_rooms_own_walls_close_it_in() -> void:
 	assert_bool(_blocked(ship, Vector3(-3.0, 2.0, -1.0), Vector3(-3.0, 4.6, -1.0))).is_true()
 
 
-func test_the_old_book_is_on_its_shelf_and_not_in_the_galley() -> void:
+func test_the_cookbook_is_in_the_galley() -> void:
 	var ship: Ship = await _ship()
 
-	var book: ReadableBook = ship.get_node_or_null("NavigationRoom/OldBook") as ReadableBook
+	var book: ReadableBook = ship.get_node_or_null("Galley/OldCookbook") as ReadableBook
 	assert_object(book).is_not_null()
 	assert_str(String(book.read_flag)).is_equal("read_fire_spirits")
-	assert_object(ship.find_child("OldBook", true, false)).is_same(book)
+	assert_object(ship.find_child("OldCookbook", true, false)).is_same(book)
 
 
 func test_you_can_look_at_the_chart() -> void:
@@ -96,32 +96,8 @@ func _blocked(ship: Ship, from: Vector3, to: Vector3) -> bool:
 	return not space.intersect_ray(ray).is_empty()
 
 
-func test_you_walk_in_from_the_galley_and_reach_the_old_book() -> void:
-	# The corridor's door is shut in under the hatch stairs, so the room's way
-	# in is a door from the galley (#204), port of the pantry.
-	var rig: Array[Node3D] = new_moored_ship_with_player(GALLEY_BY_THE_DOOR)
-	var ship: Ship = rig[0] as Ship
-	var player: Player3D = rig[1] as Player3D
-	var runner: GdUnitSceneRunner = scene_runner(ship.get_parent())
-	await physics_ticks(runner, 3)
-
-	# Forward through the door, to port across the room, and forward again to
-	# the shelf.
-	await walk(runner, "move_up", 30)
-	assert_float(ship.to_local(player.global_position).z).override_failure_message(
-			"Stopped at %s, short of the room" % ship.to_local(player.global_position)) \
-			.is_less(0.0)
-	await walk(runner, "move_left", 18)
-	await walk(runner, "move_up", 22)
-	var at: Vector3 = ship.to_local(player.global_position)
-	assert_bool(at.x < -4.0 and at.z < -1.5).override_failure_message(
-			"Stopped at %s, short of the shelf" % at).is_true()
-
-	var book: ReadableBook = ship.get_node("NavigationRoom/OldBook") as ReadableBook
-	player.face_towards(book.global_position)
-	await physics_ticks(runner, 3)
-	var detector: InteractionDetector3D = player.get_node("InteractionDetector") \
-			as InteractionDetector3D
-	assert_str(detector.interact_prompt()).override_failure_message(
-			"At %s the prompt is '%s'" % [ship.to_local(player.global_position),
-			detector.interact_prompt()]).contains("Read the old book")
+func test_the_navigation_door_blocks_the_opening() -> void:
+	var ship: Ship = await _ship()
+	var door: StaticBody3D = ship.get_node("NavigationRoom/DoorStop") as StaticBody3D
+	var shape: CollisionShape3D = door.get_node("CollisionShape3D") as CollisionShape3D
+	assert_bool(shape.disabled).is_false()
