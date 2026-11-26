@@ -1,6 +1,6 @@
 SALT AND EMBER
 A work in progress by Adam Higginson.
-https://github.com/Adam-Higginson/restaurant
+https://github.com/Adam-Higginson/salt-and-ember
 
 Made with the Godot Engine (godotengine.org), MIT licence.
 Godot's own licence and the licences of the libraries it uses:
