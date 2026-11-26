@@ -14,7 +14,7 @@ class RestingArms extends SkeletonModifier3D:
 		ArmReach.aim(rig, &"RightArm", &"RightForeArm",
 				to_rig * Vector3(5.02, 1.90, 13.16), amount)
 		ArmReach.aim(rig, &"RightForeArm", &"RightHand",
-				to_rig * Vector3(5.15, 2.08, 13.27), amount)
+				to_rig * Vector3(5.17, 2.04, 13.20), amount)
 		ArmReach.aim(rig, &"LeftForeArm", &"LeftHand",
 				to_rig * Vector3(5.45, 1.91, 13.38), amount)
 		for side: String in ["_r", "_l"]:
