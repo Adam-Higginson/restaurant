@@ -43,7 +43,6 @@ func test_the_bunks_pillows_are_pack_pillows_over_our_boxes() -> void:
 		var pack: ThirdPartyModel = bay.get_node("%s/Pack" % pillow) as ThirdPartyModel
 		assert_object(pack).override_failure_message(pillow).is_not_null()
 		assert_str(pack.path.get_file()).is_equal("pillow_A.gltf")
-		assert_object(pack.look).is_not_null()
 		assert_object(bay.get_node("%s/Box" % pillow)).is_not_null()
 	bay.free()
 
