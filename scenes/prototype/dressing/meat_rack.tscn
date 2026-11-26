@@ -3,7 +3,6 @@
 [ext_resource type="Material" path="res://assets/placeholder/materials/dark_prop_wood.tres" id="1_d"]
 [ext_resource type="Script" path="res://scripts/props/swinging.gd" id="2_d"]
 [ext_resource type="Script" path="res://scripts/art/third_party_model.gd" id="3_d"]
-[ext_resource type="Resource" path="res://data/art/looks/prop.tres" id="kiln_prop"]
 [ext_resource type="Material" path="res://assets/placeholder/materials/stew.tres" id="4_d"]
 
 [sub_resource type="BoxMesh" id="S1"]
@@ -71,9 +70,7 @@ mesh = SubResource("S2")
 transform = Transform3D(0, -1, 0, 1, 0, 0, 0, 0, 1, 0.08, -0.55, 0)
 script = ExtResource("3_d")
 path = "res://assets/third_party/kaykit_restaurant/Assets/gltf/food_ingredient_ham.gltf"
-look = ExtResource("kiln_prop")
 fit_size = Vector3(0.45, 0.45, 0.45)
-grain_metres = 0.12
 
 [node name="Hook2" type="Node3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)
@@ -128,6 +125,4 @@ mesh = SubResource("S9")
 transform = Transform3D(0, -1, 0, 1, 0, 0, 0, 0, 1, 0.08, -0.55, 0)
 script = ExtResource("3_d")
 path = "res://assets/third_party/kaykit_restaurant/Assets/gltf/food_ingredient_ham.gltf"
-look = ExtResource("kiln_prop")
 fit_size = Vector3(0.45, 0.45, 0.45)
-grain_metres = 0.12

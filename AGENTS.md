@@ -4,7 +4,7 @@
 - Godot 4.7, GDScript only (no C#).
 - Use Godot 4 APIs only: CharacterBody3D, `await`, AnimatableBody3D. Never Godot 3 APIs (KinematicBody, `yield`).
 - Typed GDScript everywhere: type every variable, parameter and return value (enforced as errors; see Code style).
-- 3D, Forward+ renderer (switched from Compatibility in #61). Low-poly models with small low-resolution textures, softly filtered as the N64 did (bilinear on our greybox, the N64's three-point filter on fired pack models; #129), not crisp pixels, lit with modern lighting (N64/OoT style, high resolution).
+- 3D, Forward+ renderer (switched from Compatibility in #61). See `docs/look.md` for the painted environments and stylised character materials.
 - The 2D world layer (2D player, props, customers, tilemap) is legacy, being replaced by the 3D prototype in `scenes/prototype/`. Don't extend it.
 - Godot binary: `C:\Godot\godot_console.exe`
 
@@ -21,19 +21,18 @@ The full design lives in `docs/GDD.md`. Read it before starting a gameplay task,
 
 ## Public repo
 - This repo is public. Third-party art and audio go in `assets/third_party/`, which is gitignored: never commit anything from it, and never commit keys or tokens.
-- **The art is backed up in a private repo (#142).** `assets/third_party/` is its own git repo, a clone of the private `Adam-Higginson/restaurant-assets` (the packs, the Kiln output, Meshy models and ambient sounds, `.import` files included). Its `.gitattributes` turns off line-ending conversion so it's a byte-for-byte copy.
-  - **Back up** after adding a pack, firing the Kiln or making a Meshy model: in `assets/third_party/`, `git add -A`, commit with the issue in the message (`Adam-Higginson/restaurant#<n>`), and push. Say when a task changed the art, so the user knows to back it up.
+- **The art is backed up in a private repo (#142).** `assets/third_party/` is its own git repo, a clone of the private `Adam-Higginson/restaurant-assets` (the packs, Meshy models and ambient sounds, `.import` files included). Its `.gitattributes` turns off line-ending conversion so it's a byte-for-byte copy.
+  - **Back up** after adding a pack or making a Meshy model: in `assets/third_party/`, `git add -A`, commit with the issue in the message (`Adam-Higginson/restaurant#<n>`), and push. Say when a task changed the art, so the user knows to back it up.
   - **New PC or worktree:** `git clone https://github.com/Adam-Higginson/restaurant-assets.git assets/third_party`, then import (`godot_console.exe --headless --path . --import`). Clone, don't copy, so the copy is a working backup too.
   - It stays private: it holds the raw packs, which we ship inside builds but don't re-host.
 - Our own placeholder art (generated, not third-party) lives in `assets/placeholder/` and is committed. Its cloth, paper and painted textures are painted soft by `tools/textures/paint_placeholders.sh` from the pixel-art originals in `tools/textures/originals/` (#135): change an original or a recipe and run it again; don't hand-edit the painted PNGs.
-- Pack models are fired into our N64 look by the Kiln (`./kiln.sh`, Blender 4.4; see `docs/GDD.md`). Its output goes in `assets/third_party/_kiln/` and is never committed: it's made from the packs. Check fired models by eye with `tools/kiln/capture.sh <folder>`.
 - Two exceptions are committed because the game needs them to look and sound the same for everyone, each with its licence file beside it: fonts under the SIL Open Font Licence in `assets/fonts/`, and CC0 sounds in `assets/audio/`. Anything else third-party still needs asking first.
 
 ## Meshy (3D models)
 - We have a paid Meshy subscription (about 1,100 credits a month, reset monthly) for generating crew and creature models. The Meshy CLI (`meshy`, npm `meshy-cli` 0.8) is installed and signed in, and the `meshy-3d-generation` skill drives it.
 - Credits are real money: before any paid step, say what it is and what it costs (a picture 9, an edit 12, a model 15, a rig 5, an animation 3), and wait for the user's go-ahead. Show the concept picture and get it approved before making the model.
 - Generated files go in `assets/third_party/meshy/<name>/`, gitignored: never commit them. The greybox stays as the fallback.
-- Meshy models are drawn as made, at full quality: `ThirdPartyModel` with `keep_as_made`, never fired in the Kiln.
+- `ThirdPartyModel` loads models directly from their imported files. Rigged characters can use a stylised material.
 - The recipe, the prompts that worked and the gotchas (scale the node, never `fit_size`; turn it 180 degrees) are in `docs/meshy.md`.
 
 ## Task tracking

@@ -2,7 +2,6 @@
 
 [ext_resource type="Script" path="res://scripts/props/rocking.gd" id="1_d"]
 [ext_resource type="Script" path="res://scripts/art/third_party_model.gd" id="2_d"]
-[ext_resource type="Resource" path="res://data/art/looks/prop.tres" id="kiln_prop"]
 
 
 [node name="Books" type="Node3D"]
@@ -12,6 +11,4 @@ script = ExtResource("1_d")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)
 script = ExtResource("2_d")
 path = "res://assets/third_party/kaykit_furniture/Assets/gltf/book_set.gltf"
-look = ExtResource("kiln_prop")
 fit_size = Vector3(0.32, 0.26, 0.16)
-grain_metres = 0.12

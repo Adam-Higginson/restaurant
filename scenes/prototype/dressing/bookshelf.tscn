@@ -5,7 +5,6 @@
 [ext_resource type="Material" path="res://assets/placeholder/materials/prop_wood.tres" id="2_d"]
 [ext_resource type="Script" path="res://scripts/props/rocking.gd" id="3_d"]
 [ext_resource type="Script" path="res://scripts/art/third_party_model.gd" id="4_d"]
-[ext_resource type="Resource" path="res://data/art/looks/prop.tres" id="kiln_prop"]
 [ext_resource type="Material" path="res://assets/placeholder/materials/green_glass.tres" id="5_d"]
 
 [sub_resource type="BoxMesh" id="S1"]
@@ -153,9 +152,7 @@ mesh = SubResource("S12")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.05, 0, 0)
 script = ExtResource("4_d")
 path = "res://assets/third_party/kaykit_restaurant/Assets/gltf/jar_A_large.gltf"
-look = ExtResource("kiln_prop")
 fit_size = Vector3(0.16, 0.26, 0.16)
-grain_metres = 0.1
 
 [node name="Shelf3" type="MeshInstance3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.95, 0.01)
@@ -181,10 +178,8 @@ phase = 0.03
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.25, 0, 0)
 script = ExtResource("4_d")
 path = "res://assets/third_party/kaykit_restaurant/Assets/gltf/food_ingredient_lettuce.gltf"
-look = ExtResource("kiln_prop")
 tint = Color(0.55, 1.5, 0.5, 1)
 fit_size = Vector3(0.18, 0.15, 0.18)
-grain_metres = 0.06
 
 [node name="Shape" type="CollisionShape3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.95, 0)
@@ -197,9 +192,6 @@ path = "res://assets/third_party/meshy/bookshelf_empty/model/model.glb"
 fit_size = Vector3(1.1, 1.9, 0.38)
 stretch = true
 stand_ins = [NodePath("../SideLeft"), NodePath("../SideRight"), NodePath("../Top"), NodePath("../Back"), NodePath("../Shelf1"), NodePath("../Shelf2"), NodePath("../Shelf3"), NodePath("../Shelf4")]
-grain = false
-detail = 1.0
-keep_as_made = true
 
 [node name="BookRow" type="Node3D" parent="Row1"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.42, 0, 0)

@@ -67,6 +67,3 @@ path = "res://assets/third_party/meshy/pantry/model/model.glb"
 fit_size = Vector3(1.1, 1.8, 0.6)
 stretch = true
 stand_ins = [NodePath("../Mesh"), NodePath("../Doors")]
-grain = false
-detail = 1.0
-keep_as_made = true

@@ -17,12 +17,6 @@ extends Node3D
 ## Models from the packs are built at their own scale, so the model is
 ## fitted into [member fit_size] (sitting on this node's origin, centred).
 ##
-## With a [member look], the model can be fired in the Kiln (the Fire in Kiln
-## button, or kiln.sh): crunched to a low-poly copy with a small baked
-## texture, which is then drawn instead (see [KilnJob]). Until it's fired, or
-## without a look, the pack's own model shows, its smooth flat colours given
-## the chunky N64 grain (shaders/n64_prop.gdshader).
-##
 ## With a [member style], the model is drawn stylised instead (#168): every
 ## surface gets the soft cel-shaded character material, with its own texture,
 ## and an outline. Clearing the style dresses it again exactly as it was made.
@@ -31,10 +25,6 @@ extends Node3D
 ## model is showing (true) or the greybox is (false), so a node that drives
 ## the model (its animations, say) can find it.
 signal dressed(shown: bool)
-
-const N64_SHADER: Shader = preload("res://shaders/n64_prop.gdshader")
-## The chunky grain laid over models: a 32 x 32 noise texture of our own.
-const GRAIN: Texture2D = preload("res://assets/placeholder/materials/n64_grain.tres")
 
 ## The model file, under res://assets/third_party/.
 @export_file("*.gltf", "*.glb") var path: String = "":
@@ -61,18 +51,11 @@ const GRAIN: Texture2D = preload("res://assets/placeholder/materials/n64_grain.t
 			dress()
 ## Greybox meshes to hide while the model shows.
 @export var stand_ins: Array[VisualInstance3D] = []
-## Lay the chunky N64 grain over the model's colours.
-@export var grain: bool = true
-## How many metres one copy of the grain covers on this model.
-@export var grain_metres: float = 0.2
 ## Multiplies the model's colours: above 1 in a channel makes it stronger,
 ## e.g. to keep greens green under warm lamplight.
 @export var tint: Color = Color.WHITE
-## How fine a version of the model to draw: Godot keeps simplified copies of
-## every imported mesh (levels of detail), and low values pick the cruder,
-## lower-poly ones, for the chunky N64 look. 1 is Godot's usual choice.
-## Fired models are always drawn in full: the Kiln made them simple already.
-@export var detail: float = 0.05
+## Treat texture alpha as opaque, for solid props whose source textures have alpha.
+@export var opaque: bool = false
 ## Draws the model stylised (cel shading, warm shadows, rim light, outline),
 ## sharing this look's settings with every other model that uses it. Empty
 ## draws it as it was made. Changing the look's settings shows at once.
@@ -110,22 +93,6 @@ const GRAIN: Texture2D = preload("res://assets/placeholder/materials/n64_grain.t
 ## behind them).
 @export var casts_shadow: bool = true
 
-@export_group("Kiln")
-## Never fire this model: it's drawn exactly as it was made, at full quality.
-## For models made for the game (the Meshy crew) rather than taken from a
-## pack, which every pack model otherwise must be (see [member look]).
-@export var keep_as_made: bool = false
-## How the Kiln fires this model (a preset from data/art/looks/). Without one
-## it's never fired.
-@export var look: ArtLook:
-	set(value):
-		look = value
-		if is_inside_tree():
-			dress()
-## Fires the model in the Kiln (Blender, in the background). It changes in the
-## viewport when it's done.
-@export_tool_button("Fire in Kiln", "Bake") var fire_button: Callable = fire_in_kiln
-
 ## Every model loaded this run, kept so the next copy of a scene doesn't load
 ## it from disk again: the ship is made many times in the tests, and freeing it
 ## would otherwise free its models too (#196).
@@ -133,11 +100,6 @@ static var _loaded: Dictionary[String, PackedScene] = {}
 
 ## The loaded model, or null when its file isn't there.
 var model: Node3D = null
-## Whether the model showing is the Kiln's fired one.
-var fired: bool = false
-
-## Whether Blender is firing the model now.
-var _firing: bool = false
 ## The stylised materials on the model now, kept to follow [member style]'s changes.
 var _styled: Array[ShaderMaterial] = []
 
@@ -146,36 +108,14 @@ func _ready() -> void:
 	dress()
 
 
-func _get_property_list() -> Array[Dictionary]:
-	# A line in the Inspector saying where the Kiln stands: shown, not saved.
-	return [{
-		"name": "kiln_status",
-		"type": TYPE_STRING,
-		"usage": PROPERTY_USAGE_EDITOR | PROPERTY_USAGE_READ_ONLY,
-	}]
-
-
-func _get(property: StringName) -> Variant:
-	if property == &"kiln_status":
-		return kiln_status()
-	return null
-
-
-## Loads the model if its file is there, fitted and with the stand-ins hidden:
-## the Kiln's fired copy if there is one, otherwise the pack's own. Returns
-## whether a model is showing.
+## Loads and fits the source model, returning whether it is showing.
 func dress() -> bool:
 	if model != null:
 		model.queue_free()
 		model = null
-	fired = false
 	_styled.clear()
 	var scene: PackedScene = null
-	var job: KilnJob = kiln_job()
-	if job != null and job.is_fired():
-		scene = load(job.fired_path()) as PackedScene
-		fired = scene != null
-	if scene == null and not path.is_empty() and ResourceLoader.exists(path):
+	if not path.is_empty() and ResourceLoader.exists(path):
 		scene = _load_model(path)
 	if scene == null:
 		_show_stand_ins(true)
@@ -183,64 +123,19 @@ func dress() -> bool:
 		return false
 	model = scene.instantiate() as Node3D
 	if model == null:
-		fired = false
 		_show_stand_ins(true)
 		dressed.emit(false)
 		return false
 	add_child(model)
 	_wear(model)
 	_fit(model)
-	if fired:
-		FiredModel.paint(model, job, tint)
-	else:
-		if style != null or grain:
-			_convert(model, {})
-		_set_detail(model)
+	if style != null or tint != Color.WHITE or opaque:
+		_convert(model, {})
 	if not casts_shadow:
 		_cast_no_shadows(model)
 	_show_stand_ins(false)
 	dressed.emit(true)
 	return true
-
-
-## The Kiln job for this model, or null without a look (or when it's kept as made).
-func kiln_job() -> KilnJob:
-	if keep_as_made or look == null or path.is_empty():
-		return null
-	var job: KilnJob = KilnJob.new(path, look)
-	job.fit_size = fit_size
-	job.stretch = stretch
-	return job
-
-
-## Fires the model in the Kiln, in the background, then shows the fired model.
-## Call it with [code]await[/code]. Returns whether it came out fresh: it
-## needs a look, the pack file and Blender.
-func fire_in_kiln() -> bool:
-	var job: KilnJob = kiln_job()
-	if job == null or not job.can_fire() or not Kiln.has_blender():
-		push_warning("Can't fire %s in the Kiln: %s" % [name, kiln_status()])
-		return false
-	_firing = true
-	notify_property_list_changed()
-	var fresh: int = await Kiln.fire_in_background([job])
-	_firing = false
-	if is_inside_tree():
-		dress()
-	notify_property_list_changed()
-	return fresh == 1
-
-
-## Where the Kiln stands with this model, in a line (shown in the Inspector).
-func kiln_status() -> String:
-	if _firing:
-		return "Firing in Blender..."
-	var job: KilnJob = kiln_job()
-	if job == null:
-		return "No look: drawn as it comes, with grain"
-	if job.can_fire() and job.report().is_empty() and not Kiln.has_blender():
-		return "No Blender at %s (set BLENDER to its path)" % Kiln.blender()
-	return job.status()
 
 
 func _fit(node: Node3D) -> void:
@@ -280,17 +175,15 @@ func _bounds(node: Node, transform_so_far: Transform3D) -> AABB:
 	return box
 
 
-# Gives every surface the stylised material (with a [member style]) or else
-# the N64 prop shader, keeping its own colour and texture. [param made]
-# remembers each converted material, so surfaces that shared one still do.
-func _convert(node: Node, made: Dictionary) -> void:
+# Reuses the converted material across surfaces that share the same source.
+func _convert(node: Node, made: Dictionary[BaseMaterial3D, Material]) -> void:
 	var mesh_node: MeshInstance3D = node as MeshInstance3D
 	var override: BaseMaterial3D = null
 	if mesh_node != null:
 		override = mesh_node.material_override as BaseMaterial3D
 	if override != null:
 		# One material over the whole mesh: convert that instead.
-		var whole: ShaderMaterial = made.get(override, null)
+		var whole: Material = made.get(override, null)
 		if whole == null:
 			whole = _material_for(override)
 			made[override] = whole
@@ -300,7 +193,7 @@ func _convert(node: Node, made: Dictionary) -> void:
 			var source: BaseMaterial3D = mesh_node.mesh.surface_get_material(surface) as BaseMaterial3D
 			if source == null:
 				continue
-			var converted: ShaderMaterial = made.get(source, null)
+			var converted: Material = made.get(source, null)
 			if converted == null:
 				converted = _material_for(source)
 				made[source] = converted
@@ -310,10 +203,16 @@ func _convert(node: Node, made: Dictionary) -> void:
 
 
 # The material a surface painted with [param source] is drawn with.
-func _material_for(source: BaseMaterial3D) -> ShaderMaterial:
+func _material_for(source: BaseMaterial3D) -> Material:
+	var base: BaseMaterial3D = source
+	if tint != Color.WHITE or opaque:
+		base = source.duplicate() as BaseMaterial3D
+		base.albedo_color *= tint
+		if opaque:
+			base.transparency = BaseMaterial3D.TRANSPARENCY_DISABLED
 	if style == null:
-		return n64_material(source, grain_metres, tint)
-	var material: ShaderMaterial = style.make_material(source)
+		return base
+	var material: ShaderMaterial = style.make_material(base)
 	if recolour != null:
 		recolour.apply(material)
 	_styled.append(material)
@@ -374,7 +273,6 @@ func _hide_under_outfit(skeleton: Skeleton3D) -> void:
 		body.set_instance_shader_parameter(&"hidden_bones", mask)
 
 
-# The outfit changed: dress the model again in it.
 ## [param file] loaded, from [member _loaded] if it was loaded before. In the
 ## editor it's always loaded afresh, so a model imported again shows at once.
 static func _load_model(file: String) -> PackedScene:
@@ -386,6 +284,7 @@ static func _load_model(file: String) -> PackedScene:
 	return scene
 
 
+# The outfit changed: dress the model again in it.
 func _redress() -> void:
 	if is_inside_tree():
 		dress()
@@ -403,31 +302,6 @@ func _restyle() -> void:
 			ClothRecolour.clear(material)
 
 
-## The N64 prop material for a model surface painted with [param source]:
-## the same colour and texture (times [param tint]), with chunky grain every
-## [param metres].
-static func n64_material(source: BaseMaterial3D, metres: float,
-		tint: Color = Color.WHITE) -> ShaderMaterial:
-	var material: ShaderMaterial = ShaderMaterial.new()
-	material.shader = N64_SHADER
-	material.set_shader_parameter(&"albedo_color", source.albedo_color * tint)
-	if source.albedo_texture != null:
-		material.set_shader_parameter(&"albedo_texture", source.albedo_texture)
-	material.set_shader_parameter(&"grain", GRAIN)
-	material.set_shader_parameter(&"grain_metres", metres)
-	return material
-
-
-# Draws every mesh in the model at the chosen level of detail.
-func _set_detail(node: Node) -> void:
-	var shape: GeometryInstance3D = node as GeometryInstance3D
-	if shape != null:
-		shape.lod_bias = detail
-	for child: Node in node.get_children():
-		_set_detail(child)
-
-
-# Stops every mesh in the model casting shadows.
 func _cast_no_shadows(node: Node) -> void:
 	var shape: GeometryInstance3D = node as GeometryInstance3D
 	if shape != null:

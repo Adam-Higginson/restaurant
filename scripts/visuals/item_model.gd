@@ -153,16 +153,9 @@ static func tool_model(tool: HandTool) -> Node3D:
 		return root
 	var model: ThirdPartyModel = ThirdPartyModel.new()
 	model.name = "Model"
-	model.look = tool.model_look
-	model.keep_as_made = tool.model_look == null
-	model.grain = false
-	model.detail = 1.0
 	model.fit_size = tool.model_size
 	model.stand_ins = [block]
-	if model.keep_as_made:
-		model.dressed.connect(func(shown: bool) -> void:
-			if shown:
-				_as_made(model.model, Color.WHITE))
+	model.opaque = true
 	model.path = tool.model_path
 	root.add_child(model)
 	return root
@@ -176,7 +169,7 @@ static func food(item: Item, size: float) -> Node3D:
 	var cube: MeshInstance3D = _box(Vector3.ONE * size, item.color, Vector3.UP * size / 2.0)
 	cube.name = "Greybox"
 	piece.add_child(cube)
-	# Fitted to its own size (one Kiln job per item), then shrunk on a vessel
+	# Fitted to its own size, then shrunk on a vessel
 	# as the cubes are, so up to three fit.
 	if item.model_pieces <= 1:
 		_add_model(piece, item, [cube], size / FOOD_SIZE)
@@ -201,41 +194,15 @@ static func _add_model(parent: Node3D, item: Item, stand_ins: Array[VisualInstan
 		return
 	var model: ThirdPartyModel = ThirdPartyModel.new()
 	model.name = "Model"
-	model.look = item.model_look
-	model.keep_as_made = item.model_look == null
-	model.grain = false
-	model.detail = 1.0
 	model.fit_size = item.model_size
 	model.stand_ins = stand_ins
+	model.opaque = true
 	model.tint = item.model_tint
-	if model.keep_as_made:
-		# A model drawn as made (Meshy) isn't tinted by ThirdPartyModel, and
-		# comes in see-through (its textures have an alpha channel): fix both.
-		model.dressed.connect(func(shown: bool) -> void:
-			if shown:
-				_as_made(model.model, item.model_tint))
 	model.scale = Vector3.ONE * scale
 	model.position = item.model_offset * scale
 	model.rotation_degrees = Vector3(0.0, item.model_yaw_degrees, item.model_roll_degrees)
 	model.path = item.model_path
 	parent.add_child(model)
-
-
-## Makes every surface under [param node] solid and multiplies its colours
-## by [param tint], on copies of their materials.
-static func _as_made(node: Node, tint: Color) -> void:
-	var mesh_instance: MeshInstance3D = node as MeshInstance3D
-	if mesh_instance != null and mesh_instance.mesh != null:
-		for surface: int in mesh_instance.mesh.get_surface_count():
-			var material: BaseMaterial3D = mesh_instance.get_active_material(surface) \
-					as BaseMaterial3D
-			if material != null:
-				var made: BaseMaterial3D = material.duplicate() as BaseMaterial3D
-				made.albedo_color = material.albedo_color * tint
-				made.transparency = BaseMaterial3D.TRANSPARENCY_DISABLED
-				mesh_instance.set_surface_override_material(surface, made)
-	for child: Node in node.get_children():
-		_as_made(child, tint)
 
 
 ## How high food sits in or on the vessel [param item]: on the floor of the

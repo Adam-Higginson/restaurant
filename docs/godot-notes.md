@@ -58,7 +58,7 @@ A growing glossary of the Godot concepts this project uses: what each one is, in
 
 **Camera3D.** What the player sees. The one marked `current` is used. *Ours:* the player's `CameraRig/Camera3D` (`scenes/prototype/player.tscn`), which the rig places each frame, at the spring arm's `FreeSpot` or a camera zone's shot.
 
-**StandardMaterial3D and texture filtering.** A material sets a surface's colour, texture and shininess. *Texture filter* decides how texture pixels are blended when stretched: *Linear* blurs them, *Nearest* keeps them as crisp blocks (the N64/OoT look). "With mipmaps" also uses smaller copies far away, to stop shimmering. Godot has no project-wide setting for this in 3D, so we set it on each material. **Triplanar** mapping projects the texture from the sides, so boxes of any size get evenly sized squares without UV unwrapping. *Ours:* `assets/placeholder/materials/greybox_*.tres`, all sharing the 16-pixel `greybox_grid.png` (one square per metre).
+**StandardMaterial3D and texture filtering.** A material sets a surface's colour, texture and shininess. *Texture filter* decides how texture pixels are blended when stretched: *Linear* blurs them, *Nearest* keeps them as crisp blocks. "With mipmaps" also uses smaller copies far away, to stop shimmering. Godot has no project-wide setting for this in 3D, so we set it on each material. **Triplanar** mapping projects the texture from the sides, so boxes of any size get evenly sized squares without UV unwrapping. *Ours:* `assets/placeholder/materials/greybox_*.tres`, all sharing the 16-pixel `greybox_grid.png` (one square per metre).
 
 **CharacterBody3D and `move_and_slide()`.** A body moved by its own script rather than by physics forces: you set its `velocity`, then call `move_and_slide()`, which moves it, slides it along walls and slopes, and works out whether it's on the floor (`is_on_floor()`). If the floor is a moving body, it adds that floor's velocity too (the *platform velocity*), including turning. *Ours:* `Player3D` (`scripts/player/player_3d.gd`). That's how the ship's deck carries the player as it sails and turns.
 
@@ -132,7 +132,7 @@ A growing glossary of the Godot concepts this project uses: what each one is, in
 
 **CSG shapes.** *Constructive solid geometry*: simple shapes (`CSGBox3D`, `CSGCylinder3D`) that combine, with a child set to *Subtraction* cutting itself out of its parent. Quick for blocking out levels; slower than plain meshes, so best for a few pieces. *Ours:* the galley's starboard wall is a `CSGBox3D` with two cylinders cut out for the portholes.
 
-**Override materials.** A mesh's own materials can be replaced per instance without touching the mesh: `material_override` covers the whole mesh, `set_surface_override_material()` one surface. *Ours:* `ThirdPartyModel` gives pack models the N64 grain shader this way, keeping each model's own colours.
+**Override materials.** A mesh's own materials can be replaced per instance without touching the mesh: `material_override` covers the whole mesh, `set_surface_override_material()` one surface. *Ours:* `ThirdPartyModel` applies stylised materials or a tint to individual imported models this way.
 
 **Overridden properties on an instance.** A scene placed inside another (an *instance*) keeps its own values unless the outer scene changes one. A changed value is saved in the outer scene, shows in the Inspector with a circular ↺ revert arrow beside it, and clicking the arrow goes back to the instanced scene's value. *Ours:* `sea.tscn` used to set its `Player`'s `speed` to 2 m/s for a slower pace aboard; that's gone, so every scene uses `player.tscn`'s 3.5 m/s.
 
@@ -410,55 +410,13 @@ A growing glossary of the Godot concepts this project uses: what each one is, in
 
 **`top_level` doesn't escape a hidden parent.** A `top_level` node ignores its parent's position, but not its visibility: hide the parent and it's hidden too. *Ours:* the lantern spirit is a child of the player (so `@hide player` hides only the player's `Model`, or he'd vanish with you).
 
-**Hiding part of a model.** A character built from several meshes can show or hide each with `visible`. *Ours:* `CharacterModel.eyes_shut` hides the eyeballs, which leaves the lids' own hollow: closed eyes, with no extra art. A head fired in the Kiln is one mesh with the eyes painted in, so there's nothing to hide; the Kiln fires the head a second time without the eyeballs (`CharacterParts.sleeping_head_job()`, its files named `.asleep`), and `eyes_shut` shows that head instead of the awake one.
+**Hiding part of a model.** A character built from several meshes can show or hide each with `visible`. *Ours:* `CharacterModel.eyes_shut` hides the eyeballs, which leaves the lids' own hollow: closed eyes, with no extra art.
 
 **Queueing an animation (`AnimationPlayer.queue`).** `play()` switches to a clip at once; `queue()` lines one up to start when the current one ends. *Ours:* the `@queue` cue: `pleads` plays once, then the `offered` loop takes over for as long as the player waits.
 
 **Lines that don't wait.** A line in the dialogue box normally waits for a button. `Conversation.say_aside()` shows one that doesn't: the box has no arrow, the script carries on, and whoever asked puts it away. *Ours:* the `@say` and `@say_in` cues (`scripts/cutscene/speech_cues.gd`), for a shout or a plea that should pass with the moment.
 
 **Giving each of many things its own pace.** A small sum that turns an index into a number between 0 and 1, always the same for that index, is enough to make a crowd look unplanned without storing anything. *Ours:* `LanternField.share_of`, which sets how fast each lantern sinks and turns.
-
-## The Kiln (#126)
-
-**Texel density.** How many texture pixels cover a metre of surface. The N64 look is a low, even density (about 64 per metre) so every surface's pixels are the same chunky size. *Ours:* each `ArtLook`'s `pixels_per_metre`; the Kiln sizes each texture to hit it at the size the model is drawn.
-
-**Decimating and baking (Blender).** *Decimating* removes triangles while keeping the shape (Blender's "collapse" merges the edges that change it least). *Baking* paints how one model looks onto another's texture: rays from the simple model find the detailed one, and copy its colour, or how shaded its creases are (ambient occlusion). *Ours:* `tools/kiln/fire.py`.
-
-**`@export_tool_button`.** Puts a button in the Inspector that runs a function in the editor, without a plugin; the script must be `@tool`. *Ours:* Fire in Kiln on `ThirdPartyModel` and `CharacterParts`.
-
-**Starting other programs (`OS.create_process`, `OS.execute`).** `create_process` starts a program and carries on (it gives back a process id to check with `OS.is_process_running`); `execute` waits for it to finish and can collect what it printed. *Ours:* `Kiln.start` (the editor buttons, so the editor doesn't freeze) and `Kiln.run` (`kiln.sh`).
-
-**Awaiting a timer (coroutines).** A function that uses `await` pauses there and carries on later, while the game (or editor) keeps running; whoever calls it can `await` it too. `get_tree().create_timer(s).timeout` is something to await for a while. *Ours:* `Kiln.fire_in_background` checks four times a second until Blender is done.
-
-**Import settings (`.import` files).** When Godot first sees a file it imports it with the settings in the `.import` file beside it, making one with defaults if there isn't one. Textures are normally compressed for the graphics card, which smudges tiny pixel textures. *Ours:* the Kiln writes `.import` files before Godot sees its output, so textures stay exact (lossless, no mipmaps) and models get no extra levels of detail.
-
-**Reaching the editor from game code.** The editor's classes (`EditorInterface`) aren't in a built game, so a script that names them fails there; `Engine.get_singleton(&"EditorInterface")` finds it by name only when it's there. `get_resource_filesystem().reimport_files()` imports new files straight away. *Ours:* `Kiln.import_in_editor`.
-
-**Inspector lines that aren't saved (`_get_property_list`).** A script can add properties to the Inspector in code, with usage flags: `PROPERTY_USAGE_EDITOR | PROPERTY_USAGE_READ_ONLY` shows a value without saving it or letting it be changed. `_get` supplies its value. *Ours:* `ThirdPartyModel`'s `kiln_status`.
-
-**Reading a scene without running it (`SceneState`).** `PackedScene.get_state()` lists a saved scene's nodes and their property values without building it. *Ours:* the Lookbook borrows the player's animation files from `player.tscn`.
-
-**Skinned meshes' boxes.** A mesh bent by a skeleton keeps the box (AABB) of its resting shape, wherever its bones move it, so don't frame a camera or measure by it while it's animated. *Ours:* the Lookbook frames exhibits by their size and position instead.
-
-**Photographing the screen.** After `await RenderingServer.frame_post_draw`, `get_viewport().get_texture().get_image()` is what was just drawn; `save_png` writes it. It needs a real window (not `--headless`). *Ours:* `tools/kiln/capture.sh`.
-
-**OKLab.** A colour space where equal distances look equally different to the eye (plain RGB doesn't: a step in green looks bigger than the same step in blue). One axis is lightness, two are colour. *Ours:* `KilnPalette.nearest` and the Kiln's palette snap compare colours in OKLab (#128).
-
-**k-means clustering.** Finds a few colours that best stand for many: start with some, give every pixel to its nearest, move each colour to the average of its pixels, repeat. *Ours:* `tools/kiln/make_palette.py` makes the 64-colour Salt and Ember palette this way (#128).
-
-**The "keep" importer.** A `.import` file with `importer="keep"` tells Godot to leave a file as it is, not make a texture of it. *Ours:* the Kiln's `.raw.png` copies, kept only for making palettes (#128).
-
-**Shader includes (`.gdshaderinc`).** A file of shader code that several shaders pull in with `#include "res://..."`, so they share it. *Ours:* `n64_surface.gdshaderinc`, shared by `n64_surface` and `n64_surface_vertex` (#129).
-
-**Per-vertex lighting (`render_mode vertex_lighting`).** Lights a mesh at its corners and blends across each triangle (Gouraud shading), as N64-era hardware did, rather than for every pixel. Cheaper and softer, and it shows the triangles. *Ours:* `n64_surface_vertex.gdshader`, chosen by a look's `vertex_lighting` (#129).
-
-**Stepped animation.** With the animation player moved on by hand (`ANIMATION_CALLBACK_MODE_PROCESS_MANUAL` and `advance()`), holding the time back and releasing it in whole steps makes a model move a few poses a second, like hand-keyed animation. *Ours:* `AnimationStepper`, used by `Crab` and `CharacterModel` when a look's `animation_steps` is set (#129).
-
-**Anti-aliasing by supersampling.** Drawing a shape at several samples per pixel and averaging them gives edge pixels in-between colours, so edges look smooth, not stepped. *Ours:* `tools/textures/paint_placeholders.py` paints our placeholder textures at 4 x 4 samples per pixel (#135). (Smoothing model edges on screen is a different thing: #134.)
-
-**Filtering by hand in a shader.** A shader that makes its own low-resolution picture (fire from noise, worked out per texel) can still look filtered: work out the four texels around a point and blend them by how far the point is between them, as a filtered texture does. *Ours:* the `soft` switch in `pixel_fire` (the stoves) and `flame_hand` (#137).
-
-**`.gdignore`.** An empty file named `.gdignore` in a folder makes Godot skip that folder: nothing in it is imported or shown in the FileSystem dock. *Ours:* `tools/textures/originals/`, the pixel-art originals kept only for the painting script (#135).
 
 ## The Meshy heron captain (#139)
 

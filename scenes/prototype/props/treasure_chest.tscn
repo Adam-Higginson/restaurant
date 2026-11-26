@@ -174,9 +174,6 @@ script = ExtResource("3_ifvip")
 path = "res://assets/third_party/meshy/chest_big/chest_big.glb"
 fit_size = Vector3(0.9, 0.9, 0.9)
 stand_ins = [NodePath("../Body"), NodePath("../BodyBand"), NodePath("../Lock")]
-grain = false
-detail = 1.0
-keep_as_made = true
 
 [node name="Glow" type="OmniLight3D" parent="." unique_id=829583998]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.45, 0)

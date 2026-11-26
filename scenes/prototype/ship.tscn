@@ -383,25 +383,21 @@ update_mode = 1
 script = ExtResource("14_tex")
 material = ExtResource("10_wet")
 path = "res://assets/third_party/sbs_textures_128/128x128/Wood/Synth-Wood_13-128x128.png"
-pixels = 32
 
 [node name="GalleyWoodTexture" type="Node" parent="." unique_id=355991380]
 script = ExtResource("14_tex")
 material = ExtResource("2_nifss")
 path = "res://assets/third_party/sbs_textures_128/128x128/Wood/Synth-Wood_15-128x128.png"
-pixels = 32
 
 [node name="GalleyFloorTexture" type="Node" parent="." unique_id=1625436600]
 script = ExtResource("14_tex")
 material = ExtResource("17_floor")
 path = "res://assets/third_party/sbs_textures_128/128x128/Wood/Synth-Wood_14-128x128.png"
-pixels = 32
 
 [node name="TrimTexture" type="Node" parent="." unique_id=739034238]
 script = ExtResource("14_tex")
 material = ExtResource("13_wetdark")
 path = "res://assets/third_party/sbs_textures_128/128x128/Wood/Synth-Wood_01-128x128.png"
-pixels = 32
 
 [node name="SurfaceSpace" type="Node" parent="." unique_id=1907707367]
 script = ExtResource("16_space")
@@ -489,67 +485,56 @@ shape = SubResource("Cosy_38")
 script = ExtResource("14_tex")
 material = ExtResource("27_propwood")
 path = "res://assets/third_party/sbs_textures_128/128x128/Wood/Synth-Wood_14-128x128.png"
-pixels = 32
 
 [node name="DarkWoodTexture" type="Node" parent="." unique_id=1697228527]
 script = ExtResource("14_tex")
 material = ExtResource("28_darkwood")
 path = "res://assets/third_party/sbs_textures_128/128x128/Wood/Synth-Wood_09-128x128.png"
-pixels = 32
 
 [node name="ClayTexture" type="Node" parent="." unique_id=1435079611]
 script = ExtResource("14_tex")
 material = ExtResource("29_clay")
 path = "res://assets/third_party/sbs_textures_128/128x128/Stone/Synth-Stone_08-128x128.png"
-pixels = 32
 
 [node name="SackTexture" type="Node" parent="." unique_id=1400068786]
 script = ExtResource("14_tex")
 material = ExtResource("30_sack")
 path = "res://assets/third_party/sbs_textures_128/128x128/Fabric/Synth-Fabric_13-128x128.png"
-pixels = 32
 
 [node name="RugTexture" type="Node" parent="." unique_id=2145094304]
 script = ExtResource("14_tex")
 material = ExtResource("31_rug")
 path = "res://assets/third_party/sbs_textures_128/128x128/Fabric/Synth-Fabric_04-128x128.png"
-pixels = 32
 
 [node name="RopeTexture" type="Node" parent="." unique_id=392979490]
 script = ExtResource("14_tex")
 material = ExtResource("32_rope")
 path = "res://assets/third_party/sbs_textures_128/128x128/Fabric/Synth-Fabric_03-128x128.png"
-pixels = 32
 
 [node name="StoneTexture" type="Node" parent="." unique_id=1564122977]
 script = ExtResource("14_tex")
 material = ExtResource("35_stone")
 path = "res://assets/third_party/sbs_textures_128/128x128/Stone/Synth-Stone_09-128x128.png"
-pixels = 32
 
 [node name="PlankingTexture" type="Node" parent="." unique_id=1752915310]
 script = ExtResource("14_tex")
 material = ExtResource("90_planking")
 path = "res://assets/third_party/sbs_textures_128/128x128/Wood/Synth-Wood_15-128x128.png"
-pixels = 32
 
 [node name="DeckPropWoodTexture" type="Node" parent="." unique_id=1231413089]
 script = ExtResource("14_tex")
 material = ExtResource("90_propwood")
 path = "res://assets/third_party/sbs_textures_128/128x128/Wood/Synth-Wood_14-128x128.png"
-pixels = 32
 
 [node name="DeckRopeTexture" type="Node" parent="." unique_id=487945806]
 script = ExtResource("14_tex")
 material = ExtResource("90_rope")
 path = "res://assets/third_party/sbs_textures_128/128x128/Fabric/Synth-Fabric_03-128x128.png"
-pixels = 32
 
 [node name="TarredRopeTexture" type="Node" parent="." unique_id=216636396]
 script = ExtResource("14_tex")
 material = ExtResource("90_tar")
 path = "res://assets/third_party/sbs_textures_128/128x128/Fabric/Synth-Fabric_03-128x128.png"
-pixels = 32
 
 [node name="Shelter" type="Area3D" parent="." unique_id=259877000]
 script = ExtResource("11_shelter")

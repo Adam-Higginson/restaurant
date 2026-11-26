@@ -62,6 +62,3 @@ script = ExtResource("900_meshy")
 path = "res://assets/third_party/kaykit_furniture/Assets/gltf/book_set.gltf"
 fit_size = Vector3(0.3, 0.2, 0.3)
 stand_ins = [NodePath("../Book1"), NodePath("../Book2"), NodePath("../Book3")]
-grain = false
-detail = 1.0
-keep_as_made = true

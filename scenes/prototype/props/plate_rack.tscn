@@ -142,6 +142,3 @@ path = "res://assets/third_party/meshy/plate_rack/model/model.glb"
 fit_size = Vector3(1.1, 1.55, 0.6)
 stretch = true
 stand_ins = [NodePath("../Mesh"), NodePath("../Back"), NodePath("../Plate1"), NodePath("../Plate2"), NodePath("../Plate3"), NodePath("../Plate4"), NodePath("../Plate5"), NodePath("../Plate6"), NodePath("../PlateRail")]
-grain = false
-detail = 1.0
-keep_as_made = true

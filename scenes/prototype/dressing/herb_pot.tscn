@@ -3,7 +3,6 @@
 [ext_resource type="Script" path="res://scripts/props/rocking.gd" id="1_d"]
 [ext_resource type="Material" path="res://assets/placeholder/materials/clay.tres" id="2_d"]
 [ext_resource type="Script" path="res://scripts/art/third_party_model.gd" id="3_d"]
-[ext_resource type="Resource" path="res://data/art/looks/prop.tres" id="kiln_prop"]
 
 [sub_resource type="CylinderMesh" id="S1"]
 top_radius = 0.09
@@ -24,7 +23,5 @@ mesh = SubResource("S1")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.11, 0)
 script = ExtResource("3_d")
 path = "res://assets/third_party/kaykit_restaurant/Assets/gltf/food_ingredient_lettuce.gltf"
-look = ExtResource("kiln_prop")
 tint = Color(0.55, 1.5, 0.5, 1)
 fit_size = Vector3(0.2, 0.17, 0.2)
-grain_metres = 0.06

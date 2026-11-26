@@ -37,13 +37,12 @@ func test_every_texture_keeps_its_pixel_art_original() -> void:
 	assert_bool(FileAccess.file_exists(ORIGINALS.path_join(".gdignore"))).is_true()
 
 
-func test_the_bunks_pillows_are_fired_pack_pillows_over_our_boxes() -> void:
+func test_the_bunks_pillows_are_pack_pillows_over_our_boxes() -> void:
 	var bay: Node = (load("res://scenes/prototype/props/bunk_bay.tscn") as PackedScene).instantiate()
 	for pillow: String in ["LowerPillow", "LowerPillowSmall", "UpperPillow", "UpperPillowSmall"]:
 		var pack: ThirdPartyModel = bay.get_node("%s/Pack" % pillow) as ThirdPartyModel
 		assert_object(pack).override_failure_message(pillow).is_not_null()
 		assert_str(pack.path.get_file()).is_equal("pillow_A.gltf")
-		assert_object(pack.look).is_not_null()
 		assert_object(bay.get_node("%s/Box" % pillow)).is_not_null()
 	bay.free()
 

@@ -106,7 +106,7 @@ func _droplet() -> QuadMesh:
 
 
 # A round blob of water, its edge fading softly to see-through, smoothly
-# filtered as N64 sprites were (#137).
+# smoothly filtered (#137).
 func _droplet_texture() -> ImageTexture:
 	const SIZE: int = 16
 	var image: Image = Image.create(SIZE, SIZE, false, Image.FORMAT_RGBA8)

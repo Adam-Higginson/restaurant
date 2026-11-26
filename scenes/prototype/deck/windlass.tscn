@@ -174,6 +174,3 @@ script = ExtResource("900_meshy")
 path = "res://assets/third_party/meshy/windlass/model/model.glb"
 fit_size = Vector3(2.96, 1.6, 1.59)
 stand_ins = [NodePath("../Sill"), NodePath("../CheekPort"), NodePath("../CheekCapPort"), NodePath("../CheekStarboard"), NodePath("../CheekCapStarboard"), NodePath("../Drum"), NodePath("../Whelp30"), NodePath("../Whelp85"), NodePath("../Hole1"), NodePath("../Hole2"), NodePath("../Hole3"), NodePath("../PawlPost"), NodePath("../Pawl"), NodePath("../Turn1"), NodePath("../Turn2"), NodePath("../Turn3"), NodePath("../Turn4"), NodePath("../Turn5"), NodePath("../Handspike")]
-grain = false
-detail = 1.0
-keep_as_made = true

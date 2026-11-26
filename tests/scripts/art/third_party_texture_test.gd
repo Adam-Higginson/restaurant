@@ -25,15 +25,6 @@ func test_does_nothing_without_a_material_or_path() -> void:
 	assert_bool(dresser.apply()).is_false()
 
 
-func test_shrinks_to_chunky_pixels() -> void:
-	var dresser: ThirdPartyTexture = _new_dresser(GRID)
-	dresser.pixels = 8
-	assert_bool(dresser.apply()).is_true()
-	var shrunk: Texture2D = dresser.material.get_shader_parameter(&"albedo_texture")
-	assert_int(shrunk.get_width()).is_equal(8)
-	assert_int(shrunk.get_height()).is_equal(8)
-
-
 func test_can_give_the_texture_mipmaps() -> void:
 	var dresser: ThirdPartyTexture = _new_dresser(GRID)
 	dresser.mipmaps = true

@@ -1,7 +1,6 @@
 [gd_resource type="Resource" script_class="Item" format=3]
 
 [ext_resource type="Script" path="res://scripts/data/item.gd" id="1_myuw4"]
-[ext_resource type="Resource" path="res://data/art/looks/prop.tres" id="look_prop"]
 
 [resource]
 script = ExtResource("1_myuw4")
@@ -10,4 +9,3 @@ display_name = "Lettuce"
 color = Color(0.45, 0.75, 0.35, 1)
 storage = 1
 model_path = "res://assets/third_party/kaykit_restaurant/Assets/gltf/food_ingredient_lettuce.gltf"
-model_look = ExtResource("look_prop")

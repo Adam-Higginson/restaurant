@@ -17,8 +17,7 @@
 [ext_resource type="PackedScene" path="res://scenes/prototype/props/lantern.tscn" id="13_kea4x"]
 [ext_resource type="Material" path="res://assets/placeholder/materials/leather.tres" id="14_6bqnt"]
 [ext_resource type="PackedScene" path="res://scenes/prototype/dressing/candle.tscn" id="15_g20dw"]
-[ext_resource type="Script" path="res://scripts/art/third_party_model.gd" id="kiln_model"]
-[ext_resource type="Resource" path="res://data/art/looks/prop.tres" id="kiln_prop"]
+[ext_resource type="Script" path="res://scripts/art/third_party_model.gd" id="pack_model"]
 
 [sub_resource type="BoxMesh" id="BoxMesh_j7brd"]
 size = Vector3(0.06, 2.95, 1)
@@ -273,13 +272,12 @@ mesh = SubResource("BoxMesh_ycbqk")
 
 [node name="Pack" type="Node3D" parent="LowerPillow" node_paths=PackedStringArray("stand_ins")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.075, 0)
-script = ExtResource("kiln_model")
+script = ExtResource("pack_model")
 path = "res://assets/third_party/kaykit_furniture/Assets/gltf/pillow_A.gltf"
 fit_size = Vector3(0.38, 0.15, 0.6)
 stretch = true
 stand_ins = [NodePath("../Box")]
 tint = Color(1.04, 1.28, 1.75, 1)
-look = ExtResource("kiln_prop")
 
 [node name="LowerQuilt" type="MeshInstance3D" parent="." unique_id=354320288]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.295, 0.657, 0.475)
@@ -305,13 +303,12 @@ mesh = SubResource("BoxMesh_tpfig")
 
 [node name="Pack" type="Node3D" parent="LowerPillowSmall" node_paths=PackedStringArray("stand_ins")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.05, 0)
-script = ExtResource("kiln_model")
+script = ExtResource("pack_model")
 path = "res://assets/third_party/kaykit_furniture/Assets/gltf/pillow_A.gltf"
 fit_size = Vector3(0.3, 0.1, 0.46)
 stretch = true
 stand_ins = [NodePath("../Box")]
 tint = Color(1.04, 1.28, 1.75, 1)
-look = ExtResource("kiln_prop")
 
 [node name="LowerFootBlanket" type="MeshInstance3D" parent="." unique_id=905325509]
 transform = Transform3D(0.9975641, 0, 0.06975647, 0, 1, 0, -0.06975647, 0, 0.9975641, 0.73, 0.727, 0.475)
@@ -402,13 +399,12 @@ mesh = SubResource("BoxMesh_ue704")
 
 [node name="Pack" type="Node3D" parent="UpperPillow" node_paths=PackedStringArray("stand_ins")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.075, 0)
-script = ExtResource("kiln_model")
+script = ExtResource("pack_model")
 path = "res://assets/third_party/kaykit_furniture/Assets/gltf/pillow_A.gltf"
 fit_size = Vector3(0.38, 0.15, 0.6)
 stretch = true
 stand_ins = [NodePath("../Box")]
 tint = Color(1.04, 1.28, 1.75, 1)
-look = ExtResource("kiln_prop")
 
 [node name="UpperQuilt" type="MeshInstance3D" parent="." unique_id=910099644]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.295, 1.947, 0.475)
@@ -434,13 +430,12 @@ mesh = SubResource("BoxMesh_6kk0l")
 
 [node name="Pack" type="Node3D" parent="UpperPillowSmall" node_paths=PackedStringArray("stand_ins")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.05, 0)
-script = ExtResource("kiln_model")
+script = ExtResource("pack_model")
 path = "res://assets/third_party/kaykit_furniture/Assets/gltf/pillow_A.gltf"
 fit_size = Vector3(0.3, 0.1, 0.46)
 stretch = true
 stand_ins = [NodePath("../Box")]
 tint = Color(1.04, 1.28, 1.75, 1)
-look = ExtResource("kiln_prop")
 
 [node name="UpperFootBlanket" type="MeshInstance3D" parent="." unique_id=1738223221]
 transform = Transform3D(0.9975641, 0, 0.06975647, 0, 1, 0, -0.06975647, 0, 0.9975641, 0.73, 2.017, 0.475)
@@ -584,6 +579,3 @@ path = "res://assets/third_party/meshy/berth/model/model.glb"
 fit_size = Vector3(2.12, 2.95, 1.12)
 stretch = true
 stand_ins = [NodePath("../EndLeft"), NodePath("../PostLeft"), NodePath("../EndRight"), NodePath("../PostRight"), NodePath("../Canopy"), NodePath("../DrawerFront"), NodePath("../DrawerLeft"), NodePath("../DrawerLeft/Handle"), NodePath("../DrawerRight"), NodePath("../DrawerRight/Handle"), NodePath("../LowerPlatform"), NodePath("../LowerMattress"), NodePath("../LowerSheet"), NodePath("../LowerPillow/Box"), NodePath("../LowerQuilt"), NodePath("../LowerQuiltFold"), NodePath("../LowerQuiltDrape"), NodePath("../LowerPillowSmall/Box"), NodePath("../LowerFootBlanket"), NodePath("../LowerQuiltHeap/Bulk"), NodePath("../LowerQuiltHeap/Ruck"), NodePath("../LowerQuiltHeap/Twist"), NodePath("../LowerQuiltHeap/Corner"), NodePath("../LowerLeeBoard"), NodePath("../LowerRail"), NodePath("../UpperPlatform"), NodePath("../UpperMattress"), NodePath("../UpperSheet"), NodePath("../UpperPillow/Box"), NodePath("../UpperQuilt"), NodePath("../UpperQuiltFold"), NodePath("../UpperQuiltDrape"), NodePath("../UpperPillowSmall/Box"), NodePath("../UpperFootBlanket"), NodePath("../UpperQuiltHeap/Bulk"), NodePath("../UpperQuiltHeap/Ruck"), NodePath("../UpperQuiltHeap/Twist"), NodePath("../UpperQuiltHeap/Corner"), NodePath("../UpperLeeBoard"), NodePath("../UpperRail"), NodePath("../LadderRail1"), NodePath("../LadderRail2"), NodePath("../Rung1"), NodePath("../Rung2"), NodePath("../Rung3"), NodePath("../Rung4"), NodePath("../Rung5"), NodePath("../Rung6")]
-grain = false
-detail = 1.0
-keep_as_made = true

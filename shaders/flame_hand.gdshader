@@ -1,4 +1,4 @@
-// The lantern spirit's hand: the same soft N64 fire as his flame
+// The lantern spirit's hand: the same soft fire as his flame
 // (shaders/lantern_glass.gdshader), poured into the outline of an arm and a
 // hand. The outline is worked out with distances rather than drawn: for
 // every texel we ask how far it is from the nearest part of the hand (the
@@ -39,7 +39,7 @@ uniform float grip = 0.0;
 // How long the sheet is against how wide it is (FlameHand sets it from the
 // sheet, so the fingertips stay on it).
 uniform float aspect = 1.6;
-// Draw the hand smoothly, as N64 fire was filtered; off snaps it to chunky
+// Draw the hand smoothly; off snaps it to chunky
 // texel squares.
 uniform bool soft = true;
 
@@ -70,7 +70,7 @@ float melt(float a, float b, float k) {
 }
 
 void fragment() {
-	// Soft, the hand is drawn smoothly, as N64 fire was filtered; otherwise
+	// Soft, the hand is drawn smoothly; otherwise
 	// snapped to the texel grid, in chunky squares.
 	vec2 uv = soft ? UV : (floor(UV * texels) + 0.5) / texels;
 	// Along the arm from the wrist (0) and up across it (0 to 1).

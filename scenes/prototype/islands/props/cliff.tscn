@@ -18,7 +18,4 @@ script = ExtResource("1_model")
 path = "res://assets/third_party/meshy/cliff/model/model.glb"
 fit_size = Vector3(80, 32, 80)
 stand_ins = [NodePath("../StandIn")]
-grain = false
-detail = 1.0
-keep_as_made = true
 casts_shadow = false

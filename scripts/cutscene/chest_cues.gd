@@ -267,15 +267,15 @@ func _begin_staging() -> void:
 ## bar in its colour. Freed by whoever adds it.
 static func make_treasure(tool: HandTool) -> Node3D:
 	if tool == null:
-		return _treasure_of("", null, Vector3(0.15, 0.6, 0.06), Color.WHITE, 0.0)
-	return _treasure_of(tool.model_path, tool.model_look, tool.model_size, tool.color,
+		return _treasure_of("", Vector3(0.15, 0.6, 0.06), Color.WHITE, 0.0)
+	return _treasure_of(tool.model_path, tool.model_size, tool.color,
 			tool.hold_up_turn_degrees)
 
 
 ## The model of [param item] to hold up (the captain's pot): its own model
 ## stood on end, handle up, turning on the spot; otherwise a greybox block.
 static func make_item_treasure(item: Item) -> Node3D:
-	return _treasure_of(item.model_path, item.model_look, item.model_size, item.color,
+	return _treasure_of(item.model_path, item.model_size, item.color,
 			ITEM_TURN_DEGREES)
 
 
@@ -283,7 +283,7 @@ static func make_item_treasure(item: Item) -> Node3D:
 # (a greybox block in [param tint] without it), lit and haloed, its middle on
 # the hands. [param turn_degrees] turns it about its forward axis to stand it
 # up (a knife point up, a pot handle up).
-static func _treasure_of(path: String, look: ArtLook, size: Vector3, tint: Color,
+static func _treasure_of(path: String, size: Vector3, tint: Color,
 		turn_degrees: float) -> Node3D:
 	var root: Node3D = Node3D.new()
 	root.name = "Treasure"
@@ -325,10 +325,6 @@ static func _treasure_of(path: String, look: ArtLook, size: Vector3, tint: Color
 	if not path.is_empty():
 		var model: ThirdPartyModel = ThirdPartyModel.new()
 		model.name = "Model"
-		model.look = look
-		model.keep_as_made = look == null
-		model.grain = false
-		model.detail = 1.0
 		model.fit_size = size
 		model.stand_ins = [bar]
 		# Its middle on the hands, so it turns on the spot rather than round a

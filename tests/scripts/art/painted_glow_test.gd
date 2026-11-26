@@ -64,13 +64,12 @@ func test_a_cut_away_lantern_casts_shadows_but_a_glowing_one_doesnt() -> void:
 	assert_int(cut_mesh.cast_shadow).is_equal(GeometryInstance3D.SHADOW_CASTING_SETTING_ON)
 
 
-# A test box dressed as made (no grain), with a PaintedGlow on it, in the tree.
+# A test box with its source material, with a PaintedGlow on it, in the tree.
 func _glowing_box(threshold: float, energy: float) -> PaintedGlow:
 	var holder: Node3D = Node3D.new()
 	auto_free(holder)
 	var dresser: ThirdPartyModel = ThirdPartyModel.new()
 	dresser.path = STAND_IN_MODEL
-	dresser.grain = false
 	holder.add_child(dresser)
 	var glow: PaintedGlow = PaintedGlow.new()
 	glow.threshold = threshold
@@ -88,7 +87,6 @@ func _box_with_glass(size: Vector3, corner: float) -> PaintedGlow:
 	auto_free(holder)
 	var dresser: ThirdPartyModel = ThirdPartyModel.new()
 	dresser.path = STAND_IN_MODEL
-	dresser.grain = false
 	holder.add_child(dresser)
 	var glass: Node3D = Node3D.new()
 	glass.position = Vector3(0.1, 0.5, -0.2)

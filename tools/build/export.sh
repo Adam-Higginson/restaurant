@@ -19,7 +19,7 @@ GODOT="${GODOT:-/c/Godot/godot_console.exe}"
 cd "$(dirname "$0")/../.."
 
 # Without the art the build would quietly be greybox: refuse instead.
-for needed in assets/third_party/_kiln assets/third_party/kaykit_restaurant \
+for needed in assets/third_party/kaykit_restaurant \
 		assets/third_party/quaternius_base_characters assets/third_party/meshy; do
 	if [ ! -d "$needed" ]; then
 		echo "error: $needed is missing. Clone the art first (see CLAUDE.md)." >&2

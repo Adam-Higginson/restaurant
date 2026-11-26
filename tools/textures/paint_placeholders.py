@@ -22,7 +22,7 @@ import bpy
 import numpy
 
 SAMPLES = 4
-# How many times bigger than #135's soft N64 size each texture is painted,
+# How many times bigger than the original size each texture is painted,
 # and the most pixels across its longer side.
 DETAIL = 4
 LARGEST = 1024

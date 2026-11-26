@@ -1,11 +1,6 @@
 extends GameTestSuite
-## Tests that our own greybox keeps the soft N64 look chosen in #129: no
-## placeholder material draws its texture as sharp nearest-neighbour squares
-## (they read as voxels), and the shared grain is gentle mottling, not
-## high-contrast specks.
-
 const MATERIALS: String = "res://assets/placeholder/materials"
-const GRAIN: String = "res://assets/placeholder/materials/n64_grain.tres"
+const GRAIN: String = "res://assets/placeholder/materials/soft_grain.tres"
 
 
 func test_no_greybox_material_draws_sharp_pixels() -> void:

@@ -162,11 +162,7 @@ func _tool_model(tool: HandTool) -> Node3D:
 	root.add_child(bar)
 	if not tool.model_path.is_empty() and ResourceLoader.exists(tool.model_path):
 		var model: ThirdPartyModel = ThirdPartyModel.new()
-		model.look = tool.model_look
-		model.keep_as_made = tool.model_look == null
 		model.fit_size = tool.model_size
-		model.grain = false
-		model.detail = 1.0
 		model.stand_ins = [bar]
 		model.path = tool.model_path
 		root.add_child(model)

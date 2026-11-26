@@ -162,6 +162,3 @@ script = ExtResource("900_meshy")
 path = "res://assets/third_party/meshy/ships_wheel/model/model.glb"
 fit_size = Vector3(1.58, 1.97, 0.59)
 stand_ins = [NodePath("../Plinth"), NodePath("../UprightPort"), NodePath("../UprightStarboard"), NodePath("../Crossbar"), NodePath("../Housing"), NodePath("../Wheel/Hub"), NodePath("../Wheel/HubCap"), NodePath("../Wheel/Rim"), NodePath("../Wheel/Spoke1"), NodePath("../Wheel/Spoke2"), NodePath("../Wheel/Spoke3"), NodePath("../Wheel/Spoke4"), NodePath("../Wheel/Handle1"), NodePath("../Wheel/Handle2"), NodePath("../Wheel/Handle3"), NodePath("../Wheel/Handle4"), NodePath("../Wheel/Handle5"), NodePath("../Wheel/Handle6"), NodePath("../Wheel/Handle7"), NodePath("../Wheel/Handle8")]
-grain = false
-detail = 1.0
-keep_as_made = true

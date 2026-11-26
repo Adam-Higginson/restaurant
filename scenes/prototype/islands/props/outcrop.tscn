@@ -18,6 +18,3 @@ script = ExtResource("1_model")
 path = "res://assets/third_party/meshy/outcrop/model/model.glb"
 fit_size = Vector3(60, 4.5, 60)
 stand_ins = [NodePath("../StandIn")]
-grain = false
-detail = 1.0
-keep_as_made = true

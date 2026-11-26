@@ -72,6 +72,3 @@ path = "res://assets/third_party/kaykit_furniture/Assets/gltf/table_small.gltf"
 fit_size = Vector3(0.92, 0.575, 0.92)
 stretch = true
 stand_ins = [NodePath("../FootA"), NodePath("../FootB"), NodePath("../Column"), NodePath("../Top"), NodePath("../Rim")]
-grain = false
-detail = 1.0
-keep_as_made = true

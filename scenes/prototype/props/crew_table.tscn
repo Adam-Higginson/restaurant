@@ -208,9 +208,6 @@ path = "res://assets/third_party/meshy/crew_table/model/model.glb"
 fit_size = Vector3(2.44, 0.824, 1.12)
 stretch = true
 stand_ins = [NodePath("../TopBoard1"), NodePath("../TopBoard2"), NodePath("../TopBoard3"), NodePath("../CleatPort"), NodePath("../ApronFore"), NodePath("../CleatStarboard"), NodePath("../ApronAft"), NodePath("../Leg1"), NodePath("../Leg2"), NodePath("../EndStretcher1"), NodePath("../Leg3"), NodePath("../Leg4"), NodePath("../EndStretcher2"), NodePath("../Stretcher")]
-grain = false
-detail = 1.0
-keep_as_made = true
 
 [node name="BenchForeMeshy" type="Node3D" parent="." node_paths=PackedStringArray("stand_ins")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, -0, 0, 1, 0, 0, -0.86)
@@ -219,9 +216,6 @@ path = "res://assets/third_party/meshy/bench/model/model.glb"
 fit_size = Vector3(2.2, 0.5, 0.36)
 stretch = true
 stand_ins = [NodePath("../BenchFore"), NodePath("../BenchForeLeg1"), NodePath("../BenchForeLeg2"), NodePath("../BenchForeStretcher")]
-grain = false
-detail = 1.0
-keep_as_made = true
 
 [node name="BenchAftMeshy" type="Node3D" parent="." node_paths=PackedStringArray("stand_ins")]
 transform = Transform3D(-1, 0, 1.22465e-16, 0, 1, 0, -1.22465e-16, 0, -1, 0, 0, 0.86)
@@ -230,6 +224,3 @@ path = "res://assets/third_party/meshy/bench/model/model.glb"
 fit_size = Vector3(2.2, 0.5, 0.36)
 stretch = true
 stand_ins = [NodePath("../BenchAft"), NodePath("../BenchAftLeg1"), NodePath("../BenchAftLeg2"), NodePath("../BenchAftStretcher")]
-grain = false
-detail = 1.0
-keep_as_made = true

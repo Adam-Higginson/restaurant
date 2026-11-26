@@ -48,28 +48,6 @@ func test_scuttling_in_it_plays_its_walk() -> void:
 	assert_str(String(crab.playing())).is_equal("walk")
 
 
-func test_its_look_moves_it_a_few_poses_a_second() -> void:
-	var player: Player3D = new_player_3d_on_floor()
-	var crab: Crab = _new_rigged_crab(player, Vector3(0, 0, -8))
-	var runner: GdUnitSceneRunner = scene_runner(player.get_parent())
-	await physics_ticks(runner, 2)
-	var animator: AnimationPlayer = crab.find_children("*", "AnimationPlayer", true,
-			false)[0] as AnimationPlayer
-	var steps: float = _dresser(crab).look.animation_steps
-	assert_float(steps).is_greater(0.0)
-
-	var changes: int = 0
-	var last: float = animator.current_animation_position
-	for tick: int in 12:
-		await physics_ticks(runner, 1)
-		if not is_equal_approx(animator.current_animation_position, last):
-			changes += 1
-		last = animator.current_animation_position
-	# 12 frames at 60 a second is 0.2 s: a pose every 1/steps seconds.
-	assert_int(changes).is_less_equal(ceili(0.2 * steps) + 1)
-	assert_int(changes).is_greater(0)
-
-
 func test_its_claws_lift_through_its_arms_as_it_rears_up() -> void:
 	var player: Player3D = new_player_3d_on_floor()
 	var crab: Crab = _new_rigged_crab(player, CLOSE)

@@ -152,6 +152,3 @@ path = "res://assets/third_party/meshy/chart_table/model/model.glb"
 fit_size = Vector3(1.25, 0.95, 0.85)
 stretch = true
 stand_ins = [NodePath("../Top"), NodePath("../Leg1"), NodePath("../Leg2"), NodePath("../Leg3"), NodePath("../Leg4"), NodePath("../Shelf"), NodePath("../FiddleFore"), NodePath("../FiddleAft"), NodePath("../FiddlePort"), NodePath("../FiddleStarboard"), NodePath("../Chart"), NodePath("../Spyglass"), NodePath("../PipeBowl"), NodePath("../PipeStem"), NodePath("../LampStand"), NodePath("../LampArm"), NodePath("../NavigatorThings/Compass"), NodePath("../NavigatorThings/RolledChart"), NodePath("../NavigatorThings/DividerA"), NodePath("../NavigatorThings/DividerB")]
-grain = false
-detail = 1.0
-keep_as_made = true
