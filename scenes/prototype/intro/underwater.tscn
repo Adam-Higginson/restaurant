@@ -9143,9 +9143,8 @@ light_energy = 0.12
 light_volumetric_fog_energy = 0.3
 
 [node name="CastawayLamp" parent="." instance=ExtResource("EmberLamp")]
-position = Vector3(-0.41, 1.24, 0.94)
+position = Vector3(-0.34, 1.34, -0.32)
 rotation = Vector3(-0.14, -0.37, 0.12)
-scale = Vector3(1.2, 1.2, 1.2)
 
 [node name="Glass" parent="CastawayLamp"]
 instance_shader_parameters/ember = 0.24
