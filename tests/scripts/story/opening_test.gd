@@ -458,7 +458,9 @@ func test_skipping_the_intro_ends_it_with_everything_put_away() -> void:
 	assert_bool((_sea.get_node("FirstQuest") as FirstQuest).is_heading_to_helm).is_true()
 	assert_bool(Game.dialogue.is_set(LanternSpirit.LOW_FLAG)).is_true()
 	var at: Vector3 = _ship.to_local(_player.global_position)
-	assert_float(at.distance_to(_opening.wake_spot)).is_less(0.6)
+	assert_float(at.distance_to(_ship.to_local(_mark("bunk_stand").global_position))) \
+			.is_less(0.6)
+	assert_bool((_ship.get_node("WakingSet/Props/SeatedYou") as Node3D).visible).is_false()
 
 
 func test_a_saved_voyage_carries_on_after_the_title_instead_of_the_rescue() -> void:

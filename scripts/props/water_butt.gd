@@ -151,7 +151,8 @@ func _on_used(player: Player3D) -> void:
 	_play_once(dip_sound_path if dipping else pour_sound_path)
 	player.controls_enabled = false
 	var elapsed: float = 0.0
-	while is_instance_valid(player) and elapsed < dip_seconds:
+	while is_instance_valid(player) and elapsed < dip_seconds \
+			and player.arms.top() == vessel:
 		if dipping:
 			player.fill_progress = elapsed / dip_seconds
 		await get_tree().physics_frame
@@ -159,7 +160,7 @@ func _on_used(player: Player3D) -> void:
 	if not is_instance_valid(player):
 		return
 	player.fill_progress = -1.0
-	if player.arms.top() == vessel:
+	if elapsed >= dip_seconds and player.arms.top() == vessel:
 		if dipping:
 			fill(player.arms)
 		else:

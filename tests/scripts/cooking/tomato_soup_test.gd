@@ -30,6 +30,24 @@ func test_the_water_butt_fills_a_held_saucepan() -> void:
 	assert_float(player.fill_progress).is_equal(-1.0)
 
 
+func test_switching_slots_during_the_dip_leaves_the_pot_empty() -> void:
+	var rig: Array[Node3D] = new_moored_ship_with_player(AT_THE_BUTT)
+	var player: Player3D = rig[1] as Player3D
+	var runner: GdUnitSceneRunner = scene_runner(rig[0].get_parent())
+	await physics_ticks(runner, 2)
+	var pot: ItemInstance = ItemInstance.new(_item(&"saucepan"))
+	player.toolbar.add(pot)
+	await walk(runner, "move_left", 2)
+	await press(runner, "use_tool")
+	assert_bool(player.controls_enabled).is_false()
+	player.toolbar.select_next()
+	await physics_ticks(runner, 3)
+	assert_bool(player.controls_enabled).is_true()
+	assert_float(player.fill_progress).is_equal(-1.0)
+	assert_bool(pot.contents.get_contents().is_empty()).is_true()
+	assert_bool(Game.dialogue.is_set(WaterButt.FETCHED_FLAG)).is_false()
+
+
 func test_a_pot_only_ever_holds_one_lot_of_water() -> void:
 	var butt: WaterButt = _butt()
 	var toolbar: Toolbar = Toolbar.new()

@@ -12,6 +12,7 @@ extends Arms
 ## [method take_top] empties the selected slot, and [method is_full] means no
 ## slot is free. Arms' own stack is never used.
 
+## Emitted when the contents of any vessel on the toolbar change.
 signal vessel_contents_changed
 
 const SLOT_COUNT: int = 12

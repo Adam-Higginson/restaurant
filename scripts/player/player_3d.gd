@@ -111,7 +111,7 @@ var _zone_seen: CameraZone
 @onready var _camera_rig: CameraRig = $CameraRig
 
 
-## Remaining seconds in a short interaction shown by the HUD.
+## Progress through the water dip, 0 to 1, or -1 outside the interaction.
 var fill_progress: float = -1.0
 
 
