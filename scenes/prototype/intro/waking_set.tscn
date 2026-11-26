@@ -103,8 +103,8 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.6, 2.55, 11.8)
 [node name="Props" type="Node3D" parent="." unique_id=1506382072]
 
 [node name="SleepingYou" parent="Props" unique_id=1384354435 groups=["props"] instance=ExtResource("1_ma0b6")]
-position = Vector3(5.23, 1.79, 13.66)
-rotation = Vector3(-0.07, 3.141593, -0.09)
+position = Vector3(5.23, 1.835, 13.69)
+rotation = Vector3(-0.12, 3.141593, -0.045)
 visible = false
 
 [node name="Character" parent="Props/SleepingYou" index="5"]
