@@ -369,7 +369,7 @@ func test_you_wake_the_captain_and_the_weak_lantern_talk_and_then_the_ship_is_yo
 	assert_bool(sleeping.visible).is_false()
 	var seated: Node3D = _ship.get_node("WakingSet/Props/SeatedYou") as Node3D
 	assert_bool(seated.visible).is_true()
-	await physics_ticks(runner, 86)
+	await physics_ticks(runner, 110)
 	assert_bool(your_body.visible).is_true()
 	assert_bool(seated.visible).is_false()
 

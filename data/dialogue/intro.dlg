@@ -391,7 +391,7 @@ set lantern_low
 heron: Ah. You're awake.
 heron: Easy. Take your time.
 @play stirs_in_bunk
-@shot by_the_lantern cut
+@shot lantern_at_bunk cut
 @face heron lantern
 heron: You gave me a fright.
 lantern: Did I?
