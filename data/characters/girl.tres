@@ -1,9 +1,6 @@
 [gd_resource type="Resource" script_class="CharacterParts" format=3]
 
 [ext_resource type="Script" path="res://scripts/data/character_parts.gd" id="1"]
-[ext_resource type="Resource" path="res://data/art/looks/character_body.tres" id="2_body"]
-[ext_resource type="Resource" path="res://data/art/looks/character_head.tres" id="3_head"]
-[ext_resource type="Resource" path="res://data/art/looks/character_hair.tres" id="4_hair"]
 
 [resource]
 script = ExtResource("1")
@@ -12,6 +9,3 @@ head_from = "res://assets/third_party/quaternius_base_characters/Universal Base 
 hair = "res://assets/third_party/quaternius_base_characters/Universal Base Characters[Standard]/Hairstyles/Rigged to Head Bone/glTF (Godot -Unreal)/Hair_Buns.gltf"
 eyebrows = "res://assets/third_party/quaternius_base_characters/Universal Base Characters[Standard]/Hairstyles/Rigged to Head Bone/glTF (Godot -Unreal)/Eyebrows_Female.gltf"
 hair_colour = Color(0.45, 0.28, 0.16, 1)
-body_look = ExtResource("2_body")
-head_look = ExtResource("3_head")
-hair_look = ExtResource("4_hair")

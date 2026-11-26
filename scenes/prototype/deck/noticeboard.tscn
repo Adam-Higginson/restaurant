@@ -107,6 +107,3 @@ script = ExtResource("900_meshy")
 path = "res://assets/third_party/meshy/noticeboard/model/model.glb"
 fit_size = Vector3(1.12, 0.86, 0.19)
 stand_ins = [NodePath("../Frame"), NodePath("../Cork"), NodePath("../Roof"), NodePath("../Map"), NodePath("../Note1"), NodePath("../Note2"), NodePath("../Drawing"), NodePath("../Pin1"), NodePath("../Pin2"), NodePath("../Pin3"), NodePath("../Pin4"), NodePath("../Pin5")]
-grain = false
-detail = 1.0
-keep_as_made = true

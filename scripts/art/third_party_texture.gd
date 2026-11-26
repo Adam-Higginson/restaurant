@@ -14,9 +14,6 @@ extends Node
 @export_file("*.png", "*.jpg") var path: String = ""
 ## The shader parameter that takes the texture.
 @export var parameter: StringName = &"albedo_texture"
-## Shrink the texture to this many pixels across (and down) as it loads, for
-## the chunky N64 look; 0 keeps it as it is.
-@export var pixels: int = 0
 ## Make mipmaps for it as it loads: smaller copies Godot draws far away, so
 ## a finely detailed texture on the ground doesn't shimmer in the distance.
 @export var mipmaps: bool = false
@@ -33,25 +30,10 @@ func apply() -> bool:
 	var texture: Texture2D = load(path) as Texture2D
 	if texture == null:
 		return false
-	if pixels > 0:
-		texture = shrunk(texture, pixels)
 	if mipmaps:
 		texture = with_mipmaps(texture)
 	material.set_shader_parameter(parameter, texture)
 	return true
-
-
-## A copy of [param texture] shrunk smoothly to [param size] pixels square,
-## so its grain keeps its shape.
-static func shrunk(texture: Texture2D, size: int) -> ImageTexture:
-	# A copy: get_image() can hand back the texture's own picture (it does
-	# with no graphics card, as the tests run), and changing that would
-	# change the texture for everything else that uses it.
-	var image: Image = texture.get_image().duplicate() as Image
-	if image.is_compressed():
-		image.decompress()
-	image.resize(size, size, Image.INTERPOLATE_BILINEAR)
-	return ImageTexture.create_from_image(image)
 
 
 ## A copy of [param texture] with mipmaps: the smaller copies Godot draws

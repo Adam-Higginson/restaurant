@@ -7,8 +7,7 @@ extends RefCounted
 ## can export a list of files and whatever they need instead, so this lists:
 ## - every file of ours, outside the folders in [constant LEFT_OUT];
 ## - every pack file one of them names by path (the game loads models,
-##   textures and sounds by path, so Godot can't see those by itself);
-## - all of the Kiln's output, whose paths are worked out as the game runs.
+##   textures and sounds by path, so Godot can't see those by itself).
 ## Godot adds what those need, like a model's textures, as it exports.
 ##
 ## [code]tools/build/prepare_export.gd[/code] writes the list into the export
@@ -27,8 +26,6 @@ const LEFT_OUT: PackedStringArray = [
 ]
 ## Where the art packs are.
 const THIRD_PARTY: String = "res://assets/third_party/"
-## The Kiln's fired models: always exported whole.
-const KILN: String = "res://assets/third_party/_kiln"
 ## The kinds of text file that can name a pack file.
 const NAMING: PackedStringArray = ["tscn", "tres", "gd", "dlg", "gdshader"]
 
@@ -46,9 +43,6 @@ static func build() -> PackedStringArray:
 			for named: String in named_in(FileAccess.get_file_as_string(path)):
 				if ResourceLoader.exists(named):
 					found[named] = true
-	for path: String in files_under(KILN):
-		if ResourceLoader.exists(path):
-			found[path] = true
 	var listed: PackedStringArray = PackedStringArray(found.keys())
 	listed.sort()
 	return listed

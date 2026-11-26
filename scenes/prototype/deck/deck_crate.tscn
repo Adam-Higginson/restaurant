@@ -95,6 +95,3 @@ script = ExtResource("900_meshy")
 path = "res://assets/third_party/meshy/crate/model/model.glb"
 fit_size = Vector3(0.62, 0.62, 0.62)
 stand_ins = [NodePath("../Box"), NodePath("../Corner1"), NodePath("../Corner2"), NodePath("../Corner3"), NodePath("../Corner4"), NodePath("../BottomRimFore"), NodePath("../BottomRimAft"), NodePath("../BottomRimPort"), NodePath("../BottomRimStarboard"), NodePath("../TopRimFore"), NodePath("../TopRimAft"), NodePath("../TopRimPort"), NodePath("../TopRimStarboard")]
-grain = false
-detail = 1.0
-keep_as_made = true

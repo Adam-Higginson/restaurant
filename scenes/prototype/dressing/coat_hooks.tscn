@@ -173,6 +173,3 @@ script = ExtResource("196_meshy")
 path = "res://assets/third_party/meshy/peg_rail/model/model.glb"
 fit_size = Vector3(0.9, 1.4, 0.5)
 stand_ins = [NodePath("../Rail"), NodePath("../Peg1"), NodePath("../Peg2"), NodePath("../Peg3"), NodePath("../Souwester"), NodePath("../ScarfFront"), NodePath("../ScarfBack"), NodePath("../Raincoat/Hood"), NodePath("../Raincoat/Shoulders"), NodePath("../Raincoat/Body"), NodePath("../Raincoat/Skirt"), NodePath("../Raincoat/SleeveL"), NodePath("../Raincoat/SleeveR"), NodePath("../Raincoat/Toggle1"), NodePath("../Raincoat/Toggle2"), NodePath("../Raincoat/Toggle3")]
-grain = false
-detail = 1.0
-keep_as_made = true

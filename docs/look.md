@@ -1,6 +1,6 @@
 # The stylised look: how to tune it
 
-The game is moving from the soft N64 look to a warm, painted, anime-styled one: low golden light through windows, glowing lanterns, warm shadows, and characters with soft cel shading, a rim of light and a thin dark outline. This page says where each part of that look lives and which number to turn for each effect. It started with the look-dev cabin (#168).
+The game uses a warm, painted, anime-styled look with low golden light through windows, glowing lanterns, warm shadows, and characters with soft cel shading, a rim of light and a thin dark outline. This page says where each part of that look lives and which number to turn for each effect. It started with the look-dev cabin (#168).
 
 ## Where to try it
 

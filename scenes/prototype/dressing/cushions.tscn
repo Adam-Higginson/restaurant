@@ -28,9 +28,6 @@ script = ExtResource("900_meshy")
 path = "res://assets/third_party/kaykit_furniture/Assets/gltf/pillow_A.gltf"
 fit_size = Vector3(0.42, 0.14, 0.42)
 stand_ins = [NodePath("../Flat")]
-grain = false
-detail = 1.0
-keep_as_made = true
 
 [node name="Pillow2" type="Node3D" parent="." node_paths=PackedStringArray("stand_ins")]
 transform = Transform3D(0.906308, 0, -0.422618, 0, 1, 0, 0.422618, 0, 0.906308, 0.03, 0.11, -0.02)
@@ -38,6 +35,3 @@ script = ExtResource("900_meshy")
 path = "res://assets/third_party/kaykit_furniture/Assets/gltf/pillow_B.gltf"
 fit_size = Vector3(0.38, 0.14, 0.38)
 stand_ins = [NodePath("../Leaning")]
-grain = false
-detail = 1.0
-keep_as_made = true

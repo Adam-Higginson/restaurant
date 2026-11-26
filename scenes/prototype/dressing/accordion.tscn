@@ -100,6 +100,3 @@ script = ExtResource("900_meshy")
 path = "res://assets/third_party/meshy/accordion/model/model.glb"
 fit_size = Vector3(0.36, 0.27, 0.27)
 stand_ins = [NodePath("../EndL"), NodePath("../EndL/Trim"), NodePath("../EndR"), NodePath("../EndR/Trim"), NodePath("../Keys"), NodePath("../Fold1"), NodePath("../Fold2"), NodePath("../Fold3"), NodePath("../Fold4"), NodePath("../Fold5"), NodePath("../Strap")]
-grain = false
-detail = 1.0
-keep_as_made = true

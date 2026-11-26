@@ -22,9 +22,6 @@ script = ExtResource("1_model")
 path = "res://assets/third_party/meshy/bush/model/model.glb"
 fit_size = Vector3(40, 1.4, 40)
 stand_ins = [NodePath("../StandIn")]
-grain = false
-detail = 1.0
-keep_as_made = true
 
 [node name="Sway" type="Node" parent="." node_paths=PackedStringArray("model")]
 script = ExtResource("2_sway")

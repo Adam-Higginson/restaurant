@@ -138,7 +138,6 @@ var _rests: Dictionary[Node3D, Transform3D] = {}
 ## How far through their stepping the legs are, in radians.
 var _stride: float = 0.0
 ## Moves its animation on in steps, if its look says so.
-var _stepper: AnimationStepper = AnimationStepper.new()
 
 @onready var _model: Node3D = $Model
 @onready var _claw_left: Node3D = $Model/ClawLeft
@@ -506,8 +505,6 @@ func _find_rig() -> void:
 	_animator = animators[0] as AnimationPlayer
 	_skeleton = skeletons[0] as Skeleton3D
 	_animator.callback_mode_process = AnimationMixer.ANIMATION_CALLBACK_MODE_PROCESS_MANUAL
-	# Its look may move it in steps, a few poses a second, like N64 creatures.
-	_stepper = AnimationStepper.new(_dresser.look.animation_steps if _dresser.look != null else 0.0)
 	for anim_name: StringName in [IDLE_ANIMATION, WALK_ANIMATION]:
 		if _animator.has_animation(anim_name):
 			_animator.get_animation(anim_name).loop_mode = Animation.LOOP_LINEAR
@@ -526,7 +523,7 @@ func _animate(delta: float) -> void:
 	# Dead, time stands still for it, but advancing by nothing still puts the
 	# pose back, so the claws below aren't lifted again on top of last frame's.
 	var step: float = delta * (FLAIL_SPEED if is_flipped() else 1.0)
-	_animator.advance(0.0 if is_dead() else _stepper.take(step))
+	_animator.advance(0.0 if is_dead() else step)
 	for bone_name: String in ARM_BONES:
 		var bone: int = _skeleton.find_bone(bone_name)
 		if bone < 0:

@@ -8,8 +8,7 @@
 [ext_resource type="Material" path="res://assets/placeholder/materials/canvas.tres" id="5_vhu76"]
 [ext_resource type="Material" path="res://assets/placeholder/materials/bedlinen.tres" id="6_cfsc6"]
 [ext_resource type="Material" path="res://assets/placeholder/materials/quilt_red.tres" id="7_6u4x5"]
-[ext_resource type="Script" path="res://scripts/art/third_party_model.gd" id="kiln_model"]
-[ext_resource type="Resource" path="res://data/art/looks/prop.tres" id="kiln_prop"]
+[ext_resource type="Script" path="res://scripts/art/third_party_model.gd" id="pack_model"]
 
 [sub_resource type="BoxMesh" id="BoxMesh_6eltw"]
 size = Vector3(0.84, 0.04, 0.04)
@@ -391,13 +390,12 @@ mesh = SubResource("BoxMesh_2lleo")
 
 [node name="Pack" type="Node3D" parent="Sling/Pillow" node_paths=PackedStringArray("stand_ins")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.045, 0)
-script = ExtResource("kiln_model")
+script = ExtResource("pack_model")
 path = "res://assets/third_party/kaykit_furniture/Assets/gltf/pillow_A.gltf"
 fit_size = Vector3(0.34, 0.09, 0.22)
 stretch = true
 stand_ins = [NodePath("../Box")]
 tint = Color(1.04, 1.28, 1.75, 1)
-look = ExtResource("kiln_prop")
 
 [node name="Blanket" type="MeshInstance3D" parent="Sling" unique_id=921635348]
 transform = Transform3D(0.97576493, -0.06823213, -0.2079117, 0.06975647, 0.9975641, 0, 0.20740524, -0.014503187, 0.9781476, -0.03, -0.47, 0.15)
@@ -438,6 +436,3 @@ path = "res://assets/third_party/meshy/hammock/model/model.glb"
 fit_size = Vector3(3.6, 0.62, 0.9)
 stretch = true
 stand_ins = [NodePath("../../Sling/SpreaderFore"), NodePath("../../Sling/ClewFore1"), NodePath("../../Sling/ClewFore2"), NodePath("../../Sling/ClewFore3"), NodePath("../../Sling/ClewFore4"), NodePath("../../Sling/ClewFore5"), NodePath("../../Sling/RingFore"), NodePath("../../Sling/SpreaderAft"), NodePath("../../Sling/ClewAft1"), NodePath("../../Sling/ClewAft2"), NodePath("../../Sling/ClewAft3"), NodePath("../../Sling/ClewAft4"), NodePath("../../Sling/ClewAft5"), NodePath("../../Sling/RingAft"), NodePath("../../Sling/Canvas1/Middle"), NodePath("../../Sling/Canvas1/SideL"), NodePath("../../Sling/Canvas1/SideR"), NodePath("../../Sling/Canvas2/Middle"), NodePath("../../Sling/Canvas2/SideL"), NodePath("../../Sling/Canvas2/SideR"), NodePath("../../Sling/Canvas3/Middle"), NodePath("../../Sling/Canvas3/SideL"), NodePath("../../Sling/Canvas3/SideR"), NodePath("../../Sling/Canvas4/Middle"), NodePath("../../Sling/Canvas4/SideL"), NodePath("../../Sling/Canvas4/SideR"), NodePath("../../Sling/Canvas5/Middle"), NodePath("../../Sling/Canvas5/SideL"), NodePath("../../Sling/Canvas5/SideR"), NodePath("../../Sling/Canvas6/Middle"), NodePath("../../Sling/Canvas6/SideL"), NodePath("../../Sling/Canvas6/SideR"), NodePath("../../Sling/Canvas7/Middle"), NodePath("../../Sling/Canvas7/SideL"), NodePath("../../Sling/Canvas7/SideR"), NodePath("../../Sling/Canvas8/Middle"), NodePath("../../Sling/Canvas8/SideL"), NodePath("../../Sling/Canvas8/SideR"), NodePath("../../Sling/Pillow/Box"), NodePath("../../Sling/Blanket"), NodePath("../../Sling/BlanketRuck"), NodePath("../../Sling/BlanketFold/BlanketDrape")]
-grain = false
-detail = 1.0
-keep_as_made = true

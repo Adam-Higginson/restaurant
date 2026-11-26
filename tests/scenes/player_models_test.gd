@@ -33,7 +33,7 @@ func test_with_their_files_the_models_replace_the_greybox() -> void:
 				"%s's greybox still shows" % holder).is_false()
 
 
-func test_the_knife_and_pan_are_the_meshy_models_drawn_as_made() -> void:
+func test_the_knife_and_pan_name_the_meshy_models() -> void:
 	var player: Player3D = new_player_3d_on_floor()
 	scene_runner(player.get_parent())
 
@@ -41,5 +41,3 @@ func test_the_knife_and_pan_are_the_meshy_models_drawn_as_made() -> void:
 	var pan: ThirdPartyModel = player.find_child("PanModel", true, false) as ThirdPartyModel
 	assert_str(knife.path).ends_with("meshy/kitchen_knife/model/model.glb")
 	assert_str(pan.path).ends_with("meshy/frying_pan/model/model.glb")
-	assert_bool(knife.keep_as_made).is_true()
-	assert_bool(pan.keep_as_made).is_true()

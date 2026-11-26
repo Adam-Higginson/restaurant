@@ -3,7 +3,6 @@
 [ext_resource type="Script" path="res://scripts/props/swinging.gd" id="1_d"]
 [ext_resource type="Material" path="res://assets/placeholder/materials/dark_prop_wood.tres" id="2_d"]
 [ext_resource type="Script" path="res://scripts/art/third_party_model.gd" id="3_d"]
-[ext_resource type="Resource" path="res://data/art/looks/prop.tres" id="kiln_prop"]
 
 [sub_resource type="BoxMesh" id="S1"]
 size = Vector3(0.02, 0.3, 0.02)
@@ -22,6 +21,4 @@ mesh = SubResource("S1")
 transform = Transform3D(0, -1, 0, 1, 0, 0, 0, 0, 1, 0, -0.72, 0)
 script = ExtResource("3_d")
 path = "res://assets/third_party/kaykit_restaurant/Assets/gltf/food_ingredient_ham.gltf"
-look = ExtResource("kiln_prop")
 fit_size = Vector3(0.3, 0.42, 0.3)
-grain_metres = 0.15

@@ -1,5 +1,5 @@
-// N64 flames: a fire drawn on a small grid of texels, blended softly between
-// them as N64 textures were filtered (#137), rising and flickering, glowing so
+// Flames: a fire drawn on a small grid of texels, blended softly between
+// them to soften the edges (#137), rising and flickering, glowing so
 // the bloom catches it. Used for the stove's firebox and the lantern panes,
 // so every light aboard visibly comes from a flame.
 shader_type spatial;
@@ -16,7 +16,7 @@ uniform float glow = 4.0;
 uniform float speed = 1.6;
 // Each fire flickers its own way.
 uniform float seed = 0.0;
-// Blend the texels softly, as N64 textures were filtered; off draws them as
+// Blend the texels softly, to soften the edges; off draws them as
 // chunky squares.
 uniform bool soft = true;
 
@@ -50,8 +50,7 @@ void fragment() {
 	float t = TIME * speed + seed * 17.0;
 	float heat;
 	if (soft) {
-		// The N64 way: the flame is still a few texels, but blended between
-		// them like a filtered texture, so it glows in soft blobs.
+		// Blend neighbouring samples to give the flame soft edges.
 		vec2 cell = UV * texels - 0.5;
 		vec2 base = floor(cell);
 		vec2 f = fract(cell);

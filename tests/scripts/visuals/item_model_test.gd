@@ -38,3 +38,34 @@ func test_a_chopped_chilli_is_in_bits() -> void:
 
 	assert_int(model.find_children("Bit*", "", false, false).size()).is_equal(chopped.model_pieces)
 	assert_int(chopped.model_pieces).is_greater(1)
+
+
+func test_food_uses_its_source_model_and_hides_the_cube() -> void:
+	var item: Item = Item.new()
+	item.model_path = "res://tests/fixtures/box_model.tscn"
+	item.model_size = Vector3(0.22, 0.18, 0.12)
+	item.model_tint = Color(0.5, 0.75, 1.0)
+	var food: Node3D = ItemModel.food(item, ItemModel.FOOD_SIZE)
+	auto_free(food)
+	add_child(food)
+
+	var cube: MeshInstance3D = food.get_node("Greybox") as MeshInstance3D
+	var dresser: ThirdPartyModel = food.get_node("Model") as ThirdPartyModel
+	assert_bool(cube.visible).is_false()
+	assert_object(dresser.model).is_not_null()
+	assert_float(dresser.model.scale.x).is_equal_approx(0.2, 0.0001)
+	var mesh: MeshInstance3D = dresser.model.get_node("Mesh") as MeshInstance3D
+	var material: BaseMaterial3D = mesh.material_override as BaseMaterial3D
+	assert_that(material.albedo_color).is_equal(Color(0.6, 0.4, 0.2) * item.model_tint)
+
+
+func test_a_tool_with_a_missing_model_keeps_its_greybox() -> void:
+	var tool: HandTool = HandTool.new()
+	tool.model_path = "res://assets/third_party/no_such_tool.glb"
+	var model: Node3D = ItemModel.tool_model(tool)
+	auto_free(model)
+	add_child(model)
+
+	var greybox: MeshInstance3D = model.get_node("Greybox") as MeshInstance3D
+	assert_bool(greybox.visible).is_true()
+	assert_object(model.get_node_or_null("Model")).is_null()

@@ -1,6 +1,5 @@
 #!/usr/bin/env bash
-# Paints our placeholder textures (assets/placeholder/textures/) as soft N64
-# textures from the pixel-art originals in tools/textures/originals/ (#135),
+# Paints our placeholder textures (assets/placeholder/textures/) from the pixel-art originals in tools/textures/originals/ (#135),
 # then imports them.
 #
 #   tools/textures/paint_placeholders.sh            every texture

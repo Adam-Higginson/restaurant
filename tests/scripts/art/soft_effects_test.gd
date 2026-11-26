@@ -1,5 +1,5 @@
 extends GameTestSuite
-## Tests that fire and small effects are drawn the soft N64 way (#137): the
+## Tests that fire and small effects are drawn with soft edges (#137): the
 ## flame shaders blend their texels by default, and the motes and the bow's
 ## spray are soft round specks, smoothly filtered, not squares.
 

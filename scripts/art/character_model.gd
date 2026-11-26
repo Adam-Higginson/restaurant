@@ -46,7 +46,7 @@ enum Pose {
 ## The toe joints, which the feet are planted by.
 const TOE_BONES: PackedStringArray = ["ball_l", "ball_r"]
 ## The bones the head is cut from the base character's body by.
-const HEAD_BONES: PackedStringArray = CharacterParts.HEAD_BONES
+const HEAD_BONES: PackedStringArray = ["Head", "neck_01"]
 ## Bones whose position the animations may move (the whole body's sway and
 ## bob). Every other bone only turns, keeping our proportions.
 const MOVING_BONES: PackedStringArray = ["root", "pelvis"]
@@ -139,14 +139,6 @@ const CHOP_CONTACT: float = 0.62
 ## Empty to idle as usual.
 @export var held_animation: StringName = &""
 @export var held_at: float = 0.0
-## Draw parts the Kiln hasn't fired the N64 way: softly filtered texture
-## pixels, as the N64 drew them, and no shine. Their own materials are kept:
-## the props' N64 shader turns these textures the wrong colours. (Fired parts
-## are drawn as their look says.)
-@export var n64: bool = true
-## How fine a version of the model to draw (see [member ThirdPartyModel.detail]).
-## Parts fired in the Kiln are always drawn in full.
-@export var detail: float = 0.3
 ## Whether the character's eyes are shut: asleep, or out cold. A clip can
 ## move it.
 @export var eyes_shut: bool = false:
@@ -219,11 +211,8 @@ const CHOP_CONTACT: float = 0.62
 		afloat = clampf(value, 0.0, 1.0)
 		if _legs != null:
 			_legs.amount = afloat
-## Draw the parts the Kiln has fired (see [CharacterParts]) instead of the
-## packs' own. Off shows the packs' as they come (the Lookbook's "before").
-@export var use_kiln: bool = true
 ## Parts to build instead of the player's own look ([member boy] or
-## [member girl]), e.g. to show both side by side in the Lookbook.
+## [member girl]), e.g. for a preview.
 @export var parts_override: CharacterParts
 ## Leave a whole character's clothes off, so it shows in what its model
 ## was made in (the boy's underwear): the castaway, pulled from the sea.
@@ -268,10 +257,6 @@ var _arm: ArmReach = null
 var _lifts: Array[ArmReach] = []
 ## What brings the right arm (the knife hand) down in a chop at the board.
 var _chop_arm: ArmReach = null
-## The fired head's meshes, awake and asleep: shown by [member eyes_shut].
-## Empty unless both have been fired.
-var _awake_head: Array[MeshInstance3D] = []
-var _asleep_head: Array[MeshInstance3D] = []
 ## What turns the head when it watches something.
 var _head: HeadLook = null
 ## What lets the legs hang when afloat.
@@ -291,8 +276,6 @@ var _act_left: float = 0.0
 var _act_speed: float = 1.0
 ## The recovery to play when the cut playing ends, if nothing follows it.
 var _recovery: StringName = &""
-## Moves the animations on in steps, if the body's look says so.
-var _stepper: AnimationStepper = AnimationStepper.new()
 
 
 func _ready() -> void:
@@ -310,8 +293,6 @@ func _ready() -> void:
 func _process(delta: float) -> void:
 	if _animator == null:
 		return
-	if _stepper.steps > 0.0:
-		_animator.advance(_stepper.take(delta))
 	plant_feet()
 	_turn_for_flip()
 	if _arm != null and is_instance_valid(reach_for):
@@ -488,7 +469,7 @@ func clip_length(anim_name: StringName) -> float:
 
 
 ## Holds the character still [param at] seconds into the animation
-## [param anim_name], until something else plays (the Lookbook's pictures).
+## [param anim_name], until something else plays.
 ## Returns whether there's such an animation.
 func hold(anim_name: StringName, at: float) -> bool:
 	var full: StringName = StringName("%s/%s" % [LIBRARY, anim_name])
@@ -719,13 +700,7 @@ func _build(parts: CharacterParts) -> void:
 	if parts.is_whole():
 		_build_whole(parts)
 		return
-	# Each part is the Kiln's fired one if it's there, else the pack's own.
-	var body_job: KilnJob = parts.outfit_job() if use_kiln else null
-	var body_fired: bool = body_job != null and body_job.is_fired()
-	var body_file: String = body_job.fired_path() if body_fired else parts.outfit
-	character = (load(body_file) as PackedScene).instantiate() as Node3D
-	if body_fired:
-		FiredModel.paint(character, body_job)
+	character = (load(parts.outfit) as PackedScene).instantiate() as Node3D
 	add_child(character)
 	# The packs face +Z; our forward is -Z.
 	character.rotation.y = PI
@@ -733,36 +708,14 @@ func _build(parts: CharacterParts) -> void:
 	skeleton = character.find_children("*", "Skeleton3D", true, false)[0] as Skeleton3D
 	# Measured on the outfit alone: its boots are what stand on the floor.
 	_toe_height = _rest_toe_height()
-	_awake_head = _fired_meshes(parts.head_job()) if use_kiln else ([] as Array[MeshInstance3D])
-	var head_fired: bool = not _awake_head.is_empty()
-	if head_fired:
-		_asleep_head = _fired_meshes(parts.sleeping_head_job())
-		if _asleep_head.is_empty():
-			_awake_head.clear()
-	else:
-		_add_head(parts.head_from)
-	if not parts.hair.is_empty() and not (use_kiln and _add_fired(parts.hair_job())):
+	_add_head(parts.head_from)
+	if not parts.hair.is_empty():
 		_add_meshes(parts.hair, parts.hair_colour)
-	# A fired head has the eyebrows painted on.
-	if not parts.eyebrows.is_empty() and not head_fired:
+	if not parts.eyebrows.is_empty():
 		_add_meshes(parts.eyebrows, parts.hair_colour)
 	skeleton.set_bone_pose_scale(skeleton.find_bone("Head"), Vector3.ONE * head_scale)
-	for mesh: MeshInstance3D in skeleton.find_children("*", "MeshInstance3D", true, false):
-		# Fired parts are drawn by the Kiln's own material, in full.
-		if mesh.material_override != null:
-			continue
-		mesh.lod_bias = detail
-		if n64:
-			_use_n64(mesh)
 	_animator = AnimationPlayer.new()
 	character.add_child(_animator)
-	# The body's look may move it in steps, a few poses a second: then the
-	# animations are moved on by hand, in _process.
-	var steps: float = parts.body_look.animation_steps \
-			if use_kiln and parts.body_look != null else 0.0
-	_stepper = AnimationStepper.new(steps)
-	if steps > 0.0:
-		_animator.callback_mode_process = AnimationMixer.ANIMATION_CALLBACK_MODE_PROCESS_MANUAL
 	_animator.add_animation_library(LIBRARY, _library(_animator.get_node(_animator.root_node)))
 	# The charge's stance is held as long as the button is: round and round.
 	var stance: StringName = StringName("%s/%s" % [LIBRARY, charge_animation])
@@ -831,9 +784,6 @@ func _build_whole(parts: CharacterParts) -> void:
 	var dresser: ThirdPartyModel = ThirdPartyModel.new()
 	dresser.name = "Whole"
 	dresser.path = parts.whole
-	dresser.keep_as_made = true
-	dresser.grain = false
-	dresser.detail = 1.0
 	dresser.outfit = outfit_for(parts, undressed)
 	# Always stylised: the body under the clothes is only left undrawn by the
 	# stylised look's shader, so drawn as made its feet show through its boots.
@@ -879,7 +829,6 @@ func _hook_whole() -> void:
 	_toe_height = _rest_toe_height()
 	_animator = AnimationPlayer.new()
 	dresser.model.add_child(_animator)
-	_stepper = AnimationStepper.new(0.0)
 	if _whole_moves == null:
 		_whole_moves = _whole_library(_whole_parts)
 	_animator.add_animation_library(LIBRARY, _whole_moves)
@@ -1147,27 +1096,6 @@ func _add_head(path: String) -> void:
 	source.free()
 
 
-# Every mesh of [param job]'s fired part onto our skeleton, drawn with its
-# fired texture. Returns whether it was there to add.
-func _add_fired(job: KilnJob) -> bool:
-	return not _fired_meshes(job).is_empty()
-
-
-# Every mesh of [param job]'s fired part onto our skeleton, drawn with its
-# fired texture. Returns them: none if it hasn't been fired.
-func _fired_meshes(job: KilnJob) -> Array[MeshInstance3D]:
-	var added: Array[MeshInstance3D] = []
-	if job == null or not job.is_fired():
-		return added
-	var source: Node = (load(job.fired_path()) as PackedScene).instantiate()
-	FiredModel.paint(source, job)
-	for mesh: MeshInstance3D in source.find_children("*", "MeshInstance3D", true, false):
-		_move_to_skeleton(mesh)
-		added.append(mesh)
-	source.free()
-	return added
-
-
 # Every mesh in [param path], onto our skeleton, tinted [param colour].
 func _add_meshes(path: String, colour: Color) -> void:
 	var source: Node = (load(path) as PackedScene).instantiate()
@@ -1181,21 +1109,6 @@ func _add_meshes(path: String, colour: Color) -> void:
 			mesh.set_surface_override_material(surface, tinted)
 		_move_to_skeleton(mesh)
 	source.free()
-
-
-# Draws each of [param mesh]'s surfaces with softly filtered texture pixels
-# and no shine, keeping its colour, texture and any tint already given.
-func _use_n64(mesh: MeshInstance3D) -> void:
-	for surface: int in mesh.mesh.get_surface_count():
-		var source: BaseMaterial3D = mesh.get_surface_override_material(surface) as BaseMaterial3D
-		if source == null:
-			source = mesh.mesh.surface_get_material(surface) as BaseMaterial3D
-		if source == null:
-			continue
-		var material: BaseMaterial3D = source.duplicate() as BaseMaterial3D
-		material.texture_filter = BaseMaterial3D.TEXTURE_FILTER_LINEAR_WITH_MIPMAPS
-		material.metallic_specular = 0.2
-		mesh.set_surface_override_material(surface, material)
 
 
 func _move_to_skeleton(mesh: MeshInstance3D) -> void:
@@ -1286,8 +1199,7 @@ func _measure_stride(anim_name: StringName) -> float:
 
 
 # Shuts or opens the eyes: shut, the eyeballs aren't drawn, which leaves
-# the lids' own shadowed hollow. A fired head has its eyes painted in, so
-# the head fired asleep, without them, is shown in its place.
+# the lids' own shadowed hollow.
 func _show_eyes() -> void:
 	if skeleton == null:
 		return
@@ -1298,12 +1210,6 @@ func _show_eyes() -> void:
 			var body: MeshInstance3D = child as MeshInstance3D
 			if body != null and not String(body.name).begins_with("Outfit_"):
 				body.set_instance_shader_parameter(&"eyes_shut", 1.0 if eyes_shut else 0.0)
-		return
-	if not _asleep_head.is_empty():
-		for mesh: MeshInstance3D in _awake_head:
-			mesh.visible = not eyes_shut
-		for mesh: MeshInstance3D in _asleep_head:
-			mesh.visible = eyes_shut
 		return
 	for mesh: MeshInstance3D in skeleton.find_children("Eyes", "MeshInstance3D", true, false):
 		mesh.visible = not eyes_shut
@@ -1381,8 +1287,6 @@ func _undress() -> void:
 	_arm = null
 	_lifts.clear()
 	_chop_arm = null
-	_awake_head.clear()
-	_asleep_head.clear()
 	_head = null
 	_legs = null
 	_act_left = 0.0

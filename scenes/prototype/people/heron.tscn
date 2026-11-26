@@ -183,9 +183,6 @@ transform = Transform3D(-1.2105, 0, 0, 0, 1.2105, 0, 0, 0, -1.2105, 0, 0, 0)
 script = ExtResource("10_model")
 path = "res://assets/third_party/meshy/heron/heron.glb"
 stand_ins = [NodePath("../LegLeft"), NodePath("../LegRight"), NodePath("../FootLeft"), NodePath("../FootRight"), NodePath("../Coat"), NodePath("../Collar"), NodePath("../Tail"), NodePath("../Neck"), NodePath("../Head"), NodePath("../Beak"), NodePath("../EyeLeft"), NodePath("../EyeRight"), NodePath("../Crest"), NodePath("../Brim"), NodePath("../Crown")]
-grain = false
-detail = 1.0
-keep_as_made = true
 
 [node name="Head" type="Marker3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.45, -0.1)

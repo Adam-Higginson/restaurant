@@ -160,6 +160,3 @@ script = ExtResource("4_meshy")
 path = "res://assets/third_party/meshy/woodpile/model/model.glb"
 fit_size = Vector3(0.72, 0.55, 0.64)
 stand_ins = [NodePath("../Log1"), NodePath("../Log2"), NodePath("../Log3"), NodePath("../Log4"), NodePath("../Log5"), NodePath("../Log6"), NodePath("../Log7"), NodePath("../Log8"), NodePath("../Log9"), NodePath("../Split1"), NodePath("../Split2")]
-grain = false
-detail = 1.0
-keep_as_made = true

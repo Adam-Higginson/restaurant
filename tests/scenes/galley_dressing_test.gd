@@ -1,6 +1,6 @@
 extends GameTestSuite
 ## Tests for the galley's dressing scenes: they load on their own (so they
-## can be reused anywhere), and their pack models get the N64 treatment.
+## can be reused anywhere).
 
 const DRESSING: Array[String] = [
 	"veg_crate", "lettuce_crate", "hanging_ham", "meat_rack", "pot_rail", "crockery_shelf",
@@ -45,16 +45,6 @@ func test_the_net_and_the_bell_sway_with_the_sea() -> void:
 		auto_free(piece)
 		assert_object(piece.get_node(parts[1]) as Swinging).override_failure_message(
 				"%s doesn't sway" % parts[0]).is_not_null()
-
-
-func test_pack_models_are_drawn_crude_for_the_n64_look() -> void:
-	var dresser: ThirdPartyModel = ThirdPartyModel.new()
-	dresser.path = "res://tests/fixtures/box_model.tscn"
-	dresser.detail = 0.05
-	add_child(dresser)
-	auto_free(dresser)
-	var mesh: MeshInstance3D = dresser.model.get_node("Mesh") as MeshInstance3D
-	assert_float(mesh.lod_bias).is_equal_approx(0.05, 0.0001)
 
 
 func test_you_cannot_walk_through_the_stool() -> void:

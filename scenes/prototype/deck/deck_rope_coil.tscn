@@ -108,6 +108,3 @@ script = ExtResource("900_meshy")
 path = "res://assets/third_party/meshy/deck_rope_coil/model/model.glb"
 fit_size = Vector3(1.19, 0.3, 0.87)
 stand_ins = [NodePath("../Turn1"), NodePath("../Turn2"), NodePath("../Turn3"), NodePath("../Turn4"), NodePath("../Turn5"), NodePath("../Upper1"), NodePath("../Upper2"), NodePath("../Upper3"), NodePath("../End")]
-grain = false
-detail = 1.0
-keep_as_made = true

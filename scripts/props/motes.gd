@@ -42,8 +42,7 @@ func _ready() -> void:
 	material.emission_enabled = true
 	material.emission = Color(1.0, 0.7, 0.3)
 	material.emission_energy_multiplier = 4.0
-	# A tiny soft glow, bright in the middle, filtered smoothly as N64 sprites
-	# were, so each mote is a round speck of light, not a square (#137).
+	# The soft gradient gives each mote a bright centre and a round edge (#137).
 	var soft: Gradient = Gradient.new()
 	soft.offsets = PackedFloat32Array([0.0, 0.25, 1.0])
 	soft.colors = PackedColorArray([Color(1, 1, 1, 1), Color(1, 1, 1, 0.6), Color(1, 1, 1, 0)])

@@ -117,9 +117,6 @@ script = ExtResource("900_meshy")
 path = "res://assets/third_party/meshy/lantern_hanging/model/model.glb"
 fit_size = Vector3(0.3, 0.5, 0.3)
 stand_ins = [NodePath("../Ring"), NodePath("../Cap"), NodePath("../Post1"), NodePath("../Post2"), NodePath("../Post3"), NodePath("../Post4"), NodePath("../Base")]
-grain = false
-detail = 1.0
-keep_as_made = true
 
 [node name="Glow" type="Node" parent="." node_paths=PackedStringArray("model", "glass")]
 script = ExtResource("901_glow")

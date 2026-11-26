@@ -85,6 +85,3 @@ script = ExtResource("900_meshy")
 path = "res://assets/third_party/meshy/sea_chest/model/model.glb"
 fit_size = Vector3(0.88, 0.58, 0.56)
 stand_ins = [NodePath("../Body"), NodePath("../Lid"), NodePath("../LidTop"), NodePath("../Band1"), NodePath("../Band2"), NodePath("../Lock"), NodePath("../HandleL"), NodePath("../HandleR")]
-grain = false
-detail = 1.0
-keep_as_made = true

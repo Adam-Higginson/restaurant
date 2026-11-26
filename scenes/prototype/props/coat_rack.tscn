@@ -188,6 +188,3 @@ script = ExtResource("196_meshy")
 path = "res://assets/third_party/meshy/coat_stand/model/model.glb"
 fit_size = Vector3(0.9, 1.85, 0.9)
 stand_ins = [NodePath("../Foot1"), NodePath("../Foot2"), NodePath("../Foot3"), NodePath("../Pole"), NodePath("../Knob"), NodePath("../Peg1"), NodePath("../Peg2"), NodePath("../Peg3"), NodePath("../Peg4"), NodePath("../Cap"), NodePath("../ScarfFront"), NodePath("../WoolCoat/Shoulders"), NodePath("../WoolCoat/Body"), NodePath("../WoolCoat/Skirt"), NodePath("../WoolCoat/SleeveL"), NodePath("../WoolCoat/SleeveR")]
-grain = false
-detail = 1.0
-keep_as_made = true

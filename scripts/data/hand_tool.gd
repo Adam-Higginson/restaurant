@@ -27,8 +27,6 @@ extends Resource
 ## res://assets/third_party/, fitted into [member model_size] standing up.
 ## Without one (or on a fresh clone) a greybox bar in [member color] shows.
 @export_file("*.gltf", "*.glb") var model_path: String = ""
-## How the Kiln fires [member model_path] (see [ThirdPartyModel.look]).
-@export var model_look: ArtLook = null
 @export var model_size: Vector3 = Vector3(0.15, 0.6, 0.06)
 ## Whether this is the recipe book (#184): not used on anything, but read.
 ## Selected and Used, it opens wherever you are, whatever's in reach.
@@ -45,12 +43,3 @@ extends Resource
 var owned_flag: StringName:
 	get:
 		return StringName("has_%s" % id)
-
-
-## The Kiln job for [member model_path], or null if it's never fired.
-func kiln_job() -> KilnJob:
-	if model_path.is_empty() or model_look == null:
-		return null
-	var job: KilnJob = KilnJob.new(model_path, model_look)
-	job.fit_size = model_size
-	return job

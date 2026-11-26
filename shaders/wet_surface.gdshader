@@ -8,7 +8,7 @@
 // only a little glossier; standing water is a near-mirror; rain lands only on
 // faces that look up at the sky.
 //
-// Textures are small and nearest-filtered (N64 style). The wet effects are
+// The surface shader controls the texture filtering. The wet effects are
 // smooth lighting on top of them.
 //
 // Everything is placed in the surface's own space (the ship's, handed in as

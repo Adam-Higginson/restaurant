@@ -184,6 +184,3 @@ script = ExtResource("900_meshy")
 path = "res://assets/third_party/meshy/fife_rail/model/model.glb"
 fit_size = Vector3(1.92, 1.3, 1.92)
 stand_ins = [NodePath("../Partners"), NodePath("../Post1"), NodePath("../Knob1"), NodePath("../Post2"), NodePath("../Knob2"), NodePath("../Post3"), NodePath("../Knob3"), NodePath("../Post4"), NodePath("../Knob4"), NodePath("../RailFore"), NodePath("../RailAft"), NodePath("../RailPort"), NodePath("../RailStarboard"), NodePath("../Pin1"), NodePath("../Pin2"), NodePath("../Pin3"), NodePath("../Pin4"), NodePath("../Pin5"), NodePath("../Pin6"), NodePath("../Pin7"), NodePath("../Pin8"), NodePath("../Pin9"), NodePath("../Pin10"), NodePath("../Pin11"), NodePath("../Pin12")]
-grain = false
-detail = 1.0
-keep_as_made = true

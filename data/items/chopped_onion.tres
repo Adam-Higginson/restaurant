@@ -1,7 +1,6 @@
 [gd_resource type="Resource" script_class="Item" format=3 uid="uid://ch0ppedon10n"]
 
 [ext_resource type="Script" path="res://scripts/data/item.gd" id="1_item"]
-[ext_resource type="Resource" path="res://data/art/looks/prop.tres" id="look_prop"]
 
 [resource]
 script = ExtResource("1_item")
@@ -10,4 +9,3 @@ display_name = "Chopped Onion"
 color = Color(0.92, 0.86, 0.72, 1)
 storage = 1
 model_path = "res://assets/third_party/kaykit_restaurant/Assets/gltf/food_ingredient_onion_chopped.gltf"
-model_look = ExtResource("look_prop")

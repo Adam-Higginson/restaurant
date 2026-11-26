@@ -418,6 +418,3 @@ script = ExtResource("900_meshy")
 path = "res://assets/third_party/meshy/galley_stove/model/model.glb"
 fit_size = Vector3(0.79, 1.293, 0.61)
 stand_ins = [NodePath("../LegLB"), NodePath("../LegLF"), NodePath("../LegRB"), NodePath("../LegRF"), NodePath("../Base"), NodePath("../Belly"), NodePath("../Shoulder"), NodePath("../Band"), NodePath("../Top"), NodePath("../DoorFrame"), NodePath("../Embers"), NodePath("../Fire"), NodePath("../Bar1"), NodePath("../Bar2"), NodePath("../Bar3"), NodePath("../DoorHinge/Door"), NodePath("../AshLip")]
-grain = false
-detail = 1.0
-keep_as_made = true

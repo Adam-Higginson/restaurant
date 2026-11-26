@@ -818,9 +818,6 @@ script = ExtResource("196_meshy")
 path = "res://assets/third_party/meshy/crock_shelf/model/model.glb"
 fit_size = Vector3(1.2, 0.9, 0.45)
 stand_ins = [NodePath("../CrockShelf"), NodePath("../CrockShelfBracket1"), NodePath("../CrockShelfBracket2"), NodePath("../Crock1"), NodePath("../Crock1Lid"), NodePath("../Crock2"), NodePath("../Crock2Lid"), NodePath("../Crock3"), NodePath("../Crock3Lid"), NodePath("../LowerShelf"), NodePath("../LowCrock1"), NodePath("../LowCrock2")]
-grain = false
-detail = 1.0
-keep_as_made = true
 
 [node name="SupperTable" parent="." instance=ExtResource("207_supper")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1, 1.82, 5.3)
@@ -831,9 +828,6 @@ script = ExtResource("196_meshy")
 path = "res://assets/third_party/meshy/kitchen_knife/model/model.glb"
 fit_size = Vector3(0.42, 10, 10)
 stand_ins = [NodePath("../Knife1"), NodePath("../KnifeHandle1")]
-grain = false
-detail = 1.0
-keep_as_made = true
 
 [node name="KnifeMeshy2" type="Node3D" parent="." node_paths=PackedStringArray("stand_ins")]
 transform = Transform3D(0, -1, 0, 1, 0, 0, 0, 0, 1, 0.62, 2.37, 1.25)
@@ -841,9 +835,6 @@ script = ExtResource("196_meshy")
 path = "res://assets/third_party/meshy/kitchen_knife/model/model.glb"
 fit_size = Vector3(0.42, 10, 10)
 stand_ins = [NodePath("../Knife2"), NodePath("../KnifeHandle2")]
-grain = false
-detail = 1.0
-keep_as_made = true
 
 [node name="KnifeMeshy3" type="Node3D" parent="." node_paths=PackedStringArray("stand_ins")]
 transform = Transform3D(0, -1, 0, 1, 0, 0, 0, 0, 1, 0.8, 2.37, 1.25)
@@ -851,9 +842,6 @@ script = ExtResource("196_meshy")
 path = "res://assets/third_party/meshy/kitchen_knife/model/model.glb"
 fit_size = Vector3(0.42, 10, 10)
 stand_ins = [NodePath("../Knife3"), NodePath("../KnifeHandle3")]
-grain = false
-detail = 1.0
-keep_as_made = true
 
 [node name="PanMeshy" type="Node3D" parent="PanHook" node_paths=PackedStringArray("stand_ins")]
 transform = Transform3D(0, -1, 0, 1, 0, 0, 0, 0, 1, 0.05, -0.5, 0)
@@ -861,6 +849,3 @@ script = ExtResource("196_meshy")
 path = "res://assets/third_party/meshy/frying_pan/model/model.glb"
 fit_size = Vector3(10, 10, 0.3)
 stand_ins = [NodePath("../Pan")]
-grain = false
-detail = 1.0
-keep_as_made = true

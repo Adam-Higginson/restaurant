@@ -1,7 +1,6 @@
 [gd_scene format=3]
 
 [ext_resource type="Script" path="res://scripts/art/third_party_model.gd" id="1_d"]
-[ext_resource type="Resource" path="res://data/art/looks/prop.tres" id="kiln_prop"]
 
 [sub_resource type="BoxShape3D" id="S1"]
 size = Vector3(0.42, 0.28, 0.42)
@@ -12,9 +11,7 @@ size = Vector3(0.42, 0.28, 0.42)
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)
 script = ExtResource("1_d")
 path = "res://assets/third_party/kaykit_furniture/Assets/gltf/chair_stool_wood.gltf"
-look = ExtResource("kiln_prop")
 fit_size = Vector3(0.42, 0.28, 0.42)
-grain_metres = 0.2
 
 [node name="Shape" type="CollisionShape3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.14, 0)

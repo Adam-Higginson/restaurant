@@ -25,9 +25,6 @@ enum VesselShape { FLAT, BOWL, PAN, POT }
 ## into [member model_size] (sitting on its base, centred). Without one, or
 ## on a fresh clone, it's drawn as a greybox in [member color].
 @export_file("*.gltf", "*.glb") var model_path: String = ""
-## How the Kiln fires [member model_path] (see [member ThirdPartyModel.look]).
-## None draws it as made (a Meshy model).
-@export var model_look: ArtLook = null
 @export var model_size: Vector3 = Vector3(0.2, 0.2, 0.2)
 ## Multiplies the model's colours: a fillet's model browned for the fried
 ## dish, the herring's made greener for a mackerel.
@@ -65,15 +62,6 @@ enum VesselShape { FLAT, BOWL, PAN, POT }
 ## parried perfectly, in seconds. A better pan has longer ones (#152).
 @export var parry_seconds: float = 0.3
 @export var perfect_parry_seconds: float = 0.12
-
-
-## The Kiln job for [member model_path], or null if it's never fired.
-func kiln_job() -> KilnJob:
-	if model_path.is_empty() or model_look == null:
-		return null
-	var job: KilnJob = KilnJob.new(model_path, model_look)
-	job.fit_size = model_size
-	return job
 
 
 ## Whether food can go in it. Vessels never go inside other vessels.

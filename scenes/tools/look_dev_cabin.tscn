@@ -1083,9 +1083,6 @@ script = ExtResource("4_lvtdo")
 path = "res://assets/third_party/meshy/bunk_bay/model/model.glb"
 fit_size = Vector3(2.2, 1.9, 1.1)
 stand_ins = [NodePath("../Greybox")]
-grain = false
-detail = 1.0
-keep_as_made = true
 
 [node name="SeaChest" type="Node3D" parent="Props" unique_id=1020385340]
 transform = Transform3D(-4.371139e-08, 0, -1, 0, 1, 0, 1, 0, -4.371139e-08, 3.2, 0, -0.3)
@@ -1100,9 +1097,6 @@ script = ExtResource("4_lvtdo")
 path = "res://assets/third_party/meshy/sea_chest/model/model.glb"
 fit_size = Vector3(0.95, 0.65, 0.6)
 stand_ins = [NodePath("../Greybox")]
-grain = false
-detail = 1.0
-keep_as_made = true
 
 [node name="Stove" type="Node3D" parent="Props" unique_id=1868509673]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.9, 0, -3)
@@ -1117,9 +1111,6 @@ script = ExtResource("4_lvtdo")
 path = "res://assets/third_party/meshy/galley_stove/model/model.glb"
 fit_size = Vector3(1, 1.8, 0.8)
 stand_ins = [NodePath("../Greybox")]
-grain = false
-detail = 1.0
-keep_as_made = true
 
 [node name="Counter" type="Node3D" parent="Props" unique_id=1094997249]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.4, 0, -3.05)
@@ -1134,9 +1125,6 @@ script = ExtResource("4_lvtdo")
 path = "res://assets/third_party/meshy/counter/model/model.glb"
 fit_size = Vector3(1.6, 1, 0.75)
 stand_ins = [NodePath("../Greybox")]
-grain = false
-detail = 1.0
-keep_as_made = true
 
 [node name="Barrel" type="Node3D" parent="Props" unique_id=1405616191]
 transform = Transform3D(0.9659258, 0, 0.25881904, 0, 1, 0, -0.25881904, 0, 0.9659258, -3.3, 0, -3)
@@ -1151,9 +1139,6 @@ script = ExtResource("4_lvtdo")
 path = "res://assets/third_party/meshy/barrel/model/model.glb"
 fit_size = Vector3(0.62, 0.9, 0.62)
 stand_ins = [NodePath("../Greybox")]
-grain = false
-detail = 1.0
-keep_as_made = true
 
 [node name="Crate" type="Node3D" parent="Props" unique_id=940659005]
 transform = Transform3D(0.9848077, 0, -0.17364818, 0, 1, 0, 0.17364818, 0, 0.9848077, 2.6, 0, -3)
@@ -1168,9 +1153,6 @@ script = ExtResource("4_lvtdo")
 path = "res://assets/third_party/meshy/crate/model/model.glb"
 fit_size = Vector3(0.7, 0.7, 0.7)
 stand_ins = [NodePath("../Greybox")]
-grain = false
-detail = 1.0
-keep_as_made = true
 
 [node name="Table" type="Node3D" parent="Props" unique_id=1823970146]
 transform = Transform3D(0.99026805, 0, 0.1391731, 0, 1, 0, -0.1391731, 0, 0.99026805, -1.2, 0, 1.6)
@@ -1185,9 +1167,6 @@ script = ExtResource("4_lvtdo")
 path = "res://assets/third_party/meshy/crew_table/model/model.glb"
 fit_size = Vector3(2, 0.8, 0.95)
 stand_ins = [NodePath("../Greybox")]
-grain = false
-detail = 1.0
-keep_as_made = true
 
 [node name="Rug" type="Node3D" parent="Props" unique_id=195089108]
 transform = Transform3D(0.9945219, 0, -0.104528464, 0, 1, 0, 0.104528464, 0, 0.9945219, -0.1, 0.012, -0.55)
@@ -1241,9 +1220,6 @@ script = ExtResource("4_lvtdo")
 path = "res://assets/third_party/meshy/lantern_hanging/model/model.glb"
 fit_size = Vector3(0.34, 0.62, 0.34)
 stand_ins = [NodePath("../Greybox")]
-grain = false
-detail = 1.0
-keep_as_made = true
 
 [node name="Chain" type="MeshInstance3D" parent="Lanterns/HangingLeft" unique_id=1006606492]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.84000003, 0)
@@ -1285,9 +1261,6 @@ script = ExtResource("4_lvtdo")
 path = "res://assets/third_party/meshy/lantern_hanging/model/model.glb"
 fit_size = Vector3(0.34, 0.62, 0.34)
 stand_ins = [NodePath("../Greybox")]
-grain = false
-detail = 1.0
-keep_as_made = true
 
 [node name="Chain" type="MeshInstance3D" parent="Lanterns/HangingRight" unique_id=1126162103]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.84000003, 0)
@@ -1329,9 +1302,6 @@ script = ExtResource("4_lvtdo")
 path = "res://assets/third_party/meshy/lantern_floor/model/model.glb"
 fit_size = Vector3(0.42, 0.6, 0.42)
 stand_ins = [NodePath("../Greybox")]
-grain = false
-detail = 1.0
-keep_as_made = true
 
 [node name="Glass" type="MeshInstance3D" parent="Lanterns/OnTable" unique_id=1990199003]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.21, 0)
@@ -1375,12 +1345,9 @@ mesh = SubResource("BoxMesh_13tdi")
 script = ExtResource("4_lvtdo")
 path = "res://assets/third_party/meshy/boy/anim/idle.glb"
 stand_ins = [NodePath("../Greybox")]
-grain = false
-detail = 1.0
 style = ExtResource("2_yl23w")
 outfit = ExtResource("18_unpng")
 recolour = ExtResource("19_s60dp")
-keep_as_made = true
 
 [node name="Camera" type="Camera3D" parent="." unique_id=58399859]
 transform = Transform3D(0.99227786, -0.008950961, 0.12371135, 0, 0.9973928, 0.07216495, -0.12403473, -0.07160769, 0.9896908, 0.5, 1.5, 4)

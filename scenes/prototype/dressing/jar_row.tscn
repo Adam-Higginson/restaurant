@@ -2,7 +2,6 @@
 
 [ext_resource type="Script" path="res://scripts/props/rocking.gd" id="1_d"]
 [ext_resource type="Script" path="res://scripts/art/third_party_model.gd" id="2_d"]
-[ext_resource type="Resource" path="res://data/art/looks/prop.tres" id="kiln_prop"]
 
 
 [node name="JarRow" type="Node3D"]
@@ -16,9 +15,7 @@ phase = 0.0
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)
 script = ExtResource("2_d")
 path = "res://assets/third_party/kaykit_restaurant/Assets/gltf/jar_A_large.gltf"
-look = ExtResource("kiln_prop")
 fit_size = Vector3(0.22, 0.35200000000000004, 0.22)
-grain_metres = 0.1
 
 [node name="Jar2" type="Node3D" parent="."]
 transform = Transform3D(0.7648, 0, 0.6442, 0, 1, 0, -0.6442, 0, 0.7648, -0.04, 0, 0)
@@ -29,9 +26,7 @@ phase = 0.01
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)
 script = ExtResource("2_d")
 path = "res://assets/third_party/kaykit_restaurant/Assets/gltf/jar_C_medium.gltf"
-look = ExtResource("kiln_prop")
 fit_size = Vector3(0.18, 0.288, 0.18)
-grain_metres = 0.1
 
 [node name="Jar3" type="Node3D" parent="."]
 transform = Transform3D(0.17, 0, 0.9854, 0, 1, 0, -0.9854, 0, 0.17, 0.16, 0, 0)
@@ -42,9 +37,7 @@ phase = 0.02
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)
 script = ExtResource("2_d")
 path = "res://assets/third_party/kaykit_restaurant/Assets/gltf/jar_D_small.gltf"
-look = ExtResource("kiln_prop")
 fit_size = Vector3(0.15, 0.24, 0.15)
-grain_metres = 0.1
 
 [node name="Jar4" type="Node3D" parent="."]
 transform = Transform3D(-0.5048, 0, 0.8632, 0, 1, 0, -0.8632, 0, -0.5048, 0.35, 0, 0)
@@ -55,6 +48,4 @@ phase = 0.03
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)
 script = ExtResource("2_d")
 path = "res://assets/third_party/kaykit_restaurant/Assets/gltf/jar_C_medium.gltf"
-look = ExtResource("kiln_prop")
 fit_size = Vector3(0.17, 0.272, 0.17)
-grain_metres = 0.1

@@ -1,7 +1,6 @@
 [gd_scene format=3]
 
 [ext_resource type="Script" path="res://scripts/art/third_party_model.gd" id="1_d"]
-[ext_resource type="Resource" path="res://data/art/looks/prop.tres" id="kiln_prop"]
 
 [sub_resource type="BoxShape3D" id="S1"]
 size = Vector3(0.6, 0.3, 0.6)
@@ -12,56 +11,43 @@ size = Vector3(0.6, 0.3, 0.6)
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)
 script = ExtResource("1_d")
 path = "res://assets/third_party/kaykit_restaurant/Assets/gltf/crate.gltf"
-look = ExtResource("kiln_prop")
 fit_size = Vector3(0.6, 0.3, 0.6)
 
 [node name="Veg1" type="Node3D" parent="."]
 transform = Transform3D(0.9801, 0, 0.1987, 0, 1, 0, -0.1987, 0, 0.9801, -0.15, 0.2, -0.12)
 script = ExtResource("1_d")
 path = "res://assets/third_party/kaykit_restaurant/Assets/gltf/food_ingredient_potato.gltf"
-look = ExtResource("kiln_prop")
 fit_size = Vector3(0.13, 0.13, 0.13)
-grain_metres = 0.12
 
 [node name="Veg2" type="Node3D" parent="."]
 transform = Transform3D(0.17, 0, 0.9854, 0, 1, 0, -0.9854, 0, 0.17, 0.08, 0.2, -0.16)
 script = ExtResource("1_d")
 path = "res://assets/third_party/kaykit_restaurant/Assets/gltf/food_ingredient_potato.gltf"
-look = ExtResource("kiln_prop")
 fit_size = Vector3(0.12, 0.12, 0.12)
-grain_metres = 0.12
 
 [node name="Veg3" type="Node3D" parent="."]
 transform = Transform3D(0.8253, 0, 0.5646, 0, 1, 0, -0.5646, 0, 0.8253, 0.15, 0.2, 0.08)
 script = ExtResource("1_d")
 path = "res://assets/third_party/kaykit_restaurant/Assets/gltf/food_ingredient_onion.gltf"
-look = ExtResource("kiln_prop")
 fit_size = Vector3(0.13, 0.13, 0.13)
-grain_metres = 0.12
 
 [node name="Veg4" type="Node3D" parent="."]
 transform = Transform3D(-0.4161, 0, 0.9093, 0, 1, 0, -0.9093, 0, -0.4161, -0.12, 0.2, 0.12)
 script = ExtResource("1_d")
 path = "res://assets/third_party/kaykit_restaurant/Assets/gltf/food_ingredient_tomato.gltf"
-look = ExtResource("kiln_prop")
 fit_size = Vector3(0.12, 0.12, 0.12)
-grain_metres = 0.12
 
 [node name="Veg5" type="Node3D" parent="."]
 transform = Transform3D(0.6216, 0, 0.7833, 0, 1, 0, -0.7833, 0, 0.6216, 0.02, 0.2, 0)
 script = ExtResource("1_d")
 path = "res://assets/third_party/kaykit_restaurant/Assets/gltf/food_ingredient_carrot.gltf"
-look = ExtResource("kiln_prop")
 fit_size = Vector3(0.22, 0.22, 0.22)
-grain_metres = 0.12
 
 [node name="Veg6" type="Node3D" parent="."]
 transform = Transform3D(-0.8569, 0, 0.5155, 0, 1, 0, -0.5155, 0, -0.8569, -0.02, 0.2, 0.17)
 script = ExtResource("1_d")
 path = "res://assets/third_party/kaykit_restaurant/Assets/gltf/food_ingredient_onion.gltf"
-look = ExtResource("kiln_prop")
 fit_size = Vector3(0.12, 0.12, 0.12)
-grain_metres = 0.12
 
 [node name="Shape" type="CollisionShape3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.15, 0)

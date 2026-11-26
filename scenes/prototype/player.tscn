@@ -172,9 +172,6 @@ script = ExtResource("37_model")
 path = "res://assets/third_party/meshy/kitchen_knife/model/model.glb"
 fit_size = Vector3(0.8, 10, 10)
 stand_ins = [NodePath("../Blade")]
-grain = false
-detail = 1.0
-keep_as_made = true
 
 [node name="Heel" type="Marker3D" parent="Model/Knife"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -0.5)
@@ -231,9 +228,6 @@ script = ExtResource("37_model")
 path = "res://assets/third_party/meshy/frying_pan/model/model.glb"
 fit_size = Vector3(10, 10, 0.7)
 stand_ins = [NodePath("../Plate")]
-grain = false
-detail = 1.0
-keep_as_made = true
 
 [node name="Sparks" type="CPUParticles3D" parent="Model"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.0, -0.6)

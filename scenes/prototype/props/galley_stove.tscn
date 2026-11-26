@@ -337,6 +337,3 @@ path = "res://assets/third_party/meshy/galley_hearth/model/model.glb"
 fit_size = Vector3(1.62, 1.98, 1.34)
 stretch = true
 stand_ins = [NodePath("../Plinth"), NodePath("../Back"), NodePath("../PierLeft"), NodePath("../PierRight"), NodePath("../Lintel"), NodePath("../Sill"), NodePath("../SootBack"), NodePath("../SootLeft"), NodePath("../SootRight"), NodePath("../SootTop"), NodePath("../EmberBed"), NodePath("../LogBack"), NodePath("../LogFront"), NodePath("../Fire"), NodePath("../ArchStone1"), NodePath("../ArchStone2"), NodePath("../ArchStone3"), NodePath("../ArchStone4"), NodePath("../ArchStone5"), NodePath("../Quoin1"), NodePath("../Quoin2"), NodePath("../Quoin3"), NodePath("../Quoin4"), NodePath("../Top"), NodePath("../Rail"), NodePath("../RailBracket1"), NodePath("../RailBracket2"), NodePath("../Flue"), NodePath("../FlueCollar")]
-grain = false
-detail = 1.0
-keep_as_made = true
