@@ -25,8 +25,8 @@ fog_mode = 1
 fog_light_color = Color(0.08, 0.115, 0.15, 1)
 fog_sky_affect = 1.0
 fog_depth_curve = 1.6
-fog_depth_begin = 18.0
-fog_depth_end = 62.0
+fog_depth_begin = 7.0
+fog_depth_end = 29.0
 volumetric_fog_enabled = true
 volumetric_fog_density = 0.0
 volumetric_fog_albedo = Color(0.55, 0.75, 0.78, 1)
@@ -76,8 +76,8 @@ shader_parameter/tint = Color(0.85, 0.95, 0.95, 1)
 
 [sub_resource type="PlaneMesh" id="Sea"]
 size = Vector2(160, 160)
-subdivide_width = 4
-subdivide_depth = 4
+subdivide_width = 160
+subdivide_depth = 160
 
 [sub_resource type="ShaderMaterial" id="ThingSkin"]
 render_priority = 0
@@ -103,6 +103,7 @@ height = 160.0
 
 [sub_resource type="StandardMaterial3D" id="RainDrop"]
 transparency = 1
+render_priority = 2
 shading_mode = 0
 albedo_color = Color(0.62, 0.7, 0.78, 0.18)
 
@@ -297,14 +298,14 @@ extra_cull_margin = 20.0
 mesh = SubResource("ThingBody")
 
 [node name="Rain" type="CPUParticles3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 4, -14)
-amount = 700
-lifetime = 0.7
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 5.5, -7)
+amount = 1650
+lifetime = 0.38
 preprocess = 1.0
 local_coords = true
 mesh = SubResource("Drop")
 emission_shape = 3
-emission_box_extents = Vector3(14, 1, 10)
+emission_box_extents = Vector3(18, 0.2, 18)
 direction = Vector3(0.05, -1, 0)
 spread = 2.0
 gravity = Vector3(0, -9.8, 0)
@@ -1243,15 +1244,11 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.3, -3.7, -9.6)
 [node name="Figure" parent="Overboard" instance=ExtResource("6_castaway")]
 transform = Transform3D(0.97, -0.17, 0.12, 0.18, 0.98, -0.06, -0.11, 0.08, 0.99, 0, 0, 0)
 
-[node name="Character" parent="Overboard/Figure" index="5" node_paths=PackedStringArray("reach_for")]
-reach_for = NodePath("../../Reach")
-reach = 1.0
+[node name="Character" parent="Overboard/Figure" index="5"]
+held_animation = &"Idle"
 eyes_shut = true
 undressed = true
 afloat = 1.0
-
-[node name="Reach" type="Marker3D" parent="Overboard"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.15, 4.4, 0.1)
 
 [node name="Clips" type="AnimationPlayer" parent="." groups=["clips"]]
 libraries/ = SubResource("Library")

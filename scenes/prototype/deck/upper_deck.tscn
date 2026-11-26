@@ -3167,27 +3167,27 @@ material_override = ExtResource("2_3xgj1")
 mesh = SubResource("BoxMesh_153")
 
 [node name="Boom" type="MeshInstance3D" parent="Masts/Mizzen" unique_id=895618374]
-transform = Transform3D(0, 0, 0.24, 0.23980033, 0.19999981, 0, -0.009787758, 4.9000006, 0, 0, 9.65, 16.75)
+transform = Transform3D(0, 0, 0.24, 0.23980033, 0.19999981, 0, -0.009787758, 4.9000006, 0, 0, 9.65, 16.37)
 material_override = ExtResource("2_3xgj1")
 mesh = SubResource("CylinderMesh_34")
 
 [node name="FurledSpanker" type="MeshInstance3D" parent="Masts/Mizzen" unique_id=1825965999]
-transform = Transform3D(0, 0, 0.42, 0.41961482, 0.17999935, 0, -0.017983424, 4.200001, 0, 0, 9.860001, 16.6)
+transform = Transform3D(0, 0, 0.42, 0.41961482, 0.17999935, 0, -0.017983424, 4.200001, 0, 0, 9.860001, 16.22)
 material_override = ExtResource("14_7gjw2")
 mesh = SubResource("CylinderMesh_34")
 
 [node name="Gaff" type="MeshInstance3D" parent="Masts/Mizzen" unique_id=2060551999]
-transform = Transform3D(0, 0, 0.2, 0.17419569, 2.1999998, 0, -0.09826422, 3.9000006, 0, 0, 14.299999, 16.25)
+transform = Transform3D(0, 0, 0.2, 0.17419569, 2.1999998, 0, -0.09826422, 3.9000006, 0, 0, 14.299999, 15.93)
 material_override = ExtResource("2_3xgj1")
 mesh = SubResource("CylinderMesh_34")
 
 [node name="BrailedSail" type="MeshInstance3D" parent="Masts/Mizzen" unique_id=1556669041]
-transform = Transform3D(0, 0, 0.34, 0.2873658, 2.1499996, 0, -0.18171655, 3.4000006, 0, 0, 14.025, 16.1)
+transform = Transform3D(0, 0, 0.34, 0.2873658, 2.1499996, 0, -0.18171655, 3.4000006, 0, 0, 14.025, 15.78)
 material_override = ExtResource("14_7gjw2")
 mesh = SubResource("CylinderMesh_34")
 
 [node name="SailLeech" type="MeshInstance3D" parent="Masts/Mizzen" unique_id=1137043282]
-transform = Transform3D(0, 0, 0.1, 0.014284948, -4.8500004, 0, 0.098974444, 0.69999886, 0, 0, 12.575, 18.25)
+transform = Transform3D(0, 0, 0.1, 0.014284948, -4.8500004, 0, 0.098974444, 0.69999886, 0, 0, 12.575, 17.9)
 material_override = ExtResource("14_7gjw2")
 mesh = SubResource("CylinderMesh_34")
 
@@ -3603,86 +3603,86 @@ material_override = ExtResource("16_8fstm")
 mesh = SubResource("CylinderMesh_34")
 
 [node name="MizzenChannelPort" type="MeshInstance3D" parent="Rigging" unique_id=446943991]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -6.7, 7.35, 13.55)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -6.7, 8.0, 13.55)
 material_override = ExtResource("2_3xgj1")
 mesh = SubResource("BoxMesh_157")
 
 [node name="MizzenShroudsPort" type="Node3D" parent="Rigging" unique_id=517138398]
 
 [node name="Shroud1" type="MeshInstance3D" parent="Rigging/MizzenShroudsPort" unique_id=1517513716]
-transform = Transform3D(0, 6.49, 0.041454, 0.005911, 7.4, -0.035937, -0.054681, 0.799999, -0.003885, -3.525, 11.8, 13.5)
+transform = Transform3D(0, 6.49, 0.041454, 0.005911, 6.75, -0.035937, -0.054681, 0.799999, -0.003885, -3.525, 12.125, 13.5)
 material_override = ExtResource("16_8fstm")
 mesh = SubResource("CylinderMesh_34")
 
 [node name="DeadeyeUpper1" type="MeshInstance3D" parent="Rigging/MizzenShroudsPort" unique_id=1206971979]
-transform = Transform3D(0, -1, 0, 1, 0, 0, 0, 0, 1, -6.77, 8.1, 13.1)
+transform = Transform3D(0, -1, 0, 1, 0, 0, 0, 0, 1, -6.77, 8.75, 13.1)
 material_override = ExtResource("2_3xgj1")
 mesh = SubResource("CylinderMesh_155")
 
 [node name="DeadeyeLower1" type="MeshInstance3D" parent="Rigging/MizzenShroudsPort" unique_id=1464047232]
-transform = Transform3D(0, -1, 0, 1, 0, 0, 0, 0, 1, -6.77, 7.7, 13.1)
+transform = Transform3D(0, -1, 0, 1, 0, 0, 0, 0, 1, -6.77, 8.35, 13.1)
 material_override = ExtResource("2_3xgj1")
 mesh = SubResource("CylinderMesh_155")
 
 [node name="Lanyard1_1" type="MeshInstance3D" parent="Rigging/MizzenShroudsPort" unique_id=351536883]
-transform = Transform3D(0, 0, 0.018, 0, -0.3, 0, 0.018, 0, 0, -6.77, 7.9, 13.04)
+transform = Transform3D(0, 0, 0.018, 0, -0.3, 0, 0.018, 0, 0, -6.77, 8.55, 13.04)
 material_override = ExtResource("13_ddrw7")
 cast_shadow = 0
 mesh = SubResource("CylinderMesh_34")
 
 [node name="Lanyard1_2" type="MeshInstance3D" parent="Rigging/MizzenShroudsPort" unique_id=474093773]
-transform = Transform3D(0, 0, 0.018, 0, -0.3, 0, 0.018, 0, 0, -6.77, 7.9, 13.1)
+transform = Transform3D(0, 0, 0.018, 0, -0.3, 0, 0.018, 0, 0, -6.77, 8.55, 13.1)
 material_override = ExtResource("13_ddrw7")
 cast_shadow = 0
 mesh = SubResource("CylinderMesh_34")
 
 [node name="Lanyard1_3" type="MeshInstance3D" parent="Rigging/MizzenShroudsPort" unique_id=1666457493]
-transform = Transform3D(0, 0, 0.018, 0, -0.3, 0, 0.018, 0, 0, -6.77, 7.9, 13.160001)
+transform = Transform3D(0, 0, 0.018, 0, -0.3, 0, 0.018, 0, 0, -6.77, 8.55, 13.160001)
 material_override = ExtResource("13_ddrw7")
 cast_shadow = 0
 mesh = SubResource("CylinderMesh_34")
 
 [node name="Chain1" type="MeshInstance3D" parent="Rigging/MizzenShroudsPort" unique_id=1628739850]
-transform = Transform3D(0, 0, 0.04, 0, -0.65, 0, 0.04, 0, 0, -6.77, 7.375, 13.1)
+transform = Transform3D(0, 0, 0.04, 0, -0.65, 0, 0.04, 0, 0, -6.77, 8.025, 13.1)
 material_override = ExtResource("6_iav1l")
 cast_shadow = 0
 mesh = SubResource("CylinderMesh_34")
 
 [node name="Shroud2" type="MeshInstance3D" parent="Rigging/MizzenShroudsPort" unique_id=1466243034]
-transform = Transform3D(0, 6.49, 0.041352, 0.000743, 7.4, -0.03626, -0.054995, 0.1, -0.00049, -3.525, 11.8, 14.05)
+transform = Transform3D(0, 6.49, 0.041352, 0.000743, 6.75, -0.03626, -0.054995, 0.1, -0.00049, -3.525, 12.125, 14.05)
 material_override = ExtResource("16_8fstm")
 mesh = SubResource("CylinderMesh_34")
 
 [node name="DeadeyeUpper2" type="MeshInstance3D" parent="Rigging/MizzenShroudsPort" unique_id=2065778889]
-transform = Transform3D(0, -1, 0, 1, 0, 0, 0, 0, 1, -6.77, 8.1, 14)
+transform = Transform3D(0, -1, 0, 1, 0, 0, 0, 0, 1, -6.77, 8.75, 14)
 material_override = ExtResource("2_3xgj1")
 mesh = SubResource("CylinderMesh_155")
 
 [node name="DeadeyeLower2" type="MeshInstance3D" parent="Rigging/MizzenShroudsPort" unique_id=390209762]
-transform = Transform3D(0, -1, 0, 1, 0, 0, 0, 0, 1, -6.77, 7.7, 14)
+transform = Transform3D(0, -1, 0, 1, 0, 0, 0, 0, 1, -6.77, 8.35, 14)
 material_override = ExtResource("2_3xgj1")
 mesh = SubResource("CylinderMesh_155")
 
 [node name="Lanyard2_1" type="MeshInstance3D" parent="Rigging/MizzenShroudsPort" unique_id=281664787]
-transform = Transform3D(0, 0, 0.018, 0, -0.3, 0, 0.018, 0, 0, -6.77, 7.9, 13.94)
+transform = Transform3D(0, 0, 0.018, 0, -0.3, 0, 0.018, 0, 0, -6.77, 8.55, 13.94)
 material_override = ExtResource("13_ddrw7")
 cast_shadow = 0
 mesh = SubResource("CylinderMesh_34")
 
 [node name="Lanyard2_2" type="MeshInstance3D" parent="Rigging/MizzenShroudsPort" unique_id=988177240]
-transform = Transform3D(0, 0, 0.018, 0, -0.3, 0, 0.018, 0, 0, -6.77, 7.9, 14)
+transform = Transform3D(0, 0, 0.018, 0, -0.3, 0, 0.018, 0, 0, -6.77, 8.55, 14)
 material_override = ExtResource("13_ddrw7")
 cast_shadow = 0
 mesh = SubResource("CylinderMesh_34")
 
 [node name="Lanyard2_3" type="MeshInstance3D" parent="Rigging/MizzenShroudsPort" unique_id=161213564]
-transform = Transform3D(0, 0, 0.018, 0, -0.3, 0, 0.018, 0, 0, -6.77, 7.9, 14.06)
+transform = Transform3D(0, 0, 0.018, 0, -0.3, 0, 0.018, 0, 0, -6.77, 8.55, 14.06)
 material_override = ExtResource("13_ddrw7")
 cast_shadow = 0
 mesh = SubResource("CylinderMesh_34")
 
 [node name="Chain2" type="MeshInstance3D" parent="Rigging/MizzenShroudsPort" unique_id=581285632]
-transform = Transform3D(0, 0, 0.04, 0, -0.65, 0, 0.04, 0, 0, -6.77, 7.375, 14)
+transform = Transform3D(0, 0, 0.04, 0, -0.65, 0, 0.04, 0, 0, -6.77, 8.025, 14)
 material_override = ExtResource("6_iav1l")
 cast_shadow = 0
 mesh = SubResource("CylinderMesh_34")
@@ -4358,86 +4358,86 @@ material_override = ExtResource("16_8fstm")
 mesh = SubResource("CylinderMesh_34")
 
 [node name="MizzenChannelStarboard" type="MeshInstance3D" parent="Rigging" unique_id=1758801179]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6.7, 7.35, 13.55)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6.7, 8.0, 13.55)
 material_override = ExtResource("2_3xgj1")
 mesh = SubResource("BoxMesh_157")
 
 [node name="MizzenShroudsStarboard" type="Node3D" parent="Rigging" unique_id=872039674]
 
 [node name="Shroud1" type="MeshInstance3D" parent="Rigging/MizzenShroudsStarboard" unique_id=1877024202]
-transform = Transform3D(0, -6.49, 0.041454, 0.005911, 7.4, 0.035937, -0.054681, 0.799999, 0.003885, 3.525, 11.8, 13.5)
+transform = Transform3D(0, -6.49, 0.041454, 0.005911, 6.75, 0.035937, -0.054681, 0.799999, 0.003885, 3.525, 12.125, 13.5)
 material_override = ExtResource("16_8fstm")
 mesh = SubResource("CylinderMesh_34")
 
 [node name="DeadeyeUpper1" type="MeshInstance3D" parent="Rigging/MizzenShroudsStarboard" unique_id=1209791314]
-transform = Transform3D(0, -1, 0, 1, 0, 0, 0, 0, 1, 6.77, 8.1, 13.1)
+transform = Transform3D(0, -1, 0, 1, 0, 0, 0, 0, 1, 6.77, 8.75, 13.1)
 material_override = ExtResource("2_3xgj1")
 mesh = SubResource("CylinderMesh_155")
 
 [node name="DeadeyeLower1" type="MeshInstance3D" parent="Rigging/MizzenShroudsStarboard" unique_id=543947230]
-transform = Transform3D(0, -1, 0, 1, 0, 0, 0, 0, 1, 6.77, 7.7, 13.1)
+transform = Transform3D(0, -1, 0, 1, 0, 0, 0, 0, 1, 6.77, 8.35, 13.1)
 material_override = ExtResource("2_3xgj1")
 mesh = SubResource("CylinderMesh_155")
 
 [node name="Lanyard1_1" type="MeshInstance3D" parent="Rigging/MizzenShroudsStarboard" unique_id=455472436]
-transform = Transform3D(0, 0, 0.018, 0, -0.3, 0, 0.018, 0, 0, 6.77, 7.9, 13.04)
+transform = Transform3D(0, 0, 0.018, 0, -0.3, 0, 0.018, 0, 0, 6.77, 8.55, 13.04)
 material_override = ExtResource("13_ddrw7")
 cast_shadow = 0
 mesh = SubResource("CylinderMesh_34")
 
 [node name="Lanyard1_2" type="MeshInstance3D" parent="Rigging/MizzenShroudsStarboard" unique_id=1565256874]
-transform = Transform3D(0, 0, 0.018, 0, -0.3, 0, 0.018, 0, 0, 6.77, 7.9, 13.1)
+transform = Transform3D(0, 0, 0.018, 0, -0.3, 0, 0.018, 0, 0, 6.77, 8.55, 13.1)
 material_override = ExtResource("13_ddrw7")
 cast_shadow = 0
 mesh = SubResource("CylinderMesh_34")
 
 [node name="Lanyard1_3" type="MeshInstance3D" parent="Rigging/MizzenShroudsStarboard" unique_id=2108114150]
-transform = Transform3D(0, 0, 0.018, 0, -0.3, 0, 0.018, 0, 0, 6.77, 7.9, 13.160001)
+transform = Transform3D(0, 0, 0.018, 0, -0.3, 0, 0.018, 0, 0, 6.77, 8.55, 13.160001)
 material_override = ExtResource("13_ddrw7")
 cast_shadow = 0
 mesh = SubResource("CylinderMesh_34")
 
 [node name="Chain1" type="MeshInstance3D" parent="Rigging/MizzenShroudsStarboard" unique_id=1415856022]
-transform = Transform3D(0, 0, 0.04, 0, -0.65, 0, 0.04, 0, 0, 6.77, 7.375, 13.1)
+transform = Transform3D(0, 0, 0.04, 0, -0.65, 0, 0.04, 0, 0, 6.77, 8.025, 13.1)
 material_override = ExtResource("6_iav1l")
 cast_shadow = 0
 mesh = SubResource("CylinderMesh_34")
 
 [node name="Shroud2" type="MeshInstance3D" parent="Rigging/MizzenShroudsStarboard" unique_id=1810423977]
-transform = Transform3D(0, -6.49, 0.041352, 0.000743, 7.4, 0.03626, -0.054995, 0.1, 0.00049, 3.525, 11.8, 14.05)
+transform = Transform3D(0, -6.49, 0.041352, 0.000743, 6.75, 0.03626, -0.054995, 0.1, 0.00049, 3.525, 12.125, 14.05)
 material_override = ExtResource("16_8fstm")
 mesh = SubResource("CylinderMesh_34")
 
 [node name="DeadeyeUpper2" type="MeshInstance3D" parent="Rigging/MizzenShroudsStarboard" unique_id=1337037281]
-transform = Transform3D(0, -1, 0, 1, 0, 0, 0, 0, 1, 6.77, 8.1, 14)
+transform = Transform3D(0, -1, 0, 1, 0, 0, 0, 0, 1, 6.77, 8.75, 14)
 material_override = ExtResource("2_3xgj1")
 mesh = SubResource("CylinderMesh_155")
 
 [node name="DeadeyeLower2" type="MeshInstance3D" parent="Rigging/MizzenShroudsStarboard" unique_id=1968077612]
-transform = Transform3D(0, -1, 0, 1, 0, 0, 0, 0, 1, 6.77, 7.7, 14)
+transform = Transform3D(0, -1, 0, 1, 0, 0, 0, 0, 1, 6.77, 8.35, 14)
 material_override = ExtResource("2_3xgj1")
 mesh = SubResource("CylinderMesh_155")
 
 [node name="Lanyard2_1" type="MeshInstance3D" parent="Rigging/MizzenShroudsStarboard" unique_id=1331075544]
-transform = Transform3D(0, 0, 0.018, 0, -0.3, 0, 0.018, 0, 0, 6.77, 7.9, 13.94)
+transform = Transform3D(0, 0, 0.018, 0, -0.3, 0, 0.018, 0, 0, 6.77, 8.55, 13.94)
 material_override = ExtResource("13_ddrw7")
 cast_shadow = 0
 mesh = SubResource("CylinderMesh_34")
 
 [node name="Lanyard2_2" type="MeshInstance3D" parent="Rigging/MizzenShroudsStarboard" unique_id=528402266]
-transform = Transform3D(0, 0, 0.018, 0, -0.3, 0, 0.018, 0, 0, 6.77, 7.9, 14)
+transform = Transform3D(0, 0, 0.018, 0, -0.3, 0, 0.018, 0, 0, 6.77, 8.55, 14)
 material_override = ExtResource("13_ddrw7")
 cast_shadow = 0
 mesh = SubResource("CylinderMesh_34")
 
 [node name="Lanyard2_3" type="MeshInstance3D" parent="Rigging/MizzenShroudsStarboard" unique_id=1243985546]
-transform = Transform3D(0, 0, 0.018, 0, -0.3, 0, 0.018, 0, 0, 6.77, 7.9, 14.06)
+transform = Transform3D(0, 0, 0.018, 0, -0.3, 0, 0.018, 0, 0, 6.77, 8.55, 14.06)
 material_override = ExtResource("13_ddrw7")
 cast_shadow = 0
 mesh = SubResource("CylinderMesh_34")
 
 [node name="Chain2" type="MeshInstance3D" parent="Rigging/MizzenShroudsStarboard" unique_id=1020777688]
-transform = Transform3D(0, 0, 0.04, 0, -0.65, 0, 0.04, 0, 0, 6.77, 7.375, 14)
+transform = Transform3D(0, 0, 0.04, 0, -0.65, 0, 0.04, 0, 0, 6.77, 8.025, 14)
 material_override = ExtResource("6_iav1l")
 cast_shadow = 0
 mesh = SubResource("CylinderMesh_34")
@@ -5295,7 +5295,9 @@ mesh = SubResource("BoxMesh_178")
 [node name="SternLantern" type="Node3D" parent="Lights" unique_id=198966340 instance=ExtResource("42_16o8s")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 9, 15.1)
 script = ExtResource("43_dro8j")
-light_energy = 1.6
+light_energy = 1.25
+light_range = 5.8
+casts_shadows = false
 phase = 0.37
 
 [node name="BowspritLantern" type="Node3D" parent="Lights" unique_id=1479310234 instance=ExtResource("42_16o8s")]

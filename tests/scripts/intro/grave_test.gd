@@ -79,11 +79,8 @@ func test_the_hand_is_out_of_sight_until_its_moment() -> void:
 
 	_jump_to_end(clips, &"finds_the_hand")
 	assert_bool(overboard.visible).is_true()
-	# Hanging there, eyes shut, one arm reaching up towards the surface.
 	assert_bool(you.eyes_shut).is_true()
-	assert_float(you.reach).is_equal(1.0)
-	var reach: Node3D = grave.get_node("Overboard/Reach") as Node3D
-	assert_float(reach.global_position.y).is_greater(overboard.global_position.y + 2.0)
+	assert_float(you.reach).is_equal(0.0)
 
 
 func test_the_thing_passes_from_one_side_to_the_other_far_below() -> void:

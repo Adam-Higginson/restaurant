@@ -241,19 +241,19 @@ material_override = ExtResource("28_darkwood")
 mesh = SubResource("BoxMesh_g41xf")
 
 [node name="StarboardBay1" parent="." unique_id=1493438848 instance=ExtResource("57_1yecb")]
-transform = Transform3D(-4.371139e-08, 0, -1, 0, 1, 0, 1, 0, -4.371139e-08, 5.7, 1, 9.05)
+transform = Transform3D(-4.371139e-08, 0, -1, 0, 1, 0, 1, 0, -4.371139e-08, 5.655, 1, 9.05)
 lower_quilt = ExtResource("58_alpw3")
 upper_quilt = ExtResource("59_dlopa")
 curtain_cloth = ExtResource("60_q7k3o")
 
 [node name="StarboardBay2" parent="." unique_id=1621438252 instance=ExtResource("57_1yecb")]
-transform = Transform3D(-4.371139e-08, 0, -1, 0, 1, 0, 1, 0, -4.371139e-08, 5.7, 1, 11.25)
+transform = Transform3D(-4.371139e-08, 0, -1, 0, 1, 0, 1, 0, -4.371139e-08, 5.655, 1, 11.25)
 lower_quilt = ExtResource("60_f3yei")
 upper_quilt = ExtResource("58_alpw3")
 curtain_cloth = ExtResource("62_wb018")
 
 [node name="YourBunk" parent="." unique_id=637154212 instance=ExtResource("57_1yecb")]
-transform = Transform3D(-4.371139e-08, 0, -1, 0, 1, 0, 1, 0, -4.371139e-08, 5.7, 1, 13.45)
+transform = Transform3D(-4.371139e-08, 0, -1, 0, 1, 0, 1, 0, -4.371139e-08, 5.655, 1, 13.45)
 lower_quilt = ExtResource("61_kupa5")
 upper_quilt = ExtResource("60_f3yei")
 curtain_cloth = ExtResource("60_q7k3o")

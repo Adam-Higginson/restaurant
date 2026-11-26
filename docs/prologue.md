@@ -14,7 +14,7 @@ This is the script the opening is being rebuilt to (#181). The GDD's *The openin
 - **The captain gives you the cooking pot** at the helm, where he stays while the lantern is low, going for a drink at the water butt now and then. The frying pan, your shield in a fight, is the first thing you find ashore.
 - **The deck talk plays by itself** the first time you come up on deck after the soup, and **the frying pan is in a washed-up chest** on the cove's beach (#187).
 - **The water comes from the water butt** on deck, not a stream off the rigging, and the soup is made in two steps (a Tomato Soup, then the chilli and herbs stirred in), as the recipe book has it (#186).
-- **They look out together (#203).** After the captain's first line from the wheel, the lantern flies off his hook to the starboard rail and the captain comes over to stand beside him, so the rest of the talk is side by side at the rail, and he goes over the side from there.
+- **They look out together (#203).** After the captain's first line from the wheel, the lantern bobs up to the captain at the wheel, then leads him to the starboard rail, so the rest of the talk is side by side at the rail, and he goes over the side from there.
 - **The rescue ends in white.** The haul up through the dead lanterns, the storm surface and the heron at the rail are gone; how you came aboard isn't shown.
 - **The arrival is the cove** (#163): the ship anchors off the beach and you row ashore. The harbour, the settlement and the old structures belong to Chapter 1.
 
@@ -56,11 +56,11 @@ He looks towards the wheel, where the heron captain stands.
 
 **HERON:** "Something, or another one of your little lights?"
 
-**LANTERN:** "I know the difference!"
+The lantern lifts off his hook and settles beside the captain.
 
-**HERON:** "Do you?"
+**LANTERN:** "Captain. Come take a look."
 
-The lantern turns back towards the ocean.
+He leads the captain to the rail and turns towards the ocean.
 
 **LANTERN:** "Look."
 
@@ -86,9 +86,7 @@ He moves closer to the rail.
 
 **LANTERN:** "Captain, I think there's something down there."
 
-**HERON:** "Don't lean too far over."
-
-**LANTERN:** "I'm not!"
+**HERON:** "What do you hear?"
 
 The lantern leans further.
 
@@ -148,7 +146,7 @@ No response.
 
 **LANTERN:** "Can you hear me?"
 
-He circles the player.
+He dips to look beneath the player's bowed head, pauses for a response and drifts back.
 
 **LANTERN:** "Oh, you're in a bad way…"
 
@@ -166,7 +164,7 @@ He moves closer and reaches out his little hand.
 
 **LANTERN:** "Here. Take my hand."
 
-**GAMEPLAY: REACH OUT.** The player slowly raises their hand. For a moment the two hands almost touch. The lantern reaches a little further. The player takes his hand.
+**GAMEPLAY: REACH OUT.** The player slowly raises their hand. For a moment the two hands almost touch. The lantern reaches a little further. The player takes his hand. Their eyelids flutter open and they look towards him.
 
 A strange sound resonates through the water.
 

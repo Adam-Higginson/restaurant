@@ -108,11 +108,19 @@ func test_the_rail_looks_down_into_the_grave_finds_a_hand_and_ends_in_his_dive()
 	var hook_lantern: Node3D = _hook_lantern()
 	await physics_ticks(runner, 3)
 
-	# He's off his hook and round to the rail, and the captain comes over
-	# from the wheel to stand beside him (#203). "Look." The camera goes past
+	# The invitation plays at the wheel before either of them goes to the rail.
+	assert_bool(await _read_on_until(runner, said, &"to_the_rail")).is_true()
+	assert_bool(await _line_shows(runner, said, 5)).is_true()
+	assert_str(_conversation.box.line_text()).is_equal("Captain. Come take a look.")
+	assert_float(hook_lantern.global_position.distance_to(_mark("at_wheel").global_position)) \
+			.is_less(0.35)
+	assert_float(_heron().global_position.distance_to(_mark("wheel").global_position)) \
+			.is_less(0.3)
+
+	# At the rail they look out together. The camera goes past
 	# him, out over the water and down into the Grave of the Lanterns, a set
 	# of its own. You're not to be seen yet.
-	assert_bool(await _read_on_until(runner, said, &"the_grave")).is_true()
+	assert_bool(await _read_on_until(runner, said, &"the_grave", said[0] - 1)).is_true()
 	var beside: Vector3 = _mark("beside_him").global_position
 	var perch: Vector3 = _mark("rail_perch").global_position
 	assert_float(_heron().global_position.distance_to(beside)).is_less(0.3)
@@ -123,9 +131,14 @@ func test_the_rail_looks_down_into_the_grave_finds_a_hand_and_ends_in_his_dive()
 	assert_bool(grave.is_open).is_true()
 	assert_bool(overboard.visible).is_false()
 
-	# "That one..." Back up top, the ringing, then down again as something
-	# passes far beneath: the thing goes by under the lanterns.
-	assert_bool(await _read_on_until(runner, said, &"the_shape")).is_true()
+	# The rail comes back in a direct cut, before the bell rings.
+	assert_bool(await _read_on_until(runner, said, &"something_down_there")).is_true()
+	await physics_ticks(runner, 3)
+	assert_bool(grave.is_open).is_false()
+	assert_bool(_fade().visible).is_false()
+
+	# Back over the water, the thing goes by under the lanterns.
+	assert_bool(await _read_on_until(runner, said, &"the_shape", said[0] - 1)).is_true()
 	await physics_ticks(runner, 100)
 	assert_bool(grave.is_open).is_true()
 	var thing_was: Vector3 = thing.position
@@ -187,7 +200,7 @@ func test_he_comes_down_warm_finds_you_and_holds_out_his_hand() -> void:
 	assert_str(_conversation.box.line_text()).is_equal("Hello?")
 	assert_bool(you.eyes_shut).is_true()
 
-	# He circles you, tries to lift you, looks up at the surface, and then
+	# He checks your face, tries to lift you, looks up at the surface, and then
 	# opens his door: his flame makes a hand, and holds it out, steady.
 	assert_bool(await _read_on_until(runner, said, &"reach", 0)).is_true()
 	await physics_ticks(runner, 300)
@@ -232,14 +245,13 @@ func test_his_light_pours_into_you_the_deep_stirs_and_he_lets_go_to_white() -> v
 	lightning.struck.connect(func() -> void: strikes.append(1))
 	await physics_ticks(runner, 300)
 
-	# Take it: his hand closes on yours. Only your arm goes out to him, and
-	# your eyes stay shut. His flame flares.
+	# Taking his hand brings a brief conscious response before his light flows.
 	_conversation.press()
 	assert_bool(await _reaches(runner, &"it_catches")).is_true()
 	await physics_ticks(runner, 70)
 	assert_float(hand.grip).is_equal_approx(1.0, 0.01)
 	assert_float(you.reach).is_equal_approx(1.0, 0.01)
-	assert_bool(you.eyes_shut).is_true()
+	assert_bool(you.eyes_shut).is_false()
 	assert_float(face.strength).is_greater(0.95)
 	assert_float(flow.flow).is_equal(0.0)
 	assert_float(drain.flow).is_equal(0.0)
