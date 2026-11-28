@@ -367,12 +367,16 @@ func test_you_wake_the_captain_and_the_weak_lantern_talk_and_then_the_ship_is_yo
 	assert_vector(heron.global_position).is_equal_approx(bedside.global_position, NEAR)
 	assert_float(heron.global_position.distance_to(_player.global_position)).is_less(3.0)
 	assert_bool(sleeping.visible).is_false()
+	var seated: Node3D = _ship.get_node("WakingSet/Props/SeatedYou") as Node3D
+	assert_bool(seated.visible).is_true()
+	await physics_ticks(runner, 110)
 	assert_bool(your_body.visible).is_true()
+	assert_bool(seated.visible).is_false()
 
 	# Read on, answering when asked. Low as he is, the lantern talks; he
 	# tries to float over to you and sinks back home.
 	var floated: bool = false
-	var pressed: int = said[0]
+	var pressed: int = said[0] - 1
 	var answered_after: int = -1
 	var facing_him: Marker3D = _shot("facing_him")
 	var asked_facing: Array[bool] = [false]
@@ -454,7 +458,9 @@ func test_skipping_the_intro_ends_it_with_everything_put_away() -> void:
 	assert_bool((_sea.get_node("FirstQuest") as FirstQuest).is_heading_to_helm).is_true()
 	assert_bool(Game.dialogue.is_set(LanternSpirit.LOW_FLAG)).is_true()
 	var at: Vector3 = _ship.to_local(_player.global_position)
-	assert_float(at.distance_to(_opening.wake_spot)).is_less(0.6)
+	assert_float(at.distance_to(_ship.to_local(_mark("bunk_stand").global_position))) \
+			.is_less(0.6)
+	assert_bool((_ship.get_node("WakingSet/Props/SeatedYou") as Node3D).visible).is_false()
 
 
 func test_a_saved_voyage_carries_on_after_the_title_instead_of_the_rescue() -> void:

@@ -169,10 +169,10 @@ func test_the_captain_sends_you_to_the_books_then_hints_at_the_water() -> void:
 	state.set_flag(LanternSpirit.LOW_FLAG)
 
 	var before_reading: String = " ".join(_said(&"heron", state)).to_lower()
-	assert_str(before_reading).contains("books")
+	assert_str(before_reading).contains("cookbook")
 	state.set_flag(&"read_fire_spirits")
 	var after_reading: String = " ".join(_said(&"heron", state)).to_lower()
-	assert_str(after_reading).contains("water")
+	assert_str(after_reading).contains("soup")
 	assert_str(after_reading).not_contains("rain")
 	state.set_flag(WaterButt.FETCHED_FLAG)
 	var after_fetching: String = " ".join(_said(&"heron", state)).to_lower()

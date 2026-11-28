@@ -47,6 +47,30 @@
 [ext_resource type="PackedScene" path="res://scenes/prototype/props/treasure_chest.tscn" id="320_chest"]
 [ext_resource type="Resource" path="res://data/tools/chefs_knife.tres" id="321_knife"]
 
+[ext_resource type="PackedScene" path="res://scenes/prototype/props/old_book.tscn" id="GalleyCookbook"]
+
+[ext_resource type="Script" path="res://scripts/props/slops_bucket.gd" id="SlopsScript"]
+[ext_resource type="Script" path="res://scripts/interaction/interactable_3d.gd" id="SlopsReach"]
+[ext_resource type="Material" path="res://assets/placeholder/materials/dark_prop_wood.tres" id="SlopsWood"]
+
+[ext_resource type="Script" path="res://scripts/props/inspectable.gd" id="JugInspect"]
+[ext_resource type="PackedScene" path="res://scenes/prototype/dressing/green_bottle.tscn" id="WaterJug"]
+
+[sub_resource type="BoxShape3D" id="JugReach"]
+size = Vector3(0.48, 0.8, 0.45)
+
+[sub_resource type="BoxMesh" id="CookbookStandMesh"]
+size = Vector3(0.94, 1, 0.45)
+
+[sub_resource type="CylinderMesh" id="SlopsMesh"]
+top_radius = 0.25
+bottom_radius = 0.19
+height = 0.34
+cap_top = false
+
+[sub_resource type="BoxShape3D" id="SlopsArea"]
+size = Vector3(0.6, 0.7, 0.6)
+
 [sub_resource type="BoxMesh" id="Cosy_1"]
 size = Vector3(9.1, 0.1, 6.65)
 
@@ -633,6 +657,44 @@ interior = true
 ambient_mode = 2
 ambient_color = Color(0.32, 0.2, 0.13, 1)
 ambient_color_energy = 0.35
+
+[node name="SlopsBucket" type="Node3D" parent="."]
+position = Vector3(-2.65, 1.2, 2.2)
+script = ExtResource("SlopsScript")
+
+[node name="Bucket" type="MeshInstance3D" parent="SlopsBucket"]
+mesh = SubResource("SlopsMesh")
+material_override = ExtResource("SlopsWood")
+
+[node name="Reach" type="Area3D" parent="SlopsBucket"]
+script = ExtResource("SlopsReach")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="SlopsBucket/Reach"]
+shape = SubResource("SlopsArea")
+
+[node name="CookbookStand" type="MeshInstance3D" parent="."]
+position = Vector3(4.76, 1.45, 1.45)
+mesh = SubResource("CookbookStandMesh")
+material_override = ExtResource("SlopsWood")
+
+[node name="WaterJug" type="Node3D" parent="."]
+position = Vector3(5.02, 1.96, 1.46)
+script = ExtResource("JugInspect")
+what = "the empty bottle"
+lines = &"water_jug"
+
+[node name="Bottle" parent="WaterJug" instance=ExtResource("WaterJug")]
+scale = Vector3(0.8, 0.8, 0.8)
+
+[node name="Reach" type="Area3D" parent="WaterJug"]
+position = Vector3(0.14, -0.28, 0.04)
+script = ExtResource("SlopsReach")
+
+[node name="Shape" type="CollisionShape3D" parent="WaterJug/Reach"]
+shape = SubResource("JugReach")
+
+[node name="OldCookbook" parent="." instance=ExtResource("GalleyCookbook")]
+position = Vector3(4.55, 1.95, 1.45)
 
 [node name="Pantry" parent="." unique_id=1036573145 instance=ExtResource("7_pantry")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.65, 1, 1.45)

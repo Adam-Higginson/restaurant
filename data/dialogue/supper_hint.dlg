@@ -4,11 +4,16 @@
 # Placeholder writing: rewrite freely.
 
 ~ start
+@send heron captain_supper_seat
 @go lantern supper_bowl
-@wait 1.5
+@walk heron captain_supper_seat
+@wait 1.0
 @look lantern tired
 lantern: Mm. Thank you. That was kind.
 lantern: I'm still so cold, though...
 lantern: Something warmer, maybe? Something with a bit of fire in it.
+? supper_plain_soup
+lantern: Could you make this one a little fiercer? There's plenty left.
 @home lantern
+@send heron wheel
 -> END

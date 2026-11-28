@@ -24,7 +24,7 @@ heron: Bit of a rough night out there, isn't it?
 # Your side is the replies you pick. He ends by giving you the ship's old
 # cooking pot (the frying pan is found ashore, #187).
 ~ first
-heron: Settling in?
+heron: How’s his light?
 - (Nod) -> settling
 
 ~ settling
@@ -57,7 +57,7 @@ set has_saucepan
 @hold_up saucepan
 narrator: You got the *Cooking Pot*! Set it on the *hob* to cook in it.
 @put_away
-heron: It's not much, but it'll do.
+heron: Try the old cookbook by the galley stove. We’ve had to warm him up before.
 heron: Try not to burn the ship down.
 -> met
 
@@ -120,12 +120,17 @@ heron: Hm.
 # and still have no water, he mentions the water.
 ~ still_low
 heron: Well? He's no brighter.
-heron: There's books in the chart room, forward of the ramp. I don't read 'em. Somebody did, once.
+heron: Try the old cookbook by the galley stove.
 -> END
 
 ~ hint_water
-heron: Soup wants water. Not seawater. You'd poison him.
-heron: Sky's been pouring all night. Some of us had the sense to catch it.
+heron: Any luck with the soup?
+- (Ask where to get fresh water) -> fresh_water
+- (Leave) -> END
+
+~ fresh_water
+set asked_fresh_water
+heron: Rain barrel on deck. We might as well get something out of this weather.
 -> END
 
 # After the deck talk (#187): he's said it once.

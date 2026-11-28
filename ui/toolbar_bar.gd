@@ -67,6 +67,7 @@ func _draw() -> void:
 func setup(player: Player3D) -> void:
 	_player = player
 	_player.toolbar.changed.connect(queue_redraw)
+	_player.toolbar.vessel_contents_changed.connect(queue_redraw)
 	queue_redraw()
 
 

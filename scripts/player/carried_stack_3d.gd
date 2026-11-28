@@ -53,7 +53,7 @@ func _ready() -> void:
 
 func _process(_delta: float) -> void:
 	var hand: Node3D = held_in()
-	visible = hand != null and get_child_count() > 0
+	visible = hand != null and get_child_count() > 0 and _character.hold_up <= 0.0
 	if hand == null:
 		return
 	if _held == null or not _held.is_vessel():

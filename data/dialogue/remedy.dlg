@@ -9,6 +9,7 @@
 # goes back up to the wheel, where the deck talk finds him (#187).
 
 ~ start
+@send heron captain_supper_seat
 @place player supper_seat
 @place lantern lantern_arrives
 @shot supper_wide cut
@@ -50,10 +51,8 @@ lantern: Oh, that's much better!
 @wait 0.6
 @go lantern lantern_thanks
 lantern: I feel wonderful!
-@place heron doorway
-@show heron
+@walk heron captain_supper_seat
 @face heron lantern
-@shot doorway cut
 @wait 0.6
 heron: Well, I'll be.
 @shot supper_wide

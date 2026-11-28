@@ -12,6 +12,9 @@ extends Arms
 ## [method take_top] empties the selected slot, and [method is_full] means no
 ## slot is free. Arms' own stack is never used.
 
+## Emitted when the contents of any vessel on the toolbar change.
+signal vessel_contents_changed
+
 const SLOT_COUNT: int = 12
 
 ## The selected slot, from 0 to SLOT_COUNT - 1. Change it with select().
@@ -70,6 +73,7 @@ func add(item: ItemInstance) -> bool:
 	if slot == -1:
 		return false
 	_slot_items[slot] = item
+	_watch_vessel(item, true)
 	_selected = slot
 	changed.emit()
 	return true
@@ -81,6 +85,7 @@ func take_top() -> ItemInstance:
 	var item: ItemInstance = _slot_items[_selected]
 	if item == null:
 		return null
+	_watch_vessel(item, false)
 	_slot_items[_selected] = null
 	changed.emit()
 	return item
@@ -92,6 +97,7 @@ func take_item(index: int) -> ItemInstance:
 	var item: ItemInstance = get_item(index)
 	if item == null:
 		return null
+	_watch_vessel(item, false)
 	_slot_items[index] = null
 	changed.emit()
 	return item
@@ -204,3 +210,17 @@ func _free_slot() -> int:
 
 func _is_valid(index: int) -> bool:
 	return index >= 0 and index < SLOT_COUNT
+
+
+func _watch_vessel(item: ItemInstance, watching: bool) -> void:
+	if not item.is_vessel():
+		return
+	var change: Signal = item.contents.contents_changed
+	if watching and not change.is_connected(_on_vessel_changed):
+		change.connect(_on_vessel_changed)
+	elif not watching and change.is_connected(_on_vessel_changed):
+		change.disconnect(_on_vessel_changed)
+
+
+func _on_vessel_changed() -> void:
+	vessel_contents_changed.emit()

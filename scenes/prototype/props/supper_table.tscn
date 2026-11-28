@@ -7,9 +7,20 @@
 [sub_resource type="BoxShape3D" id="BoxShape3D_reach"]
 size = Vector3(0.8, 0.6, 0.8)
 
+[sub_resource type="StandardMaterial3D" id="PlacematMaterial"]
+albedo_color = Color(0.45, 0.22, 0.14, 1)
+
+[sub_resource type="BoxMesh" id="PlacematMesh"]
+material = SubResource("PlacematMaterial")
+size = Vector3(0.55, 0.012, 0.45)
+
 [node name="SupperTable" type="Node3D"]
 script = ExtResource("1_table")
 remedy = ExtResource("3_remedy")
+
+[node name="Placemat" type="MeshInstance3D" parent="."]
+position = Vector3(0, -0.006, 0)
+mesh = SubResource("PlacematMesh")
 
 [node name="PlateSpot" type="Node3D" parent="."]
 

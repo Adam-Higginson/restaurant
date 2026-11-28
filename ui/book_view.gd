@@ -102,7 +102,8 @@ func _unhandled_input(event: InputEvent) -> void:
 	# The press that opened the book mustn't close it again.
 	if Engine.get_process_frames() == _opened_frame:
 		return
-	if event.is_action_pressed("interact") or event.is_action_pressed("ui_cancel"):
+	if event.is_action_pressed("interact") or event.is_action_pressed("ui_cancel") \
+			or (_reading.book.title == "Journal" and event.is_action_pressed("journal")):
 		get_viewport().set_input_as_handled()
 		close()
 	elif _newly_pushed(event, &"move_right") or _newly_pushed(event, &"ui_right"):
@@ -289,8 +290,10 @@ func _refresh_prompt() -> void:
 	var turn: String = "Stick" if _device == ActionPrompt.Device.PAD else "%s/%s" % [
 			ActionPrompt.button_name(&"move_left", _device),
 			ActionPrompt.button_name(&"move_right", _device)]
+	var action: StringName = &"journal" if _reading != null \
+			and _reading.book.title == "Journal" else &"interact"
 	_prompt.text = "[%s] Turn the page      [%s] Close" % [
-			turn, ActionPrompt.button_name(&"interact", _device)]
+			turn, ActionPrompt.button_name(action, _device)]
 
 
 func _play(sound: AudioStream, volume_db: float) -> void:

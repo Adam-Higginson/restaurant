@@ -111,6 +111,10 @@ var _zone_seen: CameraZone
 @onready var _camera_rig: CameraRig = $CameraRig
 
 
+## Progress through the water dip, 0 to 1, or -1 outside the interaction.
+var fill_progress: float = -1.0
+
+
 func _ready() -> void:
 	add_to_group(GROUP)
 	for i: int in mini(start_tools.size(), Toolbar.SLOT_COUNT):
@@ -153,7 +157,11 @@ func _physics_process(delta: float) -> void:
 
 
 func _unhandled_input(event: InputEvent) -> void:
-	if event.is_action_pressed("select_slot_next"):
+	if event.is_action_pressed("journal") and controls_enabled \
+			and Game.dialogue.is_set(RecipeBook.OWNED_FLAG):
+		get_viewport().set_input_as_handled()
+		RecipeBook.open_journal(self)
+	elif event.is_action_pressed("select_slot_next"):
 		get_viewport().set_input_as_handled()
 		toolbar.select_next()
 	elif event.is_action_pressed("select_slot_previous"):
@@ -295,7 +303,8 @@ func _face(direction: Vector3, _delta: float) -> void:
 # Gives the tool or item that the flag [param flag] ([code]has_<id>[/code])
 # says you own, if it's set and you haven't got it on the toolbar.
 func _give(flag: StringName) -> void:
-	if not Game.dialogue.is_set(flag) or not String(flag).begins_with("has_"):
+	if flag == RecipeBook.OWNED_FLAG or not Game.dialogue.is_set(flag) \
+			or not String(flag).begins_with("has_"):
 		return
 	var id: StringName = StringName(String(flag).trim_prefix("has_"))
 	var catalog: Catalog = Catalog.load_default()

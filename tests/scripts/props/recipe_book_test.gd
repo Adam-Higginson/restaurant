@@ -17,7 +17,7 @@ func after_test() -> void:
 	Game.dialogue.reset()
 
 
-func test_it_lies_by_the_lantern_and_picking_it_up_makes_it_yours_unopened() -> void:
+func test_it_lies_by_the_lantern_and_picking_it_up_opens_your_journal() -> void:
 	var rig: Array[Node3D] = new_moored_ship_with_player(Vector3(0, 1.05, 6))
 	var ship: Ship = rig[0] as Ship
 	var player: Player3D = rig[1] as Player3D
@@ -57,41 +57,29 @@ func test_it_lies_by_the_lantern_and_picking_it_up_makes_it_yours_unopened() -> 
 
 	assert_bool(Game.dialogue.is_set(RecipeBook.OWNED_FLAG)).is_true()
 	assert_bool(Game.dialogue.is_set(&"said_a_cook")).is_true()
-	assert_bool(player.toolbar.has_tool(&"recipe_book")).is_true()
-	assert_int(opened[0]).is_equal(0)
-	assert_bool(player.controls_enabled).is_true()
+	assert_bool(player.toolbar.has_tool(&"recipe_book")).is_false()
+	await physics_ticks(runner, 2)
+	assert_int(opened[0]).is_equal(1)
+	assert_bool(player.controls_enabled).is_false()
 	assert_bool(book.visible).is_false()
 	assert_bool(book.is_taken()).is_true()
 	# Picking it up again does nothing.
 	assert_bool(book.pick_up(player)).is_false()
 
 
-func test_on_your_toolbar_use_reads_it_wherever_you_are() -> void:
+func test_an_existing_book_flag_unlocks_the_journal_shortcut() -> void:
 	var rig: Array[Node3D] = new_moored_ship_with_player(Vector3(0, 1.05, 6))
 	var player: Player3D = rig[1] as Player3D
 	var hud: Hud3D = new_hud_3d(player)
 	var runner: GdUnitSceneRunner = scene_runner(rig[0].get_parent())
 	await physics_ticks(runner, 2)
-	var detector: InteractionDetector3D = player.get_node("InteractionDetector") \
-			as InteractionDetector3D
 	var view: BookView = hud.get_node("%BookView") as BookView
-	var recipes: Array[Recipe] = Catalog.load_default().recipes
 	Game.dialogue.set_flag(RecipeBook.OWNED_FLAG)
-	await physics_ticks(runner, 2)
-	assert_bool(player.toolbar.has_tool(&"recipe_book")).is_true()
-	for slot: int in Toolbar.SLOT_COUNT:
-		var tool: HandTool = player.toolbar.get_tool(slot)
-		if tool != null and tool.is_recipe_book:
-			player.toolbar.select(slot)
-	# Nothing in reach, and still it can be read.
-	assert_object(detector.focused).is_null()
-	assert_str(detector.tool_prompt()).is_equal("Read the recipe book")
+	assert_bool(player.toolbar.has_tool(&"recipe_book")).is_false()
 
-	await press(runner, "use_tool")
-
+	await press(runner, "journal")
 	assert_bool(view.is_open()).is_true()
-	assert_int(view.reading.page_count()).is_equal(recipes.size())
-	assert_str(view.reading.left_page().heading).is_equal(recipes[0].title)
+	assert_str(view.reading.left_page().heading).contains("A Little Warmth")
 	assert_bool(player.controls_enabled).is_false()
 	view.close()
 	assert_bool(player.controls_enabled).is_true()
@@ -112,6 +100,21 @@ func test_opening_it_opens_the_book_view_with_a_page_per_recipe() -> void:
 	assert_bool(hud.shows_play_parts()).is_false()
 	view.close()
 	assert_bool(hud.shows_play_parts()).is_true()
+
+
+func test_journal_recipes_unlock_with_the_cookbook_and_fit_the_page() -> void:
+	var early: Book = RecipeBook.make_journal()
+	for page: BookPage in early.pages:
+		assert_str(page.heading).is_not_equal("Spicy Tomato Soup")
+	for flag: StringName in [&"has_saucepan", &"read_fire_spirits", &"fetched_water",
+			&"cooked_remedy", &"warmed_lantern"]:
+		Game.dialogue.set_flag(flag)
+	var finished: Book = RecipeBook.make_journal()
+	var has_remedy: bool = false
+	for page: BookPage in finished.pages:
+		has_remedy = has_remedy or page.heading == "Spicy Tomato Soup"
+		assert_bool(BookView.fits(page)).override_failure_message(page.heading).is_true()
+	assert_bool(has_remedy).is_true()
 
 
 func test_every_recipe_page_fits_its_paper() -> void:

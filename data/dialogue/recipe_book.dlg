@@ -7,14 +7,14 @@
 ~ start
 @hold_up recipe_book
 set has_recipe_book
-narrator: You got the *Recipe Book*! Small, battered, the corners frayed. Select it on your toolbar and *Use* it to read it, wherever you are.
+narrator: You got your *Journal*! Small, battered, the corners frayed.
 @put_away
 @shot by_the_lantern
 lantern: What's that?
 - (Show him the book) -> shown
 
 ~ shown
-lantern: A recipe book!
+lantern: Oh! Those look like recipes.
 lantern: Are you a cook?
 - (Hesitate, then nod) -> a_cook
 

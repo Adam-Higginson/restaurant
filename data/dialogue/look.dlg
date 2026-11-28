@@ -9,3 +9,7 @@ narrator: Nothing much to see.
 ~ grave_chart
 narrator: An old chart. Someone has marked a route through the *Grave of the Lanterns*.
 narrator: The destination appears to be an island somewhere beyond the fog. Its name is lost to age and damp: you can't make it out.
+
+~ water_jug
+narrator: Dry. A ring of rainwater marks the wood beneath it.
+-> END

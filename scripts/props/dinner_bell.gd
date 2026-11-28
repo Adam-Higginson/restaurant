@@ -19,7 +19,10 @@ signal rung
 
 func _ready() -> void:
 	_reach.interacted.connect(ring)
-	_reach.describe_interact = func(_player: Player3D) -> String: return "Ring for supper"
+	_reach.describe_interact = func(_player: Player3D) -> String:
+		var table: SupperTable = _supper_table()
+		return "Set a meal on the table first" if table != null and table.dish() == null \
+				else "Ring for supper"
 
 
 ## Rings the bell, calling [param player]'s company to the table. Returns
@@ -29,8 +32,12 @@ func ring(player: Player3D) -> bool:
 	_shiver()
 	_sound.play()
 	rung.emit()
-	var table: SupperTable = get_tree().get_first_node_in_group(SupperTable.GROUP) as SupperTable
+	var table: SupperTable = _supper_table()
 	return table != null and player != null and table.call_to_supper(player)
+
+
+func _supper_table() -> SupperTable:
+	return get_tree().get_first_node_in_group(SupperTable.GROUP) as SupperTable
 
 
 # The Meshy bell is fixed to its bracket, so it shivers rather than swings.

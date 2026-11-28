@@ -20,10 +20,9 @@ const FETCHED_FLAG: StringName = &"fetched_water"
 @export var boiled: Item = preload("res://data/items/boiling_water.tres")
 ## How long the hero stoops to dip or pour, in seconds. They stand still.
 @export var dip_seconds: float = 0.9
-## The splash of dipping a pot in and of pouring it back. Third-party and
-## gitignored; without them it's silent (the splash still shows).
+## The splash of dipping a pot in, and the optional sound of pouring it back.
 @export_file("*.ogg", "*.wav") var dip_sound_path: String = \
-		"res://assets/third_party/audio/water_dip.ogg"
+		"res://assets/audio/water/pot_dip.wav"
 @export_file("*.ogg", "*.wav") var pour_sound_path: String = \
 		"res://assets/third_party/audio/water_pour.ogg"
 ## A loop of rain drumming into it, heard only close by: the one tell, for
@@ -140,8 +139,9 @@ func _water_in(vessel: ItemInstance) -> Array[ItemInstance]:
 # and stoops, standing still while they do, and the water splashes.
 func _on_used(player: Player3D) -> void:
 	var dipping: bool = can_fill(player.arms)
-	if not (fill(player.arms) if dipping else pour(player.arms)):
+	if not player.controls_enabled or (not dipping and not can_pour(player.arms)):
 		return
+	var vessel: ItemInstance = player.arms.top()
 	player.face_towards(global_position)
 	var model: CharacterModel = player.get_node_or_null("Model/Character") as CharacterModel
 	if model != null:
@@ -150,9 +150,22 @@ func _on_used(player: Player3D) -> void:
 	_splash()
 	_play_once(dip_sound_path if dipping else pour_sound_path)
 	player.controls_enabled = false
-	await get_tree().create_timer(dip_seconds).timeout
-	if is_instance_valid(player):
-		player.controls_enabled = true
+	var elapsed: float = 0.0
+	while is_instance_valid(player) and elapsed < dip_seconds \
+			and player.arms.top() == vessel:
+		if dipping:
+			player.fill_progress = elapsed / dip_seconds
+		await get_tree().physics_frame
+		elapsed += get_physics_process_delta_time()
+	if not is_instance_valid(player):
+		return
+	player.fill_progress = -1.0
+	if elapsed >= dip_seconds and player.arms.top() == vessel:
+		if dipping:
+			fill(player.arms)
+		else:
+			pour(player.arms)
+	player.controls_enabled = true
 
 
 # A burst of droplets off the water's surface.
