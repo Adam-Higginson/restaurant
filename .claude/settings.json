@@ -1,0 +1,11 @@
+{
+  "permissions": {
+    "deny": [
+      "mcp__godot-ai__node_create",
+      "mcp__godot-ai__node_set_property",
+      "mcp__godot-ai__node_manage",
+      "mcp__godot-ai__scene_save",
+      "mcp__godot-ai__scene_manage"
+    ]
+  }
+}
