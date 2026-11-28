@@ -256,6 +256,8 @@ func _watch_the_fog(here: Vector3, delta: float) -> void:
 		world.environment.fog_density = lerpf(_home_fog, far_fog_density, out)
 	if out <= 0.0:
 		_far_seconds = 0.0
+		# Back in home waters: a nudge still waiting its turn is out of date.
+		waiting.erase(TOO_FAR)
 		return
 	_far_seconds += delta
 	var due: float = nudge_seconds if _nudges == 0 else nudge_repeat

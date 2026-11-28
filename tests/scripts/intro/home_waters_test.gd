@@ -148,6 +148,25 @@ func test_near_the_buoy_there_is_no_nudge() -> void:
 	assert_float(_beat.fog_at(_beat.boat.global_position)).is_equal(0.0)
 
 
+func test_a_nudge_waiting_its_turn_is_dropped_once_you_turn_back() -> void:
+	# The lantern is still talking when the nudge falls due, so it has to wait.
+	_beat.sibling.hush()
+	_beat.nudge_seconds = 0.5
+	_beat.lantern.say("Something long to say, so the nudge has to wait.")
+	_place(FAR_OUT)
+	await physics_ticks(_runner, 60)
+	assert_array(_beat.waiting).contains([HomeWaters.TOO_FAR])
+
+	# You turn back before he finishes: the nudge no longer applies.
+	_place(Vector2(28, 29))
+	await physics_ticks(_runner, 5)
+	assert_array(_beat.waiting).not_contains([HomeWaters.TOO_FAR])
+
+	_beat.lantern.hush()
+	await physics_ticks(_runner, 30)
+	assert_bool(_beat.played.has(HomeWaters.TOO_FAR)).is_false()
+
+
 func test_every_moment_has_lines() -> void:
 	var moments: Array[StringName] = [&"left_jetty", &"by_chain", &"buoy_sighted", &"at_buoy",
 			HomeWaters.TOO_FAR]
