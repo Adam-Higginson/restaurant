@@ -9,9 +9,9 @@ This is the script the opening is being rebuilt to (#181), now led by the Unmoor
 **How it was fitted to the game (decided 2026-11-24; some of it superseded by the Unmooring, #233, as marked):**
 - **The ship is the Salt and Ember**, not the Wayward. *(Superseded: the title screen no longer stays her carved nameboard on a new voyage, which opens on home waters; her name is the title drop when she finds you, #231, #232. A saved voyage still opens on the nameboard. The rail scene no longer begins on your press: it is replaced by the Grave scene, #230.)*
 - **The player never speaks.** Where the script says the player nods, shakes their head or asks something, that's a reply you choose in the conversation box.
-- **You wake in your own bunk** in the bunk room, not a cabin, with the captain standing over you at its foot (not calling from the doorway), and the lantern lies on his round table by the stove. *(Superseded: you climb a rope ladder onto a dark, abandoned ship, #231. What happens to the bunk and the captain's place is open.)*
+- **You wake in your own bunk** in the bunk room, not a cabin, with the captain standing over you at its foot (not calling from the doorway), and the lantern lies on his round table by the stove. *(Superseded: you climb a rope ladder onto a dark ship that looks abandoned, #231, and find the captain in his cabin, cold and barely awake. Where he and the bunk fit after that is for #231.)*
 - **The navigation room** is a new room in the empty bow half below deck, through a door at the forward end of the hatch ramp's corridor. The captain's cabin stays shut for now.
-- **The captain gives you the cooking pot** (open: whether the captain is aboard to give it, #233) at the helm, where he stays while the lantern is low, going for a drink at the water butt now and then. The frying pan, your shield in a fight, is the first thing you find ashore.
+- **The captain gives you the cooking pot** (the captain is aboard, the last of the crew, #233; his context is rewritten once he's brought round) at the helm, where he stays while the lantern is low, going for a drink at the water butt now and then. The frying pan, your shield in a fight, is the first thing you find ashore.
 - **The deck talk plays by itself** the first time you come up on deck after the soup, and **the frying pan is in a washed-up chest** on the cove's beach (#187).
 - **The water comes from the water butt** on deck, not a stream off the rigging, and the soup is made in two steps (a Tomato Soup, then the chilli and herbs stirred in), as the recipe book has it (#186).
 - **They look out together (#203).** *(Superseded by the Unmooring: no rail talk.)* After the captain's first line from the wheel, the lantern bobs up to the captain at the wheel, then leads him to the starboard rail, so the rest of the talk is side by side at the rail, and he goes over the side from there.
@@ -70,7 +70,7 @@ The fog closes, and home is gone.
 
 **It must never feel like you failed to catch it.** The sea was taking you the whole time.
 
-**Weather (#239).** Wind, rain, spray and swell should rise with the current's `takeover`, the swell first, so being swept away feels like the sea taking over. Keep the landmarks readable, or you can't tell the boat is being carried. **Open question:** does the storm break the chain, so the weather builds *before* the current takes the boat, or does the weather rise with the current? To settle before #239 is built.
+**Weather (#239).** Wind, rain, spray and swell should rise with the current's `takeover`, the swell first, so being swept away feels like the sea taking over. Keep the landmarks readable, or you can't tell the boat is being carried. **Decided:** the chain breaks on a calm, uncanny dusk, with no storm and no cause you can see (a sound from below, and the buoy lurches), and the weather rises with the current afterwards. This keeps the mystery of why chains break.
 
 ### Scene U4: Into the Grave, the capsize and the rescue (#230)
 
@@ -98,9 +98,11 @@ A bell in the fog. A ship comes alongside, dark, and nobody calls out.
 
 Lightning shows her name on her stern: SALT AND EMBER. This is the title drop (the nameboard is reused).
 
-A rope ladder is already trailing in the water. You climb up together, carrying him, and the abandoned ship begins.
+A rope ladder is already trailing in the water. You climb up together, carrying him, and the ship begins. She looks abandoned.
 
-**Open question:** who, if anyone, is aboard. The captain's scenes below (2 to 8) were written with the heron beside you when you arrive; that has to be decided before they're reworked. *(See the GDD's Open questions.)*
+**The captain is aboard (decided, planned).** You find the heron in his cabin, cold and barely awake: the last of the crew, who has sailed her alone and worn himself down. *(Lines to be written, #231.)*
+
+**The ship comes alive (decided, planned).** The lantern lights the galley stove with his own flame, giving some of his light to start it, and goes dim. This pays off Scene U2, where he gave the buoy a little of his flame. The first quest (spicy tomato soup to restore his light) then carries over almost as built, and that first meal also brings the captain round. *(Lines to be written, #231.)*
 
 ### The title (#232)
 
@@ -303,11 +305,11 @@ Silence.
 
 ## Chapter 1: The Salt and Ember
 
-*Scenes 2 to 8 were written with the heron captain aboard. After the Unmooring the ship is dark and abandoned, so who is aboard when you arrive, and how the captain and crew fit, is open (#233; see the GDD's Open questions). Until that is decided these stay as drafted and as built.
+*Scenes 2 to 8 were written with the heron captain aboard, and in the Unmooring he still is (decided, planned): the last of the crew, found fading in his cabin. So the pot, the old book's feather and his lines survive, but with rewritten context: he is cold and barely awake at first, not standing over your bunk, and the first meal brings him round as well as the lantern. How the *other* crew join is open (see the GDD's Open questions). Until they're reworked (#231, #186) these stay as drafted and as built.
 
 ### Scene 2: Waking up (#184, built; to be replaced by the ship finding you, #231)
 
-*Superseded, and open. In the Unmooring you climb aboard an abandoned ship instead of waking in a bunk, and you aren't an amnesiac: you know where you came from. So the captain's questions below ("Do you remember anything?") don't survive, and who is aboard is open (see the GDD's Open questions). Kept for its lines, the recipe book by your pillow and the first beats of the lantern's weakness.*
+*Superseded. In the Unmooring you climb aboard a ship that looks abandoned instead of waking in a bunk, find the captain in his cabin, cold and barely awake, and you aren't an amnesiac: you know where you came from. So the captain's questions below ("Do you remember anything?") don't survive. Kept for its lines, the recipe book by your pillow and the first beats of the lantern's weakness.*
 
 **Location:** the Salt and Ember, the bunk room.
 
