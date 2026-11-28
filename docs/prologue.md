@@ -4,23 +4,116 @@
 **Estimated playtime:** 30–45 minutes
 **Purpose:** introduce the world, establish the relationship between the player and the lantern, teach exploration and cooking through the first puzzle, and bring the player to the first island.
 
-This is the script the opening is being rebuilt to (#181). The GDD's *The opening as intended* and *MVP: the Prologue* summarise it; the scene-by-scene words are here. Each scene says which issue builds it.
+This is the script the opening is being rebuilt to (#181), now led by the Unmooring (#233, below): your home, the chain breaking and the ship finding you. The GDD's *The opening as intended* and *MVP: the Prologue* summarise it; the scene-by-scene words are here. Each scene says which issue builds it, and whether it's built or planned.
 
-**How it was fitted to the game (decided 2026-11-24):**
-- **The ship is the Salt and Ember**, not the Wayward, and the title screen stays her carved nameboard. The rail scene begins on your press.
+**How it was fitted to the game (decided 2026-11-24; some of it superseded by the Unmooring, #233, as marked):**
+- **The ship is the Salt and Ember**, not the Wayward. *(Superseded: the title screen no longer stays her carved nameboard on a new voyage, which opens on home waters; her name is the title drop when she finds you, #231, #232. A saved voyage still opens on the nameboard. The rail scene no longer begins on your press: it is replaced by the Grave scene, #230.)*
 - **The player never speaks.** Where the script says the player nods, shakes their head or asks something, that's a reply you choose in the conversation box.
-- **You wake in your own bunk** in the bunk room, not a cabin, with the captain standing over you at its foot (not calling from the doorway), and the lantern lies on his round table by the stove.
+- **You wake in your own bunk** in the bunk room, not a cabin, with the captain standing over you at its foot (not calling from the doorway), and the lantern lies on his round table by the stove. *(Superseded: you climb a rope ladder onto a dark, abandoned ship, #231. What happens to the bunk and the captain's place is open.)*
 - **The navigation room** is a new room in the empty bow half below deck, through a door at the forward end of the hatch ramp's corridor. The captain's cabin stays shut for now.
-- **The captain gives you the cooking pot** at the helm, where he stays while the lantern is low, going for a drink at the water butt now and then. The frying pan, your shield in a fight, is the first thing you find ashore.
+- **The captain gives you the cooking pot** (open: whether the captain is aboard to give it, #233) at the helm, where he stays while the lantern is low, going for a drink at the water butt now and then. The frying pan, your shield in a fight, is the first thing you find ashore.
 - **The deck talk plays by itself** the first time you come up on deck after the soup, and **the frying pan is in a washed-up chest** on the cove's beach (#187).
 - **The water comes from the water butt** on deck, not a stream off the rigging, and the soup is made in two steps (a Tomato Soup, then the chilli and herbs stirred in), as the recipe book has it (#186).
-- **They look out together (#203).** After the captain's first line from the wheel, the lantern bobs up to the captain at the wheel, then leads him to the starboard rail, so the rest of the talk is side by side at the rail, and he goes over the side from there.
-- **The rescue ends in white.** The haul up through the dead lanterns, the storm surface and the heron at the rail are gone; how you came aboard isn't shown.
+- **They look out together (#203).** *(Superseded by the Unmooring: no rail talk.)* After the captain's first line from the wheel, the lantern bobs up to the captain at the wheel, then leads him to the starboard rail, so the rest of the talk is side by side at the rail, and he goes over the side from there.
+- **The rescue ends in white.** The haul up through the dead lanterns, the storm surface and the heron at the rail are gone; how you came aboard isn't shown. *(In the Unmooring the white is followed by you surfacing beside your upturned rowboat and the ship finding you, #231.)*
 - **The arrival is the cove** (#163): the ship anchors off the beach and you row ashore. The harbour, the settlement and the old structures belong to Chapter 1.
 
 ---
 
-## Scene 0: The title screen (#182)
+## The Unmooring (#233)
+
+*Planned, except the rowing, which is built (#226). This is the new opening, and it comes before everything below. It replaces Scene 0's title and rail talk and Scene 2's waking, and changes Scene 1's lines. The words here are first drafts, and only the quoted lines are decided; where the beats say "lines to be written", they're open. Greybox shapes first.*
+
+**The premise.** The islands were once anchored by great chains, and the chains are breaking. You are your island's chain-tender, and the lantern is your friend, the buoy's light. You aren't a castaway and you don't lose your memory: you know home. It has drifted away. People find their way by an island's cooking and its songs, and the taste of home is your older sibling's fish stew. Lanterns are one kind of sea spirit among many.
+
+**The player never walks ashore here.** Everything is the rowboat, the water and the buoy.
+
+### Scene U1: Home waters at dusk (#227)
+
+**Location:** the water off your home island, at dusk.
+
+The first shot of the game: your island seen from the water, its lights, bells and chimney smoke, before it's lost. The rowboat is at the jetty and the lantern rides a pole at its bow.
+
+Your older sibling calls from a lit window. You never see them.
+
+**SIBLING (off):** "Back by supper. I'm doing the fish stew."
+
+Out in the dusk is the marker buoy, and the great chain rises from the sea to the island. You row out to it while the lantern chatters: you've done this a hundred times. *(Lines to be written.)*
+
+*Built:* the rowing itself, in the greybox (`scenes/prototype/intro/rowing_greybox.tscn`: the boat, the sea and a chase camera you can turn). *Planned:* the island, the jetty, the buoy, the chain, the lantern on the pole, the sibling's call. The rowboat is a greybox until the Meshy model (#234).
+
+### Scene U2: Tending the buoy (#228)
+
+**Location:** the buoy, over your island's chain.
+
+Your nightly job: row out to the buoy, check it and keep its light lit. You tie up and climb onto it. You put a hand on the chain and feel its slow hum.
+
+The buoy's lamp is out. The lantern gives it a little of his flame.
+
+**LANTERN:** "Just a little. Doesn't hurt."
+
+This sets up that his light can be given away, which the ship's stove pays off later. *(The rest to be written.)*
+
+### Scene U3: The chain breaks and you're swept away (#229)
+
+**Location:** the buoy, then open water. About a minute, as one beat.
+
+The chain's hum stops. A ringing comes up it. It falls slack and slides into the sea. Alarm bells at home, and the island's lights turn away into the fog.
+
+**(Speaker to settle, probably the lantern)** "Row! Row!"
+
+You row after it, and at first the boat answers. But the current is already taking you: the steering fades over about 20 seconds, the island slides off to one side and the bells fade. (This is the rowing greybox's `takeover`, built in #226: at full takeover your strokes do nothing, the bow swings round with the water, and the current runs at 4 m/s.)
+
+**(Speaker to settle)** "It's not us. It's the sea."
+
+The fog closes, and home is gone.
+
+**It must never feel like you failed to catch it.** The sea was taking you the whole time.
+
+**Weather (#239).** Wind, rain, spray and swell should rise with the current's `takeover`, the swell first, so being swept away feels like the sea taking over. Keep the landmarks readable, or you can't tell the boat is being carried. **Open question:** does the storm break the chain, so the weather builds *before* the current takes the boat, or does the weather rise with the current? To settle before #239 is built.
+
+### Scene U4: Into the Grave, the capsize and the rescue (#230)
+
+**Location:** the Grave of the Lanterns, which nobody has heard of.
+
+Swept through the fog, you come out over lights below. The lantern leans out, thrilled. He thinks it's home.
+
+**LANTERN:** "There you are..."
+
+They're dead lanterns, his own kind. Nobody ever told him where lanterns go.
+
+**LANTERN:** "...Oh."
+
+The ringing, the pull, the capsize: the Grave pulls him off the pole, you reach for him and go in after him.
+
+Then the rescue as built (Scene 1 below, `underwater.tscn`), with his lines rewritten for a friend rather than a stranger. This replaces Scene 0's rail talk. *(Lines to be written.)*
+
+### Scene U5: The ship finds you (#231)
+
+**Location:** the fog, at sea.
+
+After the white you surface, clinging to your upturned rowboat with half its name still on the bow (the first clue to home), the lantern in your arms, barely lit.
+
+A bell in the fog. A ship comes alongside, dark, and nobody calls out.
+
+Lightning shows her name on her stern: SALT AND EMBER. This is the title drop (the nameboard is reused).
+
+A rope ladder is already trailing in the water. You climb up together, carrying him, and the abandoned ship begins.
+
+**Open question:** who, if anyone, is aboard. The captain's scenes below (2 to 8) were written with the heron beside you when you arrive; that has to be decided before they're reworked. *(See the GDD's Open questions.)*
+
+### The title (#232)
+
+A new voyage opens on home waters at dusk (Scene U1) instead of her nameboard; the ship's name is the title drop when she finds you. A saved voyage still opens on the nameboard, since you live aboard by then. Continue and Start a new voyage keep working (#151). Where "who are you" is asked is open.
+
+---
+
+*Everything from here is the Prologue as first drafted (#181), before the Unmooring. What's marked below as superseded is kept for its lines and pictures.*
+
+
+## Scene 0: The title screen (#182, built; replaced by the Unmooring, #227 to #232)
+
+*Superseded. This is the nameboard title and the rail talk as built. A new voyage now opens on home waters (Scene U1) and the lantern finds the Grave from your rowboat (Scene U4), not from the rail beside a captain. Kept for its lines and the shots the new scenes reuse (the lights under the water, "There you are...", the nameboard for the title drop).*
 
 BLACK SCREEN.
 
@@ -130,7 +223,9 @@ The lantern is already gone, off his hook and over the side.
 
 ---
 
-## Scene 1: The rescue (#183)
+## Scene 1: The rescue (#183, built; lines to be rewritten, #230)
+
+*The pictures stay (the descent, the dead lanterns, his hand, the light going into you, the white). The words change: in the Unmooring he is your friend, not a stranger, so "I don't know who you are..." goes, and the rest is rewritten for a friend (#230).*
 
 **Location:** the Grave of the Lanterns, underwater.
 
@@ -208,7 +303,11 @@ Silence.
 
 ## Chapter 1: The Salt and Ember
 
-### Scene 2: Waking up (#184)
+*Scenes 2 to 8 were written with the heron captain aboard. After the Unmooring the ship is dark and abandoned, so who is aboard when you arrive, and how the captain and crew fit, is open (#233; see the GDD's Open questions). Until that is decided these stay as drafted and as built.
+
+### Scene 2: Waking up (#184, built; to be replaced by the ship finding you, #231)
+
+*Superseded, and open. In the Unmooring you climb aboard an abandoned ship instead of waking in a bunk, and you aren't an amnesiac: you know where you came from. So the captain's questions below ("Do you remember anything?") don't survive, and who is aboard is open (see the GDD's Open questions). Kept for its lines, the recipe book by your pillow and the first beats of the lantern's weakness.*
 
 **Location:** the Salt and Ember, the bunk room.
 
