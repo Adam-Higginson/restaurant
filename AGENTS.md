@@ -23,7 +23,7 @@ The full design lives in `docs/GDD.md`. Read it before starting a gameplay task,
 - This repo is public. Third-party art and audio go in `assets/third_party/`, which is gitignored: never commit anything from it, and never commit keys or tokens.
 - **The art is backed up in a private repo (#142).** `assets/third_party/` is its own git repo, a clone of the private `Adam-Higginson/restaurant-assets` (the packs, Meshy models and ambient sounds, `.import` files included). Its `.gitattributes` turns off line-ending conversion so it's a byte-for-byte copy.
   - **Back up** after adding a pack or making a Meshy model: in `assets/third_party/`, `git add -A`, commit with the issue in the message (`Adam-Higginson/restaurant#<n>`), and push. Say when a task changed the art, so the user knows to back it up.
-  - **New PC or worktree:** `git clone https://github.com/Adam-Higginson/restaurant-assets.git assets/third_party`, then import (`godot_console.exe --headless --path . --import`). Clone, don't copy, so the copy is a working backup too.
+  - **New PC or worktree, if the task needs the real art:** `git clone https://github.com/Adam-Higginson/restaurant-assets.git assets/third_party`, then import (`godot_console.exe --headless --path . --import`). Clone, don't copy, so the copy is a working backup too.
   - It stays private: it holds the raw packs, which we ship inside builds but don't re-host.
 - Our own placeholder art (generated, not third-party) lives in `assets/placeholder/` and is committed. Its cloth, paper and painted textures are painted soft by `tools/textures/paint_placeholders.sh` from the pixel-art originals in `tools/textures/originals/` (#135): change an original or a recipe and run it again; don't hand-edit the painted PNGs.
 - Two exceptions are committed because the game needs them to look and sound the same for everyone, each with its licence file beside it: fonts under the SIL Open Font Licence in `assets/fonts/`, and CC0 sounds in `assets/audio/`. Anything else third-party still needs asking first.
@@ -37,17 +37,19 @@ The full design lives in `docs/GDD.md`. Read it before starting a gameplay task,
 
 ## Task tracking
 - The backlog is GitHub Project #1 owned by `Adam-Higginson` (kanban columns: Todo, In Progress, In Review, Done). Each task is an issue in `Adam-Higginson/restaurant` added to the board.
+- Claude works on GitHub as `adam-higginson-claude`, a machine account with Write on this repo, `restaurant-assets` and the board. Its login and commit name come from the gitignored `.claude/settings.local.json` (an `env` block: `GH_CONFIG_DIR` for `gh`, `GIT_CONFIG_*` so git pushes use `gh auth git-credential`, and `GIT_AUTHOR_*`/`GIT_COMMITTER_*`), which `.worktreeinclude` copies into new worktrees. Before the first push in a session, check `gh api user --jq .login` says `adam-higginson-claude`; if not, stop and say so. Never print or handle its token.
+- Each task runs in its own git worktree on its own branch, usually as a separate Claude session the user can open and steer. The main chat coordinates from a clean `main` and doesn't do task coding in its own folder.
 - The user chooses which task to work on. If none was given, list the Todo items and ask.
 - **Plan and discuss before writing code.** For every task or other non-trivial change, first present a plan in chat and wait for the user's explicit approval before executing. The plan covers: the goal, the approach (with alternatives and a recommendation), the pieces/files involved, edge cases, the tests, what's out of scope, and any decisions the user needs to make (including project settings or plugins). Explain unfamiliar Godot concepts along the way. If the approach needs to change significantly during the task, stop and discuss before continuing. Small implementation details that don't change the approach can be decided as you go, but call them out in the summary.
 - Each task goes through a branch and a PR that the user reviews:
   1. Start from an up-to-date `main` and create a branch named `<issue-number>-<short-slug>`, e.g. `2-player-movement`. Move the card to In Progress.
   2. Commit on the branch as you go. Reference the issue number in commit messages, e.g. `Add customer spawning (#12)`.
   3. When the task is working and the headless check passes, push the branch and open a PR into `main`. The PR body summarises the change, says how to test it in-game, and includes `Closes #<n>`.
-  4. Move the card to In Review, then stop and tell the user the PR is ready for review. Address review comments as new commits on the same branch.
-  5. **Only merge when the user explicitly tells you to.** Then:
+  4. Move the card to In Review, then stop and tell the user the PR is ready for review. The user reviews and **approves the PR in GitHub** from their own account. Address review comments as new commits on the same branch.
+  5. **Only merge after the user's approval in GitHub (or an explicit instruction).** `main` requires one approving review. Then:
      - Check CI is green, then merge with a merge commit: `gh pr merge <n> --merge`. Don't pass `--delete-branch` while another open PR is based on that branch, because deleting a PR's base branch closes the PR.
      - Confirm the issue closed and the card is in Done. The board normally does this; if it hasn't, close the issue or move the card yourself.
-     - Delete the merged branch (remote and local), switch to `main` and pull, and check CI passes on `main`.
+     - Delete the merged branch (remote and local) and the task's worktree (`git worktree remove`), switch to `main` and pull, and check CI passes on `main`.
      - Report back with what was merged and the board state.
 - Never commit directly to `main`: it is protected and only accepts PRs. This includes changes to `AGENTS.md`, `CLAUDE.md`, and docs, which go on a `docs/<slug>` branch.
 - Godot rewrites `project.godot` in its own format when the editor saves it. If it shows as modified with no real setting changes, commit it separately as a normalise commit.
