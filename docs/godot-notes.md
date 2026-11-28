@@ -770,6 +770,20 @@ A growing glossary of the Godot concepts this project uses: what each one is, in
 
 **Raw keys in a test scene.** `_unhandled_input` receives every input event nothing else used. Checking `InputEventKey.keycode` against a key like `KEY_C` reads a key directly, without an Input Map action, which is fine for a tuning tool that players never see. *Ours:* `RowingGreybox`: C lets the current take the boat, X gives it back.
 
+## Home waters at dusk (#227)
+
+**A procedural sky.** A `WorldEnvironment` with `background_mode` set to Sky draws a `Sky` whose material paints it. A `ProceduralSkyMaterial` needs no picture: you give it a top colour, a horizon colour and how sharply they blend (`sky_curve`), and it draws the sun where the scene's `DirectionalLight3D` points, with a glow round it (`sun_angle_max`). The sky also lights the scene (`ambient_light_source` = Sky). *Ours:* the violet dusk in `home_waters.tscn`, with the low orange sun beyond the buoy.
+
+**Height fog.** Besides the usual fog that thickens with distance (`fog_density`), an `Environment` can make fog thicker low down: below `fog_height` it gets denser by `fog_height_density`. `fog_sky_affect` says how much the fog covers the sky. *Ours:* the violet mist lying on the water round the island; `HomeWaters` thickens `fog_density` as you row out past home waters.
+
+**Resources local to the scene.** Resources (materials, environments) are shared: every copy of a scene uses the same one, so changing it in one changes them all. Ticking `resource_local_to_scene` gives each copy of the scene its own. *Ours:* the home waters `Environment`, so the fog `HomeWaters` thickens is only that copy's (each test loads a fresh one).
+
+**Physics process priority.** Every node's `_physics_process` runs once a tick, lower `process_physics_priority` first (0 is the default, then tree order). *Ours:* `HomeWaters` sets its own to 10, so it runs after the `Rowboat` has moved and its `KeepClear` walls see where the boat went.
+
+**A wall for something that isn't a physics body.** A collision shape only stops physics bodies, and the rowboat is moved by script. So the wall is a sum instead: if the boat's inside the circle, put it back on the edge and take away the part of its speed heading in, which leaves it free to slide along. `Geometry2D.get_closest_point_to_segment()` is the same kind of flat sum for "how near a line". *Ours:* `KeepClear` (`scripts/sea/keep_clear.gd`) round the island, the buoy and the chain's foot; `HomeWaters.chain_distance()`.
+
+**Soft particles from a gradient.** A particle drawn as a plain `QuadMesh` is a hard square. A `GradientTexture2D` with `fill` set to Radial makes a soft dot from a gradient (white in the middle, clear at the edge), and as the quad's texture it makes each particle a puff. With *Billboard* set to Particle the quads always face the camera. *Ours:* the chimney smoke over each cottage in `home_waters.tscn`.
+
 ## Testing
 
 **gdUnit4.** The test framework (`addons/gdUnit4`). Suites extend our `GameTestSuite` and have `test_...` functions. `scene_runner` loads a scene and lets a test press inputs and wait physics ticks. *Ours:* `tests/`.
