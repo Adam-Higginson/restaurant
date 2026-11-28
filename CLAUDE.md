@@ -51,7 +51,7 @@ The full design lives in `docs/GDD.md`. Read it before starting a gameplay task,
      - Report back with what was merged and the board state.
 - Never commit directly to `main`: it is protected and only accepts PRs. This includes changes to CLAUDE.md and docs, which go on a `docs/<slug>` branch.
 - Godot rewrites `project.godot` in its own format when the editor saves it. If it shows as modified with no real setting changes, commit it separately as a normalise commit.
-- Don't add new issues to the board yourself. Suggest follow-ups and bugs to the user instead.
+- Open issues when the user agrees to them: after planning work together, open the agreed issues (`gh issue create`) with a milestone, and they go on the board as Todo. Otherwise suggest follow-ups and bugs to the user rather than opening them unasked.
 - Useful commands:
   - List items: `gh project item-list 1 --owner Adam-Higginson`
   - New issues in the repo are added to the board as Todo automatically (the board's auto-add workflow). Use the `Prototype` milestone (greybox 3D prototype) or `MVP: Prologue`.
