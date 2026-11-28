@@ -4,7 +4,9 @@ extends Node3D
 ## rowing feels and how being swept away by the current feels. Open
 ## scenes/prototype/intro/rowing_greybox.tscn and press F6.
 ##
-## Row with the stick or WASD. Press C to let the current take the boat over
+## Row with the stick or WASD. Look round with the mouse (click to capture it,
+## Esc to free it) or the right stick; the camera eases back behind the boat.
+## Press C to let the current take the boat over
 ## [member sweep_seconds]; press X to give it back.
 ##
 ## The sea's plane is kept centred under the boat, so you can row as far as
@@ -43,6 +45,13 @@ func _process(_delta: float) -> void:
 
 
 func _unhandled_input(event: InputEvent) -> void:
+	# The mouse turns the camera only while it's captured: Esc frees it, and a
+	# click captures it again (as in the main prototype's CameraRig).
+	if event.is_action_pressed("ui_cancel"):
+		Input.mouse_mode = Input.MOUSE_MODE_VISIBLE
+	elif event is InputEventMouseButton and (event as InputEventMouseButton).pressed \
+			and (event as InputEventMouseButton).button_index == MOUSE_BUTTON_LEFT:
+		Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
 	var key: InputEventKey = event as InputEventKey
 	if key == null or not key.pressed or key.echo or current == null:
 		return
