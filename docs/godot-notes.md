@@ -746,6 +746,16 @@ A growing glossary of the Godot concepts this project uses: what each one is, in
 
 **Particles that change colour as they age.** A `ParticleProcessMaterial`'s `color_ramp` is a gradient each particle runs along from birth to death, and `scale_curve` does the same for its size. *Ours:* the hearth's flames (`GalleyStove._make_flames`) are born yellow and broad at the logs and die small, red and see-through as they rise.
 
+## Letting Claude see the game (#237)
+
+**EditorPlugin.** A script that extends the Godot editor itself: new docks, buttons, import steps, or (for godot-ai) a connection to an outside program. It lives in `addons/<name>/` with a `plugin.cfg`, and only runs once ticked in *Project → Project Settings → Plugins*, which records it under `[editor_plugins]` in `project.godot`. *Ours:* gdUnit4 and godot-ai.
+
+**An autoload added by a plugin.** A plugin can register an autoload so that a script of its own runs inside the game while it's played from the editor. godot-ai's `_mcp_game_helper` relays screenshots, input and the live scene tree back to the editor. It does nothing outside the editor, and godot-ai's export plugin strips it from builds. *Ours:* `project.godot`'s `[autoload]` section.
+
+**Editor Settings vs Project Settings.** Project Settings belong to the game and are saved in `project.godot`, shared through git. Editor Settings belong to your copy of Godot on this computer (*Editor → Editor Settings*, saved in `%APPDATA%\Godot\editor_settings-4.7.tres`) and apply to every project you open. *Ours:* godot-ai's usage-data switch and excluded tool groups are Editor Settings, so each PC sets them once.
+
+**MCP (Model Context Protocol).** The standard way to give an AI assistant extra tools. A small server offers tools (here: "take a screenshot", "press move_up for 30 frames") and Claude Code calls them. `.mcp.json` tells Claude Code which servers to start for this project. *Ours:* the `godot-ai` server, which talks to the editor plugin over a local, authenticated connection.
+
 ## Rowing and the current (#226)
 
 **Moving a node by script instead of physics.** A `RigidBody3D` is pushed around by the physics engine: forces, mass, collisions. It's realistic, but hard to steer and free to tip over. A plain `Node3D` that a script moves each physics tick does exactly what the script says, so it can feel good to control and can never capsize. *Ours:* `Rowboat.row()` works out the boat's velocity and heading from the stick and the water, then moves it; `Rowboat.ride()` sets its height and tilt.

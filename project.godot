@@ -19,6 +19,7 @@ config/icon="res://icon.svg"
 
 Game="*res://scripts/state/game_state.gd"
 FullscreenToggle="*res://scripts/app/window_toggle.gd"
+_mcp_game_helper="*res://addons/godot_ai/runtime/game_helper.gd"
 
 [debug]
 
@@ -34,14 +35,14 @@ window/size/viewport_width=480
 window/size/viewport_height=270
 window/size/window_width_override=1440
 window/size/window_height_override=810
-window/size/mode.release=3
 window/stretch/mode="canvas_items"
 window/stretch/aspect="expand"
 window/stretch/scale_mode="integer"
+window/size/mode.release=3
 
 [editor_plugins]
 
-enabled=PackedStringArray("res://addons/gdUnit4/plugin.cfg")
+enabled=PackedStringArray("res://addons/gdUnit4/plugin.cfg", "res://addons/godot_ai/plugin.cfg")
 
 [input]
 
@@ -206,7 +207,9 @@ debug_replay_cutscene={
 }
 journal={
 "deadzone": 0.5,
-"events": [Object(InputEventKey,"physical_keycode":74), Object(InputEventJoypadButton,"button_index":4)]
+"events": [Object(InputEventKey,"resource_local_to_scene":false,"resource_name":"","device":16,"window_id":0,"alt_pressed":false,"shift_pressed":false,"ctrl_pressed":false,"meta_pressed":false,"pressed":false,"keycode":0,"physical_keycode":74,"key_label":0,"unicode":0,"location":0,"echo":false,"script":null)
+, Object(InputEventJoypadButton,"resource_local_to_scene":false,"resource_name":"","device":0,"button_index":4,"pressure":0.0,"pressed":false,"script":null)
+]
 }
 skip_cutscene={
 "deadzone": 0.2,
