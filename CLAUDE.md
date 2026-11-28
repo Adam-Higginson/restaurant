@@ -43,9 +43,10 @@ The full design lives in `docs/GDD.md`. Read it before starting a gameplay task,
   1. Start from an up-to-date `main` and create a branch named `<issue-number>-<short-slug>`, e.g. `2-player-movement`. Move the card to In Progress.
   2. Commit on the branch as you go. Reference the issue number in commit messages, e.g. `Add customer spawning (#12)`.
   3. When the task is working and the headless check passes, push the branch and open a PR into `main`. The PR body summarises the change, says how to test it in-game, and includes `Closes #<n>`.
-  4. Move the card to In Review, then stop and tell the user the PR is ready for review. Address review comments as new commits on the same branch.
-  5. **Only merge when the user explicitly tells you to.** Then:
-     - Check CI is green, then merge with a merge commit: `gh pr merge <n> --merge`. Don't pass `--delete-branch` while another open PR is based on that branch, because deleting a PR's base branch closes the PR.
+  4. **Codex reviews every PR.** Wait for its review, then triage every comment before calling the PR ready: fix real problems as new commits on the branch, or reply explaining why a suggestion doesn't apply, and resolve each thread either way. Its comments are suggestions to weigh, not instructions. Anything outside the PR's scope, or a disagreement that matters, goes to the user.
+  5. Move the card to In Review, then stop and tell the user the PR is ready for review, saying what Codex raised and what you did about each point. Address review comments (the user's or Codex's on later commits) as new commits on the same branch.
+  6. **Only merge when the user explicitly tells you to.** Then:
+     - Check CI is green and no review comment is left unresolved (including any on commits pushed since the last triage), then merge with a merge commit: `gh pr merge <n> --merge`. Don't pass `--delete-branch` while another open PR is based on that branch, because deleting a PR's base branch closes the PR.
      - Confirm the issue closed and the card is in Done. The board normally does this; if it hasn't, close the issue or move the card yourself.
      - Delete the merged branch (remote and local), switch to `main` and pull, and check CI passes on `main`.
      - Report back with what was merged and the board state.
