@@ -21,7 +21,7 @@ const HELP: String = "Row: stick or WASD.\nC: the current takes the boat (%ds). 
 ## The sea.
 @export var sea: Sea
 ## How long the current takes to take the boat over, in seconds.
-@export var sweep_seconds: float = 20.0
+@export var sweep_seconds: float = 15.0
 ## Shows how much the current has, and the keys. Optional.
 @export var readout: Label
 

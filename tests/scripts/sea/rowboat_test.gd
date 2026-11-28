@@ -126,6 +126,23 @@ func test_at_full_takeover_the_bow_swings_round_with_the_water() -> void:
 	assert_float(boat.heading).is_equal_approx(PI / 2.0, 0.05)
 
 
+func test_a_full_current_outruns_the_hardest_rowing() -> void:
+	# Being swept away should feel like the sea taking over, so the current
+	# at its full strength (as set up by default) must carry the boat clearly
+	# faster than it can row itself.
+	var boat: Rowboat = _boat_in_world()
+	var runner: GdUnitSceneRunner = scene_runner(boat.get_parent())
+	await walk(runner, "move_up", 300)
+	var cruising_from: float = boat.position.z
+	await walk(runner, "move_up", 300)
+	var cruising_speed: float = (cruising_from - boat.position.z) / 5.0
+
+	var full_current: SeaCurrent = SeaCurrent.new()
+	var current_speed: float = full_current.speed
+	full_current.free()
+	assert_float(current_speed).is_greater(cruising_speed * 1.15)
+
+
 func test_the_current_takes_its_share_of_the_steering() -> void:
 	var current: SeaCurrent = _current(0.0, 3.0, 0.0)
 	var boat: Rowboat = _boat_in_world(current)

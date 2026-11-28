@@ -32,18 +32,18 @@ signal stroked
 ## How hard backing water pushes astern, as a share of a forward stroke.
 @export_range(0.0, 1.0) var backing_share: float = 0.4
 ## How much the water slows the boat going forward, per second. Low: it glides.
-@export var forward_drag: float = 0.6
+@export var forward_drag: float = 0.45
 ## How much the water stops it sliding sideways, per second. High, like a keel.
 @export var side_drag: float = 3.0
 
 @export_group("Turning")
 ## How fast it turns with the stick hard over, in degrees per second.
-@export var turn_speed: float = 55.0
+@export var turn_speed: float = 40.0
 ## How quickly it starts and stops turning: higher is snappier.
-@export var turn_response: float = 3.0
+@export var turn_response: float = 2.0
 ## How fast the current swings the bow round to run with it at full
 ## takeover, in degrees per second.
-@export var current_turn_speed: float = 20.0
+@export var current_turn_speed: float = 12.0
 
 @export_group("Riding the sea")
 ## Half the boat's length and beam, in metres: where the waves are sampled.

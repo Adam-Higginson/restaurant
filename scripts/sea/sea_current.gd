@@ -15,7 +15,7 @@ signal took_over
 ## (the same way round as [WaveLayer]).
 @export_range(0.0, 360.0) var direction_degrees: float = 0.0
 ## How fast the water runs at full takeover, in metres per second.
-@export var speed: float = 3.0
+@export var speed: float = 4.0
 ## How much of the steering belongs to the sea, 0 to 1.
 @export_range(0.0, 1.0) var takeover: float = 0.0:
 	set(value):
