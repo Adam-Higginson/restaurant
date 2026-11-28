@@ -22,7 +22,7 @@ This is the script the opening is being rebuilt to (#181), now led by the Unmoor
 
 ## The Unmooring (#233)
 
-*Planned, except the rowing, which is built (#226). This is the new opening, and it comes before everything below. It replaces Scene 0's title and rail talk and Scene 2's waking, and changes Scene 1's lines. The words here are first drafts, and only the quoted lines are decided; where the beats say "lines to be written", they're open. Greybox shapes first.*
+*Planned, except the rowing (#226) and home waters (#227), which are built as greyboxes. This is the new opening, and it comes before everything below. It replaces Scene 0's title and rail talk and Scene 2's waking, and changes Scene 1's lines. The words here are first drafts, and only the quoted lines are decided; where the beats say "lines to be written", they're open. Greybox shapes first.*
 
 **The premise.** The islands were once anchored by great chains, and the chains are breaking. You are your island's chain-tender, and the lantern is your friend, the buoy's light. You aren't a castaway and you don't lose your memory: you know home. It has drifted away. People find their way by an island's cooking and its songs, and the taste of home is your older sibling's fish stew. Lanterns are one kind of sea spirit among many.
 
@@ -38,9 +38,18 @@ Your older sibling calls from a lit window. You never see them.
 
 **SIBLING (off):** "Back by supper. I'm doing the fish stew."
 
-Out in the dusk is the marker buoy, and the great chain rises from the sea to the island. You row out to it while the lantern chatters: you've done this a hundred times. *(Lines to be written.)*
+Out in the dusk is the marker buoy, and the great chain rises from the sea to the island. You row out to it while the lantern chatters: you've done this a hundred times. His lines (first drafts, in `data/dialogue/home_waters.dlg`), each said once as it comes:
 
-*Built:* the rowing itself, in the greybox (`scenes/prototype/intro/rowing_greybox.tscn`: the boat, the sea and a chase camera you can turn). *Planned:* the island, the jetty, the buoy, the chain, the lantern on the pole, the sibling's call. The rowboat is a greybox until the Meshy model (#234).
+- *Leaving the jetty:* **LANTERN:** "Off we go. Out to the buoy, light it, home for stew." / "Mind the third post. You always nearly hit the third post."
+- *A fifth of the way:* **LANTERN:** "Smell that? The onions are on already."
+- *Halfway:* **LANTERN:** "Halfway. I counted. I always count." / "Ninety-one strokes, if you don't dawdle. You're dawdling."
+- *Passing the chain:* **LANTERN:** "Evening, chain." / "It hums, you know. You'll feel it when we tie up. Like a cat, only iron."
+- *The buoy in sight:* **LANTERN:** "There she is. Lamp's out again, look." / "Don't worry. I've got plenty."
+- *Nearly there:* **LANTERN:** "Easy on the last bit, or you'll bump her and she sulks."
+- *Alongside:* **LANTERN:** "Bump. ...Gently, I said."
+- *Rowed off into the fog (in turn):* **LANTERN:** "Wrong way, chain-tender. The buoy's back there." / "There's nothing out here but fog. Turn us round?"
+
+*Built as a greybox (#227):* `scenes/prototype/intro/home_waters.tscn`: the island, the jetty, the buoy, the chain, the lantern on the pole, the sibling's call and the island's bells (see the GDD's "The Unmooring"). The rowboat is a greybox until the Meshy model (#234).
 
 ### Scene U2: Tending the buoy (#228)
 

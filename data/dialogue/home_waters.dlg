@@ -1,0 +1,49 @@
+# Home waters at dusk (#227): the lantern chattering on the bow pole while
+# you row out to the buoy, as you've done a hundred times. Each section is
+# tagged with the moment it's for; the scene (scripts/intro/home_waters.gd)
+# says the moments as you go, each once, in the order they happen, waiting
+# for the last to finish.
+#
+# Moments, roughly in the order they come:
+#   left_jetty    you've pulled away from the jetty
+#   out_quarter   a fifth of the way to the buoy
+#   out_half      halfway
+#   by_chain      you're passing beside the great chain
+#   buoy_sighted  the buoy's near enough to see clearly
+#   out_most      nearly there
+#   at_buoy       you've come alongside
+#   too_far       you've rowed off into the fog (said again, in turn, if you
+#                 stay out there)
+#
+# First drafts: rewrite freely.
+
+~ left_jetty [on left_jetty]
+lantern: Off we go. Out to the buoy, light it, home for stew.
+lantern: Mind the third post. You always nearly hit the third post.
+
+~ out_quarter [on out_quarter]
+lantern: Smell that? The onions are on already.
+
+~ out_half [on out_half]
+lantern: Halfway. I counted. I always count.
+lantern: Ninety-one strokes, if you don't dawdle. You're dawdling.
+
+~ by_chain [on by_chain]
+lantern: Evening, chain.
+lantern: It hums, you know. You'll feel it when we tie up. Like a cat, only iron.
+
+~ buoy_sighted [on buoy_sighted]
+lantern: There she is. Lamp's out again, look.
+lantern: Don't worry. I've got plenty.
+
+~ out_most [on out_most]
+lantern: Easy on the last bit, or you'll bump her and she sulks.
+
+~ at_buoy [on at_buoy]
+lantern: Bump. ...Gently, I said.
+
+~ too_far_1 [on too_far]
+lantern: Wrong way, chain-tender. The buoy's back there.
+
+~ too_far_2 [on too_far]
+lantern: There's nothing out here but fog. Turn us round?

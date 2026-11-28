@@ -1,0 +1,276 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://scripts/intro/home_waters.gd" id="1_beat"]
+[ext_resource type="PackedScene" path="res://scenes/prototype/weather/sea_surface.tscn" id="2_sea"]
+[ext_resource type="Resource" path="res://data/sea/dusk_swell.tres" id="3_swell"]
+[ext_resource type="PackedScene" path="res://scenes/prototype/intro/rowboat.tscn" id="4_boat"]
+[ext_resource type="Script" path="res://scripts/camera/follow_camera.gd" id="5_camera"]
+[ext_resource type="Script" path="res://scripts/sea/keep_clear.gd" id="6_wall"]
+[ext_resource type="Script" path="res://scripts/intro/hanging_chain.gd" id="7_chain"]
+[ext_resource type="Script" path="res://scripts/dialogue/speaker.gd" id="8_speaker"]
+[ext_resource type="Script" path="res://scripts/weather/sound_spot.gd" id="10_sound"]
+[ext_resource type="Material" path="res://assets/placeholder/materials/greybox_grass.tres" id="14_grass"]
+[ext_resource type="PackedScene" path="res://scenes/props/home/mooring.tscn" id="20_mooring"]
+[ext_resource type="PackedScene" path="res://scenes/props/home/jetty_cottage.tscn" id="21_jetty_cottage"]
+[ext_resource type="PackedScene" path="res://scenes/props/home/jetty.tscn" id="22_jetty"]
+[ext_resource type="PackedScene" path="res://scenes/props/home/buoy.tscn" id="23_buoy"]
+[ext_resource type="PackedScene" path="res://scenes/props/home/cottage.tscn" id="24_cottage"]
+[ext_resource type="PackedScene" path="res://scenes/props/home/lamp_post.tscn" id="25_lamp_post"]
+
+[sub_resource type="ProceduralSkyMaterial" id="DuskSky"]
+sky_top_color = Color(0.24, 0.16, 0.44, 1)
+sky_horizon_color = Color(0.78, 0.42, 0.5, 1)
+sky_curve = 0.08
+ground_bottom_color = Color(0.1, 0.08, 0.18, 1)
+ground_horizon_color = Color(0.6, 0.36, 0.46, 1)
+ground_curve = 0.05
+sun_angle_max = 38.0
+sun_curve = 0.06
+
+[sub_resource type="Sky" id="Sky"]
+sky_material = SubResource("DuskSky")
+
+[sub_resource type="Environment" id="Environment_dusk"]
+resource_local_to_scene = true
+background_mode = 2
+sky = SubResource("Sky")
+ambient_light_source = 3
+ambient_light_color = Color(0.46, 0.4, 0.66, 1)
+ambient_light_sky_contribution = 0.6
+ambient_light_energy = 0.8
+tonemap_mode = 2
+glow_enabled = true
+glow_intensity = 0.6
+glow_bloom = 0.05
+fog_enabled = true
+fog_light_color = Color(0.44, 0.37, 0.62, 1)
+fog_density = 0.0045
+fog_sky_affect = 0.2
+fog_height = 1.5
+fog_height_density = 0.12
+
+[sub_resource type="StandardMaterial3D" id="Rock"]
+albedo_color = Color(0.4, 0.34, 0.4, 1)
+metallic = 0
+roughness = 0.9
+
+[sub_resource type="StandardMaterial3D" id="ChainRust"]
+albedo_color = Color(0.33, 0.17, 0.13, 1)
+metallic = 0.4
+roughness = 0.8
+
+[sub_resource type="CylinderMesh" id="Shelf"]
+top_radius = 42.0
+bottom_radius = 46.0
+height = 8.0
+radial_segments = 28
+
+[sub_resource type="CylinderMesh" id="Hill"]
+top_radius = 5
+bottom_radius = 34
+height = 32.4
+radial_segments = 24
+
+[sub_resource type="CylinderMesh" id="Shoulder"]
+top_radius = 4.0
+bottom_radius = 20.0
+height = 20.0
+radial_segments = 16
+
+[sub_resource type="CylinderMesh" id="Knoll"]
+top_radius = 3.0
+bottom_radius = 15.0
+height = 13.0
+radial_segments = 14
+
+[sub_resource type="SphereMesh" id="Boulder"]
+radius = 4.0
+height = 6.0
+radial_segments = 10
+rings = 5
+
+[node name="HomeWaters" type="Node3D" node_paths=PackedStringArray("boat", "sea", "buoy", "chain", "lantern", "sibling", "home_centre", "walls", "world", "ending")]
+script = ExtResource("1_beat")
+boat = NodePath("Rowboat")
+sea = NodePath("SeaSurface")
+buoy = NodePath("Buoy")
+chain = NodePath("Chain")
+lantern = NodePath("Rowboat/BowPole/Voice")
+sibling = NodePath("Island/JettyCottage/SiblingVoice")
+home_centre = NodePath("HomeCentre")
+walls = [NodePath("Island/Wall"), NodePath("Buoy/Wall"), NodePath("ChainFoot")]
+world = NodePath("WorldEnvironment")
+ending = NodePath("Screen/Ending")
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+environment = SubResource("Environment_dusk")
+
+[node name="Sun" type="DirectionalLight3D" parent="."]
+rotation = Vector3(-0.055, -2.763, 0)
+light_color = Color(1, 0.56, 0.32, 1)
+light_energy = 0.9
+shadow_enabled = true
+directional_shadow_max_distance = 250.0
+
+[node name="SeaSurface" parent="." instance=ExtResource("2_sea")]
+settings = ExtResource("3_swell")
+hull_half = Vector2(0, 0)
+bow_reach = 0.0
+
+[node name="Rowboat" parent="." instance=ExtResource("4_boat")]
+position = Vector3(28, 0, 29)
+
+[node name="Voice" type="Marker3D" parent="Rowboat/BowPole"]
+position = Vector3(0, 1.85, -0.4)
+script = ExtResource("8_speaker")
+who = &"lantern"
+
+[node name="Camera" type="Camera3D" parent="." node_paths=PackedStringArray("target")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 28, 2.9, 35.5)
+current = true
+fov = 60.0
+far = 1200.0
+script = ExtResource("5_camera")
+target = NodePath("../Rowboat")
+
+[node name="HomeCentre" type="Marker3D" parent="."]
+position = Vector3(-5, 0, -30)
+
+[node name="Island" type="Node3D" parent="."]
+
+[node name="Wall" type="Marker3D" parent="Island"]
+position = Vector3(0, 0, 70)
+script = ExtResource("6_wall")
+radius = 44.0
+
+[node name="Shelf" type="MeshInstance3D" parent="Island"]
+position = Vector3(0, -2.4, 70)
+material_override = SubResource("Rock")
+mesh = SubResource("Shelf")
+
+[node name="Hill" type="MeshInstance3D" parent="Island"]
+position = Vector3(0, 17.8, 70)
+material_override = ExtResource("14_grass")
+mesh = SubResource("Hill")
+
+[node name="Shoulder" type="MeshInstance3D" parent="Island"]
+position = Vector3(14, 11.6, 84)
+material_override = ExtResource("14_grass")
+mesh = SubResource("Shoulder")
+
+[node name="Knoll" type="MeshInstance3D" parent="Island"]
+position = Vector3(-20, 8.1, 66)
+material_override = ExtResource("14_grass")
+mesh = SubResource("Knoll")
+
+[node name="Rock1" type="MeshInstance3D" parent="Island"]
+position = Vector3(-30, 0.5, 40)
+material_override = SubResource("Rock")
+mesh = SubResource("Boulder")
+
+[node name="Rock2" type="MeshInstance3D" parent="Island"]
+position = Vector3(-38, 1, 62)
+material_override = SubResource("Rock")
+mesh = SubResource("Boulder")
+
+[node name="Rock3" type="MeshInstance3D" parent="Island"]
+position = Vector3(36, 0.8, 78)
+material_override = SubResource("Rock")
+mesh = SubResource("Boulder")
+
+[node name="Rock4" type="MeshInstance3D" parent="Island"]
+position = Vector3(6, 0.2, 30)
+material_override = SubResource("Rock")
+mesh = SubResource("Boulder")
+
+[node name="Mooring" parent="Island" instance=ExtResource("20_mooring")]
+position = Vector3(0, 34, 70)
+
+[node name="JettyCottage" parent="Island" instance=ExtResource("21_jetty_cottage")]
+transform = Transform3D(-1, 0, 0, 0, 1, 0, 0, 0, -1, 29, 1.6, 45)
+
+[node name="Cottage2" parent="Island" instance=ExtResource("24_cottage")]
+transform = Transform3D(-0.8638, 0, 0.5039, 0, 1, 0, -0.5039, 0, -0.8638, 14, 8.5438, 46)
+
+[node name="Cottage3" parent="Island" instance=ExtResource("24_cottage")]
+transform = Transform3D(-0.8192, 0, -0.5735, 0, 1, 0, 0.5735, 0, -0.8192, -14, 12.3109, 50)
+
+[node name="Cottage4" parent="Island" instance=ExtResource("24_cottage")]
+transform = Transform3D(-0.2631, 0, 0.9648, 0, 1, 0, -0.9648, 0, -0.2631, 22, 14.1092, 64)
+
+[node name="Cottage5" parent="Island" instance=ExtResource("24_cottage")]
+transform = Transform3D(-0.9191, 0, -0.3939, 0, 1, 0, 0.3939, 0, -0.9191, -6, 22.5689, 56)
+
+[node name="Cottage6" parent="Island" instance=ExtResource("24_cottage")]
+transform = Transform3D(0.5145, 0, 0.8575, 0, 1, 0, -0.8575, 0, 0.5145, 10, 26.557, 76)
+
+[node name="Jetty" parent="Island" instance=ExtResource("22_jetty")]
+position = Vector3(24, 0, 31.5)
+
+[node name="Lamps" type="Node3D" parent="Island"]
+
+[node name="Lamp1" parent="Island/Lamps" instance=ExtResource("25_lamp_post")]
+position = Vector3(25.8, 1.33, 27)
+
+[node name="Lamp2" parent="Island/Lamps" instance=ExtResource("25_lamp_post")]
+position = Vector3(25.8, 1.33, 33.5)
+
+[node name="Lamp3" parent="Island/Lamps" instance=ExtResource("25_lamp_post")]
+position = Vector3(21.5, 1.6, 38.5)
+
+[node name="Lamp4" parent="Island/Lamps" instance=ExtResource("25_lamp_post")]
+position = Vector3(17, 4.8797, 44)
+
+[node name="Lamp5" parent="Island/Lamps" instance=ExtResource("25_lamp_post")]
+position = Vector3(8, 12.3796, 47)
+
+[node name="Lamp6" parent="Island/Lamps" instance=ExtResource("25_lamp_post")]
+position = Vector3(-3, 19.1985, 52)
+
+[node name="Bells" type="AudioStreamPlayer3D" parent="Island"]
+position = Vector3(0, 24, 62)
+volume_db = -10.0
+unit_size = 30.0
+script = ExtResource("10_sound")
+recordings = Array[String](["res://assets/audio/intro/island_bells.mp3"])
+min_gap = 20.0
+max_gap = 45.0
+fade_after = 14.0
+
+[node name="Chain" type="MultiMeshInstance3D" parent="."]
+script = ExtResource("7_chain")
+top = Vector3(0, 40, 66.5)
+bottom = Vector3(-20, -5, -114)
+sag = 4.0
+link_length = 7.0
+thickness = 1.3
+iron = SubResource("ChainRust")
+
+[node name="ChainFoot" type="Marker3D" parent="."]
+position = Vector3(-19, 0, -113)
+script = ExtResource("6_wall")
+radius = 5.5
+
+[node name="Buoy" parent="." instance=ExtResource("23_buoy")]
+position = Vector3(-10, 0, -120)
+
+[node name="Screen" type="CanvasLayer" parent="."]
+
+[node name="Help" type="Label" parent="Screen"]
+offset_left = 16.0
+offset_top = 12.0
+offset_right = 900.0
+offset_bottom = 60.0
+theme_override_font_sizes/font_size = 11
+text = "Row: stick or WASD. Look: mouse (click; Esc frees it) or right stick."
+
+[node name="Ending" type="Label" parent="Screen"]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_font_sizes/font_size = 40
+text = "To be continued..."
+horizontal_alignment = 1
+vertical_alignment = 1

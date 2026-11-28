@@ -1,0 +1,297 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://scripts/sea/keep_clear.gd" id="6_wall"]
+[ext_resource type="Script" path="res://scripts/sea/float_on_sea.gd" id="9_float"]
+
+[sub_resource type="StandardMaterial3D" id="Rust"]
+albedo_color = Color(0.5, 0.23, 0.15, 1)
+metallic = 0.3
+roughness = 0.85
+
+[sub_resource type="StandardMaterial3D" id="DarkGlass"]
+albedo_color = Color(0.12, 0.12, 0.16, 1)
+metallic = 0.2
+roughness = 0.15
+
+[sub_resource type="CylinderMesh" id="Float"]
+top_radius = 2.0
+bottom_radius = 2.5
+height = 2.6
+radial_segments = 20
+
+[sub_resource type="TorusMesh" id="Eye"]
+inner_radius = 0.18
+outer_radius = 0.3
+rings = 12
+ring_segments = 6
+
+[sub_resource type="BoxMesh" id="Leg"]
+size = Vector3(0.2, 4.2, 0.2)
+
+[sub_resource type="BoxMesh" id="BraceX"]
+size = Vector3(2.0, 0.12, 0.12)
+
+[sub_resource type="BoxMesh" id="BraceZ"]
+size = Vector3(0.12, 0.12, 2.0)
+
+[sub_resource type="BoxMesh" id="CrossX"]
+size = Vector3(2.4, 0.1, 0.1)
+
+[sub_resource type="BoxMesh" id="CrossZ"]
+size = Vector3(0.1, 0.1, 2.4)
+
+[sub_resource type="CylinderMesh" id="Platform"]
+top_radius = 1.5
+bottom_radius = 1.5
+height = 0.15
+radial_segments = 16
+
+[sub_resource type="TorusMesh" id="Railing"]
+inner_radius = 1.42
+outer_radius = 1.52
+rings = 20
+ring_segments = 5
+
+[sub_resource type="CylinderMesh" id="RailPost"]
+top_radius = 0.04
+bottom_radius = 0.04
+height = 0.65
+radial_segments = 5
+
+[sub_resource type="CylinderMesh" id="LampGlass"]
+top_radius = 0.32
+bottom_radius = 0.32
+height = 0.7
+radial_segments = 10
+
+[sub_resource type="CylinderMesh" id="CageBar"]
+top_radius = 0.03
+bottom_radius = 0.03
+height = 0.8
+radial_segments = 4
+
+[sub_resource type="CylinderMesh" id="LampCap"]
+top_radius = 0.06
+bottom_radius = 0.46
+height = 0.32
+radial_segments = 10
+
+[node name="Buoy" type="Node3D"]
+
+[node name="FloatOnSea" type="Node" parent="."]
+script = ExtResource("9_float")
+
+[node name="Wall" type="Marker3D" parent="."]
+script = ExtResource("6_wall")
+radius = 4.2
+
+[node name="Model" type="Node3D" parent="."]
+
+[node name="Float" type="MeshInstance3D" parent="Model"]
+position = Vector3(0, -0.4, 0)
+material_override = SubResource("Rust")
+mesh = SubResource("Float")
+
+[node name="Eye1" type="MeshInstance3D" parent="Model"]
+position = Vector3(-1.6, 1.1, 0)
+rotation = Vector3(1.5708, 0, 0)
+material_override = SubResource("Rust")
+mesh = SubResource("Eye")
+
+[node name="Eye2" type="MeshInstance3D" parent="Model"]
+position = Vector3(1.6, 1.1, 0)
+rotation = Vector3(1.5708, 0, 0)
+material_override = SubResource("Rust")
+mesh = SubResource("Eye")
+
+[node name="LegWN" type="MeshInstance3D" parent="Model"]
+position = Vector3(-0.85, 3, -0.85)
+rotation = Vector3(0.0713, 0, -0.0713)
+material_override = SubResource("Rust")
+mesh = SubResource("Leg")
+
+[node name="LegWS" type="MeshInstance3D" parent="Model"]
+position = Vector3(-0.85, 3, 0.85)
+rotation = Vector3(-0.0713, 0, -0.0713)
+material_override = SubResource("Rust")
+mesh = SubResource("Leg")
+
+[node name="LegEN" type="MeshInstance3D" parent="Model"]
+position = Vector3(0.85, 3, -0.85)
+rotation = Vector3(0.0713, 0, 0.0713)
+material_override = SubResource("Rust")
+mesh = SubResource("Leg")
+
+[node name="LegES" type="MeshInstance3D" parent="Model"]
+position = Vector3(0.85, 3, 0.85)
+rotation = Vector3(-0.0713, 0, 0.0713)
+material_override = SubResource("Rust")
+mesh = SubResource("Leg")
+
+[node name="Rail1N" type="MeshInstance3D" parent="Model"]
+position = Vector3(0, 1.6, -0.95)
+material_override = SubResource("Rust")
+mesh = SubResource("BraceX")
+
+[node name="Rail1S" type="MeshInstance3D" parent="Model"]
+position = Vector3(0, 1.6, 0.95)
+material_override = SubResource("Rust")
+mesh = SubResource("BraceX")
+
+[node name="Rail1W" type="MeshInstance3D" parent="Model"]
+position = Vector3(-0.95, 1.6, 0)
+material_override = SubResource("Rust")
+mesh = SubResource("BraceZ")
+
+[node name="Rail1E" type="MeshInstance3D" parent="Model"]
+position = Vector3(0.95, 1.6, 0)
+material_override = SubResource("Rust")
+mesh = SubResource("BraceZ")
+
+[node name="Rail2N" type="MeshInstance3D" parent="Model"]
+position = Vector3(0, 4.4, -0.75)
+material_override = SubResource("Rust")
+mesh = SubResource("BraceX")
+
+[node name="Rail2S" type="MeshInstance3D" parent="Model"]
+position = Vector3(0, 4.4, 0.75)
+material_override = SubResource("Rust")
+mesh = SubResource("BraceX")
+
+[node name="Rail2W" type="MeshInstance3D" parent="Model"]
+position = Vector3(-0.75, 4.4, 0)
+material_override = SubResource("Rust")
+mesh = SubResource("BraceZ")
+
+[node name="Rail2E" type="MeshInstance3D" parent="Model"]
+position = Vector3(0.75, 4.4, 0)
+material_override = SubResource("Rust")
+mesh = SubResource("BraceZ")
+
+[node name="CrossN1" type="MeshInstance3D" parent="Model"]
+position = Vector3(0, 3, -0.85)
+rotation = Vector3(0, 0, 0.9)
+material_override = SubResource("Rust")
+mesh = SubResource("CrossX")
+
+[node name="CrossN2" type="MeshInstance3D" parent="Model"]
+position = Vector3(0, 3, -0.85)
+rotation = Vector3(0, 0, -0.9)
+material_override = SubResource("Rust")
+mesh = SubResource("CrossX")
+
+[node name="CrossS1" type="MeshInstance3D" parent="Model"]
+position = Vector3(0, 3, 0.85)
+rotation = Vector3(0, 0, 0.9)
+material_override = SubResource("Rust")
+mesh = SubResource("CrossX")
+
+[node name="CrossS2" type="MeshInstance3D" parent="Model"]
+position = Vector3(0, 3, 0.85)
+rotation = Vector3(0, 0, -0.9)
+material_override = SubResource("Rust")
+mesh = SubResource("CrossX")
+
+[node name="CrossW1" type="MeshInstance3D" parent="Model"]
+position = Vector3(-0.85, 3, 0)
+rotation = Vector3(0.9, 0, 0)
+material_override = SubResource("Rust")
+mesh = SubResource("CrossZ")
+
+[node name="CrossW2" type="MeshInstance3D" parent="Model"]
+position = Vector3(-0.85, 3, 0)
+rotation = Vector3(-0.9, 0, 0)
+material_override = SubResource("Rust")
+mesh = SubResource("CrossZ")
+
+[node name="CrossE1" type="MeshInstance3D" parent="Model"]
+position = Vector3(0.85, 3, 0)
+rotation = Vector3(0.9, 0, 0)
+material_override = SubResource("Rust")
+mesh = SubResource("CrossZ")
+
+[node name="CrossE2" type="MeshInstance3D" parent="Model"]
+position = Vector3(0.85, 3, 0)
+rotation = Vector3(-0.9, 0, 0)
+material_override = SubResource("Rust")
+mesh = SubResource("CrossZ")
+
+[node name="Platform" type="MeshInstance3D" parent="Model"]
+position = Vector3(0, 5.15, 0)
+material_override = SubResource("Rust")
+mesh = SubResource("Platform")
+
+[node name="Railing" type="MeshInstance3D" parent="Model"]
+position = Vector3(0, 5.8, 0)
+material_override = SubResource("Rust")
+mesh = SubResource("Railing")
+
+[node name="RailPost1" type="MeshInstance3D" parent="Model"]
+position = Vector3(1.47, 5.48, 0)
+material_override = SubResource("Rust")
+mesh = SubResource("RailPost")
+
+[node name="RailPost2" type="MeshInstance3D" parent="Model"]
+position = Vector3(0.735, 5.48, 1.2731)
+material_override = SubResource("Rust")
+mesh = SubResource("RailPost")
+
+[node name="RailPost3" type="MeshInstance3D" parent="Model"]
+position = Vector3(-0.735, 5.48, 1.2731)
+material_override = SubResource("Rust")
+mesh = SubResource("RailPost")
+
+[node name="RailPost4" type="MeshInstance3D" parent="Model"]
+position = Vector3(-1.47, 5.48, 0)
+material_override = SubResource("Rust")
+mesh = SubResource("RailPost")
+
+[node name="RailPost5" type="MeshInstance3D" parent="Model"]
+position = Vector3(-0.735, 5.48, -1.2731)
+material_override = SubResource("Rust")
+mesh = SubResource("RailPost")
+
+[node name="RailPost6" type="MeshInstance3D" parent="Model"]
+position = Vector3(0.735, 5.48, -1.2731)
+material_override = SubResource("Rust")
+mesh = SubResource("RailPost")
+
+[node name="LampGlass" type="MeshInstance3D" parent="Model"]
+position = Vector3(0, 5.65, 0)
+material_override = SubResource("DarkGlass")
+mesh = SubResource("LampGlass")
+
+[node name="CageBar1" type="MeshInstance3D" parent="Model"]
+position = Vector3(0.3464, 5.65, 0.2)
+material_override = SubResource("Rust")
+mesh = SubResource("CageBar")
+
+[node name="CageBar2" type="MeshInstance3D" parent="Model"]
+position = Vector3(0, 5.65, 0.4)
+material_override = SubResource("Rust")
+mesh = SubResource("CageBar")
+
+[node name="CageBar3" type="MeshInstance3D" parent="Model"]
+position = Vector3(-0.3464, 5.65, 0.2)
+material_override = SubResource("Rust")
+mesh = SubResource("CageBar")
+
+[node name="CageBar4" type="MeshInstance3D" parent="Model"]
+position = Vector3(-0.3464, 5.65, -0.2)
+material_override = SubResource("Rust")
+mesh = SubResource("CageBar")
+
+[node name="CageBar5" type="MeshInstance3D" parent="Model"]
+position = Vector3(0, 5.65, -0.4)
+material_override = SubResource("Rust")
+mesh = SubResource("CageBar")
+
+[node name="CageBar6" type="MeshInstance3D" parent="Model"]
+position = Vector3(0.3464, 5.65, -0.2)
+material_override = SubResource("Rust")
+mesh = SubResource("CageBar")
+
+[node name="LampCap" type="MeshInstance3D" parent="Model"]
+position = Vector3(0, 6.16, 0)
+material_override = SubResource("Rust")
+mesh = SubResource("LampCap")

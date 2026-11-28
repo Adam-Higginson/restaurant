@@ -1,0 +1,59 @@
+[gd_scene format=3]
+
+[ext_resource type="Material" path="res://assets/placeholder/materials/greybox_dark_wood.tres" id="13_wood"]
+
+[sub_resource type="BoxMesh" id="Deck"]
+size = Vector3(3, 0.25, 11)
+
+[sub_resource type="CylinderMesh" id="Pile"]
+top_radius = 0.22
+bottom_radius = 0.24
+height = 4.0
+radial_segments = 8
+
+[node name="Jetty" type="Node3D"]
+
+[node name="Deck" type="MeshInstance3D" parent="."]
+position = Vector3(0, 1.2, 0)
+material_override = ExtResource("13_wood")
+mesh = SubResource("Deck")
+
+[node name="PilePort1" type="MeshInstance3D" parent="."]
+position = Vector3(-1.4, -0.6, -5)
+material_override = ExtResource("13_wood")
+mesh = SubResource("Pile")
+
+[node name="PileStarboard1" type="MeshInstance3D" parent="."]
+position = Vector3(1.4, -0.6, -5)
+material_override = ExtResource("13_wood")
+mesh = SubResource("Pile")
+
+[node name="PilePort2" type="MeshInstance3D" parent="."]
+position = Vector3(-1.4, -0.6, -1.5)
+material_override = ExtResource("13_wood")
+mesh = SubResource("Pile")
+
+[node name="PileStarboard2" type="MeshInstance3D" parent="."]
+position = Vector3(1.4, -0.6, -1.5)
+material_override = ExtResource("13_wood")
+mesh = SubResource("Pile")
+
+[node name="PilePort3" type="MeshInstance3D" parent="."]
+position = Vector3(-1.4, -0.6, 2)
+material_override = ExtResource("13_wood")
+mesh = SubResource("Pile")
+
+[node name="PileStarboard3" type="MeshInstance3D" parent="."]
+position = Vector3(1.4, -0.6, 2)
+material_override = ExtResource("13_wood")
+mesh = SubResource("Pile")
+
+[node name="PilePort4" type="MeshInstance3D" parent="."]
+position = Vector3(-1.4, -0.6, 5.5)
+material_override = ExtResource("13_wood")
+mesh = SubResource("Pile")
+
+[node name="PileStarboard4" type="MeshInstance3D" parent="."]
+position = Vector3(1.4, -0.6, 5.5)
+material_override = ExtResource("13_wood")
+mesh = SubResource("Pile")

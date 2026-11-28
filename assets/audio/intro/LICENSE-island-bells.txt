@@ -1,0 +1,11 @@
+island_bells.mp3
+
+"Church Bells Ringing with Birds in the Background" by hoshisato
+https://freesound.org/people/hoshisato/sounds/852997/
+
+License: Creative Commons Zero (CC0 1.0), public domain dedication
+https://creativecommons.org/publicdomain/zero/1.0/
+
+This file is Freesound's high-quality preview (128 kbps MP3) of the original
+recording, unchanged. The game plays a part of it softly from the island in
+home waters (#227).
