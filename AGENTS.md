@@ -9,7 +9,7 @@
 - Godot binary: `C:\Godot\godot_console.exe`
 
 ## The game
-A cosy 3D adventure in the spirit of Ocarina of Time. A lantern spirit rescues the player at sea and they join a ship's crew sailing between fog-wrapped islands, searching for a home they remember only as tastes and sounds. Ashore: exploring, gathering, puzzles and OoT-style duels against fog-touched creatures. Aboard: the ship is a safe hearth, and the galley, where you cook for the crew, is its heart. The hands-on cooking system carries over from the earlier restaurant design.
+A cosy 3D adventure in the spirit of Ocarina of Time. You are your island's chain-tender, with a lantern spirit for a friend. When the great chain that holds your island breaks, the sea sweeps you away into the Grave of the Lanterns and a ship finds you. Home hasn't gone anywhere you can't follow: like all the islands it has drifted off through the fog (you lose no memory), so you join a crew sailing between fog-wrapped islands to find it, guided by each island's cooking and songs and by the taste of your older sibling's fish stew. Ashore: exploring, gathering, puzzles and OoT-style duels against fog-touched creatures. Aboard: the ship is a safe hearth, and the galley, where you cook for the crew, is its heart. The hands-on cooking system carries over from the earlier restaurant design.
 
 Use greybox placeholder shapes until real art is added.
 
