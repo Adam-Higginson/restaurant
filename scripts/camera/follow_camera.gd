@@ -21,6 +21,10 @@ var _yaw: float = 0.0
 
 
 func _ready() -> void:
+	# It places itself every rendered frame from where the target is drawn,
+	# which is already smoothed between physics ticks. Smoothing it again
+	# would make it lag a tick behind and jitter against the target.
+	physics_interpolation_mode = Node.PHYSICS_INTERPOLATION_MODE_OFF
 	if target != null:
 		_yaw = _yaw_of(target.global_basis)
 		_place(1.0)

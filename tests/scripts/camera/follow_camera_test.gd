@@ -43,6 +43,17 @@ func test_it_doesnt_roll_with_what_it_follows() -> void:
 	assert_float(camera.global_basis.x.y).is_equal_approx(0.0, 0.001)
 
 
+func test_it_is_not_smoothed_a_second_time() -> void:
+	var camera: FollowCamera = _camera_following(Node3D.new())
+	var runner: GdUnitSceneRunner = scene_runner(camera.get_parent())
+
+	await physics_ticks(runner, 1)
+
+	# It follows where the target is drawn, which is already smoothed.
+	assert_int(camera.physics_interpolation_mode) \
+			.is_equal(Node.PHYSICS_INTERPOLATION_MODE_OFF)
+
+
 func _camera_following(target: Node3D) -> FollowCamera:
 	var world: Node3D = Node3D.new()
 	auto_free(world)
