@@ -1,0 +1,110 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://scripts/sea/rowing_greybox.gd" id="1_ground"]
+[ext_resource type="PackedScene" path="res://scenes/prototype/weather/sea_surface.tscn" id="2_sea"]
+[ext_resource type="Resource" path="res://data/sea/dusk_swell.tres" id="3_swell"]
+[ext_resource type="Script" path="res://scripts/sea/sea_current.gd" id="4_current"]
+[ext_resource type="PackedScene" path="res://scenes/prototype/intro/rowboat.tscn" id="5_boat"]
+[ext_resource type="Script" path="res://scripts/camera/follow_camera.gd" id="6_camera"]
+[ext_resource type="Material" path="res://assets/placeholder/materials/greybox_dark_wood.tres" id="7_post"]
+
+[sub_resource type="Environment" id="Environment_dusk"]
+background_mode = 1
+background_color = Color(0.11, 0.13, 0.2, 1)
+ambient_light_source = 2
+ambient_light_color = Color(0.36, 0.4, 0.55, 1)
+ambient_light_energy = 0.5
+tonemap_mode = 2
+fog_enabled = true
+fog_light_color = Color(0.2, 0.23, 0.32, 1)
+fog_density = 0.035
+
+[sub_resource type="CylinderMesh" id="Post"]
+top_radius = 0.25
+bottom_radius = 0.3
+height = 6.0
+radial_segments = 10
+
+[node name="RowingGreybox" type="Node3D" node_paths=PackedStringArray("boat", "current", "sea", "readout")]
+script = ExtResource("1_ground")
+boat = NodePath("Rowboat")
+current = NodePath("SeaCurrent")
+sea = NodePath("SeaSurface")
+readout = NodePath("Help/Readout")
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+environment = SubResource("Environment_dusk")
+
+[node name="Moon" type="DirectionalLight3D" parent="."]
+rotation = Vector3(-0.6, 0.8, 0)
+light_color = Color(0.7, 0.76, 0.95, 1)
+light_energy = 0.35
+
+[node name="SeaSurface" parent="." instance=ExtResource("2_sea")]
+settings = ExtResource("3_swell")
+hull_half = Vector2(0, 0)
+bow_reach = 0.0
+
+[node name="SeaCurrent" type="Node" parent="."]
+script = ExtResource("4_current")
+direction_degrees = 90.0
+
+[node name="Rowboat" parent="." node_paths=PackedStringArray("current") instance=ExtResource("5_boat")]
+current = NodePath("../SeaCurrent")
+
+[node name="Camera" type="Camera3D" parent="." node_paths=PackedStringArray("target")]
+current = true
+fov = 60.0
+script = ExtResource("6_camera")
+target = NodePath("../Rowboat")
+
+[node name="Posts" type="Node3D" parent="."]
+
+[node name="Post1" type="MeshInstance3D" parent="Posts"]
+position = Vector3(6, 0, -14)
+material_override = ExtResource("7_post")
+mesh = SubResource("Post")
+
+[node name="Post2" type="MeshInstance3D" parent="Posts"]
+position = Vector3(-9, 0, -26)
+material_override = ExtResource("7_post")
+mesh = SubResource("Post")
+
+[node name="Post3" type="MeshInstance3D" parent="Posts"]
+position = Vector3(14, 0, -40)
+material_override = ExtResource("7_post")
+mesh = SubResource("Post")
+
+[node name="Post4" type="MeshInstance3D" parent="Posts"]
+position = Vector3(-4, 0, -55)
+material_override = ExtResource("7_post")
+mesh = SubResource("Post")
+
+[node name="Post5" type="MeshInstance3D" parent="Posts"]
+position = Vector3(-20, 0, -8)
+material_override = ExtResource("7_post")
+mesh = SubResource("Post")
+
+[node name="Post6" type="MeshInstance3D" parent="Posts"]
+position = Vector3(22, 0, -18)
+material_override = ExtResource("7_post")
+mesh = SubResource("Post")
+
+[node name="Post7" type="MeshInstance3D" parent="Posts"]
+position = Vector3(3, 0, 18)
+material_override = ExtResource("7_post")
+mesh = SubResource("Post")
+
+[node name="Post8" type="MeshInstance3D" parent="Posts"]
+position = Vector3(-15, 0, 30)
+material_override = ExtResource("7_post")
+mesh = SubResource("Post")
+
+[node name="Help" type="CanvasLayer" parent="."]
+
+[node name="Readout" type="Label" parent="Help"]
+offset_left = 16.0
+offset_top = 12.0
+offset_right = 900.0
+offset_bottom = 60.0
+theme_override_font_sizes/font_size = 15

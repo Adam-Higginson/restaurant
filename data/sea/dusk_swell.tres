@@ -1,0 +1,30 @@
+[gd_resource type="Resource" script_class="WaveSettings" format=3]
+
+[ext_resource type="Script" path="res://scripts/sea/wave_layer.gd" id="1_layer"]
+[ext_resource type="Script" path="res://scripts/sea/wave_settings.gd" id="2_settings"]
+
+[sub_resource type="Resource" id="Resource_swell"]
+script = ExtResource("1_layer")
+direction_degrees = 20.0
+wavelength = 70.0
+amplitude = 0.45
+steepness = 0.3
+
+[sub_resource type="Resource" id="Resource_cross"]
+script = ExtResource("1_layer")
+direction_degrees = 60.0
+wavelength = 34.0
+amplitude = 0.22
+steepness = 0.35
+
+[sub_resource type="Resource" id="Resource_chop"]
+script = ExtResource("1_layer")
+direction_degrees = 105.0
+wavelength = 9.0
+amplitude = 0.06
+steepness = 0.5
+
+[resource]
+script = ExtResource("2_settings")
+layers = Array[ExtResource("1_layer")]([SubResource("Resource_swell"), SubResource("Resource_cross"), SubResource("Resource_chop")])
+time_scale = 0.8

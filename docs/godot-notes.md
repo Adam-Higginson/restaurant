@@ -78,7 +78,7 @@ A growing glossary of the Godot concepts this project uses: what each one is, in
 
 **`get_global_transform_interpolated()`.** Where a physics-interpolated node is *drawn* this frame, rather than where physics last put it. Use it from `_process` to follow a physics body smoothly. *Ours:* `CameraRig._follow_target()`.
 
-**Mouse capture and `InputEventMouseMotion`.** `Input.mouse_mode = Input.MOUSE_MODE_CAPTURED` hides the cursor and locks it to the window, so the mouse can turn the camera forever without hitting the screen edge. Each movement arrives as an `InputEventMouseMotion` whose `relative` is how far it moved. Mouse movement can't be an Input Map action, so the camera reads it in `_unhandled_input`. *Ours:* `CameraRig`. Esc releases the mouse, and a click captures it again.
+**Mouse capture and `InputEventMouseMotion`.** `Input.mouse_mode = Input.MOUSE_MODE_CAPTURED` hides the cursor and locks it to the window, so the mouse can turn the camera forever without hitting the screen edge. Each movement arrives as an `InputEventMouseMotion` whose `relative` is how far it moved. Mouse movement can't be an Input Map action, so the camera reads it in `_unhandled_input`. *Ours:* `CameraRig` and `FollowCamera` (the rowing greybox's chase camera, where `RowingGreybox` captures on a click and frees on Esc). Esc releases the mouse, and a click captures it again.
 
 **Area3D and `body_entered` / `body_exited`.** An invisible volume (shaped by a `CollisionShape3D` child) that notices physics bodies overlapping it, but doesn't block them. It emits `body_entered(body)` when one starts overlapping and `body_exited(body)` when it stops, checked on physics ticks. It notices every body its collision mask covers, so check what came in. *Ours:* `CameraZone` (`scripts/camera/camera_zone.gd`), which reacts only to a `Player3D`.
 
@@ -755,6 +755,20 @@ A growing glossary of the Godot concepts this project uses: what each one is, in
 **Editor Settings vs Project Settings.** Project Settings belong to the game and are saved in `project.godot`, shared through git. Editor Settings belong to your copy of Godot on this computer (*Editor → Editor Settings*, saved in `%APPDATA%\Godot\editor_settings-4.7.tres`) and apply to every project you open. *Ours:* godot-ai's usage-data switch and excluded tool groups are Editor Settings, so each PC sets them once.
 
 **MCP (Model Context Protocol).** The standard way to give an AI assistant extra tools. A small server offers tools (here: "take a screenshot", "press move_up for 30 frames") and Claude Code calls them. `.mcp.json` tells Claude Code which servers to start for this project. *Ours:* the `godot-ai` server, which talks to the editor plugin over a local, authenticated connection.
+
+## Rowing and the current (#226)
+
+**Moving a node by script instead of physics.** A `RigidBody3D` is pushed around by the physics engine: forces, mass, collisions. It's realistic, but hard to steer and free to tip over. A plain `Node3D` that a script moves each physics tick does exactly what the script says, so it can feel good to control and can never capsize. *Ours:* `Rowboat.row()` works out the boat's velocity and heading from the stick and the water, then moves it; `Rowboat.ride()` sets its height and tilt.
+
+**Framerate-independent smoothing with `exp()`.** `lerpf(now, wanted, 1.0 - exp(-rate * delta))` moves a value towards a target the same amount per second however many frames there are, where a fixed `lerpf(now, wanted, 0.1)` would be faster at higher frame rates. Multiplying by `exp(-drag * delta)` is the same idea for slowing down. *Ours:* the boat's drag and turning (`Rowboat.row()`), and how `FollowCamera` swings round.
+
+**`Basis.from_euler()`.** Builds a rotation from three angles in radians: pitch about X, yaw about Y and roll about Z. *Ours:* `Rowboat.ride()` turns the boat to its heading and tilts it with the swell in one go.
+
+**`rotate_toward()` and `lerp_angle()`.** Angles wrap round (a little past 180 degrees is a little past -180), so they can't be moved with plain `lerpf`. `rotate_toward(from, to, step)` turns by at most `step` the short way round; `lerp_angle(from, to, weight)` blends the short way round. *Ours:* the current swinging the boat's bow round (`Rowboat.row()`), and `FollowCamera` swinging round behind it.
+
+**Exports in groups.** `@export_group("Rowing")` puts the exports after it under a foldable heading in the Inspector, so a node with lots of settings stays readable. *Ours:* `Rowboat`'s Rowing, Turning, Riding the sea and Oars.
+
+**Raw keys in a test scene.** `_unhandled_input` receives every input event nothing else used. Checking `InputEventKey.keycode` against a key like `KEY_C` reads a key directly, without an Input Map action, which is fine for a tuning tool that players never see. *Ours:* `RowingGreybox`: C lets the current take the boat, X gives it back.
 
 ## Testing
 
