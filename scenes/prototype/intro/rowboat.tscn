@@ -1,0 +1,162 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://scripts/sea/rowboat.gd" id="1_boat"]
+[ext_resource type="Material" path="res://assets/placeholder/materials/greybox_wood.tres" id="2_wood"]
+[ext_resource type="Material" path="res://assets/placeholder/materials/greybox_dark_wood.tres" id="3_dark"]
+[ext_resource type="Material" path="res://assets/placeholder/materials/greybox_player.tres" id="4_player"]
+[ext_resource type="PackedScene" path="res://scenes/prototype/lantern_body.tscn" id="5_lantern"]
+[ext_resource type="Script" path="res://scripts/props/flicker.gd" id="6_flicker"]
+
+[sub_resource type="BoxMesh" id="Bottom"]
+size = Vector3(1.1, 0.1, 2.9)
+
+[sub_resource type="BoxMesh" id="Side"]
+size = Vector3(0.08, 0.5, 3.0)
+
+[sub_resource type="BoxMesh" id="Transom"]
+size = Vector3(1.3, 0.5, 0.08)
+
+[sub_resource type="BoxMesh" id="Stem"]
+size = Vector3(0.7, 0.55, 0.3)
+
+[sub_resource type="BoxMesh" id="Thwart"]
+size = Vector3(1.2, 0.06, 0.32)
+
+[sub_resource type="CylinderMesh" id="Shaft"]
+top_radius = 0.03
+bottom_radius = 0.03
+height = 2.6
+radial_segments = 8
+
+[sub_resource type="BoxMesh" id="Blade"]
+size = Vector3(0.55, 0.025, 0.15)
+
+[sub_resource type="CylinderMesh" id="Pole"]
+top_radius = 0.025
+bottom_radius = 0.03
+height = 1.3
+radial_segments = 8
+
+[sub_resource type="BoxMesh" id="Arm"]
+size = Vector3(0.04, 0.04, 0.45)
+
+[sub_resource type="CapsuleMesh" id="Body"]
+radius = 0.22
+height = 0.8
+
+[sub_resource type="SphereMesh" id="Head"]
+radius = 0.15
+height = 0.3
+
+[node name="Rowboat" type="Node3D"]
+script = ExtResource("1_boat")
+
+[node name="Hull" type="Node3D" parent="."]
+
+[node name="Bottom" type="MeshInstance3D" parent="Hull"]
+position = Vector3(0, -0.28, 0)
+material_override = ExtResource("2_wood")
+mesh = SubResource("Bottom")
+
+[node name="Starboard" type="MeshInstance3D" parent="Hull"]
+position = Vector3(0.6, -0.05, 0)
+material_override = ExtResource("2_wood")
+mesh = SubResource("Side")
+
+[node name="Port" type="MeshInstance3D" parent="Hull"]
+position = Vector3(-0.6, -0.05, 0)
+material_override = ExtResource("2_wood")
+mesh = SubResource("Side")
+
+[node name="Transom" type="MeshInstance3D" parent="Hull"]
+position = Vector3(0, -0.05, 1.5)
+material_override = ExtResource("2_wood")
+mesh = SubResource("Transom")
+
+[node name="Stem" type="MeshInstance3D" parent="Hull"]
+position = Vector3(0, -0.02, -1.62)
+material_override = ExtResource("2_wood")
+mesh = SubResource("Stem")
+
+[node name="RowingThwart" type="MeshInstance3D" parent="Hull"]
+position = Vector3(0, 0.02, 0.45)
+material_override = ExtResource("3_dark")
+mesh = SubResource("Thwart")
+
+[node name="BowThwart" type="MeshInstance3D" parent="Hull"]
+position = Vector3(0, 0.02, -0.95)
+material_override = ExtResource("3_dark")
+mesh = SubResource("Thwart")
+
+[node name="OarStarboard" type="Node3D" parent="."]
+position = Vector3(0.62, 0.22, 0)
+
+[node name="Oar" type="Node3D" parent="OarStarboard"]
+rotation = Vector3(0, 0, -0.17)
+
+[node name="Shaft" type="MeshInstance3D" parent="OarStarboard/Oar"]
+position = Vector3(0.7, 0, 0)
+rotation = Vector3(0, 0, -1.5708)
+material_override = ExtResource("3_dark")
+mesh = SubResource("Shaft")
+
+[node name="Blade" type="MeshInstance3D" parent="OarStarboard/Oar"]
+position = Vector3(1.75, 0, 0)
+material_override = ExtResource("3_dark")
+mesh = SubResource("Blade")
+
+[node name="OarPort" type="Node3D" parent="."]
+position = Vector3(-0.62, 0.22, 0)
+
+[node name="Oar" type="Node3D" parent="OarPort"]
+rotation = Vector3(0, 0, 0.17)
+
+[node name="Shaft" type="MeshInstance3D" parent="OarPort/Oar"]
+position = Vector3(-0.7, 0, 0)
+rotation = Vector3(0, 0, 1.5708)
+material_override = ExtResource("3_dark")
+mesh = SubResource("Shaft")
+
+[node name="Blade" type="MeshInstance3D" parent="OarPort/Oar"]
+position = Vector3(-1.75, 0, 0)
+material_override = ExtResource("3_dark")
+mesh = SubResource("Blade")
+
+[node name="Rower" type="Node3D" parent="."]
+position = Vector3(0, 0, 0.45)
+
+[node name="Body" type="MeshInstance3D" parent="Rower"]
+position = Vector3(0, 0.45, 0)
+material_override = ExtResource("4_player")
+mesh = SubResource("Body")
+
+[node name="Head" type="MeshInstance3D" parent="Rower"]
+position = Vector3(0, 1.0, 0)
+material_override = ExtResource("4_player")
+mesh = SubResource("Head")
+
+[node name="BowPole" type="Node3D" parent="."]
+position = Vector3(0, 0, -1.6)
+
+[node name="Pole" type="MeshInstance3D" parent="BowPole"]
+position = Vector3(0, 0.9, 0)
+material_override = ExtResource("3_dark")
+mesh = SubResource("Pole")
+
+[node name="Arm" type="MeshInstance3D" parent="BowPole"]
+position = Vector3(0, 1.53, -0.2)
+material_override = ExtResource("3_dark")
+mesh = SubResource("Arm")
+
+[node name="Lantern" parent="BowPole" instance=ExtResource("5_lantern")]
+position = Vector3(0, 1.3, -0.4)
+
+[node name="Light" type="OmniLight3D" parent="BowPole"]
+position = Vector3(0, 1.3, -0.4)
+light_color = Color(1, 0.72, 0.42, 1)
+light_energy = 1.6
+shadow_enabled = true
+omni_range = 10.0
+script = ExtResource("6_flicker")
+base_energy = 1.6
+amount = 0.15
