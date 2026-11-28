@@ -21,14 +21,20 @@ extends AudioStreamPlayer3D
 ## Whether it plays by itself now and then. Off for sounds something else
 ## starts, like the bell when it's rung (see [method play_now]).
 @export var automatic: bool = true
+## If above 0, each sound fades out over a couple of seconds once it has
+## played this long, in seconds: a few tolls of a long peal of bells.
+@export var fade_after: float = 0.0
 
 var _streams: Array[AudioStream] = []
 var _wait: float = 0.0
 var _rng: RandomNumberGenerator = RandomNumberGenerator.new()
+var _full_volume: float = 0.0
+var _fade: Tween = null
 
 
 func _ready() -> void:
 	_rng.randomize()
+	_full_volume = volume_db
 	bus = Ambience.BUS
 	for path: String in recordings:
 		if Ambience.has_sound(path):
@@ -59,7 +65,15 @@ func play_now() -> void:
 		return
 	stream = _streams[_rng.randi_range(0, _streams.size() - 1)]
 	pitch_scale = _rng.randf_range(0.9, 1.1)
+	volume_db = _full_volume
 	play()
+	if fade_after > 0.0:
+		if _fade != null:
+			_fade.kill()
+		_fade = create_tween()
+		_fade.tween_interval(fade_after)
+		_fade.tween_property(self, "volume_db", -60.0, 2.5)
+		_fade.tween_callback(stop)
 
 
 ## Whether it has any recordings to play.

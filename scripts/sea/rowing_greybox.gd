@@ -29,17 +29,11 @@ const HELP: String = "Row: stick or WASD.\nC: the current takes the boat (%ds). 
 
 
 func _ready() -> void:
-	if sea != null:
-		# There's no ship here, so move the water's hull cut-out (and the foam
-		# drawn round it) far off, where it can't mark the sea round the origin.
-		var water: ShaderMaterial = sea.material_override as ShaderMaterial
-		if water != null:
-			var away: Transform3D = Transform3D(Basis(), Vector3(1.0e6, -1000.0, 1.0e6))
-			water.set_shader_parameter("hull_inverse", Projection(away.affine_inverse()))
+	clear_hull_cutout(sea)
 
 
 func _process(_delta: float) -> void:
-	_centre_sea()
+	centre_sea_under(sea, boat)
 	if readout != null and current != null:
 		readout.text = HELP % [int(sweep_seconds), roundi(current.takeover * 100.0)]
 
@@ -61,13 +55,25 @@ func _unhandled_input(event: InputEvent) -> void:
 		current.release()
 
 
-# Keeps the sea's plane under the boat, in the sea's own grid steps so its
-# waves never shimmer as it moves.
-func _centre_sea() -> void:
-	if sea == null or boat == null:
+## There's no ship on a rowing sea, so this moves [param water]'s hull
+## cut-out (and the foam drawn round it) far off, where it can't mark the sea
+## round the origin. Also used by [HomeWaters].
+static func clear_hull_cutout(water: Sea) -> void:
+	if water == null:
 		return
-	sea.global_position = Vector3(
-		snappedf(boat.global_position.x, sea.grid_step),
+	var shader: ShaderMaterial = water.material_override as ShaderMaterial
+	if shader != null:
+		var away: Transform3D = Transform3D(Basis(), Vector3(1.0e6, -1000.0, 1.0e6))
+		shader.set_shader_parameter("hull_inverse", Projection(away.affine_inverse()))
+
+
+## Keeps [param water]'s plane under [param rowed], in the sea's own grid
+## steps so its waves never shimmer as it moves. Also used by [HomeWaters].
+static func centre_sea_under(water: Sea, rowed: Node3D) -> void:
+	if water == null or rowed == null:
+		return
+	water.global_position = Vector3(
+		snappedf(rowed.global_position.x, water.grid_step),
 		0.0,
-		snappedf(boat.global_position.z, sea.grid_step),
+		snappedf(rowed.global_position.z, water.grid_step),
 	)

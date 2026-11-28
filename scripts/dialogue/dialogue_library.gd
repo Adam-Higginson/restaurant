@@ -12,7 +12,7 @@ const FOLDER: String = "res://data/dialogue"
 const ENDING: String = ".dlg"
 ## The files that hold remarks (things said in passing, see [Remark]) rather
 ## than conversations.
-const REMARK_FILES: Array[StringName] = [&"ambient", &"moments"]
+const REMARK_FILES: Array[StringName] = [&"ambient", &"moments", &"home_waters"]
 
 static var _trees: Dictionary[StringName, DialogueTree] = {}
 static var _remarks: Dictionary[StringName, Array] = {}
