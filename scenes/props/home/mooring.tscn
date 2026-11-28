@@ -1,0 +1,47 @@
+[gd_scene format=3]
+
+[sub_resource type="StandardMaterial3D" id="Rock"]
+albedo_color = Color(0.4, 0.34, 0.4, 1)
+metallic = 0
+roughness = 0.9
+
+[sub_resource type="StandardMaterial3D" id="ChainRust"]
+albedo_color = Color(0.33, 0.17, 0.13, 1)
+metallic = 0.4
+roughness = 0.8
+
+[sub_resource type="CylinderMesh" id="MooringBase"]
+top_radius = 4.5
+bottom_radius = 6.0
+height = 3.0
+radial_segments = 16
+
+[sub_resource type="CylinderMesh" id="MooringPost"]
+top_radius = 1.6
+bottom_radius = 1.8
+height = 4.0
+radial_segments = 12
+
+[sub_resource type="TorusMesh" id="MooringRing"]
+inner_radius = 2.6
+outer_radius = 4.2
+rings = 24
+ring_segments = 10
+
+[node name="Mooring" type="Node3D"]
+
+[node name="Base" type="MeshInstance3D" parent="."]
+position = Vector3(0, 1.5, 0)
+material_override = SubResource("Rock")
+mesh = SubResource("MooringBase")
+
+[node name="Post" type="MeshInstance3D" parent="."]
+position = Vector3(0, 5, 0)
+material_override = SubResource("ChainRust")
+mesh = SubResource("MooringPost")
+
+[node name="Ring" type="MeshInstance3D" parent="."]
+position = Vector3(0, 7.5, -2)
+rotation = Vector3(0, 0, 1.5708)
+material_override = SubResource("ChainRust")
+mesh = SubResource("MooringRing")

@@ -1,0 +1,118 @@
+[gd_scene format=3]
+
+[ext_resource type="Material" path="res://assets/placeholder/materials/window_glow.tres" id="12_glow"]
+
+[sub_resource type="StandardMaterial3D" id="Wall"]
+albedo_color = Color(0.86, 0.8, 0.74, 1)
+metallic = 0
+roughness = 0.9
+
+[sub_resource type="StandardMaterial3D" id="Roof"]
+albedo_color = Color(0.56, 0.22, 0.2, 1)
+metallic = 0
+roughness = 0.9
+
+[sub_resource type="Gradient" id="SmokeFade"]
+offsets = PackedFloat32Array(0, 0.2, 1)
+colors = PackedColorArray(0.6, 0.55, 0.68, 0, 0.6, 0.55, 0.68, 0.45, 0.64, 0.6, 0.72, 0)
+
+[sub_resource type="GradientTexture1D" id="SmokeRamp"]
+gradient = SubResource("SmokeFade")
+
+[sub_resource type="Curve" id="SmokeGrow"]
+_data = [Vector2(0, 0.35), 0.0, 0.0, 0, 0, Vector2(1, 1), 0.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="CurveTexture" id="SmokeGrowTex"]
+curve = SubResource("SmokeGrow")
+
+[sub_resource type="ParticleProcessMaterial" id="SmokeRise"]
+emission_shape = 1
+emission_sphere_radius = 0.2
+direction = Vector3(0, 1, 0)
+spread = 10.0
+initial_velocity_min = 0.5
+initial_velocity_max = 0.9
+gravity = Vector3(0.25, 0.12, 0.1)
+scale_min = 1.2
+scale_max = 1.8
+scale_curve = SubResource("SmokeGrowTex")
+color_ramp = SubResource("SmokeRamp")
+
+[sub_resource type="Gradient" id="PuffEdge"]
+colors = PackedColorArray(1, 1, 1, 1, 1, 1, 1, 0)
+
+[sub_resource type="GradientTexture2D" id="PuffShape"]
+gradient = SubResource("PuffEdge")
+width = 64
+height = 64
+fill = 1
+fill_from = Vector2(0.5, 0.5)
+fill_to = Vector2(1, 0.5)
+
+[sub_resource type="StandardMaterial3D" id="SmokePuff"]
+transparency = 1
+albedo_texture = SubResource("PuffShape")
+shading_mode = 0
+vertex_color_use_as_albedo = true
+billboard_mode = 3
+billboard_keep_scale = true
+
+[sub_resource type="QuadMesh" id="Puff"]
+material = SubResource("SmokePuff")
+
+[sub_resource type="BoxMesh" id="Body"]
+size = Vector3(6, 11, 5)
+
+[sub_resource type="PrismMesh" id="RoofShape"]
+size = Vector3(6.8, 2.4, 5.6)
+
+[sub_resource type="BoxMesh" id="Chimney"]
+size = Vector3(0.8, 2.4, 0.8)
+
+[sub_resource type="BoxMesh" id="Window"]
+size = Vector3(0.9, 0.9, 0.1)
+
+[node name="Cottage" type="Node3D"]
+
+[node name="Body" type="MeshInstance3D" parent="."]
+position = Vector3(0, -1.5, 0)
+material_override = SubResource("Wall")
+mesh = SubResource("Body")
+
+[node name="Roof" type="MeshInstance3D" parent="."]
+position = Vector3(0, 5.2, 0)
+material_override = SubResource("Roof")
+mesh = SubResource("RoofShape")
+
+[node name="Chimney" type="MeshInstance3D" parent="."]
+position = Vector3(1.8, 5.6, -1)
+material_override = SubResource("Wall")
+mesh = SubResource("Chimney")
+
+[node name="WindowLeft" type="MeshInstance3D" parent="."]
+position = Vector3(-1.5, 2.2, 2.52)
+cast_shadow = 0
+material_override = ExtResource("12_glow")
+mesh = SubResource("Window")
+
+[node name="WindowRight" type="MeshInstance3D" parent="."]
+position = Vector3(1.5, 2.2, 2.52)
+cast_shadow = 0
+material_override = ExtResource("12_glow")
+mesh = SubResource("Window")
+
+[node name="WindowLight" type="OmniLight3D" parent="."]
+position = Vector3(0, 2.2, 3.6)
+light_color = Color(1, 0.66, 0.36, 1)
+light_energy = 1.2
+omni_range = 7.0
+
+[node name="Smoke" type="GPUParticles3D" parent="."]
+position = Vector3(1.8, 7, -1)
+amount = 16
+lifetime = 7.0
+preprocess = 7.0
+visibility_aabb = AABB(-4, -1, -4, 8, 14, 8)
+process_material = SubResource("SmokeRise")
+draw_pass_1 = SubResource("Puff")

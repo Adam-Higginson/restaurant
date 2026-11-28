@@ -82,3 +82,20 @@ Layers fitted by `tools/meshy/fit_layer.py` each sit 12 mm off the body, so wher
         start_legs.glb sea_feet.glb start_legs.glb legs
 
 The hero's own (`meshy/boy_stern/layers/`) were tucked this way: shirt into trousers, trousers into the sea boots. A layer refitted with `fit_layer.py` comes out untucked again, so tuck it again after.
+
+## Models wanted (home waters, #227)
+
+The opening's first beat (`scenes/prototype/intro/home_waters.tscn`) is greybox. Every prop is its own scene under `scenes/props/home/`, so a Meshy model replaces a prop in one place and every instance picks it up. Sizes are rough, in metres. Concept images are in `docs/concept/opening/`.
+
+| Scene | Size (W x H x D) | What it is | Concept image |
+|---|---|---|---|
+| `cottage.tscn` | 6.8 x 9 x 5.6 (chimney included) | A stone-walled island cottage with a red roof, chimney, two glowing windows, a window light and a smoke plume. Five of them climb the hill. | `home-from-the-water.webp` |
+| `jetty_cottage.tscn` | 6.8 x 9 x 5.6 | Your home by the jetty: like the cottage but with one big lit window, a green door and a warmer light. Holds `SiblingVoice`, where your sibling's call comes from. | `jetty-start.webp`, `home-from-the-water.webp` |
+| `jetty.tscn` | 3 x 5 x 11 | A wooden jetty on piles, running out into the water; the boat is tied up at its end. | `jetty-start.webp` |
+| `lamp_post.tscn` | 0.6 x 3.1 x 1.0 | A wooden post with an arm and a hanging lit lantern (flickering light). Six along the path up from the jetty. | `jetty-start.webp` |
+| `mooring.tscn` | 12 x 9 x 12 | The stone mooring on the island's summit, with an iron post and a great ring where the chain was fixed. | `home-from-the-water.webp` |
+| `buoy.tscn` | 5 x 7 x 5 | The rusted marker buoy: a round float with eyes, a four-legged cage rising to a railed platform and a lantern with a cap. Floats on the swell. Its `Model` node holds the shapes; `FloatOnSea` and `Wall` stay. | `buoy-and-chain.webp`, `rowing-out.webp` |
+
+Not wanted as models: the island's land (hill, shelf, knoll and rocks) is terrain, left as plain shapes; the great chain is built by `HangingChain` from one link; the rowboat has its own scene (`scenes/prototype/intro/rowboat.tscn`).
+
+**Swapping one in:** open the prop's scene, replace its shapes with the model (via `ThirdPartyModel`, as for the props above), and keep the root's name and any logic nodes (`SiblingVoice`, `Wall`, `FloatOnSea`, the lights and smoke). `home_waters.gd` finds the buoy, the buoy's wall and `SiblingVoice` by their paths.
