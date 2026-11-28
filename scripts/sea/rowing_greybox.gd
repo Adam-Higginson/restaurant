@@ -11,8 +11,8 @@ extends Node3D
 ## you like.
 
 ## What the readout says: the keys, and how much the current has.
-const HELP: String = "Row: stick or WASD.  C: the current takes the boat (%ds)." \
-		+ "  X: give it back.\nThe current has %d%% of the steering."
+const HELP: String = "Row: stick or WASD.\nC: the current takes the boat (%ds). X: give it back." \
+		+ "\nThe current has %d%% of the steering."
 
 ## The boat.
 @export var boat: Rowboat
@@ -28,11 +28,11 @@ const HELP: String = "Row: stick or WASD.  C: the current takes the boat (%ds)."
 
 func _ready() -> void:
 	if sea != null:
-		# There's no ship here, so move the water's hull cut-out far below
-		# the sea, where it can't cut a hole round the origin.
+		# There's no ship here, so move the water's hull cut-out (and the foam
+		# drawn round it) far off, where it can't mark the sea round the origin.
 		var water: ShaderMaterial = sea.material_override as ShaderMaterial
 		if water != null:
-			var away: Transform3D = Transform3D(Basis(), Vector3(0.0, -1000.0, 0.0))
+			var away: Transform3D = Transform3D(Basis(), Vector3(1.0e6, -1000.0, 1.0e6))
 			water.set_shader_parameter("hull_inverse", Projection(away.affine_inverse()))
 
 

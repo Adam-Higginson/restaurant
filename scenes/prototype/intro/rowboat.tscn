@@ -50,6 +50,7 @@ height = 0.3
 
 [node name="Rowboat" type="Node3D"]
 script = ExtResource("1_boat")
+float_height = 0.3
 
 [node name="Hull" type="Node3D" parent="."]
 
@@ -92,7 +93,7 @@ mesh = SubResource("Thwart")
 position = Vector3(0.62, 0.22, 0)
 
 [node name="Oar" type="Node3D" parent="OarStarboard"]
-rotation = Vector3(0, 0, -0.17)
+rotation = Vector3(0, 0, -0.28)
 
 [node name="Shaft" type="MeshInstance3D" parent="OarStarboard/Oar"]
 position = Vector3(0.7, 0, 0)
@@ -109,7 +110,7 @@ mesh = SubResource("Blade")
 position = Vector3(-0.62, 0.22, 0)
 
 [node name="Oar" type="Node3D" parent="OarPort"]
-rotation = Vector3(0, 0, 0.17)
+rotation = Vector3(0, 0, 0.28)
 
 [node name="Shaft" type="MeshInstance3D" parent="OarPort/Oar"]
 position = Vector3(-0.7, 0, 0)

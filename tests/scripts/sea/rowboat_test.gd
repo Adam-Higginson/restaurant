@@ -159,7 +159,7 @@ func test_it_rides_on_the_sea() -> void:
 
 	for check: int in 4:
 		await physics_ticks(runner, 30)
-		assert_float(boat.global_position.y).is_equal_approx(
+		assert_float(boat.global_position.y - boat.float_height).is_equal_approx(
 				FloatOnSea.surface_height(sea, boat.global_position), 0.3)
 
 
